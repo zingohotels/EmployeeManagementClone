@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
+import app.zingo.employeemanagements.Adapter.DepartmentAdapter;
 import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.Organization;
@@ -46,6 +48,7 @@ public class OrganizationDetailScree extends AppCompatActivity {
 
     TextView mName,mAbout,mAddress,mBuild,mWebsite,mDepartmentCount;
     RecyclerView mDepartmentList;
+    LinearLayout mDepartmentLay;
 
     Organization organization;
 
@@ -75,6 +78,7 @@ public class OrganizationDetailScree extends AppCompatActivity {
             mDepartmentCount = (TextView)findViewById(R.id.department_count);
             mapView = (MapView) findViewById(R.id.organization_map);
             mDepartmentList = (RecyclerView) findViewById(R.id.department_list);
+            mDepartmentLay = (LinearLayout) findViewById(R.id.department_layout);
 
             mapView.onCreate(savedInstanceState);
             mapView.onResume();
@@ -157,6 +161,10 @@ public class OrganizationDetailScree extends AppCompatActivity {
 
                                 if(organization.getDepartment()!=null&&organization.getDepartment().size()!=0){
                                     mDepartmentCount.setText(""+organization.getDepartment().size());
+
+                                    DepartmentAdapter adapter = new DepartmentAdapter(OrganizationDetailScree.this,organization.getDepartment());
+                                    mDepartmentList.setAdapter(adapter);
+
                                 }else{
 
                                     getDepartment(organization.getOrganizationId());
@@ -212,7 +220,10 @@ public class OrganizationDetailScree extends AppCompatActivity {
                             if(departmentsList != null && departmentsList.size()!=0 )
                             {
 
+
                                 mDepartmentCount.setText(""+departmentsList.size());
+                                DepartmentAdapter adapter = new DepartmentAdapter(OrganizationDetailScree.this,organization.getDepartment());
+                                mDepartmentList.setAdapter(adapter);
 
                             }
                             else

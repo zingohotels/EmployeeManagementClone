@@ -124,7 +124,7 @@
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:id="@+id/master_login"
+                    android:id="@+id/department_layout"
                     android:layout_weight="1"
                     android:layout_gravity="center"
                     android:layout_margin="15dp"

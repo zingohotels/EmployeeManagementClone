@@ -13,7 +13,6 @@
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.REAL_GET_TASKS" />
 
     <supports-screens
         android:anyDensity="true"
@@ -34,11 +33,7 @@
             android:name=".UI.Landing.SplashScreen"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".UI.Landing.PhoneVerificationScreen"
@@ -57,7 +52,15 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".UI.Login.LoginScreen"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
         <activity
             android:name=".UI.Admin.DashBoardAdmin"
             android:label=""
