@@ -1,0 +1,48 @@
+<resources>
+    <string name="app_name">Employee Management</string>
+
+    <!--Custom Font Type imported,refer main->assets->font folder-->
+    <string name="ColonnaMT">ColonnaMT</string>
+    <string name="Leprosy">Leprosy</string>
+    <string name="BomBardment">bombardment_shadow</string>
+    <string name="mina">Mina_is_gone_3D</string>
+    <string name="Yeysk">Yeysk</string>
+    <string name="Maribel_Suit">Maribel_Suit</string>
+    <string name="arial">arial</string>
+    <string name="Mistral">Mistral</string>
+
+    <!--Splash screen-->
+    <string name="splash_app_name">Employee Management</string>
+    <string name="powered_by_zingo">Powered By Zingo</string>
+    <string name="copyright_lucida">&#9400; Lucida Hospitality Pvt Ltd</string>
+
+    <!--Guest Login-->
+    <string name="login_app_name">Employee Management</string>
+    <string name="login_app_desc">Manage your Organization</string>
+    <string name="verify_text">Verify your Mobile Number</string>
+    <string name="verify_msg">Enter the 6-digit code we sent to </string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Zingo Hotels</string>
+
+    <array name="navbar_items">
+        <!--<item>Home</item>-->
+        <item>Profile</item>
+        <item>Organization</item>
+        <item>Employees</item>
+        <item>Meetings</item>
+        <item>Field Employees</item>
+        <item>Change Password</item>
+        <item>Logout</item>
+    </array>
+    <array name="navnar_item_images">
+        <item>@drawable/profile</item>
+        <item>@drawable/organization_icon</item>
+        <item>@drawable/employee</item>
+        <item>@drawable/interview</item>
+        <item>@drawable/field_icon</item>
+        <item>@drawable/password</item>
+        <item>@drawable/logout</item>
+    </array>
+
+</resources>

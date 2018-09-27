@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#4B0D82</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="grey_charcoal">#ff39444f</color>
+    <color name="tealish_primary_pressed">#7F39FB</color>
+    <color name="primary_cloudy">#3700B3</color>
+    <color name="tealish_primary">#985EFF</color>
+    <color name="text_black">#000000</color>
+    <color name="transparentBlack">#5e000000</color>
+
+    <color name="text_blue">#3700B3</color>
+    <color name="text_grey">#424D58</color>
+    <color name="white">#FFFFFF</color>
+
+</resources>

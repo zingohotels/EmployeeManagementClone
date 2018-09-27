@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/main_contenier"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center"
+    android:layout_gravity="center"
+    android:layout_marginTop="15dp"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <app.zingo.employeemanagements.Custom.CustomFontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            app:fontName="arial"
+            android:textColor="#000000"
+
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text=""/>
+
+        <app.zingo.employeemanagements.Custom.CustomFontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            app:fontName="arial"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+
+            android:text=""
+            />
+
+        <app.zingo.employeemanagements.Custom.CustomFontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            app:fontName="arial"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+
+            android:text=""
+            />
+
+
+        <Button
+            android:id="@+id/retry_button"
+            android:layout_below="@+id/text_internal"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:text="Next"
+            android:layout_centerInParent="true"
+            android:layout_margin="10dp"
+            android:background="#ff0000"
+            android:textColor="#ffffff"/>
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>

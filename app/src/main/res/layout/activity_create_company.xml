@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:id="@+id/rootView"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+
+
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/appBarLayout"
+        android:background="#FFFFFF"
+        >
+
+        <android.support.v7.widget.Toolbar
+            android:id="@id/toolbar"
+            android:background="@drawable/shape_bottom_stroke_grey_light"
+            android:fitsSystemWindows="true"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?android:actionBarSize"
+            app:contentInsetStartWithNavigation="0.0dip"
+            app:layout_scrollFlags="enterAlways|scroll|snap"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="5dp"
+                    android:text="Create Organization"
+                    android:textColor="@color/text_blue"
+                    />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:background="#FFFFFFFF"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/appBar"
+        android:layout_alignParentBottom="true">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/nameInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_large_margin"
+                android:layout_marginTop="20.0dip"
+                android:layout_marginRight="@dimen/activity_large_margin"
+                android:hint="Organization Name"
+
+                >
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/name"
+                    android:maxLength="50"
+                    android:inputType="text"
+                    style="@style/fp_editText" />
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_large_margin"
+                    android:layout_marginTop="20.0dip"
+                    android:layout_marginRight="@dimen/activity_large_margin"
+                    android:text="About Organization"/>
+
+                <EditText
+                    android:id="@+id/about"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="start"
+                    android:gravity="start"
+                    android:scrollbarAlwaysDrawVerticalTrack="true"
+                    android:overScrollMode="always"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="vertical"
+                    android:keepScreenOn="true"
+                    android:layout_marginLeft="@dimen/activity_large_margin"
+                    android:layout_marginRight="@dimen/activity_large_margin"
+                    android:lines="10"
+                    android:background="@drawable/spinner_background"
+                    android:maxLines="10"
+                    />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_large_margin"
+                    android:layout_marginTop="20.0dip"
+                    android:layout_marginRight="@dimen/activity_large_margin"
+                    android:text="Address"/>
+
+                <EditText
+                    android:id="@+id/address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="start"
+                    android:gravity="start"
+                    android:scrollbarAlwaysDrawVerticalTrack="true"
+                    android:overScrollMode="always"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="vertical"
+                    android:keepScreenOn="true"
+                    android:layout_marginLeft="@dimen/activity_large_margin"
+                    android:layout_marginRight="@dimen/activity_large_margin"
+                    android:lines="5"
+                    android:background="@drawable/spinner_background"
+                    />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/cityInputLayout"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_large_margin"
+                android:layout_marginTop="20.0dip"
+                android:layout_marginRight="@dimen/activity_large_margin"
+                android:hint="City"
+                >
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/city"
+                    android:maxLength="50"
+                    android:focusableInTouchMode="false"
+                    android:inputType="text"
+                    style="@style/fp_editText" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/stateInputLayout"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_large_margin"
+                android:layout_marginTop="20.0dip"
+                android:layout_marginRight="@dimen/activity_large_margin"
+                android:hint="State"
+
+                >
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/state"
+                    android:maxLength="50"
+                    android:inputType="text"
+                    style="@style/fp_editText" />
+            </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/buildInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_large_margin"
+                    android:layout_marginTop="20.0dip"
+                    android:layout_marginRight="@dimen/activity_large_margin"
+                    android:hint="Build Year"
+                    >
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/build"
+                        android:maxLength="4"
+                        android:inputType="number"
+                        style="@style/fp_editText" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/websitesInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_large_margin"
+                    android:layout_marginTop="20.0dip"
+                    android:layout_marginRight="@dimen/activity_large_margin"
+                    android:hint="Website"
+
+                    >
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/website"
+                        android:maxLength="50"
+                        android:inputType="textUri"
+                        style="@style/fp_editText" />
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <android.support.v7.widget.AppCompatButton
+                android:textSize="@dimen/regularFont"
+                android:textColor="@color/white"
+                android:id="@+id/createCompany"
+                android:background="@drawable/selector_button_app"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_large_margin"
+                android:layout_marginTop="20.0dip"
+                android:layout_marginRight="@dimen/activity_large_margin"
+                android:text="Create Organization"
+                android:textAllCaps="false"
+
+                />
+
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+</RelativeLayout>

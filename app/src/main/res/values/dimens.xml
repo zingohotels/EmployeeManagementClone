@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="activity_large_margin">30.0dip</dimen>
+    <dimen name="tinyFont">12.0sp</dimen>
+    <dimen name="veryTinyFont">11.0sp</dimen>
+    <dimen name="regularFont">16.0sp</dimen>
+    <dimen name="largeFont">20.0sp</dimen>
+    <dimen name="verylargeFont">25.0sp</dimen>
+    <dimen name="megaFont">25dp</dimen>
+    <dimen name="activity_vertical_margin">16.0dip</dimen>
+    <dimen name="smallFont">14.0sp</dimen>
+    <dimen name="regularRadius">5.0dip</dimen>
+    <dimen name="socialMediaButtonPadding">13.0dip</dimen>
+    <dimen name="largeRadius">6.0dip</dimen>
+    <dimen name="height">60.0dip</dimen>
+</resources>

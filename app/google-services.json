@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "902261099152",
+    "firebase_url": "https://employeemanagement-6ecf2.firebaseio.com",
+    "project_id": "employeemanagement-6ecf2",
+    "storage_bucket": "employeemanagement-6ecf2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:902261099152:android:268320325b9f7d5b",
+        "android_client_info": {
+          "package_name": "app.zingo.employeemanagements"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "902261099152-soemkann09n47b3lidg60h9gk6pidhjr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.zingo.employeemanagements",
+            "certificate_hash": "1f1380323348bc3b4e74e259dc5ff18fbfbb28bc"
+          }
+        },
+        {
+          "client_id": "902261099152-bhcjeu00p4p0sr2m7csfo5mkvfm8d0ln.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyActb2wsQHb5lElghzSe4QyCo8b83zyLDQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "902261099152-bhcjeu00p4p0sr2m7csfo5mkvfm8d0ln.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
