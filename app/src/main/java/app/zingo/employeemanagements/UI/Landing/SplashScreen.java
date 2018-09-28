@@ -75,6 +75,7 @@ public class SplashScreen extends AppCompatActivity {
 
                     if(mobilenumber.equals("")&&profileId==0)
                     {
+                        //Intent verify = new Intent(SplashScreen.this,LoginScreen.class);
                         Intent verify = new Intent(SplashScreen.this,SlideScreen.class);
                         startActivity(verify);
                         SplashScreen.this.finish();
@@ -92,6 +93,7 @@ public class SplashScreen extends AppCompatActivity {
                             startActivity(verify);
                             SplashScreen.this.finish();
                         }else if(companyId!=0&&profileId!=0){
+                            //Intent verify = new Intent(SplashScreen.this,DashBoardEmployee.class);
                             Intent verify = new Intent(SplashScreen.this,DashBoardAdmin.class);
                             startActivity(verify);
                             SplashScreen.this.finish();

@@ -265,11 +265,21 @@ public class DashBoardEmployee extends AppCompatActivity {
                 public void onClick(View view) {
 
                     String loginStatus = PreferenceHandler.getInstance(DashBoardEmployee.this).getLoginStatus();
+                    String meetingStatus = PreferenceHandler.getInstance(DashBoardEmployee.this).getMeetingLoginStatus();
 
                     if(loginStatus!=null&&!loginStatus.isEmpty()){
 
                         if(loginStatus.equalsIgnoreCase("Login")){
-                            masterloginalert("Login");
+
+                            if(meetingStatus!=null&&meetingStatus.equalsIgnoreCase("Login")){
+
+                                Toast.makeText(DashBoardEmployee.this, "You are in some meeting .So Please checkout", Toast.LENGTH_SHORT).show();
+
+                            }else{
+
+                                getLoginDetails(PreferenceHandler.getInstance(DashBoardEmployee.this).getLoginId());
+                            }
+
 
                         }else if(loginStatus.equalsIgnoreCase("Logout")){
 
@@ -298,7 +308,8 @@ public class DashBoardEmployee extends AppCompatActivity {
                         if(loginStatus!=null&&!loginStatus.isEmpty()){
 
                             if(loginStatus.equalsIgnoreCase("Login")){
-                                meetingloginalert("Login");
+                                //meetingloginalert("Login");
+                                getMeetings(PreferenceHandler.getInstance(DashBoardEmployee.this).getMeetingId());
 
                             }else if(loginStatus.equalsIgnoreCase("Logout")){
 
@@ -1049,6 +1060,8 @@ public class DashBoardEmployee extends AppCompatActivity {
 
                         }else {
 
+                            if (progressDialog!=null)
+                                progressDialog.dismiss();
 
                             Toast.makeText(DashBoardEmployee.this, "Failed due to : "+response.message(), Toast.LENGTH_SHORT).show();
                         }
@@ -1102,6 +1115,7 @@ public class DashBoardEmployee extends AppCompatActivity {
                                 Meetings loginDetails = list.get(list.size()-1);
 
                                 if(loginDetails!=null){
+                                    PreferenceHandler.getInstance(DashBoardEmployee.this).setMeetingId(loginDetails.getMeetingsId());
 
                                     String logout = loginDetails.getEndTime();
                                     String login = loginDetails.getStartTime();
@@ -1270,7 +1284,7 @@ public class DashBoardEmployee extends AppCompatActivity {
                 mSave.setText(option);
                 final EditText mRemarks = (EditText) views.findViewById(R.id.meeting_remarks);
                 final TextInputEditText mClient = (TextInputEditText) views.findViewById(R.id.client_name);
-                final TextInputEditText mContact = (TextInputEditText) views.findViewById(R.id.client_name);
+                final TextInputEditText mContact = (TextInputEditText) views.findViewById(R.id.client_contact);
                 final TextInputEditText mPurpose = (TextInputEditText) views.findViewById(R.id.purpose_meeting);
 
 
@@ -1617,7 +1631,153 @@ public class DashBoardEmployee extends AppCompatActivity {
 
     }
 
-    public void getMeeting(final int id){
+    public void updateMeeting(final Meetings loginDetails,final AlertDialog dialogs) throws Exception{
+
+
+
+        final ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setMessage("Saving Details..");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        MeetingsAPI apiService = Util.getClient().create(MeetingsAPI.class);
+
+        Call<Meetings> call = apiService.updateMeetingById(loginDetails.getMeetingsId(),loginDetails);
+
+        call.enqueue(new Callback<Meetings>() {
+            @Override
+            public void onResponse(Call<Meetings> call, Response<Meetings> response) {
+//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
+                try
+                {
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+
+                    int statusCode = response.code();
+                    if (statusCode == 200 || statusCode == 201||response.code()==204) {
+
+
+                            dialogs.dismiss();
+
+                            Toast.makeText(DashBoardEmployee.this, "You Checked out", Toast.LENGTH_SHORT).show();
+
+                            PreferenceHandler.getInstance(DashBoardEmployee.this).setMeetingId(0);
+                            getMeetingDetails();
+
+
+                            mMeetingText.setText("Check-In");
+                            PreferenceHandler.getInstance(DashBoardEmployee.this).setMeetingLoginStatus("Logout");
+
+
+
+                    }else {
+                        Toast.makeText(DashBoardEmployee.this, "Failed Due to "+response.message(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+                    ex.printStackTrace();
+                }
+//                callGetStartEnd();
+            }
+
+            @Override
+            public void onFailure(Call<Meetings> call, Throwable t) {
+
+                if(dialog != null && dialog.isShowing())
+                {
+                    dialog.dismiss();
+                }
+                Toast.makeText(DashBoardEmployee.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("TAG", t.toString());
+            }
+        });
+
+
+
+    }
+
+    public void updateLogin(final LoginDetails loginDetails,final AlertDialog dialogs) throws Exception{
+
+
+
+        final ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setMessage("Saving Details..");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        LoginDetailsAPI apiService = Util.getClient().create(LoginDetailsAPI.class);
+
+        Call<LoginDetails> call = apiService.updateLoginById(loginDetails.getLoginDetailsId(),loginDetails);
+
+        call.enqueue(new Callback<LoginDetails>() {
+            @Override
+            public void onResponse(Call<LoginDetails> call, Response<LoginDetails> response) {
+//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
+                try
+                {
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+
+                    int statusCode = response.code();
+                    if (statusCode == 200 || statusCode == 201||response.code()==204) {
+
+
+                        dialogs.dismiss();
+
+                        Toast.makeText(DashBoardEmployee.this, "You logged out", Toast.LENGTH_SHORT).show();
+
+                        PreferenceHandler.getInstance(DashBoardEmployee.this).setLoginId(0);
+                        getLoginDetails();
+
+
+                        mMasterText.setText("Log in");
+                        PreferenceHandler.getInstance(DashBoardEmployee.this).setLoginStatus("Logout");
+
+
+
+                    }else {
+                        Toast.makeText(DashBoardEmployee.this, "Failed Due to "+response.message(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+                    ex.printStackTrace();
+                }
+//                callGetStartEnd();
+            }
+
+            @Override
+            public void onFailure(Call<LoginDetails> call, Throwable t) {
+
+                if(dialog != null && dialog.isShowing())
+                {
+                    dialog.dismiss();
+                }
+                Toast.makeText(DashBoardEmployee.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("TAG", t.toString());
+            }
+        });
+
+
+
+    }
+
+    public void getMeetings(final int id){
 
         new ThreadExecuter().execute(new Runnable() {
             @Override
@@ -1662,7 +1822,7 @@ public class DashBoardEmployee extends AppCompatActivity {
                                         mSave.setText(option);
                                         final EditText mRemarks = (EditText) views.findViewById(R.id.meeting_remarks);
                                         final TextInputEditText mClient = (TextInputEditText) views.findViewById(R.id.client_name);
-                                        final TextInputEditText mContact = (TextInputEditText) views.findViewById(R.id.client_name);
+                                        final TextInputEditText mContact = (TextInputEditText) views.findViewById(R.id.client_contact);
                                         final TextInputEditText mPurpose = (TextInputEditText) views.findViewById(R.id.purpose_meeting);
 
                                         mRemarks.setText(""+dto.getMeetingDetails());
@@ -1677,9 +1837,9 @@ public class DashBoardEmployee extends AppCompatActivity {
 
                                         mPurpose.setText(""+dto.getMeetingAgenda());
 
-                                        final AlertDialog dialog = builder.create();
-                                        dialog.show();
-                                        dialog.setCanceledOnTouchOutside(true);
+                                        final AlertDialog dialogs = builder.create();
+                                        dialogs.show();
+                                        dialogs.setCanceledOnTouchOutside(true);
 
                                         mSave.setOnClickListener(new View.OnClickListener() {
                                             @Override
@@ -1734,7 +1894,7 @@ public class DashBoardEmployee extends AppCompatActivity {
                                                             loginDetails.setMeetingPersonDetails(client);
                                                         }
                                                         try {
-                                                            //addMeeting(loginDetails,dialog);
+                                                            updateMeeting(loginDetails,dialogs);
                                                         } catch (Exception e) {
                                                             e.printStackTrace();
                                                         }
@@ -1774,6 +1934,134 @@ public class DashBoardEmployee extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<Meetings> call, Throwable t) {
+
+                    }
+                });
+
+            }
+
+        });
+    }
+
+    public void getLoginDetails(final int id){
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+
+                final LoginDetailsAPI subCategoryAPI = Util.getClient().create(LoginDetailsAPI.class);
+                Call<LoginDetails> getProf = subCategoryAPI.getLoginById(id);
+                //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
+
+                getProf.enqueue(new Callback<LoginDetails>() {
+
+                    @Override
+                    public void onResponse(Call<LoginDetails> call, Response<LoginDetails> response) {
+
+                        if (response.code() == 200||response.code() == 201||response.code() == 204)
+                        {
+                            System.out.println("Inside api");
+
+                            final LoginDetails dto = response.body();
+
+                            if(dto!=null){
+
+                                try {
+
+                                    String message = "Login";
+                                    option = "Check-In";
+
+
+
+                                        message = "Do you want to Log-Out?";
+                                        option = "Log-Out";
+
+
+
+                                    final AlertDialog.Builder builder = new AlertDialog.Builder(DashBoardEmployee.this);
+                                    builder.setTitle(message);
+
+
+
+                                    builder.setPositiveButton(option, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+
+
+
+                                            if(locationCheck()){
+                                                if(gps.canGetLocation())
+                                                {
+                                                    System.out.println("Long and lat Rev"+gps.getLatitude()+" = "+gps.getLongitude());
+                                                    latitude = gps.getLatitude();
+                                                    longitude = gps.getLongitude();
+
+                                                    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+                                                    SimpleDateFormat sdt = new SimpleDateFormat("hh:mm a");
+
+                                                    LatLng master = new LatLng(latitude,longitude);
+                                                    String address = getAddress(master);
+
+                                                    LoginDetails loginDetails = dto;
+                                                    loginDetails.setEmployeeId(PreferenceHandler.getInstance(DashBoardEmployee.this).getUserId());
+                                                    loginDetails.setLatitude(""+latitude);
+                                                    loginDetails.setLongitude(""+longitude);
+                                                    loginDetails.setLocation(""+address);
+                                                    loginDetails.setLogOutTime(""+sdt.format(new Date()));
+                                                    loginDetails.setLoginDate(""+sdf.format(new Date()));
+
+                                                    try {
+                                                        updateLogin(loginDetails,builder.create());
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    }
+
+
+                                                }
+                                                else
+                                                {
+
+                                                }
+                                            }
+
+
+
+
+
+                                        }
+                                    });
+
+                                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            dialogInterface.dismiss();
+                                        }
+                                    });
+
+                                    final AlertDialog dialog = builder.create();
+                                    dialog.show();
+
+
+                                }
+                                catch (Exception ex)
+                                {
+                                    ex.printStackTrace();
+                                }
+
+                            }
+
+
+
+
+                        }else{
+
+
+                            //meet
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<LoginDetails> call, Throwable t) {
 
                     }
                 });
