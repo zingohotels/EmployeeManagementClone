@@ -25,6 +25,12 @@ public interface EmployeeApi {
     @POST("Employees/GetEmployeeByEmail")
     Call<ArrayList<Employee>> getUserByEmail(@Body Employee userProfile);
 
+    @GET("Employees")
+    Call<ArrayList<Employee>> getEmployees();
+
+    @GET("Employees/GetEmployeesByOrganizationId/{OrganizationId}")
+    Call<ArrayList<Employee>> getEmployeesByOrgId(@Path("OrganizationId") int id);
+
 
     @POST("Employees/GetEmployeeByEmailAndPassword")
     Call<ArrayList<Employee>> getEmployeeforLogin(@Body Employee body);

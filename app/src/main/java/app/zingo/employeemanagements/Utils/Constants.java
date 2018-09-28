@@ -15,6 +15,8 @@ public interface Constants {
     String COMPANY_ID = "company_id";
     String DESIGNATION_ID = "designation_id";
     String DEPARTMENT_ID = "department_id";
+    String LOGIN_ID = "log_id";
+    String MEETING_ID = "meet_id";
     String COMPANY_NAME ="company_name";
     String USER_NAME ="user_name";
     String HOTEL_PLACE ="user_phoneno";
@@ -23,4 +25,9 @@ public interface Constants {
 
     String USER_ROLE_UNIQUE_ID = "user_role_unique_id";
     String mapKey = "AIzaSyBN_9MfDVrhG1_D9Q1XpakTiDkoqSU5gGA";
+
+    public static final String LOGIN_STATUS = "login_status";
+
+    //Meeting Login
+    public static final String MEET_LOGIN_STATUS = "meeting_login_status";
 }

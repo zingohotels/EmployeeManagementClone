@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
  * Created by ZingoHotels Tech on 26-09-2018.
@@ -208,4 +209,13 @@ public class Employee implements Serializable {
     public void setEmployeeImages(ArrayList<EmployeeImages> employeeImages) {
         this.employeeImages = employeeImages;
     }
+
+    public static Comparator compareEmployee = new Comparator() {
+        @Override
+        public int compare(Object o, Object t1) {
+            Employee profile = (Employee) o;
+            Employee profile1 = (Employee) t1;
+            return profile.getEmployeeName().compareTo(profile1.getEmployeeName());
+        }
+    };
 }

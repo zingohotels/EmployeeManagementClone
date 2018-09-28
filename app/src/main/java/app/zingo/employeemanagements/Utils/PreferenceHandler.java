@@ -139,4 +139,46 @@ public class PreferenceHandler {
         return sh.getString(Constants.USER_ROLE_UNIQUE_ID,"");
     }
 
+    public void setLoginStatus(String loginStatus)
+    {
+        sh.edit().putString(Constants.LOGIN_STATUS,loginStatus).apply();
+    }
+
+    public String getLoginStatus()
+    {
+        return sh.getString(Constants.LOGIN_STATUS,"Logout");
+    }
+
+    public void setMeetingLoginStatus(String loginStatus)
+    {
+        sh.edit().putString(Constants.MEET_LOGIN_STATUS,loginStatus).apply();
+    }
+
+    public String getMeetingLoginStatus()
+    {
+        return sh.getString(Constants.MEET_LOGIN_STATUS,"Logout");
+    }
+
+    public void setLoginId(int id)
+    {
+        sh.edit().putInt(Constants.LOGIN_ID,id).apply();
+    }
+
+    public int getLoginId()
+    {
+        return sh.getInt(Constants.LOGIN_ID,0);
+    }
+
+
+    public void setMeetingId(int id)
+    {
+        sh.edit().putInt(Constants.MEETING_ID,id).apply();
+    }
+
+    public int getMeetingId()
+    {
+        return sh.getInt(Constants.MEETING_ID,0);
+    }
+
+
 }

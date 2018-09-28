@@ -1,14 +1,24 @@
 package app.zingo.employeemanagements.UI.Company;
 
 import android.Manifest;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,7 +35,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import app.zingo.employeemanagements.Adapter.DepartmentAdapter;
 import app.zingo.employeemanagements.Model.Departments;
@@ -49,6 +61,8 @@ public class OrganizationDetailScree extends AppCompatActivity {
     TextView mName,mAbout,mAddress,mBuild,mWebsite,mDepartmentCount;
     RecyclerView mDepartmentList;
     LinearLayout mDepartmentLay;
+    CardView mDepartmentCard;
+    AppCompatButton mAddDepartment;
 
     Organization organization;
 
@@ -78,10 +92,15 @@ public class OrganizationDetailScree extends AppCompatActivity {
             mDepartmentCount = (TextView)findViewById(R.id.department_count);
             mapView = (MapView) findViewById(R.id.organization_map);
             mDepartmentList = (RecyclerView) findViewById(R.id.department_list);
-            mDepartmentLay = (LinearLayout) findViewById(R.id.department_layout);
+            mDepartmentLay = (LinearLayout) findViewById(R.id.department_lay);
+            mDepartmentCard = (CardView) findViewById(R.id.department_layout);
+            mAddDepartment = (AppCompatButton) findViewById(R.id.add_department);
 
             mapView.onCreate(savedInstanceState);
             mapView.onResume();
+
+           /* mDepartmentCard.setVisibility(View.GONE);
+            mDepartmentLay.setVisibility(View.GONE);*/
 
             try {
                 MapsInitializer.initialize(OrganizationDetailScree.this);
@@ -110,6 +129,29 @@ public class OrganizationDetailScree extends AppCompatActivity {
                     }
 
 
+                }
+            });
+
+            mDepartmentCard.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if(mDepartmentLay.getVisibility()==View.GONE){
+
+                        mDepartmentLay.setVisibility(View.VISIBLE);
+
+                    }else{
+
+                        mDepartmentLay.setVisibility(View.GONE);
+                    }
+                }
+            });
+
+            mAddDepartment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    departmentAlert();
                 }
             });
 
@@ -159,11 +201,29 @@ public class OrganizationDetailScree extends AppCompatActivity {
                                 CameraPosition cameraPosition = new CameraPosition.Builder().zoom(14).target(latlng).build();
                                 mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
-                                if(organization.getDepartment()!=null&&organization.getDepartment().size()!=0){
-                                    mDepartmentCount.setText(""+organization.getDepartment().size());
+                                //Only for founder
 
-                                    DepartmentAdapter adapter = new DepartmentAdapter(OrganizationDetailScree.this,organization.getDepartment());
-                                    mDepartmentList.setAdapter(adapter);
+                                if(organization.getDepartment()!=null&&organization.getDepartment().size()!=0){
+
+
+                                    ArrayList<Departments> departmentsArrayList = new ArrayList<>();
+
+                                    for(int i=0;i<organization.getDepartment().size();i++){
+
+                                        if(!organization.getDepartment().get(i).getDepartmentName().equalsIgnoreCase("Founders")){
+
+                                            departmentsArrayList.add(organization.getDepartment().get(i));
+                                        }
+                                    }
+
+                                    if(departmentsArrayList!=null&&departmentsArrayList.size()!=0){
+
+                                        mDepartmentCount.setText(""+departmentsArrayList.size());
+                                        DepartmentAdapter adapter = new DepartmentAdapter(OrganizationDetailScree.this,departmentsArrayList);
+                                        mDepartmentList.setAdapter(adapter);
+                                    }
+
+
 
                                 }else{
 
@@ -220,10 +280,24 @@ public class OrganizationDetailScree extends AppCompatActivity {
                             if(departmentsList != null && departmentsList.size()!=0 )
                             {
 
+                                ArrayList<Departments> departmentsArrayList = new ArrayList<>();
 
-                                mDepartmentCount.setText(""+departmentsList.size());
-                                DepartmentAdapter adapter = new DepartmentAdapter(OrganizationDetailScree.this,organization.getDepartment());
-                                mDepartmentList.setAdapter(adapter);
+                                for(int i=0;i<departmentsList.size();i++){
+
+                                    if(!departmentsList.get(i).getDepartmentName().equalsIgnoreCase("Founders")){
+
+                                        departmentsArrayList.add(departmentsList.get(i));
+                                    }
+                                }
+
+                                if(departmentsArrayList!=null&&departmentsArrayList.size()!=0){
+
+                                    mDepartmentCount.setText(""+departmentsArrayList.size());
+                                    DepartmentAdapter adapter = new DepartmentAdapter(OrganizationDetailScree.this,departmentsArrayList);
+                                    mDepartmentList.setAdapter(adapter);
+                                }
+
+
 
                             }
                             else
@@ -249,6 +323,132 @@ public class OrganizationDetailScree extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    private void departmentAlert(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(OrganizationDetailScree.this);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View views = inflater.inflate(R.layout.custom_alert_box_department, null);
+
+        builder.setView(views);
+        final Button mSave = (Button) views.findViewById(R.id.save);
+        final EditText desc = (EditText) views.findViewById(R.id.department_description);
+        final TextInputEditText mName = (TextInputEditText) views.findViewById(R.id.department_name);
+
+
+        final android.support.v7.app.AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.setCanceledOnTouchOutside(false);
+
+        mSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                String name = mName.getText().toString();
+                String descrp = desc.getText().toString();
+
+                if(name.isEmpty()){
+
+                    Toast.makeText(OrganizationDetailScree.this, "Please enter Department Name", Toast.LENGTH_SHORT).show();
+
+                }else if (descrp.isEmpty()){
+
+                    Toast.makeText(OrganizationDetailScree.this, "Please enter Department Description", Toast.LENGTH_SHORT).show();
+                }else{
+
+                    Departments departments = new Departments();
+                    departments.setDepartmentName(name);
+                    departments.setDepartmentDescription(descrp);
+                    departments.setOrganizationId(organization.getOrganizationId());
+
+                    try {
+                        addDepartments(departments,dialog);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+
+            }
+        });
+
+    }
+
+
+    public void addDepartments(final Departments departments,final AlertDialog dialogs) throws Exception{
+
+
+        final ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setMessage("Saving Details..");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        DepartmentApi apiService = Util.getClient().create(DepartmentApi.class);
+
+        Call<Departments> call = apiService.addDepartments(departments);
+
+        call.enqueue(new Callback<Departments>() {
+            @Override
+            public void onResponse(Call<Departments> call, Response<Departments> response) {
+//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
+                try
+                {
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+
+                    int statusCode = response.code();
+                    if (statusCode == 200 || statusCode == 201) {
+
+                        Departments s = response.body();
+
+                        if(s!=null){
+
+                            Toast.makeText(OrganizationDetailScree.this, "Your Organization Creted Successfully ", Toast.LENGTH_SHORT).show();
+
+                            dialogs.dismiss();
+
+                            getDepartment(organization.getOrganizationId());
+
+
+                        }
+
+
+
+
+                    }else {
+                        Toast.makeText(OrganizationDetailScree.this, "Failed Due to "+response.message(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+                    ex.printStackTrace();
+                }
+//                callGetStartEnd();
+            }
+
+            @Override
+            public void onFailure(Call<Departments> call, Throwable t) {
+
+                if(dialog != null && dialog.isShowing())
+                {
+                    dialog.dismiss();
+                }
+                Toast.makeText(OrganizationDetailScree.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("TAG", t.toString());
+            }
+        });
+
+
+
     }
 
     @Override

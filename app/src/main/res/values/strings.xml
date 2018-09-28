@@ -45,4 +45,22 @@
         <item>@drawable/logout</item>
     </array>
 
+    <array name="navbar_items_employee">
+        <!--<item>Home</item>-->
+        <item>Profile</item>
+        <item>Organization</item>
+        <item>Meetings</item>
+        <item>Attendance</item>
+        <item>Change Password</item>
+        <item>Logout</item>
+    </array>
+    <array name="navnar_item_images_employee">
+        <item>@drawable/profile</item>
+        <item>@drawable/organization_icon</item>
+        <item>@drawable/interview</item>
+        <item>@drawable/build_year</item>
+        <item>@drawable/password</item>
+        <item>@drawable/logout</item>
+    </array>
+
 </resources>

@@ -48,6 +48,7 @@ import app.zingo.employeemanagements.Model.EmployeeImages;
 import app.zingo.employeemanagements.Model.NavBarItems;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Company.OrganizationDetailScree;
+import app.zingo.employeemanagements.UI.Employee.EmployeeListScreen;
 import app.zingo.employeemanagements.UI.Login.LoginScreen;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
@@ -781,7 +782,8 @@ public class DashBoardAdmin extends AppCompatActivity {
                 break;
 
             case "Employees":
-
+                Intent employee = new Intent(DashBoardAdmin.this, EmployeeListScreen.class);
+                startActivity(employee);
                 break;
 
             case "Meetings":

@@ -33,7 +33,11 @@
             android:name=".UI.Landing.SplashScreen"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".UI.Landing.PhoneVerificationScreen"
@@ -52,20 +56,20 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".UI.Login.LoginScreen"
-            android:theme="@style/AppTheme.NoActionBar" >
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".UI.Admin.DashBoardAdmin"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".UI.Company.OrganizationDetailScree"></activity>
+        <activity android:name=".UI.Company.OrganizationDetailScree" />
+        <activity android:name=".UI.Employee.EmployeeListScreen" />
+        <activity android:name=".UI.Employee.CreateEmployeeScreen" />
+        <activity
+            android:name=".UI.Landing.SlideScreen"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".UI.Employee.DashBoardEmployee"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label=""></activity>
     </application>
 
 </manifest>

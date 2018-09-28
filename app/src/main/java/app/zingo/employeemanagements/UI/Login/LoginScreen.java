@@ -24,6 +24,7 @@ import app.zingo.employeemanagements.Model.EmployeeImages;
 import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Admin.DashBoardAdmin;
+import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
@@ -247,6 +248,7 @@ public class LoginScreen extends AppCompatActivity {
                             PreferenceHandler.getInstance(LoginScreen.this).setCompanyId(response.body().getOrganizationId());
                             PreferenceHandler.getInstance(LoginScreen.this).setCompanyName(response.body().getOrganizationName());
                             Intent i = new Intent(LoginScreen.this, DashBoardAdmin.class);
+                            //Intent i = new Intent(LoginScreen.this, DashBoardEmployee.class);
                             i.putExtra("Profile",dto);
                             startActivity(i);
                             finish();
@@ -255,6 +257,7 @@ public class LoginScreen extends AppCompatActivity {
                         }else{
 
                             Intent i = new Intent(LoginScreen.this, DashBoardAdmin.class);
+                            //Intent i = new Intent(LoginScreen.this, DashBoardEmployee.class);
                             i.putExtra("Profile",dto);
                             startActivity(i);
                             finish();
