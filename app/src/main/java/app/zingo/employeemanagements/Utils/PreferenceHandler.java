@@ -43,6 +43,16 @@ public class PreferenceHandler {
         return sh.getInt(Constants.USER_ID,0);
     }
 
+    public void setManagerId(int id)
+    {
+        sh.edit().putInt(Constants.MANAGER_ID,id).apply();
+    }
+
+    public int getManagerId()
+    {
+        return sh.getInt(Constants.MANAGER_ID,0);
+    }
+
     public void setUserName(String hotelName) {
         sh.edit().putString(Constants.USER_NAME,hotelName).apply();
     }
@@ -102,14 +112,6 @@ public class PreferenceHandler {
         return sh.getString(Constants.COMPANY_NAME,"");
     }
 
-    public void setHotelPlace(String hotelPlace) {
-        sh.edit().putString(Constants.HOTEL_PLACE,hotelPlace).apply();
-    }
-
-    public String getHotelPlace()
-    {
-        return sh.getString(Constants.HOTEL_PLACE,"");
-    }
 
     public void setUserFullName(String fullname) {
         sh.edit().putString(Constants.USER_FULLNAME,fullname).apply();
@@ -129,14 +131,14 @@ public class PreferenceHandler {
         return sh.getString(Constants.USER_EMAIL,"");
     }
 
-    public void setUserRoleUniqueID(String approved)
+    public void setUserRoleUniqueID(int approved)
     {
-        sh.edit().putString(Constants.USER_ROLE_UNIQUE_ID,approved).apply();
+        sh.edit().putInt(Constants.USER_ROLE_UNIQUE_ID,approved).apply();
     }
 
-    public String getUserRoleUniqueID()
+    public int getUserRoleUniqueID()
     {
-        return sh.getString(Constants.USER_ROLE_UNIQUE_ID,"");
+        return sh.getInt(Constants.USER_ROLE_UNIQUE_ID,0);
     }
 
     public void setLoginStatus(String loginStatus)

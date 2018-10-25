@@ -20,6 +20,9 @@ import java.util.ArrayList;
 
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.R;
+import app.zingo.employeemanagements.UI.Admin.CreatePaySlip;
+import app.zingo.employeemanagements.UI.Admin.EmployeesDashBoard;
+import app.zingo.employeemanagements.UI.Employee.EmployeeMeetingHost;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import retrofit2.Callback;
@@ -33,11 +36,13 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
 
     private Context context;
     private ArrayList<Employee> list;
+    String type;
 
-    public EmployeeAdapter(Context context, ArrayList<Employee> list) {
+    public EmployeeAdapter(Context context, ArrayList<Employee> list,String type) {
 
         this.context = context;
         this.list = list;
+        this.type = type;
 
     }
 
@@ -50,7 +55,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         final Employee dto = list.get(position);
 
         holder.mProfileName.setText(dto.getEmployeeName());
@@ -60,6 +65,34 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
         holder.mProfileMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(type!=null&&type.equalsIgnoreCase("Meetings")){
+
+                    Intent intent = new Intent(context, EmployeeMeetingHost.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("EmployeeId",list.get(position).getEmployeeId());
+                    intent.putExtras(bundle);
+                    context.startActivity(intent);
+
+                }else  if(type!=null&&type.equalsIgnoreCase("Salary")){
+
+                    Intent intent = new Intent(context, CreatePaySlip.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("EmployeeId",list.get(position).getEmployeeId());
+                    bundle.putSerializable("Employee",list.get(position));
+                    intent.putExtras(bundle);
+                    context.startActivity(intent);
+
+                }else{
+                    Intent intent = new Intent(context, EmployeesDashBoard.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("Profile",list.get(position));
+                    bundle.putInt("ProfileId",list.get(position).getEmployeeId());
+                    intent.putExtras(bundle);
+                    context.startActivity(intent);
+                }
+
+
 
             }
         });

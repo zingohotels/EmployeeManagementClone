@@ -60,11 +60,26 @@ public class Employee implements Serializable {
     @SerializedName("Status")
     private String Status;
 
+    @SerializedName("employeeDocument")
+    private ArrayList<EmployeeDocuments> employeeDocument;
+
     @SerializedName("Email")
     private String Email;
 
+    @SerializedName("loginDetails")
+    private ArrayList<LoginDetails> loginDetails;
+
+    @SerializedName("meetings")
+    private ArrayList<Meetings> meetings;
+
     @SerializedName("employeeImages")
     private ArrayList<EmployeeImages> employeeImages;
+
+    @SerializedName("Salary")
+    private double Salary;
+
+    @SerializedName("UserRoleId")
+    private int UserRoleId;
 
     public int getEmployeeId() {
         return EmployeeId;
@@ -208,6 +223,54 @@ public class Employee implements Serializable {
 
     public void setEmployeeImages(ArrayList<EmployeeImages> employeeImages) {
         this.employeeImages = employeeImages;
+    }
+
+    public ArrayList<LoginDetails> getLoginDetails() {
+        return loginDetails;
+    }
+
+    public void setLoginDetails(ArrayList<LoginDetails> loginDetails) {
+        this.loginDetails = loginDetails;
+    }
+
+    public ArrayList<Meetings> getMeetings() {
+        return meetings;
+    }
+
+    public void setMeetings(ArrayList<Meetings> meetings) {
+        this.meetings = meetings;
+    }
+
+    public double getSalary() {
+        return Salary;
+    }
+
+    public void setSalary(double salary) {
+        Salary = salary;
+    }
+
+    public int getUserRoleId() {
+        return UserRoleId;
+    }
+
+    public void setUserRoleId(int userRoleId) {
+        UserRoleId = userRoleId;
+    }
+
+    public static Comparator getCompareEmployee() {
+        return compareEmployee;
+    }
+
+    public ArrayList<EmployeeDocuments> getEmployeeDocument() {
+        return employeeDocument;
+    }
+
+    public void setEmployeeDocument(ArrayList<EmployeeDocuments> employeeDocument) {
+        this.employeeDocument = employeeDocument;
+    }
+
+    public static void setCompareEmployee(Comparator compareEmployee) {
+        Employee.compareEmployee = compareEmployee;
     }
 
     public static Comparator compareEmployee = new Comparator() {

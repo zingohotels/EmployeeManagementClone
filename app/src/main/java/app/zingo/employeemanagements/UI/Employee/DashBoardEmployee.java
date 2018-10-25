@@ -64,10 +64,13 @@ import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.EmployeeImages;
 import app.zingo.employeemanagements.Model.LoginDetails;
+import app.zingo.employeemanagements.Model.LoginDetailsNotificationManagers;
+import app.zingo.employeemanagements.Model.MeetingDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.Meetings;
 import app.zingo.employeemanagements.Model.NavBarItems;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Admin.DashBoardAdmin;
+import app.zingo.employeemanagements.UI.Common.ChangePasswordScreen;
 import app.zingo.employeemanagements.UI.Company.OrganizationDetailScree;
 import app.zingo.employeemanagements.UI.Login.LoginScreen;
 import app.zingo.employeemanagements.Utils.Constants;
@@ -79,6 +82,8 @@ import app.zingo.employeemanagements.WebApi.DepartmentApi;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
 import app.zingo.employeemanagements.WebApi.EmployeeImageAPI;
 import app.zingo.employeemanagements.WebApi.LoginDetailsAPI;
+import app.zingo.employeemanagements.WebApi.LoginNotificationAPI;
+import app.zingo.employeemanagements.WebApi.MeetingNotificationAPI;
 import app.zingo.employeemanagements.WebApi.MeetingsAPI;
 import app.zingo.employeemanagements.WebApi.UploadApi;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -935,16 +940,27 @@ public class DashBoardEmployee extends AppCompatActivity {
                 break;
 
             case "Meetings":
-
+                Intent meetings = new Intent(DashBoardEmployee.this, EmployeeMeetingHost.class);
+                meetings.putExtra("EmployeeId",PreferenceHandler.getInstance(DashBoardEmployee.this).getUserId());
+                startActivity(meetings);
                 break;
 
-            case "Field Employees":
-
+            case "Attendance":
+                Intent attendance = new Intent(DashBoardEmployee.this, AttendanceScreen.class);
+                attendance.putExtra("EmployeeId",PreferenceHandler.getInstance(DashBoardEmployee.this).getUserId());
+                startActivity(attendance);
                 break;
 
             case "Change Password":
-
+                Intent chnage = new Intent(DashBoardEmployee.this, ChangePasswordScreen.class);
+                startActivity(chnage);
                 break;
+
+            case "Leave Management":
+            Intent leave = new Intent(DashBoardEmployee.this, LeaveManagementHost.class);
+            leave.putExtra("EmployeeId",PreferenceHandler.getInstance(DashBoardEmployee.this).getUserId());
+            startActivity(leave);
+            break;
 
             case "Logout":
 
@@ -1023,7 +1039,7 @@ public class DashBoardEmployee extends AppCompatActivity {
 
                                         if(date!=null&&!date.isEmpty()){
 
-                                            mLoggedTime.setText("Last Logout : "+date+" "+logout);
+                                            mLoggedTime.setText("Last Logout : "+logout);
 
                                         }else{
 
@@ -1037,7 +1053,7 @@ public class DashBoardEmployee extends AppCompatActivity {
 
                                         if(date!=null&&!date.isEmpty()){
 
-                                            mLoggedTime.setText("Last Logged in : "+date+" "+login);
+                                            mLoggedTime.setText("Last Logged in : "+login);
 
                                         }else{
 
@@ -1045,6 +1061,7 @@ public class DashBoardEmployee extends AppCompatActivity {
                                         }
                                         mMasterText.setText("Logout");
                                         PreferenceHandler.getInstance(DashBoardEmployee.this).setLoginStatus("Login");
+                                        PreferenceHandler.getInstance(DashBoardEmployee.this).setLoginId(loginDetails.getLoginDetailsId());
                                     }
 
                                 }
@@ -1204,7 +1221,7 @@ public class DashBoardEmployee extends AppCompatActivity {
                             longitude = gps.getLongitude();
 
                             SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-                            SimpleDateFormat sdt = new SimpleDateFormat("hh:mm a");
+                            SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
 
                             LatLng master = new LatLng(latitude,longitude);
                             String address = getAddress(master);
@@ -1218,7 +1235,19 @@ public class DashBoardEmployee extends AppCompatActivity {
                             loginDetails.setLoginDate(""+sdf.format(new Date()));
                             loginDetails.setLogOutTime("");
                             try {
-                                addLogin(loginDetails,builder.create());
+
+                                LoginDetailsNotificationManagers md = new LoginDetailsNotificationManagers();
+                                md.setTitle("Login Details from "+PreferenceHandler.getInstance(DashBoardEmployee.this).getUserFullName());
+                                md.setMessage("Log in at  "+""+sdt.format(new Date()));
+                                md.setLocation(address);
+                                md.setLongitude(""+longitude);
+                                md.setLatitude(""+latitude);
+                                md.setLoginDate(""+sdt.format(new Date()));
+                                md.setStatus("In meeting");
+                                md.setEmployeeId(PreferenceHandler.getInstance(DashBoardEmployee.this).getUserId());
+                                md.setManagerId(PreferenceHandler.getInstance(DashBoardEmployee.this).getManagerId());
+
+                                addLogin(loginDetails,builder.create(),md);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -1323,7 +1352,7 @@ public class DashBoardEmployee extends AppCompatActivity {
 
 
                                 SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-                                SimpleDateFormat sdt = new SimpleDateFormat("hh:mm a");
+                                SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
 
                                 LatLng master = new LatLng(latitude,longitude);
                                 String address = getAddress(master);
@@ -1345,7 +1374,23 @@ public class DashBoardEmployee extends AppCompatActivity {
                                     loginDetails.setMeetingPersonDetails(client);
                                 }
                                 try {
-                                    addMeeting(loginDetails,dialog);
+
+                                    MeetingDetailsNotificationManagers md = new MeetingDetailsNotificationManagers();
+                                    md.setTitle("Meeting Details from "+PreferenceHandler.getInstance(DashBoardEmployee.this).getUserFullName());
+                                    md.setMessage("Meeting with "+client+" for "+purpose);
+                                    md.setLocation(address);
+                                    md.setLongitude(""+longitude);
+                                    md.setLatitude(""+latitude);
+                                    md.setMeetingDate(""+sdt.format(new Date()));
+                                    md.setStatus("In meeting");
+                                    md.setEmployeeId(PreferenceHandler.getInstance(DashBoardEmployee.this).getUserId());
+                                    md.setManagerId(PreferenceHandler.getInstance(DashBoardEmployee.this).getManagerId());
+                                    md.setMeetingPerson(client);
+                                    md.setMeetingsDetails(purpose);
+                                    md.setMeetingComments(remark);
+
+
+                                    addMeeting(loginDetails,dialog,md);
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -1455,7 +1500,7 @@ public class DashBoardEmployee extends AppCompatActivity {
 
     }
 
-    public void addLogin(final LoginDetails loginDetails,final AlertDialog dialogs) throws Exception{
+    public void addLogin(final LoginDetails loginDetails,final AlertDialog dialogs,final LoginDetailsNotificationManagers md) throws Exception{
 
 
 
@@ -1487,6 +1532,8 @@ public class DashBoardEmployee extends AppCompatActivity {
                         if(s!=null){
 
                             dialogs.dismiss();
+                            md.setLoginDetailsId(s.getLoginDetailsId());
+                            saveLoginNotification(md);
 
                             Toast.makeText(DashBoardEmployee.this, "You Logged in", Toast.LENGTH_SHORT).show();
 
@@ -1503,7 +1550,7 @@ public class DashBoardEmployee extends AppCompatActivity {
                                     SimpleDateFormat sdfs = new SimpleDateFormat("MMM dd,yyyy");
 
                                     Date dt = sdf.parse(logins[0]);
-                                    mLoggedTime.setText("Last Logged in : "+sdfs.format(dt)+" "+s.getLoginTime());
+                                    mLoggedTime.setText("Last Logged in : "+s.getLoginTime());
                                 }
                             }else{
                                 mLoggedTime.setText("Last Logged in : "+s.getLoginTime());
@@ -1550,7 +1597,7 @@ public class DashBoardEmployee extends AppCompatActivity {
 
     }
 
-    public void addMeeting(final Meetings loginDetails,final AlertDialog dialogs) throws Exception{
+    public void addMeeting(final Meetings loginDetails,final AlertDialog dialogs,final MeetingDetailsNotificationManagers md) throws Exception{
 
 
 
@@ -1583,11 +1630,12 @@ public class DashBoardEmployee extends AppCompatActivity {
 
                             dialogs.dismiss();
 
+                            md.setMeetingsId(s.getMeetingsId());
                             Toast.makeText(DashBoardEmployee.this, "You Checked in", Toast.LENGTH_SHORT).show();
 
                             PreferenceHandler.getInstance(DashBoardEmployee.this).setMeetingId(s.getMeetingsId());
 
-
+                            saveMeetingNotification(md);
 
 
                             mMeetingText.setText("Checkout");
@@ -1631,7 +1679,7 @@ public class DashBoardEmployee extends AppCompatActivity {
 
     }
 
-    public void updateMeeting(final Meetings loginDetails,final AlertDialog dialogs) throws Exception{
+    public void updateMeeting(final Meetings loginDetails,final AlertDialog dialogs,final MeetingDetailsNotificationManagers md) throws Exception{
 
 
 
@@ -1660,6 +1708,7 @@ public class DashBoardEmployee extends AppCompatActivity {
 
 
                             dialogs.dismiss();
+                            saveMeetingNotification(md);
 
                             Toast.makeText(DashBoardEmployee.this, "You Checked out", Toast.LENGTH_SHORT).show();
 
@@ -1704,7 +1753,7 @@ public class DashBoardEmployee extends AppCompatActivity {
 
     }
 
-    public void updateLogin(final LoginDetails loginDetails,final AlertDialog dialogs) throws Exception{
+    public void updateLogin(final LoginDetails loginDetails,final AlertDialog dialogs,final LoginDetailsNotificationManagers md) throws Exception{
 
 
 
@@ -1733,6 +1782,7 @@ public class DashBoardEmployee extends AppCompatActivity {
 
 
                         dialogs.dismiss();
+                        saveLoginNotification(md);
 
                         Toast.makeText(DashBoardEmployee.this, "You logged out", Toast.LENGTH_SHORT).show();
 
@@ -1872,7 +1922,7 @@ public class DashBoardEmployee extends AppCompatActivity {
 
 
                                                         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-                                                        SimpleDateFormat sdt = new SimpleDateFormat("hh:mm a");
+                                                        SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
 
                                                         LatLng master = new LatLng(latitude,longitude);
                                                         String address = getAddress(master);
@@ -1894,7 +1944,22 @@ public class DashBoardEmployee extends AppCompatActivity {
                                                             loginDetails.setMeetingPersonDetails(client);
                                                         }
                                                         try {
-                                                            updateMeeting(loginDetails,dialogs);
+
+                                                            MeetingDetailsNotificationManagers md = new MeetingDetailsNotificationManagers();
+                                                            md.setTitle("Meeting Details from "+PreferenceHandler.getInstance(DashBoardEmployee.this).getUserFullName());
+                                                            md.setMessage("Meeting with "+client+" for "+purpose);
+                                                            md.setLocation(address);
+                                                            md.setLongitude(""+longitude);
+                                                            md.setLatitude(""+latitude);
+                                                            md.setMeetingDate(""+sdt.format(new Date()));
+                                                            md.setStatus("In meeting");
+                                                            md.setEmployeeId(PreferenceHandler.getInstance(DashBoardEmployee.this).getUserId());
+                                                            md.setManagerId(PreferenceHandler.getInstance(DashBoardEmployee.this).getManagerId());
+                                                            md.setMeetingPerson(client);
+                                                            md.setMeetingsId(loginDetails.getMeetingsId());
+                                                            md.setMeetingsDetails(purpose);
+                                                            md.setMeetingComments(remark);
+                                                            updateMeeting(loginDetails,dialogs,md);
                                                         } catch (Exception e) {
                                                             e.printStackTrace();
                                                         }
@@ -1997,7 +2062,7 @@ public class DashBoardEmployee extends AppCompatActivity {
                                                     longitude = gps.getLongitude();
 
                                                     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-                                                    SimpleDateFormat sdt = new SimpleDateFormat("hh:mm a");
+                                                    SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
 
                                                     LatLng master = new LatLng(latitude,longitude);
                                                     String address = getAddress(master);
@@ -2011,7 +2076,19 @@ public class DashBoardEmployee extends AppCompatActivity {
                                                     loginDetails.setLoginDate(""+sdf.format(new Date()));
 
                                                     try {
-                                                        updateLogin(loginDetails,builder.create());
+                                                        LoginDetailsNotificationManagers md = new LoginDetailsNotificationManagers();
+                                                        md.setTitle("Login Details from "+PreferenceHandler.getInstance(DashBoardEmployee.this).getUserFullName());
+                                                        md.setMessage("Log in at  "+""+sdt.format(new Date()));
+                                                        md.setLocation(address);
+                                                        md.setLongitude(""+longitude);
+                                                        md.setLatitude(""+latitude);
+                                                        md.setLoginDate(""+sdt.format(new Date()));
+                                                        md.setStatus("In meeting");
+                                                        md.setEmployeeId(PreferenceHandler.getInstance(DashBoardEmployee.this).getUserId());
+                                                        md.setManagerId(PreferenceHandler.getInstance(DashBoardEmployee.this).getManagerId());
+                                                        md.setLoginDetailsId(dto.getLoginDetailsId());
+
+                                                        updateLogin(loginDetails,builder.create(),md);
                                                     } catch (Exception e) {
                                                         e.printStackTrace();
                                                     }
@@ -2069,6 +2146,150 @@ public class DashBoardEmployee extends AppCompatActivity {
             }
 
         });
+    }
+
+    public void saveMeetingNotification(final MeetingDetailsNotificationManagers md) throws Exception{
+
+
+
+        final ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setMessage("Saving Details..");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        MeetingNotificationAPI apiService = Util.getClient().create(MeetingNotificationAPI.class);
+
+        Call<MeetingDetailsNotificationManagers> call = apiService.saveMeetingNotification(md);
+
+        call.enqueue(new Callback<MeetingDetailsNotificationManagers>() {
+            @Override
+            public void onResponse(Call<MeetingDetailsNotificationManagers> call, Response<MeetingDetailsNotificationManagers> response) {
+//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
+                try
+                {
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+
+                    int statusCode = response.code();
+                    if (statusCode == 200 || statusCode == 201) {
+
+                        MeetingDetailsNotificationManagers s = response.body();
+
+                        if(s!=null){
+
+
+
+
+
+                        }
+
+
+
+
+                    }else {
+                        Toast.makeText(DashBoardEmployee.this, "Failed Due to "+response.message(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+                    ex.printStackTrace();
+                }
+//                callGetStartEnd();
+            }
+
+            @Override
+            public void onFailure(Call<MeetingDetailsNotificationManagers> call, Throwable t) {
+
+                if(dialog != null && dialog.isShowing())
+                {
+                    dialog.dismiss();
+                }
+                Toast.makeText(DashBoardEmployee.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("TAG", t.toString());
+            }
+        });
+
+
+
+    }
+
+    public void saveLoginNotification(final LoginDetailsNotificationManagers md) throws Exception{
+
+
+
+        final ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setMessage("Saving Details..");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        LoginNotificationAPI apiService = Util.getClient().create(LoginNotificationAPI.class);
+
+        Call<LoginDetailsNotificationManagers> call = apiService.saveLoginNotification(md);
+
+        call.enqueue(new Callback<LoginDetailsNotificationManagers>() {
+            @Override
+            public void onResponse(Call<LoginDetailsNotificationManagers> call, Response<LoginDetailsNotificationManagers> response) {
+//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
+                try
+                {
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+
+                    int statusCode = response.code();
+                    if (statusCode == 200 || statusCode == 201) {
+
+                        LoginDetailsNotificationManagers s = response.body();
+
+                        if(s!=null){
+
+
+
+
+
+                        }
+
+
+
+
+                    }else {
+                        Toast.makeText(DashBoardEmployee.this, "Failed Due to "+response.message(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+                    ex.printStackTrace();
+                }
+//                callGetStartEnd();
+            }
+
+            @Override
+            public void onFailure(Call<LoginDetailsNotificationManagers> call, Throwable t) {
+
+                if(dialog != null && dialog.isShowing())
+                {
+                    dialog.dismiss();
+                }
+                Toast.makeText(DashBoardEmployee.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("TAG", t.toString());
+            }
+        });
+
+
+
     }
 
     @Override

@@ -3,6 +3,7 @@ package app.zingo.employeemanagements.Model;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
 /**
  * Created by ZingoHotels Tech on 28-09-2018.
@@ -120,4 +121,13 @@ public class LoginDetails implements Serializable {
     public void setEmployeeId(int employeeId) {
         EmployeeId = employeeId;
     }
+
+    public static Comparator compareLogin = new Comparator() {
+        @Override
+        public int compare(Object o, Object t1) {
+            LoginDetails profile = (LoginDetails) o;
+            LoginDetails profile1 = (LoginDetails) t1;
+            return profile.getLoginDate().compareTo(profile1.getLoginDate());
+        }
+    };
 }

@@ -8,6 +8,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 /**
@@ -18,6 +19,9 @@ public interface EmployeeApi {
 
     @POST("Employees")
     Call<Employee> addEmployee(@Body Employee details);
+
+    @PUT("Employees/{id}")
+    Call<Employee> updateEmployee(@Path("id") int id,@Body Employee details);
 
     @GET("Employees/GetEmployeeByPhoneNumber/{PhoneNumber}")
     Call<ArrayList<Employee>> getUserByPhone(@Path("PhoneNumber") String phone);
@@ -30,6 +34,9 @@ public interface EmployeeApi {
 
     @GET("Employees/GetEmployeesByOrganizationId/{OrganizationId}")
     Call<ArrayList<Employee>> getEmployeesByOrgId(@Path("OrganizationId") int id);
+
+    @GET("Employees/GetEmployeeByDepartmentId/{DepartmentId}")
+    Call<ArrayList<Employee>> getEmployeesByDepId(@Path("DepartmentId") int id);
 
 
     @POST("Employees/GetEmployeeByEmailAndPassword")

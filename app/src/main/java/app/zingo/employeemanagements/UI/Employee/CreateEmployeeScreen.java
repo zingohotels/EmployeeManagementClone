@@ -45,7 +45,8 @@ import retrofit2.Response;
 
 public class CreateEmployeeScreen extends AppCompatActivity {
 
-    TextInputEditText mName,mDob,mDoj,mPrimaryEmail,mSecondaryEmail,mMobile,mPassword,mConfirm,mDesignation;
+    TextInputEditText mName,mDob,mDoj,mPrimaryEmail,mSecondaryEmail,
+            mMobile,mPassword,mConfirm,mDesignation,mSalary;
     EditText mAddress;
     Spinner mDepartment;
     RadioButton mMale,mFemale,mOthers;
@@ -69,6 +70,7 @@ public class CreateEmployeeScreen extends AppCompatActivity {
             mDob = (TextInputEditText)findViewById(R.id.dob);
             mDoj = (TextInputEditText)findViewById(R.id.doj);
             mDesignation = (TextInputEditText)findViewById(R.id.designation);
+            mSalary = (TextInputEditText)findViewById(R.id.salary);
             mPrimaryEmail = (TextInputEditText)findViewById(R.id.email);
             mSecondaryEmail = (TextInputEditText)findViewById(R.id.semail);
             mMobile = (TextInputEditText)findViewById(R.id.mobile);
@@ -180,6 +182,7 @@ public class CreateEmployeeScreen extends AppCompatActivity {
         String dob = mDob.getText().toString();
         String doj = mDoj.getText().toString();
         String designation = mDesignation.getText().toString();
+        String salary = mSalary.getText().toString();
         String primary = mPrimaryEmail.getText().toString();
         String secondary = mSecondaryEmail.getText().toString();
         String mobile = mMobile.getText().toString();
@@ -214,6 +217,10 @@ public class CreateEmployeeScreen extends AppCompatActivity {
         }else if(designation.isEmpty()){
 
             Toast.makeText(this, "Designation is required", Toast.LENGTH_SHORT).show();
+
+        }else if(salary.isEmpty()){
+
+            Toast.makeText(this, "Salary is required", Toast.LENGTH_SHORT).show();
 
         }else if(password.isEmpty()){
 
@@ -271,13 +278,15 @@ public class CreateEmployeeScreen extends AppCompatActivity {
             }
 
             employee.setPrimaryEmailAddress(primary);
+            employee.setSalary(Double.parseDouble(salary));
             employee.setAlternateEmailAddress(secondary);
             employee.setPhoneNumber(mobile);
             employee.setPassword(password);
             employee.setDepartmentId(departmentData.get(mDepartment.getSelectedItemPosition()).getDepartmentId());
 
 
-            employee.setStatus("Employee");
+            employee.setStatus("Active");
+            employee.setUserRoleId(1);
 
             Designations designations = new Designations();
             designations.setDesignationTitle(designation);

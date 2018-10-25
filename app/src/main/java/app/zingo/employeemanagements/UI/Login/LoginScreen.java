@@ -138,6 +138,8 @@ public class LoginScreen extends AppCompatActivity {
                                 SharedPreferences.Editor spe = sp.edit();
                                 spe.putInt(Constants.USER_ID, dto.getEmployeeId());
                                 PreferenceHandler.getInstance(LoginScreen.this).setUserId(dto.getEmployeeId());
+                                PreferenceHandler.getInstance(LoginScreen.this).setManagerId(dto.getManagerId());
+                                PreferenceHandler.getInstance(LoginScreen.this).setUserRoleUniqueID(dto.getUserRoleId());
                                 PreferenceHandler.getInstance(LoginScreen.this).setUserName(dto.getEmployeeName());
                                 PreferenceHandler.getInstance(LoginScreen.this).setUserEmail(dto.getPrimaryEmailAddress());
                                 PreferenceHandler.getInstance(LoginScreen.this).setUserFullName(dto.getEmployeeName());
@@ -247,20 +249,38 @@ public class LoginScreen extends AppCompatActivity {
                             System.out.println("Inside api");
                             PreferenceHandler.getInstance(LoginScreen.this).setCompanyId(response.body().getOrganizationId());
                             PreferenceHandler.getInstance(LoginScreen.this).setCompanyName(response.body().getOrganizationName());
-                            Intent i = new Intent(LoginScreen.this, DashBoardAdmin.class);
-                            //Intent i = new Intent(LoginScreen.this, DashBoardEmployee.class);
-                            i.putExtra("Profile",dto);
-                            startActivity(i);
-                            finish();
+
+                            if(PreferenceHandler.getInstance(LoginScreen.this).getUserRoleUniqueID()==2){
+                                Intent i = new Intent(LoginScreen.this, DashBoardAdmin.class);
+                                //Intent i = new Intent(LoginScreen.this, DashBoardEmployee.class);
+                                i.putExtra("Profile",dto);
+                                startActivity(i);
+                                finish();
+                            }else{
+                                //Intent i = new Intent(LoginScreen.this, DashBoardAdmin.class);
+                                Intent i = new Intent(LoginScreen.this, DashBoardEmployee.class);
+                                i.putExtra("Profile",dto);
+                                startActivity(i);
+                                finish();
+                            }
+
 
 
                         }else{
 
-                            Intent i = new Intent(LoginScreen.this, DashBoardAdmin.class);
-                            //Intent i = new Intent(LoginScreen.this, DashBoardEmployee.class);
-                            i.putExtra("Profile",dto);
-                            startActivity(i);
-                            finish();
+                            if(PreferenceHandler.getInstance(LoginScreen.this).getUserRoleUniqueID()==2){
+                                Intent i = new Intent(LoginScreen.this, DashBoardAdmin.class);
+                                //Intent i = new Intent(LoginScreen.this, DashBoardEmployee.class);
+                                i.putExtra("Profile",dto);
+                                startActivity(i);
+                                finish();
+                            }else{
+                                //Intent i = new Intent(LoginScreen.this, DashBoardAdmin.class);
+                                Intent i = new Intent(LoginScreen.this, DashBoardEmployee.class);
+                                i.putExtra("Profile",dto);
+                                startActivity(i);
+                                finish();
+                            }
                         }
                     }
 

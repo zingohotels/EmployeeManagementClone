@@ -12,6 +12,7 @@ public interface Constants {
     String USER_PHONENUMBER ="user_phoneno";
     String weather_api = "a78b3dd6ac89129adf2a6600d8eafa7a";
     String USER_ID = "user_id";
+    String MANAGER_ID = "manager_id";
     String COMPANY_ID = "company_id";
     String DESIGNATION_ID = "designation_id";
     String DEPARTMENT_ID = "department_id";
@@ -22,6 +23,9 @@ public interface Constants {
     String HOTEL_PLACE ="user_phoneno";
     String USER_FULLNAME ="user_fullname";
     String USER_EMAIL ="user_email";
+
+    String SENDER_ID ="902261099152";
+    String SERVER_ID ="AIzaSyClRpicBflz2b_t7enwcXQ5bxYeYqzBC_I";
 
     String USER_ROLE_UNIQUE_ID = "user_role_unique_id";
     String mapKey = "AIzaSyBN_9MfDVrhG1_D9Q1XpakTiDkoqSU5gGA";

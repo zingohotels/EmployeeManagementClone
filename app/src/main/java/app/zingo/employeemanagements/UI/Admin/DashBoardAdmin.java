@@ -30,6 +30,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,11 +43,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import app.zingo.employeemanagements.Adapter.DepartmentAdapter;
+import app.zingo.employeemanagements.Adapter.DepartmentGridAdapter;
 import app.zingo.employeemanagements.Adapter.NavigationListAdapter;
+import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.EmployeeImages;
 import app.zingo.employeemanagements.Model.NavBarItems;
 import app.zingo.employeemanagements.R;
+import app.zingo.employeemanagements.UI.Common.ChangePasswordScreen;
 import app.zingo.employeemanagements.UI.Company.OrganizationDetailScree;
 import app.zingo.employeemanagements.UI.Employee.EmployeeListScreen;
 import app.zingo.employeemanagements.UI.Login.LoginScreen;
@@ -54,6 +59,7 @@ import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
+import app.zingo.employeemanagements.WebApi.DepartmentApi;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
 import app.zingo.employeemanagements.WebApi.EmployeeImageAPI;
 import app.zingo.employeemanagements.WebApi.UploadApi;
@@ -73,6 +79,7 @@ public class DashBoardAdmin extends AppCompatActivity {
     ListView navbar;
     TextView mUserName,mUserEmail;
     CircleImageView mProfileImage;
+    GridView mDepartmentGrid;
 
 
     Employee profile;
@@ -106,6 +113,7 @@ public class DashBoardAdmin extends AppCompatActivity {
             mUserName = (TextView) findViewById(R.id.main_user_name);
             mUserEmail = (TextView) findViewById(R.id.user_mail);
             mProfileImage = (CircleImageView) findViewById(R.id.user_image);
+            mDepartmentGrid = (GridView) findViewById(R.id.department_grid);
 
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                     this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -178,6 +186,8 @@ public class DashBoardAdmin extends AppCompatActivity {
                 }
 
             }
+
+            getDepartment(PreferenceHandler.getInstance(DashBoardAdmin.this).getCompanyId());
 
 
         }catch (Exception e){
@@ -479,6 +489,7 @@ public class DashBoardAdmin extends AppCompatActivity {
                             EmployeeImages employeeImages = new EmployeeImages();
                             employeeImages.setImage(Constants.IMAGE_URL+response.body().toString());
                             employeeImages.setEmployeeImageId(employee.getEmployeeId());
+                            employeeImages.setEmployeeId(employee.getEmployeeId());
 
 
                             addProfileImage(employeeImages);
@@ -487,7 +498,7 @@ public class DashBoardAdmin extends AppCompatActivity {
                             EmployeeImages employeeImagess = employeeImages;
                             employeeImagess.setImage(Constants.IMAGE_URL+response.body().toString());
                             employeeImagess.setEmployeeImageId(employee.getEmployeeId());
-
+                            employeeImages.setEmployeeId(employee.getEmployeeId());
 
                             updateProfileImage(employeeImages);
                         }
@@ -787,7 +798,15 @@ public class DashBoardAdmin extends AppCompatActivity {
                 break;
 
             case "Meetings":
+                Intent employees = new Intent(DashBoardAdmin.this, EmployeeListScreen.class);
+                employees.putExtra("Type","Meetings");
+                startActivity(employees);
+                break;
 
+            case "Salary":
+                Intent salary = new Intent(DashBoardAdmin.this, EmployeeListScreen.class);
+                salary.putExtra("Type","Salary");
+                startActivity(salary);
                 break;
 
             case "Field Employees":
@@ -795,7 +814,8 @@ public class DashBoardAdmin extends AppCompatActivity {
                 break;
 
             case "Change Password":
-
+                Intent chnage = new Intent(DashBoardAdmin.this, ChangePasswordScreen.class);
+                startActivity(chnage);
                 break;
 
             case "Logout":
@@ -811,6 +831,75 @@ public class DashBoardAdmin extends AppCompatActivity {
                 break;
 
         }
+    }
+
+    private void getDepartment(final int id){
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+
+
+                DepartmentApi apiService =
+                        Util.getClient().create(DepartmentApi.class);
+
+                Call<ArrayList<Departments>> call = apiService.getDepartmentByOrganization(id);
+
+                call.enqueue(new Callback<ArrayList<Departments>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<Departments>> call, Response<ArrayList<Departments>> response) {
+//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
+                        int statusCode = response.code();
+
+                        if(statusCode == 200 || statusCode == 204)
+                        {
+                            ArrayList<Departments> departmentsList = response.body();
+                            if(departmentsList != null && departmentsList.size()!=0 )
+                            {
+
+                                ArrayList<Departments> departmentsArrayList = new ArrayList<>();
+
+                                for(int i=0;i<departmentsList.size();i++){
+
+                                    if(!departmentsList.get(i).getDepartmentName().equalsIgnoreCase("Founders")){
+
+                                        departmentsArrayList.add(departmentsList.get(i));
+                                    }
+                                }
+
+                                if(departmentsArrayList!=null&&departmentsArrayList.size()!=0){
+
+
+                                    DepartmentGridAdapter adapter = new DepartmentGridAdapter(DashBoardAdmin.this,departmentsArrayList);
+                                    mDepartmentGrid.setAdapter(adapter);
+                                }
+
+
+
+                            }
+                            else
+                            {
+
+
+                            }
+                        }
+                        else
+                        {
+
+                            Toast.makeText(DashBoardAdmin.this,response.message(),Toast.LENGTH_SHORT).show();
+                        }
+//                callGetStartEnd();
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<Departments>> call, Throwable t) {
+                        // Log error here since request failed
+
+                        Log.e("TAG", t.toString());
+                    }
+                });
+            }
+        });
     }
 
     @Override

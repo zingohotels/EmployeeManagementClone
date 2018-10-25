@@ -48,6 +48,12 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBN_9MfDVrhG1_D9Q1XpakTiDkoqSU5gGA" />
 
+        <!--
+            <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyD7wKDeCjNaLc8OjxHhYFVieOsL9lXhFZQ" />
+        -->
+
         <activity
             android:name=".UI.Company.CreateCompany"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -67,9 +73,39 @@
         <activity
             android:name=".UI.Landing.SlideScreen"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".UI.Employee.DashBoardEmployee"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:label=""></activity>
+        <activity
+            android:name=".UI.Employee.DashBoardEmployee"
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".UI.Admin.DepartmentEmployeeListScreen" />
+        <activity
+            android:name=".UI.Admin.EmployeesDashBoard"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".UI.Common.EmployeeMeetingMap"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".UI.Employee.MapsActivity" />
+        <activity android:name=".UI.Common.ChangePasswordScreen" />
+        <activity android:name=".UI.Employee.EmployeeMeetingHost" />
+        <activity
+            android:name=".UI.Common.EmployeeMeetingList"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".UI.Employee.AttendanceScreen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".UI.Employee.WorkedDaysListScreen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".UI.Employee.LeaveTakenDays"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".UI.Employee.LeaveManagementHost"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".UI.Employee.ApplyLeaveScreen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".UI.Admin.CreatePaySlip"></activity>
     </application>
 
 </manifest>

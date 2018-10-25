@@ -23,10 +23,10 @@ public interface LoginDetailsAPI {
     @POST("LoginDetails")
     Call<LoginDetails> addLogin(@Body LoginDetails details);
 
-    @GET("Meetings/{id}")
+    @GET("LoginDetails/{id}")
     Call<LoginDetails> getLoginById(@Path("id") int id);
 
-    @PUT("Meetings/{id}")
+    @PUT("LoginDetails/{id}")
     Call<LoginDetails> updateLoginById(@Path("id") int id,@Body LoginDetails details);
 
     @GET("LoginDetails/GetLoginDetailsByEmployeeId/{EmployeeId}")

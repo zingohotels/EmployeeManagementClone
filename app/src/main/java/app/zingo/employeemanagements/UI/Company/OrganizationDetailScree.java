@@ -60,7 +60,7 @@ public class OrganizationDetailScree extends AppCompatActivity {
 
     TextView mName,mAbout,mAddress,mBuild,mWebsite,mDepartmentCount;
     RecyclerView mDepartmentList;
-    LinearLayout mDepartmentLay;
+    LinearLayout mDepartmentLay,mDepartmentMain;
     CardView mDepartmentCard;
     AppCompatButton mAddDepartment;
 
@@ -93,6 +93,7 @@ public class OrganizationDetailScree extends AppCompatActivity {
             mapView = (MapView) findViewById(R.id.organization_map);
             mDepartmentList = (RecyclerView) findViewById(R.id.department_list);
             mDepartmentLay = (LinearLayout) findViewById(R.id.department_lay);
+            mDepartmentMain = (LinearLayout) findViewById(R.id.department_layout_main);
             mDepartmentCard = (CardView) findViewById(R.id.department_layout);
             mAddDepartment = (AppCompatButton) findViewById(R.id.add_department);
 
@@ -101,6 +102,14 @@ public class OrganizationDetailScree extends AppCompatActivity {
 
            /* mDepartmentCard.setVisibility(View.GONE);
             mDepartmentLay.setVisibility(View.GONE);*/
+
+           int userRoleId = PreferenceHandler.getInstance(OrganizationDetailScree.this).getUserRoleUniqueID();
+
+           if(userRoleId==2){
+               mDepartmentMain.setVisibility(View.VISIBLE);
+           }else{
+               mDepartmentMain.setVisibility(View.GONE);
+           }
 
             try {
                 MapsInitializer.initialize(OrganizationDetailScree.this);

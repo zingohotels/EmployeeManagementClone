@@ -31,6 +31,8 @@ public class EmployeeListScreen extends AppCompatActivity {
     RecyclerView mProfileList;
     FloatingActionButton mAddProfiles;
 
+    String type;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +48,16 @@ public class EmployeeListScreen extends AppCompatActivity {
             mProfileList = (RecyclerView)findViewById(R.id.profile_list);
             mAddProfiles = (FloatingActionButton) findViewById(R.id.add_profile);
 
+            Bundle bundle = getIntent().getExtras();
+
+            if(bundle!=null){
+                type = bundle.getString("Type");
+            }
+
+            if(type!=null&&(type.equalsIgnoreCase("Meetings")||type.equalsIgnoreCase("Salary"))){
+
+                mAddProfiles.setVisibility(View.GONE);
+            }
 
 
             mAddProfiles.setOnClickListener(new View.OnClickListener() {
@@ -109,7 +121,7 @@ public class EmployeeListScreen extends AppCompatActivity {
 
                                 if(employees!=null&&employees.size()!=0){
                                     Collections.sort(employees,Employee.compareEmployee);
-                                    EmployeeAdapter adapter = new EmployeeAdapter(EmployeeListScreen.this, employees);
+                                    EmployeeAdapter adapter = new EmployeeAdapter(EmployeeListScreen.this, employees,type);
                                     mProfileList.setAdapter(adapter);
                                 }else{
                                     Toast.makeText(EmployeeListScreen.this,"No Employees added",Toast.LENGTH_LONG).show();

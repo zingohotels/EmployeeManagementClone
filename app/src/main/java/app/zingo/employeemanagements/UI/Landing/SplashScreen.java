@@ -93,10 +93,18 @@ public class SplashScreen extends AppCompatActivity {
                             startActivity(verify);
                             SplashScreen.this.finish();
                         }else if(companyId!=0&&profileId!=0){
-                            //Intent verify = new Intent(SplashScreen.this,DashBoardEmployee.class);
-                            Intent verify = new Intent(SplashScreen.this,DashBoardAdmin.class);
-                            startActivity(verify);
-                            SplashScreen.this.finish();
+
+                            if(PreferenceHandler.getInstance(SplashScreen.this).getUserRoleUniqueID()==2){
+                                //Intent verify = new Intent(SplashScreen.this,DashBoardEmployee.class);
+                                Intent verify = new Intent(SplashScreen.this,DashBoardAdmin.class);
+                                startActivity(verify);
+                                SplashScreen.this.finish();
+                            }else{
+                                Intent verify = new Intent(SplashScreen.this,DashBoardEmployee.class);
+                                startActivity(verify);
+                                SplashScreen.this.finish();
+                            }
+
                         }else{
 
                             if(profileId==0){

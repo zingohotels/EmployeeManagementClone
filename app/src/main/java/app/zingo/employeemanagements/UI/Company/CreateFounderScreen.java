@@ -314,6 +314,7 @@ public class CreateFounderScreen extends AppCompatActivity {
             Employee employee = new Employee();
             employee.setEmployeeName(name);
             employee.setAddress(address);
+            employee.setUserRoleId(2);
             if(mMale.isChecked()){
                 employee.setGender("Male");
             }else if(mFemale.isChecked()){
@@ -350,7 +351,8 @@ public class CreateFounderScreen extends AppCompatActivity {
             //employee.setDepartmentId(1);
             employee.setDepartmentId(PreferenceHandler.getInstance(CreateFounderScreen.this).getDepartmentId());
             employee.setDesignationId(PreferenceHandler.getInstance(CreateFounderScreen.this).getDesignationId());
-            employee.setStatus("Admin");
+            employee.setStatus("Active");
+            employee.setUserRoleId(2);
 
             checkUserByEmailId(employee);
 
