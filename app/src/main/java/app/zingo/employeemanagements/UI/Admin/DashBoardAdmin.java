@@ -46,13 +46,16 @@ import java.util.ArrayList;
 import app.zingo.employeemanagements.Adapter.DepartmentAdapter;
 import app.zingo.employeemanagements.Adapter.DepartmentGridAdapter;
 import app.zingo.employeemanagements.Adapter.NavigationListAdapter;
+import app.zingo.employeemanagements.FireBase.SharedPrefManager;
 import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Employee;
+import app.zingo.employeemanagements.Model.EmployeeDeviceMapping;
 import app.zingo.employeemanagements.Model.EmployeeImages;
 import app.zingo.employeemanagements.Model.NavBarItems;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Common.ChangePasswordScreen;
 import app.zingo.employeemanagements.UI.Company.OrganizationDetailScree;
+import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
 import app.zingo.employeemanagements.UI.Employee.EmployeeListScreen;
 import app.zingo.employeemanagements.UI.Login.LoginScreen;
 import app.zingo.employeemanagements.Utils.Constants;
@@ -61,6 +64,7 @@ import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.DepartmentApi;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
+import app.zingo.employeemanagements.WebApi.EmployeeDeviceApi;
 import app.zingo.employeemanagements.WebApi.EmployeeImageAPI;
 import app.zingo.employeemanagements.WebApi.UploadApi;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -133,6 +137,7 @@ public class DashBoardAdmin extends AppCompatActivity {
             userId = PreferenceHandler.getInstance(DashBoardAdmin.this).getUserId();
             userName = PreferenceHandler.getInstance(DashBoardAdmin.this).getUserFullName();
             userEmail = PreferenceHandler.getInstance(DashBoardAdmin.this).getUserEmail();
+            int mapId = PreferenceHandler.getInstance(DashBoardAdmin.this).getMappingId();
 
             if(userName!=null&&!userName.isEmpty()){
 
@@ -145,6 +150,15 @@ public class DashBoardAdmin extends AppCompatActivity {
                 mUserEmail.setVisibility(View.VISIBLE);
                 mUserEmail.setText(""+userEmail);
 
+            }
+
+            EmployeeDeviceMapping hm = new EmployeeDeviceMapping();
+            String token = SharedPrefManager.getInstance(DashBoardAdmin.this).getDeviceToken();
+
+            if(userId!=0&&token!=null&&mapId==0){
+                hm.setEmployeeId(userId);
+                hm.setDeviceId(token);
+                addDeviceId(hm);
             }
 
             mProfileImage.setOnClickListener(new View.OnClickListener() {
@@ -916,5 +930,72 @@ public class DashBoardAdmin extends AppCompatActivity {
                 })
                 .setNegativeButton("No", null)
                 .show();
+    }
+
+
+    public void addDeviceId(final EmployeeDeviceMapping pf)
+    {
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+
+
+                EmployeeDeviceApi hotelOperation = Util.getClient().create(EmployeeDeviceApi.class);
+                Call<EmployeeDeviceMapping> response = hotelOperation.addProfileDevice(pf);
+
+                response.enqueue(new Callback<EmployeeDeviceMapping>() {
+                    @Override
+                    public void onResponse(Call<EmployeeDeviceMapping> call, Response<EmployeeDeviceMapping> response) {
+                        System.out.println("GetHotelByProfileId = "+response.code());
+
+
+                        if(response.code() == 200||response.code() == 201||response.code() == 202||response.code() == 204)
+                        {
+                            try{
+                                System.out.println("registered");
+                                EmployeeDeviceMapping pr = response.body();
+
+                                System.out.println();
+
+                                if(pr != null)
+                                {
+
+                                    PreferenceHandler.getInstance(DashBoardAdmin.this).setMappingId(pr.getEmployeeDeviceMappingId());
+
+
+
+                                }
+
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+
+
+
+
+                        }else if(response.code() == 404){
+                            System.out.println("already registered");
+
+
+
+                        }
+                        else
+                        {
+
+
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<EmployeeDeviceMapping> call, Throwable t) {
+
+
+                    }
+                });
+            }
+        });
     }
 }

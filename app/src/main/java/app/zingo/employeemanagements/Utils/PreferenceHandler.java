@@ -182,5 +182,14 @@ public class PreferenceHandler {
         return sh.getInt(Constants.MEETING_ID,0);
     }
 
+    public void setMappingId(int mapid)
+    {
+        sh.edit().putInt(Constants.MAPPING_ID,mapid).apply();
+    }
+
+    public int getMappingId()
+    {
+        return sh.getInt(Constants.MAPPING_ID,0);
+    }
 
 }

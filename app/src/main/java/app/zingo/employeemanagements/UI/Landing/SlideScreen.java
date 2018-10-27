@@ -13,6 +13,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 
+import app.zingo.employeemanagements.FireBase.SharedPrefManager;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Login.LoginScreen;
 
@@ -41,7 +42,9 @@ public class SlideScreen extends AppCompatActivity {
             mCompany = (Button)findViewById(R.id.create_account);
             mLogin = (Button)findViewById(R.id.login_account);
             checkPermission();
+            String token = SharedPrefManager.getInstance(SlideScreen.this).getDeviceToken();
 
+            System.out.println("Splash Token  = "+token);
 
             mCompany.setOnClickListener(new View.OnClickListener() {
                 @Override

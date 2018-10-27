@@ -18,6 +18,7 @@ public interface Constants {
     String DEPARTMENT_ID = "department_id";
     String LOGIN_ID = "log_id";
     String MEETING_ID = "meet_id";
+    String MAPPING_ID = "map_id";
     String COMPANY_NAME ="company_name";
     String USER_NAME ="user_name";
     String HOTEL_PLACE ="user_phoneno";

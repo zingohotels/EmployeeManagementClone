@@ -18,6 +18,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import app.zingo.employeemanagements.FireBase.SharedPrefManager;
 import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.EmployeeImages;
@@ -25,6 +26,7 @@ import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Admin.DashBoardAdmin;
 import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
+import app.zingo.employeemanagements.UI.Landing.SplashScreen;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
@@ -60,6 +62,11 @@ public class LoginScreen extends AppCompatActivity {
             mPassword = (TextInputEditText)findViewById(R.id.password);
 
             mLogin = (AppCompatButton)findViewById(R.id.loginAccount);
+
+            String token = SharedPrefManager.getInstance(LoginScreen.this).getDeviceToken();
+
+            System.out.println("Splash Token  = "+token);
+
 
             mLogin.setOnClickListener(new View.OnClickListener() {
                 @Override

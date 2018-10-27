@@ -706,7 +706,7 @@ public class CreatePaySlip extends AppCompatActivity {
         }
         Uri uri = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            uri = FileProvider.getUriForFile(this, "app.zingo.employeemanagement.fileprovider", file);
+            uri = FileProvider.getUriForFile(this, "app.zingo.employeemanagements.fileprovider", file);
         }else{
             uri = Uri.fromFile(file);
         }

@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import app.zingo.employeemanagements.BuildConfig;
+import app.zingo.employeemanagements.FireBase.SharedPrefManager;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Admin.DashBoardAdmin;
 import app.zingo.employeemanagements.UI.Company.CreateCompany;
@@ -55,6 +56,11 @@ public class SplashScreen extends AppCompatActivity {
         try{
 
             mVersionName.setText("Version code : "+ BuildConfig.VERSION_NAME+"");
+
+            String token = SharedPrefManager.getInstance(SplashScreen.this).getDeviceToken();
+
+            System.out.println("Splash Token  = "+token);
+
 
             Animation fade_in = AnimationUtils.loadAnimation(this,R.anim.fade_in);
             Animation right_anim = AnimationUtils.loadAnimation(this,R.anim.right_trans);

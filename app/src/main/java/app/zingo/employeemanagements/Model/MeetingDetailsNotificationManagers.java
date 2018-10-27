@@ -13,6 +13,12 @@ public class MeetingDetailsNotificationManagers implements Serializable {
     @SerializedName("MeetingNotificationManagerId")
     public int MeetingNotificationManagerId;
 
+    @SerializedName("SenderId")
+    public String SenderId;
+
+    @SerializedName("ServerId")
+    public String ServerId;
+
     @SerializedName("Title")
     public String Title;
 
@@ -162,5 +168,21 @@ public class MeetingDetailsNotificationManagers implements Serializable {
 
     public void setMeetingComments(String meetingComments) {
         MeetingComments = meetingComments;
+    }
+
+    public String getSenderId() {
+        return SenderId;
+    }
+
+    public void setSenderId(String senderId) {
+        SenderId = senderId;
+    }
+
+    public String getServerId() {
+        return ServerId;
+    }
+
+    public void setServerId(String serverId) {
+        ServerId = serverId;
     }
 }

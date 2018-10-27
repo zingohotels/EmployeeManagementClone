@@ -60,8 +60,10 @@ import java.util.Locale;
 
 import app.zingo.employeemanagements.Adapter.EmployeeAdapter;
 import app.zingo.employeemanagements.Adapter.NavigationListAdapter;
+import app.zingo.employeemanagements.FireBase.SharedPrefManager;
 import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Employee;
+import app.zingo.employeemanagements.Model.EmployeeDeviceMapping;
 import app.zingo.employeemanagements.Model.EmployeeImages;
 import app.zingo.employeemanagements.Model.LoginDetails;
 import app.zingo.employeemanagements.Model.LoginDetailsNotificationManagers;
@@ -80,6 +82,7 @@ import app.zingo.employeemanagements.Utils.TrackGPS;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.DepartmentApi;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
+import app.zingo.employeemanagements.WebApi.EmployeeDeviceApi;
 import app.zingo.employeemanagements.WebApi.EmployeeImageAPI;
 import app.zingo.employeemanagements.WebApi.LoginDetailsAPI;
 import app.zingo.employeemanagements.WebApi.LoginNotificationAPI;
@@ -183,6 +186,17 @@ public class DashBoardEmployee extends AppCompatActivity {
                 mUserEmail.setVisibility(View.VISIBLE);
                 mUserEmail.setText(""+userEmail);
 
+            }
+
+            int mapId = PreferenceHandler.getInstance(DashBoardEmployee.this).getMappingId();
+
+            EmployeeDeviceMapping hm = new EmployeeDeviceMapping();
+            String token = SharedPrefManager.getInstance(DashBoardEmployee.this).getDeviceToken();
+
+            if(userId!=0&&token!=null&&mapId==0){
+                hm.setEmployeeId(userId);
+                hm.setDeviceId(token);
+                addDeviceId(hm);
             }
 
             mProfileImage.setOnClickListener(new View.OnClickListener() {
@@ -2179,9 +2193,24 @@ public class DashBoardEmployee extends AppCompatActivity {
 
                         if(s!=null){
 
+                            MeetingDetailsNotificationManagers md = new MeetingDetailsNotificationManagers();
+                            md.setTitle(s.getTitle());
+                            md.setMessage(s.getMessage());
+                            md.setLocation(s.getLocation());
+                            md.setLongitude(""+s.getLongitude());
+                            md.setLatitude(""+s.getLatitude());
+                            md.setMeetingDate(""+s.getMeetingDate());
+                            md.setStatus(s.getStatus());
+                            md.setEmployeeId(s.getManagerId());
+                            md.setManagerId(s.getEmployeeId());
+                            md.setMeetingPerson(s.getMeetingPerson());
+                            md.setMeetingsDetails(s.getMeetingsDetails());
+                            md.setMeetingComments(s.getMeetingComments());
+                            md.setMeetingsId(s.getMeetingsId());
+                            md.setSenderId(Constants.SENDER_ID);
+                            md.setServerId(Constants.SERVER_ID);
 
-
-
+                            sendMeetingNotification(md);
 
                         }
 
@@ -2206,6 +2235,91 @@ public class DashBoardEmployee extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<MeetingDetailsNotificationManagers> call, Throwable t) {
+
+                if(dialog != null && dialog.isShowing())
+                {
+                    dialog.dismiss();
+                }
+                Toast.makeText(DashBoardEmployee.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("TAG", t.toString());
+            }
+        });
+
+
+
+    }
+
+    public void sendMeetingNotification(final MeetingDetailsNotificationManagers md) throws Exception{
+
+
+
+        final ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setMessage("Sending Details..");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        MeetingNotificationAPI apiService = Util.getClient().create(MeetingNotificationAPI.class);
+
+        Call<ArrayList<String>> call = apiService.sendMeetingNotification(md);
+
+        call.enqueue(new Callback<ArrayList<String>>() {
+            @Override
+            public void onResponse(Call<ArrayList<String>> call, Response<ArrayList<String>> response) {
+//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
+                try
+                {
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+
+                    int statusCode = response.code();
+                    if (statusCode == 200 || statusCode == 201) {
+
+                        /*MeetingDetailsNotificationManagers s = response.body();
+
+                        if(s!=null){
+
+                            MeetingDetailsNotificationManagers md = new MeetingDetailsNotificationManagers();
+                            md.setTitle(s.getTitle());
+                            md.setMessage(s.getMessage());
+                            md.setLocation(s.getLocation());
+                            md.setLongitude(""+s.getLongitude());
+                            md.setLatitude(""+s.getLatitude());
+                            md.setMeetingDate(""+s.getMeetingDate());
+                            md.setStatus(s.getStatus());
+                            md.setEmployeeId(s.getManagerId());
+                            md.setManagerId(s.getEmployeeId());
+                            md.setMeetingPerson(s.getMeetingPerson());
+                            md.setMeetingsDetails(s.getMeetingsDetails());
+                            md.setMeetingComments(s.getMeetingComments());
+                            md.setMeetingsId(s.getMeetingsId());*/
+
+
+
+                        //}
+
+
+
+
+                    }else {
+                        Toast.makeText(DashBoardEmployee.this, "Failed Due to "+response.message(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+                    ex.printStackTrace();
+                }
+//                callGetStartEnd();
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<String>> call, Throwable t) {
 
                 if(dialog != null && dialog.isShowing())
                 {
@@ -2307,4 +2421,71 @@ public class DashBoardEmployee extends AppCompatActivity {
                 .setNegativeButton("No", null)
                 .show();
     }
+
+    public void addDeviceId(final EmployeeDeviceMapping pf)
+    {
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+
+
+                EmployeeDeviceApi hotelOperation = Util.getClient().create(EmployeeDeviceApi.class);
+                Call<EmployeeDeviceMapping> response = hotelOperation.addProfileDevice(pf);
+
+                response.enqueue(new Callback<EmployeeDeviceMapping>() {
+                    @Override
+                    public void onResponse(Call<EmployeeDeviceMapping> call, Response<EmployeeDeviceMapping> response) {
+                        System.out.println("GetHotelByProfileId = "+response.code());
+
+
+                        if(response.code() == 200||response.code() == 201||response.code() == 202||response.code() == 204)
+                        {
+                            try{
+                                System.out.println("registered");
+                                EmployeeDeviceMapping pr = response.body();
+
+                                System.out.println();
+
+                                if(pr != null)
+                                {
+
+                                        PreferenceHandler.getInstance(DashBoardEmployee.this).setMappingId(pr.getEmployeeDeviceMappingId());
+
+
+
+                                }
+
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+
+
+
+
+                        }else if(response.code() == 404){
+                            System.out.println("already registered");
+
+
+
+                        }
+                        else
+                        {
+
+
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<EmployeeDeviceMapping> call, Throwable t) {
+
+
+                    }
+                });
+            }
+        });
+    }
+
 }

@@ -18,12 +18,14 @@ import java.util.Calendar;
 import java.util.Date;
 
 import app.zingo.employeemanagements.Model.Employee;
+import app.zingo.employeemanagements.Model.LeaveNotificationManagers;
 import app.zingo.employeemanagements.Model.Leaves;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
 import app.zingo.employeemanagements.WebApi.LeaveAPI;
+import app.zingo.employeemanagements.WebApi.LeaveNotificationAPI;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -259,8 +261,17 @@ public class ApplyLeaveScreen extends AppCompatActivity {
                         if(s!=null){
 
 
-                            ApplyLeaveScreen.this.finish();
-
+                            //ApplyLeaveScreen.this.finish();
+                            LeaveNotificationManagers lm = new LeaveNotificationManagers();
+                            lm.setTitle("Apply For Leave");
+                            lm.setMessage("Leave from "+s.getFromDate()+" to "+s.getToDate());
+                            lm.setReason(""+s.getLeaveComment());
+                            lm.setEmployeeId(s.getEmployeeId());
+                            lm.setManagerId(PreferenceHandler.getInstance(ApplyLeaveScreen.this).getManagerId());
+                            lm.setEmployeeName(PreferenceHandler.getInstance(ApplyLeaveScreen.this).getUserFullName());
+                            lm.setFromDate(leaves.getFromDate());
+                            lm.setToDate(leaves.getToDate());
+                            saveLeave(lm);
 
 
                         }
@@ -286,6 +297,76 @@ public class ApplyLeaveScreen extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Leaves> call, Throwable t) {
+
+                if(dialog != null && dialog.isShowing())
+                {
+                    dialog.dismiss();
+                }
+                Toast.makeText(ApplyLeaveScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("TAG", t.toString());
+            }
+        });
+
+
+
+    }
+
+    public void saveLeave(final LeaveNotificationManagers leaves) throws Exception{
+
+
+
+        final ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setMessage("Saving Details..");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        LeaveNotificationAPI apiService = Util.getClient().create(LeaveNotificationAPI.class);
+
+        Call<LeaveNotificationManagers> call = apiService.saveLeave(leaves);
+
+        call.enqueue(new Callback<LeaveNotificationManagers>() {
+            @Override
+            public void onResponse(Call<LeaveNotificationManagers> call, Response<LeaveNotificationManagers> response) {
+//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
+                try
+                {
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+
+                    int statusCode = response.code();
+                    if (statusCode == 200 || statusCode == 201) {
+
+                        LeaveNotificationManagers s = response.body();
+
+                        if(s!=null){
+
+                            ApplyLeaveScreen.this.finish();
+
+                        }
+
+
+
+
+                    }else {
+                        Toast.makeText(ApplyLeaveScreen.this, "Failed Due to "+response.message(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+                    ex.printStackTrace();
+                }
+//                callGetStartEnd();
+            }
+
+            @Override
+            public void onFailure(Call<LeaveNotificationManagers> call, Throwable t) {
 
                 if(dialog != null && dialog.isShowing())
                 {
