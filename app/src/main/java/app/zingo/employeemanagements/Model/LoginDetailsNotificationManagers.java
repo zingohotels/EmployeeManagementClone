@@ -13,6 +13,12 @@ public class LoginDetailsNotificationManagers  implements Serializable {
     @SerializedName("NotificationManagerId")
     public int NotificationManagerId;
 
+    @SerializedName("SenderId")
+    public String SenderId;
+
+    @SerializedName("ServerId")
+    public String ServerId;
+
     @SerializedName("Title")
     public String Title;
 
@@ -129,5 +135,21 @@ public class LoginDetailsNotificationManagers  implements Serializable {
 
     public void setLoginDetailsId(int loginDetailsId) {
         LoginDetailsId = loginDetailsId;
+    }
+
+    public String getSenderId() {
+        return SenderId;
+    }
+
+    public void setSenderId(String senderId) {
+        SenderId = senderId;
+    }
+
+    public String getServerId() {
+        return ServerId;
+    }
+
+    public void setServerId(String serverId) {
+        ServerId = serverId;
     }
 }

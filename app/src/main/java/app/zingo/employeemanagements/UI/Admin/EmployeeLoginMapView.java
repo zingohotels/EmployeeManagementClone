@@ -1,4 +1,4 @@
-package app.zingo.employeemanagements.UI.Common;
+package app.zingo.employeemanagements.UI.Admin;
 
 import android.Manifest;
 import android.app.ProgressDialog;
@@ -36,24 +36,27 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import java.util.Collections;
-
+import app.zingo.employeemanagements.Model.LoginDetails;
 import app.zingo.employeemanagements.Model.MarkerData;
 import app.zingo.employeemanagements.Model.Meetings;
 import app.zingo.employeemanagements.R;
+import app.zingo.employeemanagements.UI.Common.EmployeeMeetingMap;
 import app.zingo.employeemanagements.Utils.DataParser;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
+import app.zingo.employeemanagements.WebApi.LoginDetailsAPI;
 import app.zingo.employeemanagements.WebApi.MeetingsAPI;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EmployeeMeetingMap extends AppCompatActivity{
+//activity_employee_login_map_view
 
+public class EmployeeLoginMapView extends AppCompatActivity {
     //maps related
     private GoogleMap mMap;
     MapView mapView;
@@ -72,7 +75,7 @@ public class EmployeeMeetingMap extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try{
-            setContentView(R.layout.activity_employee_meeting_map);
+            setContentView(R.layout.activity_employee_login_map_view);
 
 
 
@@ -86,15 +89,15 @@ public class EmployeeMeetingMap extends AppCompatActivity{
            /* mDepartmentCard.setVisibility(View.GONE);
             mDepartmentLay.setVisibility(View.GONE);*/
 
-           Bundle bundle = getIntent().getExtras();
+            Bundle bundle = getIntent().getExtras();
 
-           if(bundle!=null){
+            if(bundle!=null){
 
-               employeeId = bundle.getInt("EmployeeId");
-           }
+                employeeId = bundle.getInt("EmployeeId");
+            }
 
             try {
-                MapsInitializer.initialize(EmployeeMeetingMap.this);
+                MapsInitializer.initialize(EmployeeLoginMapView.this);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -105,7 +108,7 @@ public class EmployeeMeetingMap extends AppCompatActivity{
                     mMap = googleMap;
 
 
-                    if (ActivityCompat.checkSelfPermission(EmployeeMeetingMap.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(EmployeeMeetingMap.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(EmployeeLoginMapView.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(EmployeeLoginMapView.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
                         return;
                     }
@@ -114,7 +117,7 @@ public class EmployeeMeetingMap extends AppCompatActivity{
 
 
                     try{
-                        getMeetingDetails(employeeId);
+                        getLoginDetails(employeeId);
                         //getMeetingDetails(11);
                     }catch (Exception e){
                         e.printStackTrace();
@@ -132,7 +135,7 @@ public class EmployeeMeetingMap extends AppCompatActivity{
 
     }
 
-    private void getMeetingDetails(final int employeeId){
+    private void getLoginDetails(final int employeeId){
 
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
@@ -143,38 +146,38 @@ public class EmployeeMeetingMap extends AppCompatActivity{
         new ThreadExecuter().execute(new Runnable() {
             @Override
             public void run() {
-                MeetingsAPI apiService = Util.getClient().create(MeetingsAPI.class);
-                Call<ArrayList<Meetings>> call = apiService.getMeetingsByEmployeeId(employeeId);
+                LoginDetailsAPI apiService = Util.getClient().create(LoginDetailsAPI.class);
+                Call<ArrayList<LoginDetails>> call = apiService.getLoginByEmployeeId(employeeId);
 
-                call.enqueue(new Callback<ArrayList<Meetings>>() {
+                call.enqueue(new Callback<ArrayList<LoginDetails>>() {
                     @Override
-                    public void onResponse(Call<ArrayList<Meetings>> call, Response<ArrayList<Meetings>> response) {
+                    public void onResponse(Call<ArrayList<LoginDetails>> call, Response<ArrayList<LoginDetails>> response) {
                         int statusCode = response.code();
                         if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
 
 
                             if (progressDialog!=null)
                                 progressDialog.dismiss();
-                            ArrayList<Meetings> list = response.body();
+                            ArrayList<LoginDetails> list = response.body();
                             long hours=0;
 
                             ArrayList<MarkerData> markerData = new ArrayList<>();
 
                             if (list !=null && list.size()!=0) {
 
-                                Collections.sort(list,Meetings.compareMeetings);
+                                Collections.sort(list,LoginDetails.compareLogin);
 
                                 mMap.clear();
                                 for(int i=0;i<list.size();i++){
 
-                                    if(list.get(i).getStartLongitude()!=null||list.get(i).getStartLatitude()!=null||list.get(i).getEndLongitude()!=null||list.get(i).getEndLatitude()!=null){
+                                    if(list.get(i).getLongitude()!=null||list.get(i).getLatitude()!=null){
 
 
-                                        markerData.add(new MarkerData(Double.parseDouble(list.get(i).getStartLongitude()),Double.parseDouble(list.get(i).getStartLatitude()),""+(i+1),list.get(i).getMeetingPersonDetails()));
-                                        markerData.add(new MarkerData(Double.parseDouble(list.get(i).getEndLongitude()),Double.parseDouble(list.get(i).getEndLatitude()),""+(i+1),list.get(i).getMeetingPersonDetails()));
+                                        markerData.add(new MarkerData(Double.parseDouble(list.get(i).getLongitude()),Double.parseDouble(list.get(i).getLatitude()),""+(i+1),list.get(i).getLocation()));
+                                        markerData.add(new MarkerData(Double.parseDouble(list.get(i).getLongitude()),Double.parseDouble(list.get(i).getLatitude()),""+(i+1),list.get(i).getLocation()));
 
-                                        MarkerPoints.add(new LatLng(Double.parseDouble(list.get(i).getStartLongitude()),Double.parseDouble(list.get(i).getStartLatitude())));
-                                        MarkerPoints.add(new LatLng(Double.parseDouble(list.get(i).getEndLongitude()),Double.parseDouble(list.get(i).getEndLatitude())));
+                                        MarkerPoints.add(new LatLng(Double.parseDouble(list.get(i).getLongitude()),Double.parseDouble(list.get(i).getLatitude())));
+                                        MarkerPoints.add(new LatLng(Double.parseDouble(list.get(i).getLongitude()),Double.parseDouble(list.get(i).getLatitude())));
 
                                     }
 
@@ -220,12 +223,12 @@ public class EmployeeMeetingMap extends AppCompatActivity{
                         }else {
 
 
-                            Toast.makeText(EmployeeMeetingMap.this, "Failed due to : "+response.message(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EmployeeLoginMapView.this, "Failed due to : "+response.message(), Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<ArrayList<Meetings>> call, Throwable t) {
+                    public void onFailure(Call<ArrayList<LoginDetails>> call, Throwable t) {
                         // Log error here since request failed
                         if (progressDialog!=null)
                             progressDialog.dismiss();
@@ -433,7 +436,7 @@ public class EmployeeMeetingMap extends AppCompatActivity{
         {
             case android.R.id.home:
 
-                EmployeeMeetingMap.this.finish();
+                EmployeeLoginMapView.this.finish();
         }
         return super.onOptionsItemSelected(item);
     }

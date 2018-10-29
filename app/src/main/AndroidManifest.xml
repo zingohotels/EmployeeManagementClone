@@ -84,6 +84,7 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
         <activity
             android:name=".UI.Landing.SlideScreen"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -119,7 +120,10 @@
         <activity
             android:name=".UI.Employee.ApplyLeaveScreen"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".UI.Admin.CreatePaySlip"></activity>
+        <activity android:name=".UI.Admin.CreatePaySlip" />
+        <activity android:name=".UI.Admin.LoginDetailsHost" />
+        <activity android:name=".UI.Admin.EmployeeLoginList" />
+        <activity android:name=".UI.Admin.EmployeeLoginMapView"></activity>
     </application>
 
 </manifest>

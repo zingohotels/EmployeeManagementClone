@@ -21,7 +21,9 @@ import java.util.Date;
 import java.util.Map;
 
 import app.zingo.employeemanagements.R;
+import app.zingo.employeemanagements.UI.Admin.LoginDetailsHost;
 import app.zingo.employeemanagements.UI.Employee.EmployeeMeetingHost;
+import app.zingo.employeemanagements.Utils.PreferenceHandler;
 
 /**
  * Created by ZingoHotels Tech on 17-10-2018.
@@ -40,7 +42,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // sendNotification(notification.getTitle(), notification.getBody(), map);
         dataPay(remoteMessage);
 
-        sendPopNotification(notification.getTitle(), notification.getBody(), map);
+        if(PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()==2){
+            sendPopNotification(notification.getTitle(), notification.getBody(), map);
+        }
+
 
     }
 
@@ -51,23 +56,35 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private void sendPopNotification(String title, String body, Map<String, String> map) {
         Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.app_logo);
 
-        URL url = null;
-        Bitmap bigPicture  = null;
-        try {
+      //  URL url = null;
+      //  Bitmap bigPicture  = null;
+       /* try {
             url = new URL(map.get("PictureUrl"));
             bigPicture = BitmapFactory.decodeStream(url.openConnection().getInputStream());
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
 
         String message="";
 
         message = body;
 
-        Intent intent = new Intent(this, EmployeeMeetingHost.class);
-        intent.putExtra("BlogId",map.get("BlogId"));
-        intent.putExtra("Title",title);
-        intent.putExtra("Message",body);
+        Intent intent = null;
+
+        if(title.contains("Meeting Details from ")){
+            intent = new Intent(this, EmployeeMeetingHost.class);
+            int employeeId = Integer.parseInt(map.get("ManagerId"));
+            intent.putExtra("EmployeeId",employeeId);
+            intent.putExtra("Title",title);
+            intent.putExtra("Message",body);
+        }else{
+            intent = new Intent(this, LoginDetailsHost.class);
+            int employeeId = Integer.parseInt(map.get("ManagerId"));
+            intent.putExtra("EmployeeId",employeeId);
+            intent.putExtra("Title",title);
+            intent.putExtra("Message",body);
+        }
+
 
         //  Uri sound = Uri.parse("android.resource://" + this.getPackageName() + "/raw/good_morning");
         int m = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
@@ -99,8 +116,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     .setContentInfo(title)
                     .setLargeIcon(icon)
                     .setChannelId("1")
-                    .setStyle(new Notification.BigPictureStyle()
-                            .bigPicture(bigPicture))
+                   /* .setStyle(new Notification.BigPictureStyle()
+                            .bigPicture(bigPicture))*/
                     .setPriority(Notification.PRIORITY_MAX)
 
                     // .setPriority(NotificationManager.IMPORTANCE_HIGH)
@@ -115,8 +132,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     .setContentIntent(pendingIntent)
                     .setContentInfo(title)
                     .setLargeIcon(icon)
-                    .setStyle(new Notification.BigPictureStyle()
-                            .bigPicture(bigPicture))
+                    /*.setStyle(new Notification.BigPictureStyle()
+                            .bigPicture(bigPicture))*/
                     .setPriority(Notification.PRIORITY_MAX)
 
                     .setNumber(count)

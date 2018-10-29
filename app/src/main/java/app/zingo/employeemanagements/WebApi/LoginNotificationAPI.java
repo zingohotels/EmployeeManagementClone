@@ -1,5 +1,7 @@
 package app.zingo.employeemanagements.WebApi;
 
+import java.util.ArrayList;
+
 import app.zingo.employeemanagements.Model.LoginDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.MeetingDetailsNotificationManagers;
 import retrofit2.Call;
@@ -14,4 +16,7 @@ public interface LoginNotificationAPI {
 
     @POST("LoginDetailsNotificationManagers")
     Call<LoginDetailsNotificationManagers> saveLoginNotification(@Body LoginDetailsNotificationManagers details);
+
+    @POST("LoginDetailsNotificationManagers/SendLoginDetailsNotification")
+    Call<ArrayList<String>> sendLoginNotification(@Body LoginDetailsNotificationManagers details);
 }

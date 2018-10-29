@@ -1966,7 +1966,7 @@ public class DashBoardEmployee extends AppCompatActivity {
                                                             md.setLongitude(""+longitude);
                                                             md.setLatitude(""+latitude);
                                                             md.setMeetingDate(""+sdt.format(new Date()));
-                                                            md.setStatus("In meeting");
+                                                            md.setStatus("Completed");
                                                             md.setEmployeeId(PreferenceHandler.getInstance(DashBoardEmployee.this).getUserId());
                                                             md.setManagerId(PreferenceHandler.getInstance(DashBoardEmployee.this).getManagerId());
                                                             md.setMeetingPerson(client);
@@ -1974,6 +1974,7 @@ public class DashBoardEmployee extends AppCompatActivity {
                                                             md.setMeetingsDetails(purpose);
                                                             md.setMeetingComments(remark);
                                                             updateMeeting(loginDetails,dialogs,md);
+                                                            
                                                         } catch (Exception e) {
                                                             e.printStackTrace();
                                                         }
@@ -2092,12 +2093,12 @@ public class DashBoardEmployee extends AppCompatActivity {
                                                     try {
                                                         LoginDetailsNotificationManagers md = new LoginDetailsNotificationManagers();
                                                         md.setTitle("Login Details from "+PreferenceHandler.getInstance(DashBoardEmployee.this).getUserFullName());
-                                                        md.setMessage("Log in at  "+""+sdt.format(new Date()));
+                                                        md.setMessage("Log out at  "+""+sdt.format(new Date()));
                                                         md.setLocation(address);
                                                         md.setLongitude(""+longitude);
                                                         md.setLatitude(""+latitude);
                                                         md.setLoginDate(""+sdt.format(new Date()));
-                                                        md.setStatus("In meeting");
+                                                        md.setStatus("Log out");
                                                         md.setEmployeeId(PreferenceHandler.getInstance(DashBoardEmployee.this).getUserId());
                                                         md.setManagerId(PreferenceHandler.getInstance(DashBoardEmployee.this).getManagerId());
                                                         md.setLoginDetailsId(dto.getLoginDetailsId());
@@ -2276,28 +2277,6 @@ public class DashBoardEmployee extends AppCompatActivity {
                     int statusCode = response.code();
                     if (statusCode == 200 || statusCode == 201) {
 
-                        /*MeetingDetailsNotificationManagers s = response.body();
-
-                        if(s!=null){
-
-                            MeetingDetailsNotificationManagers md = new MeetingDetailsNotificationManagers();
-                            md.setTitle(s.getTitle());
-                            md.setMessage(s.getMessage());
-                            md.setLocation(s.getLocation());
-                            md.setLongitude(""+s.getLongitude());
-                            md.setLatitude(""+s.getLatitude());
-                            md.setMeetingDate(""+s.getMeetingDate());
-                            md.setStatus(s.getStatus());
-                            md.setEmployeeId(s.getManagerId());
-                            md.setManagerId(s.getEmployeeId());
-                            md.setMeetingPerson(s.getMeetingPerson());
-                            md.setMeetingsDetails(s.getMeetingsDetails());
-                            md.setMeetingComments(s.getMeetingComments());
-                            md.setMeetingsId(s.getMeetingsId());*/
-
-
-
-                        //}
 
 
 
@@ -2366,6 +2345,11 @@ public class DashBoardEmployee extends AppCompatActivity {
                         if(s!=null){
 
 
+                            s.setEmployeeId(md.getManagerId());
+                            s.setManagerId(md.getEmployeeId());
+                            s.setSenderId(Constants.SENDER_ID);
+                            s.setServerId(Constants.SERVER_ID);
+                            sendLoginNotification(s);
 
 
 
@@ -2392,6 +2376,69 @@ public class DashBoardEmployee extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<LoginDetailsNotificationManagers> call, Throwable t) {
+
+                if(dialog != null && dialog.isShowing())
+                {
+                    dialog.dismiss();
+                }
+                Toast.makeText(DashBoardEmployee.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("TAG", t.toString());
+            }
+        });
+
+
+
+    }
+
+    public void sendLoginNotification(final LoginDetailsNotificationManagers md) throws Exception{
+
+
+
+        final ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setMessage("Sending Details..");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        LoginNotificationAPI apiService = Util.getClient().create(LoginNotificationAPI.class);
+
+        Call<ArrayList<String>> call = apiService.sendLoginNotification(md);
+
+        call.enqueue(new Callback<ArrayList<String>>() {
+            @Override
+            public void onResponse(Call<ArrayList<String>> call, Response<ArrayList<String>> response) {
+//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
+                try
+                {
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+
+                    int statusCode = response.code();
+                    if (statusCode == 200 || statusCode == 201) {
+
+
+
+
+
+                    }else {
+                        Toast.makeText(DashBoardEmployee.this, "Failed Due to "+response.message(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+                    ex.printStackTrace();
+                }
+//                callGetStartEnd();
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<String>> call, Throwable t) {
 
                 if(dialog != null && dialog.isShowing())
                 {
