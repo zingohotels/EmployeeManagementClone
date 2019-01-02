@@ -78,7 +78,7 @@ public class LeaveManagementHost extends TabActivity implements TabHost.OnTabCha
 
             labelRequest.setText(getResources().getString(R.string.leaveRequest));
             tabMaps.setIndicator(tabRequest);
-            Intent maps = new Intent(this, EmployeeMeetingMap.class);
+            Intent maps = new Intent(this, LeaveTakenDays.class);
             maps.putExtra("EmployeeId", employeeId);
             tabMaps.setContent(maps);
 

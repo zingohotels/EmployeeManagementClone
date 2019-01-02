@@ -16,6 +16,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.location.LocationManager;
 import android.media.ExifInterface;
 import android.net.Uri;
@@ -70,7 +71,9 @@ import app.zingo.employeemanagements.Model.LoginDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.MeetingDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.Meetings;
 import app.zingo.employeemanagements.Model.NavBarItems;
+import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.R;
+import app.zingo.employeemanagements.Service.LocationSharingServices;
 import app.zingo.employeemanagements.UI.Admin.DashBoardAdmin;
 import app.zingo.employeemanagements.UI.Common.ChangePasswordScreen;
 import app.zingo.employeemanagements.UI.Company.OrganizationDetailScree;
@@ -88,6 +91,7 @@ import app.zingo.employeemanagements.WebApi.LoginDetailsAPI;
 import app.zingo.employeemanagements.WebApi.LoginNotificationAPI;
 import app.zingo.employeemanagements.WebApi.MeetingNotificationAPI;
 import app.zingo.employeemanagements.WebApi.MeetingsAPI;
+import app.zingo.employeemanagements.WebApi.OrganizationApi;
 import app.zingo.employeemanagements.WebApi.UploadApi;
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
@@ -110,6 +114,7 @@ public class DashBoardEmployee extends AppCompatActivity {
 
 
     Employee profile;
+    Organization organization;
     EmployeeImages employeeImages;
     int userId=0,imageId=0;
     String userName="",userEmail="";
@@ -168,7 +173,12 @@ public class DashBoardEmployee extends AppCompatActivity {
             if(bundle!=null){
 
                 profile = (Employee) bundle.getSerializable("Profile");
+                organization = (Organization) bundle.getSerializable("Organization");
 
+            }
+
+            if(organization==null){
+                getCompany(PreferenceHandler.getInstance(DashBoardEmployee.this).getCompanyId());
             }
 
             userId = PreferenceHandler.getInstance(DashBoardEmployee.this).getUserId();
@@ -303,10 +313,14 @@ public class DashBoardEmployee extends AppCompatActivity {
                         }else if(loginStatus.equalsIgnoreCase("Logout")){
 
                             masterloginalert("Logout");
+                            Intent serviceIntent = new Intent(DashBoardEmployee.this,LocationSharingServices.class);
+                            startService(serviceIntent);
                         }
 
                     }else{
                         masterloginalert("Logout");
+                        Intent serviceIntent = new Intent(DashBoardEmployee.this,LocationSharingServices.class);
+                        startService(serviceIntent);
                     }
 
 
@@ -645,7 +659,8 @@ public class DashBoardEmployee extends AppCompatActivity {
                         if(employeeImages==null){
                             EmployeeImages employeeImages = new EmployeeImages();
                             employeeImages.setImage(Constants.IMAGE_URL+response.body().toString());
-                            employeeImages.setEmployeeImageId(employee.getEmployeeId());
+                            //employeeImages.setEmployeeImageId(employee.getEmployeeId());
+                            employeeImages.setEmployeeId(employee.getEmployeeId());
 
 
                             addProfileImage(employeeImages);
@@ -653,7 +668,8 @@ public class DashBoardEmployee extends AppCompatActivity {
 
                             EmployeeImages employeeImagess = employeeImages;
                             employeeImagess.setImage(Constants.IMAGE_URL+response.body().toString());
-                            employeeImagess.setEmployeeImageId(employee.getEmployeeId());
+                            employeeImagess.setEmployeeImageId(employeeImages.getEmployeeImageId());
+                            employeeImages.setEmployeeId(employee.getEmployeeId());
 
 
                             updateProfileImage(employeeImages);
@@ -1221,6 +1237,7 @@ public class DashBoardEmployee extends AppCompatActivity {
 
 
 
+
             builder.setPositiveButton(option, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -1234,37 +1251,56 @@ public class DashBoardEmployee extends AppCompatActivity {
                             latitude = gps.getLatitude();
                             longitude = gps.getLongitude();
 
-                            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-                            SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+                            Location locationA = new Location("point A");
 
-                            LatLng master = new LatLng(latitude,longitude);
-                            String address = getAddress(master);
+                            locationA.setLatitude(Double.parseDouble(organization.getLatitude()));
+                            locationA.setLongitude(Double.parseDouble(organization.getLongitude()));
 
-                            LoginDetails loginDetails = new LoginDetails();
-                            loginDetails.setEmployeeId(PreferenceHandler.getInstance(DashBoardEmployee.this).getUserId());
-                            loginDetails.setLatitude(""+latitude);
-                            loginDetails.setLongitude(""+longitude);
-                            loginDetails.setLocation(""+address);
-                            loginDetails.setLoginTime(""+sdt.format(new Date()));
-                            loginDetails.setLoginDate(""+sdf.format(new Date()));
-                            loginDetails.setLogOutTime("");
-                            try {
+                            Location locationB = new Location("point B");
 
-                                LoginDetailsNotificationManagers md = new LoginDetailsNotificationManagers();
-                                md.setTitle("Login Details from "+PreferenceHandler.getInstance(DashBoardEmployee.this).getUserFullName());
-                                md.setMessage("Log in at  "+""+sdt.format(new Date()));
-                                md.setLocation(address);
-                                md.setLongitude(""+longitude);
-                                md.setLatitude(""+latitude);
-                                md.setLoginDate(""+sdt.format(new Date()));
-                                md.setStatus("In meeting");
-                                md.setEmployeeId(PreferenceHandler.getInstance(DashBoardEmployee.this).getUserId());
-                                md.setManagerId(PreferenceHandler.getInstance(DashBoardEmployee.this).getManagerId());
+                            locationB.setLatitude(latitude);
+                            locationB.setLongitude(longitude);
 
-                                addLogin(loginDetails,builder.create(),md);
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                            float distance = locationA.distanceTo(locationB);
+
+                            if(distance>=0&&distance<=30){
+                                Toast.makeText(DashBoardEmployee.this, "distance "+distance, Toast.LENGTH_SHORT).show();
+                                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+                                SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+
+                                LatLng master = new LatLng(latitude,longitude);
+                                String address = getAddress(master);
+
+                                LoginDetails loginDetails = new LoginDetails();
+                                loginDetails.setEmployeeId(PreferenceHandler.getInstance(DashBoardEmployee.this).getUserId());
+                                loginDetails.setLatitude(""+latitude);
+                                loginDetails.setLongitude(""+longitude);
+                                loginDetails.setLocation(""+address);
+                                loginDetails.setLoginTime(""+sdt.format(new Date()));
+                                loginDetails.setLoginDate(""+sdf.format(new Date()));
+                                loginDetails.setLogOutTime("");
+                                try {
+
+                                    LoginDetailsNotificationManagers md = new LoginDetailsNotificationManagers();
+                                    md.setTitle("Login Details from "+PreferenceHandler.getInstance(DashBoardEmployee.this).getUserFullName());
+                                    md.setMessage("Log in at  "+""+sdt.format(new Date()));
+                                    md.setLocation(address);
+                                    md.setLongitude(""+longitude);
+                                    md.setLatitude(""+latitude);
+                                    md.setLoginDate(""+sdt.format(new Date()));
+                                    md.setStatus("In meeting");
+                                    md.setEmployeeId(PreferenceHandler.getInstance(DashBoardEmployee.this).getUserId());
+                                    md.setManagerId(PreferenceHandler.getInstance(DashBoardEmployee.this).getManagerId());
+
+                                    addLogin(loginDetails,builder.create(),md);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                            }else{
+                                Toast.makeText(DashBoardEmployee.this, "You are far away "+distance+" meter from your office", Toast.LENGTH_SHORT).show();
                             }
+
 
 
                         }
@@ -2532,6 +2568,44 @@ public class DashBoardEmployee extends AppCompatActivity {
                     }
                 });
             }
+        });
+    }
+
+    public void getCompany(final int id){
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+
+                final OrganizationApi subCategoryAPI = Util.getClient().create(OrganizationApi.class);
+                Call<Organization> getProf = subCategoryAPI.getOrganizationById(id);
+                //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
+
+                getProf.enqueue(new Callback<Organization>() {
+
+                    @Override
+                    public void onResponse(Call<Organization> call, Response<Organization> response) {
+
+                        if (response.code() == 200||response.code() == 201||response.code() == 204)
+                        {
+
+                            if(response.body()!=null){
+                                organization = response.body();
+                            }
+
+
+                        }else{
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Organization> call, Throwable t) {
+
+                    }
+                });
+
+            }
+
         });
     }
 

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -20,6 +21,7 @@ import java.net.URL;
 import java.util.Date;
 import java.util.Map;
 
+import app.zingo.employeemanagements.Model.LeaveNotificationManagers;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Admin.LoginDetailsHost;
 import app.zingo.employeemanagements.UI.Employee.EmployeeMeetingHost;
@@ -77,6 +79,24 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             intent.putExtra("EmployeeId",employeeId);
             intent.putExtra("Title",title);
             intent.putExtra("Message",body);
+        }else  if(title.contains("Apply For Leave")){
+            intent = new Intent(this, EmployeeMeetingHost.class);
+            int employeeId = Integer.parseInt(map.get("EmployeeId"));
+            String employeeName = map.get("EmployeeName");
+            String from = map.get("FromDate");
+            String to = map.get("ToDate");
+            String reason = map.get("Reason");
+            LeaveNotificationManagers lm = new LeaveNotificationManagers();
+            lm.setEmployeeName(employeeName);
+            lm.setFromDate(from);
+            lm.setToDate(to);
+            lm.setReason(reason);
+            lm.setEmployeeId(employeeId);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("LeaveNotification",lm);
+            intent.putExtras(bundle);
+
+
         }else{
             intent = new Intent(this, LoginDetailsHost.class);
             int employeeId = Integer.parseInt(map.get("ManagerId"));

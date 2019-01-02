@@ -261,12 +261,14 @@ public class LoginScreen extends AppCompatActivity {
                                 Intent i = new Intent(LoginScreen.this, DashBoardAdmin.class);
                                 //Intent i = new Intent(LoginScreen.this, DashBoardEmployee.class);
                                 i.putExtra("Profile",dto);
+
                                 startActivity(i);
                                 finish();
                             }else{
                                 //Intent i = new Intent(LoginScreen.this, DashBoardAdmin.class);
                                 Intent i = new Intent(LoginScreen.this, DashBoardEmployee.class);
                                 i.putExtra("Profile",dto);
+                                i.putExtra("Organization",response.body());
                                 startActivity(i);
                                 finish();
                             }

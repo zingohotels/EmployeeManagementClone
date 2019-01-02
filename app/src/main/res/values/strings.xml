@@ -11,6 +11,8 @@
     <string name="arial">arial</string>
     <string name="Mistral">Mistral</string>
 
+    <string name="file_provider_authority" translatable="false">app.zingo.employeemanagements.fileprovider</string>
+
     <!--Splash screen-->
     <string name="splash_app_name">Employee Management</string>
     <string name="powered_by_zingo">Powered By Zingo</string>

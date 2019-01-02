@@ -15,6 +15,7 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import app.zingo.employeemanagements.R;
+import app.zingo.employeemanagements.UI.Admin.EmployeeLiveMappingScreen;
 import app.zingo.employeemanagements.UI.Common.EmployeeMeetingList;
 import app.zingo.employeemanagements.UI.Common.EmployeeMeetingMap;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
@@ -76,7 +77,7 @@ public class EmployeeMeetingHost extends TabActivity implements TabHost.OnTabCha
 
             labelMap.setText(getResources().getString(R.string.mapView));
             tabMaps.setIndicator(tabMap);
-            Intent maps = new Intent(this, EmployeeMeetingMap.class);
+            Intent maps = new Intent(this, EmployeeLiveMappingScreen.class);
             maps.putExtra("EmployeeId", employeeId);
             tabMaps.setContent(maps);
 

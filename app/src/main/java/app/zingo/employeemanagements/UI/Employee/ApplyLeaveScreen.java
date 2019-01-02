@@ -14,18 +14,21 @@ import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.LeaveNotificationManagers;
 import app.zingo.employeemanagements.Model.Leaves;
+import app.zingo.employeemanagements.Model.MeetingDetailsNotificationManagers;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
 import app.zingo.employeemanagements.WebApi.LeaveAPI;
 import app.zingo.employeemanagements.WebApi.LeaveNotificationAPI;
+import app.zingo.employeemanagements.WebApi.MeetingNotificationAPI;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -176,6 +179,7 @@ public class ApplyLeaveScreen extends AppCompatActivity {
                 leaves.setFromDate(dfs.format(fromDate));
                 leaves.setToDate(dfs.format(toDate));
                 leaves.setStatus("Pending");
+                leaves.setLeaveType("UnConfirmed");
                 int diffs = (int)dateCal(from,to);
                 leaves.setNoOfDays(diffs);
                 leaves.setApprovedDate(dfs.format(fromDate));
@@ -265,7 +269,7 @@ public class ApplyLeaveScreen extends AppCompatActivity {
                             LeaveNotificationManagers lm = new LeaveNotificationManagers();
                             lm.setTitle("Apply For Leave");
                             lm.setMessage("Leave from "+s.getFromDate()+" to "+s.getToDate());
-                            lm.setReason(""+s.getLeaveComment());
+                            lm.setReason(s.getLeaveId()+","+s.getLeaveComment());
                             lm.setEmployeeId(s.getEmployeeId());
                             lm.setManagerId(PreferenceHandler.getInstance(ApplyLeaveScreen.this).getManagerId());
                             lm.setEmployeeName(PreferenceHandler.getInstance(ApplyLeaveScreen.this).getUserFullName());
@@ -342,7 +346,9 @@ public class ApplyLeaveScreen extends AppCompatActivity {
 
                         if(s!=null){
 
+                          //  sendLeaveNotification(leaves);
                             ApplyLeaveScreen.this.finish();
+
 
                         }
 
@@ -367,6 +373,69 @@ public class ApplyLeaveScreen extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<LeaveNotificationManagers> call, Throwable t) {
+
+                if(dialog != null && dialog.isShowing())
+                {
+                    dialog.dismiss();
+                }
+                Toast.makeText(ApplyLeaveScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("TAG", t.toString());
+            }
+        });
+
+
+
+    }
+
+    public void sendLeaveNotification(final LeaveNotificationManagers lm) throws Exception{
+
+
+
+        final ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setMessage("Sending Details..");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        LeaveNotificationAPI apiService = Util.getClient().create(LeaveNotificationAPI.class);
+
+        Call<ArrayList<String>> call = apiService.sendLeaveNotification(lm);
+
+        call.enqueue(new Callback<ArrayList<String>>() {
+            @Override
+            public void onResponse(Call<ArrayList<String>> call, Response<ArrayList<String>> response) {
+//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
+                try
+                {
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+
+                    int statusCode = response.code();
+                    if (statusCode == 200 || statusCode == 201) {
+
+
+                    ApplyLeaveScreen.this.finish();
+
+
+                    }else {
+                        Toast.makeText(ApplyLeaveScreen.this, "Failed Due to "+response.message(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+                    ex.printStackTrace();
+                }
+//                callGetStartEnd();
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<String>> call, Throwable t) {
 
                 if(dialog != null && dialog.isShowing())
                 {

@@ -1,0 +1,31 @@
+package app.zingo.employeemanagements.WebApi;
+
+import java.util.ArrayList;
+
+import app.zingo.employeemanagements.Model.LiveTracking;
+import app.zingo.employeemanagements.Model.LoginDetails;
+import retrofit2.Call;
+import retrofit2.http.Body;
+import retrofit2.http.GET;
+import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
+
+/**
+ * Created by ZingoHotels Tech on 02-01-2019.
+ */
+
+public interface LiveTrackingAPI {
+
+    @GET("LiveTrackingDetails/GetliveTrackingDetailsByEmployeeId/{EmployeeId}")
+    Call<ArrayList<LiveTracking>> getLiveTrackingByEmployeeId(@Path("EmployeeId") int id);
+
+    @POST("LiveTrackingDetails")
+    Call<LiveTracking> addLiveTracking(@Body LiveTracking details);
+
+    @GET("LiveTrackingDetails/{id}")
+    Call<LiveTracking> getLiveTrackingById(@Path("id") int id);
+
+    @PUT("LiveTrackingDetails/{id}")
+    Call<LiveTracking> updateLiveTrackingById(@Path("id") int id,@Body LiveTracking details);
+}
