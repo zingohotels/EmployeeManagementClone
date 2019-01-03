@@ -5,6 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
     tools:context="app.zingo.employeemanagements.UI.LandingScreen">
 
     <ScrollView
@@ -141,9 +143,6 @@
                 android:textSize="16dp"
                 android:textColor="#fff"
                 />
-
-
-
 
 
         </LinearLayout>

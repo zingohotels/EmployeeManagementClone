@@ -81,6 +81,36 @@ public class Employee implements Serializable {
     @SerializedName("UserRoleId")
     private int UserRoleId;
 
+    @SerializedName("Lastseen")
+    private String Lastseen;
+
+    @SerializedName("IsLocationOn")
+    private boolean IsLocationOn;
+
+    @SerializedName("Battery")
+    private String Battery;
+
+    @SerializedName("IsDataOn")
+    private boolean IsDataOn;
+
+    @SerializedName("LastUpdated")
+    private String LastUpdated;
+
+    @SerializedName("DeviceName")
+    private String DeviceName;
+
+    @SerializedName("DeviceIMEI")
+    private int DeviceIMEI;
+
+    @SerializedName("DeviceModel")
+    private String DeviceModel;
+
+    @SerializedName("DeviceAndroidVersion")
+    private String DeviceAndroidVersion;
+
+    @SerializedName("IsAppOpen")
+    private boolean IsAppOpen;
+
     public int getEmployeeId() {
         return EmployeeId;
     }
@@ -267,6 +297,86 @@ public class Employee implements Serializable {
 
     public void setEmployeeDocument(ArrayList<EmployeeDocuments> employeeDocument) {
         this.employeeDocument = employeeDocument;
+    }
+
+    public String getLastseen() {
+        return Lastseen;
+    }
+
+    public void setLastseen(String lastseen) {
+        Lastseen = lastseen;
+    }
+
+    public boolean isLocationOn() {
+        return IsLocationOn;
+    }
+
+    public void setLocationOn(boolean locationOn) {
+        IsLocationOn = locationOn;
+    }
+
+    public String getBattery() {
+        return Battery;
+    }
+
+    public void setBattery(String battery) {
+        Battery = battery;
+    }
+
+    public boolean isDataOn() {
+        return IsDataOn;
+    }
+
+    public void setDataOn(boolean dataOn) {
+        IsDataOn = dataOn;
+    }
+
+    public String getLastUpdated() {
+        return LastUpdated;
+    }
+
+    public void setLastUpdated(String lastUpdated) {
+        LastUpdated = lastUpdated;
+    }
+
+    public String getDeviceName() {
+        return DeviceName;
+    }
+
+    public void setDeviceName(String deviceName) {
+        DeviceName = deviceName;
+    }
+
+    public int getDeviceIMEI() {
+        return DeviceIMEI;
+    }
+
+    public void setDeviceIMEI(int deviceIMEI) {
+        DeviceIMEI = deviceIMEI;
+    }
+
+    public String getDeviceModel() {
+        return DeviceModel;
+    }
+
+    public void setDeviceModel(String deviceModel) {
+        DeviceModel = deviceModel;
+    }
+
+    public String getDeviceAndroidVersion() {
+        return DeviceAndroidVersion;
+    }
+
+    public void setDeviceAndroidVersion(String deviceAndroidVersion) {
+        DeviceAndroidVersion = deviceAndroidVersion;
+    }
+
+    public boolean isAppOpen() {
+        return IsAppOpen;
+    }
+
+    public void setAppOpen(boolean appOpen) {
+        IsAppOpen = appOpen;
     }
 
     public static void setCompareEmployee(Comparator compareEmployee) {

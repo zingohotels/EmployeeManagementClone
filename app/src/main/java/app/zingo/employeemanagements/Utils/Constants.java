@@ -20,6 +20,13 @@ public interface Constants {
     String MEETING_ID = "meet_id";
     String MAPPING_ID = "map_id";
     String COMPANY_NAME ="company_name";
+    String APP_TYPE ="app_type";
+    String LIC_START ="lic_start";
+    String LIC_END ="lic_end";
+    String PLAN_TYPE ="plan_type";
+    String SIGNUP_DATE ="sing_date";
+    String EMP_LIMIT ="emp_limit";
+    String PLAN_ID ="plan_id";
     String USER_NAME ="user_name";
     String HOTEL_PLACE ="user_phoneno";
     String USER_FULLNAME ="user_fullname";

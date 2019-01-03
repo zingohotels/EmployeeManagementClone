@@ -32,9 +32,7 @@
         <activity
             android:name=".UI.Landing.SplashScreen"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".UI.Landing.PhoneVerificationScreen"
             android:screenOrientation="portrait"
@@ -138,15 +136,27 @@
         <activity
             android:name=".UI.Admin.EmployeeLiveMappingScreen"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".UI.LandingScreen"
+        <activity
+            android:name=".UI.LandingScreen"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoAction">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".UI.ContactUsScreen"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".UI.SupportScreen"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".GetStartedScreen"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" ></activity>
     </application>
 
 </manifest>

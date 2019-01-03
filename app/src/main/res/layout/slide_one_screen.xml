@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    xmlns:card-view="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+
+    >
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        card-view:cardElevation="10dp"
+        android:elevation="10dp"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="5dp"
+                android:src="@drawable/ic_customer_service"/>
+
+            <app.zingo.employeemanagements.Custom.MyRegulerText
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:text="Phone Support"
+                android:textSize="22dp"
+                android:textColor="@color/colorPrimaryDark"
+                />
+            <View
+                android:id="@+id/view_color"
+                android:layout_width="180dp"
+                android:layout_height="5dp"
+                android:background="#04BEBD"
+
+                />
+
+            <app.zingo.employeemanagements.Custom.MyRegulerText
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:text="Available to Employee Management App administrators only. Log in to your admin account for verification."
+                android:textSize="22dp"
+                android:textColor="@color/text_grey"
+                />
+
+        </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>
+</RelativeLayout>

@@ -47,8 +47,35 @@ public class Organization implements Serializable {
     @SerializedName("AboutUs")
     private String AboutUs;
 
+    @SerializedName("Images")
+    private ArrayList<OrganizationImage> Images;
+
     @SerializedName("department")
     private ArrayList<Departments> department;
+
+    @SerializedName("AppType")
+    private String AppType;
+
+    @SerializedName("LicenseStartDate")
+    private String LicenseStartDate;
+
+    @SerializedName("LicenseEndDate")
+    private String LicenseEndDate;
+
+    @SerializedName("PlanType")
+    private String PlanType;
+
+    @SerializedName("SignupDate")
+    private String SignupDate;
+
+    @SerializedName("EmployeeLimit")
+    private int EmployeeLimit;
+
+    @SerializedName("PlanId")
+    private int PlanId;
+
+    @SerializedName("plans")
+    private Plans plans;
 
     public int getOrganizationId() {
         return OrganizationId;
@@ -152,5 +179,77 @@ public class Organization implements Serializable {
 
     public void setDepartment(ArrayList<Departments> department) {
         this.department = department;
+    }
+
+    public ArrayList<OrganizationImage> getImages() {
+        return Images;
+    }
+
+    public void setImages(ArrayList<OrganizationImage> images) {
+        Images = images;
+    }
+
+    public String getAppType() {
+        return AppType;
+    }
+
+    public void setAppType(String appType) {
+        AppType = appType;
+    }
+
+    public String getLicenseStartDate() {
+        return LicenseStartDate;
+    }
+
+    public void setLicenseStartDate(String licenseStartDate) {
+        LicenseStartDate = licenseStartDate;
+    }
+
+    public String getLicenseEndDate() {
+        return LicenseEndDate;
+    }
+
+    public void setLicenseEndDate(String licenseEndDate) {
+        LicenseEndDate = licenseEndDate;
+    }
+
+    public String getPlanType() {
+        return PlanType;
+    }
+
+    public void setPlanType(String planType) {
+        PlanType = planType;
+    }
+
+    public String getSignupDate() {
+        return SignupDate;
+    }
+
+    public void setSignupDate(String signupDate) {
+        SignupDate = signupDate;
+    }
+
+    public int getEmployeeLimit() {
+        return EmployeeLimit;
+    }
+
+    public void setEmployeeLimit(int employeeLimit) {
+        EmployeeLimit = employeeLimit;
+    }
+
+    public int getPlanId() {
+        return PlanId;
+    }
+
+    public void setPlanId(int planId) {
+        PlanId = planId;
+    }
+
+    public Plans getPlans() {
+        return plans;
+    }
+
+    public void setPlans(Plans plans) {
+        this.plans = plans;
     }
 }

@@ -112,6 +112,69 @@ public class PreferenceHandler {
         return sh.getString(Constants.COMPANY_NAME,"");
     }
 
+    public void setAppType(String appType) {
+        sh.edit().putString(Constants.APP_TYPE,appType).apply();
+    }
+
+    public String getAppType()
+    {
+        return sh.getString(Constants.APP_TYPE,"");
+    }
+
+    public void setLicenseStartDate(String licenseStartDate) {
+        sh.edit().putString(Constants.LIC_START,licenseStartDate).apply();
+    }
+
+    public String getLicenseStartDate()
+    {
+        return sh.getString(Constants.LIC_START,"");
+    }
+
+    public void setLicenseEndDate(String licenseEndDate) {
+        sh.edit().putString(Constants.LIC_END,licenseEndDate).apply();
+    }
+
+    public String getLicenseEndDate()
+    {
+        return sh.getString(Constants.LIC_END,"");
+    }
+
+    public void setPlanType(String appType) {
+        sh.edit().putString(Constants.PLAN_TYPE,appType).apply();
+    }
+
+    public String getPlanType()
+    {
+        return sh.getString(Constants.PLAN_TYPE,"");
+    }
+
+    public void setSignupDate(String signupDate) {
+        sh.edit().putString(Constants.SIGNUP_DATE,signupDate).apply();
+    }
+
+    public String getSignupDate()
+    {
+        return sh.getString(Constants.SIGNUP_DATE,"");
+    }
+
+    public void setEmployeeLimit(int employeeLimit) {
+        sh.edit().putInt(Constants.EMP_LIMIT,employeeLimit).apply();
+    }
+
+    public int getEmployeeLimit()
+    {
+        return sh.getInt(Constants.EMP_LIMIT,0);
+    }
+
+    public void setPlanId(int planId) {
+        sh.edit().putInt(Constants.PLAN_ID,planId).apply();
+    }
+
+    public int getPlanId()
+    {
+        return sh.getInt(Constants.PLAN_ID,0);
+    }
+
 
     public void setUserFullName(String fullname) {
         sh.edit().putString(Constants.USER_FULLNAME,fullname).apply();
