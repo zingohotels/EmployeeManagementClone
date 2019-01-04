@@ -1,13 +1,21 @@
 package app.zingo.employeemanagements.UI;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,14 +26,12 @@ import java.util.Date;
 import app.zingo.employeemanagements.Custom.MyEditText;
 import app.zingo.employeemanagements.Custom.MyRegulerText;
 import app.zingo.employeemanagements.FireBase.SharedPrefManager;
-import app.zingo.employeemanagements.GetStartedScreen;
 import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Admin.DashBoardAdmin;
 import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
-import app.zingo.employeemanagements.UI.Login.LoginScreen;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
@@ -42,6 +48,7 @@ public class LandingScreen extends AppCompatActivity {
     TextView mSignIn,mSupport;
     MyEditText mEmail,mPassword;
     MyRegulerText mSignInButton,mGetStarted,mContactUs;
+    CheckBox mShowPwd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +64,7 @@ public class LandingScreen extends AppCompatActivity {
             mSignInButton = (MyRegulerText)findViewById(R.id.buttonsignin);
             mGetStarted = (MyRegulerText)findViewById(R.id.button_get_started);
             mContactUs = (MyRegulerText)findViewById(R.id.button_contact_us);
+            mShowPwd = (CheckBox) findViewById(R.id.show_hide_password);
 
             String token = SharedPrefManager.getInstance(LandingScreen.this).getDeviceToken();
 
@@ -89,6 +97,31 @@ public class LandingScreen extends AppCompatActivity {
                 public void onClick(View view) {
 
                     validateField();
+
+                }
+            });
+
+            mShowPwd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+                @Override
+                public void onCheckedChanged(CompoundButton button,
+                                             boolean isChecked) {
+
+                    // If it is checked then show password else hide password
+                    if (isChecked) {
+
+                        mShowPwd.setText("Hide Password");// change checkbox text
+
+                        mPassword.setInputType(InputType.TYPE_CLASS_TEXT);
+                        mPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());// show password
+                    } else {
+                        mShowPwd.setText("Show Password");// change checkbox text
+
+                        mPassword.setInputType(InputType.TYPE_CLASS_TEXT
+                                | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        mPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());// hide password
+
+                    }
 
                 }
             });
@@ -288,7 +321,16 @@ public class LandingScreen extends AppCompatActivity {
 
                                     if((smdf.parse(licenseEndDate).getTime()<smdf.parse(smdf.format(new Date())).getTime())){
 
-                                        Toast.makeText(LandingScreen.this, "Trial Version Expired.Please Update Paid Version", Toast.LENGTH_SHORT).show();
+
+                                        if(PreferenceHandler.getInstance(LandingScreen.this).getUserRoleUniqueID()==2){
+
+                                            popupUpgrade("Your free trial version expired.Upgrade the app to continue the services","Any quieries about Plans contact our Customer Support team");
+
+                                        }else{
+
+                                            popupUpgrade("Your free trial version expired.Upgrade the app to continue the services","Ask your management to Upgrade the app version.");
+
+                                        }
 
                                     }else{
                                         if(PreferenceHandler.getInstance(LandingScreen.this).getUserRoleUniqueID()==2){
@@ -363,5 +405,61 @@ public class LandingScreen extends AppCompatActivity {
             }
 
         });
+    }
+
+    public void popupUpgrade(final String text,final String days){
+
+        try{
+
+            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(LandingScreen.this);
+            LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View views = inflater.inflate(R.layout.app_upgrade_pop, null);
+
+            builder.setView(views);
+
+            final Button mPaid = (Button) views.findViewById(R.id.paid_version_upgrade);
+            final MyRegulerText mCompanyName = (MyRegulerText) views.findViewById(R.id.company_name_upgrade);
+            final MyRegulerText mText = (MyRegulerText) views.findViewById(R.id.alert_message_upgrade);
+            final MyRegulerText mDay = (MyRegulerText) views.findViewById(R.id.day_count_upgrade);
+
+            final android.support.v7.app.AlertDialog dialogs = builder.create();
+            dialogs.show();
+            dialogs.setCanceledOnTouchOutside(true);
+
+            mCompanyName.setText("Dear "+PreferenceHandler.getInstance(LandingScreen.this).getCompanyName());
+            mText.setText(""+text);
+            mDay.setText(""+days);
+
+
+            if(PreferenceHandler.getInstance(LandingScreen.this).getUserRoleUniqueID()==2){
+
+
+
+            }else{
+
+                mPaid.setVisibility(View.GONE);
+
+            }
+            mPaid.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    dialogs.dismiss();
+
+                }
+            });
+
+
+
+
+
+
+
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 }

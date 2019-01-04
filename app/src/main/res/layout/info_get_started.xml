@@ -68,13 +68,23 @@
             android:textColor="@color/text_grey"
             />
 
-
         <Button
-            android:id="@+id/retry_button"
+            android:id="@+id/paid_version"
             android:layout_below="@+id/text_internal"
             android:layout_width="150dp"
             android:layout_height="40dp"
-            android:text="Next"
+            android:text="Paid Version"
+            android:layout_centerInParent="true"
+            android:layout_margin="10dp"
+            android:background="#04BEBD"
+            android:textColor="#ffffff"/>
+
+        <Button
+            android:id="@+id/trial_version"
+            android:layout_below="@+id/text_internal"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:text="Trial version"
             android:layout_centerInParent="true"
             android:layout_margin="10dp"
             android:background="#04BEBD"

@@ -15,10 +15,10 @@ public class Plans implements Serializable {
     public int PlansId;
 
     @SerializedName("PlanName")
-    public int PlanName;
+    public String PlanName;
 
     @SerializedName("Description")
-    public int Description;
+    public String Description;
 
     @SerializedName("ratesList")
     public ArrayList<Rates> ratesList;
@@ -31,19 +31,19 @@ public class Plans implements Serializable {
         PlansId = plansId;
     }
 
-    public int getPlanName() {
+    public String getPlanName() {
         return PlanName;
     }
 
-    public void setPlanName(int planName) {
+    public void setPlanName(String planName) {
         PlanName = planName;
     }
 
-    public int getDescription() {
+    public String getDescription() {
         return Description;
     }
 
-    public void setDescription(int description) {
+    public void setDescription(String description) {
         Description = description;
     }
 

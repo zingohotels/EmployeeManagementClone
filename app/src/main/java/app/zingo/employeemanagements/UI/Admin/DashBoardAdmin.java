@@ -27,9 +27,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -41,23 +44,29 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import app.zingo.employeemanagements.Adapter.DepartmentAdapter;
 import app.zingo.employeemanagements.Adapter.DepartmentGridAdapter;
 import app.zingo.employeemanagements.Adapter.NavigationListAdapter;
+import app.zingo.employeemanagements.Custom.MyRegulerText;
 import app.zingo.employeemanagements.FireBase.SharedPrefManager;
 import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.EmployeeDeviceMapping;
 import app.zingo.employeemanagements.Model.EmployeeImages;
 import app.zingo.employeemanagements.Model.NavBarItems;
+import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Common.ChangePasswordScreen;
 import app.zingo.employeemanagements.UI.Company.OrganizationDetailScree;
 import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
 import app.zingo.employeemanagements.UI.Employee.EmployeeListScreen;
-import app.zingo.employeemanagements.UI.Login.LoginScreen;
+import app.zingo.employeemanagements.UI.GetStartedScreen;
+import app.zingo.employeemanagements.UI.LandingScreen;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
@@ -66,6 +75,7 @@ import app.zingo.employeemanagements.WebApi.DepartmentApi;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
 import app.zingo.employeemanagements.WebApi.EmployeeDeviceApi;
 import app.zingo.employeemanagements.WebApi.EmployeeImageAPI;
+import app.zingo.employeemanagements.WebApi.OrganizationApi;
 import app.zingo.employeemanagements.WebApi.UploadApi;
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
@@ -90,6 +100,8 @@ public class DashBoardAdmin extends AppCompatActivity {
     EmployeeImages employeeImages;
     int userId=0,imageId=0;
     String userName="",userEmail="";
+    String appType="",planType="",licensesStartDate="",licenseEndDate="";
+    int planId=0;
 
     public static final int MY_PERMISSIONS_REQUEST_RESULT = 1;
 
@@ -138,6 +150,8 @@ public class DashBoardAdmin extends AppCompatActivity {
             userName = PreferenceHandler.getInstance(DashBoardAdmin.this).getUserFullName();
             userEmail = PreferenceHandler.getInstance(DashBoardAdmin.this).getUserEmail();
             int mapId = PreferenceHandler.getInstance(DashBoardAdmin.this).getMappingId();
+
+
 
             if(userName!=null&&!userName.isEmpty()){
 
@@ -202,6 +216,9 @@ public class DashBoardAdmin extends AppCompatActivity {
             }
 
             getDepartment(PreferenceHandler.getInstance(DashBoardAdmin.this).getCompanyId());
+            getCompany(PreferenceHandler.getInstance(DashBoardAdmin.this).getCompanyId());
+
+
 
 
         }catch (Exception e){
@@ -836,7 +853,7 @@ public class DashBoardAdmin extends AppCompatActivity {
 
                 PreferenceHandler.getInstance(DashBoardAdmin.this).clear();
 
-                Intent log = new Intent(DashBoardAdmin.this, LoginScreen.class);
+                Intent log = new Intent(DashBoardAdmin.this, LandingScreen.class);
                 log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                 Toast.makeText(DashBoardAdmin.this,"Logout",Toast.LENGTH_SHORT).show();
@@ -913,6 +930,119 @@ public class DashBoardAdmin extends AppCompatActivity {
                     }
                 });
             }
+        });
+    }
+
+    public void getCompany(final int id){
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+
+                final OrganizationApi subCategoryAPI = Util.getClient().create(OrganizationApi.class);
+                Call<Organization> getProf = subCategoryAPI.getOrganizationById(id);
+                //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
+
+                getProf.enqueue(new Callback<Organization>() {
+
+                    @Override
+                    public void onResponse(Call<Organization> call, Response<Organization> response) {
+
+                        if (response.code() == 200||response.code() == 201||response.code() == 204)
+                        {
+                            System.out.println("Inside api");
+                            PreferenceHandler.getInstance(DashBoardAdmin.this).setCompanyId(response.body().getOrganizationId());
+                            PreferenceHandler.getInstance(DashBoardAdmin.this).setCompanyName(response.body().getOrganizationName());
+                            PreferenceHandler.getInstance(DashBoardAdmin.this).setAppType(response.body().getAppType());
+
+                            PreferenceHandler.getInstance(DashBoardAdmin.this).setAppType(response.body().getAppType());
+                            PreferenceHandler.getInstance(DashBoardAdmin.this).setLicenseStartDate(response.body().getLicenseStartDate());
+                            PreferenceHandler.getInstance(DashBoardAdmin.this).setLicenseEndDate(response.body().getLicenseEndDate());
+                            PreferenceHandler.getInstance(DashBoardAdmin.this).setSignupDate(response.body().getSignupDate());
+                            PreferenceHandler.getInstance(DashBoardAdmin.this).setPlanType(response.body().getPlanType());
+                            PreferenceHandler.getInstance(DashBoardAdmin.this).setEmployeeLimit(response.body().getEmployeeLimit());
+                            PreferenceHandler.getInstance(DashBoardAdmin.this).setPlanId(response.body().getPlanId());
+
+                            appType = PreferenceHandler.getInstance(DashBoardAdmin.this).getAppType();
+                            planType = PreferenceHandler.getInstance(DashBoardAdmin.this).getPlanType();
+                            licensesStartDate = PreferenceHandler.getInstance(DashBoardAdmin.this).getLicenseStartDate();
+                            licenseEndDate = PreferenceHandler.getInstance(DashBoardAdmin.this).getLicenseEndDate();
+                            planId = PreferenceHandler.getInstance(DashBoardAdmin.this).getPlanId();
+
+                            try{
+
+                                if(appType!=null){
+
+                                    if(appType.equalsIgnoreCase("Trial")){
+
+                                        SimpleDateFormat smdf = new SimpleDateFormat("MM/dd/yyyy");
+
+                                        long days = dateCal(licenseEndDate);
+
+
+
+                                        if((smdf.parse(licenseEndDate).getTime()<smdf.parse(smdf.format(new Date())).getTime())){
+
+                                            Toast.makeText(DashBoardAdmin.this, "Trial Version Expired.Please Update Paid Version", Toast.LENGTH_SHORT).show();
+                                            PreferenceHandler.getInstance(DashBoardAdmin.this).clear();
+
+                                            Intent log = new Intent(DashBoardAdmin.this, LandingScreen.class);
+                                            log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                            log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            Toast.makeText(DashBoardAdmin.this,"Logout",Toast.LENGTH_SHORT).show();
+                                            startActivity(log);
+                                            finish();
+
+                                        }else{
+
+                                            if(days>=1&&days<=5){
+                                                popupUpgrade("Hope your enjoying to use our Trial version.Get more features You need to Upgrade App","Your trial period is going to expire in "+days+" days");
+
+                                            }else if(days==0){
+                                                popupUpgrade("Hope your enjoying to use our Trial version.Get more features You need to Upgrade App","Today is last day for your free trial");
+
+                                            }else if(days<0){
+                                                Toast.makeText(DashBoardAdmin.this, "Your Trial Period is Expired", Toast.LENGTH_SHORT).show();
+                                                PreferenceHandler.getInstance(DashBoardAdmin.this).clear();
+
+                                                Intent log = new Intent(DashBoardAdmin.this, LandingScreen.class);
+                                                log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                Toast.makeText(DashBoardAdmin.this,"Logout",Toast.LENGTH_SHORT).show();
+                                                startActivity(log);
+                                                finish();
+                                            }
+
+                                        }
+
+                                    }else if(appType.equalsIgnoreCase("Paid")){
+
+                                    }
+                                }
+
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+
+
+
+
+
+
+                        }else{
+
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Organization> call, Throwable t) {
+
+                    }
+                });
+
+            }
+
         });
     }
 
@@ -997,5 +1127,79 @@ public class DashBoardAdmin extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    public long dateCal(String date){
+
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+
+
+
+        Date fd=null,td=null;
+
+        try {
+            fd = sdf.parse(""+date);
+            td = sdf.parse(""+sdf.format(new Date()));
+
+            long diff = fd.getTime() - td.getTime();
+            long days = diff / (24 * 60 * 60 * 1000);
+
+
+
+            return  days;
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return 0;
+        }
+
+
+    }
+
+    public void popupUpgrade(final String text,final String days){
+
+        try{
+
+            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(DashBoardAdmin.this);
+            LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View views = inflater.inflate(R.layout.app_upgrade_pop, null);
+
+            builder.setView(views);
+
+            final Button mPaid = (Button) views.findViewById(R.id.paid_version_upgrade);
+            final MyRegulerText mCompanyName = (MyRegulerText) views.findViewById(R.id.company_name_upgrade);
+            final MyRegulerText mText = (MyRegulerText) views.findViewById(R.id.alert_message_upgrade);
+            final MyRegulerText mDay = (MyRegulerText) views.findViewById(R.id.day_count_upgrade);
+
+            final android.support.v7.app.AlertDialog dialogs = builder.create();
+            dialogs.show();
+            dialogs.setCanceledOnTouchOutside(true);
+
+            mCompanyName.setText("Dear "+PreferenceHandler.getInstance(DashBoardAdmin.this).getCompanyName());
+            mText.setText(""+text);
+            mDay.setText(""+days);
+
+
+
+            mPaid.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    dialogs.dismiss();
+
+                }
+            });
+
+
+
+
+
+
+
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 }

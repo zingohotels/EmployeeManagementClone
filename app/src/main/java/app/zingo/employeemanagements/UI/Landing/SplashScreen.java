@@ -22,6 +22,7 @@ import app.zingo.employeemanagements.UI.Admin.DashBoardAdmin;
 import app.zingo.employeemanagements.UI.Company.CreateCompany;
 import app.zingo.employeemanagements.UI.Company.CreateFounderScreen;
 import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
+import app.zingo.employeemanagements.UI.LandingScreen;
 import app.zingo.employeemanagements.UI.Login.LoginScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 
@@ -88,7 +89,7 @@ public class SplashScreen extends AppCompatActivity {
                     if(mobilenumber.equals("")&&profileId==0)
                     {
                         //Intent verify = new Intent(SplashScreen.this,LoginScreen.class);
-                        Intent verify = new Intent(SplashScreen.this,SlideScreen.class);
+                        Intent verify = new Intent(SplashScreen.this,LandingScreen.class);
                         startActivity(verify);
                         SplashScreen.this.finish();
                     }

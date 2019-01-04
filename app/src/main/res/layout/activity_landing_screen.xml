@@ -112,6 +112,8 @@
                 />
 
 
+
+
             <app.zingo.employeemanagements.Custom.MyEditText
                 android:id="@+id/landing_password"
                 android:layout_width="match_parent"
@@ -128,6 +130,15 @@
                 android:drawablePadding="16dp"
                 android:drawableLeft="@drawable/lock"
                 />
+
+            <CheckBox
+                android:id="@+id/show_hide_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Show Password"
+                android:textColor="#000000"
+                android:textSize="14sp" />
 
 
             <app.zingo.employeemanagements.Custom.MyRegulerText
