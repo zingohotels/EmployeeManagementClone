@@ -338,7 +338,7 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:textColor="#000"
-                            android:text="1 Month"/>
+                            android:text="3 Month"/>
 
 
 

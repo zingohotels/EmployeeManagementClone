@@ -54,7 +54,7 @@ public class EmployeeListScreen extends AppCompatActivity {
                 type = bundle.getString("Type");
             }
 
-            if(type!=null&&(type.equalsIgnoreCase("Meetings")||type.equalsIgnoreCase("Salary"))){
+            if(type!=null&&(type.equalsIgnoreCase("Meetings")||type.equalsIgnoreCase("Salary")||type.equalsIgnoreCase("Live"))){
 
                 mAddProfiles.setVisibility(View.GONE);
             }

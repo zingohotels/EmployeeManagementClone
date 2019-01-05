@@ -48,7 +48,9 @@ import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.EmployeeDocuments;
 import app.zingo.employeemanagements.Model.Leaves;
 import app.zingo.employeemanagements.Model.Organization;
+import app.zingo.employeemanagements.Model.PaySlips;
 import app.zingo.employeemanagements.R;
+import app.zingo.employeemanagements.UI.Company.CreateCompany;
 import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
 import app.zingo.employeemanagements.UI.Employee.LeaveTakenDays;
 import app.zingo.employeemanagements.UI.Login.LoginScreen;
@@ -59,6 +61,7 @@ import app.zingo.employeemanagements.WebApi.DepartmentApi;
 import app.zingo.employeemanagements.WebApi.DesignationsAPI;
 import app.zingo.employeemanagements.WebApi.LeaveAPI;
 import app.zingo.employeemanagements.WebApi.OrganizationApi;
+import app.zingo.employeemanagements.WebApi.PayslipAPI;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -72,7 +75,11 @@ public class CreatePaySlip extends AppCompatActivity {
 
     private static AppCompatButton mCreate;
 
-    String name,design,eid,pan,month,year,doj,dept,leaveTaken,basic,house,convey,medical,vehicle,washing,other,others,pf,esi,loan,pt,leaves,advance;
+    String name,design,eid,pan,month,year,doj,
+            dept,leaveTaken,basic,house,convey,medical,vehicle,
+            washing,other,others,pf,esi,loan,pt,leaves,advance;
+
+    String companyName,city,state,websites;
 
     double addition=0,deduction=0,net=0;
 
@@ -129,7 +136,7 @@ public class CreatePaySlip extends AppCompatActivity {
 
 
             mMonth.setText(new SimpleDateFormat("MMM").format(new Date()));
-            mYear.setText(new SimpleDateFormat("YYYY").format(new Date()));
+            mYear.setText(new SimpleDateFormat("yyyy").format(new Date()));
 
             mMonth.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -177,6 +184,7 @@ public class CreatePaySlip extends AppCompatActivity {
                 if(employee.getDepartment()!=null){
 
                     mDepartment.setText(""+employee.getDepartment().getDepartmentName());
+                    getCompany(employee.getDepartment().getOrganizationId());
                 }else{
                     getDepartment(employee.getDepartmentId(),employee.getEmployeeId());
                 }
@@ -346,6 +354,30 @@ public class CreatePaySlip extends AppCompatActivity {
                 addition = basics+houses+conveys+medicals+vehicles+washings+otherss+othersss;
                 deduction = pfs+esis+loans+pts+leavess+advances;
 
+                PaySlips paySlips = new PaySlips();
+                paySlips.setEmployeeName(name);
+                paySlips.setDesignationName(design);
+                paySlips.setEmployeeId(employeeId);
+                paySlips.setPANnumber(pan);
+                paySlips.setMonth(month);
+                paySlips.setYear(year);
+                paySlips.setDateOfJoining(doj);
+                paySlips.setDepartmentName(dept);
+                paySlips.setLeaveTaken(leaveCount);
+                paySlips.setBasicPay(basics);
+                paySlips.setRentAllowance(houses);
+                paySlips.setConveyAllowance(conveys);
+                paySlips.setMedicalAllowance(medicals);
+                paySlips.setPF(pfs);
+                paySlips.setESI(esis);
+                paySlips.setLoan(loans);
+                paySlips.setProfessionalTax(pts);
+                paySlips.setLeaves(leavess);
+                paySlips.setAdvance(advances);
+                paySlips.setCreatedBy(""+PreferenceHandler.getInstance(CreatePaySlip.this).getUserFullName());
+                paySlips.setCreatedDate(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
+
+
                 if(pfs==0){
                     pf="-";
                 }
@@ -377,6 +409,7 @@ public class CreatePaySlip extends AppCompatActivity {
                         }else{
                             Toast.makeText(CreatePaySlip.this, "File not generate but booking happened", Toast.LENGTH_SHORT).show();
                             createPDFInvoice();
+                            addPaySlips(paySlips);
                         }
 
                     }else if((invoicepdfFile!=null&&!invoicepdfFile.isEmpty())){
@@ -390,6 +423,7 @@ public class CreatePaySlip extends AppCompatActivity {
                         }else{
                             Toast.makeText(CreatePaySlip.this, "File not generate but booking happened", Toast.LENGTH_SHORT).show();
                             createPDFInvoice();
+                            addPaySlips(paySlips);
                         }
                         // Toast.makeText(BillDetails.this, "Booking Not done", Toast.LENGTH_SHORT).show();
                     }
@@ -505,14 +539,14 @@ public class CreatePaySlip extends AppCompatActivity {
             SimpleDateFormat sdfd = new SimpleDateFormat("dd MMM");
 
 
-            createHeadingsTitles(cb,250,760,"Lucida Hospitality Private Limited");
-            createContentTitles(cb,300,740,"First Office, ZingoHotels- #88,1st Floor,");
-            createContentTitles(cb,290,720,"Koramangala Industrial Layout 5th Block,");
-            createContentTitles(cb,305,700,"Near JNC College, Bangalore-560095");
-            createContentTitles(cb,335,680,"CIN: U55209KA2016PTC096968");
-            createContentTitles(cb,355,660,"Email: hello@zingohotels.com");
-            createContentTitles(cb,370,640,"Web: www.Zingohotels.com");
-            createContentTitles(cb,390,620,"Mob: +91- 7065 651 651");
+            createHeadingsTitles(cb,25,760,companyName);
+            createContentTitles(cb,25,740,city);
+            createContentTitles(cb,25,720,state);
+          /*  createContentTitles(cb,305,700,"Near JNC College, Bangalore-560095");
+            createContentTitles(cb,335,680,"CIN: U55209KA2016PTC096968");*/
+            //createContentTitles(cb,355,660,"Email: "+);
+            createContentTitles(cb,25,640,"Web: "+websites);
+            //createContentTitles(cb,390,620,"Mob: +91- 7065 651 651");
 
             createHeadingsTitles(cb,250,560,"Salary Slip");
 
@@ -741,6 +775,7 @@ public class CreatePaySlip extends AppCompatActivity {
                             if(response.body()!=null){
                                 mDepartment.setText(""+response.body().getDepartmentName());
                             }
+                            getCompany(response.body().getOrganizationId());
 
                             String company = PreferenceHandler.getInstance(CreatePaySlip.this).getCompanyName();
 
@@ -822,17 +857,22 @@ public class CreatePaySlip extends AppCompatActivity {
             public void run() {
 
                 final OrganizationApi subCategoryAPI = Util.getClient().create(OrganizationApi.class);
-                Call<Organization> getProf = subCategoryAPI.getOrganizationById(id);
+                Call<ArrayList<Organization>> getProf = subCategoryAPI.getOrganizationById(id);
                 //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
 
-                getProf.enqueue(new Callback<Organization>() {
+                getProf.enqueue(new Callback<ArrayList<Organization>>() {
 
                     @Override
-                    public void onResponse(Call<Organization> call, Response<Organization> response) {
+                    public void onResponse(Call<ArrayList<Organization>> call, Response<ArrayList<Organization>> response) {
 
                         if (response.code() == 200||response.code() == 201||response.code() == 204)
                         {
 
+
+                            companyName = response.body().get(0).getOrganizationName();
+                            city = response.body().get(0).getCity();
+                            state = response.body().get(0).getState();
+                            websites = response.body().get(0).getWebsite();
 
 
                         }else{
@@ -842,7 +882,7 @@ public class CreatePaySlip extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<Organization> call, Throwable t) {
+                    public void onFailure(Call<ArrayList<Organization>> call, Throwable t) {
 
                     }
                 });
@@ -1053,7 +1093,76 @@ public class CreatePaySlip extends AppCompatActivity {
         });
     }
 
+    public void addPaySlips(final PaySlips paySlips) throws Exception{
 
+
+        final ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setMessage("Please wait...");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        PayslipAPI apiService = Util.getClient().create(PayslipAPI.class);
+
+        Call<PaySlips> call = apiService.addPaySlips(paySlips);
+
+        call.enqueue(new Callback<PaySlips>() {
+            @Override
+            public void onResponse(Call<PaySlips> call, Response<PaySlips> response) {
+//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
+                try
+                {
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+
+                    int statusCode = response.code();
+                    if (statusCode == 200 || statusCode == 201) {
+
+                        PaySlips s = response.body();
+
+                        if(s!=null){
+
+
+
+
+
+                        }
+
+
+
+
+                    }else {
+                        Toast.makeText(CreatePaySlip.this, "Failed Due to "+response.message(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+                    ex.printStackTrace();
+                }
+//                callGetStartEnd();
+            }
+
+            @Override
+            public void onFailure(Call<PaySlips> call, Throwable t) {
+
+                if(dialog != null && dialog.isShowing())
+                {
+                    dialog.dismiss();
+                }
+                Toast.makeText(CreatePaySlip.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("TAG", t.toString());
+            }
+        });
+
+
+
+    }
 
 
 }

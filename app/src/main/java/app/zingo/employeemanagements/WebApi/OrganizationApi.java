@@ -1,5 +1,7 @@
 package app.zingo.employeemanagements.WebApi;
 
+import java.util.ArrayList;
+
 import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Organization;
 import retrofit2.Call;
@@ -19,6 +21,6 @@ public interface OrganizationApi {
     Call<Organization> addOrganization(@Body Organization details);
 
     @GET("Organizations/{id}")
-    Call<Organization> getOrganizationById(@Path("id") int id);
+    Call<ArrayList<Organization>> getOrganizationById(@Path("id") int id);
 
 }

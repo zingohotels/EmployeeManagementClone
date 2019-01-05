@@ -77,7 +77,7 @@ public class EmployeeMeetingHost extends TabActivity implements TabHost.OnTabCha
 
             labelMap.setText(getResources().getString(R.string.mapView));
             tabMaps.setIndicator(tabMap);
-            Intent maps = new Intent(this, EmployeeLiveMappingScreen.class);
+            Intent maps = new Intent(this, EmployeeMeetingMap.class);
             maps.putExtra("EmployeeId", employeeId);
             tabMaps.setContent(maps);
 

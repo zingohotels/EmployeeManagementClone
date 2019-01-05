@@ -61,6 +61,7 @@ import java.util.Locale;
 
 import app.zingo.employeemanagements.Adapter.EmployeeAdapter;
 import app.zingo.employeemanagements.Adapter.NavigationListAdapter;
+import app.zingo.employeemanagements.Custom.MyRegulerText;
 import app.zingo.employeemanagements.FireBase.SharedPrefManager;
 import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Employee;
@@ -75,8 +76,10 @@ import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.Service.LocationSharingServices;
 import app.zingo.employeemanagements.UI.Admin.DashBoardAdmin;
+import app.zingo.employeemanagements.UI.Admin.EmployeeLiveMappingScreen;
 import app.zingo.employeemanagements.UI.Common.ChangePasswordScreen;
 import app.zingo.employeemanagements.UI.Company.OrganizationDetailScree;
+import app.zingo.employeemanagements.UI.LandingScreen;
 import app.zingo.employeemanagements.UI.Login.LoginScreen;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
@@ -110,7 +113,7 @@ public class DashBoardEmployee extends AppCompatActivity {
     TextView mUserName,mUserEmail,mMeetingCount;
     CircleImageView mProfileImage;
     TextView mLoggedTime,mMasterText,mMeetingText;
-    CardView mMasterLogin,mMeetingLogin;
+    CardView mMasterLogin,mMeetingLogin,mMeetingCountLay;
 
 
     Employee profile;
@@ -118,6 +121,8 @@ public class DashBoardEmployee extends AppCompatActivity {
     EmployeeImages employeeImages;
     int userId=0,imageId=0;
     String userName="",userEmail="";
+    String appType="",planType="",licensesStartDate="",licenseEndDate="";
+    int planId=0;
 
 
 
@@ -160,6 +165,8 @@ public class DashBoardEmployee extends AppCompatActivity {
             mMeetingCount = (TextView) findViewById(R.id.meeting_count);
             mMasterLogin = (CardView) findViewById(R.id.master_login);
             mMeetingLogin = (CardView) findViewById(R.id.meeting_login);
+            mMeetingCountLay = (CardView) findViewById(R.id.meeting_layout);
+
 
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                     this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -167,7 +174,7 @@ public class DashBoardEmployee extends AppCompatActivity {
             toggle.syncState();
 
             checkPermission();
-            setUpNavigationDrawer();
+
 
             Bundle bundle = getIntent().getExtras();
             if(bundle!=null){
@@ -177,9 +184,9 @@ public class DashBoardEmployee extends AppCompatActivity {
 
             }
 
-            if(organization==null){
-                getCompany(PreferenceHandler.getInstance(DashBoardEmployee.this).getCompanyId());
-            }
+
+            getCompany(PreferenceHandler.getInstance(DashBoardEmployee.this).getCompanyId());
+
 
             userId = PreferenceHandler.getInstance(DashBoardEmployee.this).getUserId();
             userName = PreferenceHandler.getInstance(DashBoardEmployee.this).getUserFullName();
@@ -271,6 +278,7 @@ public class DashBoardEmployee extends AppCompatActivity {
                 }
             }*/
 
+            //getCompany(PreferenceHandler.getInstance(DashBoardEmployee.this).getCompanyId());
             getLoginDetails();
             getMeetingDetails();
 
@@ -313,14 +321,20 @@ public class DashBoardEmployee extends AppCompatActivity {
                         }else if(loginStatus.equalsIgnoreCase("Logout")){
 
                             masterloginalert("Logout");
-                            Intent serviceIntent = new Intent(DashBoardEmployee.this,LocationSharingServices.class);
-                            startService(serviceIntent);
+
+                            if(planType.contains("Advance")){
+                                Intent serviceIntent = new Intent(DashBoardEmployee.this,LocationSharingServices.class);
+                                startService(serviceIntent);
+                            }
+
                         }
 
                     }else{
                         masterloginalert("Logout");
-                        Intent serviceIntent = new Intent(DashBoardEmployee.this,LocationSharingServices.class);
-                        startService(serviceIntent);
+                        if(planType.contains("Advance")){
+                            Intent serviceIntent = new Intent(DashBoardEmployee.this,LocationSharingServices.class);
+                            startService(serviceIntent);
+                        }
                     }
 
 
@@ -412,8 +426,38 @@ public class DashBoardEmployee extends AppCompatActivity {
 
     private void setUpNavigationDrawer() {
 
-        TypedArray icons = getResources().obtainTypedArray(R.array.navnar_item_images_employee);
-        String[] title  = getResources().getStringArray(R.array.navbar_items_employee);
+
+
+        TypedArray icons = getResources().obtainTypedArray(R.array.navnar_item_images_employee_advance);
+        String[] title  = getResources().getStringArray(R.array.navbar_items_employee_advance);
+        String planName = PreferenceHandler.getInstance(DashBoardEmployee.this).getPlanType();
+
+        if(planName.contains(",")){
+
+            String plansName[] = planName.split(",");
+
+            if(plansName[0].equalsIgnoreCase("Basic"))
+            {
+
+                icons = getResources().obtainTypedArray(R.array.navnar_item_images_employee);
+                title  = getResources().getStringArray(R.array.navbar_items_employee);
+                mMeetingCountLay.setVisibility(View.GONE);
+
+
+
+            }
+            else if(plansName[0].equalsIgnoreCase("Advance"))
+            {
+                icons = getResources().obtainTypedArray(R.array.navnar_item_images_employee_advance);
+                title  = getResources().getStringArray(R.array.navbar_items_employee_advance);
+                mMeetingLogin.setVisibility(View.VISIBLE);
+
+            }
+
+
+        }
+
+
 
         final ArrayList<NavBarItems> navBarItemsList = new ArrayList<>();
 
@@ -434,7 +478,6 @@ public class DashBoardEmployee extends AppCompatActivity {
 
 
 
-
     }
 
     public void getProfile(final int id){
@@ -444,19 +487,19 @@ public class DashBoardEmployee extends AppCompatActivity {
             public void run() {
 
                 final EmployeeApi subCategoryAPI = Util.getClient().create(EmployeeApi.class);
-                Call<Employee> getProf = subCategoryAPI.getProfileById(id);
+                Call<ArrayList<Employee>> getProf = subCategoryAPI.getProfileById(id);
                 //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
 
-                getProf.enqueue(new Callback<Employee>() {
+                getProf.enqueue(new Callback<ArrayList<Employee>>() {
 
                     @Override
-                    public void onResponse(Call<Employee> call, Response<Employee> response) {
+                    public void onResponse(Call<ArrayList<Employee>> call, Response<ArrayList<Employee>> response) {
 
                         if (response.code() == 200)
                         {
                             System.out.println("Inside api");
 
-                            profile = response.body();
+                            profile = response.body().get(0);
 
                             ArrayList<EmployeeImages> images = profile.getEmployeeImages();
 
@@ -480,7 +523,7 @@ public class DashBoardEmployee extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<Employee> call, Throwable t) {
+                    public void onFailure(Call<ArrayList<Employee>> call, Throwable t) {
 
                     }
                 });
@@ -964,6 +1007,13 @@ public class DashBoardEmployee extends AppCompatActivity {
                 startActivity(organization);
                 break;
 
+            case "Live Tracking":
+
+                Intent live = new Intent(DashBoardEmployee.this, EmployeeLiveMappingScreen.class);
+                live.putExtra("EmployeeId",PreferenceHandler.getInstance(DashBoardEmployee.this).getUserId());
+                startActivity(live);
+                break;
+
             case "Employees":
                 Intent employee = new Intent(DashBoardEmployee.this, EmployeeListScreen.class);
                 startActivity(employee);
@@ -996,7 +1046,7 @@ public class DashBoardEmployee extends AppCompatActivity {
 
                 PreferenceHandler.getInstance(DashBoardEmployee.this).clear();
 
-                Intent log = new Intent(DashBoardEmployee.this, LoginScreen.class);
+                Intent log = new Intent(DashBoardEmployee.this, LandingScreen.class);
                 log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                 Toast.makeText(DashBoardEmployee.this,"Logout",Toast.LENGTH_SHORT).show();
@@ -2111,6 +2161,9 @@ public class DashBoardEmployee extends AppCompatActivity {
                                                     System.out.println("Long and lat Rev"+gps.getLatitude()+" = "+gps.getLongitude());
                                                     latitude = gps.getLatitude();
                                                     longitude = gps.getLongitude();
+                                                    Intent myService = new Intent(DashBoardEmployee.this, LocationSharingServices.class);
+                                                    DashBoardEmployee.this.stopService(myService);
+
 
                                                     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
                                                     SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
@@ -2578,19 +2631,95 @@ public class DashBoardEmployee extends AppCompatActivity {
             public void run() {
 
                 final OrganizationApi subCategoryAPI = Util.getClient().create(OrganizationApi.class);
-                Call<Organization> getProf = subCategoryAPI.getOrganizationById(id);
+                Call<ArrayList<Organization>> getProf = subCategoryAPI.getOrganizationById(id);
                 //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
 
-                getProf.enqueue(new Callback<Organization>() {
+                getProf.enqueue(new Callback<ArrayList<Organization>>() {
 
                     @Override
-                    public void onResponse(Call<Organization> call, Response<Organization> response) {
+                    public void onResponse(Call<ArrayList<Organization>> call, Response<ArrayList<Organization>> response) {
 
                         if (response.code() == 200||response.code() == 201||response.code() == 204)
                         {
 
-                            if(response.body()!=null){
-                                organization = response.body();
+                            if(response.body().size()!=0){
+                                organization = response.body().get(0);
+                                PreferenceHandler.getInstance(DashBoardEmployee.this).setCompanyId(organization.getOrganizationId());
+                                PreferenceHandler.getInstance(DashBoardEmployee.this).setCompanyName(organization.getOrganizationName());
+                                PreferenceHandler.getInstance(DashBoardEmployee.this).setAppType(organization.getAppType());
+
+                                PreferenceHandler.getInstance(DashBoardEmployee.this).setAppType(organization.getAppType());
+                                PreferenceHandler.getInstance(DashBoardEmployee.this).setLicenseStartDate(organization.getLicenseStartDate());
+                                PreferenceHandler.getInstance(DashBoardEmployee.this).setLicenseEndDate(organization.getLicenseEndDate());
+                                PreferenceHandler.getInstance(DashBoardEmployee.this).setSignupDate(organization.getSignupDate());
+                                PreferenceHandler.getInstance(DashBoardEmployee.this).setPlanType(organization.getPlanType());
+                                PreferenceHandler.getInstance(DashBoardEmployee.this).setEmployeeLimit(organization.getEmployeeLimit());
+                                PreferenceHandler.getInstance(DashBoardEmployee.this).setPlanId(organization.getPlanId());
+
+                                appType = PreferenceHandler.getInstance(DashBoardEmployee.this).getAppType();
+                                planType = PreferenceHandler.getInstance(DashBoardEmployee.this).getPlanType();
+                                licensesStartDate = PreferenceHandler.getInstance(DashBoardEmployee.this).getLicenseStartDate();
+                                licenseEndDate = PreferenceHandler.getInstance(DashBoardEmployee.this).getLicenseEndDate();
+                                planId = PreferenceHandler.getInstance(DashBoardEmployee.this).getPlanId();
+
+                                setUpNavigationDrawer();
+
+                                try{
+
+                                    if(appType!=null){
+
+                                        if(appType.equalsIgnoreCase("Trial")){
+
+                                            SimpleDateFormat smdf = new SimpleDateFormat("MM/dd/yyyy");
+
+                                            long days = dateCal(licenseEndDate);
+
+
+
+                                            if((smdf.parse(licenseEndDate).getTime()<smdf.parse(smdf.format(new Date())).getTime())){
+
+                                                Toast.makeText(DashBoardEmployee.this, "Trial Version Expired.Please Update Paid Version", Toast.LENGTH_SHORT).show();
+                                                PreferenceHandler.getInstance(DashBoardEmployee.this).clear();
+
+                                                Intent log = new Intent(DashBoardEmployee.this, LandingScreen.class);
+                                                log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                Toast.makeText(DashBoardEmployee.this,"Logout",Toast.LENGTH_SHORT).show();
+                                                startActivity(log);
+                                                finish();
+
+                                            }else{
+
+                                                if(days>=1&&days<=3){
+                                                    popupUpgrade("Hope your enjoying to use our Trial version.Inform your management to Upgrade App.","Your trial period is going to expire in "+days+" days");
+
+                                                }else if(days==0){
+                                                    popupUpgrade("Hope your enjoying to use our Trial version.Inform your management to Upgrade App.","Today is last day for your free trial");
+
+                                                }else if(days<0){
+                                                    Toast.makeText(DashBoardEmployee.this, "Your Trial Period is Expired", Toast.LENGTH_SHORT).show();
+                                                    PreferenceHandler.getInstance(DashBoardEmployee.this).clear();
+
+                                                    Intent log = new Intent(DashBoardEmployee.this, LandingScreen.class);
+                                                    log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                    log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                    Toast.makeText(DashBoardEmployee.this,"Logout",Toast.LENGTH_SHORT).show();
+                                                    startActivity(log);
+                                                    finish();
+                                                }
+
+                                            }
+
+                                        }else if(appType.equalsIgnoreCase("Paid")){
+
+                                        }
+                                    }
+
+                                }catch (Exception e){
+                                    e.printStackTrace();
+                                }
+
+
                             }
 
 
@@ -2599,7 +2728,7 @@ public class DashBoardEmployee extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<Organization> call, Throwable t) {
+                    public void onFailure(Call<ArrayList<Organization>> call, Throwable t) {
 
                     }
                 });
@@ -2607,6 +2736,87 @@ public class DashBoardEmployee extends AppCompatActivity {
             }
 
         });
+    }
+
+    public long dateCal(String date){
+
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+
+
+
+        Date fd=null,td=null;
+
+        try {
+            fd = sdf.parse(""+date);
+            td = sdf.parse(""+sdf.format(new Date()));
+
+            long diff = fd.getTime() - td.getTime();
+            long days = diff / (24 * 60 * 60 * 1000);
+
+
+
+            return  days;
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return 0;
+        }
+
+
+    }
+
+
+    public void popupUpgrade(final String text,final String days){
+
+        try{
+
+            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(DashBoardEmployee.this);
+            LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View views = inflater.inflate(R.layout.app_upgrade_pop, null);
+
+            builder.setView(views);
+
+            final Button mPaid = (Button) views.findViewById(R.id.paid_version_upgrade);
+            mPaid.setText("CLOSE");
+            final MyRegulerText mCompanyName = (MyRegulerText) views.findViewById(R.id.company_name_upgrade);
+            final MyRegulerText mText = (MyRegulerText) views.findViewById(R.id.alert_message_upgrade);
+            final MyRegulerText mDay = (MyRegulerText) views.findViewById(R.id.day_count_upgrade);
+
+            final android.support.v7.app.AlertDialog dialogs = builder.create();
+            dialogs.show();
+            dialogs.setCanceledOnTouchOutside(true);
+
+            mCompanyName.setText("Dear "+PreferenceHandler.getInstance(DashBoardEmployee.this).getCompanyName());
+            mText.setText(""+text);
+            mDay.setText(""+days);
+
+
+
+            mPaid.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    dialogs.dismiss();
+
+                }
+            });
+
+
+
+
+
+
+
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    private void setUpNavbarBasedOnPlan() throws Exception{
+
+
     }
 
 }

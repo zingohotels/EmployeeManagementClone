@@ -17,7 +17,6 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import org.json.JSONObject;
 
-import java.net.URL;
 import java.util.Date;
 import java.util.Map;
 
@@ -56,7 +55,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     //firebase cloud messaging
 
     private void sendPopNotification(String title, String body, Map<String, String> map) {
-        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.app_logo);
+        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.ems);
 
       //  URL url = null;
       //  Bitmap bigPicture  = null;

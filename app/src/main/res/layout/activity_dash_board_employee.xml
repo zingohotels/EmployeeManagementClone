@@ -132,6 +132,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
                         android:layout_weight="1"
+                        android:visibility="gone"
                         android:id="@+id/meeting_login"
                         android:layout_gravity="center"
                         android:layout_marginRight="15dp"

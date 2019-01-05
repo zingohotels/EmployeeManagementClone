@@ -243,19 +243,21 @@ public class LoginScreen extends AppCompatActivity {
             public void run() {
 
                 final OrganizationApi subCategoryAPI = Util.getClient().create(OrganizationApi.class);
-                Call<Organization> getProf = subCategoryAPI.getOrganizationById(id);
+                Call<ArrayList<Organization>> getProf = subCategoryAPI.getOrganizationById(id);
                 //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
 
-                getProf.enqueue(new Callback<Organization>() {
+                getProf.enqueue(new Callback<ArrayList<Organization>>() {
 
                     @Override
-                    public void onResponse(Call<Organization> call, Response<Organization> response) {
+                    public void onResponse(Call<ArrayList<Organization>> call, Response<ArrayList<Organization>> response) {
 
-                        if (response.code() == 200||response.code() == 201||response.code() == 204)
+                        if (response.code() == 200||response.code() == 201||response.code() == 204&&response.body().size()!=0)
                         {
+
+                            Organization organization = response.body().get(0);
                             System.out.println("Inside api");
-                            PreferenceHandler.getInstance(LoginScreen.this).setCompanyId(response.body().getOrganizationId());
-                            PreferenceHandler.getInstance(LoginScreen.this).setCompanyName(response.body().getOrganizationName());
+                            PreferenceHandler.getInstance(LoginScreen.this).setCompanyId(organization.getOrganizationId());
+                            PreferenceHandler.getInstance(LoginScreen.this).setCompanyName(organization.getOrganizationName());
 
                             if(PreferenceHandler.getInstance(LoginScreen.this).getUserRoleUniqueID()==2){
                                 Intent i = new Intent(LoginScreen.this, DashBoardAdmin.class);
@@ -268,7 +270,7 @@ public class LoginScreen extends AppCompatActivity {
                                 //Intent i = new Intent(LoginScreen.this, DashBoardAdmin.class);
                                 Intent i = new Intent(LoginScreen.this, DashBoardEmployee.class);
                                 i.putExtra("Profile",dto);
-                                i.putExtra("Organization",response.body());
+                                i.putExtra("Organization",organization);
                                 startActivity(i);
                                 finish();
                             }
@@ -294,7 +296,7 @@ public class LoginScreen extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<Organization> call, Throwable t) {
+                    public void onFailure(Call<ArrayList<Organization>> call, Throwable t) {
 
                     }
                 });

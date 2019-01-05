@@ -21,7 +21,9 @@ import java.util.ArrayList;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Admin.CreatePaySlip;
+import app.zingo.employeemanagements.UI.Admin.EmployeeLiveMappingScreen;
 import app.zingo.employeemanagements.UI.Admin.EmployeesDashBoard;
+import app.zingo.employeemanagements.UI.Admin.TaskManagementHost;
 import app.zingo.employeemanagements.UI.Employee.EmployeeMeetingHost;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
@@ -77,6 +79,24 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
                 }else  if(type!=null&&type.equalsIgnoreCase("Salary")){
 
                     Intent intent = new Intent(context, CreatePaySlip.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("EmployeeId",list.get(position).getEmployeeId());
+                    bundle.putSerializable("Employee",list.get(position));
+                    intent.putExtras(bundle);
+                    context.startActivity(intent);
+
+                }else  if(type!=null&&type.equalsIgnoreCase("Live")){
+
+                    Intent intent = new Intent(context, EmployeeLiveMappingScreen.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("EmployeeId",list.get(position).getEmployeeId());
+                    bundle.putSerializable("Employee",list.get(position));
+                    intent.putExtras(bundle);
+                    context.startActivity(intent);
+
+                }else  if(type!=null&&type.equalsIgnoreCase("Task")){
+
+                    Intent intent = new Intent(context, TaskManagementHost.class);
                     Bundle bundle = new Bundle();
                     bundle.putInt("EmployeeId",list.get(position).getEmployeeId());
                     bundle.putSerializable("Employee",list.get(position));

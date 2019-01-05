@@ -43,5 +43,5 @@ public interface EmployeeApi {
     Call<ArrayList<Employee>> getEmployeeforLogin(@Body Employee body);
 
     @GET("Employees/{id}")
-    Call<Employee> getProfileById(@Path("id") int id);
+    Call<ArrayList<Employee>> getProfileById(@Path("id") int id);
 }

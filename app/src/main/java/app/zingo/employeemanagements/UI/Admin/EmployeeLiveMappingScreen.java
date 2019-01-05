@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.json.JSONObject;
@@ -45,6 +47,7 @@ import app.zingo.employeemanagements.Model.LoginDetails;
 import app.zingo.employeemanagements.Model.MarkerData;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.Utils.DataParser;
+import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.LiveTrackingAPI;
@@ -66,8 +69,14 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
     LocationRequest mLocationRequest;
+    private LatLng lastKnownLatLng;
+    private Polyline gpsTrack;
 
     int employeeId;
+
+    Handler h = new Handler();
+    int delay = 15*1000; //1 second=1000 milisecond, 15*1000=15seconds
+    Runnable runnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +123,16 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
 
 
                     try{
-                        getLiveLocation(employeeId);
+
+
+                        h.postDelayed( runnable = new Runnable() {
+                            public void run() {
+                                //do something
+
+                                getLiveLocation(employeeId);
+                            }
+                        }, delay);
+
                         //getMeetingDetails(11);
                     }catch (Exception e){
                         e.printStackTrace();
@@ -165,16 +183,34 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
                                 Collections.sort(list,LiveTracking.compareLiveTrack);
 
                                 mMap.clear();
+
+                                LatLng calymayor = new LatLng(Double.parseDouble(list.get(0).getLatitude()), Double.parseDouble(list.get(0).getLongitude()));
+                                mMap.moveCamera(CameraUpdateFactory.newLatLng(calymayor));
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(calymayor, 15));
+
+                                PolylineOptions polylineOptions = new PolylineOptions();
+                                polylineOptions.color(Color.CYAN);
+                                polylineOptions.width(4);
+                                gpsTrack = mMap.addPolyline(polylineOptions);
                                 for(int i=0;i<list.size();i++){
 
                                     if(list.get(i).getLongitude()!=null||list.get(i).getLatitude()!=null){
 
+                                        lastKnownLatLng = new LatLng(Double.parseDouble(list.get(i).getLatitude()), Double.parseDouble(list.get(i).getLongitude()));
+                                        updateTrack();
 
-                                        markerData.add(new MarkerData(Double.parseDouble(list.get(i).getLongitude()),Double.parseDouble(list.get(i).getLatitude()),""+(i+1),""));
-                                        markerData.add(new MarkerData(Double.parseDouble(list.get(i).getLongitude()),Double.parseDouble(list.get(i).getLatitude()),""+(i+1),""));
+                                        if(i==(list.size()-1)){
+                                            createMarker(Double.parseDouble(list.get(i).getLatitude()), Double.parseDouble(list.get(i).getLongitude()),"Last Location",""+ PreferenceHandler.getInstance(EmployeeLiveMappingScreen.this).getUserFullName());
+                                            CameraPosition cameraPosition = new CameraPosition.Builder().zoom(10).target(lastKnownLatLng).build();
+                                            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                                        }
+
+
+                                     /*   markerData.add(new MarkerData(Double.parseDouble(list.get(i).getLongitude()),Double.parseDouble(list.get(i).getLatitude()),""+(list.get(i).getTrackingDate()),""));
+                                        markerData.add(new MarkerData(Double.parseDouble(list.get(i).getLongitude()),Double.parseDouble(list.get(i).getLatitude()),""+(list.get(i).getTrackingDate()),""));
 
                                         MarkerPoints.add(new LatLng(Double.parseDouble(list.get(i).getLongitude()),Double.parseDouble(list.get(i).getLatitude())));
-                                        MarkerPoints.add(new LatLng(Double.parseDouble(list.get(i).getLongitude()),Double.parseDouble(list.get(i).getLatitude())));
+                                        MarkerPoints.add(new LatLng(Double.parseDouble(list.get(i).getLongitude()),Double.parseDouble(list.get(i).getLatitude())));*/
 
                                     }
 
@@ -183,7 +219,7 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
 
                                 }
 
-                                for (MarkerData point : markerData) {
+                                /*for (MarkerData point : markerData) {
                                     createMarker(point.getLati(),point.getLongi(), point.getTitle(), point.getPerson());
                                 }
 
@@ -209,7 +245,7 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
 
                                     CameraPosition cameraPosition = new CameraPosition.Builder().zoom(10).target(latlng).build();
                                     mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                                }
+                                }*/
 
 
 
@@ -422,7 +458,14 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
         return data;
     }
 
+    private void updateTrack() {
+        List<LatLng> points = gpsTrack.getPoints();
+        points.add(lastKnownLatLng);
+        gpsTrack.setPoints(points);
 
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(lastKnownLatLng));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

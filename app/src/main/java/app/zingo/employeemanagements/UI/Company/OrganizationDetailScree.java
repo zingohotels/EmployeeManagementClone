@@ -180,17 +180,17 @@ public class OrganizationDetailScree extends AppCompatActivity {
             public void run() {
 
                 final OrganizationApi subCategoryAPI = Util.getClient().create(OrganizationApi.class);
-                Call<Organization> getProf = subCategoryAPI.getOrganizationById(id);
+                Call<ArrayList<Organization>> getProf = subCategoryAPI.getOrganizationById(id);
                 //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
 
-                getProf.enqueue(new Callback<Organization>() {
+                getProf.enqueue(new Callback<ArrayList<Organization>>() {
 
                     @Override
-                    public void onResponse(Call<Organization> call, Response<Organization> response) {
+                    public void onResponse(Call<ArrayList<Organization>> call, Response<ArrayList<Organization>> response) {
 
                         if (response.code() == 200||response.code() == 201||response.code() == 204)
                         {
-                            organization = response.body();
+                            organization = response.body().get(0);
 
                             if(organization!=null){
 
@@ -253,7 +253,7 @@ public class OrganizationDetailScree extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<Organization> call, Throwable t) {
+                    public void onFailure(Call<ArrayList<Organization>> call, Throwable t) {
 
                         Toast.makeText(OrganizationDetailScree.this, "Something went wrong", Toast.LENGTH_SHORT).show();
 

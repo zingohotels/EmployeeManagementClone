@@ -44,8 +44,6 @@
         <item>Organization</item>
         <item>Employees</item>
         <item>Salary</item>
-        <item>Meetings</item>
-        <!-- <item>Field Employees</item>-->
         <item>Change Password</item>
         <item>Logout</item>
     </array>
@@ -54,8 +52,29 @@
         <item>@drawable/organization_icon</item>
         <item>@drawable/employee</item>
         <item>@drawable/salary</item>
+        <item>@drawable/password</item>
+        <item>@drawable/logout</item>
+    </array>
+
+    <array name="navbar_items_advance">
+        <item>Profile</item>
+        <item>Organization</item>
+        <item>Employees</item>
+        <item>Salary</item>
+        <item>Meetings</item>
+        <item>Task Management</item>
+        <item>Live Tracking</item>
+        <item>Change Password</item>
+        <item>Logout</item>
+    </array>
+    <array name="navnar_item_images_advance">
+        <item>@drawable/profile</item>
+        <item>@drawable/organization_icon</item>
+        <item>@drawable/employee</item>
+        <item>@drawable/salary</item>
         <item>@drawable/interview</item>
-        <!--<item>@drawable/field_icon</item>-->
+        <item>@drawable/interview</item>
+        <item>@drawable/location</item>
         <item>@drawable/password</item>
         <item>@drawable/logout</item>
     </array>
@@ -64,7 +83,7 @@
         <!--<item>Home</item>-->
         <item>Profile</item>
         <item>Organization</item>
-        <item>Meetings</item>
+
         <item>Attendance</item>
         <item>Leave Management</item>
         <item>Change Password</item>
@@ -73,7 +92,29 @@
     <array name="navnar_item_images_employee">
         <item>@drawable/profile</item>
         <item>@drawable/organization_icon</item>
+
+        <item>@drawable/build_year</item>
+        <item>@drawable/checklist</item>
+        <item>@drawable/password</item>
+        <item>@drawable/logout</item>
+    </array>
+
+    <array name="navbar_items_employee_advance">
+        <!--<item>Home</item>-->
+        <item>Profile</item>
+        <item>Organization</item>
+        <item>Meetings</item>
+        <item>Live Tracking</item>
+        <item>Attendance</item>
+        <item>Leave Management</item>
+        <item>Change Password</item>
+        <item>Logout</item>
+    </array>
+    <array name="navnar_item_images_employee_advance">
+        <item>@drawable/profile</item>
+        <item>@drawable/organization_icon</item>
         <item>@drawable/interview</item>
+        <item>@drawable/location</item>
         <item>@drawable/build_year</item>
         <item>@drawable/checklist</item>
         <item>@drawable/password</item>

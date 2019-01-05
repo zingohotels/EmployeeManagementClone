@@ -80,7 +80,7 @@
                     android:id="@+id/landing_app_logo"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:background="@drawable/app_logo"
+                    android:background="@drawable/ems"
                     android:layout_gravity="center|top"
                     android:layout_marginTop="60dp"/>
 

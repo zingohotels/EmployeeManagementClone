@@ -32,13 +32,12 @@
         <activity
             android:name=".UI.Landing.SplashScreen"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".UI.Landing.PhoneVerificationScreen"
@@ -48,7 +47,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBN_9MfDVrhG1_D9Q1XpakTiDkoqSU5gGA" />
-
         <meta-data
             android:name="com.razorpay.ApiKey"
             android:value="rzp_live_tTRIgCc7PPKNq0" />
@@ -109,7 +107,9 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".UI.Employee.MapsActivity" />
         <activity android:name=".UI.Common.ChangePasswordScreen" />
-        <activity android:name=".UI.Employee.EmployeeMeetingHost" />
+        <activity
+            android:name=".UI.Employee.EmployeeMeetingHost"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".UI.Common.EmployeeMeetingList"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
@@ -150,9 +150,7 @@
         <activity
             android:name=".UI.LandingScreen"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNoAction">
-
-        </activity>
+            android:theme="@style/AppThemeNoAction" />
         <activity
             android:name=".UI.ContactUsScreen"
             android:screenOrientation="portrait"
@@ -161,10 +159,18 @@
             android:name=".UI.SupportScreen"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".UI.GetStartedScreen"
-            android:screenOrientation="portrait"
+        <activity
+            android:name=".UI.GetStartedScreen"
             android:configChanges="keyboardHidden|orientation|keyboard"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" ></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".UI.Admin.TaskManagementHost"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".UI.Admin.CreateTaskScreen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity android:name=".UI.Admin.TaskListScreen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
     </application>
 
 </manifest>

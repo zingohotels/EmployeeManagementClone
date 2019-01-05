@@ -272,8 +272,35 @@ public class DashBoardAdmin extends AppCompatActivity {
 
     private void setUpNavigationDrawer() {
 
-        TypedArray icons = getResources().obtainTypedArray(R.array.navnar_item_images);
-        String[] title  = getResources().getStringArray(R.array.navbar_items);
+        TypedArray icons = getResources().obtainTypedArray(R.array.navnar_item_images_advance);
+        String[] title  = getResources().getStringArray(R.array.navbar_items_advance);
+
+        String planName = PreferenceHandler.getInstance(DashBoardAdmin.this).getPlanType();
+
+        if(planName.contains(",")){
+
+            String plansName[] = planName.split(",");
+
+            if(plansName[0].equalsIgnoreCase("Basic"))
+            {
+
+                icons = getResources().obtainTypedArray(R.array.navnar_item_images);
+                title  = getResources().getStringArray(R.array.navbar_items);
+
+
+
+
+            }
+            else if(plansName[0].equalsIgnoreCase("Advance"))
+            {
+                icons = getResources().obtainTypedArray(R.array.navnar_item_images_advance);
+                title  = getResources().getStringArray(R.array.navbar_items_advance);
+
+
+            }
+
+
+        }
 
         final ArrayList<NavBarItems> navBarItemsList = new ArrayList<>();
 
@@ -304,19 +331,19 @@ public class DashBoardAdmin extends AppCompatActivity {
             public void run() {
 
                 final EmployeeApi subCategoryAPI = Util.getClient().create(EmployeeApi.class);
-                Call<Employee> getProf = subCategoryAPI.getProfileById(id);
+                Call<ArrayList<Employee>> getProf = subCategoryAPI.getProfileById(id);
                 //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
 
-                getProf.enqueue(new Callback<Employee>() {
+                getProf.enqueue(new Callback<ArrayList<Employee>>() {
 
                     @Override
-                    public void onResponse(Call<Employee> call, Response<Employee> response) {
+                    public void onResponse(Call<ArrayList<Employee>> call, Response<ArrayList<Employee>> response) {
 
                         if (response.code() == 200)
                         {
                             System.out.println("Inside api");
 
-                            profile = response.body();
+                            profile = response.body().get(0);
 
                             ArrayList<EmployeeImages> images = profile.getEmployeeImages();
 
@@ -340,7 +367,7 @@ public class DashBoardAdmin extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<Employee> call, Throwable t) {
+                    public void onFailure(Call<ArrayList<Employee>> call, Throwable t) {
 
                     }
                 });
@@ -834,6 +861,18 @@ public class DashBoardAdmin extends AppCompatActivity {
                 startActivity(employees);
                 break;
 
+            case "Task Management":
+            Intent task = new Intent(DashBoardAdmin.this, EmployeeListScreen.class);
+            task.putExtra("Type","Task");
+            startActivity(task);
+            break;
+
+            case "Live Tracking":
+                Intent live = new Intent(DashBoardAdmin.this, EmployeeListScreen.class);
+                live.putExtra("Type","Live");
+                startActivity(live);
+                break;
+
             case "Salary":
                 Intent salary = new Intent(DashBoardAdmin.this, EmployeeListScreen.class);
                 salary.putExtra("Type","Salary");
@@ -940,28 +979,30 @@ public class DashBoardAdmin extends AppCompatActivity {
             public void run() {
 
                 final OrganizationApi subCategoryAPI = Util.getClient().create(OrganizationApi.class);
-                Call<Organization> getProf = subCategoryAPI.getOrganizationById(id);
+                Call<ArrayList<Organization>> getProf = subCategoryAPI.getOrganizationById(id);
                 //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
 
-                getProf.enqueue(new Callback<Organization>() {
+                getProf.enqueue(new Callback<ArrayList<Organization>>() {
 
                     @Override
-                    public void onResponse(Call<Organization> call, Response<Organization> response) {
+                    public void onResponse(Call<ArrayList<Organization>> call, Response<ArrayList<Organization>> response) {
 
-                        if (response.code() == 200||response.code() == 201||response.code() == 204)
+                        if (response.code() == 200||response.code() == 201||response.code() == 204&&response.body().size()!=0)
                         {
-                            System.out.println("Inside api");
-                            PreferenceHandler.getInstance(DashBoardAdmin.this).setCompanyId(response.body().getOrganizationId());
-                            PreferenceHandler.getInstance(DashBoardAdmin.this).setCompanyName(response.body().getOrganizationName());
-                            PreferenceHandler.getInstance(DashBoardAdmin.this).setAppType(response.body().getAppType());
 
-                            PreferenceHandler.getInstance(DashBoardAdmin.this).setAppType(response.body().getAppType());
-                            PreferenceHandler.getInstance(DashBoardAdmin.this).setLicenseStartDate(response.body().getLicenseStartDate());
-                            PreferenceHandler.getInstance(DashBoardAdmin.this).setLicenseEndDate(response.body().getLicenseEndDate());
-                            PreferenceHandler.getInstance(DashBoardAdmin.this).setSignupDate(response.body().getSignupDate());
-                            PreferenceHandler.getInstance(DashBoardAdmin.this).setPlanType(response.body().getPlanType());
-                            PreferenceHandler.getInstance(DashBoardAdmin.this).setEmployeeLimit(response.body().getEmployeeLimit());
-                            PreferenceHandler.getInstance(DashBoardAdmin.this).setPlanId(response.body().getPlanId());
+                            Organization organization = response.body().get(0);
+                            System.out.println("Inside api");
+                            PreferenceHandler.getInstance(DashBoardAdmin.this).setCompanyId(organization.getOrganizationId());
+                            PreferenceHandler.getInstance(DashBoardAdmin.this).setCompanyName(organization.getOrganizationName());
+                            PreferenceHandler.getInstance(DashBoardAdmin.this).setAppType(organization.getAppType());
+
+                            PreferenceHandler.getInstance(DashBoardAdmin.this).setAppType(organization.getAppType());
+                            PreferenceHandler.getInstance(DashBoardAdmin.this).setLicenseStartDate(organization.getLicenseStartDate());
+                            PreferenceHandler.getInstance(DashBoardAdmin.this).setLicenseEndDate(organization.getLicenseEndDate());
+                            PreferenceHandler.getInstance(DashBoardAdmin.this).setSignupDate(organization.getSignupDate());
+                            PreferenceHandler.getInstance(DashBoardAdmin.this).setPlanType(organization.getPlanType());
+                            PreferenceHandler.getInstance(DashBoardAdmin.this).setEmployeeLimit(organization.getEmployeeLimit());
+                            PreferenceHandler.getInstance(DashBoardAdmin.this).setPlanId(organization.getPlanId());
 
                             appType = PreferenceHandler.getInstance(DashBoardAdmin.this).getAppType();
                             planType = PreferenceHandler.getInstance(DashBoardAdmin.this).getPlanType();
@@ -1036,7 +1077,7 @@ public class DashBoardAdmin extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<Organization> call, Throwable t) {
+                    public void onFailure(Call<ArrayList<Organization>> call, Throwable t) {
 
                     }
                 });

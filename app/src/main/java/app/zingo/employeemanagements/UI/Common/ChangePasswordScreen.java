@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Toast;
 
 
+import java.util.ArrayList;
 
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.R;
@@ -89,13 +90,13 @@ public class ChangePasswordScreen extends AppCompatActivity {
             public void run() {
 
                 final EmployeeApi subCategoryAPI = Util.getClient().create(EmployeeApi.class);
-                Call<Employee> getProf = subCategoryAPI.getProfileById(id);
+                Call<ArrayList<Employee>> getProf = subCategoryAPI.getProfileById(id);
                 //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
 
-                getProf.enqueue(new Callback<Employee>() {
+                getProf.enqueue(new Callback<ArrayList<Employee>>() {
 
                     @Override
-                    public void onResponse(Call<Employee> call, Response<Employee> response) {
+                    public void onResponse(Call<ArrayList<Employee>> call, Response<ArrayList<Employee>> response) {
 
                         if(dialog != null)
                         {
@@ -108,7 +109,7 @@ public class ChangePasswordScreen extends AppCompatActivity {
 
 
                            if(response.body()!=null){
-                               profile = response.body();
+                               profile = response.body().get(0);
                            }
 
                         }else{
@@ -117,7 +118,7 @@ public class ChangePasswordScreen extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<Employee> call, Throwable t) {
+                    public void onFailure(Call<ArrayList<Employee>> call, Throwable t) {
 
                         if(dialog != null)
                         {

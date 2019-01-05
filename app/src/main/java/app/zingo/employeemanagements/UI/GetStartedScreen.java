@@ -312,8 +312,8 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
                     if(dto.getRatesList()!=null&&dto.getRatesList().size()>=3){
 
                         holder.mRate1.setText(""+dto.getRatesList().get(0).getPrice());
-                        holder.mRate1.setText(""+dto.getRatesList().get(1).getPrice());
-                        holder.mRate1.setText(""+dto.getRatesList().get(2).getPrice());
+                        holder.mRate2.setText(""+dto.getRatesList().get(1).getPrice());
+                        holder.mRate3.setText(""+dto.getRatesList().get(2).getPrice());
 
                         holder.mPrice1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
@@ -326,7 +326,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
 
                                     holder.mPrice2.setChecked(false);
                                     holder.mPrice3.setChecked(false);
-                                    planType = dto.getPlanName()+""+dto.getRatesList().get(0).getRatesId();
+                                    planType = dto.getPlanName()+","+dto.getRatesList().get(0).getRatesId();
                                     addtionalDay = dto.getRatesList().get(0).getDuration();
                                     price = dto.getRatesList().get(0).getPrice();
                                     planId = dto.getPlansId();
@@ -349,7 +349,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
                                 if (isChecked) {
                                     holder.mPrice1.setChecked(false);
                                     holder.mPrice3.setChecked(false);
-                                    planType = dto.getPlanName()+""+dto.getRatesList().get(1).getRatesId();
+                                    planType = dto.getPlanName()+","+dto.getRatesList().get(1).getRatesId();
                                     addtionalDay = dto.getRatesList().get(1).getDuration();
                                     planId = dto.getPlansId();
                                     price = dto.getRatesList().get(1).getPrice();
@@ -372,7 +372,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
                                 if (isChecked) {
                                     holder.mPrice1.setChecked(false);
                                     holder.mPrice2.setChecked(false);
-                                    planType = dto.getPlanName()+""+dto.getRatesList().get(2).getRatesId();
+                                    planType = dto.getPlanName()+","+dto.getRatesList().get(2).getRatesId();
                                     addtionalDay = dto.getRatesList().get(2).getDuration();
                                     planId = dto.getPlansId();
                                     price = dto.getRatesList().get(2).getPrice();
@@ -495,6 +495,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
                 organization.setLatitude(String.valueOf(latLng.latitude));
                 organization.setLongitude(String.valueOf(latLng.longitude));
                 organization.setSignupDate(sdf.format(new Date()));
+                organization.setAppType(appType);
                 organization.setLicenseStartDate(sdfs.format(new Date()));
                 if(placeId!=null){
                     organization.setPlaceId(placeId);
@@ -803,12 +804,13 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
         try {
             JSONObject options = new JSONObject();
 
-            options.put("name", "Zingo Hotels" );
+            options.put("name", "EMS" );
             options.put("description", "For  "+planType);
             //You can omit the image option to fetch the image from dashboard
             //options.put("image", R.drawable.app_logo);
             options.put("currency", "INR");
-            options.put("amount",price * 100);
+            options.put("amount",price * 100*organization.getEmployeeLimit());
+            //options.put("amount","100");
 
             JSONObject preFill = new JSONObject();
             preFill.put("email", "");

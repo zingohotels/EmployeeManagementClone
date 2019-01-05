@@ -45,7 +45,7 @@ public class LocationSharingServices extends Service {
 
     TrackGPS gps;
     LiveTracking liveTracking;
-    int SECONDS = 10; // The delay in minutes
+    int SECONDS = 60; // The delay in minutes
 
     @Override
     public IBinder onBind(Intent arg0) {
@@ -81,7 +81,7 @@ public class LocationSharingServices extends Service {
                     liveTracking.setEmployeeId(PreferenceHandler.getInstance(LocationSharingServices.this).getUserId());
                     liveTracking.setLatitude(""+latitude);
                     liveTracking.setLongitude(""+longitude);
-                    liveTracking.setTrackingDate(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
+                    liveTracking.setTrackingDate(new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new Date()));
                     addLiveTracking(liveTracking);
 
                 }
@@ -109,7 +109,7 @@ public class LocationSharingServices extends Service {
 
 
         AlarmManager alarmService = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-        alarmService.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 100, restartServicePI);
+        alarmService.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 6000, restartServicePI);
 
         return START_STICKY;
     }
@@ -398,5 +398,11 @@ public class LocationSharingServices extends Service {
 
 
 
+    }
+
+    @Override
+    public void onDestroy() {
+
+        super.onDestroy();
     }
 }

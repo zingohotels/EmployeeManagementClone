@@ -17,7 +17,7 @@
         android:layout_gravity="center"
         android:id="@+id/employee_splash"
         android:contentDescription="@null"
-        android:src="@drawable/app_logo"/>
+        android:src="@drawable/ems"/>
 
 
 
