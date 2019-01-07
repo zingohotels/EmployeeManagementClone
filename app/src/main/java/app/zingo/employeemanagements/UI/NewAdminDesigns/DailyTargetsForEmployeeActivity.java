@@ -163,7 +163,7 @@ public class DailyTargetsForEmployeeActivity extends AppCompatActivity {
                     }else{
                         mAdapter = new TaskListAdapter(DailyTargetsForEmployeeActivity.this,new ArrayList<Tasks>());
                         mTaskList.setAdapter(mAdapter);
-                        Toast.makeText(DailyTargetsForEmployeeActivity.this, "No Closed Pending Tasks given for this employee", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DailyTargetsForEmployeeActivity.this, "No Closed Tasks given for this employee", Toast.LENGTH_SHORT).show();
                     }
 
 
