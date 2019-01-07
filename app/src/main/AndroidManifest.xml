@@ -167,10 +167,19 @@
         <activity
             android:name=".UI.Admin.TaskManagementHost"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".UI.Admin.CreateTaskScreen"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-        <activity android:name=".UI.Admin.TaskListScreen"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+        <activity
+            android:name=".UI.Admin.CreateTaskScreen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".UI.Admin.TaskListScreen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".UI.NewAdminDesigns.AdminNewMainScreen"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity android:name=".UI.NewAdminDesigns.DailyTargetsForEmployeeActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

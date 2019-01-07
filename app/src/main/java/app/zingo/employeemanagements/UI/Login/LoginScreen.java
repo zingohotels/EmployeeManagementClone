@@ -27,6 +27,7 @@ import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Admin.DashBoardAdmin;
 import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
 import app.zingo.employeemanagements.UI.Landing.SplashScreen;
+import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminNewMainScreen;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
@@ -218,7 +219,7 @@ public class LoginScreen extends AppCompatActivity {
 
                         }else{
 
-                            Intent i = new Intent(LoginScreen.this, DashBoardAdmin.class);
+                            Intent i = new Intent(LoginScreen.this, AdminNewMainScreen.class);
                             i.putExtra("Profile",dto);
                             startActivity(i);
                             finish();
@@ -260,7 +261,7 @@ public class LoginScreen extends AppCompatActivity {
                             PreferenceHandler.getInstance(LoginScreen.this).setCompanyName(organization.getOrganizationName());
 
                             if(PreferenceHandler.getInstance(LoginScreen.this).getUserRoleUniqueID()==2){
-                                Intent i = new Intent(LoginScreen.this, DashBoardAdmin.class);
+                                Intent i = new Intent(LoginScreen.this, AdminNewMainScreen.class);
                                 //Intent i = new Intent(LoginScreen.this, DashBoardEmployee.class);
                                 i.putExtra("Profile",dto);
 
@@ -280,7 +281,7 @@ public class LoginScreen extends AppCompatActivity {
                         }else{
 
                             if(PreferenceHandler.getInstance(LoginScreen.this).getUserRoleUniqueID()==2){
-                                Intent i = new Intent(LoginScreen.this, DashBoardAdmin.class);
+                                Intent i = new Intent(LoginScreen.this, AdminNewMainScreen.class);
                                 //Intent i = new Intent(LoginScreen.this, DashBoardEmployee.class);
                                 i.putExtra("Profile",dto);
                                 startActivity(i);

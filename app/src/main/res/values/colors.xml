@@ -14,5 +14,8 @@
     <color name="text_blue">#3700B3</color>
     <color name="text_grey">#424D58</color>
     <color name="white">#FFFFFF</color>
+    <color name="grey">#424D58</color>
+    <color name="highLight">#b6b6b6</color>
+    <color name="designBlueGreen">#04BEBD</color>
 
 </resources>

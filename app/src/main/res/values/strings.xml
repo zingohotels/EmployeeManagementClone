@@ -138,4 +138,8 @@
 
     </array>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="renew_alert_message">Dear Customer, Your EMS Subscription Expires Soon.\n Renew Now to Avoid Deactivation</string>
+
 </resources>

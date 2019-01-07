@@ -32,6 +32,7 @@ import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Admin.DashBoardAdmin;
 import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
+import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminNewMainScreen;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
@@ -263,7 +264,7 @@ public class LandingScreen extends AppCompatActivity {
 
                         }else{
 
-                            Intent i = new Intent(LandingScreen.this, DashBoardAdmin.class);
+                            Intent i = new Intent(LandingScreen.this, AdminNewMainScreen.class);
                             i.putExtra("Profile",dto);
                             startActivity(i);
                             finish();
@@ -335,7 +336,7 @@ public class LandingScreen extends AppCompatActivity {
 
                                     }else{
                                         if(PreferenceHandler.getInstance(LandingScreen.this).getUserRoleUniqueID()==2){
-                                            Intent i = new Intent(LandingScreen.this, DashBoardAdmin.class);
+                                            Intent i = new Intent(LandingScreen.this, AdminNewMainScreen.class);
                                             //Intent i = new Intent(LandingScreen.this, DashBoardEmployee.class);
                                             i.putExtra("Profile",dto);
 
@@ -358,7 +359,7 @@ public class LandingScreen extends AppCompatActivity {
                             }else if(organization.getAppType()!=null&&organization.getAppType().equalsIgnoreCase("Paid")){
 
                                 if(PreferenceHandler.getInstance(LandingScreen.this).getUserRoleUniqueID()==2){
-                                    Intent i = new Intent(LandingScreen.this, DashBoardAdmin.class);
+                                    Intent i = new Intent(LandingScreen.this, AdminNewMainScreen.class);
                                     //Intent i = new Intent(LandingScreen.this, DashBoardEmployee.class);
                                     i.putExtra("Profile",dto);
 
@@ -382,7 +383,7 @@ public class LandingScreen extends AppCompatActivity {
                         }else{
 
                             if(PreferenceHandler.getInstance(LandingScreen.this).getUserRoleUniqueID()==2){
-                                Intent i = new Intent(LandingScreen.this, DashBoardAdmin.class);
+                                Intent i = new Intent(LandingScreen.this, AdminNewMainScreen.class);
                                 //Intent i = new Intent(LandingScreen.this, DashBoardEmployee.class);
                                 i.putExtra("Profile",dto);
                                 startActivity(i);

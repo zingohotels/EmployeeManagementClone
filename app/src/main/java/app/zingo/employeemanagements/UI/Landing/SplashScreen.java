@@ -31,6 +31,7 @@ import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
 import app.zingo.employeemanagements.UI.LandingScreen;
 
 
+import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminNewMainScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 
 public class SplashScreen extends AppCompatActivity {
@@ -231,7 +232,7 @@ public class SplashScreen extends AppCompatActivity {
 
                                 if(PreferenceHandler.getInstance(SplashScreen.this).getUserRoleUniqueID()==2){
                                     //Intent verify = new Intent(SplashScreen.this,DashBoardEmployee.class);
-                                    Intent verify = new Intent(SplashScreen.this,DashBoardAdmin.class);
+                                    Intent verify = new Intent(SplashScreen.this,AdminNewMainScreen.class);
                                     startActivity(verify);
                                     SplashScreen.this.finish();
                                 }else{
