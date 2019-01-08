@@ -88,7 +88,7 @@ public class LandingScreen extends AppCompatActivity {
             mGetStarted.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent started = new Intent(LandingScreen.this,GetStartedScreen.class);
+                    Intent started = new Intent(LandingScreen.this,SignUpOptioins.class);
                     startActivity(started);
                 }
             });

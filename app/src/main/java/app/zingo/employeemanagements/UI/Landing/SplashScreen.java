@@ -220,8 +220,8 @@ public class SplashScreen extends AppCompatActivity {
                         if(!checkPermission()){
 
                         }else{
-                            if(companyId==0&&profileId==0){
-                                Intent verify = new Intent(SplashScreen.this,CreateCompany.class);
+                            if(companyId!=0&&profileId==0){
+                                Intent verify = new Intent(SplashScreen.this,CreateFounderScreen.class);
                                 startActivity(verify);
                                 SplashScreen.this.finish();
                             }else if(companyId==0&&profileId!=0){

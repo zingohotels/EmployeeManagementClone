@@ -100,10 +100,10 @@ public class EmployerNotificationFragment extends Fragment {
     private void getLoginNotifications(){
 
 
-        final ProgressDialog progressDialog = new ProgressDialog(getActivity());
+       /* final ProgressDialog progressDialog = new ProgressDialog(getActivity());
         progressDialog.setTitle("Loading Notifications");
         progressDialog.setCancelable(false);
-        progressDialog.show();
+        progressDialog.show();*/
 
         new ThreadExecuter().execute(new Runnable() {
             @Override
@@ -118,8 +118,8 @@ public class EmployerNotificationFragment extends Fragment {
                         if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
 
 
-                            if (progressDialog!=null)
-                                progressDialog.dismiss();
+                       /*     if (progressDialog!=null)
+                                progressDialog.dismiss();*/
                             ArrayList<LoginDetailsNotificationManagers> list = response.body();
 
 
@@ -149,8 +149,8 @@ public class EmployerNotificationFragment extends Fragment {
                     @Override
                     public void onFailure(Call<ArrayList<LoginDetailsNotificationManagers>> call, Throwable t) {
                         // Log error here since request failed
-                        if (progressDialog!=null)
-                            progressDialog.dismiss();
+                     /*   if (progressDialog!=null)
+                            progressDialog.dismiss();*/
                         mNoNotification.setVisibility(View.VISIBLE);
                         Log.e("TAG", t.toString());
                     }

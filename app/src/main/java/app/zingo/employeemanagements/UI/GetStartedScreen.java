@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,6 +48,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import app.zingo.employeemanagements.Adapter.EmployeeAdapter;
 import app.zingo.employeemanagements.Model.Departments;
@@ -61,8 +63,10 @@ import app.zingo.employeemanagements.UI.Company.CreateCompany;
 import app.zingo.employeemanagements.UI.Company.CreateFounderScreen;
 import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
 import app.zingo.employeemanagements.UI.Employee.EmployeeMeetingHost;
+import app.zingo.employeemanagements.UI.Landing.PhoneVerificationScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
+import app.zingo.employeemanagements.Utils.TrackGPS;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.DepartmentApi;
 import app.zingo.employeemanagements.WebApi.MeetingsAPI;
@@ -72,18 +76,20 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.text.TextUtils.isEmpty;
 import static java.security.AccessController.getContext;
 
 public class GetStartedScreen extends AppCompatActivity  implements PaymentResultListener {
 
     boolean popUp = false;
-    String appType = "",planType="";
-    int addtionalDay = 30,planId=1;
+    String appType = "Trial",planType="";
+    int addtionalDay = 0,planId=0;
     double price = 0;
 
 
     RecyclerView mPlanList;
     LinearLayout mPlanLayout;
+    ImageButton myLocation;
     TextInputEditText mOrganizationName,mCity,mState,mBuildYear,mNoEmployee,mWebsite;
     EditText mAbout,mAddress;
     AppCompatButton mCreate;
@@ -93,6 +99,10 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
 
     String country,placeId;
     Organization organization;
+
+    TrackGPS gps;
+    double latitude;
+    double longitude;
 
 
     //PaymentGateway
@@ -108,7 +118,9 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
 
             mPlanList = (RecyclerView)findViewById(R.id.plans);
             mPlanLayout = (LinearLayout) findViewById(R.id.plan_layout);
+            mPlanLayout.setVisibility(View.GONE);
             getPlans();
+            gps = new TrackGPS(GetStartedScreen.this);
 
             mOrganizationName = (TextInputEditText)findViewById(R.id.name);
             mCity = (TextInputEditText)findViewById(R.id.city);
@@ -119,6 +131,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
 
             mAbout = (EditText)findViewById(R.id.about);
             mAddress = (EditText)findViewById(R.id.address);
+            myLocation = (ImageButton) findViewById(R.id.my_location);
 
             mCreate = (AppCompatButton)findViewById(R.id.createCompany);
 
@@ -153,6 +166,24 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
                 }
             });
 
+            myLocation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if(gps.canGetLocation())
+                    {
+                        System.out.println(gps.getLatitude()+" = "+gps.getLongitude());
+                        latitude = gps.getLatitude();
+                        longitude = gps.getLongitude();
+                        getAddress();
+                    }
+                    else
+                    {
+                        Toast.makeText(GetStartedScreen.this, "Couldn't get the location. Make sure location is enabled on the device", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
 
 
         }catch (Exception e){
@@ -171,7 +202,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
             View views = inflater.inflate(R.layout.info_get_started, null);
 
             builder.setView(views);
-            builder.setOnKeyListener(new DialogInterface.OnKeyListener() {
+           /* builder.setOnKeyListener(new DialogInterface.OnKeyListener() {
                 @Override
                 public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                     if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
@@ -182,7 +213,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
                         return false; // Not consumed
                     }
                 }
-            });
+            });*/
             final Button mPaid = (Button) views.findViewById(R.id.paid_version);
             final Button mTrial = (Button) views.findViewById(R.id.trial_version);
             final AlertDialog dialogs = builder.create();
@@ -750,8 +781,9 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
 
                             Bundle bundle = new Bundle();
                             bundle.putSerializable("Company",organization);
-                            Intent profile = new Intent(GetStartedScreen.this,CreateFounderScreen.class);
+                            Intent profile = new Intent(GetStartedScreen.this,PhoneVerificationScreen.class);
                             profile.putExtras(bundle);
+                            profile.putExtra("Screen","Organization");
                             startActivity(profile);
                             GetStartedScreen.this.finish();
 
@@ -860,6 +892,48 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
 
         }else{
             GetStartedScreen.this.finish();
+        }
+    }
+
+    public void getAddress()
+    {
+
+        try
+        {
+            Geocoder geocoder;
+            List<Address> addresses;
+            geocoder = new Geocoder(GetStartedScreen.this, Locale.ENGLISH);
+
+            System.out.println("Latlang  = "+latitude+" == "+longitude);
+            addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+
+            String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+
+            String state = addresses.get(0).getAdminArea();
+            String country = addresses.get(0).getCountryName();
+            String postalCode = addresses.get(0).getPostalCode();
+            String knownName = addresses.get(0).getFeatureName();
+
+
+
+            System.out.println("address = "+address);
+
+            String currentLocation;
+
+            if(!isEmpty(address))
+            {
+                currentLocation=address;
+                mAddress.setText(currentLocation);
+
+            }
+            else
+                Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
+
+
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
         }
     }
 }

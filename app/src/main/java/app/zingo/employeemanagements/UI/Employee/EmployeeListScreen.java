@@ -60,6 +60,7 @@ public class EmployeeListScreen extends AppCompatActivity {
             }
 
 
+
             mAddProfiles.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -123,8 +124,14 @@ public class EmployeeListScreen extends AppCompatActivity {
                                     Collections.sort(employees,Employee.compareEmployee);
                                     EmployeeAdapter adapter = new EmployeeAdapter(EmployeeListScreen.this, employees,type);
                                     mProfileList.setAdapter(adapter);
+
+                                    if(PreferenceHandler.getInstance(EmployeeListScreen.this).getEmployeeLimit()>=employees.size()){
+                                        mAddProfiles.setVisibility(View.GONE);
+                                    }
                                 }else{
                                     Toast.makeText(EmployeeListScreen.this,"No Employees added",Toast.LENGTH_LONG).show();
+                                    Intent employee =new Intent(EmployeeListScreen.this,CreateEmployeeScreen.class);
+                                    startActivity(employee);
                                 }
 
 
@@ -132,6 +139,8 @@ public class EmployeeListScreen extends AppCompatActivity {
 
                             }else{
                                 Toast.makeText(EmployeeListScreen.this,"No Employees added",Toast.LENGTH_LONG).show();
+                                Intent employee =new Intent(EmployeeListScreen.this,CreateEmployeeScreen.class);
+                                startActivity(employee);
                             }
 
                         }else {

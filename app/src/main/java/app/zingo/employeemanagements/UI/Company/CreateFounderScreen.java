@@ -32,7 +32,7 @@ import app.zingo.employeemanagements.Model.Designations;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.R;
-import app.zingo.employeemanagements.UI.Login.LoginScreen;
+import app.zingo.employeemanagements.UI.LandingScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
@@ -49,6 +49,9 @@ public class CreateFounderScreen extends AppCompatActivity {
     EditText mAddress;
     RadioButton mMale,mFemale,mOthers;
     AppCompatButton mCreate;
+
+    Organization organization;
+    String phone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +82,18 @@ public class CreateFounderScreen extends AppCompatActivity {
 
             mCreate = (AppCompatButton)findViewById(R.id.createFounder);
 
+            Bundle bundle = getIntent().getExtras();
+
+            if(bundle!=null){
+
+                phone = bundle.getString("PhoneNumber");
+            }else{
+                phone = PreferenceHandler.getInstance(CreateFounderScreen.this).getPhoneNumber();
+            }
+
+
+            mMobile.setText(phone);
+            mMobile.setEnabled(false);
             mDob.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -394,7 +409,7 @@ public class CreateFounderScreen extends AppCompatActivity {
                             PreferenceHandler.getInstance(CreateFounderScreen.this).clear();
                             PreferenceHandler.getInstance(CreateFounderScreen.this).setUserId(s.getEmployeeId());
 
-                            Intent i = new Intent(CreateFounderScreen.this, LoginScreen.class);
+                            Intent i = new Intent(CreateFounderScreen.this, LandingScreen.class);
                             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(i);

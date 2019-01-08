@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import com.itextpdf.text.pdf.StringUtils;
 
 import app.zingo.employeemanagements.R;
+import app.zingo.employeemanagements.UI.Admin.DashBoardAdmin;
 import app.zingo.employeemanagements.UI.Employee.EmployeeListScreen;
 
 /**
@@ -119,9 +120,9 @@ public class AdminHomeFragment extends Fragment {
 
         Intent intent;
         if (view.getId() == R.id.employees) {
-            intent = new Intent(getContext(), EmployeeListScreen.class);
-            intent.putExtra("viewId", view.getId());
-            getContext().startActivity(intent);
+            Intent employee = new Intent(getContext(), EmployeeListScreen.class);
+            getContext().startActivity(employee);
+
         } else if (view.getId() == R.id.attendance) {
             intent = new Intent(getContext(), EmployeeListScreen.class);
             intent.putExtra("viewId", view.getId());

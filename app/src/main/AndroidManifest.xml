@@ -33,6 +33,8 @@
             android:name=".UI.Landing.SplashScreen"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
+
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,7 +44,9 @@
         <activity
             android:name=".UI.Landing.PhoneVerificationScreen"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" >
+
+        </activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -177,9 +181,15 @@
             android:name=".UI.NewAdminDesigns.AdminNewMainScreen"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan"></activity>
-        <activity android:name=".UI.NewAdminDesigns.DailyTargetsForEmployeeActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".UI.NewAdminDesigns.DailyTargetsForEmployeeActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".UI.SignUpOptioins"
+            android:theme="@style/AppTheme.NoActionBar" >
+
+
+        </activity>
     </application>
 
 </manifest>

@@ -137,14 +137,14 @@ public class AdminNewMainScreen extends AppCompatActivity {
     }*/
 
     private void setupTabIcons(TabLayout tabLayout) {
-        tabLayout.getTabAt(2).setIcon(R.drawable.white_navigation);
+        tabLayout.getTabAt(3).setIcon(R.drawable.white_navigation);
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        viewPager.setOffscreenPageLimit(3);
+        viewPager.setOffscreenPageLimit(4);
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-        //viewPagerAdapter.addFragment(EmployerNotificationFragment.getInstance(), "Tracking");
+        viewPagerAdapter.addFragment(AdminDashBoardFragment.getInstance(), "Dash Board");
         viewPagerAdapter.addFragment(EmployerNotificationFragment.getInstance(), "Notifications");
         viewPagerAdapter.addFragment(TaskListFragment.getInstance(), "Tasks");
         viewPagerAdapter.addFragment(AdminHomeFragment.getInstance(), "");

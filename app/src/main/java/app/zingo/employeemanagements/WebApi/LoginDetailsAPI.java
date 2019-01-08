@@ -31,4 +31,7 @@ public interface LoginDetailsAPI {
 
     @GET("LoginDetails/GetLoginDetailsByEmployeeId/{EmployeeId}")
     Call<ArrayList<LoginDetails>> getLoginByEmployeeId(@Path("EmployeeId") int id);
+
+    @POST("LoginDetails/GetLoginDetailsByEmployeeIdAndLoginDate")
+    Call<ArrayList<LoginDetails>> getLoginByEmployeeIdAndDate(@Body LoginDetails details);
 }

@@ -27,13 +27,20 @@ import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.hbb20.CountryCodePicker;
 
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import app.zingo.employeemanagements.Custom.CustomFontTextView;
+import app.zingo.employeemanagements.Model.Employee;
+import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Company.CreateCompany;
+import app.zingo.employeemanagements.UI.Company.CreateFounderScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
+import app.zingo.employeemanagements.Utils.ThreadExecuter;
+import app.zingo.employeemanagements.WebApi.EmployeeApi;
 import okhttp3.internal.Util;
+import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
@@ -56,6 +63,9 @@ public class PhoneVerificationScreen extends AppCompatActivity {
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
 
     MyCountDownTimer myCountDownTimer;
+
+    Organization organization;
+    String screen,phone;
 
 
 
@@ -90,31 +100,15 @@ public class PhoneVerificationScreen extends AppCompatActivity {
             mResend = (AppCompatTextView)findViewById(R.id.resend);
             mTimer = (AppCompatTextView)findViewById(R.id.timer);
 
-            mVerifyNum.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            Bundle bundle = getIntent().getExtras();
 
-                    String phoneNumber = mPhone.getText().toString();
-                    if(phoneNumber==null||phoneNumber.isEmpty()){
-                        mPhone.setError("Please enter mobile number");
-                        mPhone.requestFocus();
-                    }else{
+            if(bundle!=null){
 
-                        mNumberLay.setVisibility(View.GONE);
-                        mOtpLay.setVisibility(View.VISIBLE);
-                        mResend.setVisibility(View.GONE);
-                        mTimer.setVisibility(View.VISIBLE);
-
-                        myCountDownTimer = new MyCountDownTimer(10000, 1000);
-                        myCountDownTimer.start();
-                        mMobileNumWithCountry.setText(""+mCountry.getSelectedCountryCodeWithPlus()+mPhone.getText().toString());
-                        startPhoneNumberVerification(mCountry.getSelectedCountryCodeWithPlus()+mPhone.getText().toString());
+                organization = (Organization)bundle.getSerializable("Company");
+                screen = bundle.getString("Screen");
+            }
 
 
-
-                    }
-                }
-            });
 
             mCancel.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -170,10 +164,31 @@ public class PhoneVerificationScreen extends AppCompatActivity {
 
                     mVerificationId = verificationId;
                     mResendToken = token;
+
+
                     Toast.makeText(PhoneVerificationScreen.this, "OTP sent successfully", Toast.LENGTH_SHORT).show();
 
                 }
             };
+
+            mVerifyNum.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    String phoneNumber = mPhone.getText().toString();
+                    if(phoneNumber==null||phoneNumber.isEmpty()){
+                        mPhone.setError("Please enter mobile number");
+                        mPhone.requestFocus();
+                    }else{
+
+                        checkUserByPhone(phoneNumber,"Verify");
+
+
+
+
+                    }
+                }
+            });
 
             mVerifyCode.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -190,7 +205,10 @@ public class PhoneVerificationScreen extends AppCompatActivity {
             mResend.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    resendVerificationCode(mCountry.getSelectedCountryCodeWithPlus()+mPhone.getText().toString(),mResendToken);
+                    phone = mPhone.getText().toString();
+
+                    checkUserByPhone(phone,"Resend");
+
                 }
             });
 
@@ -254,12 +272,20 @@ public class PhoneVerificationScreen extends AppCompatActivity {
                         if (task.isSuccessful() ) {
 
                             PreferenceHandler.getInstance(PhoneVerificationScreen.this).setPhoneNumber(mPhone.getText().toString());
-                            Intent main = new Intent(PhoneVerificationScreen.this, CreateCompany.class);
-                            main.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            main.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                            startActivity(main);
-                            PhoneVerificationScreen.this.finish();
+
+                            if(screen!=null&&screen.equalsIgnoreCase("Organization")){
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("Company",organization);
+                                Intent main = new Intent(PhoneVerificationScreen.this, CreateFounderScreen.class);
+                                main.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                main.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                main.putExtras(bundle);
+                                main.putExtra("PhoneNumber",phone);
+                                startActivity(main);
+                                PhoneVerificationScreen.this.finish();
+                            }
+
 
 
                         } else {
@@ -296,6 +322,78 @@ public class PhoneVerificationScreen extends AppCompatActivity {
             mTimer.setVisibility(View.GONE);
             mResend.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void checkUserByPhone(final String phones,final String type){
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+
+
+                EmployeeApi apiService =
+                        app.zingo.employeemanagements.Utils.Util.getClient().create(EmployeeApi.class);
+
+                Call<ArrayList<Employee>> call = apiService.getUserByPhone(phones);
+
+                call.enqueue(new Callback<ArrayList<Employee>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<Employee>> call, Response<ArrayList<Employee>> response) {
+//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
+                        int statusCode = response.code();
+
+                        if(statusCode == 200 || statusCode == 204)
+                        {
+                            ArrayList<Employee> responseProfile = response.body();
+                            if(responseProfile != null && responseProfile.size()!=0 )
+                            {
+                                mPhone.setError("Number Already Exists");
+                                Toast.makeText(PhoneVerificationScreen.this, "Mobile already Exists", Toast.LENGTH_SHORT).show();
+
+                            }
+                            else
+                            {
+
+                                try {
+
+                                    if(type.equalsIgnoreCase("Verify")){
+                                        mNumberLay.setVisibility(View.GONE);
+                                        mOtpLay.setVisibility(View.VISIBLE);
+                                        mResend.setVisibility(View.GONE);
+                                        mTimer.setVisibility(View.VISIBLE);
+
+                                        myCountDownTimer = new MyCountDownTimer(10000, 1000);
+                                        myCountDownTimer.start();
+                                        phone = mPhone.getText().toString();
+                                        mMobileNumWithCountry.setText(""+mCountry.getSelectedCountryCodeWithPlus()+mPhone.getText().toString());
+                                        startPhoneNumberVerification(mCountry.getSelectedCountryCodeWithPlus()+mPhone.getText().toString());
+
+                                    }else if(type.equalsIgnoreCase("Resend")){
+                                        resendVerificationCode(mCountry.getSelectedCountryCodeWithPlus()+mPhone.getText().toString(),mResendToken);
+                                    }
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                        else
+                        {
+
+                            Toast.makeText(PhoneVerificationScreen.this,response.message(),Toast.LENGTH_SHORT).show();
+                        }
+//                callGetStartEnd();
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<Employee>> call, Throwable t) {
+                        // Log error here since request failed
+
+                        Log.e("TAG", t.toString());
+                    }
+                });
+            }
+        });
     }
 
 }

@@ -124,13 +124,34 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
-                    android:layout_marginTop="20.0dip"
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    android:text="Address"/>
+                    android:orientation="horizontal"
+                    >
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/activity_large_margin"
+                        android:layout_marginTop="20.0dip"
+                        android:layout_marginRight="@dimen/activity_large_margin"
+                        android:text="Address"/>
+
+                    <ImageButton
+                        android:id="@+id/my_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/activity_large_margin"
+                        android:layout_marginTop="20.0dip"
+                        android:layout_marginRight="@dimen/activity_large_margin"
+                        android:background="@drawable/ic_my_location_primary_24dp"/>
+                </LinearLayout>
+
+
+
 
                 <EditText
                     android:id="@+id/address"
