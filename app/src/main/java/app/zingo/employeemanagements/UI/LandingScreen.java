@@ -33,6 +33,7 @@ import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Admin.DashBoardAdmin;
 import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminNewMainScreen;
+import app.zingo.employeemanagements.UI.NewEmployeeDesign.EmployeeNewMainScreen;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
@@ -344,7 +345,7 @@ public class LandingScreen extends AppCompatActivity {
                                             finish();
                                         }else{
                                             //Intent i = new Intent(LandingScreen.this, DashBoardAdmin.class);
-                                            Intent i = new Intent(LandingScreen.this, DashBoardEmployee.class);
+                                            Intent i = new Intent(LandingScreen.this, EmployeeNewMainScreen.class);
                                             i.putExtra("Profile",dto);
                                             i.putExtra("Organization",organization);
                                             startActivity(i);
@@ -367,7 +368,7 @@ public class LandingScreen extends AppCompatActivity {
                                     finish();
                                 }else{
                                     //Intent i = new Intent(LandingScreen.this, DashBoardAdmin.class);
-                                    Intent i = new Intent(LandingScreen.this, DashBoardEmployee.class);
+                                    Intent i = new Intent(LandingScreen.this, EmployeeNewMainScreen.class);
                                     i.putExtra("Profile",dto);
                                     i.putExtra("Organization",organization);
                                     startActivity(i);
@@ -390,7 +391,7 @@ public class LandingScreen extends AppCompatActivity {
                                 finish();
                             }else{
                                 //Intent i = new Intent(LandingScreen.this, DashBoardAdmin.class);
-                                Intent i = new Intent(LandingScreen.this, DashBoardEmployee.class);
+                                Intent i = new Intent(LandingScreen.this, EmployeeNewMainScreen.class);
                                 i.putExtra("Profile",dto);
                                 startActivity(i);
                                 finish();

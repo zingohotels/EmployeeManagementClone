@@ -22,6 +22,9 @@ public interface LoginNotificationAPI {
     @GET("LoginDetailsNotificationManager/GetLoginDetailsNotificationByManagerId/{ManagerId}")
     Call<ArrayList<LoginDetailsNotificationManagers>> getNotificationByManagerId(@Path("ManagerId") int ManagerId);
 
+    @GET("LoginDetailsNotificationManager/GetLoginDetailsNotificationByEmployeeId/{EmployeeId}")
+    Call<ArrayList<LoginDetailsNotificationManagers>> getNotificationByEmployeeId(@Path("EmployeeId") int EmployeeId);
+
     @POST("LoginDetailsNotificationManagers/SendLoginDetailsNotification")
     Call<ArrayList<String>> sendLoginNotification(@Body LoginDetailsNotificationManagers details);
 }

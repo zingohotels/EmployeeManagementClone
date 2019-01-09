@@ -36,6 +36,7 @@ import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Company.CreateCompany;
 import app.zingo.employeemanagements.UI.Company.CreateFounderScreen;
+import app.zingo.employeemanagements.UI.EmployeeSignUp;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
@@ -274,9 +275,20 @@ public class PhoneVerificationScreen extends AppCompatActivity {
                             PreferenceHandler.getInstance(PhoneVerificationScreen.this).setPhoneNumber(mPhone.getText().toString());
 
                             if(screen!=null&&screen.equalsIgnoreCase("Organization")){
+                                    Bundle bundle = new Bundle();
+                                    bundle.putSerializable("Company",organization);
+                                    Intent main = new Intent(PhoneVerificationScreen.this, CreateFounderScreen.class);
+                                    main.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    main.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                    main.putExtras(bundle);
+                                    main.putExtra("PhoneNumber",phone);
+                                    startActivity(main);
+                                    PhoneVerificationScreen.this.finish();
+                            }else if(screen!=null&&screen.equalsIgnoreCase("Employee")){
                                 Bundle bundle = new Bundle();
                                 bundle.putSerializable("Company",organization);
-                                Intent main = new Intent(PhoneVerificationScreen.this, CreateFounderScreen.class);
+                                Intent main = new Intent(PhoneVerificationScreen.this, EmployeeSignUp.class);
                                 main.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 main.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);

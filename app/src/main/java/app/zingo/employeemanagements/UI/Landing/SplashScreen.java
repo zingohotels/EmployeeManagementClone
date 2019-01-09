@@ -28,10 +28,12 @@ import app.zingo.employeemanagements.UI.Admin.DashBoardAdmin;
 import app.zingo.employeemanagements.UI.Company.CreateCompany;
 import app.zingo.employeemanagements.UI.Company.CreateFounderScreen;
 import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
+import app.zingo.employeemanagements.UI.EmployeeSignUp;
 import app.zingo.employeemanagements.UI.LandingScreen;
 
 
 import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminNewMainScreen;
+import app.zingo.employeemanagements.UI.NewEmployeeDesign.EmployeeNewMainScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 
 public class SplashScreen extends AppCompatActivity {
@@ -236,15 +238,21 @@ public class SplashScreen extends AppCompatActivity {
                                     startActivity(verify);
                                     SplashScreen.this.finish();
                                 }else{
-                                    Intent verify = new Intent(SplashScreen.this,DashBoardEmployee.class);
+                                    Intent verify = new Intent(SplashScreen.this,EmployeeNewMainScreen.class);
                                     startActivity(verify);
                                     SplashScreen.this.finish();
                                 }
 
                             }else{
 
-                                if(profileId==0){
+                                String type = PreferenceHandler.getInstance(SplashScreen.this).getSignUpType();
+
+                                if(profileId==0&&type.equalsIgnoreCase("Organization")){
                                     Intent verify = new Intent(SplashScreen.this,CreateFounderScreen.class);
+                                    startActivity(verify);
+                                    SplashScreen.this.finish();
+                                }else  if(profileId==0&&type.equalsIgnoreCase("Employee")){
+                                    Intent verify = new Intent(SplashScreen.this,EmployeeSignUp.class);
                                     startActivity(verify);
                                     SplashScreen.this.finish();
                                 }

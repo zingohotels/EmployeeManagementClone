@@ -21,6 +21,7 @@ public interface Constants {
     String MAPPING_ID = "map_id";
     String COMPANY_NAME ="company_name";
     String APP_TYPE ="app_type";
+    String SIGN_TYPE ="sign_type";
     String LIC_START ="lic_start";
     String LIC_END ="lic_end";
     String PLAN_TYPE ="plan_type";

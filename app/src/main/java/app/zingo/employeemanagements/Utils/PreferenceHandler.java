@@ -121,6 +121,15 @@ public class PreferenceHandler {
         return sh.getString(Constants.APP_TYPE,"");
     }
 
+    public void setSignUpType(String appType) {
+        sh.edit().putString(Constants.SIGN_TYPE,appType).apply();
+    }
+
+    public String getSignUpType()
+    {
+        return sh.getString(Constants.SIGN_TYPE,"");
+    }
+
     public void setLicenseStartDate(String licenseStartDate) {
         sh.edit().putString(Constants.LIC_START,licenseStartDate).apply();
     }

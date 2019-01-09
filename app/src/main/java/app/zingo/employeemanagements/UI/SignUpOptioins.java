@@ -7,6 +7,9 @@ import android.support.v7.widget.CardView;
 import android.view.View;
 
 import app.zingo.employeemanagements.R;
+import app.zingo.employeemanagements.UI.Admin.DashBoardAdmin;
+import app.zingo.employeemanagements.UI.Landing.PhoneVerificationScreen;
+import app.zingo.employeemanagements.Utils.PreferenceHandler;
 
 public class SignUpOptioins extends AppCompatActivity {
 
@@ -27,6 +30,7 @@ public class SignUpOptioins extends AppCompatActivity {
                 public void onClick(View view) {
 
                     Intent started = new Intent(SignUpOptioins.this,GetStartedScreen.class);
+                    PreferenceHandler.getInstance(SignUpOptioins.this).setSignUpType("Organization");
                     startActivity(started);
 
                 }
@@ -35,7 +39,9 @@ public class SignUpOptioins extends AppCompatActivity {
             mEmployee.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent started = new Intent(SignUpOptioins.this,GetStartedScreen.class);
+                    Intent started = new Intent(SignUpOptioins.this,PhoneVerificationScreen.class);
+                    PreferenceHandler.getInstance(SignUpOptioins.this).setSignUpType("Employee");
+                    started.putExtra("Screen","Employee");
                     startActivity(started);
 
                 }

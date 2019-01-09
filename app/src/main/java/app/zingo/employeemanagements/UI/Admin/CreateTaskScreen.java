@@ -37,6 +37,7 @@ public class CreateTaskScreen extends AppCompatActivity {
     AppCompatButton mCreate;
 
     int employeeId;
+    String type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,7 @@ public class CreateTaskScreen extends AppCompatActivity {
             if(bundle!=null){
 
                 employeeId = bundle.getInt("EmployeeId");
+                type = bundle.getString("Type");
             }
 
 
@@ -195,8 +197,16 @@ public class CreateTaskScreen extends AppCompatActivity {
                 tasks.setStatus("Pending");
                 tasks.setComments("");
                 tasks.setRemarks("");
-                tasks.setToReportEmployeeId(PreferenceHandler.getInstance(CreateTaskScreen.this).getUserId());
-                tasks.setEmployeeId(employeeId);
+
+                if(type!=null&&type.equalsIgnoreCase("Employee")){
+                    tasks.setToReportEmployeeId(PreferenceHandler.getInstance(CreateTaskScreen.this).getManagerId());
+                    tasks.setEmployeeId(employeeId);
+
+                }else{
+                    tasks.setToReportEmployeeId(PreferenceHandler.getInstance(CreateTaskScreen.this).getUserId());
+                    tasks.setEmployeeId(employeeId);
+
+                }
 
 
                 try {
