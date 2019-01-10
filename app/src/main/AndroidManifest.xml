@@ -185,10 +185,16 @@
             android:name=".UI.SignUpOptioins"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".UI.EmployeeSignUp" />
-        <activity android:name=".UI.NewEmployeeDesign.EmployeeNewMainScreen"
+        <activity
+            android:name=".UI.NewEmployeeDesign.EmployeeNewMainScreen"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".UI.NewAdminDesigns.EmployeeUpdateListScreen" />
+        <activity android:name=".UI.NewAdminDesigns.EmployeeEditScreen" />
+        <activity android:name=".UI.NewAdminDesigns.LeaveEmployeeListScreen" />
+        <activity android:name=".UI.NewAdminDesigns.UpdateLeaveScreen" />
+        <activity android:name=".UI.NewAdminDesigns.DepartmentLilstScreen"></activity>
     </application>
 
 </manifest>

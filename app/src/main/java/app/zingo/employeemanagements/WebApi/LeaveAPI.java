@@ -9,6 +9,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 /**
@@ -19,6 +20,9 @@ public interface LeaveAPI {
 
     @POST("Leaves")
     Call<Leaves> addLeave(@Body Leaves details);
+
+    @PUT("Leaves/{id}")
+    Call<Leaves> updateLeaves(@Path("id") int id,@Body Leaves details);
 
     @GET("Leaves/GetAllLeavesByEmployeeId/{EmployeeId}")
     Call<ArrayList<Leaves>> getLeavesByEmployeeId(@Path("EmployeeId") int id);

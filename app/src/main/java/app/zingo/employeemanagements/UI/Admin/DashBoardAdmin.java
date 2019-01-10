@@ -1000,6 +1000,8 @@ public class DashBoardAdmin extends AppCompatActivity {
                             PreferenceHandler.getInstance(DashBoardAdmin.this).setLicenseStartDate(organization.getLicenseStartDate());
                             PreferenceHandler.getInstance(DashBoardAdmin.this).setLicenseEndDate(organization.getLicenseEndDate());
                             PreferenceHandler.getInstance(DashBoardAdmin.this).setSignupDate(organization.getSignupDate());
+                            PreferenceHandler.getInstance(DashBoardAdmin.this).setOrganizationLongi(organization.getLongitude());
+                            PreferenceHandler.getInstance(DashBoardAdmin.this).setOrganizationLati(organization.getLatitude());
                             PreferenceHandler.getInstance(DashBoardAdmin.this).setPlanType(organization.getPlanType());
                             PreferenceHandler.getInstance(DashBoardAdmin.this).setEmployeeLimit(organization.getEmployeeLimit());
                             PreferenceHandler.getInstance(DashBoardAdmin.this).setPlanId(organization.getPlanId());

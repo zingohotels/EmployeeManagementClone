@@ -15,7 +15,7 @@
 
     <!--Splash screen-->
     <string name="splash_app_name">Employee Management</string>
-    <string name="powered_by_zingo">Powered By Zingo</string>
+    <string name="powered_by_zingo">Powered By Zingo.tech</string>
     <string name="copyright_lucida">&#9400; Lucida Hospitality Pvt Ltd</string>
 
     <!--Guest Login-->
@@ -36,6 +36,19 @@
 
     <string name="leaveNew">Apply Leave</string>
     <string name="leaveRequest">Leaves</string>
+
+    <string-array name="leave_type">
+        <item>Paid</item>
+        <item>Un Paid</item>
+
+    </string-array>
+
+    <string-array name="leave_status">
+        <item>Pending</item>
+        <item>Approved</item>
+        <item>Rejected</item>
+
+    </string-array>
 
 
     <array name="navbar_items">

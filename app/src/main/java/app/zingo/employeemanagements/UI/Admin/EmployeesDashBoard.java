@@ -144,7 +144,7 @@ public class EmployeesDashBoard extends AppCompatActivity {
                             if (progressDialog!=null)
                                 progressDialog.dismiss();
                             ArrayList<LoginDetails> list = response.body();
-                            long hours=0;
+                            long hours=0,hourMins=0;
 
 
                             if (list !=null && list.size()!=0) {
@@ -168,7 +168,8 @@ public class EmployeesDashBoard extends AppCompatActivity {
                                             dates = new SimpleDateFormat("yyyy-MM-dd").parse(date[0]);
                                             String dateValue = new SimpleDateFormat("MMM dd,yyyy").format(dates);
 
-                                            hours = dateCal(dateValue,list.get(i).getLoginTime(),list.get(i).getLogOutTime())+hours;
+                                            hours = dateCal(dateValue,list.get(i).getLoginTime(),list.get(i).getLogOutTime());
+                                            hourMins = hourMins+hours;
                                         } catch (ParseException e) {
                                             e.printStackTrace();
                                         }
@@ -184,14 +185,15 @@ public class EmployeesDashBoard extends AppCompatActivity {
                                     mWorkedDays.setText(""+s.size());
                                 }
 
-                                loginHour = hours;
-                                long diffDays = hours / (24 * 60 * 60 * 1000);
-                                long Hours = hours / (60 * 60 * 1000) ;
-                                long Minutes = hours / (60 * 1000) ;
-                                long Seconds = hours / 1000 % 60;
-                                DecimalFormat df = new DecimalFormat("00");
+                                loginHour = hourMins;
 
-                                mWorkedHours.setText(df.format(Hours)+":"+df.format(Minutes));
+                                long diffDays = hourMins / (24 * 60 * 60 * 1000);
+                                long Hours = hourMins / (60 * 60 * 1000)  % 24;
+                                long Minutes = hourMins / (60 * 1000)% 60 ;
+                                long Seconds = hourMins / 1000 % 60;
+                                DecimalFormat df = new DecimalFormat("00");
+                                long value = ((diffDays*24)/2)+Hours;
+                                mWorkedHours.setText(df.format(value)+":"+df.format(Minutes));
 
                                 getMeetingDetails(employeeId);
 

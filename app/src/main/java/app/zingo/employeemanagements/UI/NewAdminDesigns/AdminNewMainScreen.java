@@ -32,6 +32,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +42,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -50,8 +54,10 @@ import app.zingo.employeemanagements.FireBase.SharedPrefManager;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.EmployeeDeviceMapping;
 import app.zingo.employeemanagements.Model.EmployeeImages;
+import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Admin.DashBoardAdmin;
+import app.zingo.employeemanagements.UI.LandingScreen;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
@@ -59,6 +65,7 @@ import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
 import app.zingo.employeemanagements.WebApi.EmployeeDeviceApi;
 import app.zingo.employeemanagements.WebApi.EmployeeImageAPI;
+import app.zingo.employeemanagements.WebApi.OrganizationApi;
 import app.zingo.employeemanagements.WebApi.UploadApi;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -71,6 +78,8 @@ public class AdminNewMainScreen extends AppCompatActivity {
 
     static final String TAG = "FounderMainScreen";
     ImageView mProfileImage;
+    TextView mTrialMsgInfo;
+    LinearLayout mTrialInfoLay,mShareLayout;
 
     boolean doubleBackToExitPressedOnce = false;
     public long[] mTimer = new long[1];
@@ -212,6 +221,8 @@ public class AdminNewMainScreen extends AppCompatActivity {
         View profileView = findViewById(R.id.profile);
         TextView userName = (TextView) findViewById(R.id.userName);
         mProfileImage = (ImageView) findViewById(R.id.profilePicture);
+        mTrialInfoLay = (LinearLayout) findViewById(R.id.trial_version_info_layout);
+        mTrialMsgInfo = (TextView) findViewById(R.id.trial_version_info_msg);
 
         organizationName.setText(PreferenceHandler.getInstance(AdminNewMainScreen.this).getCompanyName());
         userName.setText(PreferenceHandler.getInstance(AdminNewMainScreen.this).getUserFullName());
@@ -288,6 +299,8 @@ public class AdminNewMainScreen extends AppCompatActivity {
 
             }
         });
+
+        getCompany(PreferenceHandler.getInstance(AdminNewMainScreen.this).getCompanyId());
 
         //Subscribtion Icon visibility based on Employer
        /* if (StringUtils.equalsIgnoreCase(this.mAppUser.getUserType(), "Employer")) {
@@ -896,5 +909,151 @@ public class AdminNewMainScreen extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    public void getCompany(final int id){
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+
+                final OrganizationApi subCategoryAPI = Util.getClient().create(OrganizationApi.class);
+                Call<ArrayList<Organization>> getProf = subCategoryAPI.getOrganizationById(id);
+                //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
+
+                getProf.enqueue(new Callback<ArrayList<Organization>>() {
+
+                    @Override
+                    public void onResponse(Call<ArrayList<Organization>> call, Response<ArrayList<Organization>> response) {
+
+                        if (response.code() == 200||response.code() == 201||response.code() == 204&&response.body().size()!=0)
+                        {
+
+                            Organization organization = response.body().get(0);
+                            System.out.println("Inside api");
+                            PreferenceHandler.getInstance(AdminNewMainScreen.this).setCompanyId(organization.getOrganizationId());
+                            PreferenceHandler.getInstance(AdminNewMainScreen.this).setCompanyName(organization.getOrganizationName());
+                            PreferenceHandler.getInstance(AdminNewMainScreen.this).setAppType(organization.getAppType());
+
+                            PreferenceHandler.getInstance(AdminNewMainScreen.this).setAppType(organization.getAppType());
+                            PreferenceHandler.getInstance(AdminNewMainScreen.this).setLicenseStartDate(organization.getLicenseStartDate());
+                            PreferenceHandler.getInstance(AdminNewMainScreen.this).setLicenseEndDate(organization.getLicenseEndDate());
+                            PreferenceHandler.getInstance(AdminNewMainScreen.this).setSignupDate(organization.getSignupDate());
+                            PreferenceHandler.getInstance(AdminNewMainScreen.this).setOrganizationLongi(organization.getLongitude());
+                            PreferenceHandler.getInstance(AdminNewMainScreen.this).setOrganizationLati(organization.getLatitude());
+                            PreferenceHandler.getInstance(AdminNewMainScreen.this).setPlanType(organization.getPlanType());
+                            PreferenceHandler.getInstance(AdminNewMainScreen.this).setEmployeeLimit(organization.getEmployeeLimit());
+                            PreferenceHandler.getInstance(AdminNewMainScreen.this).setPlanId(organization.getPlanId());
+
+                            appType = PreferenceHandler.getInstance(AdminNewMainScreen.this).getAppType();
+                            planType = PreferenceHandler.getInstance(AdminNewMainScreen.this).getPlanType();
+                            licensesStartDate = PreferenceHandler.getInstance(AdminNewMainScreen.this).getLicenseStartDate();
+                            licenseEndDate = PreferenceHandler.getInstance(AdminNewMainScreen.this).getLicenseEndDate();
+                            planId = PreferenceHandler.getInstance(AdminNewMainScreen.this).getPlanId();
+
+                            try{
+
+                                if(appType!=null){
+
+                                    if(appType.equalsIgnoreCase("Trial")){
+
+                                        SimpleDateFormat smdf = new SimpleDateFormat("MM/dd/yyyy");
+
+                                        long days = dateCal(licenseEndDate);
+
+
+                                        mTrialInfoLay.setVisibility(View.VISIBLE);
+                                        if((smdf.parse(licenseEndDate).getTime()<smdf.parse(smdf.format(new Date())).getTime())){
+
+                                            Toast.makeText(AdminNewMainScreen.this, "Trial Version Expired.Please Update Paid Version", Toast.LENGTH_SHORT).show();
+                                            PreferenceHandler.getInstance(AdminNewMainScreen.this).clear();
+
+                                            Intent log = new Intent(AdminNewMainScreen.this, LandingScreen.class);
+                                            log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                            log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            Toast.makeText(AdminNewMainScreen.this,"Logout",Toast.LENGTH_SHORT).show();
+                                            startActivity(log);
+                                            finish();
+
+                                        }else{
+                                            mTrialMsgInfo.setText("Your Trial version is going to expiry in "+days+" days");
+                                            if(days>=1&&days<=5){
+                                              //  popupUpgrade("Hope your enjoying to use our Trial version.Get more features You need to Upgrade App","Your trial period is going to expire in "+days+" days");
+
+
+
+                                            }else if(days==0){
+                                              //  popupUpgrade("Hope your enjoying to use our Trial version.Get more features You need to Upgrade App","Today is last day for your free trial");
+                                                mTrialMsgInfo.setText("Your Trial version is going to expiry in today");
+
+                                            }else if(days<0){
+                                                Toast.makeText(AdminNewMainScreen.this, "Your Trial Period is Expired", Toast.LENGTH_SHORT).show();
+                                                PreferenceHandler.getInstance(AdminNewMainScreen.this).clear();
+
+                                                Intent log = new Intent(AdminNewMainScreen.this, LandingScreen.class);
+                                                log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                Toast.makeText(AdminNewMainScreen.this,"Logout",Toast.LENGTH_SHORT).show();
+                                                startActivity(log);
+                                                finish();
+                                            }
+
+                                        }
+
+                                    }else if(appType.equalsIgnoreCase("Paid")){
+                                        mTrialInfoLay.setVisibility(View.GONE);
+                                    }
+                                }
+
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+
+
+
+
+
+
+                        }else{
+
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<Organization>> call, Throwable t) {
+
+                    }
+                });
+
+            }
+
+        });
+    }
+
+    public long dateCal(String date){
+
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+
+
+
+        Date fd=null,td=null;
+
+        try {
+            fd = sdf.parse(""+date);
+            td = sdf.parse(""+sdf.format(new Date()));
+
+            long diff = fd.getTime() - td.getTime();
+            long days = diff / (24 * 60 * 60 * 1000);
+
+
+
+            return  days;
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return 0;
+        }
+
+
     }
 }

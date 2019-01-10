@@ -29,6 +29,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +39,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -47,7 +51,9 @@ import app.zingo.employeemanagements.FireBase.SharedPrefManager;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.EmployeeDeviceMapping;
 import app.zingo.employeemanagements.Model.EmployeeImages;
+import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.R;
+import app.zingo.employeemanagements.UI.LandingScreen;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminDashBoardFragment;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminHomeFragment;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminNewMainScreen;
@@ -60,6 +66,7 @@ import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
 import app.zingo.employeemanagements.WebApi.EmployeeDeviceApi;
 import app.zingo.employeemanagements.WebApi.EmployeeImageAPI;
+import app.zingo.employeemanagements.WebApi.OrganizationApi;
 import app.zingo.employeemanagements.WebApi.UploadApi;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -72,6 +79,8 @@ public class EmployeeNewMainScreen extends AppCompatActivity {
 
     static final String TAG = "FounderMainScreen";
     ImageView mProfileImage;
+    TextView mTrialMsgInfo;
+    LinearLayout mTrialInfoLay;
 
     boolean doubleBackToExitPressedOnce = false;
     public long[] mTimer = new long[1];
@@ -146,7 +155,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity {
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         viewPagerAdapter.addFragment(EmployeeDashBoardFragment.getInstance(), "Dash Board");
-        viewPagerAdapter.addFragment(EmployeeLoginFragment.getInstance(), "Notifications");
+        viewPagerAdapter.addFragment(EmployeeLoginFragment.getInstance(), "Attendance");
         viewPagerAdapter.addFragment(EmployeeTaskFragment.getInstance(), "Tasks");
         viewPagerAdapter.addFragment(AdminHomeFragment.getInstance(), "");
         viewPager.setAdapter(viewPagerAdapter);
@@ -213,6 +222,8 @@ public class EmployeeNewMainScreen extends AppCompatActivity {
         View profileView = findViewById(R.id.profile);
         TextView userName = (TextView) findViewById(R.id.userName);
         mProfileImage = (ImageView) findViewById(R.id.profilePicture);
+        mTrialInfoLay = (LinearLayout) findViewById(R.id.trial_version_info_layout);
+        mTrialMsgInfo = (TextView) findViewById(R.id.trial_version_info_msg);
 
         organizationName.setText(PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getCompanyName());
         userName.setText(PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getUserFullName());
@@ -290,6 +301,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity {
             }
         });
 
+        getCompany(PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getCompanyId());
         //Subscribtion Icon visibility based on Employer
        /* if (StringUtils.equalsIgnoreCase(this.mAppUser.getUserType(), "Employer")) {
             findViewById.setOnClickListener(new C13816());
@@ -897,5 +909,151 @@ public class EmployeeNewMainScreen extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    public void getCompany(final int id){
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+
+                final OrganizationApi subCategoryAPI = Util.getClient().create(OrganizationApi.class);
+                Call<ArrayList<Organization>> getProf = subCategoryAPI.getOrganizationById(id);
+                //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
+
+                getProf.enqueue(new Callback<ArrayList<Organization>>() {
+
+                    @Override
+                    public void onResponse(Call<ArrayList<Organization>> call, Response<ArrayList<Organization>> response) {
+
+                        if (response.code() == 200||response.code() == 201||response.code() == 204&&response.body().size()!=0)
+                        {
+
+                            Organization organization = response.body().get(0);
+                            System.out.println("Inside api");
+                            PreferenceHandler.getInstance(EmployeeNewMainScreen.this).setCompanyId(organization.getOrganizationId());
+                            PreferenceHandler.getInstance(EmployeeNewMainScreen.this).setCompanyName(organization.getOrganizationName());
+                            PreferenceHandler.getInstance(EmployeeNewMainScreen.this).setAppType(organization.getAppType());
+
+                            PreferenceHandler.getInstance(EmployeeNewMainScreen.this).setAppType(organization.getAppType());
+                            PreferenceHandler.getInstance(EmployeeNewMainScreen.this).setLicenseStartDate(organization.getLicenseStartDate());
+                            PreferenceHandler.getInstance(EmployeeNewMainScreen.this).setLicenseEndDate(organization.getLicenseEndDate());
+                            PreferenceHandler.getInstance(EmployeeNewMainScreen.this).setSignupDate(organization.getSignupDate());
+                            PreferenceHandler.getInstance(EmployeeNewMainScreen.this).setOrganizationLongi(organization.getLongitude());
+                            PreferenceHandler.getInstance(EmployeeNewMainScreen.this).setOrganizationLati(organization.getLatitude());
+                            PreferenceHandler.getInstance(EmployeeNewMainScreen.this).setPlanType(organization.getPlanType());
+                            PreferenceHandler.getInstance(EmployeeNewMainScreen.this).setEmployeeLimit(organization.getEmployeeLimit());
+                            PreferenceHandler.getInstance(EmployeeNewMainScreen.this).setPlanId(organization.getPlanId());
+
+                            appType = PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getAppType();
+                            planType = PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getPlanType();
+                            licensesStartDate = PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getLicenseStartDate();
+                            licenseEndDate = PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getLicenseEndDate();
+                            planId = PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getPlanId();
+
+                            try{
+
+                                if(appType!=null){
+
+                                    if(appType.equalsIgnoreCase("Trial")){
+
+                                        SimpleDateFormat smdf = new SimpleDateFormat("MM/dd/yyyy");
+
+                                        long days = dateCal(licenseEndDate);
+
+
+                                        mTrialInfoLay.setVisibility(View.VISIBLE);
+                                        if((smdf.parse(licenseEndDate).getTime()<smdf.parse(smdf.format(new Date())).getTime())){
+
+                                            Toast.makeText(EmployeeNewMainScreen.this, "Trial Version Expired.Please Update Paid Version", Toast.LENGTH_SHORT).show();
+                                            PreferenceHandler.getInstance(EmployeeNewMainScreen.this).clear();
+
+                                            Intent log = new Intent(EmployeeNewMainScreen.this, LandingScreen.class);
+                                            log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                            log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            Toast.makeText(EmployeeNewMainScreen.this,"Logout",Toast.LENGTH_SHORT).show();
+                                            startActivity(log);
+                                            finish();
+
+                                        }else{
+                                            mTrialMsgInfo.setText("Your Trial version is going to expiry in "+days+" days");
+                                            if(days>=1&&days<=5){
+                                                //  popupUpgrade("Hope your enjoying to use our Trial version.Get more features You need to Upgrade App","Your trial period is going to expire in "+days+" days");
+
+
+
+                                            }else if(days==0){
+                                                //  popupUpgrade("Hope your enjoying to use our Trial version.Get more features You need to Upgrade App","Today is last day for your free trial");
+                                                mTrialMsgInfo.setText("Your Trial version is going to expiry in today");
+
+                                            }else if(days<0){
+                                                Toast.makeText(EmployeeNewMainScreen.this, "Your Trial Period is Expired", Toast.LENGTH_SHORT).show();
+                                                PreferenceHandler.getInstance(EmployeeNewMainScreen.this).clear();
+
+                                                Intent log = new Intent(EmployeeNewMainScreen.this, LandingScreen.class);
+                                                log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                Toast.makeText(EmployeeNewMainScreen.this,"Logout",Toast.LENGTH_SHORT).show();
+                                                startActivity(log);
+                                                finish();
+                                            }
+
+                                        }
+
+                                    }else if(appType.equalsIgnoreCase("Paid")){
+                                        mTrialInfoLay.setVisibility(View.GONE);
+                                    }
+                                }
+
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+
+
+
+
+
+
+                        }else{
+
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<Organization>> call, Throwable t) {
+
+                    }
+                });
+
+            }
+
+        });
+    }
+
+    public long dateCal(String date){
+
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+
+
+
+        Date fd=null,td=null;
+
+        try {
+            fd = sdf.parse(""+date);
+            td = sdf.parse(""+sdf.format(new Date()));
+
+            long diff = fd.getTime() - td.getTime();
+            long days = diff / (24 * 60 * 60 * 1000);
+
+
+
+            return  days;
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return 0;
+        }
+
+
     }
 }

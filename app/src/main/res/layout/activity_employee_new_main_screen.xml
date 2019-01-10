@@ -28,12 +28,52 @@
                     app:tabTextAppearance="@style/AppTabTextAppearance"
                     />
             </android.support.design.widget.AppBarLayout>
-            <android.support.v4.view.ViewPager
-                android:id="@+id/viewPager"
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
-                android:layout_below="@+id/materialTabHost"/>
+                android:layout_below="@+id/materialTabHost"
+                android:layout_weight="1">
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/viewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+
+                    />
+                <LinearLayout
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:background="#dadada"
+                    android:visibility="gone"
+                    android:id="@+id/trial_version_info_layout"
+                    android:layout_gravity="bottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:id="@+id/profile"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        >
+                        <TextView
+                            android:textSize="16dp"
+                            android:textColor="@color/transparentBlack"
+                            android:ellipsize="end"
+                            android:gravity="center"
+                            android:id="@+id/trial_version_info_msg"
+                            android:clickable="true"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            android:text="You are Using Trial version"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </FrameLayout>
         </LinearLayout>
     </android.support.v4.widget.DrawerLayout>
 </android.support.design.widget.CoordinatorLayout>

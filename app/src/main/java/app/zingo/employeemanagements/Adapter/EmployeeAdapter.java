@@ -25,6 +25,8 @@ import app.zingo.employeemanagements.UI.Admin.EmployeeLiveMappingScreen;
 import app.zingo.employeemanagements.UI.Admin.EmployeesDashBoard;
 import app.zingo.employeemanagements.UI.Admin.TaskManagementHost;
 import app.zingo.employeemanagements.UI.Employee.EmployeeMeetingHost;
+import app.zingo.employeemanagements.UI.Employee.LeaveManagementHost;
+import app.zingo.employeemanagements.UI.NewAdminDesigns.LeaveEmployeeListScreen;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import retrofit2.Callback;
@@ -76,6 +78,15 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
                     intent.putExtras(bundle);
                     context.startActivity(intent);
 
+                }else if(type!=null&&type.equalsIgnoreCase("attendance")){
+
+                    Intent intent = new Intent(context, EmployeesDashBoard.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("Profile",list.get(position));
+                    bundle.putInt("ProfileId",list.get(position).getEmployeeId());
+                    intent.putExtras(bundle);
+                    context.startActivity(intent);
+
                 }else  if(type!=null&&type.equalsIgnoreCase("Salary")){
 
                     Intent intent = new Intent(context, CreatePaySlip.class);
@@ -97,6 +108,15 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
                 }else  if(type!=null&&type.equalsIgnoreCase("Task")){
 
                     Intent intent = new Intent(context, TaskManagementHost.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("EmployeeId",list.get(position).getEmployeeId());
+                    bundle.putSerializable("Employee",list.get(position));
+                    intent.putExtras(bundle);
+                    context.startActivity(intent);
+
+                }else  if(type!=null&&type.equalsIgnoreCase("Leave")){
+
+                    Intent intent = new Intent(context, LeaveEmployeeListScreen.class);
                     Bundle bundle = new Bundle();
                     bundle.putInt("EmployeeId",list.get(position).getEmployeeId());
                     bundle.putSerializable("Employee",list.get(position));

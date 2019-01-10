@@ -2652,6 +2652,8 @@ public class DashBoardEmployee extends AppCompatActivity {
                                 PreferenceHandler.getInstance(DashBoardEmployee.this).setLicenseStartDate(organization.getLicenseStartDate());
                                 PreferenceHandler.getInstance(DashBoardEmployee.this).setLicenseEndDate(organization.getLicenseEndDate());
                                 PreferenceHandler.getInstance(DashBoardEmployee.this).setSignupDate(organization.getSignupDate());
+                                PreferenceHandler.getInstance(DashBoardEmployee.this).setOrganizationLongi(organization.getLongitude());
+                                PreferenceHandler.getInstance(DashBoardEmployee.this).setOrganizationLati(organization.getLatitude());
                                 PreferenceHandler.getInstance(DashBoardEmployee.this).setPlanType(organization.getPlanType());
                                 PreferenceHandler.getInstance(DashBoardEmployee.this).setEmployeeLimit(organization.getEmployeeLimit());
                                 PreferenceHandler.getInstance(DashBoardEmployee.this).setPlanId(organization.getPlanId());

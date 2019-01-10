@@ -63,7 +63,7 @@
                         android:layout_marginLeft="5dp"
                         android:layout_weight="1"
                         android:padding="5dp"
-                        android:text="Create Company &amp; Employer"
+                        android:text="Join us a Company &amp; Employer"
                         android:textSize="18dp"
                         android:textColor="@color/colorPrimaryDark"
                         />
@@ -118,7 +118,7 @@
                         android:layout_marginLeft="5dp"
                         android:layout_weight="1"
                         android:padding="5dp"
-                        android:text="Employee"
+                        android:text="Join us a Employee"
                         android:textSize="18dp"
                         android:textColor="@color/colorPrimaryDark"
                         />

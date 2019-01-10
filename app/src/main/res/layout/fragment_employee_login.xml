@@ -21,15 +21,16 @@
             class="com.google.android.gms.maps.SupportMapFragment"/>
         <LinearLayout
             android:orientation="horizontal"
-            android:background="#dadada"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:layout_alignParentTop="true">
-            <LinearLayout android:gravity="center"
+            <LinearLayout
+                android:gravity="center"
                 android:layout_gravity="center"
                 android:orientation="vertical"
-                android:visibility="gone"
+
                 android:id="@+id/refreshLocation"
                 android:padding="4dp"
                 android:focusable="true"
@@ -53,9 +54,11 @@
                 android:gravity="center"
                 android:layout_gravity="center_vertical"
                 android:id="@+id/latLong"
-                android:background="@drawable/rounded_landing_button"
+                android:background="@drawable/started_button"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="4"
+                android:lines="4"
                 android:layout_margin="8dp"
                 android:layout_weight="1"/>
             <LinearLayout
@@ -124,7 +127,7 @@
                         android:id="@+id/punchInText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Punch In"/>
+                        android:text="Check In"/>
                 </LinearLayout>
 
             </LinearLayout>
@@ -159,7 +162,7 @@
                         android:id="@+id/punchOutText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Punch Out"/>
+                        android:text="Check Out"/>
                 </LinearLayout>
 
             </LinearLayout>

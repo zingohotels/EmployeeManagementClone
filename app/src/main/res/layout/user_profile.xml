@@ -50,10 +50,10 @@
                 android:layout_height="wrap_content"
                 android:text="Name"/>
         </LinearLayout>
-      <!--  <LinearLayout
+        <LinearLayout
             android:gravity="center"
             android:orientation="vertical"
-            android:id="@+id/subscriptionIcon"
+            android:id="@+id/share_layout"
             android:focusable="true"
             android:clickable="true"
             android:layout_width="wrap_content"
@@ -61,10 +61,11 @@
             android:layout_margin="8dp">
             <ImageView android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:src="@mipmap/ic_cart_outline_white_48dp"
+                android:src="@drawable/ic_share_24dp"
+                android:visibility="gone"
                 style="@style/OvalGreen"/>
         </LinearLayout>
-        <LinearLayout
+        <!--<LinearLayout
             android:gravity="center"
             android:orientation="vertical"
             android:id="@+id/settingIcon"

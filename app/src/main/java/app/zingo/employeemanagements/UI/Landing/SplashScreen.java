@@ -75,7 +75,7 @@ public class SplashScreen extends AppCompatActivity {
     private void init(){
         try{
 
-            mVersionName.setText("Version code : "+ BuildConfig.VERSION_NAME+"");
+            mVersionName.setText("Ver: "+ BuildConfig.VERSION_NAME+"");
 
             String token = SharedPrefManager.getInstance(SplashScreen.this).getDeviceToken();
 
@@ -252,7 +252,7 @@ public class SplashScreen extends AppCompatActivity {
                                     startActivity(verify);
                                     SplashScreen.this.finish();
                                 }else  if(profileId==0&&type.equalsIgnoreCase("Employee")){
-                                    Intent verify = new Intent(SplashScreen.this,EmployeeSignUp.class);
+                                    Intent verify = new Intent(SplashScreen.this,LandingScreen.class);
                                     startActivity(verify);
                                     SplashScreen.this.finish();
                                 }

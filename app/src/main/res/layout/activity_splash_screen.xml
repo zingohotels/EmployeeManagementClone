@@ -11,13 +11,7 @@
 
 
 
-    <ImageView
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:layout_gravity="center"
-        android:id="@+id/employee_splash"
-        android:contentDescription="@null"
-        android:src="@drawable/ems"/>
+
 
 
 
@@ -30,11 +24,39 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="14sp"
+            android:text="Ver: 1.0"
             android:textColor="@color/colorPrimaryDark"
             android:layout_alignParentEnd="true"
             android:layout_margin="10dp"
             android:id="@+id/version_name" />
+
+        <ImageView
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_gravity="center"
+            android:layout_centerInParent="true"
+            android:id="@+id/employee_splash"
+            android:contentDescription="@null"
+            android:src="@drawable/zingy_app"/>
+
+
+        <app.zingo.employeemanagements.Custom.CustomFontTextView
+            android:id="@+id/app_name"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_margin="5dp"
+            android:layout_below="@+id/employee_splash"
+            android:text="Employee Management App"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="20sp"
+            android:textStyle="normal"
+            app:fontName="arial">
+
+        </app.zingo.employeemanagements.Custom.CustomFontTextView>
 
 
 
@@ -49,6 +71,7 @@
             android:text="@string/powered_by_zingo"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="22sp"
+            android:layout_alignParentBottom="true"
             android:layout_above="@+id/copyrights_by"
             android:textStyle="normal"
             app:fontName="Mistral">
@@ -58,6 +81,7 @@
 
         <app.zingo.employeemanagements.Custom.CustomFontTextView
             android:id="@+id/copyrights_by"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

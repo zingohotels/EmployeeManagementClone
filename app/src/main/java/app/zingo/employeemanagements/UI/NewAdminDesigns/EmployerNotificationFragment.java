@@ -100,11 +100,6 @@ public class EmployerNotificationFragment extends Fragment {
     private void getLoginNotifications(){
 
 
-       /* final ProgressDialog progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setTitle("Loading Notifications");
-        progressDialog.setCancelable(false);
-        progressDialog.show();*/
-
         new ThreadExecuter().execute(new Runnable() {
             @Override
             public void run() {
@@ -125,7 +120,8 @@ public class EmployerNotificationFragment extends Fragment {
 
                             if (list !=null && list.size()!=0) {
 
-
+                                Collections.sort(list,LoginDetailsNotificationManagers.compareLoginNM);
+                                Collections.reverse(list);
 
 
 

@@ -26,6 +26,8 @@ public interface Constants {
     String LIC_END ="lic_end";
     String PLAN_TYPE ="plan_type";
     String SIGNUP_DATE ="sing_date";
+    String ORG_LONGI ="org_long";
+    String ORG_LATI ="org_lat";
     String EMP_LIMIT ="emp_limit";
     String PLAN_ID ="plan_id";
     String USER_NAME ="user_name";

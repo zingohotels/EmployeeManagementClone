@@ -9,12 +9,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.itextpdf.text.pdf.StringUtils;
 
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Admin.DashBoardAdmin;
+import app.zingo.employeemanagements.UI.Company.OrganizationDetailScree;
 import app.zingo.employeemanagements.UI.Employee.EmployeeListScreen;
+import app.zingo.employeemanagements.UI.LandingScreen;
+import app.zingo.employeemanagements.Utils.PreferenceHandler;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,6 +28,8 @@ public class AdminHomeFragment extends Fragment {
     final String TAG = "Employer Dashboard";
     View layout;
     LinearLayout attendance,leaveApplications,employees;
+    LinearLayout departments,liveTracking,tasks;
+    LinearLayout salary,logout,deptOrg;
 
 
     public AdminHomeFragment() {
@@ -84,6 +90,14 @@ public class AdminHomeFragment extends Fragment {
         leaveApplications = (LinearLayout) this.layout.findViewById(R.id.leaveApplications);
         employees = (LinearLayout) this.layout.findViewById(R.id.employees);
 
+        departments = (LinearLayout) this.layout.findViewById(R.id.department);
+        liveTracking = (LinearLayout) this.layout.findViewById(R.id.live_tracking);
+        tasks = (LinearLayout) this.layout.findViewById(R.id.task_layout);
+
+        salary = (LinearLayout) this.layout.findViewById(R.id.salary);
+        deptOrg = (LinearLayout) this.layout.findViewById(R.id.department_org);
+        logout = (LinearLayout) this.layout.findViewById(R.id.logout);
+
         //App new version available
         View updatedText = this.layout.findViewById(R.id.updateText);
 /*        if (this.mAppUser == null || this.mAppUser.getAppVersion() == 0 || AMApp.version <= this.mAppUser.getAppVersion()) {
@@ -114,23 +128,95 @@ public class AdminHomeFragment extends Fragment {
                 openMenuViews(employees);
             }
         });
+
+        departments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                openMenuViews(departments);
+            }
+        });
+
+        liveTracking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMenuViews(liveTracking);
+            }
+        });
+
+        tasks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMenuViews(tasks);
+            }
+        });
+        deptOrg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMenuViews(deptOrg);
+            }
+        });
+        salary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMenuViews(salary);
+            }
+        });
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMenuViews(logout);
+            }
+        });
+
     }
 
     public void openMenuViews(View view) {
 
         Intent intent;
         if (view.getId() == R.id.employees) {
-            Intent employee = new Intent(getContext(), EmployeeListScreen.class);
+            Intent employee = new Intent(getContext(), EmployeeUpdateListScreen.class);
             getContext().startActivity(employee);
 
         } else if (view.getId() == R.id.attendance) {
             intent = new Intent(getContext(), EmployeeListScreen.class);
             intent.putExtra("viewId", view.getId());
+            intent.putExtra("Type","attendance");
             getContext().startActivity(intent);
         } else if (view.getId() == R.id.leaveApplications) {
             intent = new Intent(getContext(), EmployeeListScreen.class);
+            intent.putExtra("Type","Leave");
             intent.putExtra("viewId", view.getId());
             getContext().startActivity(intent);
+        }else if (view.getId() == R.id.department) {
+            Intent organization = new Intent(getActivity(), OrganizationDetailScree.class);
+            getContext().startActivity(organization);
+        }else if (view.getId() == R.id.department_org) {
+            Intent organization = new Intent(getActivity(), DepartmentLilstScreen.class);
+            getContext().startActivity(organization);
+        }else if (view.getId() == R.id.live_tracking) {
+            Intent live = new Intent(getActivity(), EmployeeListScreen.class);
+            live.putExtra("Type","Live");
+            getContext().startActivity(live);
+
+        }else if (view.getId() == R.id.task_layout) {
+            Intent task = new Intent(getActivity(), EmployeeListScreen.class);
+            task.putExtra("Type","Task");
+            getContext().startActivity(task);
+        }else if (view.getId() == R.id.salary) {
+            Intent salary = new Intent(getActivity(), EmployeeListScreen.class);
+            salary.putExtra("Type","Salary");
+            startActivity(salary);
+        }else if (view.getId() == R.id.logout) {
+            PreferenceHandler.getInstance(getActivity()).clear();
+
+            Intent log = new Intent(getActivity(), LandingScreen.class);
+            log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+            Toast.makeText(getActivity(),"Logout",Toast.LENGTH_SHORT).show();
+            startActivity(log);
+            getActivity().finish();
         }
     }
 

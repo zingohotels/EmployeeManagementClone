@@ -2,6 +2,8 @@ package app.zingo.employeemanagements.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,15 +12,21 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.LoginDetailsNotificationManagers;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Admin.EmployeesDashBoard;
+import app.zingo.employeemanagements.UI.GetStartedScreen;
+
+import static android.text.TextUtils.isEmpty;
 
 /**
  * Created by ZingoHotels Tech on 07-01-2019.
@@ -64,7 +72,13 @@ public class LoginDetailsNotificationAdapter  extends RecyclerView.Adapter<Login
             }
             holder.mTitle.setText(title+" - "+status);
             holder.mTime.setText(dto.getLoginDate());
-            holder.mAddress.setText(dto.getLocation());
+
+            if(dto.getLocation()==null){
+                getAddress(Double.parseDouble(dto.getLatitude()),Double.parseDouble(dto.getLongitude()),holder.mAddress);
+            }else{
+                holder.mAddress.setText(dto.getLocation());
+            }
+
         }
 
 
@@ -99,6 +113,50 @@ public class LoginDetailsNotificationAdapter  extends RecyclerView.Adapter<Login
             mNotificationMain = (LinearLayout) itemView.findViewById(R.id.attendanceItem);
 
 
+        }
+    }
+
+    public void getAddress(final double latitude,final double longitude,final TextView mAddress)
+    {
+
+        try
+        {
+            Geocoder geocoder;
+            List<Address> addresses;
+            geocoder = new Geocoder(context, Locale.ENGLISH);
+
+
+            addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+
+            String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+
+            String state = addresses.get(0).getAdminArea();
+            String country = addresses.get(0).getCountryName();
+            String postalCode = addresses.get(0).getPostalCode();
+            String knownName = addresses.get(0).getFeatureName();
+
+
+
+            System.out.println("address = "+address);
+
+            String currentLocation;
+
+            if(!isEmpty(address))
+            {
+                currentLocation=address;
+                mAddress.setText(currentLocation);
+
+            }
+            else{
+                mAddress.setVisibility(View.GONE);
+            }
+                //Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
+
+
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
         }
     }
 }

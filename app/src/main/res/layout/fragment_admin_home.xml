@@ -179,7 +179,7 @@
                     android:textColor="@color/grey_charcoal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Department"/>
+                    android:text="Organization"/>
             </LinearLayout>
             <LinearLayout
                 android:gravity="center"
@@ -257,6 +257,118 @@
                     android:text="Task"/>
             </LinearLayout>
         </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:weightSum="3">
+
+            <LinearLayout
+                android:gravity="center"
+                android:orientation="vertical"
+                android:id="@+id/department_org"
+                android:padding="8dp"
+                android:clickable="true"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:minWidth="70dp"
+                android:layout_weight="1">
+                <ImageView
+                    android:background="@drawable/rounded_menu_background"
+                    android:padding="8dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/employee_menu"/>
+                <TextView
+                    android:textSize="12sp"
+                    android:textColor="@color/grey_charcoal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Department"/>
+            </LinearLayout>
+            <LinearLayout
+                android:gravity="center"
+                android:orientation="vertical"
+                android:id="@+id/salary"
+                android:padding="8dp"
+                android:clickable="true"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:minWidth="70dp"
+                android:layout_weight="1">
+                <ImageView
+                    android:background="@drawable/rounded_menu_background"
+                    android:padding="8dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/employee_menu"/>
+                <TextView
+                    android:textSize="12sp"
+                    android:textColor="@color/grey_charcoal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Salary"/>
+            </LinearLayout>
+            <LinearLayout
+                android:gravity="center"
+                android:orientation="vertical"
+                android:id="@+id/logout"
+                android:padding="8dp"
+                android:clickable="true"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:minWidth="70dp"
+                android:layout_weight="1">
+                <ImageView
+                    android:background="@drawable/rounded_menu_background"
+                    android:padding="8dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/logout"/>
+                <TextView
+                    android:textSize="12sp"
+                    android:textColor="@color/grey_charcoal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Logout"/>
+            </LinearLayout>
+            <!-- <LinearLayout
+                 android:gravity="center"
+                 android:orientation="vertical"
+                 android:id="@+id/payments"
+                 android:padding="8dp"
+                 android:clickable="true"
+                 android:layout_width="0dp"
+                 android:layout_height="match_parent"
+                 android:layout_marginLeft="4dp"
+                 android:layout_marginRight="4dp"
+                 android:minWidth="70dp"
+                 android:layout_weight="1">
+                 <ImageView
+                     android:background="@drawable/rounded_menu_background"
+                     android:padding="8dp"
+                     android:layout_width="40dp"
+                     android:layout_height="40dp"
+                     android:src="@mipmap/ic_credit_card_white_48dp"/>
+                 <TextView
+                     android:textSize="12sp"
+                     android:textColor="@color/grey_charcoal"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:text="Payments"/>
+             </LinearLayout>-->
+
+        </LinearLayout>
+
+
     <!--    <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"

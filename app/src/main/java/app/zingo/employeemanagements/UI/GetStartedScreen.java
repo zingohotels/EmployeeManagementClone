@@ -26,7 +26,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -88,8 +90,9 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
 
 
     RecyclerView mPlanList;
-    LinearLayout mPlanLayout;
+    LinearLayout mPlanLayout,mEmailExtnLay;
     ImageButton myLocation;
+    ImageView mAddEmail,mDeleteEmail;
     TextInputEditText mOrganizationName,mCity,mState,mBuildYear,mNoEmployee,mWebsite;
     EditText mAbout,mAddress;
     AppCompatButton mCreate;
@@ -118,6 +121,9 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
 
             mPlanList = (RecyclerView)findViewById(R.id.plans);
             mPlanLayout = (LinearLayout) findViewById(R.id.plan_layout);
+            mEmailExtnLay = (LinearLayout) findViewById(R.id.add_email_organization);
+            mAddEmail = (ImageView) findViewById(R.id.add_mail);
+            mDeleteEmail = (ImageView) findViewById(R.id.delete_mail);
             mPlanLayout.setVisibility(View.GONE);
             getPlans();
             gps = new TrackGPS(GetStartedScreen.this);
@@ -134,6 +140,8 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
             myLocation = (ImageButton) findViewById(R.id.my_location);
 
             mCreate = (AppCompatButton)findViewById(R.id.createCompany);
+
+            onAddField();
 
             mCity.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -184,6 +192,22 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
                 }
             });
 
+
+            mAddEmail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    onAddField();
+                }
+            });
+
+            mDeleteEmail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    removeView();
+                }
+            });
 
 
         }catch (Exception e){
@@ -359,7 +383,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
                                     holder.mPrice3.setChecked(false);
                                     planType = dto.getPlanName()+","+dto.getRatesList().get(0).getRatesId();
                                     addtionalDay = dto.getRatesList().get(0).getDuration();
-                                    price = dto.getRatesList().get(0).getPrice();
+                                    price = dto.getRatesList().get(0).getPrice()*3;
                                     planId = dto.getPlansId();
 
                                 } else {
@@ -383,7 +407,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
                                     planType = dto.getPlanName()+","+dto.getRatesList().get(1).getRatesId();
                                     addtionalDay = dto.getRatesList().get(1).getDuration();
                                     planId = dto.getPlansId();
-                                    price = dto.getRatesList().get(1).getPrice();
+                                    price = dto.getRatesList().get(1).getPrice()*6;
 
                                 } else {
 
@@ -406,7 +430,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
                                     planType = dto.getPlanName()+","+dto.getRatesList().get(2).getRatesId();
                                     addtionalDay = dto.getRatesList().get(2).getDuration();
                                     planId = dto.getPlansId();
-                                    price = dto.getRatesList().get(2).getPrice();
+                                    price = dto.getRatesList().get(2).getPrice()*12;
 
                                 } else {
 
@@ -473,6 +497,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
         String build = mBuildYear.getText().toString();
         String web = mWebsite.getText().toString();
         String employeeCount = mNoEmployee.getText().toString();
+        boolean value = checkcondition();
 
         if(company.isEmpty()){
 
@@ -506,7 +531,26 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
 
             Toast.makeText(GetStartedScreen.this, "Employee Nos required", Toast.LENGTH_SHORT).show();
 
+        }else if(!value){
+
+            Toast.makeText(GetStartedScreen.this, "Employee email extension required", Toast.LENGTH_SHORT).show();
+
         }else{
+            String message = "";
+
+            if(checkcondition()){
+                int i = mEmailExtnLay.getChildCount();
+
+                for (int j = 0; j < i; j++) {
+                    EditText editText = (EditText) mEmailExtnLay.getChildAt(j);
+
+                    //System.out.println();
+                    String email = editText.getText().toString()+"@";
+
+
+                    message = message+email;
+                }
+            }
 
             LatLng latLng = convertAddressToLatLang(address+"," +city+","+state+","+country);
 
@@ -531,7 +575,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
                 if(placeId!=null){
                     organization.setPlaceId(placeId);
                 }
-                organization.setLocation(address+"," +city+","+state+","+country);
+                organization.setLocation(message);
                 Calendar c = Calendar.getInstance();
                 c.setTime(new Date());
 
@@ -556,7 +600,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
 
 
                     organization.setPlanType("Trial");
-                    c.add(Calendar.DATE, 14);
+                    c.add(Calendar.DATE, 13);
 
                     // convert calendar to date
                     Date additionalDate = c.getTime();
@@ -695,6 +739,8 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
                             PreferenceHandler.getInstance(GetStartedScreen.this).setLicenseStartDate(response.body().getLicenseStartDate());
                             PreferenceHandler.getInstance(GetStartedScreen.this).setLicenseEndDate(response.body().getLicenseEndDate());
                             PreferenceHandler.getInstance(GetStartedScreen.this).setSignupDate(response.body().getSignupDate());
+                            PreferenceHandler.getInstance(GetStartedScreen.this).setOrganizationLongi(organization.getLongitude());
+                            PreferenceHandler.getInstance(GetStartedScreen.this).setOrganizationLati(organization.getLatitude());
                             PreferenceHandler.getInstance(GetStartedScreen.this).setPlanType(response.body().getPlanType());
                             PreferenceHandler.getInstance(GetStartedScreen.this).setEmployeeLimit(response.body().getEmployeeLimit());
                             PreferenceHandler.getInstance(GetStartedScreen.this).setPlanId(response.body().getPlanId());
@@ -904,7 +950,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
             List<Address> addresses;
             geocoder = new Geocoder(GetStartedScreen.this, Locale.ENGLISH);
 
-            System.out.println("Latlang  = "+latitude+" == "+longitude);
+
             addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
 
             String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
@@ -936,4 +982,63 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
             ex.printStackTrace();
         }
     }
+    public void onAddField() {
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View rowView = inflater.inflate(R.layout.add_email_layout, null);
+
+        mEmailExtnLay.addView(rowView);
+
+
+    }
+
+    public void removeView() {
+
+        int no = mEmailExtnLay.getChildCount();
+        if(no >1)
+        {
+
+            mEmailExtnLay.removeView(mEmailExtnLay.getChildAt(no-1));
+
+        }
+        else
+        {
+            Toast.makeText(GetStartedScreen.this,"Atleast one email extension needed",Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    public boolean checkcondition()
+    {
+        boolean value = false;
+        int i = mEmailExtnLay.getChildCount();
+        if(i != 0) {
+
+
+
+                for (int j = 0; j < i; j++) {
+                    EditText editText = (EditText) mEmailExtnLay.getChildAt(j);
+
+                    if (editText.getText().toString().isEmpty()) {
+                        Toast.makeText(GetStartedScreen.this, "Please Fill the Blank Space", Toast.LENGTH_SHORT).show();
+                        value = false;
+                    }else{
+                        value =  true;
+                    }
+                }
+
+
+
+        }
+        else
+        {
+            Toast.makeText(GetStartedScreen.this, "Please add email extension for your employee", Toast.LENGTH_SHORT).show();
+            value = false;
+        }
+        //return true;
+        return value;
+
+    }
+
+
+
 }

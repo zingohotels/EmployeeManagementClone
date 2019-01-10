@@ -455,16 +455,35 @@
                     </LinearLayout>
 
 
-
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/task_list_dash"
+                    <LinearLayout
                         android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_below="@+id/revenue_layout2"
-                        android:layout_height="match_parent"
-                        android:clickable="true"
-                        android:layout_margin="8dp"
-                        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                        android:id="@+id/today_task_list"
+                        android:orientation="vertical">
+
+                    <app.zingo.employeemanagements.Custom.MyRegulerText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+
+                        android:gravity="left"
+                        android:text="Today Tasks"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="10dp"
+                        android:textColor="#000"
                         />
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/task_list_dash"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:layout_margin="8dp"
+                            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                            />
+                    </LinearLayout>
+
 
                     <Button
                         android:layout_width="150dp"

@@ -310,6 +310,8 @@ public class LandingScreen extends AppCompatActivity {
                             PreferenceHandler.getInstance(LandingScreen.this).setLicenseStartDate(organization.getLicenseStartDate());
                             PreferenceHandler.getInstance(LandingScreen.this).setLicenseEndDate(organization.getLicenseEndDate());
                             PreferenceHandler.getInstance(LandingScreen.this).setSignupDate(organization.getSignupDate());
+                            PreferenceHandler.getInstance(LandingScreen.this).setOrganizationLongi(organization.getLongitude());
+                            PreferenceHandler.getInstance(LandingScreen.this).setOrganizationLati(organization.getLatitude());
                             PreferenceHandler.getInstance(LandingScreen.this).setPlanType(organization.getPlanType());
                             PreferenceHandler.getInstance(LandingScreen.this).setEmployeeLimit(organization.getEmployeeLimit());
                             PreferenceHandler.getInstance(LandingScreen.this).setPlanId(organization.getPlanId());

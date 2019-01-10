@@ -1,4 +1,4 @@
-package app.zingo.employeemanagements.UI.Employee;
+package app.zingo.employeemanagements.UI.NewAdminDesigns;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -15,9 +15,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import app.zingo.employeemanagements.Adapter.EmployeeAdapter;
+import app.zingo.employeemanagements.Adapter.EmployeeUpdateAdapter;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.R;
-import app.zingo.employeemanagements.UI.Company.OrganizationDetailScree;
+import app.zingo.employeemanagements.UI.Employee.CreateEmployeeScreen;
+import app.zingo.employeemanagements.UI.Employee.EmployeeListScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
@@ -26,7 +28,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EmployeeListScreen extends AppCompatActivity {
+public class EmployeeUpdateListScreen extends AppCompatActivity {
 
     RecyclerView mProfileList;
     FloatingActionButton mAddProfiles;
@@ -38,8 +40,7 @@ public class EmployeeListScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         try{
-
-            setContentView(R.layout.activity_employee_list_screen);
+            setContentView(R.layout.activity_employee_update_list_screen);
 
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -48,27 +49,16 @@ public class EmployeeListScreen extends AppCompatActivity {
             mProfileList = (RecyclerView)findViewById(R.id.profile_list);
             mAddProfiles = (FloatingActionButton) findViewById(R.id.add_profile);
 
-            Bundle bundle = getIntent().getExtras();
-
-            if(bundle!=null){
-                type = bundle.getString("Type");
-            }
-            mAddProfiles.setVisibility(View.GONE);
-            /*if(type!=null&&(type.equalsIgnoreCase("Meetings")||type.equalsIgnoreCase("Salary")||type.equalsIgnoreCase("Live"))){
-
-                mAddProfiles.setVisibility(View.GONE);
-            }*/
-
-
 
             mAddProfiles.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
-                    Intent employee =new Intent(EmployeeListScreen.this,CreateEmployeeScreen.class);
+                    Intent employee =new Intent(EmployeeUpdateListScreen.this,CreateEmployeeScreen.class);
                     startActivity(employee);
                 }
             });
+
 
         }catch (Exception e){
             e.printStackTrace();
@@ -94,7 +84,7 @@ public class EmployeeListScreen extends AppCompatActivity {
             @Override
             public void run() {
                 EmployeeApi apiService = Util.getClient().create(EmployeeApi.class);
-                Call<ArrayList<Employee>> call = apiService.getEmployeesByOrgId(PreferenceHandler.getInstance(EmployeeListScreen.this).getCompanyId());
+                Call<ArrayList<Employee>> call = apiService.getEmployeesByOrgId(PreferenceHandler.getInstance(EmployeeUpdateListScreen.this).getCompanyId());
 
                 call.enqueue(new Callback<ArrayList<Employee>>() {
                     @Override
@@ -113,7 +103,7 @@ public class EmployeeListScreen extends AppCompatActivity {
                                 ArrayList<Employee> employees = new ArrayList<>();
                                 for(int i=0;i<list.size();i++){
 
-                                    if(list.get(i).getEmployeeId()!=PreferenceHandler.getInstance(EmployeeListScreen.this).getUserId()){
+                                    if(list.get(i).getEmployeeId()!=PreferenceHandler.getInstance(EmployeeUpdateListScreen.this).getUserId()){
 
                                         employees.add(list.get(i));
 
@@ -122,15 +112,15 @@ public class EmployeeListScreen extends AppCompatActivity {
 
                                 if(employees!=null&&employees.size()!=0){
                                     Collections.sort(employees,Employee.compareEmployee);
-                                    EmployeeAdapter adapter = new EmployeeAdapter(EmployeeListScreen.this, employees,type);
+                                    EmployeeUpdateAdapter adapter = new EmployeeUpdateAdapter(EmployeeUpdateListScreen.this, employees,type);
                                     mProfileList.setAdapter(adapter);
 
-                                    if(PreferenceHandler.getInstance(EmployeeListScreen.this).getEmployeeLimit()>=employees.size()){
+                                    if(PreferenceHandler.getInstance(EmployeeUpdateListScreen.this).getEmployeeLimit()>=employees.size()){
                                         mAddProfiles.setVisibility(View.GONE);
                                     }
                                 }else{
-                                    Toast.makeText(EmployeeListScreen.this,"No Employees added",Toast.LENGTH_LONG).show();
-                                    Intent employee =new Intent(EmployeeListScreen.this,CreateEmployeeScreen.class);
+                                    Toast.makeText(EmployeeUpdateListScreen.this,"No Employees added",Toast.LENGTH_LONG).show();
+                                    Intent employee =new Intent(EmployeeUpdateListScreen.this,CreateEmployeeScreen.class);
                                     startActivity(employee);
                                 }
 
@@ -138,15 +128,15 @@ public class EmployeeListScreen extends AppCompatActivity {
                                 //}
 
                             }else{
-                                Toast.makeText(EmployeeListScreen.this,"No Employees added",Toast.LENGTH_LONG).show();
-                                Intent employee =new Intent(EmployeeListScreen.this,CreateEmployeeScreen.class);
+                                Toast.makeText(EmployeeUpdateListScreen.this,"No Employees added",Toast.LENGTH_LONG).show();
+                                Intent employee =new Intent(EmployeeUpdateListScreen.this,CreateEmployeeScreen.class);
                                 startActivity(employee);
                             }
 
                         }else {
 
 
-                            Toast.makeText(EmployeeListScreen.this, "Failed due to : "+response.message(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EmployeeUpdateListScreen.this, "Failed due to : "+response.message(), Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -173,7 +163,7 @@ public class EmployeeListScreen extends AppCompatActivity {
         {
             case android.R.id.home:
 
-                EmployeeListScreen.this.finish();
+                EmployeeUpdateListScreen.this.finish();
         }
         return super.onOptionsItemSelected(item);
     }

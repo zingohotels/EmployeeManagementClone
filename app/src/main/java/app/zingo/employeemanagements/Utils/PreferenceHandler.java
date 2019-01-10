@@ -161,6 +161,24 @@ public class PreferenceHandler {
         sh.edit().putString(Constants.SIGNUP_DATE,signupDate).apply();
     }
 
+    public String getOrganizationLongi()
+    {
+        return sh.getString(Constants.ORG_LONGI,"");
+    }
+
+    public void setOrganizationLongi(String signupDate) {
+        sh.edit().putString(Constants.ORG_LONGI,signupDate).apply();
+    }
+
+    public String getOrganizationLati()
+    {
+        return sh.getString(Constants.ORG_LATI,"");
+    }
+
+    public void setOrganizationLati(String signupDate) {
+        sh.edit().putString(Constants.ORG_LATI,signupDate).apply();
+    }
+
     public String getSignupDate()
     {
         return sh.getString(Constants.SIGNUP_DATE,"");

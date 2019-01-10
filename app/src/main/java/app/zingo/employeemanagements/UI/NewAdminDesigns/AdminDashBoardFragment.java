@@ -41,6 +41,7 @@ import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.Leaves;
 import app.zingo.employeemanagements.Model.LoginDetails;
+import app.zingo.employeemanagements.Model.LoginDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.Tasks;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Admin.CreatePaySlip;
@@ -66,6 +67,7 @@ public class AdminDashBoardFragment extends Fragment {
     final String TAG = "Employer Dash";
     View layout;
     RecyclerView mTaskList;
+    LinearLayout mTaskLayout;
     private TaskListAdapter mAdapter;
     MyRegulerText mDeptCount,mEmployeeCount,mOnTask,mPending,mEmployeePresent,mEmployeeAbsent,
                     mLeaveEmployee,mUnmarkedEmployee;
@@ -121,6 +123,8 @@ public class AdminDashBoardFragment extends Fragment {
             mContext = getContext();
 
             mTaskList = (RecyclerView) layout.findViewById(R.id.task_list_dash);
+            mTaskLayout = (LinearLayout) layout.findViewById(R.id.today_task_list);
+            mTaskLayout.setVisibility(View.GONE);
             mDeptCount = (MyRegulerText)layout.findViewById(R.id.dept_count_text);
             mEmployeeCount = (MyRegulerText)layout.findViewById(R.id.employee_count_text);
             mOnTask = (MyRegulerText)layout.findViewById(R.id.on_task_count_text);
@@ -585,6 +589,8 @@ public class AdminDashBoardFragment extends Fragment {
 
                                                 todayTasks.add(task);
 
+                                            }else if(task.getStatus().equalsIgnoreCase("Pending")){
+                                                todayTasks.add(task);
                                             }
                                         }
 
@@ -610,6 +616,8 @@ public class AdminDashBoardFragment extends Fragment {
                                 }
 
                                 if(employeeTasks!=null&&employeeTasks.size()!=0){
+
+                                    mTaskLayout.setVisibility(View.VISIBLE);
 
                                     mAdapter = new TaskListAdapter(getContext(),todayTasks);
                                     mTaskList.setAdapter(mAdapter);
