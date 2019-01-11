@@ -80,7 +80,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity {
     static final String TAG = "FounderMainScreen";
     ImageView mProfileImage;
     TextView mTrialMsgInfo;
-    LinearLayout mTrialInfoLay;
+    LinearLayout mTrialInfoLay,mShareLayout;
 
     boolean doubleBackToExitPressedOnce = false;
     public long[] mTimer = new long[1];
@@ -157,7 +157,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity {
         viewPagerAdapter.addFragment(EmployeeDashBoardFragment.getInstance(), "Dash Board");
         viewPagerAdapter.addFragment(EmployeeLoginFragment.getInstance(), "Attendance");
         viewPagerAdapter.addFragment(EmployeeTaskFragment.getInstance(), "Tasks");
-        viewPagerAdapter.addFragment(AdminHomeFragment.getInstance(), "");
+        viewPagerAdapter.addFragment(EmployeeHomeFragment.getInstance(), "");
         viewPager.setAdapter(viewPagerAdapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
@@ -224,6 +224,8 @@ public class EmployeeNewMainScreen extends AppCompatActivity {
         mProfileImage = (ImageView) findViewById(R.id.profilePicture);
         mTrialInfoLay = (LinearLayout) findViewById(R.id.trial_version_info_layout);
         mTrialMsgInfo = (TextView) findViewById(R.id.trial_version_info_msg);
+        mShareLayout = (LinearLayout) findViewById(R.id.share_layout);
+        mShareLayout.setVisibility(View.GONE);
 
         organizationName.setText(PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getCompanyName());
         userName.setText(PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getUserFullName());

@@ -116,7 +116,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
         super.onCreate(savedInstanceState);
 
         try{
-            setContentView(R.layout.activity_get_started_screen);
+            setContentView(R.layout.activity_new_company_create);
             popupOne();
 
             mPlanList = (RecyclerView)findViewById(R.id.plans);

@@ -241,6 +241,16 @@ public class PreferenceHandler {
         return sh.getString(Constants.LOGIN_STATUS,"Logout");
     }
 
+    public void setLoginTime(String loginStatus)
+    {
+        sh.edit().putString(Constants.LOGIN_TIME,loginStatus).apply();
+    }
+
+    public String getLoginTime()
+    {
+        return sh.getString(Constants.LOGIN_TIME,"");
+    }
+
     public void setMeetingLoginStatus(String loginStatus)
     {
         sh.edit().putString(Constants.MEET_LOGIN_STATUS,loginStatus).apply();

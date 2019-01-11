@@ -5,12 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
     android:fitsSystemWindows="true"
+    android:background="@color/colorPrimary"
     tools:context=".UI.Landing.SplashScreen">
-
-
-
 
 
 
@@ -26,7 +23,7 @@
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:text="Ver: 1.0"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/white"
             android:layout_alignParentEnd="true"
             android:layout_margin="10dp"
             android:id="@+id/version_name" />
@@ -35,10 +32,28 @@
             android:layout_width="250dp"
             android:layout_height="250dp"
             android:layout_gravity="center"
+            android:visibility="gone"
             android:layout_centerInParent="true"
-            android:id="@+id/employee_splash"
             android:contentDescription="@null"
             android:src="@drawable/zingy_app"/>
+
+
+        <app.zingo.employeemanagements.Custom.CustomFontTextView
+            android:id="@+id/employee_splash"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginBottom="12dp"
+            android:text="Zingy"
+            android:textColor="@color/white"
+            android:textSize="50dp"
+            android:layout_centerInParent="true"
+            android:layout_above="@+id/copyrights_by"
+            android:textStyle="normal"
+            app:fontName="Mistral">
+
+        </app.zingo.employeemanagements.Custom.CustomFontTextView>
 
 
         <app.zingo.employeemanagements.Custom.CustomFontTextView
@@ -51,7 +66,7 @@
             android:layout_margin="5dp"
             android:layout_below="@+id/employee_splash"
             android:text="Employee Management App"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="normal"
             app:fontName="arial">
@@ -69,7 +84,7 @@
             android:gravity="center"
             android:layout_marginBottom="12dp"
             android:text="@string/powered_by_zingo"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/white"
             android:textSize="22sp"
             android:layout_alignParentBottom="true"
             android:layout_above="@+id/copyrights_by"

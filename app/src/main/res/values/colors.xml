@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#4B0D82</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#EE596C</color>
+    <color name="colorPrimaryDark">#9B63F8</color>
+    <color name="colorAccent">#809FFC</color>
 
     <color name="grey_charcoal">#ff39444f</color>
     <color name="tealish_primary_pressed">#7F39FB</color>
@@ -17,5 +17,5 @@
     <color name="grey">#424D58</color>
     <color name="highLight">#b6b6b6</color>
     <color name="designBlueGreen">#04BEBD</color>
-
+    <color name="pink_color">#EE596C</color>
 </resources>

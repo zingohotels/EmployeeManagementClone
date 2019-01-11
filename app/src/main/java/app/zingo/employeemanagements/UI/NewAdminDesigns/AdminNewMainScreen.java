@@ -29,6 +29,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -222,6 +223,7 @@ public class AdminNewMainScreen extends AppCompatActivity {
         TextView userName = (TextView) findViewById(R.id.userName);
         mProfileImage = (ImageView) findViewById(R.id.profilePicture);
         mTrialInfoLay = (LinearLayout) findViewById(R.id.trial_version_info_layout);
+        mShareLayout = (LinearLayout) findViewById(R.id.share_layout);
         mTrialMsgInfo = (TextView) findViewById(R.id.trial_version_info_msg);
 
         organizationName.setText(PreferenceHandler.getInstance(AdminNewMainScreen.this).getCompanyName());
@@ -255,6 +257,52 @@ public class AdminNewMainScreen extends AppCompatActivity {
             hm.setDeviceId(token);
             addDeviceId(hm);
         }
+
+
+        if(PreferenceHandler.getInstance(AdminNewMainScreen.this).getUserRoleUniqueID()==2){
+
+            mShareLayout.setVisibility(View.VISIBLE);
+
+        }else{
+            mShareLayout.setVisibility(View.GONE);
+        }
+
+        mShareLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String upToNCharacters = PreferenceHandler.getInstance(AdminNewMainScreen.this).getCompanyName().substring(0, Math.min(PreferenceHandler.getInstance(AdminNewMainScreen.this).getCompanyName().length(), 4));
+
+
+                String body = "<html><head>" +
+                        "</head>" +
+                        "<body>" +
+                        "<h2>Hello,</h2>" +
+                        "<p><br>I'm "+PreferenceHandler.getInstance(AdminNewMainScreen.this).getUserFullName()+" your manager. You are invited to join the Zingy Employee App Platform. </p></br></br>"+
+                        "<br><p>Here is a Procedure to Join the Platform using the Below Procedures. Make sure you store them safely. </p>"+
+                        "</br><p><br>Our Organization Code- "+upToNCharacters+PreferenceHandler.getInstance(AdminNewMainScreen.this).getCompanyId()+
+                        "</br></p><br><b>Step 1:  </b>"+"Download the app by clicking here"+
+                        "</br><br><b>Step 2: </b>"+"Click on Get Started and \"Join us as an Employee\""+
+                        "</br><br><b>Step 3: </b>"+"Verify your Mobile number and then Enter the Organization Code - "+upToNCharacters+PreferenceHandler.getInstance(AdminNewMainScreen.this).getCompanyId()+
+                        "</br><br><b>Step 4:</b>"+"Enter your basic details and the complete the Sign up process"+
+                        "</br><p>From now on, Please login to your account using your organization email id and your password on a daily basis for attendance system,leave management,Expense management, sales visit etc., via mobile app. </p>"+
+                        "</br><p>If you have any questions then contact the Admin/HR of the company.</p>"+
+                        "</br><p><b>Cheers,</b><br><br>"+PreferenceHandler.getInstance(AdminNewMainScreen.this).getUserFullName()+"</p></body></html>";
+
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                emailIntent.setType("text/plain");
+
+
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Employee Management App Invitation");
+
+
+                emailIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(new StringBuilder()
+                        .append(body)
+                        .toString()));
+                //emailIntent.putExtra(Intent.EXTRA_HTML_TEXT, body);
+                startActivity(Intent.createChooser(emailIntent, "Send email.."));
+            }
+        });
 
         mProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override

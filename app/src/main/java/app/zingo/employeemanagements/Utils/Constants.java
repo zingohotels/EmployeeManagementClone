@@ -42,6 +42,7 @@ public interface Constants {
     String mapKey = "AIzaSyBN_9MfDVrhG1_D9Q1XpakTiDkoqSU5gGA";
 
     public static final String LOGIN_STATUS = "login_status";
+    public static final String LOGIN_TIME = "login_time";
 
     //Meeting Login
     public static final String MEET_LOGIN_STATUS = "meeting_login_status";

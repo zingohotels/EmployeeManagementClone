@@ -33,11 +33,13 @@
             android:name=".UI.Landing.SplashScreen"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity
             android:name=".UI.Landing.PhoneVerificationScreen"
@@ -184,7 +186,9 @@
         <activity
             android:name=".UI.SignUpOptioins"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".UI.EmployeeSignUp" />
+        <activity android:name=".UI.EmployeeSignUp" >
+
+        </activity>
         <activity
             android:name=".UI.NewEmployeeDesign.EmployeeNewMainScreen"
             android:configChanges="orientation|screenSize"
@@ -194,7 +198,10 @@
         <activity android:name=".UI.NewAdminDesigns.EmployeeEditScreen" />
         <activity android:name=".UI.NewAdminDesigns.LeaveEmployeeListScreen" />
         <activity android:name=".UI.NewAdminDesigns.UpdateLeaveScreen" />
-        <activity android:name=".UI.NewAdminDesigns.DepartmentLilstScreen"></activity>
+        <activity android:name=".UI.NewAdminDesigns.DepartmentLilstScreen" />
+        <activity android:name=".UI.PlanMainHostScreen" />
+        <activity android:name=".UI.BasicPlanScreen" />
+        <activity android:name=".UI.AdvancePlanScreen"></activity>
     </application>
 
 </manifest>

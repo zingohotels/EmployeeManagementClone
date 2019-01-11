@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@drawable/banner"
+    android:fitsSystemWindows="true"
+
+    >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#98000000" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:scrollbars="none"
+
+
+            >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/nameInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_large_margin"
+                    android:layout_marginTop="20.0dip"
+                    android:layout_marginRight="@dimen/activity_large_margin"
+                    android:textColorHint="@color/colorPrimary"
+                    android:hint="Organization Name"
+
+                    >
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/name"
+                        android:maxLength="50"
+                        android:inputType="text"
+                        style="@style/fp_editText" />
+                </android.support.design.widget.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/activity_large_margin"
+                        android:layout_marginTop="20.0dip"
+                        android:layout_marginRight="@dimen/activity_large_margin"
+                        android:orientation="horizontal">
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_gravity="right"
+                            android:textColor="@color/colorPrimary"
+                            android:gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:text="Organization Email extension"/>
+
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:id="@+id/add_mail"
+                            android:src="@android:drawable/ic_input_add"/>
+
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:id="@+id/delete_mail"
+                            android:src="@android:drawable/ic_delete"/>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/activity_large_margin"
+                        android:layout_marginRight="@dimen/activity_large_margin"
+                        android:orientation="vertical"
+                        android:id="@+id/add_email_organization">
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/activity_large_margin"
+                        android:layout_marginTop="20.0dip"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_marginRight="@dimen/activity_large_margin"
+                        android:text="About Organization"/>
+
+                    <EditText
+                        android:id="@+id/about"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="start"
+                        android:gravity="start"
+                        android:scrollbarAlwaysDrawVerticalTrack="true"
+                        android:overScrollMode="always"
+                        android:scrollbarStyle="insideInset"
+                        android:scrollbars="vertical"
+                        android:keepScreenOn="true"
+                        android:layout_marginLeft="@dimen/activity_large_margin"
+                        android:layout_marginRight="@dimen/activity_large_margin"
+                        android:lines="10"
+                        android:background="@drawable/spinner_background"
+                        android:maxLines="10"
+                        />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:textColor="@color/colorPrimary"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/activity_large_margin"
+                            android:layout_marginTop="20.0dip"
+                            android:layout_marginRight="@dimen/activity_large_margin"
+                            android:text="Address"/>
+
+                        <ImageButton
+                            android:id="@+id/my_location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/activity_large_margin"
+                            android:layout_marginTop="20.0dip"
+                            android:layout_marginRight="@dimen/activity_large_margin"
+                            android:background="@drawable/ic_my_location_primary_24dp"/>
+                    </LinearLayout>
+
+
+
+
+                    <EditText
+                        android:id="@+id/address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="start"
+                        android:gravity="start"
+                        android:scrollbarAlwaysDrawVerticalTrack="true"
+                        android:overScrollMode="always"
+                        android:scrollbarStyle="insideInset"
+                        android:scrollbars="vertical"
+                        android:keepScreenOn="true"
+                        android:layout_marginLeft="@dimen/activity_large_margin"
+                        android:layout_marginRight="@dimen/activity_large_margin"
+                        android:lines="5"
+                        android:background="@drawable/spinner_background"
+                        />
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/cityInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:textColorHint="@color/colorPrimary"
+
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/activity_large_margin"
+                        android:layout_marginTop="20.0dip"
+                        android:layout_marginRight="@dimen/activity_large_margin"
+                        android:hint="City"
+                        >
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/city"
+                            android:maxLength="50"
+                            android:textColor="@color/colorPrimary"
+                            android:focusableInTouchMode="false"
+                            android:inputType="text"
+                            style="@style/fp_editText" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/stateInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:textColorHint="@color/colorPrimary"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/activity_large_margin"
+                        android:layout_marginTop="20.0dip"
+                        android:layout_marginRight="@dimen/activity_large_margin"
+                        android:hint="State"
+
+                        >
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/state"
+                            android:maxLength="50"
+                            android:inputType="text"
+                            android:textColor="@color/colorPrimary"
+                            style="@style/fp_editText" />
+                    </android.support.design.widget.TextInputLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/buildInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:textColorHint="@color/colorPrimary"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/activity_large_margin"
+                        android:layout_marginTop="20.0dip"
+                        android:layout_marginRight="@dimen/activity_large_margin"
+                        android:hint="Build Year"
+                        >
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/build"
+                            android:maxLength="4"
+                            android:textColor="@color/colorPrimary"
+                            android:inputType="number"
+                            style="@style/fp_editText" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/employeeInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:textColorHint="@color/colorPrimary"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/activity_large_margin"
+                        android:layout_marginTop="20.0dip"
+                        android:layout_marginRight="@dimen/activity_large_margin"
+                        android:hint="No of Employees"
+
+                        >
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/employee_count"
+                            android:maxLength="3"
+                            android:inputType="number"
+                            style="@style/fp_editText" />
+                    </android.support.design.widget.TextInputLayout>
+
+                </LinearLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/websiteInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColorHint="@color/colorPrimary"
+                    android:layout_marginLeft="@dimen/activity_large_margin"
+                    android:layout_marginTop="20.0dip"
+                    android:layout_marginRight="@dimen/activity_large_margin"
+                    android:hint="Website"
+
+                    >
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/website"
+                        android:maxLength="50"
+                        android:textColor="@color/colorPrimary"
+                        android:inputType="textUri"
+                        style="@style/fp_editText" />
+                </android.support.design.widget.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/plan_layout"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="Plans(Prices are in INR)"
+                        android:textColor="#000000"
+                        android:textSize="20dp"
+                        android:padding="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_height="40dp">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.5dp"
+                            android:layout_gravity="center"
+                            android:background="#000000"
+                            />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="0.5dp"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:background="#000000"
+                                />
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.8"
+                                android:orientation="vertical"
+                                >
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+
+                                    android:gravity="center"
+                                    android:textStyle="bold"
+                                    android:textColor="#000"
+                                    android:text="Plan Name"/>
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="0.5dp"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:background="#000000"
+                                />
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:textColor="#000"
+                                    android:text="3 Month"/>
+
+
+
+
+
+
+
+                            </LinearLayout>
+
+
+                            <View
+                                android:layout_width="0.5dp"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:background="#000000"
+                                />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:textColor="#000"
+                                    android:text="6 Months"/>
+
+
+
+                            </LinearLayout>
+                            <View
+                                android:layout_width="0.5dp"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:background="#000000"
+                                />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:textColor="#000"
+                                    android:text="1 Year"/>
+
+
+
+                            </LinearLayout>
+                            <View
+                                android:layout_width="0.5dp"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:background="#000000"
+                                />
+
+
+                        </LinearLayout>
+
+
+                        <View
+                            android:layout_width="0.5dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:background="#000000"
+                            />
+
+
+                    </LinearLayout>
+
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/plans"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="10dp"
+
+                        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                        />
+
+                </LinearLayout>
+
+                <android.support.v7.widget.AppCompatButton
+                    android:textSize="@dimen/regularFont"
+                    android:textColor="@color/white"
+                    android:id="@+id/createCompany"
+                    android:background="@drawable/selector_button_app"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_large_margin"
+                    android:layout_marginTop="20.0dip"
+                    android:layout_marginRight="@dimen/activity_large_margin"
+                    android:text="Create Organization"
+                    android:textAllCaps="false"
+
+                    />
+
+
+            </LinearLayout>
+        </ScrollView>
+    </FrameLayout>
+
+
+
+</RelativeLayout>

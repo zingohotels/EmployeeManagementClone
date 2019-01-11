@@ -62,6 +62,7 @@ import app.zingo.employeemanagements.Service.LocationSharingServices;
 import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
+import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.TrackGPS;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.LoginDetailsAPI;
@@ -172,6 +173,11 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                     .build();
         }
 
+
+            if(!PreferenceHandler.getInstance(getActivity()).getLoginTime().isEmpty()){
+                punchInText.setText(""+PreferenceHandler.getInstance(getActivity()).getLoginTime());
+            }
+
         this.latLong = (TextView) this.layout.findViewById(R.id.latLong);
         ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMapAsync(this);
 
@@ -246,6 +252,24 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                 String loginStatus = PreferenceHandler.getInstance(getActivity()).getLoginStatus();
                 String meetingStatus = PreferenceHandler.getInstance(getActivity()).getMeetingLoginStatus();
 
+                if(loginStatus!=null&&!loginStatus.isEmpty()){
+
+                    if(loginStatus.equalsIgnoreCase("Login")){
+
+                        if(meetingStatus!=null&&meetingStatus.equalsIgnoreCase("Login")){
+
+                            Toast.makeText(getActivity(), "You are in some meeting .So Please checkout", Toast.LENGTH_SHORT).show();
+
+                        }else{
+
+                            getLoginDetails(PreferenceHandler.getInstance(getActivity()).getLoginId());
+                        }
+
+
+                    }
+
+                }
+
 
             }
         });
@@ -254,6 +278,249 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
         return this.layout;
     }
+
+    public void getLoginDetails(final int id){
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+
+                final LoginDetailsAPI subCategoryAPI = Util.getClient().create(LoginDetailsAPI.class);
+                Call<LoginDetails> getProf = subCategoryAPI.getLoginById(id);
+                //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
+
+                getProf.enqueue(new Callback<LoginDetails>() {
+
+                    @Override
+                    public void onResponse(Call<LoginDetails> call, Response<LoginDetails> response) {
+
+                        if (response.code() == 200||response.code() == 201||response.code() == 204)
+                        {
+                            System.out.println("Inside api");
+
+                            final LoginDetails dto = response.body();
+
+                            if(dto!=null){
+
+                                try {
+
+                                    String message = "Login";
+                                    String option = "Check-In";
+
+
+
+                                    message = "Do you want to Log-Out?";
+                                    option = "Log-Out";
+
+
+
+                                    final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                    builder.setTitle(message);
+
+
+
+                                    builder.setPositiveButton(option, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+
+
+
+                                            if(locationCheck()){
+                                                gps = new TrackGPS(getActivity());
+                                                if(gps.canGetLocation())
+                                                {
+
+                                                    latitude = gps.getLatitude();
+                                                    longitude = gps.getLongitude();
+                                                    Intent myService = new Intent(getActivity(), LocationSharingServices.class);
+                                                    getActivity().stopService(myService);
+
+
+                                                    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+                                                    SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+
+                                                    LatLng master = new LatLng(latitude,longitude);
+                                                    String address = getAddress(master);
+
+                                                    LoginDetails loginDetails = dto;
+                                                    loginDetails.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
+                                                    loginDetails.setLatitude(""+latitude);
+                                                    loginDetails.setLongitude(""+longitude);
+                                                    loginDetails.setLocation(""+address);
+                                                    loginDetails.setLogOutTime(""+sdt.format(new Date()));
+                                                    loginDetails.setLoginDate(""+sdf.format(new Date()));
+
+                                                    try {
+                                                        LoginDetailsNotificationManagers md = new LoginDetailsNotificationManagers();
+                                                        md.setTitle("Login Details from "+PreferenceHandler.getInstance(getActivity()).getUserFullName());
+                                                        md.setMessage("Log out at  "+""+sdt.format(new Date()));
+                                                        md.setLocation(address);
+                                                        md.setLongitude(""+longitude);
+                                                        md.setLatitude(""+latitude);
+                                                        md.setLoginDate(""+sdt.format(new Date()));
+                                                        md.setStatus("Log out");
+                                                        md.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
+                                                        md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
+                                                        md.setLoginDetailsId(dto.getLoginDetailsId());
+
+                                                        updateLogin(loginDetails,builder.create(),md);
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    }
+
+
+                                                }
+                                                else
+                                                {
+
+                                                }
+                                            }
+
+
+
+
+
+                                        }
+                                    });
+
+                                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            dialogInterface.dismiss();
+                                        }
+                                    });
+
+                                    final AlertDialog dialog = builder.create();
+                                    dialog.show();
+
+
+                                }
+                                catch (Exception ex)
+                                {
+                                    ex.printStackTrace();
+                                }
+
+                            }
+
+
+
+
+                        }else{
+
+
+                            //meet
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<LoginDetails> call, Throwable t) {
+
+                    }
+                });
+
+            }
+
+        });
+    }
+
+    public void updateLogin(final LoginDetails loginDetails,final AlertDialog dialogs,final LoginDetailsNotificationManagers md) throws Exception{
+
+
+
+        final ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setMessage("Saving Details..");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        LoginDetailsAPI apiService = Util.getClient().create(LoginDetailsAPI.class);
+
+        Call<LoginDetails> call = apiService.updateLoginById(loginDetails.getLoginDetailsId(),loginDetails);
+
+        call.enqueue(new Callback<LoginDetails>() {
+            @Override
+            public void onResponse(Call<LoginDetails> call, Response<LoginDetails> response) {
+//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
+                try
+                {
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+
+                    int statusCode = response.code();
+                    if (statusCode == 200 || statusCode == 201||response.code()==204) {
+
+
+                        dialogs.dismiss();
+                        saveLoginNotification(md);
+
+                        Toast.makeText(getActivity(), "You logged out", Toast.LENGTH_SHORT).show();
+
+                        PreferenceHandler.getInstance(getActivity()).setLoginId(0);
+
+
+
+                        punchInText.setText("Check in");
+                        PreferenceHandler.getInstance(getActivity()).setLoginStatus("Logout");
+
+                        punchIn.setEnabled(true);
+                        punchOut.setEnabled(false);
+
+                        String date = loginDetails.getLoginDate();
+
+                        if(date!=null&&!date.isEmpty()){
+
+                            if(date.contains("T")){
+
+                                String logins[] = date.split("T");
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                                SimpleDateFormat sdfs = new SimpleDateFormat("MMM dd,yyyy");
+
+                                Date dt = sdf.parse(logins[0]);
+                                punchOutText.setText(""+loginDetails.getLogOutTime());
+                            }
+                        }else{
+                            punchOutText.setText(""+loginDetails.getLogOutTime());
+                        }
+
+
+
+
+
+
+
+                    }else {
+                        Toast.makeText(getActivity(), "Failed Due to "+response.message(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+                    ex.printStackTrace();
+                }
+//                callGetStartEnd();
+            }
+
+            @Override
+            public void onFailure(Call<LoginDetails> call, Throwable t) {
+
+                if(dialog != null && dialog.isShowing())
+                {
+                    dialog.dismiss();
+                }
+                Toast.makeText(getActivity(), "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("TAG", t.toString());
+            }
+        });
+
+
+
+    }
+
     public void masterloginalert(final String status){
 
         try {
@@ -427,6 +694,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
 
                             PreferenceHandler.getInstance(getActivity()).setLoginStatus("Login");
+                            PreferenceHandler.getInstance(getActivity()).setLoginTime(""+s.getLoginTime());
 
 
                         }

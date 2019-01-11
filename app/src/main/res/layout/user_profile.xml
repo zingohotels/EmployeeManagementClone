@@ -59,10 +59,11 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_margin="8dp">
-            <ImageView android:layout_width="32dp"
+            <ImageView
+                android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/ic_share_24dp"
-                android:visibility="gone"
+
                 style="@style/OvalGreen"/>
         </LinearLayout>
         <!--<LinearLayout

@@ -75,6 +75,8 @@ public class EmployeeSignUp extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             setTitle("Create Employee");
 
+
+
             mName = (TextInputEditText)findViewById(R.id.name);
             mDob = (TextInputEditText)findViewById(R.id.dob);
             mDoj = (TextInputEditText)findViewById(R.id.doj);

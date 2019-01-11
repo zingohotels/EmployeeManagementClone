@@ -38,8 +38,8 @@ import app.zingo.employeemanagements.Utils.PreferenceHandler;
 
 public class SplashScreen extends AppCompatActivity {
 
-    TextView mVersionName,mPowered,mCopyRights;
-    ImageView appLogo;
+    TextView mVersionName,mPowered,mCopyRights,appLogo;
+    //ImageView appLogo;
 
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1,MY_PERMISSIONS_REQUEST_RESULT = 1;
 

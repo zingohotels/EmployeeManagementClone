@@ -52,7 +52,7 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:text="Sign in"
-                        android:textColor="#087272"
+                        android:textColor="@color/colorPrimary"
                         android:textSize="20dp"
                         android:layout_gravity="center"
                         android:gravity="center"
@@ -87,8 +87,6 @@
 
 
             </FrameLayout>
-
-
 
 
 
@@ -182,7 +180,7 @@
             android:padding="5dp"
             android:text="Get Started"
             android:textSize="22dp"
-            android:textColor="#04BEBD"
+            android:textColor="@color/colorPrimary"
             />
 
         <app.zingo.employeemanagements.Custom.MyRegulerText
