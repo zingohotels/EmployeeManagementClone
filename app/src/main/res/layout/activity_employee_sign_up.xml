@@ -88,9 +88,7 @@
         android:background="#FFFFFFFF"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:visibility="gone"
 
-        android:id="@+id/employee_detail_layout"
         android:layout_alignParentBottom="true">
 
         <LinearLayout

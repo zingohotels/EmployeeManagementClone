@@ -53,6 +53,7 @@ import java.util.List;
 import java.util.Locale;
 
 import app.zingo.employeemanagements.Adapter.EmployeeAdapter;
+import app.zingo.employeemanagements.Custom.MyEditText;
 import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.Meetings;
@@ -93,7 +94,9 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
     LinearLayout mPlanLayout,mEmailExtnLay;
     ImageButton myLocation;
     ImageView mAddEmail,mDeleteEmail;
-    TextInputEditText mOrganizationName,mCity,mState,mBuildYear,mNoEmployee,mWebsite;
+    MyEditText mOrganizationName,mCity,mState,mBuildYear,mNoEmployee,mWebsite;
+    //TextInputEditText mOrganizationName,mCity,mState,mBuildYear,mNoEmployee,mWebsite;
+    //TextInputEditText ;
     EditText mAbout,mAddress;
     AppCompatButton mCreate;
 
@@ -128,12 +131,12 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
             getPlans();
             gps = new TrackGPS(GetStartedScreen.this);
 
-            mOrganizationName = (TextInputEditText)findViewById(R.id.name);
-            mCity = (TextInputEditText)findViewById(R.id.city);
-            mState = (TextInputEditText)findViewById(R.id.state);
-            mBuildYear = (TextInputEditText)findViewById(R.id.build);
-            mWebsite = (TextInputEditText)findViewById(R.id.website);
-            mNoEmployee = (TextInputEditText)findViewById(R.id.employee_count);
+            mOrganizationName = (MyEditText)findViewById(R.id.name);
+            mCity = (MyEditText)findViewById(R.id.city);
+            mState = (MyEditText)findViewById(R.id.state);
+            mBuildYear = (MyEditText)findViewById(R.id.build);
+            mWebsite = (MyEditText)findViewById(R.id.website);
+            mNoEmployee = (MyEditText)findViewById(R.id.employee_count);
 
             mAbout = (EditText)findViewById(R.id.about);
             mAddress = (EditText)findViewById(R.id.address);

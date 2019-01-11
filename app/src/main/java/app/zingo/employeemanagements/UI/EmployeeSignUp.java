@@ -27,6 +27,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import app.zingo.employeemanagements.Adapter.DepartmentSpinnerAdapter;
+import app.zingo.employeemanagements.Custom.MyEditText;
 import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Designations;
 import app.zingo.employeemanagements.Model.Employee;
@@ -50,7 +51,10 @@ import retrofit2.Response;
 
 public class EmployeeSignUp extends AppCompatActivity {
 
-    TextInputEditText mName,mDob,mDoj,mPrimaryEmail,mSecondaryEmail,
+    /*TextInputEditText mName,mDob,mDoj,mPrimaryEmail,mSecondaryEmail,
+            mMobile,mPassword,mConfirm,mOrganizationCode,mDesignation;*/
+
+    MyEditText mName,mDob,mDoj,mPrimaryEmail,mSecondaryEmail,
             mMobile,mPassword,mConfirm,mOrganizationCode,mDesignation;
     EditText mAddress;
     CardView mOrganizationCodeLayout;
@@ -69,7 +73,7 @@ public class EmployeeSignUp extends AppCompatActivity {
 
         try{
 
-            setContentView(R.layout.activity_employee_sign_up);
+            setContentView(R.layout.activity_new_employee_signup);
 
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -77,19 +81,19 @@ public class EmployeeSignUp extends AppCompatActivity {
 
 
 
-            mName = (TextInputEditText)findViewById(R.id.name);
-            mDob = (TextInputEditText)findViewById(R.id.dob);
-            mDoj = (TextInputEditText)findViewById(R.id.doj);
-            mDesignation = (TextInputEditText)findViewById(R.id.designation);
-            mOrganizationCode = (TextInputEditText)findViewById(R.id.organization_code);
+            mName = (MyEditText)findViewById(R.id.name);
+            mDob = (MyEditText)findViewById(R.id.dob);
+            mDoj = (MyEditText)findViewById(R.id.doj);
+            mDesignation = (MyEditText)findViewById(R.id.designation);
+            mOrganizationCode = (MyEditText)findViewById(R.id.organization_code);
             mOrganizationCodeLayout = (CardView) findViewById(R.id.card);
             mEmployeeLayout = (NestedScrollView) findViewById(R.id.employee_detail_layout);
 
-            mPrimaryEmail = (TextInputEditText)findViewById(R.id.email);
-            mSecondaryEmail = (TextInputEditText)findViewById(R.id.semail);
-            mMobile = (TextInputEditText)findViewById(R.id.mobile);
-            mPassword = (TextInputEditText)findViewById(R.id.password);
-            mConfirm = (TextInputEditText)findViewById(R.id.confirmpwd);
+            mPrimaryEmail = (MyEditText)findViewById(R.id.email);
+            mSecondaryEmail = (MyEditText)findViewById(R.id.semail);
+            mMobile = (MyEditText)findViewById(R.id.mobile);
+            mPassword = (MyEditText)findViewById(R.id.password);
+            mConfirm = (MyEditText)findViewById(R.id.confirmpwd);
             mDepartment = (Spinner) findViewById(R.id.android_material_design_spinner);
             mEmailEnd = (Spinner) findViewById(R.id.primary_email_end);
 
@@ -169,7 +173,7 @@ public class EmployeeSignUp extends AppCompatActivity {
         }
     }
 
-    public void openDatePicker(final TextInputEditText tv) {
+    public void openDatePicker(final MyEditText tv) {
         // Get Current Date
 
         final Calendar c = Calendar.getInstance();
@@ -731,7 +735,7 @@ public class EmployeeSignUp extends AppCompatActivity {
                                         organizationEmail = email.split("@");
 
                                         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(EmployeeSignUp.this, android.R.layout.simple_spinner_item, organizationEmail );
-                                        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                        arrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
                                         mEmailEnd.setAdapter(arrayAdapter );
                                     }
 

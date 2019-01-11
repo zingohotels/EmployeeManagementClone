@@ -8,10 +8,13 @@
     android:textSize="18sp"
     android:lines="1"
     android:text=""
+    android:background="@drawable/test_background"
     android:hint="Example : example.com"
+
     android:maxLines="1"
     android:singleLine="true"
-    android:background="@drawable/background_border">
+    android:textColor="#ffffff"
+    >
 
 
 </EditText>

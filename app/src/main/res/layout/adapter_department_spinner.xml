@@ -13,6 +13,7 @@
         android:text="Department"
         android:id="@+id/category_spinner_item"
         android:textSize="16sp"
+        android:textColor="@color/text_black"
         android:layout_gravity="center"
         android:gravity="center"/>
 </LinearLayout>

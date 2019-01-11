@@ -137,11 +137,22 @@ public class UpdateLeaveScreen extends AppCompatActivity {
 
         }
 
-        int j = Arrays.asList(leaveTypes).indexOf(""+dto.getLeaveType());
-        mLeaveType.setSelection(j);
 
-        int k = Arrays.asList(leaveStauses).indexOf(""+dto.getStatus());
-        mLeaveType.setSelection(k);
+        if(dto.getLeaveType().equalsIgnoreCase("Paid")){
+            mLeaveType.setSelection(0);
+        }else{
+            mLeaveType.setSelection(1);
+        }
+
+        if(dto.getStatus().equalsIgnoreCase("Pending")){
+            mLeaveStatus.setSelection(0);
+        }else  if(dto.getStatus().equalsIgnoreCase("Approved")){
+            mLeaveStatus.setSelection(1);
+        }else{
+            mLeaveStatus.setSelection(2);
+        }
+
+
 
         mLeaveComment.setText(""+dto.getLeaveComment());
 

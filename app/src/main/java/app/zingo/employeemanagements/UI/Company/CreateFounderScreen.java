@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import app.zingo.employeemanagements.Custom.MyEditText;
 import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Designations;
 import app.zingo.employeemanagements.Model.Employee;
@@ -45,7 +46,7 @@ import retrofit2.Response;
 
 public class CreateFounderScreen extends AppCompatActivity {
 
-    TextInputEditText mName,mDob,mDoj,mPrimaryEmail,mSecondaryEmail,mMobile,mPassword,mConfirm;
+    MyEditText mName,mDob,mDoj,mPrimaryEmail,mSecondaryEmail,mMobile,mPassword,mConfirm;
     EditText mAddress;
     RadioButton mMale,mFemale,mOthers;
     AppCompatButton mCreate;
@@ -59,20 +60,20 @@ public class CreateFounderScreen extends AppCompatActivity {
 
         try{
 
-            setContentView(R.layout.activity_create_founder_screen);
+            setContentView(R.layout.activity_new_create_founder);
 
             if(PreferenceHandler.getInstance(CreateFounderScreen.this).getDesignationId()==0){
                 designations();
             }
 
-            mName = (TextInputEditText)findViewById(R.id.name);
-            mDob = (TextInputEditText)findViewById(R.id.dob);
-            mDoj = (TextInputEditText)findViewById(R.id.doj);
-            mPrimaryEmail = (TextInputEditText)findViewById(R.id.email);
-            mSecondaryEmail = (TextInputEditText)findViewById(R.id.semail);
-            mMobile = (TextInputEditText)findViewById(R.id.mobile);
-            mPassword = (TextInputEditText)findViewById(R.id.password);
-            mConfirm = (TextInputEditText)findViewById(R.id.confirmpwd);
+            mName = (MyEditText)findViewById(R.id.name);
+            mDob = (MyEditText)findViewById(R.id.dob);
+            mDoj = (MyEditText)findViewById(R.id.doj);
+            mPrimaryEmail = (MyEditText)findViewById(R.id.email);
+            mSecondaryEmail = (MyEditText)findViewById(R.id.semail);
+            mMobile = (MyEditText)findViewById(R.id.mobile);
+            mPassword = (MyEditText)findViewById(R.id.password);
+            mConfirm = (MyEditText)findViewById(R.id.confirmpwd);
 
             mAddress = (EditText)findViewById(R.id.address);
 
@@ -216,7 +217,7 @@ public class CreateFounderScreen extends AppCompatActivity {
 
     }
 
-    public void openDatePicker(final TextInputEditText tv) {
+    public void openDatePicker(final MyEditText tv) {
         // Get Current Date
 
         final Calendar c = Calendar.getInstance();

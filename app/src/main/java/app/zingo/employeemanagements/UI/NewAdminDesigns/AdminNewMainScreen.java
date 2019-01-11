@@ -281,7 +281,7 @@ public class AdminNewMainScreen extends AppCompatActivity {
                         "<p><br>I'm "+PreferenceHandler.getInstance(AdminNewMainScreen.this).getUserFullName()+" your manager. You are invited to join the Zingy Employee App Platform. </p></br></br>"+
                         "<br><p>Here is a Procedure to Join the Platform using the Below Procedures. Make sure you store them safely. </p>"+
                         "</br><p><br>Our Organization Code- "+upToNCharacters+PreferenceHandler.getInstance(AdminNewMainScreen.this).getCompanyId()+
-                        "</br></p><br><b>Step 1:  </b>"+"Download the app by clicking here"+
+                        "</br></p><br><b>Step 1:  </b>"+"Download the app by clicking here https://drive.google.com/open?id=1Kv_4sqvYhyWjI0eCuASIZFpu04GKGqQY\n"+
                         "</br><br><b>Step 2: </b>"+"Click on Get Started and \"Join us as an Employee\""+
                         "</br><br><b>Step 3: </b>"+"Verify your Mobile number and then Enter the Organization Code - "+upToNCharacters+PreferenceHandler.getInstance(AdminNewMainScreen.this).getCompanyId()+
                         "</br><br><b>Step 4:</b>"+"Enter your basic details and the complete the Sign up process"+

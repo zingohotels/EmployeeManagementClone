@@ -18,7 +18,7 @@
             android:layout_height="match_parent"
             android:background="#98000000" />
 
-        <ScrollView
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fillViewport="true"
@@ -34,8 +34,33 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_gravity="right"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:textSize="24dp"
+                    android:textStyle="bold"
+                    android:text="Create Organization"/>
 
-                <android.support.design.widget.TextInputLayout
+                <app.zingo.employeemanagements.Custom.MyEditText
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginLeft="@dimen/activity_large_margin"
+                    android:layout_marginTop="20.0dip"
+                    android:layout_marginRight="@dimen/activity_large_margin"
+                    android:background="@drawable/test_background"
+                    android:hint="Organization Name"
+                    android:singleLine="true"
+                    android:textColor="#ffffff"
+                    android:textColorHint="#afaeae"
+                    />
+
+
+                <!--<android.support.design.widget.TextInputLayout
                     android:id="@+id/nameInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -51,7 +76,7 @@
                         android:maxLength="50"
                         android:inputType="text"
                         style="@style/fp_editText" />
-                </android.support.design.widget.TextInputLayout>
+                </android.support.design.widget.TextInputLayout>-->
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -70,9 +95,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="30dp"
                             android:layout_gravity="right"
-                            android:textColor="@color/colorPrimary"
+                            android:textColor="@color/white"
                             android:gravity="center_vertical"
                             android:layout_weight="1"
+
                             android:text="Organization Email extension"/>
 
 
@@ -116,7 +142,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/activity_large_margin"
                         android:layout_marginTop="20.0dip"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/white"
                         android:layout_marginRight="@dimen/activity_large_margin"
                         android:text="About Organization"/>
 
@@ -127,6 +153,10 @@
                         android:layout_marginTop="5dp"
                         android:layout_gravity="start"
                         android:gravity="start"
+                        android:textColor="@color/white"
+                        android:hint="Tell about your organization"
+                        android:textColorHint="@color/white"
+                        android:padding="8dp"
                         android:scrollbarAlwaysDrawVerticalTrack="true"
                         android:overScrollMode="always"
                         android:scrollbarStyle="insideInset"
@@ -134,9 +164,9 @@
                         android:keepScreenOn="true"
                         android:layout_marginLeft="@dimen/activity_large_margin"
                         android:layout_marginRight="@dimen/activity_large_margin"
-                        android:lines="10"
-                        android:background="@drawable/spinner_background"
-                        android:maxLines="10"
+                        android:lines="5"
+                        android:background="@drawable/started_button"
+                        android:maxLines="5"
                         />
 
 
@@ -157,7 +187,7 @@
                         <android.support.v7.widget.AppCompatTextView
                             android:layout_width="match_parent"
                             android:layout_weight="1"
-                            android:textColor="@color/colorPrimary"
+                            android:textColor="@color/white"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/activity_large_margin"
                             android:layout_marginTop="20.0dip"
@@ -184,15 +214,19 @@
                         android:layout_marginTop="5dp"
                         android:layout_gravity="start"
                         android:gravity="start"
+                        android:hint="Organization Address"
+                        android:textColorHint="@color/white"
+                        android:padding="8dp"
                         android:scrollbarAlwaysDrawVerticalTrack="true"
                         android:overScrollMode="always"
                         android:scrollbarStyle="insideInset"
                         android:scrollbars="vertical"
+                        android:textColor="@color/white"
                         android:keepScreenOn="true"
                         android:layout_marginLeft="@dimen/activity_large_margin"
                         android:layout_marginRight="@dimen/activity_large_margin"
                         android:lines="5"
-                        android:background="@drawable/spinner_background"
+                        android:background="@drawable/started_button"
                         />
 
 
@@ -204,7 +238,37 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <android.support.design.widget.TextInputLayout
+                    <app.zingo.employeemanagements.Custom.MyEditText
+                        android:id="@+id/city"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:layout_marginLeft="@dimen/activity_large_margin"
+                        android:layout_marginTop="20.0dip"
+                        android:layout_marginRight="@dimen/activity_large_margin"
+                        android:background="@drawable/test_background"
+                        android:hint="City"
+                        android:layout_weight="1"
+                        android:singleLine="true"
+                        android:textColor="#ffffff"
+                        android:textColorHint="#afaeae"
+                        />
+
+                    <app.zingo.employeemanagements.Custom.MyEditText
+                        android:id="@+id/state"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:layout_marginLeft="@dimen/activity_large_margin"
+                        android:layout_marginTop="20.0dip"
+                        android:layout_marginRight="@dimen/activity_large_margin"
+                        android:background="@drawable/test_background"
+                        android:hint="State"
+                        android:layout_weight="1"
+                        android:singleLine="true"
+                        android:textColor="#ffffff"
+                        android:textColorHint="#afaeae"
+                        />
+
+                <!--    <android.support.design.widget.TextInputLayout
                         android:id="@+id/cityInputLayout"
                         android:layout_width="match_parent"
                         android:layout_weight="1"
@@ -223,9 +287,9 @@
                             android:focusableInTouchMode="false"
                             android:inputType="text"
                             style="@style/fp_editText" />
-                    </android.support.design.widget.TextInputLayout>
+                    </android.support.design.widget.TextInputLayout>-->
 
-                    <android.support.design.widget.TextInputLayout
+            <!--        <android.support.design.widget.TextInputLayout
                         android:id="@+id/stateInputLayout"
                         android:layout_width="match_parent"
                         android:layout_weight="1"
@@ -243,7 +307,7 @@
                             android:inputType="text"
                             android:textColor="@color/colorPrimary"
                             style="@style/fp_editText" />
-                    </android.support.design.widget.TextInputLayout>
+                    </android.support.design.widget.TextInputLayout>-->
 
                 </LinearLayout>
 
@@ -252,7 +316,37 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <android.support.design.widget.TextInputLayout
+                    <app.zingo.employeemanagements.Custom.MyEditText
+                        android:id="@+id/build"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:layout_marginLeft="@dimen/activity_large_margin"
+                        android:layout_marginTop="20.0dip"
+                        android:layout_marginRight="@dimen/activity_large_margin"
+                        android:background="@drawable/test_background"
+                        android:hint="Build Year"
+                        android:layout_weight="1"
+                        android:singleLine="true"
+                        android:textColor="#ffffff"
+                        android:textColorHint="#afaeae"
+                        />
+
+                    <app.zingo.employeemanagements.Custom.MyEditText
+                        android:id="@+id/employee_count"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:layout_marginLeft="@dimen/activity_large_margin"
+                        android:layout_marginTop="20.0dip"
+                        android:layout_marginRight="@dimen/activity_large_margin"
+                        android:background="@drawable/test_background"
+                        android:hint="No of Employees"
+                        android:layout_weight="1"
+                        android:singleLine="true"
+                        android:textColor="#ffffff"
+                        android:textColorHint="#afaeae"
+                        />
+
+          <!--          <android.support.design.widget.TextInputLayout
                         android:id="@+id/buildInputLayout"
                         android:layout_width="match_parent"
                         android:layout_weight="1"
@@ -269,9 +363,9 @@
                             android:textColor="@color/colorPrimary"
                             android:inputType="number"
                             style="@style/fp_editText" />
-                    </android.support.design.widget.TextInputLayout>
+                    </android.support.design.widget.TextInputLayout>-->
 
-                    <android.support.design.widget.TextInputLayout
+           <!--         <android.support.design.widget.TextInputLayout
                         android:id="@+id/employeeInputLayout"
                         android:layout_width="match_parent"
                         android:layout_weight="1"
@@ -288,11 +382,26 @@
                             android:maxLength="3"
                             android:inputType="number"
                             style="@style/fp_editText" />
-                    </android.support.design.widget.TextInputLayout>
+                    </android.support.design.widget.TextInputLayout>-->
 
                 </LinearLayout>
 
-                <android.support.design.widget.TextInputLayout
+                <app.zingo.employeemanagements.Custom.MyEditText
+                    android:id="@+id/website"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginLeft="@dimen/activity_large_margin"
+                    android:layout_marginTop="20.0dip"
+                    android:layout_marginRight="@dimen/activity_large_margin"
+                    android:background="@drawable/test_background"
+                    android:hint="Website"
+
+                    android:singleLine="true"
+                    android:textColor="#ffffff"
+                    android:textColorHint="#afaeae"
+                    />
+
+              <!--  <android.support.design.widget.TextInputLayout
                     android:id="@+id/websiteInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -309,7 +418,7 @@
                         android:textColor="@color/colorPrimary"
                         android:inputType="textUri"
                         style="@style/fp_editText" />
-                </android.support.design.widget.TextInputLayout>
+                </android.support.design.widget.TextInputLayout>-->
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -323,8 +432,9 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center"
+
                         android:text="Plans(Prices are in INR)"
-                        android:textColor="#000000"
+                        android:textColor="@color/white"
                         android:textSize="20dp"
                         android:padding="16dp"/>
 
@@ -339,7 +449,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
                             android:layout_gravity="center"
-                            android:background="#000000"
+                            android:background="@color/white"
                             />
 
                         <LinearLayout
@@ -351,7 +461,7 @@
                                 android:layout_width="0.5dp"
                                 android:layout_height="match_parent"
                                 android:layout_gravity="center"
-                                android:background="#000000"
+                                android:background="@color/white"
                                 />
 
 
@@ -369,7 +479,7 @@
 
                                     android:gravity="center"
                                     android:textStyle="bold"
-                                    android:textColor="#000"
+                                    android:textColor="@color/white"
                                     android:text="Plan Name"/>
                             </LinearLayout>
 
@@ -377,7 +487,7 @@
                                 android:layout_width="0.5dp"
                                 android:layout_height="match_parent"
                                 android:layout_gravity="center"
-                                android:background="#000000"
+                                android:background="@color/white"
                                 />
 
 
@@ -392,7 +502,7 @@
                                     android:layout_height="match_parent"
                                     android:layout_weight="1"
                                     android:gravity="center"
-                                    android:textColor="#000"
+                                    android:textColor="@color/white"
                                     android:text="3 Month"/>
 
 
@@ -408,7 +518,7 @@
                                 android:layout_width="0.5dp"
                                 android:layout_height="match_parent"
                                 android:layout_gravity="center"
-                                android:background="#000000"
+                                android:background="@color/white"
                                 />
 
                             <LinearLayout
@@ -422,7 +532,7 @@
                                     android:layout_height="match_parent"
                                     android:layout_weight="1"
                                     android:gravity="center"
-                                    android:textColor="#000"
+                                    android:textColor="@color/white"
                                     android:text="6 Months"/>
 
 
@@ -432,7 +542,7 @@
                                 android:layout_width="0.5dp"
                                 android:layout_height="match_parent"
                                 android:layout_gravity="center"
-                                android:background="#000000"
+                                android:background="@color/white"
                                 />
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -445,7 +555,7 @@
                                     android:layout_height="match_parent"
                                     android:layout_weight="1"
                                     android:gravity="center"
-                                    android:textColor="#000"
+                                    android:textColor="@color/white"
                                     android:text="1 Year"/>
 
 
@@ -455,7 +565,7 @@
                                 android:layout_width="0.5dp"
                                 android:layout_height="match_parent"
                                 android:layout_gravity="center"
-                                android:background="#000000"
+                                android:background="@color/white"
                                 />
 
 
@@ -466,7 +576,7 @@
                             android:layout_width="0.5dp"
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
-                            android:background="#000000"
+                            android:background="@color/white"
                             />
 
 
@@ -503,7 +613,7 @@
 
 
             </LinearLayout>
-        </ScrollView>
+        </android.support.v4.widget.NestedScrollView>
     </FrameLayout>
 
 
