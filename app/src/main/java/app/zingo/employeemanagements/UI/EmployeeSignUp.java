@@ -9,10 +9,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.CardView;
+import android.text.InputType;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -27,6 +32,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import app.zingo.employeemanagements.Adapter.DepartmentSpinnerAdapter;
+import app.zingo.employeemanagements.Adapter.EmailEndAdapter;
 import app.zingo.employeemanagements.Custom.MyEditText;
 import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Designations;
@@ -36,6 +42,7 @@ import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Company.CreateFounderScreen;
 import app.zingo.employeemanagements.UI.Employee.CreateEmployeeScreen;
 import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
+import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
 import app.zingo.employeemanagements.UI.Login.LoginScreen;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminNewMainScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
@@ -66,6 +73,8 @@ public class EmployeeSignUp extends AppCompatActivity {
     ArrayList<Departments> departmentData;
 
     String[] organizationEmail;
+
+    CheckBox mShowPwd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +114,8 @@ public class EmployeeSignUp extends AppCompatActivity {
 
             mCreate = (AppCompatButton)findViewById(R.id.createFounder);
             mVerifyCode = (AppCompatButton)findViewById(R.id.verify_org_code);
+
+            mShowPwd = (CheckBox) findViewById(R.id.show_hide_password);
 
             mMobile.setText(""+PreferenceHandler.getInstance(EmployeeSignUp.this).getPhoneNumber());
 
@@ -150,6 +161,38 @@ public class EmployeeSignUp extends AppCompatActivity {
                 }
             });
 
+            mShowPwd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+                @Override
+                public void onCheckedChanged(CompoundButton button,
+                                             boolean isChecked) {
+
+                    // If it is checked then show password else hide password
+                    if (isChecked) {
+
+                        mShowPwd.setText("Hide Password");// change checkbox text
+
+                        mPassword.setInputType(InputType.TYPE_CLASS_TEXT);
+                        mPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());// show password
+
+                        mConfirm.setInputType(InputType.TYPE_CLASS_TEXT);
+                        mConfirm.setTransformationMethod(HideReturnsTransformationMethod.getInstance());// show password
+                    } else {
+                        mShowPwd.setText("Show Password");// change checkbox text
+
+                        mPassword.setInputType(InputType.TYPE_CLASS_TEXT
+                                | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        mPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());// hide password
+
+                        mConfirm.setInputType(InputType.TYPE_CLASS_TEXT
+                                | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        mConfirm.setTransformationMethod(PasswordTransformationMethod.getInstance());// hide password
+
+                    }
+
+                }
+            });
+
        //
 
         }catch (Exception e){
@@ -168,7 +211,14 @@ public class EmployeeSignUp extends AppCompatActivity {
         }else{
 
             String code = organizationCode.replaceAll("[^0-9]", "");
-            getCompany(Integer.parseInt(code),organizationCode);
+            try {
+                getCompany(Integer.parseInt(code),organizationCode);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Intent i = new Intent(EmployeeSignUp.this, InternalServerErrorScreen.class);
+
+                startActivity(i);
+            }
 
         }
     }
@@ -698,7 +748,7 @@ public class EmployeeSignUp extends AppCompatActivity {
         });
     }
 
-    public void getCompany(final int id,final String code){
+    public void getCompany(final int id,final String code) throws Exception{
 
         new ThreadExecuter().execute(new Runnable() {
             @Override
@@ -734,9 +784,12 @@ public class EmployeeSignUp extends AppCompatActivity {
 
                                         organizationEmail = email.split("@");
 
-                                        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(EmployeeSignUp.this, android.R.layout.simple_spinner_item, organizationEmail );
+                                        EmailEndAdapter adapter = new EmailEndAdapter(EmployeeSignUp.this,organizationEmail);
+                                        mEmailEnd.setAdapter(adapter);
+
+                                        /*ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(EmployeeSignUp.this, R.layout.spinner_dropdown_item, organizationEmail );
                                         arrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
-                                        mEmailEnd.setAdapter(arrayAdapter );
+                                        mEmailEnd.setAdapter(arrayAdapter );*/
                                     }
 
                                     getDepartment(id);

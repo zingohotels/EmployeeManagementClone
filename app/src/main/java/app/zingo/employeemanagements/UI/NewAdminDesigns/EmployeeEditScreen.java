@@ -10,6 +10,7 @@ import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -45,6 +46,7 @@ public class EmployeeEditScreen extends AppCompatActivity {
     TextInputEditText mName,mDob,mDoj,mPrimaryEmail,mSecondaryEmail,
             mMobile,mDesignation,mSalary;
     EditText mAddress;
+    CheckBox mLocationCondition;
     Spinner mDepartment;
     RadioButton mMale,mFemale,mOthers;
     AppCompatButton mCreate;
@@ -72,6 +74,7 @@ public class EmployeeEditScreen extends AppCompatActivity {
             mPrimaryEmail = (TextInputEditText)findViewById(R.id.email);
             mSecondaryEmail = (TextInputEditText)findViewById(R.id.semail);
             mMobile = (TextInputEditText)findViewById(R.id.mobile);
+            mLocationCondition = (CheckBox) findViewById(R.id.location_condition);
 
             mDepartment = (Spinner) findViewById(R.id.android_material_design_spinner);
 
@@ -167,6 +170,11 @@ public class EmployeeEditScreen extends AppCompatActivity {
         }
 
         //mDesignation.setText();
+        boolean location = employee.isLocationOn();
+
+        if(location){
+            mLocationCondition.setChecked(true);
+        }
         mSalary.setText(""+employee.getSalary());
         mPrimaryEmail.setText(""+employee.getPrimaryEmailAddress());
         mSecondaryEmail.setText(""+employee.getAlternateEmailAddress());
@@ -290,6 +298,12 @@ public class EmployeeEditScreen extends AppCompatActivity {
             Employee employee = employees;
             employee.setEmployeeName(name);
             employee.setAddress(address);
+
+            if(mLocationCondition.isChecked()){
+                employee.setLocationOn(true);
+            }else{
+                employee.setLocationOn(false);
+            }
             if(mMale.isChecked()){
                 employee.setGender("Male");
             }else if(mFemale.isChecked()){

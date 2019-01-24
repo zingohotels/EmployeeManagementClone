@@ -30,16 +30,31 @@ public class Util {
     private static Retrofit retrofit = null;
     private static final int PERMISSION_RESULT = 1,MY_PERMISSIONS_REQUEST_RESULT = 1;
 
+    public static  String BASE_URL ;
+    public static  String IMAGE_URL ;
+
+
+
     public static Retrofit getClient() {
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(100, TimeUnit.SECONDS)
                 .readTimeout(100,TimeUnit.SECONDS).build();
         if (retrofit==null) {
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(Constants.BASE_URL)
-                    .client(client)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
+
+            if(BASE_URL!=null){
+                retrofit = new Retrofit.Builder()
+                        .baseUrl(BASE_URL)
+                        .client(client)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+            }else{
+                retrofit = new Retrofit.Builder()
+                        .baseUrl("http://zingolocals.azurewebsites.net/api/")
+                        .client(client)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+            }
+
         }
         return retrofit;
     }

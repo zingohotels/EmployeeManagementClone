@@ -64,8 +64,33 @@ public class TrackGPS extends Service implements LocationListener {
                 Log.d("Network", "No Service Provider Available");
             } else {
                 this.canGetLocation = true;
-                // First get location from Network Provider
-                if (checkNetwork) {
+
+                if (checkGPS) {
+                    //Toast.makeText(mContext, "GPS", Toast.LENGTH_SHORT).show();
+                    Log.d("Network", "GPS");
+                    if (loc == null) {
+                        try {
+                            locationManager.requestLocationUpdates(
+                                    LocationManager.GPS_PROVIDER,
+                                    MIN_TIME_BW_UPDATES,
+                                    MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+                            Log.d("GPS Enabled", "GPS Enabled");
+                            if (locationManager != null) {
+                                Log.d("GPS Enabled2", "GPS Enabled");
+                                loc = locationManager
+                                        .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                                if (loc != null) {
+                                    Log.d("GPS Enabled3", "GPS Enabled");
+                                    latitude = loc.getLatitude();
+                                    longitude = loc.getLongitude();
+                                    Log.d("GPS Enabled3", latitude+" == "+longitude);
+                                }
+                            }
+                        } catch (SecurityException e) {
+
+                        }
+                    }
+                }else if (checkNetwork) {// First get location from Network Provider
                     //Toast.makeText(mContext, "Network", Toast.LENGTH_SHORT).show();
 
                     try {
@@ -92,32 +117,7 @@ public class TrackGPS extends Service implements LocationListener {
                 }
             }
             // if GPS Enabled get lat/long using GPS Services
-            if (checkGPS) {
-                //Toast.makeText(mContext, "GPS", Toast.LENGTH_SHORT).show();
-                Log.d("Network", "GPS");
-                if (loc == null) {
-                    try {
-                        locationManager.requestLocationUpdates(
-                                LocationManager.GPS_PROVIDER,
-                                MIN_TIME_BW_UPDATES,
-                                MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-                        Log.d("GPS Enabled", "GPS Enabled");
-                        if (locationManager != null) {
-                            Log.d("GPS Enabled2", "GPS Enabled");
-                            loc = locationManager
-                                    .getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                            if (loc != null) {
-                                Log.d("GPS Enabled3", "GPS Enabled");
-                                latitude = loc.getLatitude();
-                                longitude = loc.getLongitude();
-                                Log.d("GPS Enabled3", latitude+" == "+longitude);
-                            }
-                        }
-                    } catch (SecurityException e) {
 
-                    }
-                }
-            }
 
         } catch (Exception e) {
             e.printStackTrace();

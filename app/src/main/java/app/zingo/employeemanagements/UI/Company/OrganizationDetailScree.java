@@ -45,6 +45,8 @@ import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Admin.DashBoardAdmin;
+import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
+import app.zingo.employeemanagements.UI.LandingScreen;
 import app.zingo.employeemanagements.UI.Login.LoginScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
@@ -132,9 +134,18 @@ public class OrganizationDetailScree extends AppCompatActivity {
 
 
                     try{
-                        getCompany(PreferenceHandler.getInstance(OrganizationDetailScree.this).getCompanyId());
+                        if(PreferenceHandler.getInstance(OrganizationDetailScree.this).getCompanyId()!=0){
+                            getCompany(PreferenceHandler.getInstance(OrganizationDetailScree.this).getCompanyId());
+                        }else{
+                            Intent intent = new Intent(OrganizationDetailScree.this,InternalServerErrorScreen.class);
+                            startActivity(intent);
+                        }
+
                     }catch (Exception e){
                         e.printStackTrace();
+                        Intent i = new Intent(OrganizationDetailScree.this, InternalServerErrorScreen.class);
+
+                        startActivity(i);
                     }
 
 
@@ -173,7 +184,7 @@ public class OrganizationDetailScree extends AppCompatActivity {
     }
 
 
-    public void getCompany(final int id){
+    public void getCompany(final int id) throws Exception{
 
         new ThreadExecuter().execute(new Runnable() {
             @Override

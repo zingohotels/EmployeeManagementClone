@@ -13,7 +13,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -41,6 +43,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.itextpdf.text.Utilities;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
@@ -58,7 +61,9 @@ import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.Meetings;
 import app.zingo.employeemanagements.Model.Organization;
+import app.zingo.employeemanagements.Model.OrganizationPayments;
 import app.zingo.employeemanagements.Model.Plans;
+import app.zingo.employeemanagements.Model.ResellerProfiles;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Admin.CreatePaySlip;
 import app.zingo.employeemanagements.UI.Admin.EmployeesDashBoard;
@@ -67,6 +72,7 @@ import app.zingo.employeemanagements.UI.Company.CreateFounderScreen;
 import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
 import app.zingo.employeemanagements.UI.Employee.EmployeeMeetingHost;
 import app.zingo.employeemanagements.UI.Landing.PhoneVerificationScreen;
+import app.zingo.employeemanagements.UI.Reseller.ResellerMainActivity;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.TrackGPS;
@@ -74,7 +80,9 @@ import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.DepartmentApi;
 import app.zingo.employeemanagements.WebApi.MeetingsAPI;
 import app.zingo.employeemanagements.WebApi.OrganizationApi;
+import app.zingo.employeemanagements.WebApi.OrganizationPaymentAPI;
 import app.zingo.employeemanagements.WebApi.PlansAndRatesAPI;
+import app.zingo.employeemanagements.WebApi.ResellerAPI;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -85,16 +93,16 @@ import static java.security.AccessController.getContext;
 public class GetStartedScreen extends AppCompatActivity  implements PaymentResultListener {
 
     boolean popUp = false;
-    String appType = "Trial",planType="";
+    String appType = "Trial",planType="",paymentId="";
     int addtionalDay = 0,planId=0;
-    double price = 0;
+    double price = 0,resellerPercentage=0;
 
 
     RecyclerView mPlanList;
     LinearLayout mPlanLayout,mEmailExtnLay;
     ImageButton myLocation;
     ImageView mAddEmail,mDeleteEmail;
-    MyEditText mOrganizationName,mCity,mState,mBuildYear,mNoEmployee,mWebsite;
+    MyEditText mOrganizationName,mCity,mState,mBuildYear,mNoEmployee,mWebsite,mResellerCode;
     //TextInputEditText mOrganizationName,mCity,mState,mBuildYear,mNoEmployee,mWebsite;
     //TextInputEditText ;
     EditText mAbout,mAddress;
@@ -109,6 +117,8 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
     TrackGPS gps;
     double latitude;
     double longitude;
+
+    int year = 0;
 
 
     //PaymentGateway
@@ -131,11 +141,16 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
             getPlans();
             gps = new TrackGPS(GetStartedScreen.this);
 
+            String currentYear = new SimpleDateFormat("yyyyy").format(new Date());
+
+            year = Integer.parseInt(currentYear);
+
             mOrganizationName = (MyEditText)findViewById(R.id.name);
             mCity = (MyEditText)findViewById(R.id.city);
             mState = (MyEditText)findViewById(R.id.state);
             mBuildYear = (MyEditText)findViewById(R.id.build);
             mWebsite = (MyEditText)findViewById(R.id.website);
+            mResellerCode = (MyEditText)findViewById(R.id.reseller_code);
             mNoEmployee = (MyEditText)findViewById(R.id.employee_count);
 
             mAbout = (EditText)findViewById(R.id.about);
@@ -209,6 +224,38 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
                 public void onClick(View view) {
 
                     removeView();
+                }
+            });
+
+            mBuildYear.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    String currentYear = mBuildYear.getText().toString();
+
+                    if(currentYear==null||currentYear.isEmpty()){
+
+                    }else{
+                        int value = Integer.parseInt(currentYear);
+
+                        if(value>year){
+                            mBuildYear.setError("Build year is not valid");
+                            Toast.makeText(GetStartedScreen.this, "Build year is not validate", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
                 }
             });
 
@@ -575,6 +622,22 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
                 organization.setSignupDate(sdf.format(new Date()));
                 organization.setAppType(appType);
                 organization.setLicenseStartDate(sdfs.format(new Date()));
+
+                Departments departments = new Departments();
+                departments.setDepartmentName("Founders");
+                departments.setDepartmentDescription("The owner or operator of a foundry");
+
+                ArrayList<Departments> depList = new ArrayList<>();
+                depList.add(departments);
+
+                organization.setDepartment(depList);
+
+                String resellerCode = mResellerCode.getText().toString();
+
+                if(resellerCode!=null&&!resellerCode.isEmpty()){
+
+                    organization.setReferralCodeOfReseller(resellerCode);
+                }
                 if(placeId!=null){
                     organization.setPlaceId(placeId);
                 }
@@ -594,7 +657,16 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
                         // convert calendar to date
                         Date additionalDate = c.getTime();
                         organization.setLicenseEndDate(sdfs.format(additionalDate));
-                        startPayment();
+
+                        if(resellerCode!=null&&!resellerCode.isEmpty()){
+                            String code = resellerCode.replaceAll("[^0-9]", "");
+                            getProfiles(Integer.parseInt(code),organization,resellerCode);
+                        }else{
+                            startPayment();
+                        }
+
+
+
                     }else{
                         Toast.makeText(this, "Please Choose your plan", Toast.LENGTH_SHORT).show();
                     }
@@ -603,12 +675,21 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
 
 
                     organization.setPlanType("Trial");
-                    c.add(Calendar.DATE, 13);
+                    c.add(Calendar.DATE, 30);
 
                     // convert calendar to date
                     Date additionalDate = c.getTime();
                     organization.setLicenseEndDate(sdfs.format(additionalDate));
-                    addOrganization(organization);
+
+                    if(resellerCode!=null&&!resellerCode.isEmpty()){
+                        String code = resellerCode.replaceAll("[^0-9]", "");
+                        getProfile(Integer.parseInt(code),organization,resellerCode);
+                    }else{
+                        addOrganization(organization,null);
+                    }
+
+
+
                 }
 
 
@@ -703,7 +784,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
 
 
 
-    public void addOrganization(final Organization organization) throws Exception{
+    public void addOrganization(final Organization organization,final String payment) throws Exception{
 
 
         final ProgressDialog dialog = new ProgressDialog(this);
@@ -749,12 +830,43 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
                             PreferenceHandler.getInstance(GetStartedScreen.this).setPlanId(response.body().getPlanId());
 
 
-                            Departments departments = new Departments();
-                            departments.setDepartmentName("Founders");
-                            departments.setDepartmentDescription("The owner or operator of a foundry");
-                            departments.setOrganizationId(s.getOrganizationId());
+                            if(response.body().getDepartment()!=null&&response.body().getDepartment().size()!=0){
 
-                            addDepartments(s,departments);
+                                PreferenceHandler.getInstance(GetStartedScreen.this).setDepartmentId(response.body().getDepartment().get(0).getDepartmentId());
+
+                            }
+
+
+
+
+                            //addDepartments(s,departments,payment);
+
+                            if(payment!=null&&payment.equalsIgnoreCase("Payment")){
+
+                                OrganizationPayments op = new OrganizationPayments();
+                                op.setTitle("Plan Subscription for Creating organization");
+                                op.setDescription("Plan Name "+organization.getPlanId()+" License End date "+organization.getLicenseEndDate());
+                                op.setPaymentDate(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
+                                op.setOrganizationId(organization.getOrganizationId());
+                                op.setPaymentBy(organization.getOrganizationName()+"");
+                                op.setAmount(price * 100*organization.getEmployeeLimit());
+                                op.setTransactionId(""+paymentId);
+                                op.setTransactionMethod("");
+                                op.setZingyPaymentStatus("Pending");
+                                op.setZingyPaymentDate(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
+                                op.setResellerCommissionPercentage(resellerPercentage);
+
+                                addOrgaPay(organization,op);
+
+                            }else{
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("Company",organization);
+                                Intent profile = new Intent(GetStartedScreen.this,PhoneVerificationScreen.class);
+                                profile.putExtras(bundle);
+                                profile.putExtra("Screen","Organization");
+                                startActivity(profile);
+                                GetStartedScreen.this.finish();
+                            }
 
 
                         }
@@ -794,7 +906,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
 
     }
 
-    public void addDepartments(final Organization organization,final Departments departments) throws Exception{
+    public void addDepartments(final Organization organization,final Departments departments,final String payment) throws Exception{
 
 
         final ProgressDialog dialog = new ProgressDialog(this);
@@ -828,13 +940,35 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
 
                             PreferenceHandler.getInstance(GetStartedScreen.this).setDepartmentId(s.getDepartmentId());
 
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("Company",organization);
-                            Intent profile = new Intent(GetStartedScreen.this,PhoneVerificationScreen.class);
-                            profile.putExtras(bundle);
-                            profile.putExtra("Screen","Organization");
-                            startActivity(profile);
-                            GetStartedScreen.this.finish();
+
+                            if(payment!=null&&payment.equalsIgnoreCase("Payment")){
+
+                                OrganizationPayments op = new OrganizationPayments();
+                                op.setTitle("Plan Subscription for Creating organization");
+                                op.setDescription("Plan Name "+organization.getPlanId()+" License End date "+organization.getLicenseEndDate());
+                                op.setPaymentDate(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
+                                op.setOrganizationId(organization.getOrganizationId());
+                                op.setPaymentBy(organization.getOrganizationName()+"");
+                                op.setAmount(price * 100*organization.getEmployeeLimit());
+                                op.setTransactionId(""+paymentId);
+                                op.setTransactionMethod("");
+                                op.setZingyPaymentStatus("Pending");
+                                op.setZingyPaymentDate(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
+                                op.setResellerCommissionPercentage(resellerPercentage);
+
+                                addOrgaPay(organization,op);
+
+                            }else{
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("Company",organization);
+                                Intent profile = new Intent(GetStartedScreen.this,PhoneVerificationScreen.class);
+                                profile.putExtras(bundle);
+                                profile.putExtra("Screen","Organization");
+                                startActivity(profile);
+                                GetStartedScreen.this.finish();
+                            }
+
+
 
                         }
 
@@ -859,6 +993,90 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
 
             @Override
             public void onFailure(Call<Departments> call, Throwable t) {
+
+                if(dialog != null && dialog.isShowing())
+                {
+                    dialog.dismiss();
+                }
+                Toast.makeText(GetStartedScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("TAG", t.toString());
+            }
+        });
+
+
+
+    }
+
+    public void addOrgaPay(final Organization organization,final OrganizationPayments organizationPayments) throws Exception{
+
+
+        final ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setMessage("Saving Details..");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        OrganizationPaymentAPI apiService = Util.getClient().create(OrganizationPaymentAPI.class);
+
+        Call<OrganizationPayments> call = apiService.addOrganizationPayments(organizationPayments);
+
+        call.enqueue(new Callback<OrganizationPayments>() {
+            @Override
+            public void onResponse(Call<OrganizationPayments> call, Response<OrganizationPayments> response) {
+//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
+                try
+                {
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+
+                    int statusCode = response.code();
+                    if (statusCode == 200 || statusCode == 201) {
+
+                        OrganizationPayments s = response.body();
+
+                        if(s!=null){
+
+                            Toast.makeText(GetStartedScreen.this, "Your Organization Creted Successfully ", Toast.LENGTH_SHORT).show();
+
+
+
+
+
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("Company",organization);
+                                Intent profile = new Intent(GetStartedScreen.this,PhoneVerificationScreen.class);
+                                profile.putExtras(bundle);
+                                profile.putExtra("Screen","Organization");
+                                startActivity(profile);
+                                GetStartedScreen.this.finish();
+
+
+
+
+                        }
+
+
+
+
+                    }else {
+                        Toast.makeText(GetStartedScreen.this, "Failed Due to "+response.message(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+                    ex.printStackTrace();
+                }
+//                callGetStartEnd();
+            }
+
+            @Override
+            public void onFailure(Call<OrganizationPayments> call, Throwable t) {
 
                 if(dialog != null && dialog.isShowing())
                 {
@@ -914,7 +1132,9 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
     public void onPaymentSuccess(String razorpayPaymentID) {
         try {
 
-            addOrganization(organization);
+            paymentId = razorpayPaymentID;
+
+            addOrganization(organization,"Payment");
             Toast.makeText(this, "Payment Successful: " + razorpayPaymentID, Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             Log.e(TAG, "Exception in onPaymentSuccess", e);
@@ -937,11 +1157,9 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
     @Override
     public void onBackPressed() {
 
-        if(popUp){
 
-        }else{
             GetStartedScreen.this.finish();
-        }
+
     }
 
     public void getAddress()
@@ -1042,6 +1260,127 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
 
     }
 
+
+    public void getProfile(final int id,final Organization organization,final String code ){
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+
+                final ResellerAPI subCategoryAPI = Util.getClient().create(ResellerAPI.class);
+                Call<ResellerProfiles> getProf = subCategoryAPI.getResellerProfileById(id);
+                //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
+
+                getProf.enqueue(new Callback<ResellerProfiles>() {
+
+                    @Override
+                    public void onResponse(Call<ResellerProfiles> call, Response<ResellerProfiles> response) {
+
+                        if (response.code() == 200)
+                        {
+                            System.out.println("Inside api");
+
+
+                            if(response.body()!=null){
+
+                                String upToNCharacters = response.body().getFullName().substring(0, Math.min(response.body().getFullName().length(), 4));
+                                if(code.equalsIgnoreCase(upToNCharacters+id)){
+
+                                    try {
+
+                                        organization.setResellerProfileId(response.body().getResellerProfileId());
+                                        resellerPercentage = response.body().getCommissionPercentage();
+                                        addOrganization(organization,null);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
+                                }else{
+                                    Toast.makeText(GetStartedScreen.this, "Reseller code is wrong", Toast.LENGTH_SHORT).show();
+                                }
+                            }else{
+                                Toast.makeText(GetStartedScreen.this, "Reseller code is wrong", Toast.LENGTH_SHORT).show();
+                            }
+
+
+
+                        }else{
+                            Toast.makeText(GetStartedScreen.this, "Reseller code is wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResellerProfiles> call, Throwable t) {
+
+                        Toast.makeText(GetStartedScreen.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+            }
+
+        });
+    }
+
+    public void getProfiles(final int id,final Organization organization,final String code ){
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+
+                final ResellerAPI subCategoryAPI = Util.getClient().create(ResellerAPI.class);
+                Call<ResellerProfiles> getProf = subCategoryAPI.getResellerProfileById(id);
+                //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
+
+                getProf.enqueue(new Callback<ResellerProfiles>() {
+
+                    @Override
+                    public void onResponse(Call<ResellerProfiles> call, Response<ResellerProfiles> response) {
+
+                        if (response.code() == 200)
+                        {
+                            System.out.println("Inside api");
+
+
+                            if(response.body()!=null){
+
+                                String upToNCharacters = response.body().getFullName().substring(0, Math.min(response.body().getFullName().length(), 4));
+                                if(code.equalsIgnoreCase(upToNCharacters+id)){
+
+                                    try {
+                                        organization.setResellerProfileId(response.body().getResellerProfileId());
+                                        resellerPercentage = response.body().getCommissionPercentage();
+                                        startPayment();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
+                                }else{
+                                    Toast.makeText(GetStartedScreen.this, "Reseller code is wrong", Toast.LENGTH_SHORT).show();
+                                }
+                            }else{
+                                Toast.makeText(GetStartedScreen.this, "Reseller code is wrong", Toast.LENGTH_SHORT).show();
+                            }
+
+
+
+                        }else{
+                            Toast.makeText(GetStartedScreen.this, "Reseller code is wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResellerProfiles> call, Throwable t) {
+
+                        Toast.makeText(GetStartedScreen.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+            }
+
+        });
+    }
 
 
 }

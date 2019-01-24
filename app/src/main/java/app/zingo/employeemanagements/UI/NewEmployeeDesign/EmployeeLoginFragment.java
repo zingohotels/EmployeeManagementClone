@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -26,6 +27,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,6 +48,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -57,6 +61,8 @@ import java.util.Timer;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.LoginDetails;
 import app.zingo.employeemanagements.Model.LoginDetailsNotificationManagers;
+import app.zingo.employeemanagements.Model.MeetingDetailsNotificationManagers;
+import app.zingo.employeemanagements.Model.Meetings;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.Service.LocationSharingServices;
 import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
@@ -67,6 +73,8 @@ import app.zingo.employeemanagements.Utils.TrackGPS;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.LoginDetailsAPI;
 import app.zingo.employeemanagements.WebApi.LoginNotificationAPI;
+import app.zingo.employeemanagements.WebApi.MeetingNotificationAPI;
+import app.zingo.employeemanagements.WebApi.MeetingsAPI;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -83,6 +91,11 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
     private TextView punchInText;
     private View punchOut;
     private TextView punchOutText;
+
+    private View punchInMeeting;
+    private TextView punchInTextMeeting;
+    private View punchOutMeeting;
+    private TextView punchOutTextMeeting;
 
 
     private Context mContext;
@@ -163,8 +176,15 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
         punchOut = layout.findViewById(R.id.punchOut);
         punchOutText = (TextView) layout.findViewById(R.id.punchOutText);
 
+        punchInMeeting = layout.findViewById(R.id.punchInMeeting);
+        punchInTextMeeting = (TextView) layout.findViewById(R.id.punchInTextMeeting);
+        punchOutMeeting = layout.findViewById(R.id.punchOutMeeting);
+        punchOutTextMeeting = (TextView) layout.findViewById(R.id.punchOutTextMeeting);
+
 
         planType = PreferenceHandler.getInstance(getActivity()).getPlanType();
+        getLoginDetails();
+        getMeetingDetails();
         if (mLocationClient == null) {
             mLocationClient = new GoogleApiClient.Builder(this.getContext())
                     .addConnectionCallbacks(this)
@@ -226,7 +246,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
                         masterloginalert("Logout");
 
-                        if(planType.contains("Advance")){
+                        if(planType.contains("Advance")||appType.equalsIgnoreCase("Trial")){
                             Intent serviceIntent = new Intent(getActivity(),LocationSharingServices.class);
                             getActivity().startService(serviceIntent);
                         }
@@ -235,7 +255,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
                 }else{
                     masterloginalert("Logout");
-                    if(planType.contains("Advance")){
+                    if(planType.contains("Advance")||appType.equalsIgnoreCase("Trial")){
                         Intent serviceIntent = new Intent(getActivity(),LocationSharingServices.class);
                         getActivity().startService(serviceIntent);
                     }
@@ -274,9 +294,178 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
             }
         });
 
+        punchInMeeting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String loginStatus = PreferenceHandler.getInstance(getActivity()).getMeetingLoginStatus();
+                String masterloginStatus = PreferenceHandler.getInstance(getActivity()).getLoginStatus();
+
+
+                if(masterloginStatus.equals("Login")){
+                    if(loginStatus!=null&&!loginStatus.isEmpty()){
+
+                        if(loginStatus.equalsIgnoreCase("Login")){
+                            //meetingloginalert("Login");
+                           // getMeetings(PreferenceHandler.getInstance(getActivity()).getMeetingId());
+
+                        }else if(loginStatus.equalsIgnoreCase("Logout")){
+
+                            meetingloginalert("Logout");
+                        }
+
+                    }else{
+                        meetingloginalert("Logout");
+                    }
+                }else{
+                    Toast.makeText(getActivity(), "First Check-in Master", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
+        punchOutMeeting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+
+                String loginStatus = PreferenceHandler.getInstance(getActivity()).getMeetingLoginStatus();
+                String masterloginStatus = PreferenceHandler.getInstance(getActivity()).getLoginStatus();
+
+
+                if(masterloginStatus.equals("Login")){
+                    if(loginStatus!=null&&!loginStatus.isEmpty()){
+
+                        if(loginStatus.equalsIgnoreCase("Login")){
+                            //meetingloginalert("Login");
+                             getMeetings(PreferenceHandler.getInstance(getActivity()).getMeetingId());
+
+                        }else if(loginStatus.equalsIgnoreCase("Logout")){
+
+                            meetingloginalert("Logout");
+                        }
+
+                    }else{
+                        meetingloginalert("Logout");
+                    }
+                }else{
+                    Toast.makeText(getActivity(), "First Check-in Master", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
         //setupLocalBucket();
 
         return this.layout;
+    }
+
+    private void getLoginDetails(){
+
+
+
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+                LoginDetailsAPI apiService = Util.getClient().create(LoginDetailsAPI.class);
+                Call<ArrayList<LoginDetails>> call = apiService.getLoginByEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
+
+                call.enqueue(new Callback<ArrayList<LoginDetails>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<LoginDetails>> call, Response<ArrayList<LoginDetails>> response) {
+                        int statusCode = response.code();
+                        if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
+
+
+
+                            ArrayList<LoginDetails> list = response.body();
+
+
+                            if (list !=null && list.size()!=0) {
+
+                                LoginDetails loginDetails = list.get(list.size()-1);
+
+                                if(loginDetails!=null){
+
+                                    String logout = loginDetails.getLogOutTime();
+                                    String login = loginDetails.getLoginTime();
+                                    String dates = loginDetails.getLoginDate();
+                                    String date= null;
+
+
+
+                                    if(dates!=null&&!dates.isEmpty()){
+
+                                        if(dates.contains("T")){
+
+                                            String logins[] = dates.split("T");
+                                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                                            SimpleDateFormat sdfs = new SimpleDateFormat("MMM dd,yyyy");
+
+                                            Date dt = null;
+                                            try {
+                                                dt = sdf.parse(logins[0]);
+                                                date = sdfs.format(dt);
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+
+                                        }
+                                    }
+
+                                    if(logout!=null&&!logout.isEmpty()&&(login!=null&&!login.isEmpty())){
+
+
+                                        punchInText.setText("Check-In");
+                                        PreferenceHandler.getInstance(getActivity()).setLoginStatus("Logout");
+
+                                    }else if(login!=null&&!login.isEmpty()&&(logout==null||logout.isEmpty())){
+
+                                        if(date!=null&&!date.isEmpty()){
+
+                                            punchInText.setText(""+login);
+
+                                        }else{
+
+                                            punchInText.setText(""+login);
+                                        }
+                                        punchOutText.setText("Check-out");
+                                        PreferenceHandler.getInstance(getActivity()).setLoginStatus("Login");
+                                        PreferenceHandler.getInstance(getActivity()).setLoginId(loginDetails.getLoginDetailsId());
+                                    }
+
+                                }
+
+
+
+
+                                //}
+
+                            }else{
+
+                            }
+
+                        }else {
+
+
+
+                            Toast.makeText(getActivity(), "Failed due to : "+response.message(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<LoginDetails>> call, Throwable t) {
+                        // Log error here since request failed
+
+                        Log.e("TAG", t.toString());
+                    }
+                });
+            }
+
+
+        });
     }
 
     public void getLoginDetails(final int id){
@@ -562,8 +751,12 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
                             float distance = locationA.distanceTo(locationB);
 
+                            if(PreferenceHandler.getInstance(getActivity()).isLocationOn()){
+                                distance = 0;
+                            }
+
                             if(distance>=0&&distance<=30){
-                                Toast.makeText(getActivity(), "distance "+distance, Toast.LENGTH_SHORT).show();
+                               // Toast.makeText(getActivity(), "distance "+distance, Toast.LENGTH_SHORT).show();
                                 SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
                                 SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
 
@@ -666,6 +859,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                         if(s!=null){
 
                             punchIn.setEnabled(false);
+                            punchOut.setEnabled(true);
 
                             dialogs.dismiss();
                             md.setLoginDetailsId(s.getLoginDetailsId());
@@ -1145,6 +1339,724 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
     }
 
+    private void getMeetingDetails(){
+
+
+
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+                MeetingsAPI apiService = Util.getClient().create(MeetingsAPI.class);
+                Call<ArrayList<Meetings>> call = apiService.getMeetingsByEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
+
+                call.enqueue(new Callback<ArrayList<Meetings>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<Meetings>> call, Response<ArrayList<Meetings>> response) {
+                        int statusCode = response.code();
+                        if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
+
+
+
+                            ArrayList<Meetings> list = response.body();
+
+
+                            if (list !=null && list.size()!=0) {
+
+
+
+
+                                Meetings loginDetails = list.get(list.size()-1);
+
+                                if(loginDetails!=null){
+                                    PreferenceHandler.getInstance(getActivity()).setMeetingId(loginDetails.getMeetingsId());
+
+                                    String logout = loginDetails.getEndTime();
+                                    String login = loginDetails.getStartTime();
+
+
+                                    if(logout!=null&&!logout.isEmpty()&&(login!=null&&!login.isEmpty())){
+
+
+
+                                        punchInTextMeeting.setText("Meeting-in");
+
+                                        punchOutMeeting.setEnabled(false);
+                                        punchInMeeting.setEnabled(true);
+                                        PreferenceHandler.getInstance(getActivity()).setMeetingLoginStatus("Logout");
+
+                                    }else if(login!=null&&!login.isEmpty()&&(logout==null||logout.isEmpty())){
+
+
+                                        punchOutTextMeeting.setText("Meeting-out");
+                                        punchInTextMeeting.setText(""+login);
+                                        punchOutMeeting.setEnabled(true);
+                                        punchInMeeting.setEnabled(false);
+                                        PreferenceHandler.getInstance(getActivity()).setMeetingLoginStatus("Login");
+                                    }
+
+                                }
+
+
+
+
+                                //}
+
+                            }else{
+
+                            }
+
+                        }else {
+
+
+                            Toast.makeText(getActivity(), "Failed due to : "+response.message(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<Meetings>> call, Throwable t) {
+                        // Log error here since request failed
+
+                        Log.e("TAG", t.toString());
+                    }
+                });
+            }
+
+
+        });
+    }
+
+
+    public void meetingloginalert(final String status){
+
+        try{
+
+            if(locationCheck()){
+                String message = "Login";
+                String option = "Meeting-In";
+
+                if(status.equalsIgnoreCase("Login")){
+
+                    message = "Do you want to Check-Out?";
+                    option = "Meeting-Out";
+
+                }else if(status.equalsIgnoreCase("Logout")){
+
+                    message = "Do you want to Check-In?";
+                    option = "Check-In";
+                }
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View views = inflater.inflate(R.layout.custom_alert_box_meeting, null);
+
+                builder.setView(views);
+                final Button mSave = (Button) views.findViewById(R.id.save);
+                mSave.setText(option);
+                final EditText mRemarks = (EditText) views.findViewById(R.id.meeting_remarks);
+                final TextInputEditText mClient = (TextInputEditText) views.findViewById(R.id.client_name);
+                final TextInputEditText mContact = (TextInputEditText) views.findViewById(R.id.client_contact);
+                final TextInputEditText mPurpose = (TextInputEditText) views.findViewById(R.id.purpose_meeting);
+
+
+                final AlertDialog dialog = builder.create();
+                dialog.show();
+                dialog.setCanceledOnTouchOutside(false);
+
+                mSave.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        String client = mClient.getText().toString();
+                        String purpose = mPurpose.getText().toString();
+                        String remark = mRemarks.getText().toString();
+                        String contact = mContact.getText().toString();
+
+                        if(client==null||client.isEmpty()){
+
+                            Toast.makeText(getActivity(), "Please mention client/hotel name", Toast.LENGTH_SHORT).show();
+
+                        }else if(purpose==null||purpose.isEmpty()){
+
+                            Toast.makeText(getActivity(), "Please mention purpose of meeting", Toast.LENGTH_SHORT).show();
+
+                        }else if(remark==null||remark.isEmpty()){
+
+                            Toast.makeText(getActivity(), "Please mention remarks about meeting", Toast.LENGTH_SHORT).show();
+
+                        }else{
+
+                            gps = new TrackGPS(getActivity());
+                            if(gps.canGetLocation())
+                            {
+                                System.out.println("Long and lat Rev"+gps.getLatitude()+" = "+gps.getLongitude());
+                                latitude = gps.getLatitude();
+                                longitude = gps.getLongitude();
+
+
+                                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+                                SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+
+                                LatLng master = new LatLng(latitude,longitude);
+                                String address = getAddress(master);
+
+                                Meetings loginDetails = new Meetings();
+                                loginDetails.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
+                                loginDetails.setStartLatitude(""+latitude);
+                                loginDetails.setStartLongitude(""+longitude);
+                                loginDetails.setStartLocation(""+address);
+                                loginDetails.setStartTime(""+sdt.format(new Date()));
+                                loginDetails.setMeetingDate(""+sdf.format(new Date()));
+                                loginDetails.setMeetingAgenda(purpose);
+                                loginDetails.setMeetingDetails(remark);
+                                loginDetails.setStatus("In Meeting");
+
+                                if(contact!=null&&!contact.isEmpty()){
+                                    loginDetails.setMeetingPersonDetails(client+"%"+contact);
+                                }else{
+                                    loginDetails.setMeetingPersonDetails(client);
+                                }
+                                try {
+
+                                    MeetingDetailsNotificationManagers md = new MeetingDetailsNotificationManagers();
+                                    md.setTitle("Meeting Details from "+PreferenceHandler.getInstance(getActivity()).getUserFullName());
+                                    md.setMessage("Meeting with "+client+" for "+purpose);
+                                    md.setLocation(address);
+                                    md.setLongitude(""+longitude);
+                                    md.setLatitude(""+latitude);
+                                    md.setMeetingDate(""+sdt.format(new Date()));
+                                    md.setStatus("In meeting");
+                                    md.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
+                                    md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
+                                    md.setMeetingPerson(client);
+                                    md.setMeetingsDetails(purpose);
+                                    md.setMeetingComments(remark);
+
+
+                                    addMeeting(loginDetails,dialog,md);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                            else
+                            {
+
+                            }
+
+                        }
+                    }
+                });
+
+            }else{
+
+            }
+
+
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+    }
+
+    public void addMeeting(final Meetings loginDetails,final AlertDialog dialogs,final MeetingDetailsNotificationManagers md) throws Exception{
+
+
+
+        final ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setMessage("Saving Details..");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        MeetingsAPI apiService = Util.getClient().create(MeetingsAPI.class);
+
+        Call<Meetings> call = apiService.addMeeting(loginDetails);
+
+        call.enqueue(new Callback<Meetings>() {
+            @Override
+            public void onResponse(Call<Meetings> call, Response<Meetings> response) {
+//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
+                try
+                {
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+
+                    int statusCode = response.code();
+                    if (statusCode == 200 || statusCode == 201) {
+
+                        Meetings s = response.body();
+
+                        if(s!=null){
+
+                            dialogs.dismiss();
+
+                            md.setMeetingsId(s.getMeetingsId());
+                            Toast.makeText(getActivity(), "You Checked in", Toast.LENGTH_SHORT).show();
+
+                            PreferenceHandler.getInstance(getActivity()).setMeetingId(s.getMeetingsId());
+
+                            saveMeetingNotification(md);
+
+
+                            punchOutTextMeeting.setText("Meeting-Out");
+                            punchInTextMeeting.setText(""+s.getStartTime());
+                            punchInMeeting.setEnabled(false);
+                            punchOutMeeting.setEnabled(true);
+                            PreferenceHandler.getInstance(getActivity()).setMeetingLoginStatus("Login");
+
+
+                        }
+
+
+
+
+                    }else {
+                        Toast.makeText(getActivity(), "Failed Due to "+response.message(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+                    ex.printStackTrace();
+                }
+//                callGetStartEnd();
+            }
+
+            @Override
+            public void onFailure(Call<Meetings> call, Throwable t) {
+
+                if(dialog != null && dialog.isShowing())
+                {
+                    dialog.dismiss();
+                }
+                Toast.makeText(getActivity(), "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("TAG", t.toString());
+            }
+        });
+
+
+
+    }
+
+
+    public void getMeetings(final int id){
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+
+                final MeetingsAPI subCategoryAPI = Util.getClient().create(MeetingsAPI.class);
+                Call<Meetings> getProf = subCategoryAPI.getMeetingById(id);
+                //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
+
+                getProf.enqueue(new Callback<Meetings>() {
+
+                    @Override
+                    public void onResponse(Call<Meetings> call, Response<Meetings> response) {
+
+                        if (response.code() == 200||response.code() == 201||response.code() == 204)
+                        {
+                            System.out.println("Inside api");
+
+                            final Meetings dto = response.body();
+
+                            if(dto!=null){
+
+                                try{
+
+                                    if(locationCheck()){
+                                        String message = "Login";
+
+
+
+
+                                        message = "Do you want to Check-Out?";
+                                        String option = "Meeting-Out";
+
+
+
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                        View views = inflater.inflate(R.layout.custom_alert_box_meeting, null);
+
+                                        builder.setView(views);
+                                        final Button mSave = (Button) views.findViewById(R.id.save);
+                                        mSave.setText(option);
+                                        final EditText mRemarks = (EditText) views.findViewById(R.id.meeting_remarks);
+                                        final TextInputEditText mClient = (TextInputEditText) views.findViewById(R.id.client_name);
+                                        final TextInputEditText mContact = (TextInputEditText) views.findViewById(R.id.client_contact);
+                                        final TextInputEditText mPurpose = (TextInputEditText) views.findViewById(R.id.purpose_meeting);
+
+                                        mRemarks.setText(""+dto.getMeetingDetails());
+                                        if(dto.getMeetingPersonDetails().contains("%")){
+
+                                            String person[] = dto.getMeetingPersonDetails().split("%");
+                                            mContact.setText(""+person[1]);
+                                            mClient.setText(""+person[0]);
+                                        }else{
+                                            mClient.setText(""+dto.getMeetingPersonDetails());
+                                        }
+
+                                        mPurpose.setText(""+dto.getMeetingAgenda());
+
+                                        final AlertDialog dialogs = builder.create();
+                                        dialogs.show();
+                                        dialogs.setCanceledOnTouchOutside(true);
+
+                                        mSave.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+
+                                                String client = mClient.getText().toString();
+                                                String purpose = mPurpose.getText().toString();
+                                                String remark = mRemarks.getText().toString();
+                                                String contact = mContact.getText().toString();
+
+                                                if(client==null||client.isEmpty()){
+
+                                                    Toast.makeText(getActivity(), "Please mention client/hotel name", Toast.LENGTH_SHORT).show();
+
+                                                }else if(purpose==null||purpose.isEmpty()){
+
+                                                    Toast.makeText(getActivity(), "Please mention purpose of meeting", Toast.LENGTH_SHORT).show();
+
+                                                }else if(remark==null||remark.isEmpty()){
+
+                                                    Toast.makeText(getActivity(), "Please mention remarks about meeting", Toast.LENGTH_SHORT).show();
+
+                                                }else{
+
+                                                    gps = new TrackGPS(getActivity());
+                                                    if(gps.canGetLocation())
+                                                    {
+                                                        System.out.println("Long and lat Rev"+gps.getLatitude()+" = "+gps.getLongitude());
+                                                        latitude = gps.getLatitude();
+                                                        longitude = gps.getLongitude();
+
+
+                                                        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+                                                        SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+
+                                                        LatLng master = new LatLng(latitude,longitude);
+                                                        String address = getAddress(master);
+
+                                                        Meetings loginDetails = dto;
+                                                        loginDetails.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
+                                                        loginDetails.setEndLatitude(""+latitude);
+                                                        loginDetails.setEndLongitude(""+longitude);
+                                                        loginDetails.setEndLocation(""+address);
+                                                        loginDetails.setEndTime(""+sdt.format(new Date()));
+                                                        loginDetails.setMeetingDate(""+sdf.format(new Date()));
+                                                        loginDetails.setMeetingAgenda(purpose);
+                                                        loginDetails.setMeetingDetails(remark);
+                                                        loginDetails.setStatus("Completed");
+
+                                                        if(contact!=null&&!contact.isEmpty()){
+                                                            loginDetails.setMeetingPersonDetails(client+"%"+contact);
+                                                        }else{
+                                                            loginDetails.setMeetingPersonDetails(client);
+                                                        }
+                                                        try {
+
+                                                            MeetingDetailsNotificationManagers md = new MeetingDetailsNotificationManagers();
+                                                            md.setTitle("Meeting Details from "+PreferenceHandler.getInstance(getActivity()).getUserFullName());
+                                                            md.setMessage("Meeting with "+client+" for "+purpose);
+                                                            md.setLocation(address);
+                                                            md.setLongitude(""+longitude);
+                                                            md.setLatitude(""+latitude);
+                                                            md.setMeetingDate(""+sdt.format(new Date()));
+                                                            md.setStatus("Completed");
+                                                            md.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
+                                                            md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
+                                                            md.setMeetingPerson(client);
+                                                            md.setMeetingsId(loginDetails.getMeetingsId());
+                                                            md.setMeetingsDetails(purpose);
+                                                            md.setMeetingComments(remark);
+                                                            updateMeeting(loginDetails,dialogs,md);
+
+                                                        } catch (Exception e) {
+                                                            e.printStackTrace();
+                                                        }
+
+                                                    }
+                                                    else
+                                                    {
+
+                                                    }
+
+                                                }
+                                            }
+                                        });
+
+                                    }else{
+
+                                    }
+
+
+
+
+                                }catch (Exception e){
+                                    e.printStackTrace();
+                                }
+
+                            }
+
+
+
+
+                        }else{
+
+
+                            //meet
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Meetings> call, Throwable t) {
+
+                    }
+                });
+
+            }
+
+        });
+    }
+
+    public void updateMeeting(final Meetings loginDetails,final AlertDialog dialogs,final MeetingDetailsNotificationManagers md) throws Exception{
+
+
+
+        final ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setMessage("Saving Details..");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        MeetingsAPI apiService = Util.getClient().create(MeetingsAPI.class);
+
+        Call<Meetings> call = apiService.updateMeetingById(loginDetails.getMeetingsId(),loginDetails);
+
+        call.enqueue(new Callback<Meetings>() {
+            @Override
+            public void onResponse(Call<Meetings> call, Response<Meetings> response) {
+//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
+                try
+                {
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+
+                    int statusCode = response.code();
+                    if (statusCode == 200 || statusCode == 201||response.code()==204) {
+
+
+                        dialogs.dismiss();
+                        saveMeetingNotification(md);
+
+                        Toast.makeText(getActivity(), "You Checked out", Toast.LENGTH_SHORT).show();
+
+                        PreferenceHandler.getInstance(getActivity()).setMeetingId(0);
+                        getMeetingDetails();
+
+                        punchInMeeting.setEnabled(true);
+                        punchOutMeeting.setEnabled(false);
+
+
+                        punchInTextMeeting.setText("Meeting-In");
+                        PreferenceHandler.getInstance(getActivity()).setMeetingLoginStatus("Logout");
+
+
+
+                    }else {
+                        Toast.makeText(getActivity(), "Failed Due to "+response.message(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+                    ex.printStackTrace();
+                }
+//                callGetStartEnd();
+            }
+
+            @Override
+            public void onFailure(Call<Meetings> call, Throwable t) {
+
+                if(dialog != null && dialog.isShowing())
+                {
+                    dialog.dismiss();
+                }
+                Toast.makeText(getActivity(), "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("TAG", t.toString());
+            }
+        });
+
+
+
+    }
+
+    public void saveMeetingNotification(final MeetingDetailsNotificationManagers md) throws Exception{
+
+
+
+        final ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setMessage("Saving Details..");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        MeetingNotificationAPI apiService = Util.getClient().create(MeetingNotificationAPI.class);
+
+        Call<MeetingDetailsNotificationManagers> call = apiService.saveMeetingNotification(md);
+
+        call.enqueue(new Callback<MeetingDetailsNotificationManagers>() {
+            @Override
+            public void onResponse(Call<MeetingDetailsNotificationManagers> call, Response<MeetingDetailsNotificationManagers> response) {
+//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
+                try
+                {
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+
+                    int statusCode = response.code();
+                    if (statusCode == 200 || statusCode == 201) {
+
+                        MeetingDetailsNotificationManagers s = response.body();
+
+                        if(s!=null){
+
+                            MeetingDetailsNotificationManagers md = new MeetingDetailsNotificationManagers();
+                            md.setTitle(s.getTitle());
+                            md.setMessage(s.getMessage());
+                            md.setLocation(s.getLocation());
+                            md.setLongitude(""+s.getLongitude());
+                            md.setLatitude(""+s.getLatitude());
+                            md.setMeetingDate(""+s.getMeetingDate());
+                            md.setStatus(s.getStatus());
+                            md.setEmployeeId(s.getManagerId());
+                            md.setManagerId(s.getEmployeeId());
+                            md.setMeetingPerson(s.getMeetingPerson());
+                            md.setMeetingsDetails(s.getMeetingsDetails());
+                            md.setMeetingComments(s.getMeetingComments());
+                            md.setMeetingsId(s.getMeetingsId());
+                            md.setSenderId(Constants.SENDER_ID);
+                            md.setServerId(Constants.SERVER_ID);
+
+                            sendMeetingNotification(md);
+
+                        }
+
+
+
+
+                    }else {
+                        Toast.makeText(getActivity(), "Failed Due to "+response.message(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+                    ex.printStackTrace();
+                }
+//                callGetStartEnd();
+            }
+
+            @Override
+            public void onFailure(Call<MeetingDetailsNotificationManagers> call, Throwable t) {
+
+                if(dialog != null && dialog.isShowing())
+                {
+                    dialog.dismiss();
+                }
+                Toast.makeText(getActivity(), "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("TAG", t.toString());
+            }
+        });
+
+
+
+    }
+
+    public void sendMeetingNotification(final MeetingDetailsNotificationManagers md) throws Exception{
+
+
+
+        final ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setMessage("Sending Details..");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        MeetingNotificationAPI apiService = Util.getClient().create(MeetingNotificationAPI.class);
+
+        Call<ArrayList<String>> call = apiService.sendMeetingNotification(md);
+
+        call.enqueue(new Callback<ArrayList<String>>() {
+            @Override
+            public void onResponse(Call<ArrayList<String>> call, Response<ArrayList<String>> response) {
+//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
+                try
+                {
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+
+                    int statusCode = response.code();
+                    if (statusCode == 200 || statusCode == 201) {
+
+
+
+
+
+                    }else {
+                        Toast.makeText(getActivity(), "Failed Due to "+response.message(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+                    ex.printStackTrace();
+                }
+//                callGetStartEnd();
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<String>> call, Throwable t) {
+
+                if(dialog != null && dialog.isShowing())
+                {
+                    dialog.dismiss();
+                }
+                Toast.makeText(getActivity(), "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("TAG", t.toString());
+            }
+        });
+
+
+
+    }
 
 }
 

@@ -15,9 +15,12 @@ import com.itextpdf.text.pdf.StringUtils;
 
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Admin.DashBoardAdmin;
+import app.zingo.employeemanagements.UI.Common.ChangePasswordScreen;
 import app.zingo.employeemanagements.UI.Company.OrganizationDetailScree;
 import app.zingo.employeemanagements.UI.Employee.EmployeeListScreen;
 import app.zingo.employeemanagements.UI.LandingScreen;
+import app.zingo.employeemanagements.UI.NewEmployeeDesign.ExpenseManageHost;
+import app.zingo.employeemanagements.UI.PlanMainHostScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 
 /**
@@ -28,8 +31,8 @@ public class AdminHomeFragment extends Fragment {
     final String TAG = "Employer Dashboard";
     View layout;
     LinearLayout attendance,leaveApplications,employees;
-    LinearLayout departments,liveTracking,tasks;
-    LinearLayout salary,logout,deptOrg;
+    LinearLayout departments,liveTracking,tasks,expenses;
+    LinearLayout salary,logout,deptOrg,chngPwd,plans,reports;
 
 
     public AdminHomeFragment() {
@@ -94,9 +97,15 @@ public class AdminHomeFragment extends Fragment {
         liveTracking = (LinearLayout) this.layout.findViewById(R.id.live_tracking);
         tasks = (LinearLayout) this.layout.findViewById(R.id.task_layout);
 
+        expenses = (LinearLayout) this.layout.findViewById(R.id.expenses_mgmt);
+        plans = (LinearLayout) this.layout.findViewById(R.id.plan_detail);
+
+
         salary = (LinearLayout) this.layout.findViewById(R.id.salary);
         deptOrg = (LinearLayout) this.layout.findViewById(R.id.department_org);
         logout = (LinearLayout) this.layout.findViewById(R.id.logout);
+        chngPwd = (LinearLayout) this.layout.findViewById(R.id.change_password);
+        reports = (LinearLayout) this.layout.findViewById(R.id.report_mgmt);
 
         //App new version available
         View updatedText = this.layout.findViewById(R.id.updateText);
@@ -126,6 +135,13 @@ public class AdminHomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 openMenuViews(employees);
+            }
+        });
+
+        expenses.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMenuViews(expenses);
             }
         });
 
@@ -169,6 +185,24 @@ public class AdminHomeFragment extends Fragment {
                 openMenuViews(logout);
             }
         });
+        chngPwd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMenuViews(chngPwd);
+            }
+        });
+        plans.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMenuViews(plans);
+            }
+        });
+        reports.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMenuViews(reports);
+            }
+        });
 
     }
 
@@ -179,16 +213,30 @@ public class AdminHomeFragment extends Fragment {
             Intent employee = new Intent(getContext(), EmployeeUpdateListScreen.class);
             getContext().startActivity(employee);
 
+        } else if (view.getId() == R.id.plan_detail) {
+            Intent employee = new Intent(getContext(), PlanMainHostScreen.class);
+            getContext().startActivity(employee);
+
         } else if (view.getId() == R.id.attendance) {
             intent = new Intent(getContext(), EmployeeListScreen.class);
             intent.putExtra("viewId", view.getId());
             intent.putExtra("Type","attendance");
+            getContext().startActivity(intent);
+        }else if (view.getId() == R.id.report_mgmt) {
+            intent = new Intent(getContext(), EmployeeListScreen.class);
+            intent.putExtra("viewId", view.getId());
+            intent.putExtra("Type","Report");
             getContext().startActivity(intent);
         } else if (view.getId() == R.id.leaveApplications) {
             intent = new Intent(getContext(), EmployeeListScreen.class);
             intent.putExtra("Type","Leave");
             intent.putExtra("viewId", view.getId());
             getContext().startActivity(intent);
+        }else if (view.getId() == R.id.expenses_mgmt) {
+            Intent live = new Intent(getActivity(), EmployeeListScreen.class);
+            live.putExtra("Type","Expense");
+            getContext().startActivity(live);
+
         }else if (view.getId() == R.id.department) {
             Intent organization = new Intent(getActivity(), OrganizationDetailScree.class);
             getContext().startActivity(organization);
@@ -208,6 +256,9 @@ public class AdminHomeFragment extends Fragment {
             Intent salary = new Intent(getActivity(), EmployeeListScreen.class);
             salary.putExtra("Type","Salary");
             startActivity(salary);
+        }else if (view.getId() == R.id.change_password) {
+            Intent chnage = new Intent(getActivity(), ChangePasswordScreen.class);
+            startActivity(chnage);
         }else if (view.getId() == R.id.logout) {
             PreferenceHandler.getInstance(getActivity()).clear();
 

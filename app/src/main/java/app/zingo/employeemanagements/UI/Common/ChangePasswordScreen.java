@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Admin.DashBoardAdmin;
+import app.zingo.employeemanagements.UI.LandingScreen;
 import app.zingo.employeemanagements.UI.Login.LoginScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
@@ -200,7 +201,7 @@ public class ChangePasswordScreen extends AppCompatActivity {
                         {
                             PreferenceHandler.getInstance(ChangePasswordScreen.this).clear();
 
-                            Intent log = new Intent(ChangePasswordScreen.this, LoginScreen.class);
+                            Intent log = new Intent(ChangePasswordScreen.this, LandingScreen.class);
                             log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                             Toast.makeText(ChangePasswordScreen.this,"Logout",Toast.LENGTH_SHORT).show();

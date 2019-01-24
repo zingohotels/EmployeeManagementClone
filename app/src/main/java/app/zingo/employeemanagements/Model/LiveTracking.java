@@ -30,6 +30,9 @@ public class LiveTracking implements Serializable {
     @SerializedName("TrackingDate")
     public String TrackingDate;
 
+    @SerializedName("TrackingTime")
+    public String TrackingTime;
+
     public int getLiveTrackingDetailsId() {
         return LiveTrackingDetailsId;
     }
@@ -76,6 +79,14 @@ public class LiveTracking implements Serializable {
 
     public void setTrackingDate(String trackingDate) {
         TrackingDate = trackingDate;
+    }
+
+    public String getTrackingTime() {
+        return TrackingTime;
+    }
+
+    public void setTrackingTime(String trackingTime) {
+        TrackingTime = trackingTime;
     }
 
     public static Comparator compareLiveTrack = new Comparator() {

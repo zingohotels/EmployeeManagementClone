@@ -47,6 +47,7 @@ import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Admin.CreatePaySlip;
 import app.zingo.employeemanagements.UI.Company.OrganizationDetailScree;
 import app.zingo.employeemanagements.UI.Employee.EmployeeListScreen;
+import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
@@ -67,7 +68,7 @@ public class AdminDashBoardFragment extends Fragment {
     final String TAG = "Employer Dash";
     View layout;
     RecyclerView mTaskList;
-    LinearLayout mTaskLayout;
+    LinearLayout mTaskLayout,mPendingLayout;
     private TaskListAdapter mAdapter;
     MyRegulerText mDeptCount,mEmployeeCount,mOnTask,mPending,mEmployeePresent,mEmployeeAbsent,
                     mLeaveEmployee,mUnmarkedEmployee;
@@ -124,6 +125,7 @@ public class AdminDashBoardFragment extends Fragment {
 
             mTaskList = (RecyclerView) layout.findViewById(R.id.task_list_dash);
             mTaskLayout = (LinearLayout) layout.findViewById(R.id.today_task_list);
+            mPendingLayout = (LinearLayout) layout.findViewById(R.id.pending_task_layout);
             mTaskLayout.setVisibility(View.GONE);
             mDeptCount = (MyRegulerText)layout.findViewById(R.id.dept_count_text);
             mEmployeeCount = (MyRegulerText)layout.findViewById(R.id.employee_count_text);
@@ -139,8 +141,15 @@ public class AdminDashBoardFragment extends Fragment {
             preEmpId = new ArrayList<>();
             absEmpId = new ArrayList<>();
             all = new ArrayList<>();
-            getDepartment();
-            getEmployees();
+
+            if(PreferenceHandler.getInstance(getActivity()).getCompanyId()!=0){
+                getDepartment();
+                getEmployees();
+            }else{
+                Intent error = new Intent(getActivity(),InternalServerErrorScreen.class);
+                startActivity(error);
+            }
+
 
 
 
@@ -172,6 +181,20 @@ public class AdminDashBoardFragment extends Fragment {
                 }, delay);
             }
 
+            mPendingLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if(pendingTasks!=null&&pendingTasks.size()!=0){
+                        Intent pending = new Intent(getActivity(),PendingTasks.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("PendingTasks",pendingTasks);
+                        pending.putExtras(bundle);
+                        startActivity(pending);
+                    }
+
+                }
+            });
 
             return this.layout;
         }catch(Exception e){
@@ -213,7 +236,11 @@ public class AdminDashBoardFragment extends Fragment {
                                 progressDialog.dismiss();*/
                             ArrayList<Employee> list = response.body();
 
-
+                            employeeTasks = new ArrayList<>();
+                            pendingTasks = new ArrayList<>();
+                            completedTasks = new ArrayList<>();
+                            closedTasks = new ArrayList<>();
+                            onTask = new ArrayList<>();
                             if (list !=null && list.size()!=0) {
 
                                 ArrayList<Employee> employees = new ArrayList<>();
@@ -444,7 +471,7 @@ public class AdminDashBoardFragment extends Fragment {
                             Toast.makeText(getContext(), "Department Creted Successfully ", Toast.LENGTH_SHORT).show();
 
                             dialogs.dismiss();
-                            Intent employeeList = new Intent(getContext(), EmployeeListScreen.class);
+                            Intent employeeList = new Intent(getContext(), DepartmentLilstScreen.class);
                             getActivity().startActivity(employeeList);
 
 
@@ -509,11 +536,7 @@ public class AdminDashBoardFragment extends Fragment {
 
                             ArrayList<Tasks> list = response.body();
                             ArrayList<Tasks> todayTasks = new ArrayList<>();
-                            employeeTasks = new ArrayList<>();
-                            pendingTasks = new ArrayList<>();
-                            completedTasks = new ArrayList<>();
-                            closedTasks = new ArrayList<>();
-                            onTask = new ArrayList<>();
+
 
                             Date date = new Date();
                             Date adate = new Date();
@@ -589,8 +612,6 @@ public class AdminDashBoardFragment extends Fragment {
 
                                                 todayTasks.add(task);
 
-                                            }else if(task.getStatus().equalsIgnoreCase("Pending")){
-                                                todayTasks.add(task);
                                             }
                                         }
 
@@ -617,13 +638,19 @@ public class AdminDashBoardFragment extends Fragment {
 
                                 if(employeeTasks!=null&&employeeTasks.size()!=0){
 
-                                    mTaskLayout.setVisibility(View.VISIBLE);
+                                    if(todayTasks!=null&&todayTasks.size()!=0){
+                                        mTaskLayout.setVisibility(View.VISIBLE);
 
-                                    mAdapter = new TaskListAdapter(getContext(),todayTasks);
-                                    mTaskList.setAdapter(mAdapter);
+                                        mAdapter = new TaskListAdapter(getContext(),todayTasks);
+                                        mTaskList.setAdapter(mAdapter);
+                                    }
+
+
 
                                     mOnTask.setText(""+onTasks);
                                     mPending.setText(""+pendingTask);
+
+
                                 }else{
 
                                 }
@@ -718,9 +745,6 @@ public class AdminDashBoardFragment extends Fragment {
     }
 
     private void getApprovedLeaveDetails(final int employeeId){
-
-
-
 
         new ThreadExecuter().execute(new Runnable() {
             @Override

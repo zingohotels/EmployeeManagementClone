@@ -53,6 +53,8 @@ import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Company.CreateCompany;
 import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
 import app.zingo.employeemanagements.UI.Employee.LeaveTakenDays;
+import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
+import app.zingo.employeemanagements.UI.LandingScreen;
 import app.zingo.employeemanagements.UI.Login.LoginScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
@@ -184,7 +186,23 @@ public class CreatePaySlip extends AppCompatActivity {
                 if(employee.getDepartment()!=null){
 
                     mDepartment.setText(""+employee.getDepartment().getDepartmentName());
-                    getCompany(employee.getDepartment().getOrganizationId());
+
+                    try {
+
+                        if(employee.getDepartment().getOrganizationId()!=0){
+                            getCompany(employee.getDepartment().getOrganizationId());
+                        }else{
+                            Intent i = new Intent(CreatePaySlip.this, InternalServerErrorScreen.class);
+
+                            startActivity(i);
+                        }
+
+                    }catch (Exception w){
+                        w.printStackTrace();
+                        Intent i = new Intent(CreatePaySlip.this, InternalServerErrorScreen.class);
+
+                        startActivity(i);
+                    }
                 }else{
                     getDepartment(employee.getDepartmentId(),employee.getEmployeeId());
                 }
@@ -775,7 +793,14 @@ public class CreatePaySlip extends AppCompatActivity {
                             if(response.body()!=null){
                                 mDepartment.setText(""+response.body().getDepartmentName());
                             }
-                            getCompany(response.body().getOrganizationId());
+                            try {
+                                getCompany(response.body().getOrganizationId());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Intent i = new Intent(CreatePaySlip.this, InternalServerErrorScreen.class);
+
+                                startActivity(i);
+                            }
 
                             String company = PreferenceHandler.getInstance(CreatePaySlip.this).getCompanyName();
 
@@ -788,7 +813,14 @@ public class CreatePaySlip extends AppCompatActivity {
                                     mEId.setText(company.substring(0,2)+""+employeeId);
                                 }
                             }else{
-                                getCompany(response.body().getOrganizationId());
+                                try {
+                                    getCompany(response.body().getOrganizationId());
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    Intent i = new Intent(CreatePaySlip.this, InternalServerErrorScreen.class);
+
+                                    startActivity(i);
+                                }
                             }
 
 
@@ -850,7 +882,7 @@ public class CreatePaySlip extends AppCompatActivity {
         });
     }
 
-    public void getCompany(final int id){
+    public void getCompany(final int id) throws Exception{
 
         new ThreadExecuter().execute(new Runnable() {
             @Override

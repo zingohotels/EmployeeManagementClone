@@ -115,7 +115,7 @@ public class EmployeeUpdateListScreen extends AppCompatActivity {
                                     EmployeeUpdateAdapter adapter = new EmployeeUpdateAdapter(EmployeeUpdateListScreen.this, employees,type);
                                     mProfileList.setAdapter(adapter);
 
-                                    if(PreferenceHandler.getInstance(EmployeeUpdateListScreen.this).getEmployeeLimit()>=employees.size()){
+                                    if(PreferenceHandler.getInstance(EmployeeUpdateListScreen.this).getEmployeeLimit()<=employees.size()){
                                         mAddProfiles.setVisibility(View.GONE);
                                     }
                                 }else{

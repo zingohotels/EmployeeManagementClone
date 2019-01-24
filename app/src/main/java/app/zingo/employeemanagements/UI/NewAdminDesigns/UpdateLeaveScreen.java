@@ -15,15 +15,18 @@ import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
+import app.zingo.employeemanagements.Adapter.LeaveTakenEmployeeAdapter;
 import app.zingo.employeemanagements.Model.LeaveNotificationManagers;
 import app.zingo.employeemanagements.Model.Leaves;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Employee.ApplyLeaveScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
+import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.LeaveAPI;
 import retrofit2.Call;
@@ -39,6 +42,7 @@ public class UpdateLeaveScreen extends AppCompatActivity {
 
     Leaves leavess;
     String[] leaveTypes,leaveStauses;
+    int leaveId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,10 +91,13 @@ public class UpdateLeaveScreen extends AppCompatActivity {
 
             if(bundle!=null){
                 leavess = (Leaves)bundle.getSerializable("Leaves");
+                leaveId = bundle.getInt("LeaveId");
             }
 
             if(leavess!=null){
                 setData(leavess);
+            }else if(leaveId!=0){
+                getLeaveDetails(leaveId);
             }
 
 
@@ -112,7 +119,7 @@ public class UpdateLeaveScreen extends AppCompatActivity {
 
             try {
                 Date afromDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
-                froms = new SimpleDateFormat("dd MMM yyyy").format(afromDate);
+                froms = new SimpleDateFormat("MMM dd,yyyy").format(afromDate);
                 mFrom.setText(""+froms);
 
             } catch (ParseException e) {
@@ -128,7 +135,7 @@ public class UpdateLeaveScreen extends AppCompatActivity {
 
             try {
                 Date afromDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
-                tos = new SimpleDateFormat("dd MMM yyyy").format(afromDate);
+                tos = new SimpleDateFormat("MMM dd,yyyy").format(afromDate);
                 mTo.setText(""+tos);
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -366,5 +373,65 @@ public class UpdateLeaveScreen extends AppCompatActivity {
         }
 
 
+    }
+
+    private void getLeaveDetails(final int leaveId){
+
+
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Loading Details..");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+                LeaveAPI apiService = Util.getClient().create(LeaveAPI.class);
+                Call<Leaves> call = apiService.getLeaveById(leaveId);
+
+                call.enqueue(new Callback<Leaves>() {
+                    @Override
+                    public void onResponse(Call<Leaves> call, Response<Leaves> response) {
+                        int statusCode = response.code();
+                        if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
+
+
+                            if (progressDialog!=null)
+                                progressDialog.dismiss();
+                            Leaves list = response.body();
+
+                            if(list!=null){
+
+                                setData(list);
+
+                            }else{
+                                Toast.makeText(UpdateLeaveScreen.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                            }
+
+
+
+
+
+                        }else {
+
+                            if (progressDialog!=null)
+                                progressDialog.dismiss();
+
+                            Toast.makeText(UpdateLeaveScreen.this, "Failed due to : "+response.message(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Leaves> call, Throwable t) {
+                        // Log error here since request failed
+                        if (progressDialog!=null)
+                            progressDialog.dismiss();
+                        Log.e("TAG", t.toString());
+                    }
+                });
+            }
+
+
+        });
     }
 }

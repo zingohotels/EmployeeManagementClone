@@ -71,18 +71,25 @@ public class LocationSharingServices extends Service {
         try {
 
             if(locationCheck()){
+                gps= new TrackGPS(LocationSharingServices.this);
                 if(gps.canGetLocation())
                 {
                     System.out.println("Long and lat Rev"+gps.getLatitude()+" = "+gps.getLongitude());
                     double latitude = gps.getLatitude();
                     double longitude = gps.getLongitude();
 
-                    LiveTracking liveTracking = new LiveTracking();
-                    liveTracking.setEmployeeId(PreferenceHandler.getInstance(LocationSharingServices.this).getUserId());
-                    liveTracking.setLatitude(""+latitude);
-                    liveTracking.setLongitude(""+longitude);
-                    liveTracking.setTrackingDate(new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new Date()));
-                    addLiveTracking(liveTracking);
+                    if(latitude!=0&&longitude!=0){
+                        LiveTracking liveTracking = new LiveTracking();
+                        liveTracking.setEmployeeId(PreferenceHandler.getInstance(LocationSharingServices.this).getUserId());
+                        liveTracking.setLatitude(""+latitude);
+                        liveTracking.setLongitude(""+longitude);
+                        liveTracking.setTrackingDate(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
+                        liveTracking.setTrackingTime(new SimpleDateFormat("HH:mm:ss").format(new Date()));
+                        //liveTracking.setTrackingDate("01/02/2019");
+                        addLiveTracking(liveTracking);
+                    }
+
+
 
                 }
                 else

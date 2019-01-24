@@ -38,7 +38,7 @@ import retrofit2.Response;
 public class DailyTargetsForEmployeeActivity extends AppCompatActivity {
 
 
-    FloatingActionButton floatingActionButton;
+    FloatingActionButton floatingActionButton,refresh;
     View layout;
     private TaskListAdapter mAdapter;
     RecyclerView mTaskList;
@@ -87,6 +87,7 @@ public class DailyTargetsForEmployeeActivity extends AppCompatActivity {
            // this.prevDay = (ImageView) findViewById(R.id.previousDay);
            // this.nextDay = (ImageView) findViewById(R.id.nextDay);
             this.floatingActionButton = (FloatingActionButton) findViewById(R.id.addTargetOption);
+            this.refresh = (FloatingActionButton) findViewById(R.id.refresh);
             totalTargets = (TextView) findViewById(R.id.totalTargets);
             openTargets = (TextView) findViewById(R.id.openTargets);
             closedTargets = (TextView) findViewById(R.id.closedTargets);
@@ -106,6 +107,18 @@ public class DailyTargetsForEmployeeActivity extends AppCompatActivity {
                     Intent createTask = new Intent(DailyTargetsForEmployeeActivity.this, CreateTaskScreen.class);
                     createTask.putExtra("EmployeeId", mEmployeeId);
                     startActivity(createTask);
+
+                }
+            });
+
+            refresh.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Intent createTask = new Intent(DailyTargetsForEmployeeActivity.this, DailyTargetsForEmployeeActivity.class);
+                    createTask.putExtra("ProfileId", mEmployeeId);
+                    startActivity(createTask);
+                    DailyTargetsForEmployeeActivity.this.finish();
 
                 }
             });

@@ -10,6 +10,7 @@
     <string name="Maribel_Suit">Maribel_Suit</string>
     <string name="arial">arial</string>
     <string name="Mistral">Mistral</string>
+    <string name="CooperBlack">Cooper_Black_Regular</string>
 
     <string name="file_provider_authority" translatable="false">app.zingo.employeemanagements.fileprovider</string>
 
@@ -47,6 +48,14 @@
         <item>Pending</item>
         <item>Approved</item>
         <item>Rejected</item>
+
+    </string-array>
+
+    <string-array name="task_status">
+        <item>Pending</item>
+        <item>On-Going</item>
+        <item>Completed</item>
+        <item>Closed</item>
 
     </string-array>
 
@@ -153,6 +162,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="renew_alert_message">Dear Customer, Your EMS Subscription Expires Soon.\n Renew Now to Avoid Deactivation</string>
+    <string name="renew_alert_message">Dear Customer, Your EMS Subscription Expired.\nUpdate your plan and use our services. </string>
+    <string name="error_code_expire">Error Code: EC_E05</string>
 
 </resources>

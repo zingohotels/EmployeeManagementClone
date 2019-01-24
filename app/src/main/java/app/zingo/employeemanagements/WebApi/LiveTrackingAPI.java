@@ -20,6 +20,9 @@ public interface LiveTrackingAPI {
     @GET("LiveTrackingDetails/GetliveTrackingDetailsByEmployeeId/{EmployeeId}")
     Call<ArrayList<LiveTracking>> getLiveTrackingByEmployeeId(@Path("EmployeeId") int id);
 
+    @POST("LiveTrackingDetails/GetliveTrackingDetailsByEmployeeIdAndDate")
+    Call<ArrayList<LiveTracking>> getLiveTrackingByEmployeeIdAndDate(@Body LiveTracking details);
+
     @POST("LiveTrackingDetails")
     Call<LiveTracking> addLiveTracking(@Body LiveTracking details);
 

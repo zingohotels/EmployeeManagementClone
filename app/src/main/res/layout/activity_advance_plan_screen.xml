@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -27,7 +27,7 @@
                 android:textSize="18sp"
                 android:textColor="@color/colorPrimaryDark"
                 android:layout_margin="5dp"
-                android:text="It has minimum features"
+                android:text="Key features"
                 />
 
 
@@ -45,6 +45,15 @@
             <app.zingo.employeemanagements.Custom.MyRegulerText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="\u25BA Live Tracking"
+                android:layout_margin="5dp"
+                android:textColor="@color/text_black"
+                />
+
+
+            <app.zingo.employeemanagements.Custom.MyRegulerText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:text="\u25BA Attendance Management"
                 android:layout_margin="5dp"
                 android:textColor="@color/text_black"
@@ -54,7 +63,40 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="\u25BA Leave Management"
-                android:layout_marginLeft="5dp"
+                android:layout_margin="5dp"
+                android:textColor="@color/text_black"
+                />
+
+            <app.zingo.employeemanagements.Custom.MyRegulerText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="\u25BA Salary Management"
+                android:layout_margin="5dp"
+                android:textColor="@color/text_black"
+                />
+
+            <app.zingo.employeemanagements.Custom.MyRegulerText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="\u25BA Task Management"
+                android:layout_margin="5dp"
+                android:textColor="@color/text_black"
+                />
+
+            <app.zingo.employeemanagements.Custom.MyRegulerText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="\u25BA Expense Management"
+                android:layout_margin="5dp"
+                android:textColor="@color/text_black"
+                />
+
+
+            <app.zingo.employeemanagements.Custom.MyRegulerText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="\u25BA Meeting Management"
+                android:layout_margin="5dp"
                 android:textColor="@color/text_black"
                 />
 
@@ -98,7 +140,7 @@
                     android:textStyle="bold"
                     android:textColor="@color/colorPrimaryDark"
                     android:layout_margin="5dp"
-                    android:text="Rs 95/mo per person"
+                    android:text="Rs 95/mo per Employee"
                     />
 
                 <app.zingo.employeemanagements.Custom.MyRegulerText
@@ -109,6 +151,7 @@
                     android:background="@drawable/button_primary_dark"
                     android:layout_margin="5dp"
                     android:textAlignment="center"
+                    android:visibility="gone"
                     android:gravity="center"
                     android:padding="5dp"
                     android:text="Buy Now"
@@ -170,7 +213,7 @@
                     android:textStyle="bold"
                     android:textColor="@color/colorPrimaryDark"
                     android:layout_margin="5dp"
-                    android:text="Rs 80/mo per person"
+                    android:text="Rs 80/mo per Employee"
                     />
 
                 <app.zingo.employeemanagements.Custom.MyRegulerText
@@ -181,6 +224,7 @@
                     android:background="@drawable/button_primary_dark"
                     android:layout_margin="5dp"
                     android:textAlignment="center"
+                    android:visibility="gone"
                     android:gravity="center"
                     android:padding="5dp"
                     android:text="Buy Now"
@@ -242,7 +286,7 @@
                     android:textStyle="bold"
                     android:textColor="@color/colorPrimaryDark"
                     android:layout_margin="5dp"
-                    android:text="Rs 72/mo per person"
+                    android:text="Rs 72/mo per Employee"
                     />
 
                 <app.zingo.employeemanagements.Custom.MyRegulerText
@@ -256,6 +300,7 @@
                     android:gravity="center"
                     android:padding="5dp"
                     android:text="Buy Now"
+                    android:visibility="gone"
                     android:textSize="18dp"
                     android:textColor="@color/white"
                     />
@@ -283,4 +328,4 @@
 
     </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+</ScrollView>

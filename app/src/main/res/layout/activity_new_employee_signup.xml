@@ -54,7 +54,7 @@
                         android:background="@drawable/test_background"
                         android:hint="Organization Code"
                         android:singleLine="true"
-                        android:textColor="#ffffff"
+                        android:textColor="#000000"
                         android:textColorHint="#afaeae"
                         />
 
@@ -285,7 +285,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_weight="1"
-                        android:background="@drawable/started_button"/>
+                        android:background="@drawable/spinner_background"/>
 
 
                 </LinearLayout>
@@ -420,6 +420,15 @@
                     android:textColor="#ffffff"
                     android:textColorHint="#afaeae"
                     />
+
+                <CheckBox
+                    android:id="@+id/show_hide_password"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Show Password"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
 
 
                 <!--<android.support.design.widget.TextInputLayout

@@ -1,17 +1,33 @@
 package app.zingo.employeemanagements.UI.Admin;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.DatePicker;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -37,15 +53,22 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import app.zingo.employeemanagements.Adapter.LocationLiveAdapter;
 import app.zingo.employeemanagements.Model.LiveTracking;
 import app.zingo.employeemanagements.Model.LoginDetails;
 import app.zingo.employeemanagements.Model.MarkerData;
 import app.zingo.employeemanagements.R;
+import app.zingo.employeemanagements.UI.Employee.EmployeeListScreen;
+import app.zingo.employeemanagements.UI.GetStartedScreen;
 import app.zingo.employeemanagements.Utils.DataParser;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
@@ -61,6 +84,7 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
     //maps related
     private GoogleMap mMap;
     MapView mapView;
+    LinearLayout mlocation;
     int activityId;
     Marker marker;
     private MarkerOptions options = new MarkerOptions();
@@ -78,6 +102,13 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
     int delay = 15*1000; //1 second=1000 milisecond, 15*1000=15seconds
     Runnable runnable;
 
+    Dialog slideDialog;
+
+    private static final int VIEW_TYPE_TOP = 0;
+    private static final int VIEW_TYPE_MIDDLE = 1;
+    private static final int VIEW_TYPE_BOTTOM = 2;
+    private List<LiveTracking> mItems;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +116,12 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
         try{
             setContentView(R.layout.activity_employee_live_mapping_screen);
 
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            setTitle("Location History");
+
             mapView = (MapView) findViewById(R.id.employee_live_list_map);
+            mlocation = (LinearLayout) findViewById(R.id.location_list);
 
             mapView.onCreate(savedInstanceState);
             mapView.onResume();
@@ -125,14 +161,11 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
                     try{
 
 
-                        h.postDelayed( runnable = new Runnable() {
-                            public void run() {
-                                //do something
+                        LiveTracking lv = new LiveTracking();
+                        lv.setEmployeeId(employeeId);
+                        lv.setTrackingDate(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
 
-                                getLiveLocation(employeeId);
-                            }
-                        }, delay);
-
+                        getLiveLocation(lv);
                         //getMeetingDetails(11);
                     }catch (Exception e){
                         e.printStackTrace();
@@ -150,7 +183,7 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
 
     }
 
-    private void getLiveLocation(final int employeeId){
+    private void getLiveLocation(final LiveTracking lv){
 
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
@@ -158,11 +191,13 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
+
+
         new ThreadExecuter().execute(new Runnable() {
             @Override
             public void run() {
                 LiveTrackingAPI apiService = Util.getClient().create(LiveTrackingAPI.class);
-                Call<ArrayList<LiveTracking>> call = apiService.getLiveTrackingByEmployeeId(employeeId);
+                Call<ArrayList<LiveTracking>> call = apiService.getLiveTrackingByEmployeeIdAndDate(lv);
 
                 call.enqueue(new Callback<ArrayList<LiveTracking>>() {
                     @Override
@@ -178,6 +213,7 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
 
                             ArrayList<MarkerData> markerData = new ArrayList<>();
 
+
                             if (list !=null && list.size()!=0) {
 
                                 Collections.sort(list,LiveTracking.compareLiveTrack);
@@ -189,67 +225,113 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(calymayor, 15));
 
                                 PolylineOptions polylineOptions = new PolylineOptions();
-                                polylineOptions.color(Color.CYAN);
-                                polylineOptions.width(4);
+                                polylineOptions.color(Color.BLUE);
+                                polylineOptions.width(30);
+
                                 gpsTrack = mMap.addPolyline(polylineOptions);
+
+                                ArrayList<LiveTracking> lt = new ArrayList<>();
+
+                                int k=0;
+
+
                                 for(int i=0;i<list.size();i++){
+
+
 
                                     if(list.get(i).getLongitude()!=null||list.get(i).getLatitude()!=null){
 
-                                        lastKnownLatLng = new LatLng(Double.parseDouble(list.get(i).getLatitude()), Double.parseDouble(list.get(i).getLongitude()));
-                                        updateTrack();
+                                        double lat = Double.parseDouble(list.get(i).getLatitude());
+                                        double lng = Double.parseDouble(list.get(i).getLongitude());
 
-                                        if(i==(list.size()-1)){
-                                            createMarker(Double.parseDouble(list.get(i).getLatitude()), Double.parseDouble(list.get(i).getLongitude()),"Last Location",""+ PreferenceHandler.getInstance(EmployeeLiveMappingScreen.this).getUserFullName());
-                                            CameraPosition cameraPosition = new CameraPosition.Builder().zoom(10).target(lastKnownLatLng).build();
-                                            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                                        if(lat==0&&lng==0){
+
+                                        }else{
+                                            lastKnownLatLng = new LatLng(Double.parseDouble(list.get(i).getLatitude()), Double.parseDouble(list.get(i).getLongitude()));
+                                            updateTrack();
+
+                                            k=i;
+
                                         }
 
 
-                                     /*   markerData.add(new MarkerData(Double.parseDouble(list.get(i).getLongitude()),Double.parseDouble(list.get(i).getLatitude()),""+(list.get(i).getTrackingDate()),""));
-                                        markerData.add(new MarkerData(Double.parseDouble(list.get(i).getLongitude()),Double.parseDouble(list.get(i).getLatitude()),""+(list.get(i).getTrackingDate()),""));
-
-                                        MarkerPoints.add(new LatLng(Double.parseDouble(list.get(i).getLongitude()),Double.parseDouble(list.get(i).getLatitude())));
-                                        MarkerPoints.add(new LatLng(Double.parseDouble(list.get(i).getLongitude()),Double.parseDouble(list.get(i).getLatitude())));*/
 
                                     }
 
 
-
-
                                 }
 
-                                /*for (MarkerData point : markerData) {
-                                    createMarker(point.getLati(),point.getLongi(), point.getTitle(), point.getPerson());
-                                }
+                                createMarker(Double.parseDouble(list.get(k).getLatitude()), Double.parseDouble(list.get(k).getLongitude()),"Last Location","");
 
-                                if(markerData!=null&&markerData.size()!=0){
-                                    LatLng latlng = new LatLng(markerData.get(0).getLati(),markerData.get(0).getLongi());
-
-                                    if (MarkerPoints.size() > 2) {
-                                        LatLng origin = MarkerPoints.get(0);
-                                        LatLng dest = MarkerPoints.get(3);
-
-                                        // Getting URL to the Google Directions API
-                                        String url = getUrl(origin, dest);
-                                        Log.d("onMapClick", url.toString());
-                                        FetchUrl FetchUrl = new FetchUrl();
-
-                                        // Start downloading json data from Google Directions API
-                                        FetchUrl.execute(url);
-                                        //move map camera
-                                        mMap.moveCamera(CameraUpdateFactory.newLatLng(origin));
-                                        mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
-                                    }
-
-
-                                    CameraPosition cameraPosition = new CameraPosition.Builder().zoom(10).target(latlng).build();
+                                if(lastKnownLatLng!=null){
+                                    CameraPosition cameraPosition = new CameraPosition.Builder().zoom(80).target(lastKnownLatLng).build();
                                     mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                                }*/
+                                }
+
+
+
+                                if(list.size()==3){
+
+                                    lt.add(list.get(0));
+                                    lt.add(list.get(1));
+                                    lt.add(list.get(2));
+
+                                }else if(list.size()>3){
+
+                                    lt.add(list.get(0));
+
+                                    String lati = list.get(0).getLatitude();
+                                    String lngi = list.get(0).getLongitude();
+
+                                    for(int i=1;i<list.size()-1;i++){
+
+                                        if(list.get(i-1).getLatitude().equalsIgnoreCase(list.get(i).getLatitude())&&list.get(i-1).getLongitude().equalsIgnoreCase(list.get(i).getLongitude())){
+
+                                            Location locationA = new Location("point A");
+
+                                            locationA.setLatitude(Double.parseDouble(lati));
+                                            locationA.setLongitude(Double.parseDouble(lngi));
+
+                                            Location locationB = new Location("point B");
+
+                                            locationB.setLatitude(Double.parseDouble(list.get(i).getLatitude()));
+                                            locationB.setLongitude(Double.parseDouble(list.get(i).getLongitude()));
+
+                                            float distance = locationA.distanceTo(locationB);
+
+                                            if(distance>=100){
+                                                lt.add(list.get(i));
+                                                 lati = list.get(i).getLatitude();
+                                                 lngi = list.get(i).getLongitude();
+                                            }
+
+                                        }
+                                    }
+
+                                    lt.add(list.get(list.size()-1));
+
+                                } else if(list.size()<3){
+                                    lt.add(list.get(0));
+                                    lt.add(list.get(0));
+                                    lt.add(list.get(list.size()-1));
+                                }
+
+
+                                if(lt!=null&&lt.size()!=0){
+                                    mlocation.setVisibility(View.VISIBLE);
+                                    mlocation.removeAllViews();
+                                    onAddField(lt);
+                                }else{
+
+                                }
+
+
 
 
 
                             }else{
+
+                                Toast.makeText(EmployeeLiveMappingScreen.this, "No Location found", Toast.LENGTH_SHORT).show();
 
                             }
 
@@ -467,6 +549,21 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
         mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
     }
 
+     public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_calendar, menu);
+        return true;
+    }
+
+/*
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        if (menuItem.getItemId() != R.id.action_setting) {
+            return super.onOptionsItemSelected(menuItem);
+        }
+        startActivity(new Intent(this, SettingsActivity.class));
+        return true;
+    }
+*/
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -477,7 +574,105 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
             case android.R.id.home:
 
                 EmployeeLiveMappingScreen.this.finish();
+
+            case R.id.action_calendar:
+
+               openDatePicker();
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public void openDatePicker() {
+        // Get Current Date
+
+        final Calendar c = Calendar.getInstance();
+        int mYear  = c.get(Calendar.YEAR);
+        int mMonth = c.get(Calendar.MONTH);
+        int mDay   = c.get(Calendar.DAY_OF_MONTH);
+        //launch datepicker modal
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        try {
+                            Log.d("Date", "DATE SELECTED "+dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+
+                            Calendar newDate = Calendar.getInstance();
+                            newDate.set(year,monthOfYear,dayOfMonth);
+
+
+                            String date1 = (monthOfYear + 1)  + "/" + (dayOfMonth) + "/" + year;
+
+                            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy");
+
+
+
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+                            try {
+                                Date fdate = simpleDateFormat.parse(date1);
+
+                                LiveTracking lv = new LiveTracking();
+                                lv.setEmployeeId(employeeId);
+                                lv.setTrackingDate(date1);
+                                getLiveLocation(lv);
+
+
+
+
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                        catch (Exception ex)
+                        {
+                            ex.printStackTrace();
+                        }
+
+
+                    }
+                }, mYear, mMonth, mDay);
+
+        datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+        datePickerDialog.show();
+
+    }
+
+    public void onAddField(final  ArrayList<LiveTracking> liveTrackingArrayList) {
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View rowView = inflater.inflate(R.layout.bottom_location_places, null);
+
+        TextView mNo = (TextView) rowView.findViewById(R.id.no_result);
+        mNo.setVisibility(View.GONE);
+        RecyclerView list = (RecyclerView)rowView.findViewById(R.id.location_list);
+
+        list.removeAllViews();
+
+        if(liveTrackingArrayList!=null&&liveTrackingArrayList.size()!=0){
+            LocationLiveAdapter adapter = new LocationLiveAdapter(EmployeeLiveMappingScreen.this,liveTrackingArrayList);
+            list.setAdapter(adapter);
+        }
+
+        mlocation.addView(rowView);
+
+
+    }
+
+
+    public void removeView() {
+
+        int no = mlocation.getChildCount();
+        if(no >1)
+        {
+
+            mlocation.removeView(mlocation.getChildAt(no-1));
+
+        }
+        else
+        {
+            Toast.makeText(EmployeeLiveMappingScreen.this,"Atleast one email extension needed",Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
 }

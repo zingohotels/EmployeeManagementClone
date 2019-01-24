@@ -26,7 +26,9 @@ import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Admin.DashBoardAdmin;
 import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
+import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
 import app.zingo.employeemanagements.UI.Landing.SplashScreen;
+import app.zingo.employeemanagements.UI.LandingScreen;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminNewMainScreen;
 import app.zingo.employeemanagements.UI.NewEmployeeDesign.EmployeeNewMainScreen;
 import app.zingo.employeemanagements.Utils.Constants;
@@ -215,7 +217,14 @@ public class LoginScreen extends AppCompatActivity {
                         {
                             System.out.println("Inside api");
 
-                            getCompany(response.body().getOrganizationId(),dto);
+                            try {
+                                getCompany(response.body().getOrganizationId(),dto);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Intent i = new Intent(LoginScreen.this, InternalServerErrorScreen.class);
+
+                                startActivity(i);
+                            }
 
 
                         }else{
@@ -238,7 +247,7 @@ public class LoginScreen extends AppCompatActivity {
         });
     }
 
-    public void getCompany(final int id,final Employee dto){
+    public void getCompany(final int id,final Employee dto) throws Exception{
 
         new ThreadExecuter().execute(new Runnable() {
             @Override

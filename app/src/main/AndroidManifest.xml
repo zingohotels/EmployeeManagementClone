@@ -24,8 +24,10 @@
 
     <application
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -33,13 +35,11 @@
             android:name=".UI.Landing.SplashScreen"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".UI.Landing.PhoneVerificationScreen"
@@ -146,9 +146,7 @@
         </provider>
 
         <activity android:name=".UI.Admin.LeaveApprovalScreen" />
-        <activity
-            android:name=".UI.Admin.EmployeeLiveMappingScreen"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".UI.Admin.EmployeeLiveMappingScreen" />
         <activity
             android:name=".UI.LandingScreen"
             android:screenOrientation="portrait"
@@ -186,9 +184,7 @@
         <activity
             android:name=".UI.SignUpOptioins"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".UI.EmployeeSignUp" >
-
-        </activity>
+        <activity android:name=".UI.EmployeeSignUp" />
         <activity
             android:name=".UI.NewEmployeeDesign.EmployeeNewMainScreen"
             android:configChanges="orientation|screenSize"
@@ -199,9 +195,61 @@
         <activity android:name=".UI.NewAdminDesigns.LeaveEmployeeListScreen" />
         <activity android:name=".UI.NewAdminDesigns.UpdateLeaveScreen" />
         <activity android:name=".UI.NewAdminDesigns.DepartmentLilstScreen" />
-        <activity android:name=".UI.PlanMainHostScreen" />
-        <activity android:name=".UI.BasicPlanScreen" />
-        <activity android:name=".UI.AdvancePlanScreen"></activity>
+        <activity
+            android:name=".UI.PlanMainHostScreen"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.BasicPlanScreen"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.AdvancePlanScreen"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".FireBase.EmailVerificationTesting" />
+        <activity android:name=".UI.NewEmployeeDesign.ExpenseManageHost" />
+        <activity
+            android:name=".UI.NewEmployeeDesign.CreateExpensesScreen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".UI.Common.PlanExpireScreen"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.NewEmployeeDesign.ExpensesListScreen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".UI.NewEmployeeDesign.ExpenseListScreen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".UI.NewAdminDesigns.EmployeeExpenseList" />
+        <activity android:name=".UI.NewAdminDesigns.PendingTasks" />
+        <activity
+            android:name=".UI.Reseller.ResellerSignUpScree"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.Landing.InternalServerErrorScreen"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.Reseller.ResellerMainActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".UI.Reseller.ResellerDashBoard"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.Reseller.ResellerOrganizationList"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.Reseller.ResellerPaymentListScreen"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.Reseller.ResellerProfileScreen"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".UI.Reseller.ChangePasswordReseller" />
+        <activity
+            android:name=".UI.Common.DigitalSignature"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".UI.NewEmployeeDesign.MeetingAddWithSignScreen" />
+        <activity android:name=".UI.NewAdminDesigns.LoginMapScreenAdmin" />
+        <activity android:name=".UI.Common.ReportManagementScreen"></activity>
     </application>
 
 </manifest>

@@ -197,7 +197,12 @@ public class PhoneVerificationScreen extends AppCompatActivity {
                     if(mOtp.getText().toString().isEmpty()){
                         mOtp.setError("Please enter otp");
                     }else{
-                        verifyPhoneNumberWithCode(mVerificationId,mOtp.getText().toString());
+                        try {
+                            verifyPhoneNumberWithCode(mVerificationId,mOtp.getText().toString());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Toast.makeText(PhoneVerificationScreen.this, "Please check mobile number", Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                 }
@@ -246,7 +251,7 @@ public class PhoneVerificationScreen extends AppCompatActivity {
 
     }
 
-    private void verifyPhoneNumberWithCode(String verificationId, String code) {
+    private void verifyPhoneNumberWithCode(String verificationId, String code) throws Exception {
 
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
 

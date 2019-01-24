@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- START xml_defaults -->
+<defaultsMap>
+    <entry>
+        <key>loading_phrase</key>
+        <value>Fetching config…</value>
+    </entry>
+    <entry>
+        <key>welcome_message_caps</key>
+        <value>false</value>
+    </entry>
+    <entry>
+        <key>welcome_message</key>
+        <value>http://locals.zingyapp.com/api/</value>
+    </entry>
+
+    <entry>
+        <key>welcome_image_url</key>
+        <value>http://locals.zingyapp.com/</value>
+    </entry>
+</defaultsMap>
+    <!-- END xml_defaults -->

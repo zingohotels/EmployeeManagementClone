@@ -9,10 +9,15 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
+import android.text.InputType;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -54,6 +59,9 @@ public class CreateFounderScreen extends AppCompatActivity {
     Organization organization;
     String phone;
 
+
+    CheckBox mShowPwd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,9 +70,7 @@ public class CreateFounderScreen extends AppCompatActivity {
 
             setContentView(R.layout.activity_new_create_founder);
 
-            if(PreferenceHandler.getInstance(CreateFounderScreen.this).getDesignationId()==0){
-                designations();
-            }
+
 
             mName = (MyEditText)findViewById(R.id.name);
             mDob = (MyEditText)findViewById(R.id.dob);
@@ -82,6 +88,7 @@ public class CreateFounderScreen extends AppCompatActivity {
             mOthers = (RadioButton)findViewById(R.id.founder_other);
 
             mCreate = (AppCompatButton)findViewById(R.id.createFounder);
+            mShowPwd = (CheckBox) findViewById(R.id.show_hide_password);
 
             Bundle bundle = getIntent().getExtras();
 
@@ -119,6 +126,38 @@ public class CreateFounderScreen extends AppCompatActivity {
                         validate();
                     }catch (Exception e){
                         e.printStackTrace();
+                    }
+
+                }
+            });
+
+            mShowPwd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+                @Override
+                public void onCheckedChanged(CompoundButton button,
+                                             boolean isChecked) {
+
+                    // If it is checked then show password else hide password
+                    if (isChecked) {
+
+                        mShowPwd.setText("Hide Password");// change checkbox text
+
+                        mPassword.setInputType(InputType.TYPE_CLASS_TEXT);
+                        mPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());// show password
+
+                        mConfirm.setInputType(InputType.TYPE_CLASS_TEXT);
+                        mConfirm.setTransformationMethod(HideReturnsTransformationMethod.getInstance());// show password
+                    } else {
+                        mShowPwd.setText("Show Password");// change checkbox text
+
+                        mPassword.setInputType(InputType.TYPE_CLASS_TEXT
+                                | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        mPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());// hide password
+
+                        mConfirm.setInputType(InputType.TYPE_CLASS_TEXT
+                                | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        mConfirm.setTransformationMethod(PasswordTransformationMethod.getInstance());// hide password
+
                     }
 
                 }
@@ -366,7 +405,10 @@ public class CreateFounderScreen extends AppCompatActivity {
             employee.setPassword(password);
             //employee.setDepartmentId(1);
             employee.setDepartmentId(PreferenceHandler.getInstance(CreateFounderScreen.this).getDepartmentId());
-            employee.setDesignationId(PreferenceHandler.getInstance(CreateFounderScreen.this).getDesignationId());
+            Designations designations = new Designations();
+            designations.setDesignationTitle("Founder");
+            designations.setDescription("The owner or operator of a foundry");
+            employee.setDesignation(designations);
             employee.setStatus("Active");
             employee.setUserRoleId(2);
 

@@ -1,5 +1,6 @@
 package app.zingo.employeemanagements.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
@@ -25,6 +26,7 @@ import app.zingo.employeemanagements.Model.LoginDetailsNotificationManagers;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Admin.EmployeesDashBoard;
 import app.zingo.employeemanagements.UI.GetStartedScreen;
+import app.zingo.employeemanagements.UI.NewAdminDesigns.LoginMapScreenAdmin;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -78,6 +80,18 @@ public class LoginDetailsNotificationAdapter  extends RecyclerView.Adapter<Login
             }else{
                 holder.mAddress.setText(dto.getLocation());
             }
+
+            holder.mNotificationMain.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent map = new Intent(context,LoginMapScreenAdmin.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("Location",dto);
+                    map.putExtras(bundle);
+                    ((Activity)context).startActivity(map);
+                }
+            });
 
         }
 

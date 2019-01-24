@@ -2,6 +2,8 @@ package app.zingo.employeemanagements.UI.Admin;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.location.Location;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +16,12 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.squareup.picasso.Picasso;
+
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,15 +32,25 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import app.zingo.employeemanagements.Adapter.LoginDetailsAdapter;
+import app.zingo.employeemanagements.Adapter.TaskAdapter;
 import app.zingo.employeemanagements.Model.Employee;
+import app.zingo.employeemanagements.Model.EmployeeImages;
+import app.zingo.employeemanagements.Model.LiveTracking;
 import app.zingo.employeemanagements.Model.LoginDetails;
+import app.zingo.employeemanagements.Model.MarkerData;
 import app.zingo.employeemanagements.Model.Meetings;
+import app.zingo.employeemanagements.Model.Tasks;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Common.EmployeeMeetingMap;
+import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
+import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminNewMainScreen;
+import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
+import app.zingo.employeemanagements.WebApi.LiveTrackingAPI;
 import app.zingo.employeemanagements.WebApi.LoginDetailsAPI;
 import app.zingo.employeemanagements.WebApi.MeetingsAPI;
+import app.zingo.employeemanagements.WebApi.TasksAPI;
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -42,12 +60,14 @@ public class EmployeesDashBoard extends AppCompatActivity {
 
     CollapsingToolbarLayout collapsingToolbarLayout;
     CircleImageView collapsingToolbarImageView;
-    TextView mName,mWorkedDays,mWorkedHours,mTotalMeeting,mMeetingHours,mAvgMeeting,mIdle;
+    TextView mName,mWorkedDays,mWorkedHours,mTotalMeeting,mMeetingHours,mAvgMeeting,mIdle,mTotaltask,mTotalKm,mAvgTask,mTaskTime;
     RecyclerView mLoginDetails;
 
     Employee profile;
     int profileId;
     long loginHour=0,meetingHour=0;
+
+    EmployeeImages employeeImages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +101,10 @@ public class EmployeesDashBoard extends AppCompatActivity {
             mMeetingHours = (TextView)findViewById(R.id.target_complete);
             mAvgMeeting = (TextView)findViewById(R.id.avg_meeting);
             mIdle = (TextView)findViewById(R.id.idle_time);
+            mTotaltask = (TextView)findViewById(R.id.total_tasks);
+            mTaskTime = (TextView)findViewById(R.id.task_time);
+            mAvgTask = (TextView)findViewById(R.id.avg_task);
+            mTotalKm = (TextView)findViewById(R.id.km_travelled);
             mLoginDetails = (RecyclerView) findViewById(R.id.login_details);
 
             Bundle bundle = getIntent().getExtras();
@@ -105,7 +129,34 @@ public class EmployeesDashBoard extends AppCompatActivity {
                 /*Picasso.with(ProfileBlogList.this).load(profile.getProfilePhoto()).placeholder(R.drawable.profile_image).
                         error(R.drawable.profile_image).into(collapsingToolbarImageView);*/
 
-                getLoginDetails(profile.getEmployeeId());
+                ArrayList<EmployeeImages> images = profile.getEmployeeImages();
+
+                if(images!=null&&images.size()!=0){
+                    employeeImages = images.get(0);
+
+                    if(employeeImages!=null){
+
+
+                        String base=employeeImages.getImage();
+                        if(base != null && !base.isEmpty()){
+                            Picasso.with(EmployeesDashBoard.this).load(base).placeholder(R.drawable.profile_image).
+                                    error(R.drawable.profile_image).into(collapsingToolbarImageView);
+
+
+                        }
+                    }
+
+                }
+
+                try{
+                    getLoginDetails(profile.getEmployeeId());
+                    getTasks(profile.getEmployeeId());
+                    //getLiveLocation(profile.getEmployeeId());
+                }catch (Exception e){
+                    e.printStackTrace();
+                    Intent error = new Intent(EmployeesDashBoard.this,InternalServerErrorScreen.class);
+                    startActivity(error);
+                }
 
 
 
@@ -120,7 +171,7 @@ public class EmployeesDashBoard extends AppCompatActivity {
 
     }
 
-    private void getLoginDetails(final int employeeId){
+    private void getLoginDetails(final int employeeId) throws Exception{
 
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
@@ -258,6 +309,9 @@ public class EmployeesDashBoard extends AppCompatActivity {
 
                                 for(int i=0;i<list.size();i++){
 
+
+
+
                                     if(list.get(i).getMeetingDate().contains("T")){
 
 
@@ -378,6 +432,292 @@ public class EmployeesDashBoard extends AppCompatActivity {
         }
 
 
+    }
+
+    private void getTasks(final int employeeId) throws Exception{
+
+
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Loading Tasks..");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+                TasksAPI apiService = Util.getClient().create(TasksAPI.class);
+                Call<ArrayList<Tasks>> call = apiService.getTasksByEmployeeId(employeeId);
+
+                call.enqueue(new Callback<ArrayList<Tasks>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<Tasks>> call, Response<ArrayList<Tasks>> response) {
+                        int statusCode = response.code();
+                        if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
+
+
+                            if (progressDialog!=null)
+                                progressDialog.dismiss();
+                            ArrayList<Tasks> list = response.body();
+                            ArrayList<Tasks> employeeTasks = new ArrayList<>();
+                            ArrayList<Tasks> onTask = new ArrayList<>();
+                            ArrayList<Tasks> completedTask = new ArrayList<>();
+
+                            long hours = 0;
+
+
+                            if(list!=null&&list.size()!=0){
+
+                                mTotaltask.setText(String.valueOf(list.size()));
+
+                                for (Tasks task:list) {
+
+                                    if(task.getStatus().equalsIgnoreCase("On-Going")){
+                                        onTask.add(task);
+
+                                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                                        String login,logout;
+
+                                        login = task.getStartDate();
+                                        logout = task.getEndDate();
+
+                                        if(login.contains("T")){
+                                            String[] start = login.split("T");
+                                            login = start[0];
+                                        }
+
+                                        if(logout.contains("T")){
+                                            String[] start = logout.split("T");
+                                            logout = start[0];
+                                        }
+
+
+
+                                        Date fd=null,td=null;
+
+                                        if(login==null||login.isEmpty()){
+
+                                            login = sdf.format(new Date());
+                                        }
+
+                                        if(logout==null||logout.isEmpty()){
+
+                                            logout = sdf.format(new Date()) ;
+                                        }
+
+                                        try {
+                                            fd = sdf.parse("" + login);
+                                            td = sdf.parse("" + logout);
+
+                                            long diff = td.getTime() - fd.getTime();
+                                            long Hours = diff / (60 * 60 * 1000) % 24;
+                                            long Minutes = diff / (60 * 1000) % 60;
+
+                                            hours = hours+diff;
+
+                                        }catch (Exception w){
+                                            w.printStackTrace();
+                                        }
+
+
+
+                                        }else if(task.getStatus().equalsIgnoreCase("Completed")){
+                                        completedTask.add(task);
+                                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                                        String login,logout;
+
+                                        login = task.getStartDate();
+                                        logout = task.getEndDate();
+
+                                        if(login.contains("T")){
+                                            String[] start = login.split("T");
+                                            login = start[0];
+                                        }
+
+                                        if(logout.contains("T")){
+                                            String[] start = logout.split("T");
+                                            logout = start[0];
+                                        }
+
+
+
+                                        Date fd=null,td=null;
+
+                                        if(login==null||login.isEmpty()){
+
+                                            login = sdf.format(new Date());
+                                        }
+
+                                        if(logout==null||logout.isEmpty()){
+
+                                            logout = sdf.format(new Date()) ;
+                                        }
+
+                                        try {
+                                            fd = sdf.parse("" + login);
+                                            td = sdf.parse("" + logout);
+
+                                            long diff = td.getTime() - fd.getTime();
+
+
+                                            hours = hours+diff;
+
+                                        }catch (Exception w){
+                                            w.printStackTrace();
+                                        }
+
+
+
+                                    }
+
+                                }
+
+
+
+                                long avghours = hours/list.size();
+                                long hourst = avghours*list.size();
+
+                                long Hours = hourst / (60 * 60 * 1000) % 24;
+                                long Minutes = hourst / (60 * 1000) % 60;
+
+                                long avgHours = avghours / (60 * 60 * 1000) % 24;
+                                long avgMinutes = avghours / (60 * 1000) % 60;
+
+                                mTaskTime.setText(""+(completedTask.size()));
+                                mAvgTask.setText(""+avgHours+":"+avgMinutes);
+
+
+                            }
+
+
+
+
+
+                        }else {
+
+                            if (progressDialog!=null)
+                                progressDialog.dismiss();
+
+                            Toast.makeText(EmployeesDashBoard.this, "Failed due to : "+response.message(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<Tasks>> call, Throwable t) {
+                        // Log error here since request failed
+                        if (progressDialog!=null)
+                            progressDialog.dismiss();
+                        Log.e("TAG", t.toString());
+                    }
+                });
+            }
+
+
+        });
+    }
+
+    private void getLiveLocation(final int employeeId) throws Exception{
+
+
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Loading Details..");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+                LiveTrackingAPI apiService = Util.getClient().create(LiveTrackingAPI.class);
+                Call<ArrayList<LiveTracking>> call = apiService.getLiveTrackingByEmployeeId(employeeId);
+
+                call.enqueue(new Callback<ArrayList<LiveTracking>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<LiveTracking>> call, Response<ArrayList<LiveTracking>> response) {
+                        int statusCode = response.code();
+                        if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
+
+
+                            if (progressDialog!=null)
+                                progressDialog.dismiss();
+                            ArrayList<LiveTracking> list = response.body();
+                            long hours=0;
+
+
+                            float distance = 0;
+
+                            if (list !=null && list.size()!=0) {
+
+                                for (int i=0;i<list.size();i++) {
+
+                                    if(i==0){
+                                        Location locationA = new Location("point A");
+
+                                        locationA.setLatitude(Double.parseDouble(PreferenceHandler.getInstance(EmployeesDashBoard.this).getOrganizationLati()));
+                                        locationA.setLongitude(Double.parseDouble(PreferenceHandler.getInstance(EmployeesDashBoard.this).getOrganizationLongi()));
+
+                                        Location locationB = new Location("point B");
+
+                                        locationB.setLatitude(Double.parseDouble(list.get(0).getLatitude()));
+                                        locationB.setLongitude(Double.parseDouble(list.get(0).getLongitude()));
+
+                                        distance = distance+locationA.distanceTo(locationB);
+                                    }else if(i>0&&i<(list.size()-1)){
+                                        Location locationA = new Location("point A");
+
+                                        locationA.setLatitude(Double.parseDouble(list.get(i-1).getLatitude()));
+                                        locationA.setLongitude(Double.parseDouble(list.get(i-1).getLongitude()));
+
+                                        Location locationB = new Location("point B");
+
+                                        locationB.setLatitude(Double.parseDouble(list.get(i).getLatitude()));
+                                        locationB.setLongitude(Double.parseDouble(list.get(i).getLongitude()));
+
+                                        distance = distance+locationA.distanceTo(locationB);
+                                    }else if(i==(list.size()-1)){
+                                        Location locationA = new Location("point A");
+
+                                        locationA.setLatitude(Double.parseDouble(list.get(i-1).getLatitude()));
+                                        locationA.setLongitude(Double.parseDouble(list.get(i-1).getLongitude()));
+
+                                        Location locationB = new Location("point B");
+
+                                        locationB.setLatitude(Double.parseDouble(list.get(i).getLatitude()));
+                                        locationB.setLongitude(Double.parseDouble(list.get(i).getLongitude()));
+
+                                        distance = distance+locationA.distanceTo(locationB);
+
+                                    }
+
+                                }
+
+
+                                double distanceValue = distance/1000.0;
+                                mTotalKm.setText(""+new DecimalFormat("#.##").format(distanceValue));
+
+
+
+                            }else{
+
+                            }
+
+                        }else {
+
+
+                            Toast.makeText(EmployeesDashBoard.this, "Failed due to : "+response.message(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<LiveTracking>> call, Throwable t) {
+                        // Log error here since request failed
+                        if (progressDialog!=null)
+                            progressDialog.dismiss();
+                        Log.e("TAG", t.toString());
+                    }
+                });
+            }
+
+
+        });
     }
 
     @Override

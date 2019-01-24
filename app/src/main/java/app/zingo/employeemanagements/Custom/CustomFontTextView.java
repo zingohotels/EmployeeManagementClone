@@ -51,8 +51,11 @@ public class CustomFontTextView extends AppCompatTextView {
             case 7:
                 fontName= R.string.Mistral;
                 break;
+            case 8:
+                fontName= R.string.CooperBlack;
+                break;
             default:
-                fontName = R.string.ColonnaMT;
+                fontName = R.string.CooperBlack;
                 break;
         }
 

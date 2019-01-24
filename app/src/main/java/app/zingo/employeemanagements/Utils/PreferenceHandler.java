@@ -43,6 +43,26 @@ public class PreferenceHandler {
         return sh.getInt(Constants.USER_ID,0);
     }
 
+    public void setResellerUserId(int id)
+    {
+        sh.edit().putInt(Constants.RESELLER_USER_ID,id).apply();
+    }
+
+    public int getResellerUserId()
+    {
+        return sh.getInt(Constants.RESELLER_USER_ID,0);
+    }
+
+    public void setLocationOn(boolean id)
+    {
+        sh.edit().putBoolean(Constants.LOCATION_ON,id).apply();
+    }
+
+    public boolean isLocationOn()
+    {
+        return sh.getBoolean(Constants.LOCATION_ON,false);
+    }
+
     public void setManagerId(int id)
     {
         sh.edit().putInt(Constants.MANAGER_ID,id).apply();
@@ -60,6 +80,15 @@ public class PreferenceHandler {
     public String getUserName()
     {
         return sh.getString(Constants.USER_NAME,"");
+    }
+
+    public void setResellerName(String hotelName) {
+        sh.edit().putString(Constants.REUSER_NAME,hotelName).apply();
+    }
+
+    public String getResellerName()
+    {
+        return sh.getString(Constants.REUSER_NAME,"");
     }
 
     public void setPhoneNumber(String mobilenumber)
@@ -219,6 +248,15 @@ public class PreferenceHandler {
     public String getUserEmail()
     {
         return sh.getString(Constants.USER_EMAIL,"");
+    }
+
+    public void setResellerEmail(String email) {
+        sh.edit().putString(Constants.REUSER_EMAIL,email).apply();
+    }
+
+    public String getResellerEmail()
+    {
+        return sh.getString(Constants.REUSER_EMAIL,"");
     }
 
     public void setUserRoleUniqueID(int approved)

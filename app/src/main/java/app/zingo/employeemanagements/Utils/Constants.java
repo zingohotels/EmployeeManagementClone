@@ -6,12 +6,16 @@ package app.zingo.employeemanagements.Utils;
 
 public interface Constants {
 
-    String BASE_URL = "http://zingolocals.azurewebsites.net/api/";
-    String IMAGE_URL = "http://zingolocals.azurewebsites.net/";
+    String BASE_URL = "http://locals.zingyapp.com/api/";
+    String BASE_URL_MAIN = "http://zingolocals.azurewebsites.net/api/";
+    String IMAGE_URL = "http://locals.zingyapp.com/";
+    String IMAGE_URL_MAIN = "http://zingolocals.azurewebsites.net/";
 
     String USER_PHONENUMBER ="user_phoneno";
     String weather_api = "a78b3dd6ac89129adf2a6600d8eafa7a";
     String USER_ID = "user_id";
+    String RESELLER_USER_ID = "reuser_id";
+    String LOCATION_ON = "location_on";
     String MANAGER_ID = "manager_id";
     String COMPANY_ID = "company_id";
     String DESIGNATION_ID = "designation_id";
@@ -31,9 +35,11 @@ public interface Constants {
     String EMP_LIMIT ="emp_limit";
     String PLAN_ID ="plan_id";
     String USER_NAME ="user_name";
+    String REUSER_NAME ="reuser_name";
     String HOTEL_PLACE ="user_phoneno";
     String USER_FULLNAME ="user_fullname";
     String USER_EMAIL ="user_email";
+    String REUSER_EMAIL ="reuser_email";
 
     String SENDER_ID ="902261099152";
     String SERVER_ID ="AIzaSyClRpicBflz2b_t7enwcXQ5bxYeYqzBC_I";

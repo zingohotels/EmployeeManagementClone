@@ -108,7 +108,7 @@
                     android:textAllCaps="false"
                     android:text="Save Department"
                     android:textColor="#FFFFFF"
-                    android:background="@drawable/blue_combo"
+                    android:background="@drawable/button_primary_dark"
                     android:layout_gravity="center"/>
 
 

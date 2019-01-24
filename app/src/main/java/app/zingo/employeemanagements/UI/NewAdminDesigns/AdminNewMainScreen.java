@@ -31,7 +31,9 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -51,6 +53,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import app.zingo.employeemanagements.Custom.MyRegulerText;
+import app.zingo.employeemanagements.Custom.RoundImageView;
 import app.zingo.employeemanagements.FireBase.SharedPrefManager;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.EmployeeDeviceMapping;
@@ -58,6 +62,8 @@ import app.zingo.employeemanagements.Model.EmployeeImages;
 import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Admin.DashBoardAdmin;
+import app.zingo.employeemanagements.UI.Common.PlanExpireScreen;
+import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
 import app.zingo.employeemanagements.UI.LandingScreen;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
@@ -78,7 +84,7 @@ import retrofit2.Response;
 public class AdminNewMainScreen extends AppCompatActivity {
 
     static final String TAG = "FounderMainScreen";
-    ImageView mProfileImage;
+    RoundImageView mProfileImage;
     TextView mTrialMsgInfo;
     LinearLayout mTrialInfoLay,mShareLayout;
 
@@ -221,7 +227,7 @@ public class AdminNewMainScreen extends AppCompatActivity {
         TextView organizationName = (TextView) findViewById(R.id.organizationName);
         View profileView = findViewById(R.id.profile);
         TextView userName = (TextView) findViewById(R.id.userName);
-        mProfileImage = (ImageView) findViewById(R.id.profilePicture);
+        mProfileImage = (RoundImageView) findViewById(R.id.profilePicture);
         mTrialInfoLay = (LinearLayout) findViewById(R.id.trial_version_info_layout);
         mShareLayout = (LinearLayout) findViewById(R.id.share_layout);
         mTrialMsgInfo = (TextView) findViewById(R.id.trial_version_info_msg);
@@ -281,7 +287,7 @@ public class AdminNewMainScreen extends AppCompatActivity {
                         "<p><br>I'm "+PreferenceHandler.getInstance(AdminNewMainScreen.this).getUserFullName()+" your manager. You are invited to join the Zingy Employee App Platform. </p></br></br>"+
                         "<br><p>Here is a Procedure to Join the Platform using the Below Procedures. Make sure you store them safely. </p>"+
                         "</br><p><br>Our Organization Code- "+upToNCharacters+PreferenceHandler.getInstance(AdminNewMainScreen.this).getCompanyId()+
-                        "</br></p><br><b>Step 1:  </b>"+"Download the app by clicking here https://drive.google.com/open?id=1Kv_4sqvYhyWjI0eCuASIZFpu04GKGqQY\n"+
+                        "</br></p><br><b>Step 1:  </b>"+"Download the app by clicking here <a href=\"https://play.google.com/store/apps/details?id=app.zingo.employeemanagements\">https://play.google.com/store/apps/details?id=app.zingo.employeemanagements</a>"+
                         "</br><br><b>Step 2: </b>"+"Click on Get Started and \"Join us as an Employee\""+
                         "</br><br><b>Step 3: </b>"+"Verify your Mobile number and then Enter the Organization Code - "+upToNCharacters+PreferenceHandler.getInstance(AdminNewMainScreen.this).getCompanyId()+
                         "</br><br><b>Step 4:</b>"+"Enter your basic details and the complete the Sign up process"+
@@ -348,7 +354,22 @@ public class AdminNewMainScreen extends AppCompatActivity {
             }
         });
 
-        getCompany(PreferenceHandler.getInstance(AdminNewMainScreen.this).getCompanyId());
+        try {
+
+            if(PreferenceHandler.getInstance(AdminNewMainScreen.this).getCompanyId()!=0){
+                getCompany(PreferenceHandler.getInstance(AdminNewMainScreen.this).getCompanyId());
+            }else{
+               /* Intent i = new Intent(AdminNewMainScreen.this, InternalServerErrorScreen.class);
+
+                startActivity(i);*/
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Intent i = new Intent(AdminNewMainScreen.this, InternalServerErrorScreen.class);
+
+            startActivity(i);
+        }
 
         //Subscribtion Icon visibility based on Employer
        /* if (StringUtils.equalsIgnoreCase(this.mAppUser.getUserType(), "Employer")) {
@@ -606,7 +627,13 @@ public class AdminNewMainScreen extends AppCompatActivity {
 
                         if(employeeImages==null){
                             EmployeeImages employeeImages = new EmployeeImages();
-                            employeeImages.setImage(Constants.IMAGE_URL+response.body().toString());
+
+                            if(Util.IMAGE_URL==null){
+                                employeeImages.setImage(Constants.IMAGE_URL+response.body().toString());
+                            }else{
+                                employeeImages.setImage(Util.IMAGE_URL+response.body().toString());
+                            }
+
 
                             employeeImages.setEmployeeId(employee.getEmployeeId());
 
@@ -615,7 +642,12 @@ public class AdminNewMainScreen extends AppCompatActivity {
                         }else{
 
                             EmployeeImages employeeImagess = employeeImages;
-                            employeeImagess.setImage(Constants.IMAGE_URL+response.body().toString());
+                            if(Util.IMAGE_URL==null){
+                                employeeImages.setImage(Constants.IMAGE_URL+response.body().toString());
+                            }else{
+                                employeeImages.setImage(Util.IMAGE_URL+response.body().toString());
+                            }
+                           // employeeImagess.setImage(Constants.IMAGE_URL+response.body().toString());
                             employeeImagess.setEmployeeImageId(employeeImages.getEmployeeImageId());
                             employeeImages.setEmployeeId(employee.getEmployeeId());
 
@@ -959,7 +991,7 @@ public class AdminNewMainScreen extends AppCompatActivity {
         });
     }
 
-    public void getCompany(final int id){
+    public void getCompany(final int id) throws Exception{
 
         new ThreadExecuter().execute(new Runnable() {
             @Override
@@ -1013,35 +1045,37 @@ public class AdminNewMainScreen extends AppCompatActivity {
                                         mTrialInfoLay.setVisibility(View.VISIBLE);
                                         if((smdf.parse(licenseEndDate).getTime()<smdf.parse(smdf.format(new Date())).getTime())){
 
-                                            Toast.makeText(AdminNewMainScreen.this, "Trial Version Expired.Please Update Paid Version", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(AdminNewMainScreen.this, "Your Trial Period is Expired", Toast.LENGTH_SHORT).show();
                                             PreferenceHandler.getInstance(AdminNewMainScreen.this).clear();
 
-                                            Intent log = new Intent(AdminNewMainScreen.this, LandingScreen.class);
+                                            Intent log = new Intent(AdminNewMainScreen.this, PlanExpireScreen.class);
+                                            log.putExtra("Screen","Admin");
                                             log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                             log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                                            Toast.makeText(AdminNewMainScreen.this,"Logout",Toast.LENGTH_SHORT).show();
+                                            //Toast.makeText(AdminNewMainScreen.this,"Logout",Toast.LENGTH_SHORT).show();
                                             startActivity(log);
                                             finish();
 
                                         }else{
                                             mTrialMsgInfo.setText("Your Trial version is going to expiry in "+days+" days");
                                             if(days>=1&&days<=5){
-                                              //  popupUpgrade("Hope your enjoying to use our Trial version.Get more features You need to Upgrade App","Your trial period is going to expire in "+days+" days");
+                                                popupUpgrade("Hope your enjoying to use our Trial version.Get more features You need to Upgrade App","Your trial period is going to expire in "+days+" days");
 
 
 
                                             }else if(days==0){
-                                              //  popupUpgrade("Hope your enjoying to use our Trial version.Get more features You need to Upgrade App","Today is last day for your free trial");
+                                               popupUpgrade("Hope your enjoying to use our Trial version.Get more features You need to Upgrade App","Today is last day for your free trial");
                                                 mTrialMsgInfo.setText("Your Trial version is going to expiry in today");
 
                                             }else if(days<0){
                                                 Toast.makeText(AdminNewMainScreen.this, "Your Trial Period is Expired", Toast.LENGTH_SHORT).show();
                                                 PreferenceHandler.getInstance(AdminNewMainScreen.this).clear();
 
-                                                Intent log = new Intent(AdminNewMainScreen.this, LandingScreen.class);
+                                                Intent log = new Intent(AdminNewMainScreen.this, PlanExpireScreen.class);
+                                                log.putExtra("Screen","Admin");
                                                 log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                                 log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                Toast.makeText(AdminNewMainScreen.this,"Logout",Toast.LENGTH_SHORT).show();
+                                                //Toast.makeText(AdminNewMainScreen.this,"Logout",Toast.LENGTH_SHORT).show();
                                                 startActivity(log);
                                                 finish();
                                             }
@@ -1077,6 +1111,55 @@ public class AdminNewMainScreen extends AppCompatActivity {
             }
 
         });
+    }
+
+    public void popupUpgrade(final String text,final String days){
+
+        try{
+
+            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(AdminNewMainScreen.this);
+            LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View views = inflater.inflate(R.layout.app_upgrade_pop, null);
+
+            builder.setView(views);
+
+            final Button mPaid = (Button) views.findViewById(R.id.paid_version_upgrade);
+            mPaid.setVisibility(View.GONE);
+            final MyRegulerText mCompanyName = (MyRegulerText) views.findViewById(R.id.company_name_upgrade);
+            final MyRegulerText mText = (MyRegulerText) views.findViewById(R.id.alert_message_upgrade);
+            final MyRegulerText mDay = (MyRegulerText) views.findViewById(R.id.day_count_upgrade);
+
+            final android.support.v7.app.AlertDialog dialogs = builder.create();
+            dialogs.show();
+            dialogs.setCanceledOnTouchOutside(true);
+
+            mCompanyName.setText("Dear "+PreferenceHandler.getInstance(AdminNewMainScreen.this).getCompanyName());
+            mText.setText(""+text);
+            mDay.setText(""+days);
+
+
+
+            mPaid.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    dialogs.dismiss();
+
+                }
+            });
+
+
+
+
+
+
+
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     public long dateCal(String date){

@@ -48,6 +48,7 @@ import app.zingo.employeemanagements.UI.Admin.EmployeesDashBoard;
 import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
 import app.zingo.employeemanagements.UI.Employee.EmployeeListScreen;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminDashBoardFragment;
+import app.zingo.employeemanagements.UI.NewAdminDesigns.PendingTasks;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
@@ -69,7 +70,7 @@ public class EmployeeDashBoardFragment extends Fragment {
     View layout;
     RecyclerView mTaskList;
     TextView mLoggedTime;
-    LinearLayout mTodayTaskLayout;
+    LinearLayout mTodayTaskLayout,mPendingLayout;
     private TaskListAdapter mAdapter;
     MyRegulerText mWorkedDays,mLeaveDays,mOnTask,mPending;
 
@@ -124,6 +125,7 @@ public class EmployeeDashBoardFragment extends Fragment {
             mWorkedDays = (MyRegulerText)layout.findViewById(R.id.worked_days_count);
             mLeaveDays = (MyRegulerText)layout.findViewById(R.id.leave_days_count);
             mOnTask = (MyRegulerText)layout.findViewById(R.id.on_task_count_text);
+            mPendingLayout = (LinearLayout) layout.findViewById(R.id.pending_task_layout);
             mPending = (MyRegulerText)layout.findViewById(R.id.pending_task_text);
 
 
@@ -131,7 +133,20 @@ public class EmployeeDashBoardFragment extends Fragment {
             getEmployees();
 
 
+            mPendingLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
+                    if(pendingTasks!=null&&pendingTasks.size()!=0){
+                        Intent pending = new Intent(getActivity(),PendingTasks.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("PendingTasks",pendingTasks);
+                        pending.putExtras(bundle);
+                        startActivity(pending);
+                    }
+
+                }
+            });
 
 
             return this.layout;

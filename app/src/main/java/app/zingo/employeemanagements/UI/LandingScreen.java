@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
@@ -19,21 +20,31 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import app.zingo.employeemanagements.BuildConfig;
 import app.zingo.employeemanagements.Custom.MyEditText;
 import app.zingo.employeemanagements.Custom.MyRegulerText;
 import app.zingo.employeemanagements.FireBase.SharedPrefManager;
 import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.Organization;
+import app.zingo.employeemanagements.Model.ResellerProfiles;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Admin.DashBoardAdmin;
 import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
+import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
+import app.zingo.employeemanagements.UI.Landing.SplashScreen;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminNewMainScreen;
 import app.zingo.employeemanagements.UI.NewEmployeeDesign.EmployeeNewMainScreen;
+import app.zingo.employeemanagements.UI.Reseller.ResellerMainActivity;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
@@ -41,6 +52,7 @@ import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.DepartmentApi;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
 import app.zingo.employeemanagements.WebApi.OrganizationApi;
+import app.zingo.employeemanagements.WebApi.ResellerAPI;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -50,7 +62,9 @@ public class LandingScreen extends AppCompatActivity {
     TextView mSignIn,mSupport;
     MyEditText mEmail,mPassword;
     MyRegulerText mSignInButton,mGetStarted,mContactUs;
-    CheckBox mShowPwd;
+    CheckBox mShowPwd,mResellerSign;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +81,7 @@ public class LandingScreen extends AppCompatActivity {
             mGetStarted = (MyRegulerText)findViewById(R.id.button_get_started);
             mContactUs = (MyRegulerText)findViewById(R.id.button_contact_us);
             mShowPwd = (CheckBox) findViewById(R.id.show_hide_password);
+            mResellerSign = (CheckBox) findViewById(R.id.reseller_sign_in);
 
             String token = SharedPrefManager.getInstance(LandingScreen.this).getDeviceToken();
 
@@ -83,6 +98,8 @@ public class LandingScreen extends AppCompatActivity {
                 public void onClick(View view) {
                     Intent support = new Intent(LandingScreen.this,SupportScreen.class);
                     startActivity(support);
+
+
                 }
             });
 
@@ -130,11 +147,18 @@ public class LandingScreen extends AppCompatActivity {
 
 
 
+
+
+
         }catch (Exception e){
             e.printStackTrace();
         }
 
     }
+
+
+
+
 
     public void validateField(){
 
@@ -147,11 +171,21 @@ public class LandingScreen extends AppCompatActivity {
             Toast.makeText(this, "Password is required", Toast.LENGTH_SHORT).show();
         }else{
 
-            Employee employee = new Employee();
-            employee.setPassword(password);
 
-            employee.setEmail(email);
-            loginEmployee(employee);
+            if(mResellerSign.isChecked()){
+
+                ResellerProfiles rs = new ResellerProfiles();
+                rs.setUserName(email);
+                rs.setPassword(password);
+                loginReseller(rs);
+            }else {
+                Employee employee = new Employee();
+                employee.setPassword(password);
+
+                employee.setEmail(email);
+                loginEmployee(employee);
+            }
+
 
         }
     }
@@ -192,6 +226,7 @@ public class LandingScreen extends AppCompatActivity {
                                 SharedPreferences.Editor spe = sp.edit();
                                 spe.putInt(Constants.USER_ID, dto.getEmployeeId());
                                 PreferenceHandler.getInstance(LandingScreen.this).setUserId(dto.getEmployeeId());
+                                PreferenceHandler.getInstance(LandingScreen.this).setLocationOn(dto.isLocationOn());
                                 PreferenceHandler.getInstance(LandingScreen.this).setManagerId(dto.getManagerId());
                                 PreferenceHandler.getInstance(LandingScreen.this).setUserRoleUniqueID(dto.getUserRoleId());
                                 PreferenceHandler.getInstance(LandingScreen.this).setUserName(dto.getEmployeeName());
@@ -205,7 +240,14 @@ public class LandingScreen extends AppCompatActivity {
 
                                 if(dto.getStatus().contains("Active")){
 
-                                    getDepartment(dto.getDepartmentId(),dto);
+                                    try {
+                                        getDepartment(dto.getDepartmentId(),dto);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        Intent i = new Intent(LandingScreen.this, InternalServerErrorScreen.class);
+
+                                        startActivity(i);
+                                    }
 
 
                                 }else if(dto.getStatus().equalsIgnoreCase("Disabled")){
@@ -241,7 +283,7 @@ public class LandingScreen extends AppCompatActivity {
         });
     }
 
-    public void getDepartment(final int id,final Employee dto){
+    public void getDepartment(final int id,final Employee dto) throws Exception {
 
         new ThreadExecuter().execute(new Runnable() {
             @Override
@@ -260,7 +302,17 @@ public class LandingScreen extends AppCompatActivity {
                         {
                             System.out.println("Inside api");
 
-                            getCompany(response.body().getOrganizationId(),dto);
+                            try {
+                                PreferenceHandler.getInstance(LandingScreen.this).setCompanyId(response.body().getOrganizationId());
+                                getCompany(response.body().getOrganizationId(),dto);
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Intent i = new Intent(LandingScreen.this, InternalServerErrorScreen.class);
+
+                                startActivity(i);
+
+                            }
 
 
                         }else{
@@ -283,7 +335,7 @@ public class LandingScreen extends AppCompatActivity {
         });
     }
 
-    public void getCompany(final int id,final Employee dto){
+    public void getCompany(final int id,final Employee dto) throws Exception{
 
         new ThreadExecuter().execute(new Runnable() {
             @Override
@@ -466,5 +518,93 @@ public class LandingScreen extends AppCompatActivity {
             e.printStackTrace();
         }
 
+    }
+
+    private void loginReseller( final ResellerProfiles p){
+
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Please wait..");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+
+
+                ResellerAPI apiService = Util.getClient().create(ResellerAPI.class);
+
+
+                Call<ArrayList<ResellerProfiles>> call = apiService.getResellerProfilesforLogin(p);
+
+                call.enqueue(new Callback<ArrayList<ResellerProfiles>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<ResellerProfiles>> call, Response<ArrayList<ResellerProfiles>> response) {
+//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
+                        int statusCode = response.code();
+                        if (progressDialog != null)
+                            progressDialog.dismiss();
+                        if (statusCode == 200 || statusCode == 201) {
+
+                            ArrayList<ResellerProfiles> dto1 = response.body();//-------------------should not be list------------
+                            if (dto1!=null && dto1.size()!=0) {
+                                ResellerProfiles dto = dto1.get(0);
+
+
+                                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(LandingScreen.this);
+                                SharedPreferences.Editor spe = sp.edit();
+                                spe.putInt(Constants.RESELLER_USER_ID, dto.getResellerProfileId());
+                                PreferenceHandler.getInstance(LandingScreen.this).setResellerUserId(dto.getResellerProfileId());
+
+                                PreferenceHandler.getInstance(LandingScreen.this).setUserRoleUniqueID(dto.getUserRoleId());
+                                PreferenceHandler.getInstance(LandingScreen.this).setResellerName(dto.getFullName());
+                                PreferenceHandler.getInstance(LandingScreen.this).setResellerEmail(dto.getEmail());
+
+                                spe.putString("FullName", dto.getFullName());
+                                spe.putString("Password", dto.getPassword());
+                                spe.putString("Email", dto.getEmail());
+                                spe.putString("PhoneNumber", dto.getMobileNumber());
+                                spe.apply();
+
+                                if(dto.getStatus().contains("Active")){
+
+                                    Intent i = new Intent(LandingScreen.this, ResellerMainActivity.class);
+                                    i.putExtra("Profile",dto);
+                                    startActivity(i);
+                                    finish();
+
+
+                                }else if(dto.getStatus().equalsIgnoreCase("Disabled")){
+                                    Toast.makeText(LandingScreen.this, "Your Account is Disabled", Toast.LENGTH_SHORT).show();
+                                }else{
+                                    Toast.makeText(LandingScreen.this, "Your Account is not verified .", Toast.LENGTH_SHORT).show();
+                                }
+
+
+
+                            }else{
+                                if (progressDialog != null)
+                                    progressDialog.dismiss();
+                                Toast.makeText(LandingScreen.this, "Login credentials are wrong..", Toast.LENGTH_SHORT).show();
+
+                            }
+                        }else {
+                            if (progressDialog!=null)
+                                progressDialog.dismiss();
+                            Toast.makeText(LandingScreen.this, "Login failed due to status code:"+statusCode, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<ResellerProfiles>> call, Throwable t) {
+                        // Log error here since request failed
+                        if (progressDialog!=null)
+                            progressDialog.dismiss();
+                        Log.e("TAG", t.toString());
+                    }
+                });
+            }
+        });
     }
 }

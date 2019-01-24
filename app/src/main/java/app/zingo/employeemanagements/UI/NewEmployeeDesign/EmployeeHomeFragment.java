@@ -21,6 +21,7 @@ import app.zingo.employeemanagements.Model.LoginDetails;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Admin.EmployeesDashBoard;
 import app.zingo.employeemanagements.UI.Admin.TaskManagementHost;
+import app.zingo.employeemanagements.UI.Common.ChangePasswordScreen;
 import app.zingo.employeemanagements.UI.Company.OrganizationDetailScree;
 import app.zingo.employeemanagements.UI.Employee.EmployeeListScreen;
 import app.zingo.employeemanagements.UI.Employee.LeaveManagementHost;
@@ -44,8 +45,8 @@ public class EmployeeHomeFragment extends Fragment {
     final String TAG = "Employer Dashboard";
     View layout;
     LinearLayout attendance,leaveApplications;
-    LinearLayout tasks;
-    LinearLayout logout,deptOrg;
+    LinearLayout tasks,expenses,meeting;
+    LinearLayout logout,deptOrg,chngPwd;
 
     Employee employeed;
 
@@ -108,10 +109,13 @@ public class EmployeeHomeFragment extends Fragment {
         getEmployees();
         attendance = (LinearLayout) this.layout.findViewById(R.id.attendance);
         leaveApplications = (LinearLayout) this.layout.findViewById(R.id.leaveApplications);
+        chngPwd = (LinearLayout) this.layout.findViewById(R.id.change_password);
 
 
 
         tasks = (LinearLayout) this.layout.findViewById(R.id.task_layout);
+        expenses = (LinearLayout) this.layout.findViewById(R.id.expenses_mgmt);
+        meeting = (LinearLayout) this.layout.findViewById(R.id.meeting);
 
 
         deptOrg = (LinearLayout) this.layout.findViewById(R.id.department);
@@ -141,6 +145,13 @@ public class EmployeeHomeFragment extends Fragment {
             }
         });
 
+        expenses.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMenuViews(expenses);
+            }
+        });
+
 
 
 
@@ -166,6 +177,19 @@ public class EmployeeHomeFragment extends Fragment {
             }
         });
 
+        chngPwd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMenuViews(chngPwd);
+            }
+        });
+        meeting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMenuViews(meeting);
+            }
+        });
+
     }
 
     public void openMenuViews(View view) {
@@ -182,8 +206,22 @@ public class EmployeeHomeFragment extends Fragment {
             bundle.putInt("ProfileId",employeed.getEmployeeId());
             attnd.putExtras(bundle);
             getActivity().startActivity(attnd);
+        }else if (view.getId() == R.id.meeting) {
+            Intent attnd = new Intent(getActivity(), MeetingAddWithSignScreen.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("Profile",employeed);
+            bundle.putInt("ProfileId",employeed.getEmployeeId());
+            attnd.putExtras(bundle);
+            getActivity().startActivity(attnd);
         } else if (view.getId() == R.id.leaveApplications) {
             Intent leave = new Intent(getActivity(), LeaveManagementHost.class);
+            Bundle bundle = new Bundle();
+            bundle.putInt("EmployeeId",employeed.getEmployeeId());
+            bundle.putSerializable("Employee",employeed);
+            leave.putExtras(bundle);
+            getActivity().startActivity(leave);
+        }else if (view.getId() == R.id.expenses_mgmt) {
+            Intent leave = new Intent(getActivity(), ExpenseManageHost.class);
             Bundle bundle = new Bundle();
             bundle.putInt("EmployeeId",employeed.getEmployeeId());
             bundle.putSerializable("Employee",employeed);
@@ -200,6 +238,9 @@ public class EmployeeHomeFragment extends Fragment {
             live.putExtra("Type","Live");
             getContext().startActivity(live);
 
+        }else if (view.getId() == R.id.change_password) {
+            Intent chnage = new Intent(getActivity(), ChangePasswordScreen.class);
+            startActivity(chnage);
         }else if (view.getId() == R.id.task_layout) {
             Intent task = new Intent(getActivity(), TaskManagementHost.class);
             Bundle bundle = new Bundle();

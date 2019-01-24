@@ -13,7 +13,10 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
 
 import app.zingo.employeemanagements.Model.Employee;
@@ -60,8 +63,41 @@ public class LeaveTakenAdapter  extends RecyclerView.Adapter<LeaveTakenAdapter.V
             holder.mLeaveCount.setTextColor(color);
             holder.mLeaveCount.setText("Leave "+(position+1));
 
-            holder.mFrom.setText(""+dto.getFromDate());
-            holder.mTo.setText(""+dto.getToDate());
+            String froms = dto.getFromDate();
+            String tos = dto.getToDate();
+
+            if(froms.contains("T")){
+
+                String dojs[] = froms.split("T");
+
+                try {
+                    Date afromDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
+                    froms = new SimpleDateFormat("MMM dd,yyyy").format(afromDate);
+                    holder.mFrom.setText(""+froms);
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            if(tos.contains("T")){
+
+                String dojs[] = tos.split("T");
+
+                try {
+                    Date afromDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
+                    tos = new SimpleDateFormat("MMM dd,yyyy").format(afromDate);
+                    holder.mTo.setText(""+tos);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+
             holder.mLeaveType.setText(""+dto.getLeaveType());
             holder.mLeaveComment.setText(""+dto.getLeaveComment());
 

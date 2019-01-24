@@ -23,6 +23,7 @@ import app.zingo.employeemanagements.Model.LeaveNotificationManagers;
 import app.zingo.employeemanagements.Model.Leaves;
 import app.zingo.employeemanagements.Model.MeetingDetailsNotificationManagers;
 import app.zingo.employeemanagements.R;
+import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
@@ -275,6 +276,7 @@ public class ApplyLeaveScreen extends AppCompatActivity {
                             lm.setEmployeeName(PreferenceHandler.getInstance(ApplyLeaveScreen.this).getUserFullName());
                             lm.setFromDate(leaves.getFromDate());
                             lm.setToDate(leaves.getToDate());
+                            lm.setLeaveId(s.getLeaveId()+"");
                             saveLeave(lm);
 
 
@@ -346,8 +348,11 @@ public class ApplyLeaveScreen extends AppCompatActivity {
 
                         if(s!=null){
 
-                          //  sendLeaveNotification(leaves);
-                            ApplyLeaveScreen.this.finish();
+                            leaves.setSenderId(Constants.SENDER_ID);
+                            leaves.setServerId(Constants.SERVER_ID);
+
+                           sendLeaveNotification(leaves);
+                            //ApplyLeaveScreen.this.finish();
 
 
                         }

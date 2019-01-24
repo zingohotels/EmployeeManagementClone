@@ -157,10 +157,10 @@
             android:weightSum="3">
 
 
-            <!-- <LinearLayout
+             <LinearLayout
                  android:gravity="center"
                  android:orientation="vertical"
-                 android:id="@+id/payments"
+                 android:id="@+id/expenses_mgmt"
                  android:padding="8dp"
                  android:clickable="true"
                  android:layout_width="0dp"
@@ -174,14 +174,14 @@
                      android:padding="8dp"
                      android:layout_width="40dp"
                      android:layout_height="40dp"
-                     android:src="@mipmap/ic_credit_card_white_48dp"/>
+                     android:src="@drawable/expenses"/>
                  <TextView
                      android:textSize="12sp"
                      android:textColor="@color/grey_charcoal"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
-                     android:text="Payments"/>
-             </LinearLayout>-->
+                     android:text="Expenses"/>
+             </LinearLayout>
 
 
             <LinearLayout
@@ -201,7 +201,7 @@
                     android:padding="8dp"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/leave_menu"/>
+                    android:src="@drawable/organize"/>
                 <TextView
                     android:textSize="12sp"
                     android:textColor="@color/grey_charcoal"
@@ -213,7 +213,7 @@
             <LinearLayout
                 android:gravity="center"
                 android:orientation="vertical"
-                android:id="@+id/logout"
+                android:id="@+id/change_password"
                 android:padding="8dp"
                 android:clickable="true"
                 android:layout_width="0dp"
@@ -227,56 +227,33 @@
                     android:padding="8dp"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/logout"/>
+                    android:src="@drawable/change_password"/>
                 <TextView
                     android:textSize="12sp"
                     android:textColor="@color/grey_charcoal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Logout"/>
+                    android:text="Change Password"/>
             </LinearLayout>
+
         </LinearLayout>
 
 
 
 
-        <!--    <LinearLayout
+            <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:weightSum="3">
+
                 <LinearLayout
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:id="@+id/claims"
+                    android:id="@+id/meeting"
                     android:padding="8dp"
-                    android:clickable="true"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
-                    android:minWidth="70dp"
-                    android:layout_weight="1">
-                    <ImageView
-                        android:background="@drawable/rounded_menu_background"
-                        android:padding="8dp"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@mipmap/ic_receipt_white_48dp"/>
-                    <TextView android:textSize="12sp"
-                        android:textColor="@color/grey_charcoal"
-                        android:id="@+id/claimsBadge"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Claims"/>
-                </LinearLayout>
 
-                <LinearLayout android:gravity="center"
-                    android:orientation="vertical"
-                    android:id="@+id/holidays"
-                    android:padding="8dp"
-                    android:visibility="visible"
                     android:clickable="true"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -289,15 +266,41 @@
                         android:padding="8dp"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:src="@mipmap/ic_bus_white_48dp"/>
+                        android:src="@drawable/meeting_add"/>
                     <TextView
                         android:textSize="12sp"
                         android:textColor="@color/grey_charcoal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Holiday List"/>
+                        android:text="Meeting"/>
                 </LinearLayout>
-            </LinearLayout>-->
+
+                <LinearLayout
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:id="@+id/logout"
+                    android:padding="8dp"
+                    android:clickable="true"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:minWidth="70dp"
+                    android:layout_weight="1">
+                    <ImageView
+                        android:background="@drawable/rounded_menu_background"
+                        android:padding="8dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/logout"/>
+                    <TextView
+                        android:textSize="12sp"
+                        android:textColor="@color/grey_charcoal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Logout"/>
+                </LinearLayout>
+            </LinearLayout>
         <!--  <LinearLayout
               android:orientation="horizontal"
               android:layout_width="match_parent"

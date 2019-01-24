@@ -52,6 +52,12 @@ public class Tasks implements Serializable {
     @SerializedName("Latitude")
     public String Latitude;
 
+    @SerializedName("ReminderDate")
+    public String ReminderDate;
+
+    @SerializedName("DepartmentId")
+    public int DepartmentId;
+
     public int getTaskId() {
         return TaskId;
     }
@@ -162,5 +168,21 @@ public class Tasks implements Serializable {
 
     public void setLatitude(String latitude) {
         Latitude = latitude;
+    }
+
+    public String getReminderDate() {
+        return ReminderDate;
+    }
+
+    public void setReminderDate(String reminderDate) {
+        ReminderDate = reminderDate;
+    }
+
+    public int getDepartmentId() {
+        return DepartmentId;
+    }
+
+    public void setDepartmentId(int departmentId) {
+        DepartmentId = departmentId;
     }
 }

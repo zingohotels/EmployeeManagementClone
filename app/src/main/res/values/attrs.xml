@@ -13,7 +13,7 @@
         <enum name="Maribel_Suit" value="5"/>
         <enum name="arial" value="6"/>
         <enum name="Mistral" value="7"/>
-        <enum name="Yeysk" value="8"/>
+        <enum name="Copper_Black_Regular" value="8"/>
     </attr>
 
 </resources>

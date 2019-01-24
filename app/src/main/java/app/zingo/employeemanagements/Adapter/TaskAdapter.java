@@ -11,7 +11,10 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
 
 import app.zingo.employeemanagements.Model.Leaves;
@@ -54,8 +57,42 @@ public class TaskAdapter   extends RecyclerView.Adapter<TaskAdapter.ViewHolder>{
 
             holder.mView.setBackgroundColor(color);
 
-            holder.mFrom.setText(""+dto.getStartDate());
-            holder.mTo.setText(""+dto.getEndDate());
+            String froms = dto.getStartDate();
+            String tos = dto.getEndDate();
+
+            if(froms.contains("T")){
+
+                String dojs[] = froms.split("T");
+
+                try {
+                    Date afromDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
+                    froms = new SimpleDateFormat("MMM dd,yyyy").format(afromDate);
+                    holder.mFrom.setText(""+froms);
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            if(tos.contains("T")){
+
+                String dojs[] = tos.split("T");
+
+                try {
+                    Date afromDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
+                    tos = new SimpleDateFormat("MMM dd,yyyy").format(afromDate);
+                    holder.mTo.setText(""+tos);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+           /* holder.mFrom.setText(""+dto.getStartDate());
+            holder.mTo.setText(""+dto.getEndDate());*/
             holder.mDead.setText(""+dto.getDeadLine());
             holder.mTaskName.setText(""+dto.getTaskName());
             holder.mdesc.setText(""+dto.getTaskDescription());

@@ -13,6 +13,12 @@ public class LeaveNotificationManagers implements Serializable {
     @SerializedName("LeaveNotificationManagerId")
     public int LeaveNotificationManagerId;
 
+    @SerializedName("SenderId")
+    public String SenderId;
+
+    @SerializedName("ServerId")
+    public String ServerId;
+
     @SerializedName("Title")
     public String Title;
 
@@ -42,6 +48,9 @@ public class LeaveNotificationManagers implements Serializable {
 
     @SerializedName("Comments")
     public String Comments;
+
+    @SerializedName("LeaveId")
+    public String LeaveId;
 
 
     public int getLeaveNotificationManagerId() {
@@ -130,5 +139,29 @@ public class LeaveNotificationManagers implements Serializable {
 
     public void setComments(String comments) {
         Comments = comments;
+    }
+
+    public String getLeaveId() {
+        return LeaveId;
+    }
+
+    public void setLeaveId(String leaveId) {
+        LeaveId = leaveId;
+    }
+
+    public String getSenderId() {
+        return SenderId;
+    }
+
+    public void setSenderId(String senderId) {
+        SenderId = senderId;
+    }
+
+    public String getServerId() {
+        return ServerId;
+    }
+
+    public void setServerId(String serverId) {
+        ServerId = serverId;
     }
 }

@@ -88,7 +88,7 @@ public class LeaveTakenEmployeeAdapter extends RecyclerView.Adapter<LeaveTakenEm
 
                 try {
                     Date afromDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
-                    froms = new SimpleDateFormat("dd MMM yyyy").format(afromDate);
+                    froms = new SimpleDateFormat("MMM dd,yyyy").format(afromDate);
                     holder.mFrom.setText(""+froms);
 
                 } catch (ParseException e) {
@@ -104,7 +104,7 @@ public class LeaveTakenEmployeeAdapter extends RecyclerView.Adapter<LeaveTakenEm
 
                 try {
                     Date afromDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
-                    tos = new SimpleDateFormat("dd MMM yyyy").format(afromDate);
+                    tos = new SimpleDateFormat("MMM dd,yyyy").format(afromDate);
                     holder.mTo.setText(""+tos);
                 } catch (ParseException e) {
                     e.printStackTrace();

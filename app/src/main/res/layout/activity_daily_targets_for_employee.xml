@@ -214,4 +214,15 @@
         app:backgroundTint="@color/designBlueGreen"
         app:elevation="6dp"
         app:fabSize="normal"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_gravity="bottom|left|center_vertical|center_horizontal|center|start"
+        android:id="@+id/refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:src="@drawable/quantum_ic_refresh_white_24"
+        app:backgroundTint="@color/designBlueGreen"
+        app:elevation="6dp"
+        app:fabSize="normal"/>
 </android.support.design.widget.CoordinatorLayout>

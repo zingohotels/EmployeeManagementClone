@@ -9,16 +9,20 @@
     <LinearLayout
         android:gravity="center_vertical"
         android:orientation="horizontal"
+        android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/profilePicture"
-            android:focusable="true"
-            android:clickable="true"
+
+        <app.zingo.employeemanagements.Custom.RoundImageView
+
+            android:src="@drawable/profile_image"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_margin="8dp"
-            android:src="@drawable/profile_image"/>
+            android:id="@+id/profilePicture"
+            android:scaleType="fitXY"
+            />
+
         <LinearLayout
             android:gravity="center_vertical"
             android:orientation="vertical"

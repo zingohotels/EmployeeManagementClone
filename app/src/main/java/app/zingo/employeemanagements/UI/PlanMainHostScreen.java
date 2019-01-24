@@ -72,7 +72,7 @@ public class PlanMainHostScreen extends TabActivity implements TabHost.OnTabChan
             dash.putExtra("EmployeeId", employeeId);
             tabText.setContent(dash);
 
-            labelRequest.setText("Advance Plan");
+            labelRequest.setText("Advanced Plan");
             tabMaps.setIndicator(tabRequest);
             Intent maps = new Intent(this, AdvancePlanScreen.class);
             maps.putExtra("EmployeeId", employeeId);

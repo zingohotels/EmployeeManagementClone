@@ -77,6 +77,18 @@ public class Organization implements Serializable {
     @SerializedName("plans")
     private Plans plans;
 
+    @SerializedName("ReferralCodeOfReseller")
+    private String ReferralCodeOfReseller;
+
+    @SerializedName("resellerProfile")
+    private ResellerProfiles resellerProfile;
+
+    @SerializedName("ResellerProfileId")
+    private int ResellerProfileId;
+
+    @SerializedName("IsWorking")
+    private boolean IsWorking;
+
     public int getOrganizationId() {
         return OrganizationId;
     }
@@ -251,5 +263,38 @@ public class Organization implements Serializable {
 
     public void setPlans(Plans plans) {
         this.plans = plans;
+    }
+
+
+    public String getReferralCodeOfReseller() {
+        return ReferralCodeOfReseller;
+    }
+
+    public void setReferralCodeOfReseller(String referralCodeOfReseller) {
+        ReferralCodeOfReseller = referralCodeOfReseller;
+    }
+
+    public ResellerProfiles getResellerProfile() {
+        return resellerProfile;
+    }
+
+    public void setResellerProfile(ResellerProfiles resellerProfile) {
+        this.resellerProfile = resellerProfile;
+    }
+
+    public int getResellerProfileId() {
+        return ResellerProfileId;
+    }
+
+    public void setResellerProfileId(int resellerProfileId) {
+        ResellerProfileId = resellerProfileId;
+    }
+
+    public boolean isWorking() {
+        return IsWorking;
+    }
+
+    public void setWorking(boolean working) {
+        IsWorking = working;
     }
 }

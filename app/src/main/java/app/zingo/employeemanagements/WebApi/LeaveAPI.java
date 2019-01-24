@@ -27,6 +27,9 @@ public interface LeaveAPI {
     @GET("Leaves/GetAllLeavesByEmployeeId/{EmployeeId}")
     Call<ArrayList<Leaves>> getLeavesByEmployeeId(@Path("EmployeeId") int id);
 
+    @GET("Leaves/{id}")
+    Call<Leaves> getLeaveById(@Path("id") int id);
+
     @GET("Leaves/GetAllLeavesByStatusandEmployeeId/{Status}/{EmployeeId}")
     Call<ArrayList<Leaves>> getLeavesByStatusAndEmployeeId(@Path("Status") String status,@Path("EmployeeId") int id);
 

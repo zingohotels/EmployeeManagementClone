@@ -245,6 +245,8 @@
                         android:layout_marginLeft="@dimen/activity_large_margin"
                         android:layout_marginTop="20.0dip"
                         android:layout_marginRight="@dimen/activity_large_margin"
+                        android:editable="false"
+                        android:clickable="true"
                         android:background="@drawable/test_background"
                         android:hint="City"
                         android:layout_weight="1"
@@ -325,6 +327,8 @@
                         android:layout_marginRight="@dimen/activity_large_margin"
                         android:background="@drawable/test_background"
                         android:hint="Build Year"
+                        android:maxLength="4"
+                        android:inputType="number"
                         android:layout_weight="1"
                         android:singleLine="true"
                         android:textColor="#ffffff"
@@ -342,6 +346,7 @@
                         android:hint="No of Employees"
                         android:layout_weight="1"
                         android:singleLine="true"
+                        android:inputType="number"
                         android:textColor="#ffffff"
                         android:textColorHint="#afaeae"
                         />
@@ -395,6 +400,21 @@
                     android:layout_marginRight="@dimen/activity_large_margin"
                     android:background="@drawable/test_background"
                     android:hint="Website"
+
+                    android:singleLine="true"
+                    android:textColor="#ffffff"
+                    android:textColorHint="#afaeae"
+                    />
+
+                <app.zingo.employeemanagements.Custom.MyEditText
+                    android:id="@+id/reseller_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginLeft="@dimen/activity_large_margin"
+                    android:layout_marginTop="20.0dip"
+                    android:layout_marginRight="@dimen/activity_large_margin"
+                    android:background="@drawable/test_background"
+                    android:hint="Reseller Code(optional)"
 
                     android:singleLine="true"
                     android:textColor="#ffffff"
