@@ -9,7 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.CardView;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -61,12 +63,12 @@ public class EmployeeSignUp extends AppCompatActivity {
     /*TextInputEditText mName,mDob,mDoj,mPrimaryEmail,mSecondaryEmail,
             mMobile,mPassword,mConfirm,mOrganizationCode,mDesignation;*/
 
-    MyEditText mName,mDob,mDoj,mPrimaryEmail,mSecondaryEmail,
-            mMobile,mPassword,mConfirm,mOrganizationCode,mDesignation;
+    MyEditText mName,mPrimaryEmail,mSecondaryEmail,
+            mMobile,mPassword,mConfirm,mOrganizationCode,mDesignation;//,mDob,mDoj
     EditText mAddress;
     CardView mOrganizationCodeLayout;
     NestedScrollView mEmployeeLayout;
-    Spinner mDepartment,mEmailEnd;
+    Spinner mDepartment;//mEmailEnd
     RadioButton mMale,mFemale,mOthers;
     AppCompatButton mCreate,mVerifyCode;
 
@@ -75,6 +77,10 @@ public class EmployeeSignUp extends AppCompatActivity {
     String[] organizationEmail;
 
     CheckBox mShowPwd;
+
+    private String current = "";
+    private String ddmmyyyy = "DDMMYYYY";
+    private Calendar cal = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,8 +97,8 @@ public class EmployeeSignUp extends AppCompatActivity {
 
 
             mName = (MyEditText)findViewById(R.id.name);
-            mDob = (MyEditText)findViewById(R.id.dob);
-            mDoj = (MyEditText)findViewById(R.id.doj);
+          /*  mDob = (MyEditText)findViewById(R.id.dob);
+            mDoj = (MyEditText)findViewById(R.id.doj);*/
             mDesignation = (MyEditText)findViewById(R.id.designation);
             mOrganizationCode = (MyEditText)findViewById(R.id.organization_code);
             mOrganizationCodeLayout = (CardView) findViewById(R.id.card);
@@ -104,7 +110,7 @@ public class EmployeeSignUp extends AppCompatActivity {
             mPassword = (MyEditText)findViewById(R.id.password);
             mConfirm = (MyEditText)findViewById(R.id.confirmpwd);
             mDepartment = (Spinner) findViewById(R.id.android_material_design_spinner);
-            mEmailEnd = (Spinner) findViewById(R.id.primary_email_end);
+          //  mEmailEnd = (Spinner) findViewById(R.id.primary_email_end);
 
             mAddress = (EditText)findViewById(R.id.address);
 
@@ -119,21 +125,140 @@ public class EmployeeSignUp extends AppCompatActivity {
 
             mMobile.setText(""+PreferenceHandler.getInstance(EmployeeSignUp.this).getPhoneNumber());
 
-            mDob.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            /*mDob.addTextChangedListener(new TextWatcher() {
 
-                    openDatePicker(mDob);
+
+
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    if (!s.toString().equals(current)) {
+                        String clean = s.toString().replaceAll("[^\\d.]|\\.", "");
+                        String cleanC = current.replaceAll("[^\\d.]|\\.", "");
+
+                        int cl = clean.length();
+                        int sel = cl;
+                        for (int i = 2; i <= cl && i < 6; i += 2) {
+                            sel++;
+                        }
+                        //Fix for pressing delete next to a forward slash
+                        if (clean.equals(cleanC)) sel--;
+
+                        if (clean.length() < 8){
+                            clean = clean + ddmmyyyy.substring(clean.length());
+                        }else{
+                            //This part makes sure that when we finish entering numbers
+                            //the date is correct, fixing it otherwise
+                            int day  = Integer.parseInt(clean.substring(0,2));
+                            int mon  = Integer.parseInt(clean.substring(2,4));
+                            int year = Integer.parseInt(clean.substring(4,8));
+
+                            String currentYear = new SimpleDateFormat("yyyy").format(new Date());
+
+                            int years = Integer.parseInt(currentYear);
+
+                            mon = mon < 1 ? 1 : mon > 12 ? 12 : mon;
+                            cal.set(Calendar.MONTH, mon-1);
+                            year = (year<1900)?1900:(year>years)?years:year;
+                            cal.set(Calendar.YEAR, year);
+                            // ^ first set year for the line below to work correctly
+                            //with leap years - otherwise, date e.g. 29/02/2012
+                            //would be automatically corrected to 28/02/2012
+
+                            day = (day > cal.getActualMaximum(Calendar.DATE))? cal.getActualMaximum(Calendar.DATE):day;
+                            clean = String.format("%02d%02d%02d",day, mon, year);
+                        }
+
+                        clean = String.format("%s/%s/%s", clean.substring(0, 2),
+                                clean.substring(2, 4),
+                                clean.substring(4, 8));
+
+                        sel = sel < 0 ? 0 : sel;
+                        current = clean;
+                        mDob.setText(current);
+                        mDob.setSelection(sel < current.length() ? sel : current.length());
+                    }
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
                 }
             });
 
-            mDoj.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
 
-                    openDatePicker(mDoj);
+            mDoj.addTextChangedListener(new TextWatcher() {
+
+
+
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
                 }
-            });
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    if (!s.toString().equals(current)) {
+                        String clean = s.toString().replaceAll("[^\\d.]|\\.", "");
+                        String cleanC = current.replaceAll("[^\\d.]|\\.", "");
+
+                        int cl = clean.length();
+                        int sel = cl;
+                        for (int i = 2; i <= cl && i < 6; i += 2) {
+                            sel++;
+                        }
+                        //Fix for pressing delete next to a forward slash
+                        if (clean.equals(cleanC)) sel--;
+
+                        if (clean.length() < 8){
+                            clean = clean + ddmmyyyy.substring(clean.length());
+                        }else{
+                            //This part makes sure that when we finish entering numbers
+                            //the date is correct, fixing it otherwise
+                            int day  = Integer.parseInt(clean.substring(0,2));
+                            int mon  = Integer.parseInt(clean.substring(2,4));
+                            int year = Integer.parseInt(clean.substring(4,8));
+
+                            String currentYear = new SimpleDateFormat("yyyy").format(new Date());
+
+                            int years = Integer.parseInt(currentYear);
+
+                            mon = mon < 1 ? 1 : mon > 12 ? 12 : mon;
+                            cal.set(Calendar.MONTH, mon-1);
+                            year = (year<1900)?1900:(year>years)?years:year;
+                            cal.set(Calendar.YEAR, year);
+                            // ^ first set year for the line below to work correctly
+                            //with leap years - otherwise, date e.g. 29/02/2012
+                            //would be automatically corrected to 28/02/2012
+
+                            day = (day > cal.getActualMaximum(Calendar.DATE))? cal.getActualMaximum(Calendar.DATE):day;
+                            clean = String.format("%02d%02d%02d",day, mon, year);
+                        }
+
+                        clean = String.format("%s/%s/%s", clean.substring(0, 2),
+                                clean.substring(2, 4),
+                                clean.substring(4, 8));
+
+                        sel = sel < 0 ? 0 : sel;
+                        current = clean;
+                        mDoj.setText(current);
+                        mDoj.setSelection(sel < current.length() ? sel : current.length());
+                    }
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });*/
 
             mCreate.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -279,8 +404,8 @@ public class EmployeeSignUp extends AppCompatActivity {
     public void validate() throws Exception{
 
         String name = mName.getText().toString();
-        String dob = mDob.getText().toString();
-        String doj = mDoj.getText().toString();
+        /*String dob = mDob.getText().toString();
+        String doj = mDoj.getText().toString();*/
         String designation = mDesignation.getText().toString();
         String primary = mPrimaryEmail.getText().toString();
         String secondary = mSecondaryEmail.getText().toString();
@@ -293,7 +418,7 @@ public class EmployeeSignUp extends AppCompatActivity {
 
             Toast.makeText(this, "Name is required", Toast.LENGTH_SHORT).show();
 
-        }else if(dob.isEmpty()){
+        }/*else if(dob.isEmpty()){
 
             Toast.makeText(this, "DOB is required", Toast.LENGTH_SHORT).show();
 
@@ -301,17 +426,13 @@ public class EmployeeSignUp extends AppCompatActivity {
 
             Toast.makeText(this, "Founded date is required", Toast.LENGTH_SHORT).show();
 
-        }else if(primary.isEmpty()){
+        }*/else if(primary.isEmpty()){
 
             Toast.makeText(this, "Primary Email is required", Toast.LENGTH_SHORT).show();
 
         }else if(designation.isEmpty()){
 
             Toast.makeText(this, "Designation is required", Toast.LENGTH_SHORT).show();
-
-        }else if(secondary.isEmpty()){
-
-            Toast.makeText(this, "Secondary Email is required", Toast.LENGTH_SHORT).show();
 
         }else if(mobile.isEmpty()){
 
@@ -324,10 +445,6 @@ public class EmployeeSignUp extends AppCompatActivity {
         }else if(confirm.isEmpty()){
 
             Toast.makeText(this, "Confirm Password is required", Toast.LENGTH_SHORT).show();
-
-        }else if(address.isEmpty()) {
-
-            Toast.makeText(this, "Address is required", Toast.LENGTH_SHORT).show();
 
         }else if(!password.isEmpty()&&!confirm.isEmpty()&&!password.equals(confirm)){
 
@@ -342,7 +459,10 @@ public class EmployeeSignUp extends AppCompatActivity {
 
             Employee employee = new Employee();
             employee.setEmployeeName(name);
-            employee.setAddress(address);
+            if(address!=null&&!address.isEmpty()){
+                employee.setAddress(address);
+            }
+
             if(mMale.isChecked()){
                 employee.setGender("Male");
             }else if(mFemale.isChecked()){
@@ -353,28 +473,30 @@ public class EmployeeSignUp extends AppCompatActivity {
                 employee.setGender("Others");
             }
 
-            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
             try {
-                Date fdate = sdf.parse(dob);
+                //Date fdate = sdf.parse(dob);
 
-                String from1 = simpleDateFormat.format(fdate);
+                String from1 = simpleDateFormat.format(new Date());
                 employee.setDateOfBirth(from1);
 
-                fdate = sdf.parse(doj);
+               // fdate = sdf.parse(doj);
 
-                from1 = simpleDateFormat.format(fdate);
+                from1 = simpleDateFormat.format(new Date());
                 employee.setDateOfJoining(from1);
 
 
 
-            } catch (ParseException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            employee.setPrimaryEmailAddress(primary+"@"+mEmailEnd.getSelectedItem().toString());
+            employee.setPrimaryEmailAddress(primary);
+            if(address!=null&&!address.isEmpty()){
+                employee.setAlternateEmailAddress(secondary);
+            }
 
-            employee.setAlternateEmailAddress(secondary);
             employee.setPhoneNumber(mobile);
             employee.setPassword(password);
             employee.setDepartmentId(departmentData.get(mDepartment.getSelectedItemPosition()).getDepartmentId());
@@ -763,7 +885,7 @@ public class EmployeeSignUp extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<ArrayList<Organization>> call, Response<ArrayList<Organization>> response) {
 
-                        if (response.code() == 200||response.code() == 201||response.code() == 204&&response.body().size()!=0)
+                        if ((response.code() == 200||response.code() == 201||response.code() == 204)&&response.body().size()!=0)
                         {
 
                             Organization organization = response.body().get(0);
@@ -771,7 +893,7 @@ public class EmployeeSignUp extends AppCompatActivity {
 
                             if(organization!=null){
                                 String upToNCharacters = organization.getOrganizationName().substring(0, Math.min(organization.getOrganizationName().length(), 4));
-                                Toast.makeText(EmployeeSignUp.this, ""+upToNCharacters, Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(EmployeeSignUp.this, ""+upToNCharacters, Toast.LENGTH_SHORT).show();
 
                                 if(code.equalsIgnoreCase(upToNCharacters+id)){
 
@@ -785,7 +907,7 @@ public class EmployeeSignUp extends AppCompatActivity {
                                         organizationEmail = email.split("@");
 
                                         EmailEndAdapter adapter = new EmailEndAdapter(EmployeeSignUp.this,organizationEmail);
-                                        mEmailEnd.setAdapter(adapter);
+                                        //mEmailEnd.setAdapter(adapter);
 
                                         /*ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(EmployeeSignUp.this, R.layout.spinner_dropdown_item, organizationEmail );
                                         arrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);

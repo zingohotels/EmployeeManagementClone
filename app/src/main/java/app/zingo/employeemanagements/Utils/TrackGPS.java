@@ -19,7 +19,7 @@ import android.util.Log;
 
 public class TrackGPS extends Service implements LocationListener {
 
-    private final Context mContext;
+    private Context mContext;
 
 
     boolean checkGPS = false;
@@ -34,6 +34,7 @@ public class TrackGPS extends Service implements LocationListener {
     double longitude;
 
 
+
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
 
 
@@ -43,6 +44,10 @@ public class TrackGPS extends Service implements LocationListener {
     public TrackGPS(Context mContext) {
         this.mContext = mContext;
         getLocation();
+    }
+
+    public TrackGPS() {
+
     }
 
     private Location getLocation() {
@@ -77,8 +82,7 @@ public class TrackGPS extends Service implements LocationListener {
                             Log.d("GPS Enabled", "GPS Enabled");
                             if (locationManager != null) {
                                 Log.d("GPS Enabled2", "GPS Enabled");
-                                loc = locationManager
-                                        .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                                loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                                 if (loc != null) {
                                     Log.d("GPS Enabled3", "GPS Enabled");
                                     latitude = loc.getLatitude();
@@ -186,7 +190,9 @@ public class TrackGPS extends Service implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-
+        this.loc = location;
+        getLatitude();
+        getLongitude();
     }
 
     @Override

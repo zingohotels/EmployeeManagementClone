@@ -80,6 +80,9 @@ public class Organization implements Serializable {
     @SerializedName("ReferralCodeOfReseller")
     private String ReferralCodeOfReseller;
 
+    @SerializedName("TestColumn")
+    private String TestColumn;
+
     @SerializedName("resellerProfile")
     private ResellerProfiles resellerProfile;
 
@@ -296,5 +299,13 @@ public class Organization implements Serializable {
 
     public void setWorking(boolean working) {
         IsWorking = working;
+    }
+
+    public String getTestColumn() {
+        return TestColumn;
+    }
+
+    public void setTestColumn(String testColumn) {
+        TestColumn = testColumn;
     }
 }

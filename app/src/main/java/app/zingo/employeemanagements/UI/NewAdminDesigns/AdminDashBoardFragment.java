@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.DecimalFormat;
@@ -34,6 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import app.zingo.employeemanagements.Adapter.TaskAdminListAdapter;
 import app.zingo.employeemanagements.Adapter.TaskEmployeeListAdapter;
 import app.zingo.employeemanagements.Adapter.TaskListAdapter;
 import app.zingo.employeemanagements.Custom.MyRegulerText;
@@ -42,10 +44,12 @@ import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.Leaves;
 import app.zingo.employeemanagements.Model.LoginDetails;
 import app.zingo.employeemanagements.Model.LoginDetailsNotificationManagers;
+import app.zingo.employeemanagements.Model.TaskAdminData;
 import app.zingo.employeemanagements.Model.Tasks;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Admin.CreatePaySlip;
 import app.zingo.employeemanagements.UI.Company.OrganizationDetailScree;
+import app.zingo.employeemanagements.UI.Employee.CreateEmployeeScreen;
 import app.zingo.employeemanagements.UI.Employee.EmployeeListScreen;
 import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
@@ -68,10 +72,10 @@ public class AdminDashBoardFragment extends Fragment {
     final String TAG = "Employer Dash";
     View layout;
     RecyclerView mTaskList;
-    LinearLayout mTaskLayout,mPendingLayout;
-    private TaskListAdapter mAdapter;
+    LinearLayout mTaskLayout,mPendingLayout,mOnTaskLay,mDepartmentLay,mEmployeeLay,mPresenEmploLay,mAbEmLayy,mLeaveLay;
+    private TaskAdminListAdapter mAdapter;
     MyRegulerText mDeptCount,mEmployeeCount,mOnTask,mPending,mEmployeePresent,mEmployeeAbsent,
-                    mLeaveEmployee,mUnmarkedEmployee;
+                    mLeaveEmployee;//mUnmarkedEmployee
 
     static Context mContext;
 
@@ -84,11 +88,17 @@ public class AdminDashBoardFragment extends Fragment {
 
     boolean checkValue = false;
 
-    ArrayList<Tasks> employeeTasks;
-    ArrayList<Tasks> pendingTasks ;
-    ArrayList<Tasks> completedTasks ;
-    ArrayList<Tasks> closedTasks ;
-    ArrayList<Tasks> onTask ;
+    ArrayList<TaskAdminData> employeeTasks;
+    ArrayList<TaskAdminData> pendingTasks ;
+    ArrayList<TaskAdminData> completedTasks ;
+    ArrayList<TaskAdminData> closedTasks ;
+    ArrayList<TaskAdminData> onTask ;
+    ArrayList<TaskAdminData> todayTasks;
+
+    ArrayList<Employee> presentEmployees;
+    ArrayList<Employee> absentEmployees;
+    ArrayList<Employee> allEmployees;
+    ArrayList<Employee> leaveEmployees;
 
     ArrayList<Integer> preEmpId;
     ArrayList<Integer> leaEmpId;
@@ -126,6 +136,12 @@ public class AdminDashBoardFragment extends Fragment {
             mTaskList = (RecyclerView) layout.findViewById(R.id.task_list_dash);
             mTaskLayout = (LinearLayout) layout.findViewById(R.id.today_task_list);
             mPendingLayout = (LinearLayout) layout.findViewById(R.id.pending_task_layout);
+            mOnTaskLay = (LinearLayout) layout.findViewById(R.id.on_task_count_layout);
+            mDepartmentLay = (LinearLayout) layout.findViewById(R.id.dept_count_layout);
+            mEmployeeLay = (LinearLayout) layout.findViewById(R.id.employee_count_layout);
+            mPresenEmploLay = (LinearLayout) layout.findViewById(R.id.present_count_layout);
+            mAbEmLayy = (LinearLayout) layout.findViewById(R.id.absent_count_layout);
+            mLeaveLay = (LinearLayout) layout.findViewById(R.id.leave_count_layout);
             mTaskLayout.setVisibility(View.GONE);
             mDeptCount = (MyRegulerText)layout.findViewById(R.id.dept_count_text);
             mEmployeeCount = (MyRegulerText)layout.findViewById(R.id.employee_count_text);
@@ -134,13 +150,14 @@ public class AdminDashBoardFragment extends Fragment {
             mEmployeePresent = (MyRegulerText)layout.findViewById(R.id.today_employee_present);
             mEmployeeAbsent = (MyRegulerText)layout.findViewById(R.id.absent_employee);
             mLeaveEmployee = (MyRegulerText)layout.findViewById(R.id.leave_employees);
-            mUnmarkedEmployee = (MyRegulerText)layout.findViewById(R.id.unmarked_employees);
+           // mUnmarkedEmployee = (MyRegulerText)layout.findViewById(R.id.unmarked_employees);
 
 
             leaEmpId = new ArrayList<>();
             preEmpId = new ArrayList<>();
             absEmpId = new ArrayList<>();
             all = new ArrayList<>();
+
 
             if(PreferenceHandler.getInstance(getActivity()).getCompanyId()!=0){
                 getDepartment();
@@ -151,7 +168,7 @@ public class AdminDashBoardFragment extends Fragment {
             }
 
 
-
+         //   showalertbox();
 
             if(checkValue){
                 all.addAll(leaEmpId);
@@ -159,7 +176,13 @@ public class AdminDashBoardFragment extends Fragment {
                 all.addAll(absEmpId);
 
                 all = removeDuplicates(all);
-                mUnmarkedEmployee.setText(""+(all.size()-1));
+
+                allEmployees.removeAll(presentEmployees);
+                allEmployees.removeAll(leaveEmployees);
+                allEmployees = removeDuplicates(allEmployees);
+                absentEmployees = allEmployees;
+
+               mEmployeeAbsent.setText(""+(all.size()-1));
             }else{
                 h = new Handler();
                 //1 second=1000 milisecond, 15*1000=15seconds
@@ -173,8 +196,13 @@ public class AdminDashBoardFragment extends Fragment {
                             all.addAll(preEmpId);
                             all.addAll(absEmpId);
 
+                            allEmployees.removeAll(presentEmployees);
+                            allEmployees.removeAll(leaveEmployees);
+                            allEmployees = removeDuplicates(allEmployees);
+                            absentEmployees = allEmployees;
+
                             all = removeDuplicates(all);
-                            mUnmarkedEmployee.setText(""+(employee-all.size()));
+                            mEmployeeAbsent.setText(""+(employee-all.size()));
                         }
                         h.postDelayed(runnable, delay);
                     }
@@ -189,9 +217,109 @@ public class AdminDashBoardFragment extends Fragment {
                         Intent pending = new Intent(getActivity(),PendingTasks.class);
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("PendingTasks",pendingTasks);
+                        bundle.putString("Title","Pending Tasks");
                         pending.putExtras(bundle);
                         startActivity(pending);
                     }
+
+                }
+            });
+
+            mOnTaskLay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if(onTask!=null&&onTask.size()!=0){
+                        Intent pending = new Intent(getActivity(),PendingTasks.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("PendingTasks",onTask);
+                        bundle.putString("Title","On Tasks");
+                        pending.putExtras(bundle);
+                        startActivity(pending);
+                    }
+
+                }
+            });
+
+            mDepartmentLay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent organization = new Intent(getActivity(), DepartmentLilstScreen.class);
+                    getContext().startActivity(organization);
+
+                }
+            });
+
+            mEmployeeLay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent employee = new Intent(getContext(), EmployeeUpdateListScreen.class);
+                    getContext().startActivity(employee);
+
+                }
+            });
+
+            mPresenEmploLay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if(presentEmployees!=null&&presentEmployees.size()!=0){
+
+                        Intent pending = new Intent(getActivity(),PresentEmployeeListScreen.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("Employees",presentEmployees);
+                        pending.putExtras(bundle);
+                        startActivity(pending);
+
+                    }else {
+                        Toast.makeText(getActivity(), "No Employees", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                }
+            });
+
+            mAbEmLayy.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+
+
+                    if(absentEmployees!=null&&absentEmployees.size()!=0){
+
+                        Intent pending = new Intent(getActivity(),PresentEmployeeListScreen.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("Employees",absentEmployees);
+                        pending.putExtras(bundle);
+                        startActivity(pending);
+
+                    }else {
+                        Toast.makeText(getActivity(), "No Employees", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                }
+            });
+
+            mLeaveLay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if(leaveEmployees!=null&&leaveEmployees.size()!=0){
+
+                        Intent pending = new Intent(getActivity(),PresentEmployeeListScreen.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("Employees",leaveEmployees);
+                        pending.putExtras(bundle);
+                        startActivity(pending);
+
+                    }else {
+                        Toast.makeText(getActivity(), "No Employees", Toast.LENGTH_SHORT).show();
+                    }
+
 
                 }
             });
@@ -237,10 +365,16 @@ public class AdminDashBoardFragment extends Fragment {
                             ArrayList<Employee> list = response.body();
 
                             employeeTasks = new ArrayList<>();
+                            todayTasks = new ArrayList<>();
                             pendingTasks = new ArrayList<>();
                             completedTasks = new ArrayList<>();
                             closedTasks = new ArrayList<>();
                             onTask = new ArrayList<>();
+                            presentEmployees = new ArrayList<>();
+                            absentEmployees = new ArrayList<>();
+                            allEmployees = new ArrayList<>();
+                            leaveEmployees = new ArrayList<>();
+
                             if (list !=null && list.size()!=0) {
 
                                 ArrayList<Employee> employees = new ArrayList<>();
@@ -248,15 +382,19 @@ public class AdminDashBoardFragment extends Fragment {
 
                                     if(list.get(i).getEmployeeId()!=PreferenceHandler.getInstance(getActivity()).getUserId()){
 
+                                        allEmployees.add(list.get(i));
                                         employees.add(list.get(i));
-                                        getTasks(list.get(i).getEmployeeId());
-                                        getApprovedLeaveDetails(list.get(i).getEmployeeId());
+
+                                        final Calendar calendar = Calendar.getInstance();
+                                        Date date2 = calendar.getTime();
+                                        getTasks(list.get(i),new SimpleDateFormat("yyyy-MM-dd").format(date2));
+                                        getApprovedLeaveDetails(list.get(i).getEmployeeId(),list.get(i));
                                         getRejectedLeaveDetails(list.get(i).getEmployeeId());
 
                                         LoginDetails loginDetails = new LoginDetails();
                                         loginDetails.setEmployeeId(list.get(i).getEmployeeId());
                                         loginDetails.setLoginDate(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
-                                        getLoginDetails(loginDetails);
+                                        getLoginDetails(loginDetails,list.get(i));
 
                                     }
                                 }
@@ -471,10 +609,7 @@ public class AdminDashBoardFragment extends Fragment {
                             Toast.makeText(getContext(), "Department Creted Successfully ", Toast.LENGTH_SHORT).show();
 
                             dialogs.dismiss();
-                            Intent employeeList = new Intent(getContext(), DepartmentLilstScreen.class);
-                            getActivity().startActivity(employeeList);
-
-
+                            showalertbox();
 
 
 
@@ -515,16 +650,16 @@ public class AdminDashBoardFragment extends Fragment {
 
     }
 
-    private void getTasks(final int employeeId){
+    private void getTasks(final Employee employee,final String dateValue){
 
-
+        final int employeeId = employee.getEmployeeId();
 
 
         new ThreadExecuter().execute(new Runnable() {
             @Override
             public void run() {
                 TasksAPI apiService = Util.getClient().create(TasksAPI.class);
-                Call<ArrayList<Tasks>> call = apiService.getTasks();
+                Call<ArrayList<Tasks>> call = apiService.getTasksByEmployeeId(employeeId);
 
                 call.enqueue(new Callback<ArrayList<Tasks>>() {
                     @Override
@@ -535,17 +670,15 @@ public class AdminDashBoardFragment extends Fragment {
 
 
                             ArrayList<Tasks> list = response.body();
-                            ArrayList<Tasks> todayTasks = new ArrayList<>();
+
 
 
                             Date date = new Date();
                             Date adate = new Date();
                             Date edate = new Date();
 
-
-
                             try {
-                                date = new SimpleDateFormat("yyyy-MM-dd").parse(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+                                date = new SimpleDateFormat("yyyy-MM-dd").parse(dateValue);
 
 
                             } catch (Exception e) {
@@ -560,7 +693,11 @@ public class AdminDashBoardFragment extends Fragment {
 
                                 for (Tasks task:list) {
 
-                                    if(task.getEmployeeId()==employeeId){
+
+                                    TaskAdminData taskAdminData = new TaskAdminData();
+                                    taskAdminData.setEmployee(employee);
+                                    taskAdminData.setTasks(task);
+
 
                                         String froms = task.getStartDate();
                                         String tos = task.getEndDate();
@@ -610,29 +747,36 @@ public class AdminDashBoardFragment extends Fragment {
 
                                             if(date.getTime() >= afromDate.getTime() && date.getTime() <= atoDate.getTime()){
 
-                                                todayTasks.add(task);
+                                                TaskAdminData taskAdminDatas = new TaskAdminData();
+                                                taskAdminDatas.setEmployee(employee);
+                                                taskAdminDatas.setTasks(task);
+
+                                                todayTasks.add(taskAdminDatas);
 
                                             }
                                         }
 
-                                        employeeTasks.add(task);
+                                    TaskAdminData taskAdminDatas = new TaskAdminData();
+                                    taskAdminDatas.setEmployee(employee);
+                                    taskAdminDatas.setTasks(task);
+                                    employeeTasks.add(taskAdminDatas);
                                        // total = total+1;
 
                                         if(task.getStatus().equalsIgnoreCase("Completed")){
-                                            completedTasks.add(task);
+                                            completedTasks.add(taskAdminDatas);
                                             //complete = complete+1;
                                         }else if(task.getStatus().equalsIgnoreCase("Pending")){
-                                            pendingTasks.add(task);
+                                            pendingTasks.add(taskAdminDatas);
                                             pendingTask = pendingTask+1;
                                         }else if(task.getStatus().equalsIgnoreCase("Closed")){
-                                            closedTasks.add(task);
+                                            closedTasks.add(taskAdminDatas);
                                            // closed = closed+1;
                                         }else if(task.getStatus().equalsIgnoreCase("On-Going")){
-                                            onTask.add(task);
+                                            onTask.add(taskAdminDatas);
                                             onTasks = onTasks+1;
                                         }
 
-                                    }
+
 
                                 }
 
@@ -641,7 +785,9 @@ public class AdminDashBoardFragment extends Fragment {
                                     if(todayTasks!=null&&todayTasks.size()!=0){
                                         mTaskLayout.setVisibility(View.VISIBLE);
 
-                                        mAdapter = new TaskListAdapter(getContext(),todayTasks);
+                                        mTaskList.removeAllViews();
+
+                                        mAdapter = new TaskAdminListAdapter(getContext(),todayTasks);
                                         mTaskList.setAdapter(mAdapter);
                                     }
 
@@ -685,7 +831,7 @@ public class AdminDashBoardFragment extends Fragment {
         });
     }
 
-    private void getLoginDetails(final LoginDetails loginDetails){
+    private void getLoginDetails(final LoginDetails loginDetails,final Employee employee){
 
 
 
@@ -709,11 +855,18 @@ public class AdminDashBoardFragment extends Fragment {
                             if (list !=null && list.size()!=0) {
 
 
-                                preEmpId.add(loginDetails.getEmployeeId());
-                                presentEmployee = presentEmployee+1;
-                                mEmployeePresent.setText(""+presentEmployee);
 
-                                checkValue = true;
+
+                                if(list.get(list.size()-1).getLogOutTime()==null||list.get(list.size()-1).getLogOutTime().isEmpty()){
+
+                                    preEmpId.add(loginDetails.getEmployeeId());
+                                    presentEmployee = presentEmployee+1;
+                                    mEmployeePresent.setText(""+presentEmployee);
+                                    presentEmployees.add(employee);
+                                    checkValue = true;
+                                }
+
+
 
 
                             }else{
@@ -744,7 +897,7 @@ public class AdminDashBoardFragment extends Fragment {
         });
     }
 
-    private void getApprovedLeaveDetails(final int employeeId){
+    private void getApprovedLeaveDetails(final int employeeId,final Employee employee){
 
         new ThreadExecuter().execute(new Runnable() {
             @Override
@@ -835,6 +988,7 @@ public class AdminDashBoardFragment extends Fragment {
                                             if(date.getTime() >= afromDate.getTime() && date.getTime() <= atoDate.getTime()){
 
                                                 approvedLeave.add(leaves);
+                                                leaveEmployees.add(employee);
                                                 leaEmpId.add(employeeId);
                                                 checkValue = true;
 
@@ -984,7 +1138,7 @@ public class AdminDashBoardFragment extends Fragment {
 
                                         if(rejectedLeave.size()!=0){
                                             absentEmployee = absentEmployee+1;
-                                            mEmployeeAbsent.setText(""+absentEmployee);
+                                            //mEmployeeAbsent.setText(""+absentEmployee);
                                         }
 
 
@@ -1040,6 +1194,66 @@ public class AdminDashBoardFragment extends Fragment {
 
         // return the new list
         return newList;
+    }
+
+    private void showalertbox() throws Exception{
+
+
+
+        final android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = this.getLayoutInflater();
+        View view = inflater.inflate(R.layout.depart_add_alert_layout,null);
+        TextView dontCancelBtn = (TextView)view.findViewById(R.id.no_btn);
+        TextView cancelBtn = (TextView)view.findViewById(R.id.exit_app_btn);
+        TextView ask = (TextView)view.findViewById(R.id.ask);
+
+        dialogBuilder.setView(view);
+        final android.app.AlertDialog dialog = dialogBuilder.create();
+        dialog.setCancelable(true);
+        dialog.show();
+        dontCancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try
+                {
+                    if(dialog != null)
+                    {
+                        dialog.dismiss();
+                    }
+
+                    Intent employeeList = new Intent(getContext(), DepartmentLilstScreen.class);
+                    getActivity().startActivity(employeeList);
+
+
+                }
+                catch (Exception ex)
+                {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                try
+                {
+                    if(dialog != null)
+                    {
+                        dialog.dismiss();
+                    }
+
+                    Intent employee =new Intent(getActivity(),CreateEmployeeScreen.class);
+                    startActivity(employee);
+
+
+                }
+                catch (Exception ex)
+                {
+                    ex.printStackTrace();
+                }
+            }
+        });
     }
 
 }

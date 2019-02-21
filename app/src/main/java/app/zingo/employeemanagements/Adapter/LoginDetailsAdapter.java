@@ -40,7 +40,7 @@ public class LoginDetailsAdapter extends RecyclerView.Adapter<LoginDetailsAdapte
 
         try{
             View v = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.adapter_login_details, parent, false);
+                    .inflate(R.layout.adapter_dash_employee_admin, parent, false);
             ViewHolder viewHolder = new ViewHolder(v);
             return viewHolder;
         }catch (Exception e){
@@ -58,42 +58,77 @@ public class LoginDetailsAdapter extends RecyclerView.Adapter<LoginDetailsAdapte
 
             if(loginDetails!=null){
 
-                String date[] = loginDetails.getLoginDate().split("T");
-                String dateValue="";
-                Date dates = null;
-                try {
-                    dates = new SimpleDateFormat("yyyy-MM-dd").parse(date[0]);
-                    dateValue = new SimpleDateFormat("MMM dd,yyyy").format(dates);
-                    holder.mDate.setText(dateValue);
+                String loginTime = loginDetails.getLoginTime();
+                String logoutTime = loginDetails.getLogOutTime();
+                String loginDate = loginDetails.getLoginDate();
+                String dateValue = "";
 
+                if(loginDate.contains("T")){
+
+                    String dateValues[] = loginDate.split("T");
+                    dateValue = dateValues[0];
+
+                }
+
+
+
+                if(loginTime!=null&&!loginTime.isEmpty()){
+                    holder.mLoginTime.setText(""+loginTime);
+                }else{
+                    holder.mLoginTime.setText("");
+                }
+
+                if(logoutTime!=null&&!logoutTime.isEmpty()){
+                    holder.mLogoutTime.setText(""+logoutTime);
+                }else{
+                    holder.mLogoutTime.setText("Working");
+                }
+
+
+                SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+                SimpleDateFormat sdfs = new SimpleDateFormat("MMM dd,yyyy");
+
+                Date date=null;
+                try {
+                    date = new SimpleDateFormat("yyyy-MM-dd").parse(dateValue);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                String login = loginDetails.getLoginTime();
-                String logout = loginDetails.getLogOutTime();
+
+                Date fd=null,td=null;
+                String comDate = new SimpleDateFormat("MMM dd,yyyy").format(date);
 
 
+                if(loginTime==null||loginTime.isEmpty()){
 
-                if(login!=null&&!login.isEmpty()){
-                    String time ="";
-                    if(logout!=null&&!logout.isEmpty()){
-
-                        time = login+" to "+logout;
-                        dateCal(dateValue,login,logout,holder.mDuration);
-                        holder.mDuration.setTextColor(Color.GREEN);
-
-                    }else{
-
-                        time = login+"-";
-                        dateCal(dateValue,login,new SimpleDateFormat("MMM dd,yyyy hh:mm a").format(new Date()),holder.mDuration);
-                        holder.mDuration.setTextColor(Color.RED);
-                    }
-                    holder.mTime.setText(time);
-
-                }else{
-
-                    holder.mTime.setText("");
+                    loginTime = comDate +" 00:00 am";
                 }
+
+                if(logoutTime==null||logoutTime.isEmpty()){
+
+                    logoutTime = comDate  +" "+new SimpleDateFormat("hh:mm a").format(new Date()) ;
+                }
+
+                try {
+                    fd = sdf.parse(""+loginTime);
+                    td = sdf.parse(""+logoutTime);
+
+                    long diffHrs = td.getTime() - fd.getTime();
+
+                    int minutes = (int) ((diffHrs / (1000*60)) % 60);
+                    int hours   = (int) ((diffHrs / (1000*60*60)) % 24);
+                    int days   = (int) ((diffHrs / (1000*60*60*24)));
+
+
+
+                    holder.mDuration.setText(String.format("%02d", days)+":"+String.format("%02d", hours) +":"+String.format("%02d", minutes));
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+
+                }
+
+
             }
 
 
@@ -114,7 +149,7 @@ public class LoginDetailsAdapter extends RecyclerView.Adapter<LoginDetailsAdapte
 
     class ViewHolder extends RecyclerView.ViewHolder  {
 
-        TextView mDate,mTime,mDuration;
+        TextView mLoginTime,mLogoutTime,mDuration;
 
 
 
@@ -123,9 +158,9 @@ public class LoginDetailsAdapter extends RecyclerView.Adapter<LoginDetailsAdapte
             super(itemView);
             itemView.setClickable(true);
 
-            mDate = (TextView)itemView.findViewById(R.id.login_date);
-            mTime = (TextView)itemView.findViewById(R.id.login_logout);
-            mDuration = (TextView)itemView.findViewById(R.id.working_hours);
+            mLoginTime = (TextView)itemView.findViewById(R.id.report_login);
+            mLogoutTime = (TextView)itemView.findViewById(R.id.report_logout);
+            mDuration = (TextView)itemView.findViewById(R.id.report_hours);
 
 
 

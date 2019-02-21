@@ -30,6 +30,9 @@ public interface TasksAPI {
     @GET("Tasks/GetTasksByEmployeeId/{EmployeeId}")
     Call<ArrayList<Tasks>> getTasksByEmployeeId(@Path("EmployeeId") int EmployeeId);
 
+    @GET("Tasks/GetTasksByEmployeeIdAndStatus/{EmployeeId}/{Status}")
+    Call<ArrayList<Tasks>> getTasksByEmployeeIdStatus(@Path("EmployeeId") int EmployeeId,@Path("Status") String Status);
+
 
 
 }

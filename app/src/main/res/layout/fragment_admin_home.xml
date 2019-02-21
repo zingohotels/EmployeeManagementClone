@@ -39,38 +39,14 @@
                 android:layout_height="match_parent"
                 android:text="@string/renew_alert_message"/>
         </LinearLayout>
+
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:weightSum="3">
-            <LinearLayout
-                android:gravity="center"
-                android:orientation="vertical"
-                android:id="@+id/employees"
-                android:padding="8dp"
-                android:clickable="true"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:minWidth="70dp"
-                android:layout_weight="1">
-                <ImageView
-                    android:background="@drawable/rounded_menu_background"
-                    android:padding="8dp"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/employee_menu"/>
-                <TextView
-                    android:textSize="12sp"
-                    android:textColor="@color/grey_charcoal"
-                    android:id="@+id/textView6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Employees"/>
-            </LinearLayout>
+
             <LinearLayout
                 android:gravity="center"
                 android:orientation="vertical"
@@ -97,64 +73,6 @@
                     android:text="Attendance"/>
             </LinearLayout>
 
-            <LinearLayout
-                android:gravity="center"
-                android:orientation="vertical"
-                android:id="@+id/leaveApplications"
-                android:padding="8dp"
-                android:clickable="true"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:minWidth="70dp"
-                android:layout_weight="1">
-                <ImageView
-                    android:background="@drawable/rounded_menu_background"
-                    android:padding="8dp"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/leave_menu"/>
-                <TextView
-                    android:textSize="12sp"
-                    android:textColor="@color/grey_charcoal"
-                    android:id="@+id/leaveBadge"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Leaves"/>
-            </LinearLayout>
-        </LinearLayout>
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:weightSum="3">
-            <LinearLayout
-                android:gravity="center"
-                android:orientation="vertical"
-                android:id="@+id/department"
-                android:padding="8dp"
-                android:clickable="true"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:minWidth="70dp"
-                android:layout_weight="1">
-                <ImageView
-                    android:background="@drawable/rounded_menu_background"
-                    android:padding="8dp"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/factory"/>
-                <TextView
-                    android:textSize="12sp"
-                    android:textColor="@color/grey_charcoal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Organization"/>
-            </LinearLayout>
             <LinearLayout
                 android:gravity="center"
                 android:orientation="vertical"
@@ -206,65 +124,21 @@
                     android:layout_height="wrap_content"
                     android:text="Task"/>
             </LinearLayout>
-        </LinearLayout>
 
+
+
+
+
+
+
+
+        </LinearLayout>
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:weightSum="3">
-
-            <LinearLayout
-                android:gravity="center"
-                android:orientation="vertical"
-                android:id="@+id/department_org"
-                android:padding="8dp"
-                android:clickable="true"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:minWidth="70dp"
-                android:layout_weight="1">
-                <ImageView
-                    android:background="@drawable/rounded_menu_background"
-                    android:padding="8dp"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/maintenance"/>
-                <TextView
-                    android:textSize="12sp"
-                    android:textColor="@color/grey_charcoal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Department"/>
-            </LinearLayout>
-            <LinearLayout
-                android:gravity="center"
-                android:orientation="vertical"
-                android:id="@+id/salary"
-                android:padding="8dp"
-                android:clickable="true"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:minWidth="70dp"
-                android:layout_weight="1">
-                <ImageView
-                    android:background="@drawable/rounded_menu_background"
-                    android:padding="8dp"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/salary"/>
-                <TextView
-                    android:textSize="12sp"
-                    android:textColor="@color/grey_charcoal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Salary"/>
-            </LinearLayout>
 
             <LinearLayout
                 android:gravity="center"
@@ -292,17 +166,96 @@
                     android:text="Expenses"/>
             </LinearLayout>
 
+            <LinearLayout
+                android:gravity="center"
+                android:orientation="vertical"
+                android:id="@+id/leaveApplications"
+                android:padding="8dp"
+                android:clickable="true"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:minWidth="70dp"
+                android:layout_weight="1">
+                <ImageView
+                    android:background="@drawable/rounded_menu_background"
+                    android:padding="8dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/leave_menu"/>
+                <TextView
+                    android:textSize="12sp"
+                    android:textColor="@color/grey_charcoal"
+                    android:id="@+id/leaveBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Leaves"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:gravity="center"
+                android:orientation="vertical"
+                android:id="@+id/salary"
+                android:padding="8dp"
+                android:clickable="true"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:minWidth="70dp"
+                android:layout_weight="1">
+                <ImageView
+                    android:background="@drawable/rounded_menu_background"
+                    android:padding="8dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/salary"/>
+                <TextView
+                    android:textSize="12sp"
+                    android:textColor="@color/grey_charcoal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Salary"/>
+            </LinearLayout>
 
 
         </LinearLayout>
-
-
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:weightSum="3">
+
+            <LinearLayout
+                android:gravity="center"
+                android:orientation="vertical"
+                android:id="@+id/team"
+                android:padding="8dp"
+                android:clickable="true"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:minWidth="70dp"
+                android:layout_weight="1">
+                <ImageView
+                    android:background="@drawable/rounded_menu_background"
+                    android:padding="8dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/team_list"/>
+                <TextView
+                    android:textSize="12sp"
+                    android:textColor="@color/grey_charcoal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="My Team"/>
+            </LinearLayout>
+
+
+
 
             <LinearLayout
                 android:gravity="center"
@@ -330,10 +283,11 @@
                     android:text="Reports"/>
             </LinearLayout>
 
+
             <LinearLayout
                 android:gravity="center"
                 android:orientation="vertical"
-                android:id="@+id/plan_detail"
+                android:id="@+id/department_org"
                 android:padding="8dp"
                 android:clickable="true"
                 android:layout_width="0dp"
@@ -347,14 +301,90 @@
                     android:padding="8dp"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/ic_featured_play_list_black_24dp"/>
+                    android:src="@drawable/maintenance"/>
                 <TextView
                     android:textSize="12sp"
                     android:textColor="@color/grey_charcoal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Plan Features"/>
+                    android:text="Department"/>
             </LinearLayout>
+
+
+
+
+
+
+        </LinearLayout>
+
+
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:weightSum="3">
+
+
+            <LinearLayout
+                android:gravity="center"
+                android:orientation="vertical"
+                android:id="@+id/employees"
+                android:padding="8dp"
+                android:clickable="true"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:minWidth="70dp"
+                android:layout_weight="1">
+                <ImageView
+                    android:background="@drawable/rounded_menu_background"
+                    android:padding="8dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/employee_menu"/>
+                <TextView
+                    android:textSize="12sp"
+                    android:textColor="@color/grey_charcoal"
+                    android:id="@+id/textView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Employees"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:gravity="center"
+                android:orientation="vertical"
+                android:id="@+id/customer_creation"
+                android:padding="8dp"
+                android:clickable="true"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:minWidth="70dp"
+                android:layout_weight="1">
+                <ImageView
+                    android:background="@drawable/rounded_menu_background"
+                    android:padding="8dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/rating_client"/>
+                <TextView
+                    android:textSize="12sp"
+                    android:textColor="@color/grey_charcoal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Customer/Client"/>
+            </LinearLayout>
+
+
+
+
+
             <LinearLayout
                 android:gravity="center"
                 android:orientation="vertical"
@@ -392,6 +422,62 @@
             android:weightSum="3">
 
 
+
+            <LinearLayout
+                android:gravity="center"
+                android:orientation="vertical"
+                android:id="@+id/holiday"
+                android:padding="8dp"
+
+                android:clickable="true"
+                android:layout_width="0dp"
+                android:visibility="gone"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:minWidth="70dp"
+                android:layout_weight="1">
+                <ImageView
+                    android:background="@drawable/rounded_menu_background"
+                    android:padding="8dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/event_day"/>
+                <TextView
+                    android:textSize="12sp"
+                    android:textColor="@color/grey_charcoal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Day Management"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:gravity="center"
+                android:orientation="vertical"
+                android:id="@+id/department"
+                android:padding="8dp"
+                android:clickable="true"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:minWidth="70dp"
+                android:layout_weight="1">
+                <ImageView
+                    android:background="@drawable/rounded_menu_background"
+                    android:padding="8dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/factory"/>
+                <TextView
+                    android:textSize="12sp"
+                    android:textColor="@color/grey_charcoal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Organization"/>
+            </LinearLayout>
+
+
             <LinearLayout
                 android:gravity="center"
                 android:orientation="vertical"
@@ -416,6 +502,32 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Logout"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:gravity="center"
+                android:orientation="vertical"
+                android:id="@+id/plan_detail"
+                android:padding="8dp"
+                android:clickable="true"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:minWidth="70dp"
+                android:layout_weight="1">
+                <ImageView
+                    android:background="@drawable/rounded_menu_background"
+                    android:padding="8dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_featured_play_list_black_24dp"/>
+                <TextView
+                    android:textSize="12sp"
+                    android:textColor="@color/grey_charcoal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Plan Features"/>
             </LinearLayout>
 
 

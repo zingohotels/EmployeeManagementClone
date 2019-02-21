@@ -13,15 +13,27 @@ import android.widget.Toast;
 
 import com.itextpdf.text.pdf.StringUtils;
 
+import java.util.ArrayList;
+
+import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Admin.DashBoardAdmin;
 import app.zingo.employeemanagements.UI.Common.ChangePasswordScreen;
+import app.zingo.employeemanagements.UI.Common.CustomerCreation;
+import app.zingo.employeemanagements.UI.Common.ReportManagementScreen;
 import app.zingo.employeemanagements.UI.Company.OrganizationDetailScree;
+import app.zingo.employeemanagements.UI.Company.WorkingDaysScreen;
 import app.zingo.employeemanagements.UI.Employee.EmployeeListScreen;
 import app.zingo.employeemanagements.UI.LandingScreen;
 import app.zingo.employeemanagements.UI.NewEmployeeDesign.ExpenseManageHost;
 import app.zingo.employeemanagements.UI.PlanMainHostScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
+import app.zingo.employeemanagements.Utils.ThreadExecuter;
+import app.zingo.employeemanagements.Utils.Util;
+import app.zingo.employeemanagements.WebApi.EmployeeApi;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,8 +43,8 @@ public class AdminHomeFragment extends Fragment {
     final String TAG = "Employer Dashboard";
     View layout;
     LinearLayout attendance,leaveApplications,employees;
-    LinearLayout departments,liveTracking,tasks,expenses;
-    LinearLayout salary,logout,deptOrg,chngPwd,plans,reports;
+    LinearLayout departments,liveTracking,tasks,expenses,team,client;
+    LinearLayout salary,logout,deptOrg,chngPwd,plans,reports,holiday;
 
 
     public AdminHomeFragment() {
@@ -92,12 +104,15 @@ public class AdminHomeFragment extends Fragment {
         attendance = (LinearLayout) this.layout.findViewById(R.id.attendance);
         leaveApplications = (LinearLayout) this.layout.findViewById(R.id.leaveApplications);
         employees = (LinearLayout) this.layout.findViewById(R.id.employees);
+        holiday = (LinearLayout) this.layout.findViewById(R.id.holiday);
 
         departments = (LinearLayout) this.layout.findViewById(R.id.department);
         liveTracking = (LinearLayout) this.layout.findViewById(R.id.live_tracking);
         tasks = (LinearLayout) this.layout.findViewById(R.id.task_layout);
+        client = (LinearLayout) this.layout.findViewById(R.id.customer_creation);
 
         expenses = (LinearLayout) this.layout.findViewById(R.id.expenses_mgmt);
+        team = (LinearLayout) this.layout.findViewById(R.id.team);
         plans = (LinearLayout) this.layout.findViewById(R.id.plan_detail);
 
 
@@ -106,6 +121,10 @@ public class AdminHomeFragment extends Fragment {
         logout = (LinearLayout) this.layout.findViewById(R.id.logout);
         chngPwd = (LinearLayout) this.layout.findViewById(R.id.change_password);
         reports = (LinearLayout) this.layout.findViewById(R.id.report_mgmt);
+
+        if(PreferenceHandler.getInstance(getActivity()).getResellerUserId()!=0){
+            plans.setVisibility(View.GONE);
+        }
 
         //App new version available
         View updatedText = this.layout.findViewById(R.id.updateText);
@@ -159,6 +178,12 @@ public class AdminHomeFragment extends Fragment {
                 openMenuViews(liveTracking);
             }
         });
+        team.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMenuViews(team);
+            }
+        });
 
         tasks.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -203,6 +228,18 @@ public class AdminHomeFragment extends Fragment {
                 openMenuViews(reports);
             }
         });
+        holiday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMenuViews(holiday);
+            }
+        });
+        client.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMenuViews(client);
+            }
+        });
 
     }
 
@@ -217,13 +254,21 @@ public class AdminHomeFragment extends Fragment {
             Intent employee = new Intent(getContext(), PlanMainHostScreen.class);
             getContext().startActivity(employee);
 
+        } else if (view.getId() == R.id.team) {
+            Intent employee = new Intent(getContext(), TeamMembersList.class);
+            getContext().startActivity(employee);
+
+        } else if (view.getId() == R.id.holiday) {
+            Intent employee = new Intent(getContext(), WorkingDaysScreen.class);
+            getContext().startActivity(employee);
+
         } else if (view.getId() == R.id.attendance) {
             intent = new Intent(getContext(), EmployeeListScreen.class);
             intent.putExtra("viewId", view.getId());
             intent.putExtra("Type","attendance");
             getContext().startActivity(intent);
         }else if (view.getId() == R.id.report_mgmt) {
-            intent = new Intent(getContext(), EmployeeListScreen.class);
+            intent = new Intent(getContext(), ReportManagementScreen.class);
             intent.putExtra("viewId", view.getId());
             intent.putExtra("Type","Report");
             getContext().startActivity(intent);
@@ -233,7 +278,7 @@ public class AdminHomeFragment extends Fragment {
             intent.putExtra("viewId", view.getId());
             getContext().startActivity(intent);
         }else if (view.getId() == R.id.expenses_mgmt) {
-            Intent live = new Intent(getActivity(), EmployeeListScreen.class);
+            Intent live = new Intent(getActivity(), ExpensesListAdmin.class);
             live.putExtra("Type","Expense");
             getContext().startActivity(live);
 
@@ -259,17 +304,117 @@ public class AdminHomeFragment extends Fragment {
         }else if (view.getId() == R.id.change_password) {
             Intent chnage = new Intent(getActivity(), ChangePasswordScreen.class);
             startActivity(chnage);
-        }else if (view.getId() == R.id.logout) {
-            PreferenceHandler.getInstance(getActivity()).clear();
+        }else if (view.getId() == R.id.customer_creation) {
+            /*Intent chnage = new Intent(getActivity(), CustomerCreation.class);
+            startActivity(chnage);*/
 
-            Intent log = new Intent(getActivity(), LandingScreen.class);
-            log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-            Toast.makeText(getActivity(),"Logout",Toast.LENGTH_SHORT).show();
-            startActivity(log);
-            getActivity().finish();
+            Toast.makeText(getActivity(), "Coming Soon", Toast.LENGTH_SHORT).show();
+        }else if (view.getId() == R.id.logout) {
+           getProfile(PreferenceHandler.getInstance(getActivity()).getUserId());
         }
     }
 
+    public void getProfile(final int id ){
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+
+                final EmployeeApi subCategoryAPI = Util.getClient().create(EmployeeApi.class);
+                Call<ArrayList<Employee>> getProf = subCategoryAPI.getProfileById(id);
+                //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
+
+                getProf.enqueue(new Callback<ArrayList<Employee>>() {
+
+                    @Override
+                    public void onResponse(Call<ArrayList<Employee>> call, Response<ArrayList<Employee>> response) {
+
+                        if (response.code() == 200)
+                        {
+                            System.out.println("Inside api");
+
+                            Employee profile = response.body().get(0);
+
+                            profile.setAppOpen(false);
+                            updateProfile(profile);
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<Employee>> call, Throwable t) {
+
+                    }
+                });
+
+            }
+
+        });
+    }
+
+    public void updateProfile(final Employee employee){
+
+
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+
+                final EmployeeApi subCategoryAPI = Util.getClient().create(EmployeeApi.class);
+                Call<Employee> getProf = subCategoryAPI.updateEmployee(employee.getEmployeeId(),employee);
+                //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
+
+                getProf.enqueue(new Callback<Employee>() {
+
+                    @Override
+                    public void onResponse(Call<Employee> call, Response<Employee> response) {
+
+
+                        if (response.code() == 200||response.code()==201||response.code()==204)
+                        {
+
+                            PreferenceHandler.getInstance(getActivity()).clear();
+
+                            Intent log = new Intent(getActivity(), LandingScreen.class);
+                            log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                            Toast.makeText(getActivity(),"Logout",Toast.LENGTH_SHORT).show();
+                            startActivity(log);
+                            getActivity().finish();
+
+                        }else{
+                            PreferenceHandler.getInstance(getActivity()).clear();
+
+                            Intent log = new Intent(getActivity(), LandingScreen.class);
+                            log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                            Toast.makeText(getActivity(),"Logout",Toast.LENGTH_SHORT).show();
+                            startActivity(log);
+                            getActivity().finish();
+                            // Toast.makeText(ChangePasswordScreen.this, "Failed due to status code"+response.code(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Employee> call, Throwable t) {
+
+
+                        PreferenceHandler.getInstance(getActivity()).clear();
+
+                        Intent log = new Intent(getActivity(), LandingScreen.class);
+                        log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                        Toast.makeText(getActivity(),"Logout",Toast.LENGTH_SHORT).show();
+                        startActivity(log);
+                        getActivity().finish();
+                        //  Toast.makeText(ChangePasswordScreen.this, "Something went wrong due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+            }
+
+        });
+    }
 
 }

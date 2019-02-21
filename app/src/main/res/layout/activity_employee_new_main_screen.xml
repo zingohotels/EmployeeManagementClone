@@ -34,44 +34,132 @@
                 android:layout_below="@+id/materialTabHost"
                 android:layout_weight="1">
 
-                <android.support.v4.view.ViewPager
-                    android:id="@+id/viewPager"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-
-                    />
-                <LinearLayout
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:background="#dadada"
-                    android:visibility="gone"
-                    android:id="@+id/trial_version_info_layout"
-                    android:layout_gravity="bottom"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
+
+
+                    <android.support.v4.view.ViewPager
+                        android:id="@+id/viewPager"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_above="@+id/bottom_lay"
+
+                        />
 
                     <LinearLayout
                         android:gravity="center_vertical"
                         android:orientation="vertical"
-                        android:id="@+id/profile"
+                        android:background="#dadada"
+                        android:id="@+id/bottom_lay"
+                        android:layout_alignParentBottom="true"
+                        android:layout_gravity="bottom"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        >
-                        <TextView
-                            android:textSize="16dp"
-                            android:textColor="@color/transparentBlack"
-                            android:ellipsize="end"
-                            android:gravity="center"
-                            android:id="@+id/trial_version_info_msg"
-                            android:clickable="true"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="4dp"
-                            android:text="You are Using Trial version"/>
+                        android:layout_height="wrap_content">
 
+
+                        <LinearLayout
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:background="#dadada"
+                            android:visibility="gone"
+                            android:id="@+id/trial_version_info_layout"
+                            android:layout_gravity="bottom"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <LinearLayout
+                                android:gravity="center_vertical"
+                                android:orientation="vertical"
+                                android:id="@+id/profile"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                >
+
+                                <TextView
+                                    android:id="@+id/trial_version_info_msg"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="4dp"
+                                    android:clickable="true"
+                                    android:ellipsize="end"
+                                    android:gravity="center"
+                                    android:text="You are Using Trial version"
+                                    android:textColor="@color/transparentBlack"
+                                    android:textSize="16dp" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+                        <LinearLayout
+
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:background="#000000"
+                            android:orientation="horizontal"
+                            app:layout_behavior="app.zingo.employeemanagements.Custom.ScrollingToolbarBehavior">
+
+
+
+
+
+
+                            <app.zingo.employeemanagements.Custom.MyRegulerText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:gravity="center"
+                                android:layout_weight="1"
+                                android:text="For Support, lets chat on whatsapp"
+                                android:textColor="#ffffff"
+                                android:textSize="11.3sp" />
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/gradient_rect"
+                                android:gravity="center"
+                                android:orientation="horizontal">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:paddingLeft="15dp"
+                                    android:paddingTop="5dp"
+                                    android:id="@+id/whatsapp_open"
+                                    android:paddingRight="15dp"
+                                    android:paddingBottom="5dp">
+
+
+                                    <ImageView
+                                        android:layout_width="15dp"
+                                        android:layout_height="15dp"
+                                        android:layout_gravity="center"
+                                        android:src="@drawable/ic_whatsapp" />
+
+                                    <app.zingo.employeemanagements.Custom.MyRegulerText
+                                        android:id="@+id/number"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:layout_marginLeft="5dp"
+                                        android:gravity="center"
+                                        android:text="+918987250539"
+                                        android:textColor="#ffffff"
+                                        android:textSize="12.7sp" />
+                                </LinearLayout>
+
+                            </LinearLayout>
+                        </LinearLayout>
                     </LinearLayout>
 
-                </LinearLayout>
+                </RelativeLayout>
+
 
             </FrameLayout>
         </LinearLayout>

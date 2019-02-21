@@ -12,6 +12,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputType;
@@ -57,6 +58,7 @@ import java.util.Locale;
 
 import app.zingo.employeemanagements.Adapter.EmployeeAdapter;
 import app.zingo.employeemanagements.Custom.MyEditText;
+import app.zingo.employeemanagements.Custom.MyTextView;
 import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.Meetings;
@@ -99,10 +101,11 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
 
 
     RecyclerView mPlanList;
-    LinearLayout mPlanLayout,mEmailExtnLay;
-    ImageButton myLocation;
+    LinearLayout mPlanLayout;//mEmailExtnLay
+    AppCompatTextView myLocation;
     ImageView mAddEmail,mDeleteEmail;
-    MyEditText mOrganizationName,mCity,mState,mBuildYear,mNoEmployee,mWebsite,mResellerCode;
+    MyEditText mOrganizationName,mBuildYear,mNoEmployee,mWebsite,mResellerCode;//mEmailExt
+    MyTextView mCity,mState;
     //TextInputEditText mOrganizationName,mCity,mState,mBuildYear,mNoEmployee,mWebsite;
     //TextInputEditText ;
     EditText mAbout,mAddress;
@@ -134,7 +137,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
 
             mPlanList = (RecyclerView)findViewById(R.id.plans);
             mPlanLayout = (LinearLayout) findViewById(R.id.plan_layout);
-            mEmailExtnLay = (LinearLayout) findViewById(R.id.add_email_organization);
+           // mEmailExtnLay = (LinearLayout) findViewById(R.id.add_email_organization);
             mAddEmail = (ImageView) findViewById(R.id.add_mail);
             mDeleteEmail = (ImageView) findViewById(R.id.delete_mail);
             mPlanLayout.setVisibility(View.GONE);
@@ -146,8 +149,9 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
             year = Integer.parseInt(currentYear);
 
             mOrganizationName = (MyEditText)findViewById(R.id.name);
-            mCity = (MyEditText)findViewById(R.id.city);
-            mState = (MyEditText)findViewById(R.id.state);
+          //  mEmailExt = (MyEditText)findViewById(R.id.org_email);
+            mCity = (MyTextView)findViewById(R.id.city);
+            mState = (MyTextView)findViewById(R.id.state);
             mBuildYear = (MyEditText)findViewById(R.id.build);
             mWebsite = (MyEditText)findViewById(R.id.website);
             mResellerCode = (MyEditText)findViewById(R.id.reseller_code);
@@ -155,11 +159,11 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
 
             mAbout = (EditText)findViewById(R.id.about);
             mAddress = (EditText)findViewById(R.id.address);
-            myLocation = (ImageButton) findViewById(R.id.my_location);
+            myLocation = (AppCompatTextView) findViewById(R.id.my_location);
 
             mCreate = (AppCompatButton)findViewById(R.id.createCompany);
 
-            onAddField();
+           // onAddField();
 
             mCity.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -211,7 +215,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
             });
 
 
-            mAddEmail.setOnClickListener(new View.OnClickListener() {
+        /*    mAddEmail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
@@ -225,7 +229,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
 
                     removeView();
                 }
-            });
+            });*/
 
             mBuildYear.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -540,6 +544,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
     public void validate() throws Exception{
 
         String company =mOrganizationName.getText().toString();
+      //  String mail =mEmailExt.getText().toString();
         String about = mAbout.getText().toString();
         String address = mAddress.getText().toString();
         String city = mCity.getText().toString();
@@ -547,7 +552,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
         String build = mBuildYear.getText().toString();
         String web = mWebsite.getText().toString();
         String employeeCount = mNoEmployee.getText().toString();
-        boolean value = checkcondition();
+        //boolean value = checkcondition();
 
         if(company.isEmpty()){
 
@@ -557,7 +562,11 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
 
             Toast.makeText(GetStartedScreen.this, "About Organization Name required", Toast.LENGTH_SHORT).show();
 
-        }else if(address.isEmpty()){
+        }/*else if(mail.isEmpty()){
+
+            Toast.makeText(GetStartedScreen.this, "Organization email extension required", Toast.LENGTH_SHORT).show();
+
+        }*/else if(address.isEmpty()){
 
             Toast.makeText(GetStartedScreen.this, "Address required", Toast.LENGTH_SHORT).show();
 
@@ -581,14 +590,10 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
 
             Toast.makeText(GetStartedScreen.this, "Employee Nos required", Toast.LENGTH_SHORT).show();
 
-        }else if(!value){
-
-            Toast.makeText(GetStartedScreen.this, "Employee email extension required", Toast.LENGTH_SHORT).show();
-
         }else{
-            String message = "";
+            //String message = mail+"@"+"gmail.com";
 
-            if(checkcondition()){
+           /* if(checkcondition()){
                 int i = mEmailExtnLay.getChildCount();
 
                 for (int j = 0; j < i; j++) {
@@ -600,7 +605,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
 
                     message = message+email;
                 }
-            }
+            }*/
 
             LatLng latLng = convertAddressToLatLang(address+"," +city+","+state+","+country);
 
@@ -641,7 +646,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
                 if(placeId!=null){
                     organization.setPlaceId(placeId);
                 }
-                organization.setLocation(message);
+                //organization.setLocation(message);
                 Calendar c = Calendar.getInstance();
                 c.setTime(new Date());
 
@@ -1203,16 +1208,16 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
             ex.printStackTrace();
         }
     }
-    public void onAddField() {
+   /* public void onAddField() {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.add_email_layout, null);
 
         mEmailExtnLay.addView(rowView);
 
 
-    }
+    }*/
 
-    public void removeView() {
+   /* public void removeView() {
 
         int no = mEmailExtnLay.getChildCount();
         if(no >1)
@@ -1226,9 +1231,9 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
             Toast.makeText(GetStartedScreen.this,"Atleast one email extension needed",Toast.LENGTH_SHORT).show();
         }
 
-    }
+    }*/
 
-    public boolean checkcondition()
+  /*  public boolean checkcondition()
     {
         boolean value = false;
         int i = mEmailExtnLay.getChildCount();
@@ -1258,7 +1263,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
         //return true;
         return value;
 
-    }
+    }*/
 
 
     public void getProfile(final int id,final Organization organization,final String code ){

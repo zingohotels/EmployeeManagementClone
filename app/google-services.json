@@ -23,6 +23,22 @@
           }
         },
         {
+          "client_id": "902261099152-c5it3euhd377v11km145olhqfu6p9emb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.zingo.employeemanagements",
+            "certificate_hash": "04a54e6d3ecb51654ea1a5ecd54e6866a0e2d6f1"
+          }
+        },
+        {
+          "client_id": "902261099152-ungpq73i5gpjn88lpnkgjb4m7dji787e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.zingo.employeemanagements",
+            "certificate_hash": "18db1ce594a1db0f3a873187a87112977674649a"
+          }
+        },
+        {
           "client_id": "902261099152-bhcjeu00p4p0sr2m7csfo5mkvfm8d0ln.apps.googleusercontent.com",
           "client_type": 3
         }

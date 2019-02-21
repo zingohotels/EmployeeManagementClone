@@ -5,7 +5,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -25,6 +28,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import app.zingo.employeemanagements.Custom.MyRegulerText;
 import app.zingo.employeemanagements.Custom.MyTextView;
@@ -36,6 +41,7 @@ import app.zingo.employeemanagements.Model.Tasks;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminNewMainScreen;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.UpdateLeaveScreen;
+import app.zingo.employeemanagements.UI.NewAdminDesigns.UpdateTaskScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
@@ -45,6 +51,8 @@ import app.zingo.employeemanagements.WebApi.TasksAPI;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static android.text.TextUtils.isEmpty;
 
 /**
  * Created by ZingoHotels Tech on 07-01-2019.
@@ -67,7 +75,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.adapter_task_list_employee, parent, false);
+                .inflate(R.layout.task_design_adapter, parent, false);
         ViewHolder viewHolder = new ViewHolder(v);
         return viewHolder;
     }
@@ -83,7 +91,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
 
 
             holder.mTaskName.setText(dto.getTaskName());
-            holder.mTaskDesc.setText("Description: \n"+dto.getTaskDescription());
+           // holder.mTaskDesc.setText("Description: \n"+dto.getTaskDescription());
 
             String froms = dto.getStartDate();
             String tos = dto.getEndDate();
@@ -108,7 +116,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
                     }else{
                         try {
                             afromDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dojs[0]+" "+dojs[1]);
-                            froms = new SimpleDateFormat("dd MMM yyyy HH:mm:ss").format(afromDate);
+                            froms = new SimpleDateFormat("dd MMM yyyy HH:mm").format(afromDate);
 
                         } catch (ParseException e) {
                             e.printStackTrace();
@@ -138,7 +146,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
                     }else{
                         try {
                             atoDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dojs[0]+" "+dojs[1]);
-                            tos = new SimpleDateFormat("dd MMM yyyy HH:mm:ss").format(atoDate);
+                            tos = new SimpleDateFormat("dd MMM yyyy HH:mm").format(atoDate);
 
                         } catch (ParseException e) {
                             e.printStackTrace();
@@ -152,21 +160,44 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
                 }
 
             }
-            holder.mDuration.setText(froms+" to "+tos);
-            holder.mDeadLine.setText(dto.getDeadLine());
-            holder.mStatus.setText(dto.getStatus());
+            holder.mDuration.setText(froms+" - "+tos);
+           // holder.mDeadLine.setText(dto.getDeadLine());
+            //holder.mStatus.setText(dto.getStatus());
 
-            getManagers(dto.getToReportEmployeeId(),holder.mCreatedBy);
+            String lngi = dto.getLongitude();
+            String lati = dto.getLatitude();
+
+            if(lngi!=null&&lati!=null){
+
+                double lngiValue  = Double.parseDouble(lngi);
+                double latiValue  = Double.parseDouble(lati);
+
+                if(lngiValue!=0&&latiValue!=0){
+                   // getAddress(lngiValue,latiValue,holder.mLocation);
+                }
+            }
+
+
+            getManagers(dto.getEmployeeId(),holder.mToAllocate,"Employee");
+            getManagers(dto.getToReportEmployeeId(),holder.mCreatedBy,"Manager");
            // holder.mCreatedBy.setText(dto.getStatus());
 
             if(status.equalsIgnoreCase("Pending")){
                 holder.mStatus.setBackgroundColor(Color.parseColor("#FF0000"));
+                holder.mStatusText.setBackground(context.getResources().getDrawable(R.drawable.oval_red));
+                holder.mStatusText.setText("P");
             }else if(status.equalsIgnoreCase("Completed")){
                 holder.mStatus.setBackgroundColor(Color.parseColor("#00FF00"));
+                holder.mStatusText.setBackground(context.getResources().getDrawable(R.drawable.oval_green));
+                holder.mStatusText.setText("Co");
             }else if(status.equalsIgnoreCase("Closed")){
                 holder.mStatus.setBackgroundColor(Color.parseColor("#FFFF00"));
+                holder.mStatusText.setText("Cl");
+                holder.mStatusText.setBackground(context.getResources().getDrawable(R.drawable.oval_yellow));
             }else if(status.equalsIgnoreCase("On-Going")){
                 holder.mStatus.setBackgroundColor(Color.parseColor("#D81B60"));
+                holder.mStatusText.setText("On");
+                holder.mStatusText.setBackground(context.getResources().getDrawable(R.drawable.oval_pink));
             }
 
             if(PreferenceHandler.getInstance(context).getUserRoleUniqueID()==2){
@@ -191,7 +222,13 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
                 public void onClick(View v) {
 
 
-                    try{
+                    Intent updateSc = new Intent(context,UpdateTaskScreen.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("Task",dto);
+                    updateSc.putExtras(bundle);
+                    ((Activity)context).startActivity(updateSc);
+
+                    /*try{
 
                         android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
                         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -256,7 +293,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
 
                     }catch (Exception e){
                         e.printStackTrace();
-                    }
+                    }*/
 
 
                 }
@@ -299,6 +336,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
                                 final Employee employees = list.get(0);
                                 if(employees!=null){
                                     try{
+
 
                                         android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
                                         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -394,7 +432,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
 
         });
     }
-    private void getManagers(final int id, final TextView textView){
+    private void getManagers(final int id, final MyRegulerText textView,final String type){
 
 
 
@@ -423,7 +461,13 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
                                 if(employees!=null){
                                     try{
 
-                                        textView.setText("Created By"+employees.getEmployeeName());
+                                        if(type!=null&&!type.isEmpty()&&type.equalsIgnoreCase("Manager")){
+                                            textView.setText(""+employees.getEmployeeName());
+                                        }else if(type!=null&&!type.isEmpty()&&type.equalsIgnoreCase("Employee")){
+                                            textView.setText("To "+employees.getEmployeeName());
+                                        }
+
+
 
 
                                     }catch (Exception e){
@@ -472,22 +516,30 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
 
     class ViewHolder extends RecyclerView.ViewHolder /*implements View.OnClickListener*/ {
 
-        public TextView mTaskName,mTaskDesc,mDuration,mDeadLine,mStatus,mCreatedBy;
+        MyRegulerText mToAllocate,mTaskName,mDuration,mCreatedBy;
+        View mStatus;
+        TextView mStatusText;
 
-        public LinearLayout mNotificationMain,mContact,mtaskUpdate;
+      /*  public TextView mTaskName,mTaskDesc,mDuration,mDeadLine,mStatus,mCreatedBy,mLocation,mToAllocate;*/
+
+     //   public LinearLayout mNotificationMain,mContact,mtaskUpdate;
+        public LinearLayout mContact,mtaskUpdate;
 
         public ViewHolder(View itemView) {
             super(itemView);
             itemView.setClickable(true);
 
-            mTaskName = (TextView)itemView.findViewById(R.id.title_task);
-            mTaskDesc = (TextView)itemView.findViewById(R.id.title_description);
-            mDuration = (TextView)itemView.findViewById(R.id.time_task);
-            mDeadLine = (TextView)itemView.findViewById(R.id.dead_line_task);
-            mStatus = (TextView)itemView.findViewById(R.id.status);
-            mCreatedBy = (TextView)itemView.findViewById(R.id.created_by);
+            mTaskName = (MyRegulerText)itemView.findViewById(R.id.title_task);
+           // mTaskDesc = (TextView)itemView.findViewById(R.id.title_description);
+            mDuration = (MyRegulerText)itemView.findViewById(R.id.time_task);
+           // mDeadLine = (TextView)itemView.findViewById(R.id.dead_line_task);
+            mStatus = (View)itemView.findViewById(R.id.status);
+            mStatusText = (TextView) itemView.findViewById(R.id.status_text);
+            mCreatedBy = (MyRegulerText)itemView.findViewById(R.id.created_by);
+          //  mLocation = (TextView)itemView.findViewById(R.id.task_location);
+            mToAllocate = (MyRegulerText)itemView.findViewById(R.id.to_allocated);
 
-            mNotificationMain = (LinearLayout) itemView.findViewById(R.id.attendanceItem);
+           // mNotificationMain = (LinearLayout) itemView.findViewById(R.id.attendanceItem);
             mContact = (LinearLayout) itemView.findViewById(R.id.contact_employee);
             mtaskUpdate = (LinearLayout) itemView.findViewById(R.id.task_update);
 
@@ -557,5 +609,47 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
 
 
 
+    }
+
+    public void getAddress(final double longitude,final double latitude,final TextView textView )
+    {
+
+        try
+        {
+            Geocoder geocoder;
+            List<Address> addresses;
+            geocoder = new Geocoder(context, Locale.ENGLISH);
+
+
+            addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+
+            String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+
+            String state = addresses.get(0).getAdminArea();
+            String country = addresses.get(0).getCountryName();
+            String postalCode = addresses.get(0).getPostalCode();
+            String knownName = addresses.get(0).getFeatureName();
+
+
+
+            System.out.println("address = "+address);
+
+            String currentLocation;
+
+            if(!isEmpty(address))
+            {
+                currentLocation=address;
+                textView.setText(currentLocation);
+
+            }
+            else
+                Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
+
+
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
     }
 }

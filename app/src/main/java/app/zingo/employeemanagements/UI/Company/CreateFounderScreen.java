@@ -5,11 +5,15 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -38,20 +42,26 @@ import app.zingo.employeemanagements.Model.Designations;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.R;
+import app.zingo.employeemanagements.Service.LocationSharingServices;
+import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
 import app.zingo.employeemanagements.UI.LandingScreen;
+import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminNewMainScreen;
+import app.zingo.employeemanagements.UI.NewEmployeeDesign.EmployeeNewMainScreen;
+import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.DepartmentApi;
 import app.zingo.employeemanagements.WebApi.DesignationsAPI;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
+import app.zingo.employeemanagements.WebApi.OrganizationApi;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class CreateFounderScreen extends AppCompatActivity {
 
-    MyEditText mName,mDob,mDoj,mPrimaryEmail,mSecondaryEmail,mMobile,mPassword,mConfirm;
+    MyEditText mName,mPrimaryEmail,mSecondaryEmail,mMobile,mPassword,mConfirm;//mDob,mDoj,
     EditText mAddress;
     RadioButton mMale,mFemale,mOthers;
     AppCompatButton mCreate;
@@ -61,6 +71,10 @@ public class CreateFounderScreen extends AppCompatActivity {
 
 
     CheckBox mShowPwd;
+
+    private String current = "";
+    private String ddmmyyyy = "DDMMYYYY";
+    private Calendar cal = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +87,8 @@ public class CreateFounderScreen extends AppCompatActivity {
 
 
             mName = (MyEditText)findViewById(R.id.name);
-            mDob = (MyEditText)findViewById(R.id.dob);
-            mDoj = (MyEditText)findViewById(R.id.doj);
+           /* mDob = (MyEditText)findViewById(R.id.dob);
+            mDoj = (MyEditText)findViewById(R.id.doj);*/
             mPrimaryEmail = (MyEditText)findViewById(R.id.email);
             mSecondaryEmail = (MyEditText)findViewById(R.id.semail);
             mMobile = (MyEditText)findViewById(R.id.mobile);
@@ -102,21 +116,160 @@ public class CreateFounderScreen extends AppCompatActivity {
 
             mMobile.setText(phone);
             mMobile.setEnabled(false);
-            mDob.setOnClickListener(new View.OnClickListener() {
+            /*mDob.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
-                    openDatePicker(mDob);
+                    //openDatePicker(mDob);
+                }
+            });*/
+
+
+
+           /* mDob.addTextChangedListener(new TextWatcher() {
+
+
+
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    if (!s.toString().equals(current)) {
+                        String clean = s.toString().replaceAll("[^\\d.]|\\.", "");
+                        String cleanC = current.replaceAll("[^\\d.]|\\.", "");
+
+                        int cl = clean.length();
+                        int sel = cl;
+                        for (int i = 2; i <= cl && i < 6; i += 2) {
+                            sel++;
+                        }
+                        //Fix for pressing delete next to a forward slash
+                        if (clean.equals(cleanC)) sel--;
+
+                        if (clean.length() < 8){
+                            clean = clean + ddmmyyyy.substring(clean.length());
+                        }else{
+                            //This part makes sure that when we finish entering numbers
+                            //the date is correct, fixing it otherwise
+                            int day  = Integer.parseInt(clean.substring(0,2));
+                            int mon  = Integer.parseInt(clean.substring(2,4));
+                            int year = Integer.parseInt(clean.substring(4,8));
+
+                            String currentYear = new SimpleDateFormat("yyyy").format(new Date());
+
+                            int years = Integer.parseInt(currentYear);
+
+                            mon = mon < 1 ? 1 : mon > 12 ? 12 : mon;
+                            cal.set(Calendar.MONTH, mon-1);
+                            year = (year<1900)?1900:(year>years)?years:year;
+                            cal.set(Calendar.YEAR, year);
+                            // ^ first set year for the line below to work correctly
+                            //with leap years - otherwise, date e.g. 29/02/2012
+                            //would be automatically corrected to 28/02/2012
+
+                            day = (day > cal.getActualMaximum(Calendar.DATE))? cal.getActualMaximum(Calendar.DATE):day;
+                            clean = String.format("%02d%02d%02d",day, mon, year);
+                        }
+
+                        clean = String.format("%s/%s/%s", clean.substring(0, 2),
+                                clean.substring(2, 4),
+                                clean.substring(4, 8));
+
+                        sel = sel < 0 ? 0 : sel;
+                        current = clean;
+                        mDob.setText(current);
+                        mDob.setSelection(sel < current.length() ? sel : current.length());
+                    }
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
                 }
             });
 
-            mDoj.setOnClickListener(new View.OnClickListener() {
+
+            mDoj.addTextChangedListener(new TextWatcher() {
+
+
+
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    if (!s.toString().equals(current)) {
+                        String clean = s.toString().replaceAll("[^\\d.]|\\.", "");
+                        String cleanC = current.replaceAll("[^\\d.]|\\.", "");
+
+                        int cl = clean.length();
+                        int sel = cl;
+                        for (int i = 2; i <= cl && i < 6; i += 2) {
+                            sel++;
+                        }
+                        //Fix for pressing delete next to a forward slash
+                        if (clean.equals(cleanC)) sel--;
+
+                        if (clean.length() < 8){
+                            clean = clean + ddmmyyyy.substring(clean.length());
+                        }else{
+                            //This part makes sure that when we finish entering numbers
+                            //the date is correct, fixing it otherwise
+                            int day  = Integer.parseInt(clean.substring(0,2));
+                            int mon  = Integer.parseInt(clean.substring(2,4));
+                            int year = Integer.parseInt(clean.substring(4,8));
+
+                            String currentYear = new SimpleDateFormat("yyyy").format(new Date());
+
+                            int years = Integer.parseInt(currentYear);
+
+                            mon = mon < 1 ? 1 : mon > 12 ? 12 : mon;
+                            cal.set(Calendar.MONTH, mon-1);
+                            year = (year<1900)?1900:(year>years)?years:year;
+                            cal.set(Calendar.YEAR, year);
+                            // ^ first set year for the line below to work correctly
+                            //with leap years - otherwise, date e.g. 29/02/2012
+                            //would be automatically corrected to 28/02/2012
+
+                            day = (day > cal.getActualMaximum(Calendar.DATE))? cal.getActualMaximum(Calendar.DATE):day;
+                            clean = String.format("%02d%02d%02d",day, mon, year);
+                        }
+
+                        clean = String.format("%s/%s/%s", clean.substring(0, 2),
+                                clean.substring(2, 4),
+                                clean.substring(4, 8));
+
+                        sel = sel < 0 ? 0 : sel;
+                        current = clean;
+                        mDoj.setText(current);
+                        mDoj.setSelection(sel < current.length() ? sel : current.length());
+                    }
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });*/
+
+
+
+          /*  mDoj.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
                     openDatePicker(mDoj);
                 }
-            });
+            });*/
 
             mCreate.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -312,8 +465,8 @@ public class CreateFounderScreen extends AppCompatActivity {
     public void validate() throws Exception{
 
         String name = mName.getText().toString();
-        String dob = mDob.getText().toString();
-        String doj = mDoj.getText().toString();
+       /* String dob = mDob.getText().toString();
+        String doj = mDoj.getText().toString();*/
         String primary = mPrimaryEmail.getText().toString();
         String secondary = mSecondaryEmail.getText().toString();
         String mobile = mMobile.getText().toString();
@@ -325,7 +478,7 @@ public class CreateFounderScreen extends AppCompatActivity {
 
             Toast.makeText(this, "Name is required", Toast.LENGTH_SHORT).show();
 
-        }else if(dob.isEmpty()){
+        }/*else if(dob.isEmpty()){
 
             Toast.makeText(this, "DOB is required", Toast.LENGTH_SHORT).show();
 
@@ -333,15 +486,15 @@ public class CreateFounderScreen extends AppCompatActivity {
 
             Toast.makeText(this, "Founded date is required", Toast.LENGTH_SHORT).show();
 
-        }else if(primary.isEmpty()){
+        }*/else if(primary.isEmpty()){
 
             Toast.makeText(this, "Primary Email is required", Toast.LENGTH_SHORT).show();
 
-        }else if(secondary.isEmpty()){
+        }/*else if(secondary.isEmpty()){
 
             Toast.makeText(this, "Secondary Email is required", Toast.LENGTH_SHORT).show();
 
-        }else if(mobile.isEmpty()){
+        }*/else if(mobile.isEmpty()){
 
             Toast.makeText(this, "Mobile is required", Toast.LENGTH_SHORT).show();
 
@@ -353,11 +506,11 @@ public class CreateFounderScreen extends AppCompatActivity {
 
             Toast.makeText(this, "Confirm Password is required", Toast.LENGTH_SHORT).show();
 
-        }else if(address.isEmpty()) {
+        }/*else if(address.isEmpty()) {
 
             Toast.makeText(this, "Address is required", Toast.LENGTH_SHORT).show();
 
-        }else if(!password.isEmpty()&&!confirm.isEmpty()&&!password.equals(confirm)){
+        }*/else if(!password.isEmpty()&&!confirm.isEmpty()&&!password.equals(confirm)){
 
             Toast.makeText(this, "Confirm password should be same as Password", Toast.LENGTH_SHORT).show();
         }else if(!mMale.isChecked()&&!mFemale.isChecked()&&!mOthers.isChecked()){
@@ -368,7 +521,11 @@ public class CreateFounderScreen extends AppCompatActivity {
 
             Employee employee = new Employee();
             employee.setEmployeeName(name);
-            employee.setAddress(address);
+
+            if(address!=null&&!address.isEmpty()){
+                employee.setAddress(address);
+            }
+
             employee.setUserRoleId(2);
             if(mMale.isChecked()){
                 employee.setGender("Male");
@@ -380,27 +537,30 @@ public class CreateFounderScreen extends AppCompatActivity {
                 employee.setGender("Others");
             }
 
-            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
             try {
-                Date fdate = sdf.parse(dob);
+               // Date fdate = sdf.parse(dob);
 
-                String from1 = simpleDateFormat.format(fdate);
+                String from1 = simpleDateFormat.format(new Date());
                 employee.setDateOfBirth(from1);
 
-               fdate = sdf.parse(doj);
+               //fdate = sdf.parse(doj);
 
-                from1 = simpleDateFormat.format(fdate);
+                from1 = simpleDateFormat.format(new Date());
                 employee.setDateOfJoining(from1);
 
 
 
-            } catch (ParseException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
             employee.setPrimaryEmailAddress(primary);
-            employee.setAlternateEmailAddress(secondary);
+            if(secondary!=null&&!secondary.isEmpty()){
+                employee.setAlternateEmailAddress(secondary);
+            }
+
             employee.setPhoneNumber(mobile);
             employee.setPassword(password);
             //employee.setDepartmentId(1);
@@ -445,14 +605,28 @@ public class CreateFounderScreen extends AppCompatActivity {
                     int statusCode = response.code();
                     if (statusCode == 200 || statusCode == 201) {
 
-                        Employee s = response.body();
+                        Employee dto = response.body();
 
-                        if(s!=null){
+                        if(dto!=null){
 
-                            PreferenceHandler.getInstance(CreateFounderScreen.this).clear();
-                            PreferenceHandler.getInstance(CreateFounderScreen.this).setUserId(s.getEmployeeId());
+                            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(CreateFounderScreen.this);
+                            SharedPreferences.Editor spe = sp.edit();
+                            spe.putInt(Constants.USER_ID, dto.getEmployeeId());
+                            PreferenceHandler.getInstance(CreateFounderScreen.this).setUserId(dto.getEmployeeId());
+                            PreferenceHandler.getInstance(CreateFounderScreen.this).setLocationOn(dto.isLocationOn());
+                            PreferenceHandler.getInstance(CreateFounderScreen.this).setDataOn(dto.isDataOn());
+                            PreferenceHandler.getInstance(CreateFounderScreen.this).setManagerId(dto.getManagerId());
+                            PreferenceHandler.getInstance(CreateFounderScreen.this).setUserRoleUniqueID(dto.getUserRoleId());
+                            PreferenceHandler.getInstance(CreateFounderScreen.this).setUserName(dto.getEmployeeName());
+                            PreferenceHandler.getInstance(CreateFounderScreen.this).setUserEmail(dto.getPrimaryEmailAddress());
+                            PreferenceHandler.getInstance(CreateFounderScreen.this).setUserFullName(dto.getEmployeeName());
+                            spe.putString("FullName", dto.getEmployeeName());
+                            spe.putString("Password", dto.getPassword());
+                            spe.putString("Email", dto.getPrimaryEmailAddress());
+                            spe.putString("PhoneNumber", dto.getPhoneNumber());
+                            spe.apply();
 
-                            Intent i = new Intent(CreateFounderScreen.this, LandingScreen.class);
+                            Intent i = new Intent(CreateFounderScreen.this, AdminNewMainScreen.class);
                             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(i);
@@ -626,6 +800,153 @@ public class CreateFounderScreen extends AppCompatActivity {
                     }
                 });
             }
+        });
+    }
+
+    public void getDepartment(final int id,final Employee dto) throws Exception {
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+
+                final DepartmentApi subCategoryAPI = Util.getClient().create(DepartmentApi.class);
+                Call<Departments> getProf = subCategoryAPI.getDepartmentById(id);
+                //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
+
+                getProf.enqueue(new Callback<Departments>() {
+
+                    @Override
+                    public void onResponse(Call<Departments> call, Response<Departments> response) {
+
+                        if (response.code() == 200||response.code() == 201||response.code() == 204)
+                        {
+                            System.out.println("Inside api");
+
+                            try {
+                                PreferenceHandler.getInstance(CreateFounderScreen.this).setCompanyId(response.body().getOrganizationId());
+                                //PreferenceHandler.getInstance(LandingScreen.this).setDepartmentName(response.body().getDepartmentName());
+                                getCompany(response.body().getOrganizationId(),dto);
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Intent i = new Intent(CreateFounderScreen.this, InternalServerErrorScreen.class);
+
+                                startActivity(i);
+
+                            }
+
+
+                        }else{
+
+                            Intent i = new Intent(CreateFounderScreen.this, AdminNewMainScreen.class);
+                            i.putExtra("Profile",dto);
+                            startActivity(i);
+                            finish();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Departments> call, Throwable t) {
+
+                    }
+                });
+
+            }
+
+        });
+    }
+
+    public void getCompany(final int id,final Employee dto) throws Exception{
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+
+                final OrganizationApi subCategoryAPI = Util.getClient().create(OrganizationApi.class);
+                Call<ArrayList<Organization>> getProf = subCategoryAPI.getOrganizationById(id);
+                //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
+
+                getProf.enqueue(new Callback<ArrayList<Organization>>() {
+
+                    @Override
+                    public void onResponse(Call<ArrayList<Organization>> call, Response<ArrayList<Organization>> response) {
+
+                        if (response.code() == 200||response.code() == 201||response.code() == 204&&response.body().size()!=0)
+                        {
+                            Organization organization = response.body().get(0);
+                            System.out.println("Inside api");
+                            PreferenceHandler.getInstance(CreateFounderScreen.this).setCompanyId(organization.getOrganizationId());
+                            PreferenceHandler.getInstance(CreateFounderScreen.this).setCompanyName(organization.getOrganizationName());
+                            PreferenceHandler.getInstance(CreateFounderScreen.this).setAppType(organization.getAppType());
+
+                            PreferenceHandler.getInstance(CreateFounderScreen.this).setAppType(organization.getAppType());
+                            PreferenceHandler.getInstance(CreateFounderScreen.this).setLicenseStartDate(organization.getLicenseStartDate());
+                            PreferenceHandler.getInstance(CreateFounderScreen.this).setCheckInTime(organization.getPlaceId());
+                            PreferenceHandler.getInstance(CreateFounderScreen.this).setLicenseEndDate(organization.getLicenseEndDate());
+                            PreferenceHandler.getInstance(CreateFounderScreen.this).setSignupDate(organization.getSignupDate());
+                            PreferenceHandler.getInstance(CreateFounderScreen.this).setOrganizationLongi(organization.getLongitude());
+                            PreferenceHandler.getInstance(CreateFounderScreen.this).setOrganizationLati(organization.getLatitude());
+                            PreferenceHandler.getInstance(CreateFounderScreen.this).setPlanType(organization.getPlanType());
+                            PreferenceHandler.getInstance(CreateFounderScreen.this).setEmployeeLimit(organization.getEmployeeLimit());
+                            PreferenceHandler.getInstance(CreateFounderScreen.this).setPlanId(organization.getPlanId());
+                            PreferenceHandler.getInstance(CreateFounderScreen.this).setResellerUserId(organization.getResellerProfileId());
+
+                            String licenseStartDate = organization.getLicenseStartDate();
+                            String licenseEndDate = organization.getLicenseEndDate();
+                            SimpleDateFormat smdf = new SimpleDateFormat("MM/dd/yyyy");
+
+                            if(PreferenceHandler.getInstance(CreateFounderScreen.this).getUserRoleUniqueID()==2){
+                                Intent i = new Intent(CreateFounderScreen.this, AdminNewMainScreen.class);
+                                //Intent i = new Intent(CreateFounderScreen.this, DashBoardEmployee.class);
+                                i.putExtra("Profile",dto);
+
+                                startActivity(i);
+                                finish();
+                            }else{
+                                //Intent i = new Intent(CreateFounderScreen.this, DashBoardAdmin.class);
+                                Intent i = new Intent(CreateFounderScreen.this, EmployeeNewMainScreen.class);
+                                i.putExtra("Profile",dto);
+                                i.putExtra("Organization",organization);
+
+                                if(organization.isWorking()){
+
+                                    Intent serviceIntent = new Intent(CreateFounderScreen.this,LocationSharingServices.class);
+                                    startService(serviceIntent);
+                                }
+                                startActivity(i);
+                                finish();
+                            }
+
+
+
+
+
+                        }else{
+
+                            if(PreferenceHandler.getInstance(CreateFounderScreen.this).getUserRoleUniqueID()==2){
+                                Intent i = new Intent(CreateFounderScreen.this, AdminNewMainScreen.class);
+                                //Intent i = new Intent(CreateFounderScreen.this, DashBoardEmployee.class);
+                                i.putExtra("Profile",dto);
+                                startActivity(i);
+                                finish();
+                            }else{
+                                //Intent i = new Intent(CreateFounderScreen.this, DashBoardAdmin.class);
+                                Intent i = new Intent(CreateFounderScreen.this, EmployeeNewMainScreen.class);
+                                i.putExtra("Profile",dto);
+                                startActivity(i);
+                                finish();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<Organization>> call, Throwable t) {
+
+                    }
+                });
+
+            }
+
         });
     }
 }

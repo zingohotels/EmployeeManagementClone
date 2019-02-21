@@ -38,9 +38,17 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/meeting_count"
-                        android:text="Meeying 1"
+                        android:text="Meeting 1"
                         android:layout_margin="5dp"
                         android:textSize="20dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/empl_name"
+                        android:text=""
+                        android:layout_margin="5dp"
+                        android:textSize="15dp"/>
 
 
                     <LinearLayout

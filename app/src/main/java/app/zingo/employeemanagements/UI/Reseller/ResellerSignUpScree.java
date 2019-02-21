@@ -31,6 +31,7 @@ import java.util.Date;
 import java.util.List;
 
 import app.zingo.employeemanagements.Custom.MyEditText;
+import app.zingo.employeemanagements.Custom.MyTextView;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.ResellerProfiles;
 import app.zingo.employeemanagements.R;
@@ -49,7 +50,8 @@ import retrofit2.Response;
 
 public class ResellerSignUpScree extends AppCompatActivity {
 
-    MyEditText mName,mUserName,mEmail,mMobile,mPassword,mConfirm,mCity,mCountry;
+    MyEditText mName,mUserName,mEmail,mMobile,mPassword,mConfirm;
+    MyTextView mCity,mCountry;
 
     RadioButton mMale,mFemale,mOthers;
     AppCompatButton mCreate;
@@ -73,8 +75,8 @@ public class ResellerSignUpScree extends AppCompatActivity {
             mMobile = (MyEditText)findViewById(R.id.reseller_mobile);
             mPassword = (MyEditText)findViewById(R.id.reseller_password);
             mConfirm = (MyEditText)findViewById(R.id.reseller_confirmpwd);
-            mCity = (MyEditText)findViewById(R.id.reseller_city);
-            mCountry = (MyEditText)findViewById(R.id.reseller_country);
+            mCity = (MyTextView) findViewById(R.id.reseller_city);
+            mCountry = (MyTextView) findViewById(R.id.reseller_country);
 
             mMale = (RadioButton)findViewById(R.id.reseller_male);
             mFemale = (RadioButton)findViewById(R.id.reseller_female);

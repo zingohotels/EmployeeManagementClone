@@ -58,6 +58,16 @@ public class PreferenceHandler {
         sh.edit().putBoolean(Constants.LOCATION_ON,id).apply();
     }
 
+    public boolean isDataOn()
+    {
+        return sh.getBoolean(Constants.DATA_ON,false);
+    }
+
+    public void setDataOn(boolean id)
+    {
+        sh.edit().putBoolean(Constants.DATA_ON,id).apply();
+    }
+
     public boolean isLocationOn()
     {
         return sh.getBoolean(Constants.LOCATION_ON,false);
@@ -89,6 +99,15 @@ public class PreferenceHandler {
     public String getResellerName()
     {
         return sh.getString(Constants.REUSER_NAME,"");
+    }
+
+    public void setAppVersion(String hotelName) {
+        sh.edit().putString(Constants.APP_Version,hotelName).apply();
+    }
+
+    public String getAppVersion()
+    {
+        return sh.getString(Constants.APP_Version,"");
     }
 
     public void setPhoneNumber(String mobilenumber)
@@ -141,6 +160,15 @@ public class PreferenceHandler {
         return sh.getString(Constants.COMPANY_NAME,"");
     }
 
+    public void setDepartmentName(String hotelName) {
+        sh.edit().putString(Constants.COMPANY_NAME,hotelName).apply();
+    }
+
+    public String getDepartmentName()
+    {
+        return sh.getString(Constants.COMPANY_NAME,"");
+    }
+
     public void setAppType(String appType) {
         sh.edit().putString(Constants.APP_TYPE,appType).apply();
     }
@@ -166,6 +194,15 @@ public class PreferenceHandler {
     public String getLicenseStartDate()
     {
         return sh.getString(Constants.LIC_START,"");
+    }
+
+    public void setCheckInTime(String licenseStartDate) {
+        sh.edit().putString(Constants.CHKT,licenseStartDate).apply();
+    }
+
+    public String getCheckInTime()
+    {
+        return sh.getString(Constants.CHKT,"");
     }
 
     public void setLicenseEndDate(String licenseEndDate) {

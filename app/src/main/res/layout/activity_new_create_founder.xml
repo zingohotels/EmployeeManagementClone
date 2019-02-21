@@ -45,19 +45,27 @@
                     android:textStyle="bold"
                     android:text="Founder Information"/>
 
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_large_margin"
+                    android:layout_marginTop="20.0dip"
+                    android:textColor="@color/white"
+                    android:layout_marginRight="@dimen/activity_large_margin"
+                    android:text="* Fields are Mandatory"/>
+
                 <app.zingo.employeemanagements.Custom.MyEditText
                     android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
                     android:layout_marginLeft="@dimen/activity_large_margin"
-                    android:layout_marginTop="20.0dip"
+                    android:layout_marginTop="10.0dip"
                     android:layout_marginRight="@dimen/activity_large_margin"
                     android:background="@drawable/test_background"
-                    android:hint="Founder Name"
+                    android:hint="Founder Name *"
                     android:singleLine="true"
                     android:textColor="#ffffff"
-                    android:textColorHint="#afaeae"
-                    />
+                    android:textColorHint="#ffffff" />
 
                 <RadioGroup
                     android:layout_width="match_parent"
@@ -108,6 +116,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:orientation="horizontal">
 
                     <app.zingo.employeemanagements.Custom.MyEditText
@@ -120,14 +129,16 @@
                         android:background="@drawable/test_background"
                         android:hint="DOB"
                         android:layout_weight="1"
+                        android:inputType="date"
                         android:singleLine="true"
                         android:textColor="#ffffff"
-                        android:textColorHint="#afaeae"
+                        android:textColorHint="#ffffff"
                         />
 
                     <app.zingo.employeemanagements.Custom.MyEditText
                         android:id="@+id/doj"
                         android:layout_width="match_parent"
+                        android:inputType="date"
                         android:layout_height="35dp"
                         android:layout_marginLeft="@dimen/activity_large_margin"
                         android:layout_marginTop="20.0dip"
@@ -137,7 +148,7 @@
                         android:layout_weight="1"
                         android:singleLine="true"
                         android:textColor="#ffffff"
-                        android:textColorHint="#afaeae"
+                        android:textColorHint="#ffffff"
                         />
 
                     <!--    <android.support.design.widget.TextInputLayout
@@ -191,11 +202,11 @@
                     android:layout_marginTop="20.0dip"
                     android:layout_marginRight="@dimen/activity_large_margin"
                     android:background="@drawable/test_background"
-                    android:hint="Primary/Organization Email"
+                    android:hint="Primary/Organization Email Id *"
 
                     android:singleLine="true"
                     android:textColor="#ffffff"
-                    android:textColorHint="#afaeae"
+                    android:textColorHint="#ffffff"
                     />
 
                 <app.zingo.employeemanagements.Custom.MyEditText
@@ -206,11 +217,11 @@
                     android:layout_marginTop="20.0dip"
                     android:layout_marginRight="@dimen/activity_large_margin"
                     android:background="@drawable/test_background"
-                    android:hint="Alternate Email"
+                    android:hint="Alternate Email Id(Optional)"
 
                     android:singleLine="true"
                     android:textColor="#ffffff"
-                    android:textColorHint="#afaeae"
+                    android:textColorHint="#ffffff"
                     />
 
 
@@ -222,13 +233,13 @@
                     android:layout_marginTop="20.0dip"
                     android:layout_marginRight="@dimen/activity_large_margin"
                     android:background="@drawable/test_background"
-                    android:hint="Mobile Number"
+                    android:hint="Mobile Number *"
                     android:inputType="number"
                     android:maxLength="15"
 
                     android:singleLine="true"
                     android:textColor="#ffffff"
-                    android:textColorHint="#afaeae"
+                    android:textColorHint="#ffffff"
                     />
 
                 <app.zingo.employeemanagements.Custom.MyEditText
@@ -239,12 +250,12 @@
                     android:layout_marginTop="20.0dip"
                     android:layout_marginRight="@dimen/activity_large_margin"
                     android:background="@drawable/test_background"
-                    android:hint="Password"
+                    android:hint="Password *"
                     android:inputType="textPassword"
 
                     android:singleLine="true"
                     android:textColor="#ffffff"
-                    android:textColorHint="#afaeae"
+                    android:textColorHint="#ffffff"
                     />
 
                 <app.zingo.employeemanagements.Custom.MyEditText
@@ -255,12 +266,12 @@
                     android:layout_marginTop="20.0dip"
                     android:layout_marginRight="@dimen/activity_large_margin"
                     android:background="@drawable/test_background"
-                    android:hint="Confirm Password"
+                    android:hint="Confirm Password *"
                     android:inputType="textPassword"
 
                     android:singleLine="true"
                     android:textColor="#ffffff"
-                    android:textColorHint="#afaeae"
+                    android:textColorHint="#ffffff"
                     />
 
 
@@ -329,7 +340,7 @@
                         android:layout_marginTop="5dp"
                         android:layout_gravity="start"
                         android:gravity="start"
-                        android:hint="Your Address"
+                        android:hint="Your Address(Optional)"
                         android:textColorHint="@color/white"
                         android:padding="8dp"
                         android:scrollbarAlwaysDrawVerticalTrack="true"
@@ -341,7 +352,7 @@
                         android:layout_marginLeft="@dimen/activity_large_margin"
                         android:layout_marginRight="@dimen/activity_large_margin"
                         android:lines="5"
-                        android:background="@drawable/started_button"
+                        android:background="@drawable/white_box"
                         />
 
 

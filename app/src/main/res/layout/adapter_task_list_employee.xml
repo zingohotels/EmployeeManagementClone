@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:aapt="http://schemas.android.com/aapt"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:id="@+id/attendanceItem"
     android:background="@drawable/ripple"
@@ -24,6 +25,18 @@
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp">
 
+            <TextView
+                android:gravity="center_vertical"
+                android:id="@+id/to_allocated"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="8dp"
+                android:text=""
+                android:textColor="#000000"
+                android:textSize="18dp"
+                />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -36,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginLeft="8dp"
-                android:text="Title"
+                android:text=""
                 android:textColor="#000000"
                 android:textSize="18dp"
                 />
@@ -73,7 +86,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
-                android:text="Desc"
+                android:text=""
                 android:textColor="@color/text_grey"
                 android:textSize="16dp"
                 />
@@ -89,7 +102,7 @@
                 android:drawablePadding="10dp"
                 android:paddingLeft="20dp"
                 android:gravity="center_vertical"
-                android:text="Time"
+                android:text=""
                 android:textColor="@color/text_grey"
                 android:textSize="16dp" />
 
@@ -102,7 +115,7 @@
                 android:drawablePadding="10dp"
                 android:paddingLeft="20dp"
                 android:gravity="center_vertical"
-                android:text="DeadLine"
+                android:text=""
                 android:textColor="#FF0000"
                 android:textSize="16dp" />
 
@@ -112,10 +125,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:text="Created by"
+                    android:text=""
                     android:textColor="@color/text_grey"
                     android:textSize="16dp"
                     />
+
+                <TextView
+                    android:id="@+id/task_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:drawableLeft="@drawable/location"
+                    android:drawablePadding="10dp"
+                    android:paddingLeft="20dp"
+                    android:gravity="center_vertical"
+                    android:text="No Location Marked"
+                    android:textColor="@color/text_grey"
+                    android:textSize="16dp" />
 
             <TextView
                 android:textSize="14dp"
@@ -128,7 +154,7 @@
                 android:layout_gravity="right"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:text="Open"/>
+                android:text="Pending"/>
 
         </LinearLayout>
         </LinearLayout>

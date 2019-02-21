@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/location_et"
+            android:layout_width="match_parent"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:hint="Location"
+            android:textSize="16sp"
+            android:padding="5dp"
+            android:textColor="#000"
+            android:layout_height="wrap_content"
+            android:background="#ffffff"/>
+
+        <LinearLayout
+            android:id="@+id/lan_lat"
+            android:layout_below="@+id/location_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="2"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp">
+            <EditText
+                android:id="@+id/lat_et"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:hint="Latitude"
+                android:textSize="16sp"
+                android:textColor="#000"
+                android:paddingLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:background="#ffffff"/>
+            <EditText
+                android:id="@+id/lng_et"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:hint="Longitude"
+                android:textSize="16sp"
+                android:textColor="#000"
+                android:paddingLeft="10dp"
+                android:layout_marginLeft="5dp"
+                android:background="#ffffff"/>
+
+        </LinearLayout>
+
+
+        <com.google.android.gms.maps.MapView
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:layout_below="@id/lan_lat"
+            android:layout_margin="5dp"
+            android:id="@+id/google_map_view"
+            />
+
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

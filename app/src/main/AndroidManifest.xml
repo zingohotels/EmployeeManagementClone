@@ -9,10 +9,13 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <uses-feature android:name="android.hardware.location.gps" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
 
     <supports-screens
         android:anyDensity="true"
@@ -84,6 +87,22 @@
         <service
             android:name=".Service.LocationSharingServices"
             android:enabled="true" />
+        <service
+            android:name=".Utils.TrackGPS"
+            android:enabled="true" />
+        <service
+            android:name=".Service.CheckDataAndLocation"
+            android:enabled="true" />
+        <service
+            android:name=".Service.SendEmailToAll"
+            android:enabled="true" />
+        <service
+            android:name=".Service.DistanceCheck"
+            android:enabled="true" />
+        <service
+            android:name=".Service.LocationTrackEmplService"
+            android:enabled="true"
+            android:exported="true" />
         <service
             android:name=".FireBase.MyFirebaseMessagingService"
             android:enabled="true"
@@ -249,7 +268,50 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".UI.NewEmployeeDesign.MeetingAddWithSignScreen" />
         <activity android:name=".UI.NewAdminDesigns.LoginMapScreenAdmin" />
-        <activity android:name=".UI.Common.ReportManagementScreen"></activity>
+        <activity android:name=".UI.Common.ReportManagementScreen" />
+        <activity
+            android:name=".UI.Login.ForgotPhoneVerfi"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".UI.Common.ForgotPasswordScreen" />
+        <activity android:name=".UI.Common.ForgotResellPwd" />
+        <activity android:name=".UI.NewAdminDesigns.TeamMembersList" />
+        <activity
+            android:name=".UI.Common.GeneralNotificationScreen"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".UI.Admin.EmployeeTaskMapScreen" />
+        <activity
+            android:name=".UI.NewAdminDesigns.ReportTaskListScreen"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.NewAdminDesigns.ReportExpenseList"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.NewAdminDesigns.ReportVisitsListScreen"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".UI.Company.OrganizationEditScreen" />
+        <activity
+            android:name=".UI.NewEmployeeDesign.MeetingDetailList"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".UI.Company.WorkingDaysScreen" />
+        <activity android:name=".UI.NewEmployeeDesign.ViewPaySlipScreen" />
+        <activity android:name=".UI.Common.InvokeService" />
+        <activity android:name=".UI.Common.CustomerCreation" />
+        <activity android:name=".UI.NewAdminDesigns.PlanSubscribtionScreen" />
+        <activity android:name=".UI.NewEmployeeDesign.BreakPurpose" />
+        <activity android:name=".UI.NewEmployeeDesign.WalkieTalkie" />
+        <activity android:name=".UI.NewAdminDesigns.PresentEmployeeListScreen" />
+        <activity
+            android:name=".UI.NewAdminDesigns.TaskAdminViewActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.NewAdminDesigns.UpdateTaskScreen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".UI.NewAdminDesigns.ExpensesListAdmin"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".UI.NewAdminDesigns.EmployeeDashBoardAdminView" />
+        <activity android:name=".UI.NewAdminDesigns.CheckInMapScreen"></activity>
     </application>
 
 </manifest>

@@ -3,9 +3,11 @@ package app.zingo.employeemanagements.Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +18,18 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Random;
 
+import app.zingo.employeemanagements.Custom.MyRegulerText;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.Meetings;
+import app.zingo.employeemanagements.Model.Tasks;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Admin.EmployeesDashBoard;
+import app.zingo.employeemanagements.Utils.ThreadExecuter;
+import app.zingo.employeemanagements.Utils.Util;
+import app.zingo.employeemanagements.WebApi.EmployeeApi;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by ZingoHotels Tech on 17-10-2018.
@@ -60,6 +70,7 @@ public class EmployeeMeetingAdapter extends RecyclerView.Adapter<EmployeeMeeting
 
         if(dto!=null){
 
+            getEmployees(dto.getEmployeeId(),holder.mEmpName);
             holder.mMeetingCount.setText("Meeting "+(position+1));
             Random rnd = new Random();
             int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
@@ -133,7 +144,7 @@ public class EmployeeMeetingAdapter extends RecyclerView.Adapter<EmployeeMeeting
 
         EditText mRemarks,mCheckInDetails,mCheckOutDetails;
         TextInputEditText mClient,mContact,mPurpose;
-        TextView mMeetingCount;
+        TextView mMeetingCount,mEmpName;
         public View mView;
 
         public ViewHolder(View itemView) {
@@ -142,6 +153,7 @@ public class EmployeeMeetingAdapter extends RecyclerView.Adapter<EmployeeMeeting
 
             mRemarks = (EditText) itemView.findViewById(R.id.meeting_remarks);
             mMeetingCount = (TextView) itemView.findViewById(R.id.meeting_count);
+            mEmpName = (TextView) itemView.findViewById(R.id.empl_name);
             mCheckInDetails = (EditText) itemView.findViewById(R.id.check_in_details);
             mCheckOutDetails = (EditText) itemView.findViewById(R.id.check_out_details);
             mClient = (TextInputEditText) itemView.findViewById(R.id.client_name);
@@ -152,5 +164,66 @@ public class EmployeeMeetingAdapter extends RecyclerView.Adapter<EmployeeMeeting
 
 
         }
+    }
+
+    private void getEmployees(final int id,final TextView empName){
+
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+                EmployeeApi apiService = Util.getClient().create(EmployeeApi.class);
+                Call<ArrayList<Employee>> call = apiService.getProfileById(id);
+
+                call.enqueue(new Callback<ArrayList<Employee>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<Employee>> call, Response<ArrayList<Employee>> response) {
+                        int statusCode = response.code();
+                        if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
+
+
+                           /* if (progressDialog!=null)
+                                progressDialog.dismiss();*/
+                            ArrayList<Employee> list = response.body();
+
+
+                            if (list !=null && list.size()!=0) {
+
+                                final Employee employees = list.get(0);
+                                if(employees!=null){
+
+                                    empName.setText(""+employees.getEmployeeName());
+                                }
+
+
+
+
+
+                                //}
+
+                            }else{
+
+                            }
+
+                        }else {
+
+
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<Employee>> call, Throwable t) {
+                        // Log error here since request failed
+                      /*  if (progressDialog!=null)
+                            progressDialog.dismiss();*/
+
+                        Log.e("TAG", t.toString());
+                    }
+                });
+            }
+
+
+        });
     }
 }

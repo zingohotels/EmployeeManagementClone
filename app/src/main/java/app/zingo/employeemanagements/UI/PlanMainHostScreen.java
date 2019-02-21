@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -21,6 +22,7 @@ public class PlanMainHostScreen extends TabActivity implements TabHost.OnTabChan
 
     TabHost tabHost;
     View tabNew,tabRequest;
+    ImageView mBack;
 
     public static String NEW_LEAVE = "New Tab";
     public static String REQUEST_LEAVE = "Request Tab";
@@ -45,18 +47,30 @@ public class PlanMainHostScreen extends TabActivity implements TabHost.OnTabChan
 
             setContentView(R.layout.activity_plan_main_host_screen);
 
+
             tabHost = (TabHost) findViewById(android.R.id.tabhost);
+            mBack = (ImageView) findViewById(R.id.back_button);
 
             tabNew = LayoutInflater.from(this).inflate(R.layout.tabhost_items_layout, null);
             tabRequest= LayoutInflater.from(this).inflate(R.layout.tabhost_items_layout, null);
 
             labelNew = tabNew.findViewById(R.id.tab_label);
 
+            mBack.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    PlanMainHostScreen.this.finish();
+                }
+            });
+
 
             labelRequest = tabRequest.findViewById(R.id.tab_label);
 
             TabHost.TabSpec tabText = tabHost.newTabSpec(NEW_LEAVE);
             TabHost.TabSpec tabMaps= tabHost.newTabSpec(REQUEST_LEAVE);
+
+
 
             Bundle bundle = getIntent().getExtras();
 

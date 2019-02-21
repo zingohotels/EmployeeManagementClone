@@ -8,7 +8,9 @@ import android.view.View;
 
 import java.util.ArrayList;
 
+import app.zingo.employeemanagements.Adapter.TaskAdminListAdapter;
 import app.zingo.employeemanagements.Adapter.TaskListAdapter;
+import app.zingo.employeemanagements.Model.TaskAdminData;
 import app.zingo.employeemanagements.Model.Tasks;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.EmployeeSignUp;
@@ -17,7 +19,8 @@ public class PendingTasks extends AppCompatActivity {
 
     RecyclerView mTaskList;
 
-    ArrayList<Tasks> pendingTasks;
+    ArrayList<TaskAdminData> pendingTasks;
+    String title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +33,8 @@ public class PendingTasks extends AppCompatActivity {
 
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            setTitle("Pending Tasks");
+           // title = "Tasks";
+            //setTitle("Pending Tasks");
 
             mTaskList = (RecyclerView) findViewById(R.id.task_list_dash);
 
@@ -38,13 +42,17 @@ public class PendingTasks extends AppCompatActivity {
 
             if(bundle!=null){
 
-                pendingTasks = (ArrayList<Tasks>)bundle.getSerializable("PendingTasks");
+                pendingTasks = (ArrayList<TaskAdminData>)bundle.getSerializable("PendingTasks");
+                title =bundle.getString("Title");
+            }
+            if(title!=null&&!title.isEmpty()){
+                setTitle(title);
+            }else{
+                setTitle("Tasks");
             }
             if(pendingTasks!=null&&pendingTasks.size()!=0){
 
-
-
-                TaskListAdapter mAdapter = new TaskListAdapter(PendingTasks.this,pendingTasks);
+                TaskAdminListAdapter mAdapter = new TaskAdminListAdapter(PendingTasks.this,pendingTasks);
                 mTaskList.setAdapter(mAdapter);
 
 

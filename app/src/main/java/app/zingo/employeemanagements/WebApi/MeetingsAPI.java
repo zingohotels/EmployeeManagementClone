@@ -33,4 +33,7 @@ public interface MeetingsAPI {
     @GET("Meetings/GetMeetingsByEmployeeId/{EmployeeId}")
     Call<ArrayList<Meetings>> getMeetingsByEmployeeId(@Path("EmployeeId") int id);
 
+    @POST("Meetings/GetMeetingsDetailsByEmployeeIdAndLoginDate")
+    Call<ArrayList<Meetings>> getMeetingsByEmployeeIdAndDate(@Body Meetings details);
+
 }

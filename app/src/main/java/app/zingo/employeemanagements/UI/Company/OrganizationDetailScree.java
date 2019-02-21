@@ -13,11 +13,17 @@ import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -45,6 +51,7 @@ import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Admin.DashBoardAdmin;
+import app.zingo.employeemanagements.UI.Common.ReportManagementScreen;
 import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
 import app.zingo.employeemanagements.UI.LandingScreen;
 import app.zingo.employeemanagements.UI.Login.LoginScreen;
@@ -65,6 +72,7 @@ public class OrganizationDetailScree extends AppCompatActivity {
     LinearLayout mDepartmentLay,mDepartmentMain;
     CardView mDepartmentCard;
     AppCompatButton mAddDepartment;
+    CheckBox locationTrack;
 
     Organization organization;
 
@@ -73,6 +81,8 @@ public class OrganizationDetailScree extends AppCompatActivity {
     MapView mapView;
     int activityId;
     Marker marker;
+
+    boolean track = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,10 +104,12 @@ public class OrganizationDetailScree extends AppCompatActivity {
             mDepartmentCount = (TextView)findViewById(R.id.department_count);
             mapView = (MapView) findViewById(R.id.organization_map);
             mDepartmentList = (RecyclerView) findViewById(R.id.department_list);
+            mDepartmentList.setEnabled(false);
             mDepartmentLay = (LinearLayout) findViewById(R.id.department_lay);
             mDepartmentMain = (LinearLayout) findViewById(R.id.department_layout_main);
             mDepartmentCard = (CardView) findViewById(R.id.department_layout);
             mAddDepartment = (AppCompatButton) findViewById(R.id.add_department);
+            locationTrack = (CheckBox) findViewById(R.id.location_track);
 
             mapView.onCreate(savedInstanceState);
             mapView.onResume();
@@ -109,8 +121,10 @@ public class OrganizationDetailScree extends AppCompatActivity {
 
            if(userRoleId==2){
                mDepartmentMain.setVisibility(View.VISIBLE);
+               locationTrack.setVisibility(View.VISIBLE);
            }else{
                mDepartmentMain.setVisibility(View.GONE);
+               locationTrack.setVisibility(View.GONE);
            }
 
             try {
@@ -175,6 +189,33 @@ public class OrganizationDetailScree extends AppCompatActivity {
                 }
             });
 
+            locationTrack.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+                @Override
+                public void onCheckedChanged(CompoundButton button,
+                                             boolean isChecked) {
+
+                    // If it is checked then show password else hide password
+                    if (isChecked) {
+
+                        if(organization!=null){
+
+                            organization.setWorking(true);
+                        }
+
+
+                    } else {
+
+                        if(organization!=null){
+
+                            organization.setWorking(false);
+                        }
+                    }
+
+                }
+            });
+
+
 
 
         }catch (Exception e){
@@ -210,6 +251,18 @@ public class OrganizationDetailScree extends AppCompatActivity {
                                 mAddress.setText(""+organization.getAddress()+"\n"+organization.getCity()+"\n"+organization.getState());
                                 mBuild.setText(""+organization.getBuiltYear());
                                 mWebsite.setText(""+organization.getWebsite());
+
+
+                                if(organization.isWorking()){
+
+                                    locationTrack.setChecked(true);
+
+                                }else{
+
+                                    locationTrack.setChecked(false);
+
+
+                                }
 
 
                                 mMap.clear();
@@ -471,6 +524,20 @@ public class OrganizationDetailScree extends AppCompatActivity {
 
     }
 
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        if(PreferenceHandler.getInstance(OrganizationDetailScree.this).getUserRoleUniqueID()==2){
+            getMenuInflater().inflate(R.menu.menu_edit, menu);
+            return true;
+        }else{
+            getMenuInflater().inflate(R.menu.menu_edit, menu);
+            return false;
+        }
+
+    }
+
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -480,8 +547,94 @@ public class OrganizationDetailScree extends AppCompatActivity {
         {
             case android.R.id.home:
 
+                try {
+                    if(organization!=null){
+                        updateOrg(organization);
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 OrganizationDetailScree.this.finish();
+                break;
+
+            case R.id.action_edit:
+
+                Intent org = new Intent(OrganizationDetailScree.this,OrganizationEditScreen.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Organization",organization);
+                org.putExtras(bundle);
+                startActivity(org);
+                OrganizationDetailScree.this.finish();
+                break;
+
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        try {
+            if(organization!=null){
+                updateOrg(organization);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateOrg(final Organization organization) throws Exception{
+
+
+
+
+        OrganizationApi apiService = Util.getClient().create(OrganizationApi.class);
+
+        Call<Organization> call = apiService.updateOrganization(organization.getOrganizationId(),organization);
+
+        call.enqueue(new Callback<Organization>() {
+            @Override
+            public void onResponse(Call<Organization> call, Response<Organization> response) {
+//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
+                try
+                {
+
+
+                    int statusCode = response.code();
+                    if (statusCode == 200 || statusCode == 201|| statusCode == 204) {
+
+
+
+                        OrganizationDetailScree.this.finish();
+
+
+
+                    }else {
+                        Toast.makeText(OrganizationDetailScree.this, "Failed Due to "+response.message(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception ex)
+                {
+
+
+                    ex.printStackTrace();
+                }
+//                callGetStartEnd();
+            }
+
+            @Override
+            public void onFailure(Call<Organization> call, Throwable t) {
+
+
+                Toast.makeText(OrganizationDetailScree.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("TAG", t.toString());
+            }
+        });
+
+
+
     }
 }

@@ -11,12 +11,12 @@
     </entry>
     <entry>
         <key>welcome_message</key>
-        <value>http://locals.zingyapp.com/api/</value>
+        <value>http://zingolocals.azurewebsites.net/api/</value>
     </entry>
 
     <entry>
         <key>welcome_image_url</key>
-        <value>http://locals.zingyapp.com/</value>
+        <value>http://zingolocals.azurewebsites.net/</value>
     </entry>
 </defaultsMap>
     <!-- END xml_defaults -->

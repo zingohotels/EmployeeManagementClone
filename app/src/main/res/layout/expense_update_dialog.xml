@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:focusableInTouchMode="true"
+    >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <android.support.v7.widget.CardView
+            android:id="@+id/card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <app.zingo.employeemanagements.Custom.MyRegulerText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15dp"
+                    android:layout_margin="5dp"
+                    android:text=""
+                    android:textColor="#000000"/>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <app.zingo.employeemanagements.Custom.MyEditText
+                        android:id="@+id/email"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:background="@drawable/test_background"
+                        android:layout_weight="1"
+                        android:hint="Status"
+
+                        android:singleLine="true"
+                        android:textColor="#ffffff"
+                        android:textColorHint="#afaeae"
+                        />
+
+                    <Spinner
+                        android:id="@+id/task_status_update"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:entries="@array/leave_status"
+                        android:background="@drawable/spinner_background"/>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="5dp"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Comments"
+                        android:layout_weight="2"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="@color/text_black"/>
+
+                    <EditText
+                        android:layout_weight="1"
+                        android:id="@+id/task_comments"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/spinner_background"
+                        android:gravity="left|top"
+                        android:hint="Comments/Remarks"
+                        android:inputType="text|textMultiLine"
+                        android:lines="10"
+                        android:textColor="#000000"
+                        android:maxLines="10"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="10dp"
+                        android:singleLine="true" />
+                </LinearLayout>
+
+
+
+
+                <android.support.v7.widget.AppCompatButton
+                    android:layout_width="150dp"
+                    android:layout_height="50dp"
+                    android:id="@+id/save"
+                    android:gravity="center"
+                    android:layout_margin="10dp"
+                    android:textAllCaps="false"
+                    android:text="Send"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/button_primary_dark"
+                    android:layout_gravity="center"/>
+
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+
+    </ScrollView>
+
+</RelativeLayout>

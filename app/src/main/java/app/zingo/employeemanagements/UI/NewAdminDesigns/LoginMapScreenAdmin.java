@@ -50,6 +50,7 @@ public class LoginMapScreenAdmin extends AppCompatActivity {
     private GoogleMap mMap;
     MapView mapView;
 
+    Marker mapMarker ;
     ArrayList<LatLng> MarkerPoints;
 
 
@@ -129,7 +130,14 @@ public class LoginMapScreenAdmin extends AppCompatActivity {
                             }
 
                             for (MarkerData point : markerData) {
-                                createMarker(point.getLati(),point.getLongi(), point.getTitle(), point.getPerson());
+                              mapMarker =   mMap.addMarker(new MarkerOptions()
+                                        .position(new LatLng(point.getLati(), point.getLongi()))
+                                        .anchor(0.5f, 0.5f)
+                                        .title(point.getTitle())
+                                        .snippet(point.getPerson())
+                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+
+                                //createMarker(point.getLati(),point.getLongi(), point.getTitle(), point.getPerson());
                             }
 
                             if(markerData!=null&&markerData.size()!=0){
@@ -152,8 +160,9 @@ public class LoginMapScreenAdmin extends AppCompatActivity {
                                 }
 
 
-                                CameraPosition cameraPosition = new CameraPosition.Builder().zoom(10).target(latlng).build();
+                                CameraPosition cameraPosition = new CameraPosition.Builder().zoom(100).target(latlng).build();
                                 mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                                mapMarker.showInfoWindow();
                             }
                         }
 

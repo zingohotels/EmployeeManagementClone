@@ -18,4 +18,11 @@
     <color name="highLight">#b6b6b6</color>
     <color name="designBlueGreen">#04BEBD</color>
     <color name="pink_color">#EE596C</color>
+
+    <color name="text">#223038</color>
+    <color name="subtext">#223038</color>
+    <color name="timecolor">#000</color>
+    <color name="schedulecolor">#000</color>
+    <color name="statementcolor">#778AA6</color>
+
 </resources>

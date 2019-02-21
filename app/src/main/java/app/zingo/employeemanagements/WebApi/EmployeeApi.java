@@ -6,6 +6,7 @@ import app.zingo.employeemanagements.Model.Designations;
 import app.zingo.employeemanagements.Model.Employee;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -44,4 +45,7 @@ public interface EmployeeApi {
 
     @GET("Employees/{id}")
     Call<ArrayList<Employee>> getProfileById(@Path("id") int id);
+
+    @DELETE("Employees/{id}")
+    Call<Employee> deletEmployee(@Path("id") int id);
 }

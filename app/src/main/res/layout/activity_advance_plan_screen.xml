@@ -151,7 +151,6 @@
                     android:background="@drawable/button_primary_dark"
                     android:layout_margin="5dp"
                     android:textAlignment="center"
-                    android:visibility="gone"
                     android:gravity="center"
                     android:padding="5dp"
                     android:text="Buy Now"
@@ -224,7 +223,6 @@
                     android:background="@drawable/button_primary_dark"
                     android:layout_margin="5dp"
                     android:textAlignment="center"
-                    android:visibility="gone"
                     android:gravity="center"
                     android:padding="5dp"
                     android:text="Buy Now"
@@ -300,7 +298,6 @@
                     android:gravity="center"
                     android:padding="5dp"
                     android:text="Buy Now"
-                    android:visibility="gone"
                     android:textSize="18dp"
                     android:textColor="@color/white"
                     />

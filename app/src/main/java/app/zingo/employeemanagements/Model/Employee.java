@@ -111,6 +111,16 @@ public class Employee implements Serializable {
     @SerializedName("IsAppOpen")
     private boolean IsAppOpen;
 
+    String present;
+
+    public String getPresent() {
+        return present;
+    }
+
+    public void setPresent(String present) {
+        this.present = present;
+    }
+
     public int getEmployeeId() {
         return EmployeeId;
     }
@@ -379,9 +389,6 @@ public class Employee implements Serializable {
         IsAppOpen = appOpen;
     }
 
-    public static void setCompareEmployee(Comparator compareEmployee) {
-        Employee.compareEmployee = compareEmployee;
-    }
 
     public static Comparator compareEmployee = new Comparator() {
         @Override
@@ -389,6 +396,15 @@ public class Employee implements Serializable {
             Employee profile = (Employee) o;
             Employee profile1 = (Employee) t1;
             return profile.getEmployeeName().compareTo(profile1.getEmployeeName());
+        }
+    };
+
+    public static Comparator compareEmployees = new Comparator() {
+        @Override
+        public int compare(Object o, Object t1) {
+            Employee profile = (Employee) o;
+            Employee profile1 = (Employee) t1;
+            return profile.getPresent().compareTo(profile1.getPresent());
         }
     };
 }

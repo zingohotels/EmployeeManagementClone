@@ -9,6 +9,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 /**
@@ -20,7 +21,13 @@ public interface OrganizationApi {
     @POST("Organizations")
     Call<Organization> addOrganization(@Body Organization details);
 
+    @PUT("Organizations/{id}")
+    Call<Organization> updateOrganization(@Path("id") int id,@Body Organization details);
+
     @GET("Organizations/{id}")
     Call<ArrayList<Organization>> getOrganizationById(@Path("id") int id);
+
+    @GET("Organizations")
+    Call<ArrayList<Organization>> getOrganization();
 
 }

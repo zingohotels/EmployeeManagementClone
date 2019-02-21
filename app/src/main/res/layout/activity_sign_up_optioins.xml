@@ -66,8 +66,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity=""
                             android:layout_margin="10dp"
-
-                            android:background="@drawable/gradient_rect"
+                           android:layout_weight="1"
                             android:gravity="right"
                             android:orientation="horizontal">
 
@@ -76,7 +75,9 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
                                 android:paddingLeft="15dp"
+                                android:id="@+id/join_company"
                                 android:paddingTop="5dp"
+                                android:background="@drawable/gradient_rect"
                                 android:paddingRight="15dp"
                                 android:paddingBottom="5dp">
 
@@ -84,7 +85,7 @@
 
 
                                 <app.zingo.employeemanagements.Custom.MyRegulerText
-                                    android:id="@+id/join_company"
+
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
@@ -108,7 +109,7 @@
                         android:layout_marginLeft="5dp"
                         android:layout_weight="1"
                         android:padding="5dp"
-                        android:text="Join us a Company &amp; Employer"
+                        android:text="Join as a Company &amp; Employer"
                         android:textSize="18dp"
                         android:textColor="@color/colorPrimaryDark"
                         />
@@ -167,8 +168,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity=""
                             android:layout_margin="10dp"
-
-                            android:background="@drawable/gradient_rect"
+                            android:layout_weight="1"
                             android:gravity="right"
                             android:orientation="horizontal">
 
@@ -177,7 +177,9 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
                                 android:paddingLeft="15dp"
+                                android:id="@+id/join_employee"
                                 android:paddingTop="5dp"
+                                android:background="@drawable/gradient_rect"
                                 android:paddingRight="15dp"
                                 android:paddingBottom="5dp">
 
@@ -185,7 +187,7 @@
 
 
                                 <app.zingo.employeemanagements.Custom.MyRegulerText
-                                    android:id="@+id/join_employee"
+
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
@@ -207,7 +209,7 @@
                         android:layout_marginLeft="5dp"
                         android:layout_weight="1"
                         android:padding="5dp"
-                        android:text="Join us a Employee"
+                        android:text="Join as an Employee"
                         android:textSize="18dp"
                         android:textColor="@color/colorPrimaryDark"
                         />
@@ -267,9 +269,9 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity=""
                             android:layout_margin="10dp"
-
-                            android:background="@drawable/gradient_rect"
+                            android:layout_weight="1"
                             android:gravity="right"
+
                             android:orientation="horizontal">
 
                             <LinearLayout
@@ -278,6 +280,8 @@
                                 android:orientation="horizontal"
                                 android:paddingLeft="15dp"
                                 android:paddingTop="5dp"
+                                android:id="@+id/join_reseller"
+                                android:background="@drawable/gradient_rect"
                                 android:paddingRight="15dp"
                                 android:paddingBottom="5dp">
 
@@ -285,7 +289,7 @@
 
 
                                 <app.zingo.employeemanagements.Custom.MyRegulerText
-                                    android:id="@+id/join_reseller"
+
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
@@ -307,7 +311,7 @@
                         android:layout_marginLeft="5dp"
                         android:layout_weight="1"
                         android:padding="5dp"
-                        android:text="Join us a Reseller"
+                        android:text="Join as a Reseller"
                         android:textSize="18dp"
                         android:textColor="@color/colorPrimaryDark"
                         />
@@ -393,6 +397,7 @@
                     android:orientation="horizontal"
                     android:paddingLeft="15dp"
                     android:paddingTop="5dp"
+                    android:id="@+id/whatsapp_open"
                     android:paddingRight="15dp"
                     android:paddingBottom="5dp">
 

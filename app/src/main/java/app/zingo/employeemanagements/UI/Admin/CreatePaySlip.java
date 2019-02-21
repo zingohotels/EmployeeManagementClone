@@ -13,6 +13,8 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,6 +44,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import app.zingo.employeemanagements.Adapter.LeaveTakenAdapter;
+import app.zingo.employeemanagements.Custom.MyEditText;
 import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Designations;
 import app.zingo.employeemanagements.Model.Employee;
@@ -70,10 +73,11 @@ import retrofit2.Response;
 
 public class CreatePaySlip extends AppCompatActivity {
 
-    private static TextInputEditText mName,mDesignation,mEId,mPAN,mMonth,mYear,mDepartment,mLeaveTaken,
-            mBasic,mHouse,mConvey,mMedical,mVehicle,mWashing,mOther,mOthers,mPF,mESI,mLoan,mPT,mLeaves,mAdvance;
+    private static TextInputEditText mName,mDesignation,mEId,mPAN,mDepartment,mLeaveTaken,
+            mBasic,mHouse,mConvey,mMedical,mVehicle,mWashing,mOther,mOthers,mPF,mESI,mLoan,mPT,mLeaves,mAdvance;//mYear
 
-    TextInputEditText mDOJ;
+    //TextInputEditText mDOJ;
+    MyEditText mDOJ,mMonth;
 
     private static AppCompatButton mCreate;
 
@@ -82,6 +86,8 @@ public class CreatePaySlip extends AppCompatActivity {
             washing,other,others,pf,esi,loan,pt,leaves,advance;
 
     String companyName,city,state,websites;
+
+    String email;
 
     double addition=0,deduction=0,net=0;
 
@@ -96,6 +102,13 @@ public class CreatePaySlip extends AppCompatActivity {
 
     Employee employee;
     int employeeId,leaveCount=0;
+
+    private String current = "";
+    private String ddmmyyyy = "MMYYYY";
+    private Calendar cal = Calendar.getInstance();
+
+    String dojsValue = "";
+    int dojsMValue = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,9 +126,10 @@ public class CreatePaySlip extends AppCompatActivity {
             mDesignation = (TextInputEditText)findViewById(R.id.employee_desgination);
             mEId = (TextInputEditText)findViewById(R.id.employee_id);
             mPAN = (TextInputEditText)findViewById(R.id.employee_pan);
-            mMonth = (TextInputEditText)findViewById(R.id.salary_month);
-            mYear = (TextInputEditText)findViewById(R.id.salary_year);
-            mDOJ = (TextInputEditText)findViewById(R.id.doj);
+            mMonth = (MyEditText) findViewById(R.id.salary_month);
+            //mYear = (TextInputEditText)findViewById(R.id.salary_year);
+            mDOJ = (MyEditText) findViewById(R.id.doj);
+            mDOJ.setEnabled(false);
             mDepartment = (TextInputEditText)findViewById(R.id.department);
             mLeaveTaken = (TextInputEditText)findViewById(R.id.leave_taken);
             mBasic = (TextInputEditText)findViewById(R.id.basic_pay);
@@ -137,16 +151,105 @@ public class CreatePaySlip extends AppCompatActivity {
             mCreate = (AppCompatButton) findViewById(R.id.save);
 
 
-            mMonth.setText(new SimpleDateFormat("MMM").format(new Date()));
-            mYear.setText(new SimpleDateFormat("yyyy").format(new Date()));
+            mMonth.setText(new SimpleDateFormat("MM/yyyy").format(new Date()));
+           // mYear.setText(new SimpleDateFormat("yyyy").format(new Date()));
 
-            mMonth.setOnClickListener(new View.OnClickListener() {
+            mMonth.addTextChangedListener(new TextWatcher() {
+
+
+
                 @Override
-                public void onClick(View view) {
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    if (!s.toString().equals(current)) {
+                        String clean = s.toString().replaceAll("[^\\d.]|\\.", "");
+                        String cleanC = current.replaceAll("[^\\d.]|\\.", "");
+
+                        int cl = clean.length();
+                        int sel = cl;
+                        for (int i = 0; i <= cl && i < 4; i += 2) {
+                            sel++;
+                        }
+                        //Fix for pressing delete next to a forward slash
+                        if (clean.equals(cleanC)) sel--;
+
+                        if (clean.length() < 6){
+                            clean = clean + ddmmyyyy.substring(clean.length());
+                        }else{
+                            //This part makes sure that when we finish entering numbers
+                            //the date is correct, fixing it otherwise
+                            //int day  = Integer.parseInt(clean.substring(0,2));
+                            int mon  = Integer.parseInt(clean.substring(0,2));
+                            int year = Integer.parseInt(clean.substring(2,6));
+
+                            String currentYear = new SimpleDateFormat("yyyy").format(new Date());
+
+                            int years = Integer.parseInt(currentYear);
+
+                            String currentMonth = new SimpleDateFormat("MM").format(new Date());
+
+                            int months = Integer.parseInt(currentMonth);
+                            int dojMonth = 0;
+                            int dojYear =0;
+
+
+                            if(dojsValue!=null&&!dojsValue.isEmpty()){
+
+
+                                dojMonth = Integer.parseInt(dojsValue);
+                                dojYear = dojsMValue;
+
+                            }
+
+                            mon = mon < 1 ? 1 : mon > 12 ? 12 : mon;
+                            cal.set(Calendar.MONTH, mon-1);
+                            year = (year<dojYear)?dojYear:(year>years)?years:year;
+                            cal.set(Calendar.YEAR, year);
+                            if(year==years){
+
+                                if(mon>months){
+                                    mon = months;
+                                    cal.set(Calendar.MONTH,mon-1);
+                                }
+
+                            }else if(year==dojYear){
+
+                                if(mon<dojMonth){
+                                    mon = dojMonth;
+                                    cal.set(Calendar.MONTH,mon-1);
+                                }
+                            }
+                            // ^ first set year for the line below to work correctly
+                            //with leap years - otherwise, date e.g. 29/02/2012
+                            //would be automatically corrected to 28/02/2012
+
+                            //day = (day > cal.getActualMaximum(Calendar.DATE))? cal.getActualMaximum(Calendar.DATE):day;
+                            clean = String.format("%02d%02d", mon, year);
+                        }
+
+                        clean = String.format("%s/%s",
+                                clean.substring(0, 2),
+                                clean.substring(2, 6));
+
+                        sel = sel < 0 ? 0 : sel;
+                        current = clean;
+                        mMonth.setText(current);
+                        mMonth.setSelection(sel < current.length() ? sel : current.length());
+                    }
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
 
                 }
             });
+
 
             Bundle bundle = getIntent().getExtras();
 
@@ -157,6 +260,8 @@ public class CreatePaySlip extends AppCompatActivity {
             }
 
             if(employee!=null){
+
+                email = employee.getPrimaryEmailAddress();
 
                 mName.setText(""+employee.getEmployeeName());
                 getLeaveDetails(employee.getEmployeeId(),employee.getSalary());
@@ -180,6 +285,8 @@ public class CreatePaySlip extends AppCompatActivity {
 
                         Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
                         mDOJ.setText(""+new SimpleDateFormat("MMM dd,yyyy").format(date));
+                        dojsValue = new SimpleDateFormat("MM").format(date);
+                        dojsMValue = Integer.parseInt(new SimpleDateFormat("yyyy").format(date));
                     }
                 }
 
@@ -258,8 +365,8 @@ public class CreatePaySlip extends AppCompatActivity {
         design = mDesignation.getText().toString();
         eid = mEId.getText().toString();
         pan = mPAN.getText().toString();
-        month = mMonth.getText().toString();
-        year = mYear.getText().toString();
+        String monthValue = mMonth.getText().toString();
+        //year = mYear.getText().toString();
         doj = mDOJ.getText().toString();
         dept = mDepartment.getText().toString();
         leaveTaken = mLeaveTaken.getText().toString();
@@ -290,13 +397,13 @@ public class CreatePaySlip extends AppCompatActivity {
         }else if(pan==null||pan.isEmpty()){
 
             Toast.makeText(this, "Field should not empty", Toast.LENGTH_SHORT).show();
-        }else if(month==null||month.isEmpty()){
+        }else if(monthValue==null||monthValue.isEmpty()){
 
             Toast.makeText(this, "Field should not empty", Toast.LENGTH_SHORT).show();
-        }else if(year==null||year.isEmpty()){
+        }/*else if(year==null||year.isEmpty()){
 
             Toast.makeText(this, "Field should not empty", Toast.LENGTH_SHORT).show();
-        }else if(doj==null||doj.isEmpty()){
+        }*/else if(doj==null||doj.isEmpty()){
 
             Toast.makeText(this, "Field should not empty", Toast.LENGTH_SHORT).show();
         }else if(dept==null||dept.isEmpty()){
@@ -377,6 +484,11 @@ public class CreatePaySlip extends AppCompatActivity {
                 paySlips.setDesignationName(design);
                 paySlips.setEmployeeId(employeeId);
                 paySlips.setPANnumber(pan);
+
+                Date monthDate = new SimpleDateFormat("MM/yyyy").parse(monthValue);
+                month = new SimpleDateFormat("MMM").format(monthDate);
+                year = new SimpleDateFormat("yyyy").format(monthDate);
+
                 paySlips.setMonth(month);
                 paySlips.setYear(year);
                 paySlips.setDateOfJoining(doj);
@@ -746,10 +858,11 @@ public class CreatePaySlip extends AppCompatActivity {
     }
 
     private void sendEmailattacheInvoice() throws Exception {
-        //String[] mailto = {mGuestEmail.getText().toString()};
+        String[] mailto = {email};
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
         emailIntent.setType("application/pdf");
         emailIntent.putExtra(Intent.EXTRA_SUBJECT,"Pay Slip for"+month);
+        emailIntent.putExtra(Intent.EXTRA_EMAIL,mailto);
         File root = Environment.getExternalStorageDirectory();
         String pathToMyAttachedFile = "/Employee/Pdf/PaySlip/"+invoicePdf;
         File file = new File(root, pathToMyAttachedFile);
@@ -977,7 +1090,7 @@ public class CreatePaySlip extends AppCompatActivity {
                                 ArrayList<Leaves> approvedLeave = new ArrayList<>();
 
                                 String month = mMonth.getText().toString();
-                                String year = mYear.getText().toString();
+                               //String year = mYear.getText().toString();
 
 
 

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import app.zingo.employeemanagements.Adapter.LeaveTakenAdapter;
 import app.zingo.employeemanagements.Adapter.TaskAdapter;
+import app.zingo.employeemanagements.Adapter.TaskListAdapter;
 import app.zingo.employeemanagements.Model.Leaves;
 import app.zingo.employeemanagements.Model.Tasks;
 import app.zingo.employeemanagements.R;
@@ -98,7 +99,7 @@ public class TaskListScreen extends AppCompatActivity {
                                 }
 
                                 if(employeeTasks!=null&&employeeTasks.size()!=0){
-                                    TaskAdapter adapter = new TaskAdapter(TaskListScreen.this,employeeTasks);
+                                    TaskListAdapter adapter = new TaskListAdapter(TaskListScreen.this,employeeTasks);
                                     mTaskList.setAdapter(adapter);
                                 }else{
                                     Toast.makeText(TaskListScreen.this, "No Tasks given for this employee", Toast.LENGTH_SHORT).show();

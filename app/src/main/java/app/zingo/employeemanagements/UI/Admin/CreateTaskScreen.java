@@ -1,33 +1,70 @@
 package app.zingo.employeemanagements.UI.Admin;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
+import app.zingo.employeemanagements.Custom.MapViewScroll;
 import app.zingo.employeemanagements.Model.LeaveNotificationManagers;
 import app.zingo.employeemanagements.Model.Leaves;
 import app.zingo.employeemanagements.Model.TaskNotificationManagers;
 import app.zingo.employeemanagements.Model.Tasks;
 import app.zingo.employeemanagements.R;
+import app.zingo.employeemanagements.UI.Company.OrganizationEditScreen;
 import app.zingo.employeemanagements.UI.Employee.ApplyLeaveScreen;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
+import app.zingo.employeemanagements.Utils.TrackGPS;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.LeaveAPI;
 import app.zingo.employeemanagements.WebApi.LeaveNotificationAPI;
@@ -39,30 +76,54 @@ import retrofit2.Response;
 
 public class CreateTaskScreen extends AppCompatActivity {
 
-    TextInputEditText mTaskName,mFrom,mTo,mDead;
+    TextInputEditText mTaskName, mFrom, mTo;//mDead
     EditText mdesc;
     AppCompatButton mCreate;
+    RelativeLayout mMapLay;
+    Switch mShow;
 
-    int employeeId,deptId;
+    private EditText  lat, lng;
+    private TextView location;
+
+    private GoogleMap mMap;
+    MapViewScroll mapView;
+    Marker marker;
+
+    int employeeId, deptId;
+    double lati, lngi;
     String type;
+
+    DecimalFormat df2 = new DecimalFormat(".##########");
+    public static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
+    public String TAG = "MAPLOCATION",placeId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        try{
+        try {
             setContentView(R.layout.activity_create_task_screen);
 
-            mTaskName = (TextInputEditText)findViewById(R.id.task_name);
-            mFrom = (TextInputEditText)findViewById(R.id.from_date);
-            mTo = (TextInputEditText)findViewById(R.id.to_date);
-            mDead = (TextInputEditText)findViewById(R.id.dead_line);
-            mdesc = (EditText)findViewById(R.id.task_description);
+            mTaskName = (TextInputEditText) findViewById(R.id.task_name);
+            mFrom = (TextInputEditText) findViewById(R.id.from_date);
+            mTo = (TextInputEditText) findViewById(R.id.to_date);
+           // mDead = (TextInputEditText) findViewById(R.id.dead_line);
+            mdesc = (EditText) findViewById(R.id.task_description);
             mCreate = (AppCompatButton) findViewById(R.id.apply_leave);
+            mapView = (MapViewScroll) findViewById(R.id.task_location_map);
+            mShow = (Switch) findViewById(R.id.show_map);
+            mMapLay = (RelativeLayout) findViewById(R.id.map_layout);
+
+            location = (TextView)findViewById(R.id.location_et);
+
+            lat = (EditText)findViewById(R.id.lat_et);
+            lng = (EditText)findViewById(R.id.lng_et);
+
+
 
             Bundle bundle = getIntent().getExtras();
 
-            if(bundle!=null){
+            if (bundle != null) {
 
                 employeeId = bundle.getInt("EmployeeId");
                 deptId = bundle.getInt("DepartmentId");
@@ -86,19 +147,118 @@ public class CreateTaskScreen extends AppCompatActivity {
                 }
             });
 
-            mDead.setOnClickListener(new View.OnClickListener() {
+           /* mDead.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
                     openDatePicker(mDead);
                 }
             });
-
+*/
             mCreate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
                     validate();
+                }
+            });
+
+            mShow.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                    if (isChecked) {
+                        mMapLay.setVisibility(View.VISIBLE);
+
+                    }else{
+                        mMapLay.setVisibility(View.GONE);
+                    }
+                }
+            });
+            mapView.onCreate(savedInstanceState);
+            mapView.onResume();
+
+            try {
+                MapsInitializer.initialize(CreateTaskScreen.this);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+            location.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        Intent intent =
+                                new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY/*MODE_FULLSCREEN*/)
+                                        .build(CreateTaskScreen.this);
+                        startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
+                    } catch (GooglePlayServicesRepairableException e) {
+                        e.printStackTrace();
+                        // TODO: Handle the error.
+                    } catch (GooglePlayServicesNotAvailableException e) {
+                        // TODO: Handle the error.
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            mapView.getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(GoogleMap googleMap) {
+                    mMap = googleMap;
+
+
+                    if (ActivityCompat.checkSelfPermission(CreateTaskScreen.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(CreateTaskScreen.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        return;
+                    }
+                    mMap.getUiSettings().setZoomControlsEnabled(true);
+                    mMap.getUiSettings().setAllGesturesEnabled(true);
+                    mMap.setMyLocationEnabled(true);
+                    mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                    mMap.getProjection().getVisibleRegion().latLngBounds.getCenter();
+
+                    TrackGPS trackGPS = new TrackGPS(CreateTaskScreen.this);
+
+                    if(trackGPS.canGetLocation())
+                    {
+                        lati = trackGPS.getLatitude();
+                        lngi = trackGPS.getLongitude();
+                    }
+
+
+
+                    mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                        @Override
+                        public void onMapClick(LatLng latLng) {
+                            DecimalFormat df2 = new DecimalFormat(".##########");
+
+
+                            lati = latLng.latitude;
+                            lngi = latLng.longitude;
+
+
+
+
+                            lat.setText(df2.format(latLng.latitude)+"");
+                            lng.setText(df2.format(latLng.longitude)+"");
+                            String add = getAddress(latLng);
+                            location.setText(add);
+                            mMap.clear();
+                            marker = mMap.addMarker(new MarkerOptions()
+                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                                    .position(latLng));
+                            CameraPosition cameraPosition1 = new CameraPosition.Builder().target(latLng).zoom(80).build();
+                            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition1));
+                        }
+                    });
+
                 }
             });
 
@@ -182,7 +342,7 @@ public class CreateTaskScreen extends AppCompatActivity {
 
         String from = mFrom.getText().toString();
         String to = mTo.getText().toString();
-        String dead = mDead.getText().toString();
+     //   String dead = mDead.getText().toString();
         String taskName = mTaskName.getText().toString();
         String desc = mdesc.getText().toString();
 
@@ -199,10 +359,6 @@ public class CreateTaskScreen extends AppCompatActivity {
 
             Toast.makeText(this, "To date is required", Toast.LENGTH_SHORT).show();
 
-        }else if(dead.isEmpty()){
-
-            Toast.makeText(this, "Dead line is required", Toast.LENGTH_SHORT).show();
-
         }else if(desc.isEmpty()){
 
             Toast.makeText(this, "Leave Comment is required", Toast.LENGTH_SHORT).show();
@@ -215,13 +371,19 @@ public class CreateTaskScreen extends AppCompatActivity {
                 Tasks tasks = new Tasks();
                 tasks.setTaskName(taskName);
                 tasks.setTaskDescription(desc);
-                tasks.setDeadLine(dead);
+                tasks.setDeadLine(to);
                 tasks.setStartDate(new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(sdf.parse(from)));
                 tasks.setReminderDate(new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(sdf.parse(from)));
                 tasks.setEndDate(new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(sdf.parse(to)));
                 tasks.setStatus("Pending");
                 tasks.setComments("");
                 tasks.setRemarks("");
+
+                if(mShow.isChecked()){
+                    tasks.setLatitude(lati+"");
+                    tasks.setLongitude(lngi+"");
+                }
+
 
                 if(type!=null&&type.equalsIgnoreCase("Employee")){
                     tasks.setToReportEmployeeId(PreferenceHandler.getInstance(CreateTaskScreen.this).getManagerId());
@@ -315,7 +477,7 @@ public class CreateTaskScreen extends AppCompatActivity {
 
 
                             Toast.makeText(CreateTaskScreen.this, "Task Created Successfully", Toast.LENGTH_SHORT).show();
-                         //  CreateTaskScreen.this.finish();
+                            //  CreateTaskScreen.this.finish();
                             TaskNotificationManagers tn = new TaskNotificationManagers();
                             tn.setEmployeeId(""+s.getEmployeeId());
                             tn.setTaskName(s.getTaskName());
@@ -503,6 +665,78 @@ public class CreateTaskScreen extends AppCompatActivity {
             }
         });
 
+
+
+    }
+
+    private String getAddress(LatLng latLng) {
+        Geocoder geocoder = new Geocoder(CreateTaskScreen.this, Locale.getDefault());
+        String result = null;
+        try {
+            List<Address> addressList = geocoder.getFromLocation(
+                    latLng.latitude, latLng.longitude, 1);
+            if (addressList != null && addressList.size() > 0) {
+                Address address = addressList.get(0);
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
+                    sb.append(address.getAddressLine(i)).append(",");
+                }
+
+                result = address.getAddressLine(0);
+
+
+
+                return result;
+            }
+            return result;
+        } catch (IOException e) {
+            Log.e("MapLocation", "Unable connect to Geocoder", e);
+            return result;
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+        try{
+            if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
+                if (resultCode == RESULT_OK) {
+                    Place place = PlaceAutocomplete.getPlace(this, data);
+                    //System.out.println(place.getLatLng());
+                    location.setText(place.getName()+","+place.getAddress());
+                    //location.setText(""+place.getId());
+                    placeId= place.getId();
+
+                    lati = place.getLatLng().latitude;
+                    lngi = place.getLatLng().longitude;
+
+                    lat.setText(df2.format(place.getLatLng().latitude)+"");
+                    lng.setText(df2.format(place.getLatLng().longitude)+"");
+                    System.out.println("Star Rating = "+place.getRating());
+                    if(mMap != null)
+                    {
+                        mMap.clear();
+                        marker = mMap.addMarker(new MarkerOptions()
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                                .position(place.getLatLng()));
+                        CameraPosition cameraPosition1 = new CameraPosition.Builder().target(place.getLatLng()).zoom(17).build();
+                        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition1));
+                    }
+                    //address.setText(place.getAddress());*/
+                    Log.i(TAG, "Place: " + place.getName());
+                } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                    Status status = PlaceAutocomplete.getStatus(this, data);
+                    // TODO: Handle the error.
+                    Log.i(TAG, status.getStatusMessage());
+
+                } else if (resultCode == RESULT_CANCELED) {
+                    // The user canceled the operation.
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
 
     }

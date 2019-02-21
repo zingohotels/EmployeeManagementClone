@@ -16,6 +16,7 @@ import java.util.Collections;
 
 import app.zingo.employeemanagements.Adapter.EmployeeAdapter;
 import app.zingo.employeemanagements.Adapter.EmployeeUpdateAdapter;
+import app.zingo.employeemanagements.Model.Designations;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Employee.CreateEmployeeScreen;
@@ -34,6 +35,7 @@ public class EmployeeUpdateListScreen extends AppCompatActivity {
     FloatingActionButton mAddProfiles;
 
     String type;
+    int employeeSize = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,13 +51,33 @@ public class EmployeeUpdateListScreen extends AppCompatActivity {
             mProfileList = (RecyclerView)findViewById(R.id.profile_list);
             mAddProfiles = (FloatingActionButton) findViewById(R.id.add_profile);
 
+            getProfiles();
+
 
             mAddProfiles.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
-                    Intent employee =new Intent(EmployeeUpdateListScreen.this,CreateEmployeeScreen.class);
-                    startActivity(employee);
+                    if(employeeSize>=PreferenceHandler.getInstance(EmployeeUpdateListScreen.this).getEmployeeLimit()){
+
+
+                        if(PreferenceHandler.getInstance(EmployeeUpdateListScreen.this).getAppType().equalsIgnoreCase("Trial")){
+
+                            Intent employee =new Intent(EmployeeUpdateListScreen.this,CreateEmployeeScreen.class);
+                            startActivity(employee);
+
+                        }else{
+
+                        }
+
+                    }else{
+
+                        Intent employee =new Intent(EmployeeUpdateListScreen.this,CreateEmployeeScreen.class);
+                        startActivity(employee);
+
+                    }
+
+
                 }
             });
 
@@ -69,7 +91,7 @@ public class EmployeeUpdateListScreen extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        getProfiles();
+
     }
 
     private void getProfiles(){
@@ -101,6 +123,8 @@ public class EmployeeUpdateListScreen extends AppCompatActivity {
                             if (list !=null && list.size()!=0) {
 
                                 ArrayList<Employee> employees = new ArrayList<>();
+
+                                employeeSize = list.size();
                                 for(int i=0;i<list.size();i++){
 
                                     if(list.get(i).getEmployeeId()!=PreferenceHandler.getInstance(EmployeeUpdateListScreen.this).getUserId()){
@@ -115,9 +139,9 @@ public class EmployeeUpdateListScreen extends AppCompatActivity {
                                     EmployeeUpdateAdapter adapter = new EmployeeUpdateAdapter(EmployeeUpdateListScreen.this, employees,type);
                                     mProfileList.setAdapter(adapter);
 
-                                    if(PreferenceHandler.getInstance(EmployeeUpdateListScreen.this).getEmployeeLimit()<=employees.size()){
+                                    /*if(PreferenceHandler.getInstance(EmployeeUpdateListScreen.this).getEmployeeLimit()<=employees.size()){
                                         mAddProfiles.setVisibility(View.GONE);
-                                    }
+                                    }*/
                                 }else{
                                     Toast.makeText(EmployeeUpdateListScreen.this,"No Employees added",Toast.LENGTH_LONG).show();
                                     Intent employee =new Intent(EmployeeUpdateListScreen.this,CreateEmployeeScreen.class);
@@ -153,6 +177,8 @@ public class EmployeeUpdateListScreen extends AppCompatActivity {
 
         });
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

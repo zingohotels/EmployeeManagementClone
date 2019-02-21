@@ -68,6 +68,7 @@ public class SplashScreen extends AppCompatActivity {
     private static final String WELCOME_MESSAGE_KEY = "welcome_message";
     private static final String WELCOME_MESSAGE_KEY_IMAGE = "welcome_image_url";
     private static final String WELCOME_MESSAGE_CAPS_KEY = "welcome_message_caps";
+    private static final String APP_VERSION = "app_version";
 
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
 
@@ -150,6 +151,10 @@ public class SplashScreen extends AppCompatActivity {
                             // values are returned.
                             mFirebaseRemoteConfig.activateFetched();
 
+                            String app_version = mFirebaseRemoteConfig.getString(APP_VERSION);
+                         //   Toast.makeText(SplashScreen.this, ""+app_version, Toast.LENGTH_SHORT).show();
+                            PreferenceHandler.getInstance(SplashScreen.this).setAppVersion(app_version);
+
                             if(mFirebaseRemoteConfig.getString(WELCOME_MESSAGE_CAPS_KEY).equalsIgnoreCase("false")){
                                 Util.BASE_URL = Constants.BASE_URL;
                             }else{
@@ -157,7 +162,7 @@ public class SplashScreen extends AppCompatActivity {
                                 Util.IMAGE_URL = mFirebaseRemoteConfig.getString(WELCOME_MESSAGE_KEY_IMAGE);
                             }
 
-                            getPlans();
+                           // getPlans();
 
 
                         } else {
@@ -369,7 +374,7 @@ public class SplashScreen extends AppCompatActivity {
 
                 }else{
 
-                    if(resprofileId!=0){
+                    if(resprofileId!=0&&profileId==0){
 
                         Intent verify = new Intent(SplashScreen.this,ResellerMainActivity.class);
                         startActivity(verify);

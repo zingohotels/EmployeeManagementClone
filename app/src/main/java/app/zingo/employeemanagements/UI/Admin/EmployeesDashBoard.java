@@ -1,6 +1,7 @@
 package app.zingo.employeemanagements.UI.Admin;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
@@ -11,8 +12,10 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -195,7 +198,8 @@ public class EmployeesDashBoard extends AppCompatActivity {
                             if (progressDialog!=null)
                                 progressDialog.dismiss();
                             ArrayList<LoginDetails> list = response.body();
-                            long hours=0,hourMins=0;
+                           // long hours=0,hourMins=0;
+                            long diffHrs=0;
 
 
                             if (list !=null && list.size()!=0) {
@@ -209,18 +213,55 @@ public class EmployeesDashBoard extends AppCompatActivity {
 
                                     if(list.get(i).getLoginDate().contains("T")){
 
-
-
-
-
+                                        String loginTime = list.get(i).getLoginTime();
+                                        String logoutTime = list.get(i).getLogOutTime();
                                         String date[] = list.get(i).getLoginDate().split("T");
                                         Date dates = null;
                                         try {
                                             dates = new SimpleDateFormat("yyyy-MM-dd").parse(date[0]);
                                             String dateValue = new SimpleDateFormat("MMM dd,yyyy").format(dates);
 
-                                            hours = dateCal(dateValue,list.get(i).getLoginTime(),list.get(i).getLogOutTime());
-                                            hourMins = hourMins+hours;
+                                            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+                                            SimpleDateFormat sdfs = new SimpleDateFormat("MMM dd,yyyy");
+
+
+                                            try {
+                                                dates = new SimpleDateFormat("yyyy-MM-dd").parse(dateValue);
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+
+                                            Date fd=null,td=null;
+                                            String comDate = new SimpleDateFormat("MMM dd,yyyy").format(dates);
+
+
+                                            if(loginTime==null||loginTime.isEmpty()){
+
+                                                loginTime = comDate +" 00:00 am";
+                                            }
+
+                                            if(logoutTime==null||logoutTime.isEmpty()){
+
+                                                logoutTime = comDate  +" "+new SimpleDateFormat("hh:mm a").format(new Date()) ;
+                                            }
+
+                                            try {
+                                                fd = sdf.parse(""+loginTime);
+                                                td = sdf.parse(""+logoutTime);
+
+                                                long diff = td.getTime() - fd.getTime();
+
+                                                diffHrs = diffHrs+diff;
+
+
+
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+
+                                            }
+
+                                           /* hours = dateCal(dateValue,list.get(i).getLoginTime(),list.get(i).getLogOutTime());
+                                            hourMins = hourMins+hours;*/
                                         } catch (ParseException e) {
                                             e.printStackTrace();
                                         }
@@ -236,16 +277,17 @@ public class EmployeesDashBoard extends AppCompatActivity {
                                     mWorkedDays.setText(""+s.size());
                                 }
 
-                                loginHour = hourMins;
+                                loginHour = diffHrs;
 
-                                long diffDays = hourMins / (24 * 60 * 60 * 1000);
-                                long Hours = hourMins / (60 * 60 * 1000)  % 24;
-                                long Minutes = hourMins / (60 * 1000)% 60 ;
-                                long Seconds = hourMins / 1000 % 60;
+                                int minutes = (int) ((diffHrs / (1000*60)) % 60);
+                                int hours   = (int) ((diffHrs / (1000*60*60)) % 24);
+                                int days   = (int) ((diffHrs / (1000*60*60*24)));
+
+
                                 DecimalFormat df = new DecimalFormat("00");
-                                long value = ((diffDays*24)/2)+Hours;
-                                mWorkedHours.setText(df.format(value)+":"+df.format(Minutes));
 
+
+                                mWorkedHours.setText(String.format("%02d", days)+"d"+String.format("%02d", hours) +"hr"+String.format("%02d", minutes)+"mins");
                                 getMeetingDetails(employeeId);
 
                             }else{
@@ -299,7 +341,8 @@ public class EmployeesDashBoard extends AppCompatActivity {
                             if (progressDialog!=null)
                                 progressDialog.dismiss();
                             ArrayList<Meetings> list = response.body();
-                            long hours=0;
+                           // long hours=0;
+                            long diffHrs = 0;
 
 
                             if (list !=null && list.size()!=0) {
@@ -309,16 +352,63 @@ public class EmployeesDashBoard extends AppCompatActivity {
 
                                 for(int i=0;i<list.size();i++){
 
-
-
-
                                     if(list.get(i).getMeetingDate().contains("T")){
 
-
-
-
-
+                                        String loginTime = list.get(i).getStartTime();
+                                        String logoutTime = list.get(i).getEndTime();
                                         String date[] = list.get(i).getMeetingDate().split("T");
+                                        Date dates = null;
+                                        try {
+                                            dates = new SimpleDateFormat("yyyy-MM-dd").parse(date[0]);
+                                            String dateValue = new SimpleDateFormat("MMM dd,yyyy").format(dates);
+
+                                            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+                                            SimpleDateFormat sdfs = new SimpleDateFormat("MMM dd,yyyy");
+
+
+                                            try {
+                                                dates = new SimpleDateFormat("yyyy-MM-dd").parse(dateValue);
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+
+                                            Date fd=null,td=null;
+                                            String comDate = new SimpleDateFormat("MMM dd,yyyy").format(dates);
+
+
+                                            if(loginTime==null||loginTime.isEmpty()){
+
+                                                loginTime = comDate +" 00:00 am";
+                                            }
+
+                                            if(logoutTime==null||logoutTime.isEmpty()){
+
+                                                logoutTime = comDate  +" "+new SimpleDateFormat("hh:mm a").format(dates) ;
+                                            }
+
+                                            try {
+                                                fd = sdf.parse(""+loginTime);
+                                                td = sdf.parse(""+logoutTime);
+
+                                                long diff = td.getTime() - fd.getTime();
+
+                                                diffHrs = diffHrs+diff;
+
+
+
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+
+                                            }
+
+                                           /* hours = dateCal(dateValue,list.get(i).getLoginTime(),list.get(i).getLogOutTime());
+                                            hourMins = hourMins+hours;*/
+                                        } catch (ParseException e) {
+                                            e.printStackTrace();
+                                        }
+
+
+                                        /*String date[] = list.get(i).getMeetingDate().split("T");
                                         Date dates = null;
                                         try {
                                             dates = new SimpleDateFormat("yyyy-MM-dd").parse(date[0]);
@@ -334,37 +424,39 @@ public class EmployeesDashBoard extends AppCompatActivity {
                                             hours = dateCal(dateValue,list.get(i).getStartTime(),end)+hours;
                                         } catch (ParseException e) {
                                             e.printStackTrace();
-                                        }
+                                        }*/
 
                                     }
 
                                 }
 
-                                meetingHour = hours;
+                                meetingHour = diffHrs;
 
-                                long avg = hours/list.size();
+                                long avg = diffHrs/list.size();
 
                                 long hourss = loginHour - meetingHour;
 
-                                long diffDays = hours / (24 * 60 * 60 * 1000);
-                                long Hours = hours / (60 * 60 * 1000) ;
-                                long Minutes = hours / (60 * 1000);
-                                long Seconds = hours / 1000 % 60;
+                                int minutes = (int) ((diffHrs / (1000*60)) % 60);
+                                int hours   = (int) ((diffHrs / (1000*60*60)) % 24);
+                                int days   = (int) ((diffHrs / (1000*60*60*24)));
 
-                                long diffDayss = hourss / (24 * 60 * 60 * 1000);
-                                long Hourss = hourss / (60 * 60 * 1000) ;
-                                long Minutess = hourss / (60 * 1000);
-                                long Secondss = hourss / 1000 % 60;
 
-                                long diffDaysss = avg / (24 * 60 * 60 * 1000);
-                                long Hoursss = avg / (60 * 60 * 1000) ;
-                                long Minutesss = avg / (60 * 1000);
-                                long Secondsss = avg / 1000 % 60;
                                 DecimalFormat df = new DecimalFormat("00");
 
-                                mMeetingHours.setText(df.format(Hours)+":"+df.format(Minutes));
-                                mIdle.setText(df.format(Hourss)+":"+df.format(Minutess));
-                                mAvgMeeting.setText(df.format(Hoursss)+":"+df.format(Minutesss));
+
+                                mMeetingHours.setText(String.format("%02d", days)+"d"+String.format("%02d", hours) +"hr"+String.format("%02d", minutes)+"mins");
+
+                                 minutes = (int) ((avg / (1000*60)) % 60);
+                                 hours   = (int) ((avg / (1000*60*60)) % 24);
+                                 days   = (int) ((avg / (1000*60*60*24)));
+
+                                mAvgMeeting.setText(String.format("%02d", days)+"d"+String.format("%02d", hours) +"hr"+String.format("%02d", minutes)+"mins");
+
+                                minutes = (int) ((hourss / (1000*60)) % 60);
+                                hours   = (int) ((hourss / (1000*60*60)) % 24);
+                                days   = (int) ((hourss / (1000*60*60*24)));
+
+                                mIdle.setText(String.format("%02d", days)+"d"+String.format("%02d", hours) +"hr"+String.format("%02d", minutes)+"mins");
 
                             }else{
 
@@ -462,7 +554,7 @@ public class EmployeesDashBoard extends AppCompatActivity {
                             ArrayList<Tasks> onTask = new ArrayList<>();
                             ArrayList<Tasks> completedTask = new ArrayList<>();
 
-                            long hours = 0;
+                            long diffHrs = 0;
 
 
                             if(list!=null&&list.size()!=0){
@@ -471,7 +563,7 @@ public class EmployeesDashBoard extends AppCompatActivity {
 
                                 for (Tasks task:list) {
 
-                                    if(task.getStatus().equalsIgnoreCase("On-Going")){
+                                    if(task.getStatus().equalsIgnoreCase("On-Going")&&(task.getStartDate()!=null&&task.getEndDate()!=null)){
                                         onTask.add(task);
 
                                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -509,10 +601,8 @@ public class EmployeesDashBoard extends AppCompatActivity {
                                             td = sdf.parse("" + logout);
 
                                             long diff = td.getTime() - fd.getTime();
-                                            long Hours = diff / (60 * 60 * 1000) % 24;
-                                            long Minutes = diff / (60 * 1000) % 60;
 
-                                            hours = hours+diff;
+                                            diffHrs = diffHrs+diff;
 
                                         }catch (Exception w){
                                             w.printStackTrace();
@@ -520,7 +610,7 @@ public class EmployeesDashBoard extends AppCompatActivity {
 
 
 
-                                        }else if(task.getStatus().equalsIgnoreCase("Completed")){
+                                        }else if(task.getStatus().equalsIgnoreCase("Completed")&&(task.getStartDate()!=null&&task.getEndDate()!=null)){
                                         completedTask.add(task);
                                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                                         String login,logout;
@@ -558,8 +648,8 @@ public class EmployeesDashBoard extends AppCompatActivity {
 
                                             long diff = td.getTime() - fd.getTime();
 
+                                            diffHrs = diffHrs+diff;
 
-                                            hours = hours+diff;
 
                                         }catch (Exception w){
                                             w.printStackTrace();
@@ -573,8 +663,12 @@ public class EmployeesDashBoard extends AppCompatActivity {
 
 
 
-                                long avghours = hours/list.size();
+                                long avghours = diffHrs/list.size();
                                 long hourst = avghours*list.size();
+
+                                int minutes = (int) ((avghours / (1000*60)) % 60);
+                                int hours   = (int) ((avghours / (1000*60*60)) % 24);
+                                int days   = (int) ((avghours / (1000*60*60*24)));
 
                                 long Hours = hourst / (60 * 60 * 1000) % 24;
                                 long Minutes = hourst / (60 * 1000) % 60;
@@ -583,7 +677,8 @@ public class EmployeesDashBoard extends AppCompatActivity {
                                 long avgMinutes = avghours / (60 * 1000) % 60;
 
                                 mTaskTime.setText(""+(completedTask.size()));
-                                mAvgTask.setText(""+avgHours+":"+avgMinutes);
+                                //mAvgTask.setText(""+avgHours+":"+avgMinutes);
+                                mAvgTask.setText(String.format("%02d", days)+"d"+String.format("%02d", hours) +"hr"+String.format("%02d", minutes)+"mins");
 
 
                             }
@@ -733,4 +828,179 @@ public class EmployeesDashBoard extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public class LoginDetailsAdapter extends RecyclerView.Adapter<LoginDetailsAdapter.ViewHolder>{
+
+        private Context context;
+        private ArrayList<LoginDetails> list;
+        boolean visible;
+
+        public LoginDetailsAdapter(Context context, ArrayList<LoginDetails> list) {
+
+            this.context = context;
+            this.list = list;
+
+
+        }
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+            try{
+                View v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.adapter_dash_employee_admin, parent, false);
+                ViewHolder viewHolder = new ViewHolder(v);
+                return viewHolder;
+            }catch (Exception e){
+                e.printStackTrace();
+                return null;
+            }
+
+        }
+
+        @Override
+        public void onBindViewHolder(final ViewHolder holder, int position) {
+            try{
+
+                final LoginDetails loginDetails = list.get(position);
+
+                if(loginDetails!=null){
+
+                    String loginTime = loginDetails.getLoginTime();
+                    String logoutTime = loginDetails.getLogOutTime();
+                    String loginDate = loginDetails.getLoginDate();
+                    String dateValue = "";
+
+                    if(loginDate.contains("T")){
+
+                        String dateValues[] = loginDate.split("T");
+                        dateValue = dateValues[0];
+
+                    }
+
+
+
+                    if(loginTime!=null&&!loginTime.isEmpty()){
+                        holder.mLoginTime.setText(""+loginTime);
+                    }else{
+                        holder.mLoginTime.setText("");
+                    }
+
+                    if(logoutTime!=null&&!logoutTime.isEmpty()){
+                        holder.mLogoutTime.setText(""+logoutTime);
+                    }else{
+                        holder.mLogoutTime.setText("Working");
+                    }
+
+
+                    SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+                    SimpleDateFormat sdfs = new SimpleDateFormat("MMM dd,yyyy");
+
+                    Date date=null;
+                    try {
+                        date = new SimpleDateFormat("yyyy-MM-dd").parse(dateValue);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    Date fd=null,td=null;
+                    String comDate = new SimpleDateFormat("MMM dd,yyyy").format(date);
+
+
+                    if(loginTime==null||loginTime.isEmpty()){
+
+                        loginTime = comDate +" 00:00 am";
+                    }
+
+                    if(logoutTime==null||logoutTime.isEmpty()){
+
+                        logoutTime = comDate  +" "+new SimpleDateFormat("hh:mm a").format(new Date()) ;
+                    }
+
+                    try {
+                        fd = sdf.parse(""+loginTime);
+                        td = sdf.parse(""+logoutTime);
+
+                        long diffHrs = td.getTime() - fd.getTime();
+
+                        int minutes = (int) ((diffHrs / (1000*60)) % 60);
+                        int hours   = (int) ((diffHrs / (1000*60*60)) % 24);
+                        int days   = (int) ((diffHrs / (1000*60*60*24)));
+
+
+
+                        holder.mDuration.setText(String.format("%02d", days)+":"+String.format("%02d", hours) +":"+String.format("%02d", minutes));
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+
+                    }
+
+
+                }
+
+
+
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return list.size();
+        }
+
+
+        class ViewHolder extends RecyclerView.ViewHolder  {
+
+            TextView mLoginTime,mLogoutTime,mDuration;
+
+
+
+
+            public ViewHolder(View itemView) {
+                super(itemView);
+                itemView.setClickable(true);
+
+                mLoginTime = (TextView)itemView.findViewById(R.id.report_login);
+                mLogoutTime = (TextView)itemView.findViewById(R.id.report_logout);
+                mDuration = (TextView)itemView.findViewById(R.id.report_hours);
+
+
+
+            }
+        }
+
+        public void dateCal(String date,String login,String logout,TextView textView){
+
+            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+            DecimalFormat df = new DecimalFormat("00");
+
+            Date fd=null,td=null;
+
+            try {
+                fd = sdf.parse(""+login);
+                td = sdf.parse(""+logout);
+
+                long diff = td.getTime() - fd.getTime();
+                long diffDays = diff / (24 * 60 * 60 * 1000);
+                long Hours = diff / (60 * 60 * 1000) % 24;
+                long Minutes = diff / (60 * 1000) % 60;
+                long Seconds = diff / 1000 % 60;
+
+                textView.setText(df.format(Hours)+":"+df.format(Minutes));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+
+
+        }
+    }
+
+
 }

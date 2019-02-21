@@ -2,10 +2,17 @@ package app.zingo.employeemanagements.UI.NewEmployeeDesign;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,13 +21,17 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -38,10 +49,16 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -49,18 +66,25 @@ import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.regex.Pattern;
 
+import app.zingo.employeemanagements.Adapter.MeetingDetailAdapter;
 import app.zingo.employeemanagements.Custom.MyRegulerText;
 import app.zingo.employeemanagements.Custom.RoundImageView;
 import app.zingo.employeemanagements.FireBase.SharedPrefManager;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.EmployeeDeviceMapping;
 import app.zingo.employeemanagements.Model.EmployeeImages;
+import app.zingo.employeemanagements.Model.Meetings;
 import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.R;
+import app.zingo.employeemanagements.Service.CheckDataAndLocation;
+import app.zingo.employeemanagements.Service.DistanceCheck;
+import app.zingo.employeemanagements.Service.LocationSharingServices;
 import app.zingo.employeemanagements.UI.Admin.CreatePaySlip;
 import app.zingo.employeemanagements.UI.Admin.DashBoardAdmin;
 import app.zingo.employeemanagements.UI.Common.PlanExpireScreen;
+import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
 import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
 import app.zingo.employeemanagements.UI.LandingScreen;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminDashBoardFragment;
@@ -68,6 +92,7 @@ import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminHomeFragment;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminNewMainScreen;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.EmployerNotificationFragment;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.TaskListFragment;
+import app.zingo.employeemanagements.UI.SignUpOptioins;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
@@ -75,6 +100,7 @@ import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
 import app.zingo.employeemanagements.WebApi.EmployeeDeviceApi;
 import app.zingo.employeemanagements.WebApi.EmployeeImageAPI;
+import app.zingo.employeemanagements.WebApi.MeetingsAPI;
 import app.zingo.employeemanagements.WebApi.OrganizationApi;
 import app.zingo.employeemanagements.WebApi.UploadApi;
 import okhttp3.MediaType;
@@ -106,6 +132,16 @@ public class EmployeeNewMainScreen extends AppCompatActivity {
     private int REQUEST_CAMERA = 0, SELECT_FILE = 1;
     String status,selectedImage;
 
+    String currentVersion, latestVersion;
+    Dialog dialog;
+
+    private static final int REQUEST_PERMISSIONS = 100;
+    boolean boolean_permission;
+    SharedPreferences mPref;
+    SharedPreferences.Editor medit;
+
+    LinearLayout mWhatsapp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,12 +151,117 @@ public class EmployeeNewMainScreen extends AppCompatActivity {
             setContentView(R.layout.activity_employee_new_main_screen);
             setupData();
             setupViewPager((ViewPager) findViewById(R.id.viewPager));
+            mWhatsapp = (LinearLayout)findViewById(R.id.whatsapp_open);
+
+            mPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            medit = mPref.edit();
+
+            getCurrentVersion();
+            Intent serviceIntent = new Intent(EmployeeNewMainScreen.this,CheckDataAndLocation.class);
+            startService(serviceIntent);
+
+            mWhatsapp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    String message = "Hi I'm "+PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getUserFullName()+",\n My Organization Name is "+PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getCompanyName()+".I am writing about the feedback of Zingy app.";
+
+                    PackageManager packageManager = getPackageManager();
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+
+                    try {
+                        String url = "https://api.whatsapp.com/send?phone=+918987250539" +"&text=" + URLEncoder.encode(message, "UTF-8");
+                        i.setPackage("com.whatsapp");
+                        i.setData(Uri.parse(url));
+                        if (i.resolveActivity(packageManager) != null) {
+                            startActivity(i);
+                        }
+                    } catch (Exception e){
+                        e.printStackTrace();
+                        Toast.makeText(EmployeeNewMainScreen.this, "WhatsApp not installed.", Toast.LENGTH_SHORT).show();
+                    }
+
+                    /*try {
+
+                     *//*Uri uri = Uri.parse("whatsapp://send?phone=+918987250539" );
+                        Intent i = new Intent(Intent.ACTION_VIEW, uri);
+                        i.putExtra("sms_body", "Hi");
+                        startActivity(i);*//*
+
+                        Uri uri = Uri.parse("smsto:+918987250539" );
+                        Intent i = new Intent(Intent.ACTION_SENDTO, uri);
+                        i.putExtra("sms_body", "Hi");
+                        i.setPackage("com.whatsapp");
+                        startActivity(i);
+                    }
+                    catch (ActivityNotFoundException e){
+                        e.printStackTrace();
+                        Toast.makeText(AdminNewMainScreen.this, "WhatsApp not installed.", Toast.LENGTH_SHORT).show();
+                    }*/
+
+                }
+            });
+
+            fn_permission();
+            if (boolean_permission) {
+
+                if (mPref.getString("service", "").matches("")) {
+                    medit.putString("service", "service").commit();
+
+                   /* Intent intent = new Intent(getApplicationContext(), DistanceCheck.class);
+                    startService(intent);*/
+
+                } else {
+                   // Toast.makeText(getApplicationContext(), "Service is already running", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(getApplicationContext(), "Please enable the gps", Toast.LENGTH_SHORT).show();
+            }
+
 
         }catch(Exception e){
             e.printStackTrace();
         }
 
     }
+
+    private void fn_permission() {
+        if ((ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
+
+            if ((ActivityCompat.shouldShowRequestPermissionRationale(EmployeeNewMainScreen.this, android.Manifest.permission.ACCESS_FINE_LOCATION))) {
+
+
+            } else {
+                ActivityCompat.requestPermissions(EmployeeNewMainScreen.this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION
+
+                        },
+                        REQUEST_PERMISSIONS);
+
+            }
+        } else {
+            boolean_permission = true;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case REQUEST_PERMISSIONS: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    boolean_permission = true;
+
+                } else {
+                    Toast.makeText(getApplicationContext(), "Please allow the permission", Toast.LENGTH_LONG).show();
+
+                }
+            }
+        }
+    }
+
+
+
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList();
@@ -156,14 +297,15 @@ public class EmployeeNewMainScreen extends AppCompatActivity {
     }*/
 
     private void setupTabIcons(TabLayout tabLayout) {
-        tabLayout.getTabAt(3).setIcon(R.drawable.white_navigation);
+        tabLayout.getTabAt(4).setIcon(R.drawable.white_navigation);
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        viewPager.setOffscreenPageLimit(4);
+        viewPager.setOffscreenPageLimit(5);
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         viewPagerAdapter.addFragment(EmployeeDashBoardFragment.getInstance(), "Dash Board");
+        viewPagerAdapter.addFragment(EmployeeNotificationScrenFragment.getInstance(), "Notification");
         viewPagerAdapter.addFragment(EmployeeLoginFragment.getInstance(), "Attendance");
         viewPagerAdapter.addFragment(EmployeeTaskFragment.getInstance(), "Tasks");
         viewPagerAdapter.addFragment(EmployeeHomeFragment.getInstance(), "");
@@ -284,6 +426,9 @@ public class EmployeeNewMainScreen extends AppCompatActivity {
             }
 
         }else{
+
+            profile.setAppOpen(true);
+            updateProfile(profile);
 
             ArrayList<EmployeeImages> images = profile.getEmployeeImages();
 
@@ -422,6 +567,8 @@ public class EmployeeNewMainScreen extends AppCompatActivity {
                             System.out.println("Inside api");
 
                             profile = response.body().get(0);
+                            profile.setAppOpen(true);
+                            updateProfile(profile);
 
                             ArrayList<EmployeeImages> images = profile.getEmployeeImages();
 
@@ -1132,5 +1279,216 @@ public class EmployeeNewMainScreen extends AppCompatActivity {
 
     }
 
+
+    private void getCurrentVersion() {
+        System.out.println("Google inside");
+        PackageManager pm = this.getPackageManager();
+        PackageInfo pInfo = null;
+
+        try {
+            pInfo = pm.getPackageInfo(this.getPackageName(), 0);
+
+        } catch (PackageManager.NameNotFoundException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        currentVersion = pInfo.versionName;
+        String app_version = PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getAppVersion();
+
+        if(app_version!=null&&!app_version.isEmpty()){
+
+
+            if(currentVersion.equalsIgnoreCase(app_version)){
+
+            }else{
+                final AlertDialog.Builder builder = new AlertDialog.Builder(EmployeeNewMainScreen.this);
+                builder.setTitle("A New Update is Available");
+                builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse
+                                ("https://play.google.com/store/apps/details?id=app.zingo.employeemanagements")));
+                        dialog.dismiss();
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        //background.start();
+                        // Toast.makeText(AdminNewMainScreen.this, "Check", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                builder.setCancelable(false);
+                dialog = builder.show();
+            }
+        }
+
+        // new GetVersionCode().execute();
+
+    }
+
+    class GetVersionCode extends AsyncTask<Void, String, String> {
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            String newVersion = null;
+            try {
+                Connection connection = Jsoup.connect("https://play.google.com/store/apps/details?id=app.zingo.employeemanagements" + "&hl=en");
+                Document document = connection.timeout(30000)
+                        .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
+                        .referrer("http://www.google.com")
+                        .get();
+
+                Elements versions = document.getElementsByClass("htlgb");
+
+                for (int i = 0; i < versions.size(); i++) {
+                    newVersion = versions.get(i).text();
+                    if (Pattern.matches("^[0-9]{1}.[0-9]{1}.[0-9]{1}$", newVersion)) {
+                        break;
+                    }
+                }
+
+            } catch (Exception e) {
+                return newVersion;
+            }
+            return newVersion;
+        }
+
+        @Override
+        protected void onPostExecute(String onlineVersion) {
+            super.onPostExecute(onlineVersion);
+            if (onlineVersion != null && !onlineVersion.isEmpty()) {
+                System.out.println("Online Version==" + onlineVersion);
+                System.out.println("Current Version==" + currentVersion);
+                if (!onlineVersion.equalsIgnoreCase(currentVersion)) {
+                    showUpdateDialog();
+                } else {
+                    // Toast.makeText(MainActivity.this, "Check", Toast.LENGTH_SHORT).show();
+                    System.out.println("Check");
+                }
+            } else {
+                System.out.println("Check out");
+            }
+        }
+
+
+        private void showUpdateDialog() {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(EmployeeNewMainScreen.this);
+            builder.setTitle("A New Update is Available");
+            builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse
+                            ("https://play.google.com/store/apps/details?id=app.zingo.employeemanagements")));
+                    dialog.dismiss();
+                }
+            });
+
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    //background.start();
+                    Toast.makeText(EmployeeNewMainScreen.this, "Check", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            builder.setCancelable(false);
+            dialog = builder.show();
+        }
+
+
+    }
+
+    public void updateProfile(final Employee employee){
+
+
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+
+                final EmployeeApi subCategoryAPI = Util.getClient().create(EmployeeApi.class);
+                Call<Employee> getProf = subCategoryAPI.updateEmployee(employee.getEmployeeId(),employee);
+                //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
+
+                getProf.enqueue(new Callback<Employee>() {
+
+                    @Override
+                    public void onResponse(Call<Employee> call, Response<Employee> response) {
+
+
+                        if (response.code() == 200||response.code()==201||response.code()==204)
+                        {
+
+
+                        }else{
+                            // Toast.makeText(ChangePasswordScreen.this, "Failed due to status code"+response.code(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Employee> call, Throwable t) {
+
+
+                        //  Toast.makeText(ChangePasswordScreen.this, "Something went wrong due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+            }
+
+        });
+    }
+
+    private void getMeetingsDetails(final Meetings loginDetails){
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+                MeetingsAPI apiService = Util.getClient().create(MeetingsAPI.class);
+                Call<ArrayList<Meetings>> call = apiService.getMeetingsByEmployeeIdAndDate(loginDetails);
+
+                call.enqueue(new Callback<ArrayList<Meetings>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<Meetings>> call, Response<ArrayList<Meetings>> response) {
+                        int statusCode = response.code();
+                        if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
+
+
+
+                            ArrayList<Meetings> list = response.body();
+
+                            if (list !=null && list.size()!=0) {
+
+                            }else{
+                                // Toast.makeText(DailyTargetsForEmployeeActivity.this, "No Tasks given for this employee ", Toast.LENGTH_SHORT).show();
+
+                            }
+
+                        }else {
+
+
+
+                            //Toast.makeText(DailyTargetsForEmployeeActivity.this, "Failed due to : "+response.message(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<Meetings>> call, Throwable t) {
+                        // Log error here since request failed
+                       /* if (progressDialog!=null)
+                            progressDialog.dismiss();*/
+                        Log.e("TAG", t.toString());
+                    }
+                });
+            }
+
+
+        });
+    }
 
 }

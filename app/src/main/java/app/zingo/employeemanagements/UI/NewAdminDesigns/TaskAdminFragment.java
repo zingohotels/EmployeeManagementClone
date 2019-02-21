@@ -1,0 +1,759 @@
+package app.zingo.employeemanagements.UI.NewAdminDesigns;
+
+
+import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.DatePicker;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import app.zingo.employeemanagements.Adapter.TaskEmployeeListAdapter;
+import app.zingo.employeemanagements.Adapter.TaskAdminListAdapter;
+import app.zingo.employeemanagements.Model.Employee;
+import app.zingo.employeemanagements.Model.TaskAdminData;
+import app.zingo.employeemanagements.Model.Tasks;
+import app.zingo.employeemanagements.R;
+import app.zingo.employeemanagements.UI.Admin.CreateTaskScreen;
+import app.zingo.employeemanagements.Utils.PreferenceHandler;
+import app.zingo.employeemanagements.Utils.ThreadExecuter;
+import app.zingo.employeemanagements.Utils.Util;
+import app.zingo.employeemanagements.WebApi.EmployeeApi;
+import app.zingo.employeemanagements.WebApi.TasksAPI;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+/**
+ * A simple {@link Fragment} subclass. //fragment_task_admin
+ */
+public class TaskAdminFragment extends Fragment {
+
+    final String TAG = "Employer Task Employee";
+    View layout;
+    FloatingActionButton refresh;
+    TextView mDate;
+    ImageView mPrevious,mNext;
+    //View layout;
+    private TaskAdminListAdapter mAdapter;
+    RecyclerView mTaskList;
+    static Context mContext;
+
+    SimpleDateFormat dateFormat;
+
+    List<Tasks> mTargetList = new ArrayList();
+    Toolbar mToolbar;
+    TextView movedTargets;
+    TextView closedTargets;
+    TextView totalTargets;
+    TextView openTargets;
+    TextView presentDate;
+    ImageView prevDay;
+    ImageView nextDay;
+
+
+    LinearLayout mTotalTask,mPendingTask,mCompletedTask,mClosedTask,mNoRecord;
+
+    ArrayList<TaskAdminData> employeeTasks;
+    ArrayList<TaskAdminData> pendingTasks ;
+    ArrayList<TaskAdminData> completedTasks ;
+    ArrayList<TaskAdminData> closedTasks ;
+
+    ArrayList<TaskAdminData> dayemployeeTasks;
+    ArrayList<TaskAdminData> daypendingTasks ;
+    ArrayList<TaskAdminData> daycompletedTasks ;
+    ArrayList<TaskAdminData> dayclosedTasks ;
+
+    int total=0,pending=0,complete=0,closed=0;
+    int daytotal=0,daypending=0,daycomplete=0,dayclosed=0;
+
+    public TaskAdminFragment() {
+        // Required empty public constructor
+    }
+
+    public static TaskAdminFragment getInstance() {
+        return new TaskAdminFragment();
+    }
+
+    public void onCreate(@Nullable Bundle bundle) {
+        super.onCreate(bundle);
+        // GAUtil.trackScreen(getActivity(), "Employer Dashboard");
+    }
+
+
+    @Override
+    public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        // Inflate the layout for this fragment
+        super.onCreateView(layoutInflater, viewGroup, savedInstanceState);
+        try{
+            this.layout = layoutInflater.inflate(R.layout.fragment_task_admin, viewGroup, false);
+
+            this.presentDate = (TextView) this.layout.findViewById(R.id.presentDate);
+            // this.presentDate.setText(DateUtil.getReadableDate(this.mCalendarDay));
+            mTaskList = (RecyclerView)  this.layout.findViewById(R.id.targetList);
+            mTaskList.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+            // this.prevDay = (ImageView) findViewById(R.id.previousDay);
+            // this.nextDay = (ImageView) findViewById(R.id.nextDay);
+            this.refresh = (FloatingActionButton)  this.layout.findViewById(R.id.refresh);
+            totalTargets = (TextView)  this.layout.findViewById(R.id.totalTargets);
+            openTargets = (TextView)  this.layout.findViewById(R.id.openTargets);
+            closedTargets = (TextView)  this.layout.findViewById(R.id.closedTargets);
+            movedTargets = (TextView)  this.layout.findViewById(R.id.movedTargets);
+
+            mPendingTask = (LinearLayout)  this.layout.findViewById(R.id.openTargetsLayout);
+            mCompletedTask = (LinearLayout)  this.layout.findViewById(R.id.closedTargetsLayout);
+            mClosedTask = (LinearLayout)  this.layout.findViewById(R.id.movedTargetsLayout);
+            mTotalTask = (LinearLayout)  this.layout.findViewById(R.id.totalTargetsLayout);
+            mNoRecord = (LinearLayout)  this.layout.findViewById(R.id.noRecordFound);
+
+            mDate = (TextView) this.layout.findViewById(R.id.presentDate);
+
+
+            mPrevious = (ImageView) this.layout.findViewById(R.id.previousDay);
+            mNext = (ImageView) this.layout.findViewById(R.id.nextDay);
+
+            mContext = getContext();
+
+            dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            mDate.setText(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
+
+            /*this.prevDay.setOnClickListener(new C13241());
+            this.nextDay.setOnClickListener(new C13252());*/
+
+
+            refresh.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Intent viewEmpl  = new Intent(getActivity(),TaskAdminViewActivity.class);
+                    startActivity(viewEmpl);
+                }
+            });
+
+            mPendingTask.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    mTaskList.removeAllViews();
+
+                    if(daypendingTasks!=null&&daypendingTasks.size()!=0){
+
+                        mAdapter = new TaskAdminListAdapter(getActivity(),daypendingTasks);
+                        mTaskList.setAdapter(mAdapter);
+                        mAdapter.notifyDataSetChanged();
+                    }else{
+                        mAdapter = new TaskAdminListAdapter(getActivity(),new ArrayList<TaskAdminData>());
+                        mTaskList.setAdapter(mAdapter);
+                        Toast.makeText(getActivity(), "No Pending Tasks are there", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                }
+            });
+
+            mCompletedTask.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    mTaskList.removeAllViews();
+
+                    if(daycompletedTasks!=null&&daycompletedTasks.size()!=0){
+                        mAdapter = new TaskAdminListAdapter(getActivity(),daycompletedTasks);
+                        mTaskList.setAdapter(mAdapter);
+                        mAdapter.notifyDataSetChanged();
+                    }else{
+                        mAdapter = new TaskAdminListAdapter(getActivity(),new ArrayList<TaskAdminData>());
+                        mTaskList.setAdapter(mAdapter);
+                        Toast.makeText(getActivity(), "No Completed Tasks are there", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                }
+            });
+
+            mClosedTask.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    mTaskList.removeAllViews();
+
+                    if(dayclosedTasks!=null&&dayclosedTasks.size()!=0){
+                        mAdapter = new TaskAdminListAdapter(getActivity(),dayclosedTasks);
+                        mTaskList.setAdapter(mAdapter);
+                        mAdapter.notifyDataSetChanged();
+                    }else{
+                        mAdapter = new TaskAdminListAdapter(getActivity(),new ArrayList<TaskAdminData>());
+                        mTaskList.setAdapter(mAdapter);
+                        Toast.makeText(getActivity(), "No Closed Tasks are there", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                }
+            });
+
+            mTotalTask.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    mTaskList.removeAllViews();
+
+                    if(dayemployeeTasks!=null&&dayemployeeTasks.size()!=0){
+                        mAdapter = new TaskAdminListAdapter(getActivity(),dayemployeeTasks);
+                        mTaskList.setAdapter(mAdapter);
+                        mAdapter.notifyDataSetChanged();
+                    }else{
+                        mAdapter = new TaskAdminListAdapter(getActivity(),new ArrayList<TaskAdminData>());
+                        mTaskList.setAdapter(mAdapter);
+                        Toast.makeText(getActivity(), "No Tasks are there", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                }
+            });
+            mPrevious.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try{
+                        final Date date = dateFormat.parse(mDate.getText().toString());
+                        final Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(date);
+                        calendar.add(Calendar.DAY_OF_YEAR, -1);
+
+                        Date date2 = calendar.getTime();
+
+                        mDate.setText(dateFormat.format(date2));
+
+                        taskFilter(new SimpleDateFormat("yyyy-MM-dd").format(date2));
+
+
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            mNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                    try{
+                        final Date date = dateFormat.parse(mDate.getText().toString());
+                        final Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(date);
+                        calendar.add(Calendar.DAY_OF_YEAR, 1);
+
+                        Date date2 = calendar.getTime();
+
+                        mDate.setText(dateFormat.format(date2));
+
+                        taskFilter(new SimpleDateFormat("yyyy-MM-dd").format(date2));
+
+
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+
+            mDate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    openDatePicker(mDate);
+                }
+            });
+
+            getEmployees();
+
+            return this.layout;
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public void openDatePicker(final TextView tv) {
+        // Get Current Date
+
+        final Calendar c = Calendar.getInstance();
+        int  mYear  = c.get(Calendar.YEAR);
+        int mMonth = c.get(Calendar.MONTH);
+        int mDay   = c.get(Calendar.DAY_OF_MONTH);
+        //launch datepicker modal
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(),
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        try {
+                            Log.d("Date", "DATE SELECTED "+dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+
+                            Calendar newDate = Calendar.getInstance();
+                            newDate.set(year,monthOfYear,dayOfMonth);
+
+
+                            String date1 = (dayOfMonth)  + "-" + (monthOfYear + 1)+ "-" + year;
+
+
+
+                            if (tv.equals(mDate)){
+
+
+                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                                try {
+                                    Date fdate = simpleDateFormat.parse(date1);
+
+
+                                    taskFilter(new SimpleDateFormat("yyyy-MM-dd").format(fdate));
+
+                                    String startDate = simpleDateFormat.format(fdate);
+                                    tv.setText(startDate);
+
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                //
+
+
+                            }
+
+                        }
+                        catch (Exception ex)
+                        {
+                            ex.printStackTrace();
+                        }
+
+
+                    }
+                }, mYear, mMonth, mDay);
+
+
+        datePickerDialog.show();
+
+    }
+    public void onResume() {
+        super.onResume();
+    }
+
+    public void onSaveInstanceState(Bundle bundle) {
+        super.onSaveInstanceState(bundle);
+    }
+
+    private void getEmployees(){
+
+
+
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+                EmployeeApi apiService = Util.getClient().create(EmployeeApi.class);
+                Call<ArrayList<Employee>> call = apiService.getEmployeesByOrgId(PreferenceHandler.getInstance(getActivity()).getCompanyId());
+
+                call.enqueue(new Callback<ArrayList<Employee>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<Employee>> call, Response<ArrayList<Employee>> response) {
+                        int statusCode = response.code();
+                        if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
+
+
+                           /* if (progressDialog!=null)
+                                progressDialog.dismiss();*/
+                            ArrayList<Employee> list = response.body();
+
+
+                            if (list !=null && list.size()!=0) {
+
+                                ArrayList<Employee> employeesList= list;
+
+                                Collections.sort(list,Employee.compareEmployee);
+
+                                employeeTasks = new ArrayList<>();
+                                pendingTasks = new ArrayList<>();
+                                completedTasks = new ArrayList<>();
+                                closedTasks = new ArrayList<>();
+
+                                dayemployeeTasks = new ArrayList<>();
+                                daypendingTasks = new ArrayList<>();
+                                daycompletedTasks = new ArrayList<>();
+                                dayclosedTasks = new ArrayList<>();
+
+
+                                for (Employee employee:list) {
+                                    final Calendar calendar = Calendar.getInstance();
+                                    Date date2 = calendar.getTime();
+
+                                    getTasks(employee,new SimpleDateFormat("yyyy-MM-dd").format(date2));
+                                }
+                                //}
+
+                            }else{
+
+                                Toast.makeText(getActivity(), "No employees added", Toast.LENGTH_SHORT).show();
+
+                            }
+
+                        }else {
+
+
+                            Toast.makeText(getActivity(), "Failed due to : "+response.message(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<Employee>> call, Throwable t) {
+                        // Log error here since request failed
+                      /*  if (progressDialog!=null)
+                            progressDialog.dismiss();*/
+                        Toast.makeText(getActivity(), "No employees added", Toast.LENGTH_SHORT).show();
+                        Log.e("TAG", t.toString());
+                    }
+                });
+            }
+
+
+        });
+    }
+
+    private void getTasks(final Employee employee,final String dateValue){
+
+
+        final int employeeId = employee.getEmployeeId();
+
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+                TasksAPI apiService = Util.getClient().create(TasksAPI.class);
+                Call<ArrayList<Tasks>> call = apiService.getTasksByEmployeeId(employeeId);
+
+                call.enqueue(new Callback<ArrayList<Tasks>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<Tasks>> call, Response<ArrayList<Tasks>> response) {
+                        int statusCode = response.code();
+                        if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
+
+
+
+                            ArrayList<Tasks> list = response.body();
+
+                            Date date = new Date();
+                            Date adate = new Date();
+                            Date edate = new Date();
+
+                            try {
+                                date = new SimpleDateFormat("yyyy-MM-dd").parse(dateValue);
+
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+
+
+                            if (list !=null && list.size()!=0) {
+
+
+
+                                for (Tasks task:list) {
+
+
+                                    TaskAdminData taskAdminData = new TaskAdminData();
+                                    taskAdminData.setEmployee(employee);
+                                    taskAdminData.setTasks(task);
+
+                                    employeeTasks.add(taskAdminData);
+                                    total = total+1;
+
+                                    if(task.getStatus().equalsIgnoreCase("Completed")){
+                                        completedTasks.add(taskAdminData);
+                                        complete = complete+1;
+                                    }else if(task.getStatus().equalsIgnoreCase("Pending")){
+                                        pendingTasks.add(taskAdminData);
+                                        pending = pending+1;
+                                    }else if(task.getStatus().equalsIgnoreCase("Closed")){
+                                        closedTasks.add(taskAdminData);
+                                        closed = closed+1;
+                                    }
+
+
+
+
+                                    String froms = task.getStartDate();
+                                    String tos = task.getEndDate();
+
+                                    Date afromDate = null;
+                                    Date atoDate = null;
+
+                                    if(froms!=null&&!froms.isEmpty()){
+
+                                        if(froms.contains("T")){
+
+                                            String dojs[] = froms.split("T");
+
+                                            try {
+                                                afromDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+
+
+                                        }
+
+                                    }
+
+                                    if(tos!=null&&!tos.isEmpty()){
+
+                                        if(tos.contains("T")){
+
+                                            String dojs[] = tos.split("T");
+
+                                            try {
+                                                atoDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+
+                                        }
+
+                                    }
+
+                                    if(afromDate!=null&&atoDate!=null){
+
+                                        if(date.getTime() >= afromDate.getTime() && date.getTime() <= atoDate.getTime()){
+                                            TaskAdminData taskAdminDatas = new TaskAdminData();
+                                            taskAdminDatas.setEmployee(employee);
+                                            taskAdminDatas.setTasks(task);
+
+                                            dayemployeeTasks.add(taskAdminDatas);
+                                            daytotal = daytotal+1;
+
+                                            if(task.getStatus().equalsIgnoreCase("Completed")){
+                                                daycompletedTasks.add(taskAdminData);
+                                                daycomplete = daycomplete+1;
+                                            }else if(task.getStatus().equalsIgnoreCase("Pending")){
+                                                daypendingTasks.add(taskAdminData);
+                                                daypending = daypending+1;
+                                            }else if(task.getStatus().equalsIgnoreCase("Closed")){
+                                                dayclosedTasks.add(taskAdminData);
+                                                dayclosed = dayclosed+1;
+                                            }
+
+                                        }
+                                    }
+
+
+
+                                }
+
+                                if(dayemployeeTasks!=null&&dayemployeeTasks.size()!=0){
+
+                                    mNoRecord.setVisibility(View.GONE);
+                                    mTaskList.setVisibility(View.VISIBLE);
+                                    mAdapter = new TaskAdminListAdapter(getActivity(),dayemployeeTasks);
+                                    mTaskList.setAdapter(mAdapter);
+
+                                    totalTargets.setText(""+daytotal);
+                                    openTargets.setText(""+daypending);
+                                    closedTargets.setText(""+daycomplete);
+                                    movedTargets.setText(""+dayclosed);
+                                }else{
+
+                                }
+
+
+
+                            }else{
+
+                                //Toast.makeText(DailyTargetsForEmployeeActivity.this, "No Tasks given for this employee ", Toast.LENGTH_SHORT).show();
+
+                            }
+
+                        }else {
+
+
+
+                           // Toast.makeText(DailyTargetsForEmployeeActivity.this, "Failed due to : "+response.message(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<Tasks>> call, Throwable t) {
+                        // Log error here since request failed
+
+                        Log.e("TAG", t.toString());
+                    }
+                });
+            }
+
+
+        });
+    }
+
+
+    public void taskFilter(final String dateValue){
+
+        if(employeeTasks!=null&&employeeTasks.size()!=0){
+
+            mNoRecord.setVisibility(View.VISIBLE);
+            mTaskList.setVisibility(View.GONE);
+            mTaskList.removeAllViews();
+
+            dayemployeeTasks = new ArrayList<>();
+            daypendingTasks = new ArrayList<>();
+            daycompletedTasks = new ArrayList<>();
+            dayclosedTasks = new ArrayList<>();
+
+            daytotal=0;
+            daypending=0;
+            daycomplete=0;
+            dayclosed=0;
+
+            totalTargets.setText(""+daytotal);
+            openTargets.setText(""+daypending);
+            closedTargets.setText(""+daycomplete);
+            movedTargets.setText(""+dayclosed);
+
+            Date date = new Date();
+            Date adate = new Date();
+            Date edate = new Date();
+
+            try {
+                date = new SimpleDateFormat("yyyy-MM-dd").parse(dateValue);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+
+            if (employeeTasks !=null && employeeTasks.size()!=0) {
+
+
+
+                for (TaskAdminData task:employeeTasks) {
+
+
+                    String froms = task.getTasks().getStartDate();
+                    String tos = task.getTasks().getEndDate();
+
+                    Date afromDate = null;
+                    Date atoDate = null;
+
+                    if(froms!=null&&!froms.isEmpty()){
+
+                        if(froms.contains("T")){
+
+                            String dojs[] = froms.split("T");
+
+                            try {
+                                afromDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+
+                        }
+
+                    }
+
+                    if(tos!=null&&!tos.isEmpty()){
+
+                        if(tos.contains("T")){
+
+                            String dojs[] = tos.split("T");
+
+                            try {
+                                atoDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+
+                    }
+
+                    if(afromDate!=null&&atoDate!=null){
+
+                        if(date.getTime() >= afromDate.getTime() && date.getTime() <= atoDate.getTime()){
+
+
+                            dayemployeeTasks.add(task);
+                            daytotal = daytotal+1;
+
+                            if(task.getTasks().getStatus().equalsIgnoreCase("Completed")){
+                                daycompletedTasks.add(task);
+                                daycomplete = daycomplete+1;
+                            }else if(task.getTasks().getStatus().equalsIgnoreCase("Pending")){
+                                daypendingTasks.add(task);
+                                daypending = daypending+1;
+                            }else if(task.getTasks().getStatus().equalsIgnoreCase("Closed")){
+                                dayclosedTasks.add(task);
+                                dayclosed = dayclosed+1;
+                            }
+
+                        }
+                    }
+
+
+
+                }
+
+                if(dayemployeeTasks!=null&&dayemployeeTasks.size()!=0){
+
+                    mNoRecord.setVisibility(View.GONE);
+                    mTaskList.setVisibility(View.VISIBLE);
+
+                    mAdapter = new TaskAdminListAdapter(getActivity(),dayemployeeTasks);
+                    mTaskList.setAdapter(mAdapter);
+
+                    totalTargets.setText(""+daytotal);
+                    openTargets.setText(""+daypending);
+                    closedTargets.setText(""+daycomplete);
+                    movedTargets.setText(""+dayclosed);
+                }else{
+
+                }
+
+
+
+            }else{
+
+                //Toast.makeText(DailyTargetsForEmployeeActivity.this, "No Tasks given for this employee ", Toast.LENGTH_SHORT).show();
+
+            }
+
+
+
+        }
+    }
+
+
+}

@@ -112,7 +112,7 @@
                                 android:id="@+id/worked_days"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="25sp"
+                                android:textSize="20sp"
                                 android:text="0"
                                 android:gravity="center"
                                 android:paddingTop="5dp"
@@ -168,7 +168,7 @@
                                 android:id="@+id/worked_hours"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="25sp"
+                                android:textSize="20sp"
 
                                 android:text="0"
                                 android:gravity="center"
@@ -235,7 +235,7 @@
                                 android:id="@+id/total_tasks"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="25sp"
+                                android:textSize="20sp"
                                 android:text="0"
                                 android:gravity="center"
                                 android:paddingTop="5dp"
@@ -291,7 +291,7 @@
                                 android:id="@+id/task_time"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="25sp"
+                                android:textSize="20sp"
 
                                 android:text="0"
                                 android:gravity="center"
@@ -357,7 +357,7 @@
                                 android:id="@+id/travel_distance"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="25sp"
+                                android:textSize="20sp"
                                 android:text="0"
                                 android:gravity="center"
                                 android:paddingTop="5dp"
@@ -413,7 +413,7 @@
                                 android:id="@+id/target_complete"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="25sp"
+                                android:textSize="20sp"
 
                                 android:text="0"
                                 android:gravity="center"
@@ -479,7 +479,7 @@
                                 android:id="@+id/avg_task"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="25sp"
+                                android:textSize="20sp"
                                 android:text="0"
                                 android:gravity="center"
                                 android:paddingTop="5dp"
@@ -535,7 +535,7 @@
                                 android:id="@+id/km_travelled"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="25sp"
+                                android:textSize="20sp"
 
                                 android:text="0"
                                 android:gravity="center"
@@ -601,7 +601,7 @@
                                 android:id="@+id/avg_meeting"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="25sp"
+                                android:textSize="20sp"
                                 android:text="0"
                                 android:gravity="center"
                                 android:paddingTop="5dp"
@@ -657,7 +657,7 @@
                                 android:id="@+id/idle_time"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="25sp"
+                                android:textSize="20sp"
 
                                 android:text="0"
                                 android:gravity="center"
@@ -688,31 +688,65 @@
 
             </LinearLayout>
 
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_gravity="center"
-                android:layout_margin="10dp"
-                android:background="#FFFFFF"
-                app:cardElevation="5dp"
-                app:cardCornerRadius="20dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="#FFFFFF">
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/login_details"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:clickable="true"
-                        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-                        />
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:orientation="vertical">
 
-                </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_marginBottom="10dp"
+                                android:background="#dadada"
+                                android:orientation="horizontal">
 
-            </android.support.v7.widget.CardView>
+
+
+                                <TextView
+                                    android:id="@+id/report_login"
+                                    android:layout_width="100dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="3dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:text="Login"
+                                    android:textColor="@color/colorPrimaryDark" />
+
+                                <TextView
+                                    android:id="@+id/report_logout"
+                                    android:layout_width="100dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="3dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:text="Logout"
+                                    android:textColor="@color/colorPrimaryDark" />
+
+
+                                <TextView
+                                    android:id="@+id/report_hours"
+                                    android:layout_width="80dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="3dp"
+                                    android:gravity="center"
+                                    android:text="Hours"
+                                    android:textColor="@color/colorPrimaryDark" />
+
+
+
+                            </LinearLayout>
+
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/login_details"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:clickable="true"
+                                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                                />
+                        </LinearLayout>
+
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>

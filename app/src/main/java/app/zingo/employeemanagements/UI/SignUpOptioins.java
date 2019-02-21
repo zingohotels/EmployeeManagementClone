@@ -1,10 +1,14 @@
 package app.zingo.employeemanagements.UI;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import app.zingo.employeemanagements.Custom.MyRegulerText;
 import app.zingo.employeemanagements.R;
@@ -16,7 +20,8 @@ import app.zingo.employeemanagements.Utils.PreferenceHandler;
 public class SignUpOptioins extends AppCompatActivity {
 
     CardView mOrganization,mEmployee;
-    MyRegulerText mJoinCompany,mJoinEmployee,mReseller;
+    LinearLayout mJoinCompany,mJoinEmployee,mReseller;
+    LinearLayout mWhatsapp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,9 +32,10 @@ public class SignUpOptioins extends AppCompatActivity {
             mOrganization = (CardView)findViewById(R.id.organization_signup_card);
             mEmployee = (CardView)findViewById(R.id.employee_signup_card);
 
-            mJoinCompany = (MyRegulerText)findViewById(R.id.join_company);
-            mJoinEmployee = (MyRegulerText)findViewById(R.id.join_employee);
-            mReseller = (MyRegulerText)findViewById(R.id.join_reseller);
+            mJoinCompany = (LinearLayout)findViewById(R.id.join_company);
+            mJoinEmployee = (LinearLayout)findViewById(R.id.join_employee);
+            mReseller = (LinearLayout)findViewById(R.id.join_reseller);
+            mWhatsapp = (LinearLayout)findViewById(R.id.whatsapp_open);
 
 
             mJoinCompany.setOnClickListener(new View.OnClickListener() {
@@ -61,6 +67,26 @@ public class SignUpOptioins extends AppCompatActivity {
                     PreferenceHandler.getInstance(SignUpOptioins.this).setSignUpType("Employee");
                     started.putExtra("Screen","Employee");
                     startActivity(started);
+
+                }
+            });
+
+            mWhatsapp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    String digits = "\\d+";
+
+                    try {
+
+                        Uri uri = Uri.parse("whatsapp://send?phone=+919986128021" );
+                        Intent i = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(i);
+                    }
+                    catch (ActivityNotFoundException e){
+                        e.printStackTrace();
+                        Toast.makeText(SignUpOptioins.this, "WhatsApp not installed.", Toast.LENGTH_SHORT).show();
+                    }
 
                 }
             });

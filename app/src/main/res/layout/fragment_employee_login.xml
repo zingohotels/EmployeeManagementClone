@@ -92,7 +92,7 @@
             android:background="#80000000"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="2"
+            android:weightSum="3"
             android:layout_above="@+id/master_login_layut"
             >
             <LinearLayout
@@ -168,13 +168,48 @@
                 </LinearLayout>
 
             </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_weight="1">
+                <LinearLayout android:gravity="center"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:id="@+id/tea_break"
+                    android:padding="8dp"
+                    android:clickable="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:minWidth="70dp"
+                    android:layout_weight="1">
+                    <ImageView android:padding="8dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/coffee"
+                        style="@style/OvalBack"/>
+                    <TextView android:textSize="10sp"
+                        android:textColor="@color/white"
+                        android:gravity="center"
+                        android:id="@+id/tea_break_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tea Break"/>
+                </LinearLayout>
+
+            </LinearLayout>
         </LinearLayout>
         <LinearLayout
             android:orientation="horizontal"
             android:background="#80000000"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="2"
+            android:weightSum="3"
             android:id="@+id/master_login_layut"
             android:layout_alignParentBottom="true">
             <LinearLayout
@@ -247,6 +282,41 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Meeting Out"/>
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_weight="1">
+                <LinearLayout android:gravity="center"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:id="@+id/lunch_break"
+                    android:padding="8dp"
+                    android:clickable="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:minWidth="70dp"
+                    android:layout_weight="1">
+                    <ImageView android:padding="8dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/dinner"
+                        style="@style/OvalBack"/>
+                    <TextView android:textSize="10sp"
+                        android:textColor="@color/white"
+                        android:gravity="center"
+                        android:id="@+id/lunch_break_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Lunch Break"/>
                 </LinearLayout>
 
             </LinearLayout>

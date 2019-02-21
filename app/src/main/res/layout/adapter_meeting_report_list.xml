@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:orientation="vertical"
+    android:id="@+id/attendanceItem"
+    android:background="@drawable/ripple"
+    android:focusable="true"
+    android:clickable="true"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp">
+        <LinearLayout
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:gravity="center_vertical"
+                    android:id="@+id/title_task"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="8dp"
+                    android:text="Title"
+                    android:textColor="#000000"
+                    android:textSize="18dp"
+                    />
+
+                <LinearLayout
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:id="@+id/contact_employee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:minWidth="70dp">
+                    <ImageView
+
+                        android:gravity="center"
+
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/contact"
+                        style="@style/OvalBack"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/task_update"
+                android:orientation="vertical">
+
+                <TextView
+                    android:gravity="center_vertical"
+                    android:id="@+id/title_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:text="Desc"
+                    android:textColor="@color/text_grey"
+                    android:textSize="16dp"
+                    />
+
+
+
+                <TextView
+                    android:id="@+id/time_task"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:drawableLeft="@drawable/build_year"
+                    android:drawablePadding="10dp"
+                    android:paddingLeft="20dp"
+                    android:gravity="center_vertical"
+                    android:text="Time"
+                    android:textColor="@color/text_grey"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:id="@+id/dead_line_task"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:drawableLeft="@drawable/build_year"
+                    android:drawablePadding="10dp"
+                    android:paddingLeft="20dp"
+                    android:gravity="center_vertical"
+                    android:text="DeadLine"
+                    android:textColor="#FF0000"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:gravity="center_vertical"
+                    android:id="@+id/created_by"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:text="Created by"
+                    android:textColor="@color/text_grey"
+                    android:textSize="16dp"
+                    />
+
+                <TextView
+                    android:id="@+id/task_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:drawableLeft="@drawable/location"
+                    android:drawablePadding="10dp"
+                    android:paddingLeft="20dp"
+                    android:gravity="center_vertical"
+                    android:text="No Location Marked"
+                    android:textColor="@color/text_grey"
+                    android:textSize="16dp" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:id="@+id/update"
+                        android:src="@drawable/edit_list"
+                                />
+                    <ImageView
+
+                        android:gravity="center"
+                        android:id="@+id/map"
+                        android:layout_weight="1"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/placeholder"
+                        />
+
+                    <TextView
+                        android:textSize="14dp"
+                        android:textColor="@color/white"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:id="@+id/status"
+                        android:background="#FF0000"
+                        android:padding="8dp"
+                        android:layout_margin="5dp"
+                        android:layout_gravity="right"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:text="Open"/>
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+    <View
+        android:background="@color/highLight"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+</LinearLayout>

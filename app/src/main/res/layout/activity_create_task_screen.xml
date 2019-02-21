@@ -88,7 +88,7 @@
 
             </LinearLayout>
 
-            <android.support.design.widget.TextInputLayout
+         <!--   <android.support.design.widget.TextInputLayout
                 android:id="@+id/deadInputLayout"
                 android:layout_width="match_parent"
                 android:layout_weight="1"
@@ -104,7 +104,7 @@
                     android:focusableInTouchMode="false"
                     android:inputType="text"
                     style="@style/fp_editText" />
-            </android.support.design.widget.TextInputLayout>
+            </android.support.design.widget.TextInputLayout>-->
 
 
 
@@ -142,6 +142,85 @@
 
             </LinearLayout>
 
+
+
+            <Switch
+                android:id="@+id/show_map"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="false"
+
+                android:text="Mark on map"
+                android:layout_marginLeft="@dimen/activity_large_margin"
+                android:layout_marginTop="20.0dip"
+                android:layout_marginRight="@dimen/activity_large_margin"
+                android:textOff="No"
+                android:textOn="Yes"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/map_layout"
+                android:visibility="gone"
+                >
+                <TextView
+                    android:id="@+id/location_et"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:hint="Location"
+                    android:textSize="16sp"
+                    android:padding="5dp"
+                    android:textColor="#000"
+                    android:layout_height="wrap_content"
+                    android:background="#ffffff"/>
+
+                <LinearLayout
+                    android:id="@+id/lan_lat"
+                    android:layout_below="@+id/location_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="2"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp">
+                    <EditText
+                        android:id="@+id/lat_et"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:hint="Latitude"
+                        android:textSize="16sp"
+                        android:textColor="#000"
+                        android:paddingLeft="10dp"
+                        android:layout_marginRight="5dp"
+                        android:background="#ffffff"/>
+                    <EditText
+                        android:id="@+id/lng_et"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:hint="Longitude"
+                        android:textSize="16sp"
+                        android:textColor="#000"
+                        android:paddingLeft="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:background="#ffffff"/>
+
+                </LinearLayout>
+
+
+                <app.zingo.employeemanagements.Custom.MapViewScroll
+                    android:id="@+id/task_location_map"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:layout_below="@+id/lan_lat"
+                    android:layout_margin="10dp"
+                    />
+
+
+            </RelativeLayout>
 
 
 

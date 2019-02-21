@@ -21,4 +21,7 @@ public interface PayslipAPI {
 
     @GET("Organizations")
     Call<ArrayList<Organization>> getPaySlips();
+
+    @GET("PaySlips/GetpaySlipByEmployeeIdAndMonthAndYear/{EmployeeId}/{Month}/{Year}")
+    Call<ArrayList<PaySlips>> getPaySlipByMonYearEmp(@Path("EmployeeId") int EmployeeId,@Path("Month") String Month,@Path("Year") String Year);
 }

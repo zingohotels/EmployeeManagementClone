@@ -33,6 +33,10 @@ public class LiveTracking implements Serializable {
     @SerializedName("TrackingTime")
     public String TrackingTime;
 
+    String previousTime;
+    String km;
+    String duration;
+
     public int getLiveTrackingDetailsId() {
         return LiveTrackingDetailsId;
     }
@@ -87,6 +91,30 @@ public class LiveTracking implements Serializable {
 
     public void setTrackingTime(String trackingTime) {
         TrackingTime = trackingTime;
+    }
+
+    public String getPreviousTime() {
+        return previousTime;
+    }
+
+    public void setPreviousTime(String previousTime) {
+        this.previousTime = previousTime;
+    }
+
+    public String getKm() {
+        return km;
+    }
+
+    public void setKm(String km) {
+        this.km = km;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
     }
 
     public static Comparator compareLiveTrack = new Comparator() {

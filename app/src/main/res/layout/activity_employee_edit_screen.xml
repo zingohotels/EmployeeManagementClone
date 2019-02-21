@@ -19,10 +19,22 @@
 
         <LinearLayout
             android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <Switch
+                android:id="@+id/admin_switch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Admin"
+                android:layout_marginLeft="@dimen/activity_large_margin"
+                android:layout_marginTop="20.0dip"
+                android:layout_marginRight="@dimen/activity_large_margin"
+                android:textOff="No"
+                android:textOn="Yes"/>
 
 
             <android.support.design.widget.TextInputLayout
@@ -35,55 +47,57 @@
                 android:hint="Employee Name"
 
                 >
+
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/name"
-                    android:maxLength="50"
+                    style="@style/fp_editText"
                     android:inputType="text"
-                    style="@style/fp_editText" />
+                    android:maxLength="50" />
             </android.support.design.widget.TextInputLayout>
 
             <RadioGroup
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="horizontal">
 
                 <RadioButton
-                    android:layout_width="70dp"
-                    android:layout_height="match_parent"
-                    android:button="@drawable/editext_border"
-                    android:background="@drawable/radio_btn_selector"
-                    android:textColor="@drawable/rbtn_textcolor_selector"
-                    android:text="Male"
                     android:id="@+id/founder_male"
-                    android:textSize="16sp"
-                    android:gravity="center"
-                    />
-                <RadioButton
                     android:layout_width="70dp"
                     android:layout_height="match_parent"
-                    android:button="@drawable/editext_border"
                     android:background="@drawable/radio_btn_selector"
+                    android:button="@drawable/editext_border"
+                    android:gravity="center"
+                    android:text="Male"
                     android:textColor="@drawable/rbtn_textcolor_selector"
-                    android:text="Female"
+                    android:textSize="16sp" />
 
-                    android:id="@+id/founder_female"
-                    android:textSize="16sp"
-                    android:gravity="center"/>
                 <RadioButton
+                    android:id="@+id/founder_female"
                     android:layout_width="70dp"
                     android:layout_height="match_parent"
-                    android:button="@drawable/editext_border"
                     android:background="@drawable/radio_btn_selector"
-                    android:textColor="@drawable/rbtn_textcolor_selector"
-                    android:text="Other"
-                    android:id="@+id/founder_other"
-                    android:textSize="16sp"
+                    android:button="@drawable/editext_border"
                     android:gravity="center"
+
+                    android:text="Female"
+                    android:textColor="@drawable/rbtn_textcolor_selector"
+                    android:textSize="16sp" />
+
+                <RadioButton
+                    android:id="@+id/founder_other"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/radio_btn_selector"
+                    android:button="@drawable/editext_border"
+                    android:gravity="center"
+                    android:text="Other"
+                    android:textColor="@drawable/rbtn_textcolor_selector"
+                    android:textSize="16sp"
 
                     />
             </RadioGroup>
@@ -96,38 +110,39 @@
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/dobInputLayout"
                     android:layout_width="match_parent"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/activity_large_margin"
                     android:layout_marginTop="20.0dip"
                     android:layout_marginRight="@dimen/activity_large_margin"
-                    android:hint="DOB"
-                    >
+                    android:layout_weight="1"
+                    android:hint="DOB">
+
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/dob"
-                        android:maxLength="50"
+                        style="@style/fp_editText"
                         android:focusableInTouchMode="false"
                         android:inputType="text"
-                        style="@style/fp_editText" />
+                        android:maxLength="50" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/dojInputLayout"
                     android:layout_width="match_parent"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/activity_large_margin"
                     android:layout_marginTop="20.0dip"
                     android:layout_marginRight="@dimen/activity_large_margin"
+                    android:layout_weight="1"
                     android:hint="DOJ"
 
                     >
+
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/doj"
-                        android:maxLength="50"
+                        style="@style/fp_editText"
                         android:focusableInTouchMode="false"
                         android:inputType="text"
-                        style="@style/fp_editText" />
+                        android:maxLength="50" />
                 </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
@@ -142,11 +157,12 @@
                 android:hint="Primary/Organization Email"
 
                 >
+
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/email"
-                    android:maxLength="80"
+                    style="@style/fp_editText"
                     android:inputType="textEmailAddress"
-                    style="@style/fp_editText" />
+                    android:maxLength="80" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -156,14 +172,15 @@
                 android:layout_marginLeft="@dimen/activity_large_margin"
                 android:layout_marginTop="20.0dip"
                 android:layout_marginRight="@dimen/activity_large_margin"
-                android:hint="Alternate Email"
+                android:baselineAligned="false"
 
-                >
+                android:hint="Alternate Email">
+
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/semail"
-                    android:maxLength="80"
+                    style="@style/fp_editText"
                     android:inputType="textEmailAddress"
-                    style="@style/fp_editText" />
+                    android:maxLength="80" />
             </android.support.design.widget.TextInputLayout>
 
 
@@ -177,12 +194,40 @@
                 android:hint="Mobile Number"
 
                 >
+
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/mobile"
-                    android:maxLength="15"
+                    style="@style/fp_editText"
                     android:inputType="number"
-                    style="@style/fp_editText" />
+                    android:maxLength="15" />
             </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_large_margin"
+                android:layout_marginTop="20.0dip"
+                android:layout_marginRight="@dimen/activity_large_margin"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="2"
+                    android:text="Department"
+                    android:textColor="#000000" />
+
+                <Spinner
+                    android:id="@+id/android_material_design_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/spinner_background" />
+
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -195,13 +240,13 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Department"
+                    android:text="To report"
                     android:layout_weight="2"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
                     android:textColor="#000000"/>
                 <Spinner
-                    android:id="@+id/android_material_design_spinner"
+                    android:id="@+id/managers_list"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_weight="1"
@@ -209,8 +254,6 @@
 
 
             </LinearLayout>
-
-
 
 
 
@@ -224,11 +267,12 @@
                 android:hint="Designation"
 
                 >
+
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/designation"
-                    android:maxLength="50"
+                    style="@style/fp_editText"
                     android:inputType="text"
-                    style="@style/fp_editText" />
+                    android:maxLength="50" />
             </android.support.design.widget.TextInputLayout>
 
 
@@ -242,10 +286,47 @@
                 android:hint="Salary"
 
                 >
+
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/salary"
-                    android:maxLength="50"
+                    style="@style/fp_editText"
                     android:inputType="numberDecimal"
+                    android:maxLength="50" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/passwordInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_large_margin"
+                android:layout_marginTop="20.0dip"
+                app:passwordToggleEnabled="true"
+                android:layout_marginRight="@dimen/activity_large_margin"
+                android:hint="Password"
+
+                >
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/password"
+                    android:maxLength="50"
+                    android:inputType="textPassword"
+                    style="@style/fp_editText" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/confirmpwdInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_large_margin"
+                android:layout_marginTop="20.0dip"
+                app:passwordToggleEnabled="true"
+                android:layout_marginRight="@dimen/activity_large_margin"
+                android:hint="Confirm Password"
+
+                >
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/confirmpwd"
+                    android:maxLength="50"
+                    android:inputType="textPassword"
                     style="@style/fp_editText" />
             </android.support.design.widget.TextInputLayout>
 
@@ -261,29 +342,27 @@
                     android:layout_marginLeft="@dimen/activity_large_margin"
                     android:layout_marginTop="20.0dip"
                     android:layout_marginRight="@dimen/activity_large_margin"
-                    android:text="Address"/>
+                    android:text="Address" />
 
                 <EditText
                     android:id="@+id/address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
                     android:layout_gravity="start"
-                    android:gravity="start"
-                    android:scrollbarAlwaysDrawVerticalTrack="true"
-                    android:overScrollMode="always"
-                    android:scrollbarStyle="insideInset"
-                    android:scrollbars="vertical"
-                    android:keepScreenOn="true"
                     android:layout_marginLeft="@dimen/activity_large_margin"
+                    android:layout_marginTop="5dp"
                     android:layout_marginRight="@dimen/activity_large_margin"
-                    android:lines="5"
                     android:background="@drawable/spinner_background"
-                    />
+                    android:gravity="start"
+                    android:keepScreenOn="true"
+                    android:lines="5"
+                    android:overScrollMode="always"
+                    android:scrollbarAlwaysDrawVerticalTrack="true"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="vertical" />
 
 
             </LinearLayout>
-
 
 
             <CheckBox
@@ -295,20 +374,29 @@
                 android:textColor="#000000"
                 android:textSize="14sp" />
 
+            <CheckBox
+                android:id="@+id/time_condition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Check-in Time"
+                android:textColor="#000000"
+                android:textSize="14sp" />
+
 
             <android.support.v7.widget.AppCompatButton
-                android:textSize="@dimen/regularFont"
-                android:textColor="@color/white"
                 android:id="@+id/createFounder"
-                android:background="@drawable/selector_button_app"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/activity_large_margin"
                 android:layout_marginTop="20.0dip"
-                android:layout_marginBottom="20.0dip"
                 android:layout_marginRight="@dimen/activity_large_margin"
+                android:layout_marginBottom="20.0dip"
+                android:background="@drawable/selector_button_app"
                 android:text="Update Employee"
                 android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/regularFont"
 
                 />
 

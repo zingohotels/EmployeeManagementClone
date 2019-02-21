@@ -215,8 +215,160 @@
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
 
-                  
+                    <app.zingo.employeemanagements.Custom.MyRegulerText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:id="@+id/atten_title"
+                        android:layout_below="@+id/cardview_data_count"
+                        android:gravity="left"
+                        android:text="Today Attendance"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="10dp"
+                        android:textColor="#000"
+                        />
 
+
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="match_parent"
+                        android:id="@+id/cardview_data_count_employee"
+                        android:layout_below="@+id/atten_title"
+                        android:layout_height="100dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginTop="5dp"
+                        card-view:cardElevation="5dp"
+                        card_view:cardCornerRadius="20dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:id="@+id/present_count_layout"
+                                android:orientation="vertical">
+
+                                <app.zingo.employeemanagements.Custom.MyRegulerText
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="14sp"
+
+                                    android:gravity="center_horizontal"
+                                    android:text="Present"
+                                    android:paddingLeft="10dp"
+                                    android:paddingTop="10dp"
+                                    android:textColor="#000"
+                                    />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center_horizontal"
+                                    android:orientation="horizontal">
+                                    <app.zingo.employeemanagements.Custom.MyRegulerText
+                                        android:id="@+id/today_employee_present"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:textSize="30sp"
+
+                                        android:gravity="center"
+                                        android:text="0"
+                                        android:paddingTop="5dp"
+                                        android:paddingLeft="15dp"
+                                        android:textColor="#4CAF50"
+                                        />
+
+
+                                </LinearLayout>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:id="@+id/absent_count_layout"
+                                android:orientation="vertical">
+
+                                <app.zingo.employeemanagements.Custom.MyRegulerText
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="14sp"
+                                    android:gravity="center_horizontal"
+                                    android:text="Absent"
+                                    android:paddingLeft="10dp"
+                                    android:paddingTop="10dp"
+                                    android:textColor="#000"
+                                    />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center_horizontal"
+                                    android:orientation="horizontal">
+                                    <app.zingo.employeemanagements.Custom.MyRegulerText
+                                        android:id="@+id/absent_employee"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:gravity="center"
+                                        android:textSize="30sp"
+                                        android:text="0"
+                                        android:paddingTop="5dp"
+                                        android:paddingLeft="15dp"
+                                        android:textColor="#0288D1"
+                                        />
+
+
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:id="@+id/leave_count_layout"
+                                android:orientation="vertical">
+
+                                <app.zingo.employeemanagements.Custom.MyRegulerText
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="14sp"
+                                    android:gravity="center_horizontal"
+                                    android:text="Leave"
+                                    android:paddingLeft="10dp"
+                                    android:paddingTop="10dp"
+                                    android:textColor="#000"
+                                    />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center_horizontal"
+                                    android:orientation="horizontal">
+                                    <app.zingo.employeemanagements.Custom.MyRegulerText
+                                        android:id="@+id/leave_employees"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:gravity="center"
+                                        android:textSize="30sp"
+                                        android:text="0"
+                                        android:paddingTop="5dp"
+                                        android:paddingLeft="15dp"
+                                        android:textColor="#720D5D"
+                                        />
+
+
+                                </LinearLayout>
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                  
+<!--
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="110dp"
@@ -301,17 +453,17 @@
                                     android:layout_weight="2"
                                     android:layout_marginTop="10dp"
                                     android:orientation="horizontal">
+
                                     <app.zingo.employeemanagements.Custom.MyRegulerText
                                         android:id="@+id/absent_employee"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:textSize="25sp"
-                                        android:text="0"
                                         android:gravity="center"
-                                        android:paddingTop="5dp"
                                         android:paddingLeft="15dp"
+                                        android:paddingTop="5dp"
+                                        android:text="0"
                                         android:textColor="#0288D1"
-                                        />
+                                        android:textSize="25sp" />
 
 
 
@@ -452,13 +604,13 @@
 
                         </android.support.v7.widget.CardView>
 
-                    </LinearLayout>
+                    </LinearLayout>-->
 
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/revenue_layout2"
+                        android:layout_below="@+id/cardview_data_count_employee"
                         android:id="@+id/today_task_list"
                         android:orientation="vertical">
 

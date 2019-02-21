@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:id="@+id/attendanceItem"
+    android:background="@drawable/ripple"
+    android:focusable="true"
+    android:clickable="true"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/expense_update"
+        android:orientation="horizontal"
+        android:padding="10dp">
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="125dp"
+            android:id="@+id/expense_image"
+            android:scaleType="fitXY"
+            android:src="@drawable/no_image"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="10dp"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text=""
+                android:textStyle="bold"
+                android:textColor="#000"
+                android:id="@+id/expense_title"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:text=""
+                    android:textStyle="bold"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:textColor="@color/colorPrimary"
+                    android:id="@+id/expense_amount_report"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:text=""
+                    android:layout_weight="1"
+                    android:gravity="left"
+
+                    android:id="@+id/expense_date"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:text=""
+                    android:layout_weight="1"
+                    android:gravity="left"
+
+                    android:id="@+id/employee_name"
+                    />
+
+                <TextView
+                    android:textSize="14dp"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:id="@+id/status_expense"
+                    android:background="#FF0000"
+                    android:padding="8dp"
+                    android:layout_margin="5dp"
+                    android:layout_gravity="right"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="Pending"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+    <View
+        android:background="@color/highLight"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+</LinearLayout>

@@ -1,5 +1,6 @@
 package app.zingo.employeemanagements.UI;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -38,10 +39,13 @@ import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.Model.ResellerProfiles;
 import app.zingo.employeemanagements.R;
+import app.zingo.employeemanagements.Service.LocationSharingServices;
 import app.zingo.employeemanagements.UI.Admin.DashBoardAdmin;
 import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
 import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
+import app.zingo.employeemanagements.UI.Landing.PhoneVerificationScreen;
 import app.zingo.employeemanagements.UI.Landing.SplashScreen;
+import app.zingo.employeemanagements.UI.Login.ForgotPhoneVerfi;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminNewMainScreen;
 import app.zingo.employeemanagements.UI.NewEmployeeDesign.EmployeeNewMainScreen;
 import app.zingo.employeemanagements.UI.Reseller.ResellerMainActivity;
@@ -59,7 +63,7 @@ import retrofit2.Response;
 
 public class LandingScreen extends AppCompatActivity {
 
-    TextView mSignIn,mSupport;
+    TextView mSignIn,mSupport,mForgot;
     MyEditText mEmail,mPassword;
     MyRegulerText mSignInButton,mGetStarted,mContactUs;
     CheckBox mShowPwd,mResellerSign;
@@ -82,8 +86,10 @@ public class LandingScreen extends AppCompatActivity {
             mContactUs = (MyRegulerText)findViewById(R.id.button_contact_us);
             mShowPwd = (CheckBox) findViewById(R.id.show_hide_password);
             mResellerSign = (CheckBox) findViewById(R.id.reseller_sign_in);
+            mForgot = (TextView) findViewById(R.id.forgot_pwd);
 
             String token = SharedPrefManager.getInstance(LandingScreen.this).getDeviceToken();
+            System.out.println("Toke "+token);
 
             mContactUs.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -102,6 +108,26 @@ public class LandingScreen extends AppCompatActivity {
 
                 }
             });
+            mForgot.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+
+                    if(mResellerSign.isChecked()){
+                        Intent support = new Intent(LandingScreen.this,ForgotPhoneVerfi.class);
+                        support.putExtra("Screen","Reseller");
+                        startActivity(support);
+                    }else{
+                        Intent support = new Intent(LandingScreen.this,ForgotPhoneVerfi.class);
+                        support.putExtra("Screen","Employee");
+                        startActivity(support);
+                    }
+
+
+
+                }
+            });
+
 
             mGetStarted.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -219,35 +245,94 @@ public class LandingScreen extends AppCompatActivity {
 
                             ArrayList<Employee> dto1 = response.body();//-------------------should not be list------------
                             if (dto1!=null && dto1.size()!=0) {
-                                Employee dto = dto1.get(0);
+                                final Employee dto = dto1.get(0);
 
 
-                                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(LandingScreen.this);
-                                SharedPreferences.Editor spe = sp.edit();
-                                spe.putInt(Constants.USER_ID, dto.getEmployeeId());
-                                PreferenceHandler.getInstance(LandingScreen.this).setUserId(dto.getEmployeeId());
-                                PreferenceHandler.getInstance(LandingScreen.this).setLocationOn(dto.isLocationOn());
-                                PreferenceHandler.getInstance(LandingScreen.this).setManagerId(dto.getManagerId());
-                                PreferenceHandler.getInstance(LandingScreen.this).setUserRoleUniqueID(dto.getUserRoleId());
-                                PreferenceHandler.getInstance(LandingScreen.this).setUserName(dto.getEmployeeName());
-                                PreferenceHandler.getInstance(LandingScreen.this).setUserEmail(dto.getPrimaryEmailAddress());
-                                PreferenceHandler.getInstance(LandingScreen.this).setUserFullName(dto.getEmployeeName());
-                                spe.putString("FullName", dto.getEmployeeName());
-                                spe.putString("Password", dto.getPassword());
-                                spe.putString("Email", dto.getPrimaryEmailAddress());
-                                spe.putString("PhoneNumber", dto.getPhoneNumber());
-                                spe.apply();
+
+
+
 
                                 if(dto.getStatus().contains("Active")){
 
-                                    try {
-                                        getDepartment(dto.getDepartmentId(),dto);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                        Intent i = new Intent(LandingScreen.this, InternalServerErrorScreen.class);
+                                    if(dto.isAppOpen()){
 
-                                        startActivity(i);
+                                        final android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(LandingScreen.this);
+                                        LayoutInflater inflater = getLayoutInflater();
+                                        View view = inflater.inflate(R.layout.logout_alert,null);
+                                        Button agree = (Button) view.findViewById(R.id.dialog_ok);
+
+
+                                        dialogBuilder.setView(view);
+                                        final android.app.AlertDialog dialog = dialogBuilder.create();
+                                        dialog.setCancelable(true);
+                                        dialog.show();
+
+                                        agree.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+
+
+
+                                                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(LandingScreen.this);
+                                                SharedPreferences.Editor spe = sp.edit();
+                                                spe.putInt(Constants.USER_ID, dto.getEmployeeId());
+                                                PreferenceHandler.getInstance(LandingScreen.this).setUserId(dto.getEmployeeId());
+                                                PreferenceHandler.getInstance(LandingScreen.this).setLocationOn(dto.isLocationOn());
+                                                PreferenceHandler.getInstance(LandingScreen.this).setDataOn(dto.isDataOn());
+                                                PreferenceHandler.getInstance(LandingScreen.this).setManagerId(dto.getManagerId());
+                                                PreferenceHandler.getInstance(LandingScreen.this).setUserRoleUniqueID(dto.getUserRoleId());
+                                                PreferenceHandler.getInstance(LandingScreen.this).setUserName(dto.getEmployeeName());
+                                                PreferenceHandler.getInstance(LandingScreen.this).setUserEmail(dto.getPrimaryEmailAddress());
+                                                PreferenceHandler.getInstance(LandingScreen.this).setUserFullName(dto.getEmployeeName());
+                                                spe.putString("FullName", dto.getEmployeeName());
+                                                spe.putString("Password", dto.getPassword());
+                                                spe.putString("Email", dto.getPrimaryEmailAddress());
+                                                spe.putString("PhoneNumber", dto.getPhoneNumber());
+                                                spe.apply();
+
+                                                try {
+                                                    getDepartment(dto.getDepartmentId(),dto);
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                    Intent i = new Intent(LandingScreen.this, InternalServerErrorScreen.class);
+
+                                                    startActivity(i);
+                                                }
+                                            }
+                                        });
+
+                                      //  Toast.makeText(LandingScreen.this, "Your accuont already opened in other device.Please logout from that device", Toast.LENGTH_SHORT).show();
+
+                                    }else{
+
+                                        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(LandingScreen.this);
+                                        SharedPreferences.Editor spe = sp.edit();
+                                        spe.putInt(Constants.USER_ID, dto.getEmployeeId());
+                                        PreferenceHandler.getInstance(LandingScreen.this).setUserId(dto.getEmployeeId());
+                                        PreferenceHandler.getInstance(LandingScreen.this).setLocationOn(dto.isLocationOn());
+                                        PreferenceHandler.getInstance(LandingScreen.this).setDataOn(dto.isDataOn());
+                                        PreferenceHandler.getInstance(LandingScreen.this).setManagerId(dto.getManagerId());
+                                        PreferenceHandler.getInstance(LandingScreen.this).setUserRoleUniqueID(dto.getUserRoleId());
+                                        PreferenceHandler.getInstance(LandingScreen.this).setUserName(dto.getEmployeeName());
+                                        PreferenceHandler.getInstance(LandingScreen.this).setUserEmail(dto.getPrimaryEmailAddress());
+                                        PreferenceHandler.getInstance(LandingScreen.this).setUserFullName(dto.getEmployeeName());
+                                        spe.putString("FullName", dto.getEmployeeName());
+                                        spe.putString("Password", dto.getPassword());
+                                        spe.putString("Email", dto.getPrimaryEmailAddress());
+                                        spe.putString("PhoneNumber", dto.getPhoneNumber());
+                                        spe.apply();
+
+                                        try {
+                                            getDepartment(dto.getDepartmentId(),dto);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                            Intent i = new Intent(LandingScreen.this, InternalServerErrorScreen.class);
+
+                                            startActivity(i);
+                                        }
+
                                     }
+
 
 
                                 }else if(dto.getStatus().equalsIgnoreCase("Disabled")){
@@ -304,6 +389,7 @@ public class LandingScreen extends AppCompatActivity {
 
                             try {
                                 PreferenceHandler.getInstance(LandingScreen.this).setCompanyId(response.body().getOrganizationId());
+                                //PreferenceHandler.getInstance(LandingScreen.this).setDepartmentName(response.body().getDepartmentName());
                                 getCompany(response.body().getOrganizationId(),dto);
 
                             } catch (Exception e) {
@@ -360,6 +446,7 @@ public class LandingScreen extends AppCompatActivity {
 
                             PreferenceHandler.getInstance(LandingScreen.this).setAppType(organization.getAppType());
                             PreferenceHandler.getInstance(LandingScreen.this).setLicenseStartDate(organization.getLicenseStartDate());
+                            PreferenceHandler.getInstance(LandingScreen.this).setCheckInTime(organization.getPlaceId());
                             PreferenceHandler.getInstance(LandingScreen.this).setLicenseEndDate(organization.getLicenseEndDate());
                             PreferenceHandler.getInstance(LandingScreen.this).setSignupDate(organization.getSignupDate());
                             PreferenceHandler.getInstance(LandingScreen.this).setOrganizationLongi(organization.getLongitude());
@@ -367,6 +454,7 @@ public class LandingScreen extends AppCompatActivity {
                             PreferenceHandler.getInstance(LandingScreen.this).setPlanType(organization.getPlanType());
                             PreferenceHandler.getInstance(LandingScreen.this).setEmployeeLimit(organization.getEmployeeLimit());
                             PreferenceHandler.getInstance(LandingScreen.this).setPlanId(organization.getPlanId());
+                            PreferenceHandler.getInstance(LandingScreen.this).setResellerUserId(organization.getResellerProfileId());
 
                             String licenseStartDate = organization.getLicenseStartDate();
                             String licenseEndDate = organization.getLicenseEndDate();
@@ -402,6 +490,12 @@ public class LandingScreen extends AppCompatActivity {
                                             Intent i = new Intent(LandingScreen.this, EmployeeNewMainScreen.class);
                                             i.putExtra("Profile",dto);
                                             i.putExtra("Organization",organization);
+
+                                            if(organization.isWorking()){
+
+                                                Intent serviceIntent = new Intent(LandingScreen.this,LocationSharingServices.class);
+                                               startService(serviceIntent);
+                                            }
                                             startActivity(i);
                                             finish();
                                         }

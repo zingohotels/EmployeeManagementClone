@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Address;
+import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
@@ -64,6 +65,7 @@ import app.zingo.employeemanagements.Model.LoginDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.MeetingDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.Meetings;
 import app.zingo.employeemanagements.R;
+import app.zingo.employeemanagements.Service.LocationServicesOptimize;
 import app.zingo.employeemanagements.Service.LocationSharingServices;
 import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
 import app.zingo.employeemanagements.Utils.Constants;
@@ -97,6 +99,12 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
     private View punchOutMeeting;
     private TextView punchOutTextMeeting;
 
+    private View teaView;
+    private TextView teaText;
+    private View dinnerLay;
+    private TextView dinnerText;
+
+
 
     private Context mContext;
 
@@ -114,10 +122,10 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
     //Location
     TrackGPS gps;
-    double latitude,longitude;
+    double latitude, longitude;
 
     ArrayList<LatLng> MarkerPoints;
-    String appType="",planType="",licensesStartDate="",licenseEndDate="";
+    String appType = "", planType = "", licensesStartDate = "", licenseEndDate = "";
 
 
     public void centreMapOnLocation(Location location, String title) {
@@ -125,6 +133,17 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
         LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
         mMap.clear();
         mMap.addMarker(new MarkerOptions().position(userLocation).title(title));
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        mMap.setMyLocationEnabled(true);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 12));
 
     }
@@ -181,18 +200,17 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
         punchOutMeeting = layout.findViewById(R.id.punchOutMeeting);
         punchOutTextMeeting = (TextView) layout.findViewById(R.id.punchOutTextMeeting);
 
+        teaView = layout.findViewById(R.id.tea_break);
+        teaText = (TextView) layout.findViewById(R.id.tea_break_text);
+        dinnerLay = layout.findViewById(R.id.lunch_break);
+        dinnerText = (TextView) layout.findViewById(R.id.lunch_break_text);
+
 
         planType = PreferenceHandler.getInstance(getActivity()).getPlanType();
         getLoginDetails();
         getMeetingDetails();
-        if (mLocationClient == null) {
-            mLocationClient = new GoogleApiClient.Builder(this.getContext())
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
-        }
 
+        gps = new TrackGPS(getActivity());
 
             if(!PreferenceHandler.getInstance(getActivity()).getLoginTime().isEmpty()){
                 punchInText.setText(""+PreferenceHandler.getInstance(getActivity()).getLoginTime());
@@ -201,15 +219,36 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
         this.latLong = (TextView) this.layout.findViewById(R.id.latLong);
         ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMapAsync(this);
 
-        mLocationClient.connect();
+
+
+        dinnerLay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(getActivity(), "Coming soon..", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+
+        teaView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(getActivity(), "Coming soon...", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+
 
         mRefreshLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 if(locationCheck()){
-                    gps = new TrackGPS(getActivity());
-                    if(gps.canGetLocation())
+
+                    if(gps!=null&&gps.canGetLocation())
                     {
 
                         latitude = gps.getLatitude();
@@ -515,8 +554,8 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
 
                                             if(locationCheck()){
-                                                gps = new TrackGPS(getActivity());
-                                                if(gps.canGetLocation())
+
+                                                if(gps!=null&&gps.canGetLocation())
                                                 {
 
                                                     latitude = gps.getLatitude();
@@ -537,7 +576,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                                     loginDetails.setLongitude(""+longitude);
                                                     loginDetails.setLocation(""+address);
                                                     loginDetails.setLogOutTime(""+sdt.format(new Date()));
-                                                    loginDetails.setLoginDate(""+sdf.format(new Date()));
+                                                   // loginDetails.setLoginDate(""+sdf.format(new Date()));
 
                                                     try {
                                                         LoginDetailsNotificationManagers md = new LoginDetailsNotificationManagers();
@@ -732,8 +771,8 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
 
                     if(locationCheck()){
-                        gps = new TrackGPS(getActivity());
-                        if(gps.canGetLocation())
+                        //gps = new TrackGPS(getActivity());
+                        if(gps!=null&&gps.canGetLocation())
                         {
                             System.out.println("Long and lat Rev"+gps.getLatitude()+" = "+gps.getLongitude());
                             latitude = gps.getLatitude();
@@ -755,15 +794,61 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                 distance = 0;
                             }
 
+
+
                             if(distance>=0&&distance<=30){
                                // Toast.makeText(getActivity(), "distance "+distance, Toast.LENGTH_SHORT).show();
                                 SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
                                 SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+                                SimpleDateFormat sdtT = new SimpleDateFormat("hh:mm a");
 
                                 LatLng master = new LatLng(latitude,longitude);
                                 String address = getAddress(master);
 
+                                String currentTime = sdtT.format(new Date());
+
                                 LoginDetails loginDetails = new LoginDetails();
+
+                                if(PreferenceHandler.getInstance(getActivity()).isDataOn()){
+
+                                    loginDetails.setIdleTime("0");
+
+                                }else{
+                                    if(currentTime.equalsIgnoreCase(PreferenceHandler.getInstance(getActivity()).getCheckInTime())){
+
+                                        loginDetails.setIdleTime("0");
+                                    }else{
+
+                                        try{
+                                            Date curT = sdtT.parse(currentTime);
+                                            Date offT = sdtT.parse(PreferenceHandler.getInstance(getActivity()).getCheckInTime());
+
+                                            long diff = curT.getTime()-offT.getTime();
+
+                                            if(diff>0){
+
+
+                                                long diffMinutes = diff / (60 * 1000) % 60;
+                                                long diffHours = diff / (60 * 60 * 1000) % 24;
+
+                                                loginDetails.setIdleTime("100");
+
+                                                Toast.makeText(mContext, "You are late "+(int)diffHours+" Hours "+(int)diffMinutes+" mins ", Toast.LENGTH_SHORT).show();
+                                            }else{
+                                                loginDetails.setIdleTime("0");
+                                            }
+
+
+                                        }catch (Exception e){
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+                                }
+
+
+
+
                                 loginDetails.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
                                 loginDetails.setLatitude(""+latitude);
                                 loginDetails.setLongitude(""+longitude);
@@ -1123,11 +1208,15 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
             } else {
                 currentLocation = LocationServices.FusedLocationApi.getLastLocation(mLocationClient);
 
-                LatLng master = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
-                String address = getAddress(master);
+                if(currentLocation!=null){
+                    LatLng master = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
+                    String address = getAddress(master);
 
-                latLong.setText(address);
-                centreMapOnLocation(currentLocation, "" + PreferenceHandler.getInstance(getActivity()).getUserFullName());
+                    latLong.setText(address);
+                    centreMapOnLocation(currentLocation, "" + PreferenceHandler.getInstance(getActivity()).getUserFullName());
+                }
+
+
             }
 
 
@@ -1187,7 +1276,12 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
             } else {
                 currentLocation = LocationServices.FusedLocationApi.getLastLocation(mLocationClient);
 
-                centreMapOnLocation(currentLocation, "" + PreferenceHandler.getInstance(getActivity()).getUserFullName());
+                if(currentLocation!=null){
+                    centreMapOnLocation(currentLocation, "" + PreferenceHandler.getInstance(getActivity()).getUserFullName());
+
+                }
+
+
             }
         }
     }
@@ -1486,8 +1580,8 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
                         }else{
 
-                            gps = new TrackGPS(getActivity());
-                            if(gps.canGetLocation())
+                            //gps = new TrackGPS(getActivity());
+                            if(gps!=null&&gps.canGetLocation())
                             {
                                 System.out.println("Long and lat Rev"+gps.getLatitude()+" = "+gps.getLongitude());
                                 latitude = gps.getLatitude();
@@ -1735,8 +1829,8 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
                                                 }else{
 
-                                                    gps = new TrackGPS(getActivity());
-                                                    if(gps.canGetLocation())
+                                                    //gps = new TrackGPS(getActivity());
+                                                    if(gps!=null&&gps.canGetLocation())
                                                     {
                                                         System.out.println("Long and lat Rev"+gps.getLatitude()+" = "+gps.getLongitude());
                                                         latitude = gps.getLatitude();
@@ -2058,5 +2152,18 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (mLocationClient == null) {
+            mLocationClient = new GoogleApiClient.Builder(this.getContext())
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }else{
+            mLocationClient.connect();
+        }
+    }
 }
 

@@ -168,6 +168,7 @@ public class ChangePasswordScreen extends AppCompatActivity {
         }else{
             Employee employee = profile;
             profile.setPassword(cnfrmPwd);
+            profile.setAppOpen(false);
             updateProfile(employee);
         }
     }

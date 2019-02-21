@@ -15,15 +15,18 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 
 import app.zingo.employeemanagements.Adapter.DepartmentSpinnerAdapter;
+import app.zingo.employeemanagements.Adapter.ManagerSpinnerAdapter;
 import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Designations;
 import app.zingo.employeemanagements.Model.Employee;
@@ -44,14 +47,16 @@ import retrofit2.Response;
 public class EmployeeEditScreen extends AppCompatActivity {
 
     TextInputEditText mName,mDob,mDoj,mPrimaryEmail,mSecondaryEmail,
-            mMobile,mDesignation,mSalary;
+            mMobile,mDesignation,mSalary,mPassword,mConfirm;
     EditText mAddress;
-    CheckBox mLocationCondition;
-    Spinner mDepartment;
+    CheckBox mLocationCondition,mCheckTime;
+    Spinner mDepartment,mtoReport;
+    Switch mAdmin;
     RadioButton mMale,mFemale,mOthers;
     AppCompatButton mCreate;
 
     ArrayList<Departments> departmentData;
+    ArrayList<Employee> employeeList;
 
     Employee employees;
 
@@ -66,6 +71,7 @@ public class EmployeeEditScreen extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             setTitle("Update Employee");
 
+            mAdmin = (Switch) findViewById(R.id.admin_switch);
             mName = (TextInputEditText)findViewById(R.id.name);
             mDob = (TextInputEditText)findViewById(R.id.dob);
             mDoj = (TextInputEditText)findViewById(R.id.doj);
@@ -75,8 +81,12 @@ public class EmployeeEditScreen extends AppCompatActivity {
             mSecondaryEmail = (TextInputEditText)findViewById(R.id.semail);
             mMobile = (TextInputEditText)findViewById(R.id.mobile);
             mLocationCondition = (CheckBox) findViewById(R.id.location_condition);
+            mCheckTime = (CheckBox) findViewById(R.id.time_condition);
+            mPassword = (TextInputEditText)findViewById(R.id.password);
+            mConfirm = (TextInputEditText)findViewById(R.id.confirmpwd);
 
             mDepartment = (Spinner) findViewById(R.id.android_material_design_spinner);
+            mtoReport = (Spinner) findViewById(R.id.managers_list);
 
             mAddress = (EditText)findViewById(R.id.address);
 
@@ -138,7 +148,14 @@ public class EmployeeEditScreen extends AppCompatActivity {
 
         String dob = employee.getDateOfBirth();
         String doj = employee.getDateOfJoining();
+        if(employee.getUserRoleId()==2){
 
+            mAdmin.setChecked(true);
+        }else{
+            mAdmin.setChecked(false);
+        }
+
+        getDesignation(employee.getDesignationId());
         if(dob.contains("T")){
 
             String dojs[] = dob.split("T");
@@ -175,13 +192,24 @@ public class EmployeeEditScreen extends AppCompatActivity {
         if(location){
             mLocationCondition.setChecked(true);
         }
+
+        //mDesignation.setText();
+        boolean time = employee.isDataOn();
+
+        if(time){
+            mCheckTime.setChecked(true);
+        }
+
         mSalary.setText(""+employee.getSalary());
         mPrimaryEmail.setText(""+employee.getPrimaryEmailAddress());
         mSecondaryEmail.setText(""+employee.getAlternateEmailAddress());
         mMobile.setText(""+employee.getPhoneNumber());
         mAddress.setText(""+employee.getAddress());
+        mPassword.setText(""+employee.getPassword());
+        mConfirm.setText(""+employee.getPassword());
 
         getDepartment(PreferenceHandler.getInstance(EmployeeEditScreen.this).getCompanyId(),employee.getDepartmentId());
+        getmanagerProfile(PreferenceHandler.getInstance(EmployeeEditScreen.this).getCompanyId(),employee.getManagerId());
 
     }
 
@@ -248,7 +276,8 @@ public class EmployeeEditScreen extends AppCompatActivity {
         String primary = mPrimaryEmail.getText().toString();
         String secondary = mSecondaryEmail.getText().toString();
         String mobile = mMobile.getText().toString();
-
+        String password = mPassword.getText().toString();
+        String confirm = mConfirm.getText().toString();
         String address = mAddress.getText().toString();
 
         if(name.isEmpty()){
@@ -271,6 +300,17 @@ public class EmployeeEditScreen extends AppCompatActivity {
 
             Toast.makeText(this, "Secondary Email is required", Toast.LENGTH_SHORT).show();
 
+        }else if(password.isEmpty()){
+
+            Toast.makeText(this, "Password is required", Toast.LENGTH_SHORT).show();
+
+        }else if(confirm.isEmpty()){
+
+            Toast.makeText(this, "Confirm Password is required", Toast.LENGTH_SHORT).show();
+
+        }else if(!password.isEmpty()&&!confirm.isEmpty()&&!password.equals(confirm)){
+
+            Toast.makeText(this, "Confirm password should be same as Password", Toast.LENGTH_SHORT).show();
         }else if(mobile.isEmpty()){
 
             Toast.makeText(this, "Mobile is required", Toast.LENGTH_SHORT).show();
@@ -298,11 +338,26 @@ public class EmployeeEditScreen extends AppCompatActivity {
             Employee employee = employees;
             employee.setEmployeeName(name);
             employee.setAddress(address);
+            employee.setPassword(password);
+
+
+            if(mAdmin.isChecked()){
+
+                employee.setUserRoleId(2);
+            }else{
+                employee.setUserRoleId(1);
+            }
 
             if(mLocationCondition.isChecked()){
                 employee.setLocationOn(true);
             }else{
                 employee.setLocationOn(false);
+            }
+
+            if(mCheckTime.isChecked()){
+                employee.setDataOn(true);
+            }else{
+                employee.setDataOn(false);
             }
             if(mMale.isChecked()){
                 employee.setGender("Male");
@@ -313,6 +368,7 @@ public class EmployeeEditScreen extends AppCompatActivity {
 
                 employee.setGender("Others");
             }
+            employee.setManagerId(employeeList.get(mtoReport.getSelectedItemPosition()).getEmployeeId());
 
             SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy");
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
@@ -342,7 +398,7 @@ public class EmployeeEditScreen extends AppCompatActivity {
 
 
             employee.setStatus("Active");
-            employee.setUserRoleId(1);
+
 
             Designations designations = new Designations();
             designations.setDesignationTitle(designation);
@@ -461,8 +517,10 @@ public class EmployeeEditScreen extends AppCompatActivity {
                         if(s!=null){
 
                             employee.setDesignationId(s.getDesignationId());
-                            employee.setManagerId(PreferenceHandler.getInstance(EmployeeEditScreen.this).getUserId());
-                            updateProfile(employee);
+
+                            checkUserByEmailId(employee);
+
+//                            updateProfile(employee);
 
 
                         }
@@ -565,5 +623,301 @@ public class EmployeeEditScreen extends AppCompatActivity {
                 EmployeeEditScreen.this.finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void getmanagerProfile(final int id,final int managerId){
+
+
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Loading...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+                EmployeeApi apiService = Util.getClient().create(EmployeeApi.class);
+                Call<ArrayList<Employee>> call = apiService.getEmployeesByOrgId(id);
+
+                call.enqueue(new Callback<ArrayList<Employee>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<Employee>> call, Response<ArrayList<Employee>> response) {
+                        int statusCode = response.code();
+                        if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
+
+
+                            if (progressDialog!=null)
+                                progressDialog.dismiss();
+                            ArrayList<Employee> list = response.body();
+
+
+                            if (list !=null && list.size()!=0) {
+
+                                employeeList = new ArrayList<>();
+
+                                int value = 0;
+
+
+                                for(int i=0;i<list.size();i++){
+
+                                    if(list.get(i).getEmployeeId()!=employees.getEmployeeId()){
+
+                                        employeeList.add(list.get(i));
+
+                                        if(list.get(i).getEmployeeId()==managerId){
+
+                                            value = employeeList.size()-1;
+                                        }
+
+                                    }
+                                }
+
+                                if(employeeList!=null&&employeeList.size()!=0){
+                                   //
+                                    // Collections.sort(employeeList,Employee.compareEmployee);
+                                    ManagerSpinnerAdapter arrayAdapter = new ManagerSpinnerAdapter(EmployeeEditScreen.this, employeeList);
+                                    mtoReport.setAdapter(arrayAdapter);
+                                    mtoReport.setSelection(value);
+
+
+                                }else{
+                                    Toast.makeText(EmployeeEditScreen.this,"No Employees added",Toast.LENGTH_LONG).show();
+
+                                }
+
+
+                                //}
+
+                            }else{
+                                Toast.makeText(EmployeeEditScreen.this,"No Employees added",Toast.LENGTH_LONG).show();
+
+                            }
+
+                        }else {
+
+
+                            Toast.makeText(EmployeeEditScreen.this, "Failed due to : "+response.message(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<Employee>> call, Throwable t) {
+                        // Log error here since request failed
+                        if (progressDialog!=null)
+                            progressDialog.dismiss();
+                        Log.e("TAG", t.toString());
+                    }
+                });
+            }
+
+
+        });
+    }
+
+    public void getDesignation(final int id){
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+
+                final DesignationsAPI subCategoryAPI = Util.getClient().create(DesignationsAPI.class);
+                Call<Designations> getProf = subCategoryAPI.getDesignationById(id);
+                //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
+
+                getProf.enqueue(new Callback<Designations>() {
+
+                    @Override
+                    public void onResponse(Call<Designations> call, Response<Designations> response) {
+
+                        if (response.code() == 200||response.code() == 201||response.code() == 204)
+                        {
+
+                            if(response.body()!=null){
+                                mDesignation.setText(""+response.body().getDesignationTitle());
+                            }
+
+
+
+                        }else{
+
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Designations> call, Throwable t) {
+
+                    }
+                });
+
+            }
+
+        });
+    }
+
+    private void checkUserByEmailId(final Employee userProfile){
+
+
+        userProfile.setEmail(userProfile.getPrimaryEmailAddress());
+
+
+        final ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setCancelable(false);
+        dialog.setTitle("Please wait..");
+        dialog.show();
+
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+
+
+                EmployeeApi apiService =
+                        Util.getClient().create(EmployeeApi.class);
+
+                Call<ArrayList<Employee>> call = apiService.getUserByEmail(userProfile);
+
+                call.enqueue(new Callback<ArrayList<Employee>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<Employee>> call, Response<ArrayList<Employee>> response) {
+//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
+                        int statusCode = response.code();
+
+                        if(dialog != null)
+                        {
+                            dialog.dismiss();
+                        }
+
+                        if(statusCode == 200 || statusCode == 204)
+                        {
+
+                            ArrayList<Employee> responseProfile = response.body();
+                            if(responseProfile != null && responseProfile.size()!=0 )
+                            {
+
+
+                                boolean check = false;
+                                for (Employee empl:responseProfile) {
+
+                                    if(empl.getEmployeeId()!=userProfile.getEmployeeId()){
+
+                                        check = true;
+                                    }
+
+                                }
+
+                                if(check){
+                                    mPrimaryEmail.setError("Email Exists");
+                                    Toast.makeText(EmployeeEditScreen.this, "Email already Exists", Toast.LENGTH_SHORT).show();
+                                }else{
+                                    checkUserByPhone(userProfile);
+                                }
+
+
+
+
+                            }
+                            else
+                            {
+                                checkUserByPhone(userProfile);
+                            }
+                        }
+                        else
+                        {
+
+                            Toast.makeText(EmployeeEditScreen.this,response.message(),Toast.LENGTH_SHORT).show();
+                        }
+//                callGetStartEnd();
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<Employee>> call, Throwable t) {
+                        // Log error here since request failed
+
+                        if(dialog != null)
+                        {
+                            dialog.dismiss();
+                        }
+
+                        Log.e("TAG", t.toString());
+                    }
+                });
+            }
+        });
+    }
+
+    private void checkUserByPhone(final Employee userProfile){
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+
+
+                EmployeeApi apiService =
+                        Util.getClient().create(EmployeeApi.class);
+
+                Call<ArrayList<Employee>> call = apiService.getUserByPhone(userProfile.getPhoneNumber());
+
+                call.enqueue(new Callback<ArrayList<Employee>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<Employee>> call, Response<ArrayList<Employee>> response) {
+//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
+                        int statusCode = response.code();
+
+                        if(statusCode == 200 || statusCode == 204)
+                        {
+                            ArrayList<Employee> responseProfile = response.body();
+                            if(responseProfile != null && responseProfile.size()!=0 )
+                            {
+                                boolean check = false;
+                                for (Employee empl:responseProfile) {
+
+                                    if(empl.getEmployeeId()!=userProfile.getEmployeeId()){
+
+                                        check = true;
+                                    }
+
+                                }
+
+                                if(check){
+                                    mMobile.setError("Number Already Exists");
+                                    Toast.makeText(EmployeeEditScreen.this, "Mobile already Exists", Toast.LENGTH_SHORT).show();
+                                }else{
+                                    updateProfile(userProfile);
+                                }
+
+
+                            }
+                            else
+                            {
+
+                                try {
+
+
+
+                                    updateProfile(userProfile);
+                                    //addDesignations(designations,userProfile);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                        else
+                        {
+
+                            Toast.makeText(EmployeeEditScreen.this,response.message(),Toast.LENGTH_SHORT).show();
+                        }
+//                callGetStartEnd();
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<Employee>> call, Throwable t) {
+                        // Log error here since request failed
+
+                        Log.e("TAG", t.toString());
+                    }
+                });
+            }
+        });
     }
 }

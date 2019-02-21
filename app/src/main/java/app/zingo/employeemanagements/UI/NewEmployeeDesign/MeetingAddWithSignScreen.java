@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -16,8 +17,11 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -31,6 +35,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -73,7 +78,8 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
 
     TextInputEditText mClientName,mClientMobile,mClientMail,mPurpose;
     EditText mDetails;
-    CheckBox mGetSign;
+    CheckBox mGetSign,mTakeImage;
+    ImageView mImageView;
     Button mSave;
 
     Toolbar toolbar;
@@ -90,6 +96,7 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
     String DIRECTORY = Environment.getExternalStorageDirectory().getPath() + "/Zingy Apps/";
     String pic_name = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
     String StoredPath = DIRECTORY + pic_name + ".png";
+    String StoredPathSelfie = DIRECTORY + pic_name+"selfie" + ".png";
 
     File file;
     Dialog dialog;
@@ -97,6 +104,11 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
     View view;
     signature mSignature;
     Bitmap bitmap;
+
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    String mCurrentPhotoPath;
+    Meetings loginDetails;
+    MeetingDetailsNotificationManagers md;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,11 +129,16 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
             mClientMail = (TextInputEditText) findViewById(R.id.client_contact_email);
             mPurpose = (TextInputEditText) findViewById(R.id.purpose_meeting);
             mGetSign = (CheckBox) findViewById(R.id.get_sign_check);
+            mTakeImage = (CheckBox) findViewById(R.id.get_image_check);
+            mImageView = (ImageView) findViewById(R.id.selfie_pic);
 
             mSave.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     validate();
+
+
+
                 }
             });
 
@@ -171,7 +188,7 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
                 LatLng master = new LatLng(latitude,longitude);
                 String address = getAddress(master);
 
-                Meetings loginDetails = new Meetings();
+                loginDetails = new Meetings();
                 loginDetails.setEmployeeId(PreferenceHandler.getInstance(MeetingAddWithSignScreen.this).getUserId());
                 loginDetails.setStartLatitude(""+latitude);
                 loginDetails.setStartLongitude(""+longitude);
@@ -203,7 +220,7 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
                 }
                 try {
 
-                    MeetingDetailsNotificationManagers md = new MeetingDetailsNotificationManagers();
+                    md = new MeetingDetailsNotificationManagers();
                     md.setTitle("Meeting Details from "+PreferenceHandler.getInstance(MeetingAddWithSignScreen.this).getUserFullName());
                     md.setMessage("Meeting with "+client+" for "+purpose);
                     md.setLocation(address);
@@ -219,7 +236,7 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
 
 
 
-                    if (mGetSign.isChecked()){
+                    if (mGetSign.isChecked()&&!mTakeImage.isChecked()){
                         // Method to create Directory, if the Directory doesn't exists
                         file = new File(DIRECTORY);
                         if (!file.exists()) {
@@ -233,7 +250,23 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
                         dialog.setContentView(R.layout.dialog_signature);
                         dialog.setCancelable(true);
 
-                        dialog_action(loginDetails,md);
+                        dialog_action(loginDetails,md,"null");
+
+                    }else if (mGetSign.isChecked()&&mTakeImage.isChecked()){
+
+                        file = new File(DIRECTORY);
+                        if (!file.exists()) {
+                            file.mkdir();
+                        }
+
+                        // Dialog Function
+                        dialog = new Dialog(MeetingAddWithSignScreen.this);
+                        // Removing the features of Normal Dialogs
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        dialog.setContentView(R.layout.dialog_signature);
+                        dialog.setCancelable(true);
+
+                        dialog_action(loginDetails,md,"Selfie");
 
                     }else{
                         addMeeting(loginDetails,md);
@@ -520,7 +553,7 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
     }
 
     // Function for Digital Signature
-    public void dialog_action(final Meetings loginDetails, final MeetingDetailsNotificationManagers md) {
+    public void dialog_action(final Meetings loginDetails, final MeetingDetailsNotificationManagers md,final String type) {
 
         mContent = (LinearLayout) dialog.findViewById(R.id.linearLayout);
         mSignature = new signature(getApplicationContext(), null);
@@ -547,7 +580,7 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
 
                 Log.v("log_tag", "Panel Saved");
                 view.setDrawingCacheEnabled(true);
-                mSignature.save(view, StoredPath,loginDetails,md);
+                mSignature.save(view, StoredPath,loginDetails,md,type);
                 dialog.dismiss();
                 Toast.makeText(getApplicationContext(), "Successfully Saved", Toast.LENGTH_SHORT).show();
                 // Calling the same class
@@ -587,7 +620,7 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
             paint.setStrokeWidth(STROKE_WIDTH);
         }
 
-        public void save(View v, String StoredPath,final Meetings loginDetails, final MeetingDetailsNotificationManagers md) {
+        public void save(View v, String StoredPath,final Meetings loginDetails, final MeetingDetailsNotificationManagers md,final String type) {
             Log.v("log_tag", "Width: " + v.getWidth());
             Log.v("log_tag", "Height: " + v.getHeight());
             if (bitmap == null) {
@@ -618,14 +651,14 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
 //          write the compressed bitmap at the field_icon specified by filename.
                     myBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
 
-                    uploadImage(filename,loginDetails,md);
+                    uploadImage(filename,loginDetails,md,type);
 
 
 
                 }
                 else
                 {
-                    compressImage(StoredPath,loginDetails,md);
+                    compressImage(StoredPath,loginDetails,md,type);
                 }
 
             } catch (Exception e) {
@@ -633,6 +666,8 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
             }
 
         }
+
+
 
         public void clear() {
             path.reset();
@@ -735,7 +770,7 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
 
     }
 
-    private void uploadImage(final String filePath,final Meetings loginDetails, final MeetingDetailsNotificationManagers md)
+    private void uploadImage(final String filePath,final Meetings loginDetails, final MeetingDetailsNotificationManagers md,final String type)
     {
         //String filePath = getRealPathFromURIPath(uri, ImageUploadActivity.this);
 
@@ -747,7 +782,7 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
             if(file.length() > size)
             {
                 System.out.println(file.length());
-                compressImage(filePath,loginDetails,md);
+                compressImage(filePath,loginDetails,md,type);
             }
             else
             {
@@ -772,15 +807,39 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
                         }
 
 
-                        if(Util.IMAGE_URL==null){
-                            loginDetails.setEndPlaceID(Constants.IMAGE_URL+response.body().toString());
-                        }else{
-                            loginDetails.setEndPlaceID(Util.IMAGE_URL+response.body().toString());
-                        }
+
 
 
                         try {
-                            addMeeting(loginDetails,md);
+
+                            if(type!=null&&type.equalsIgnoreCase("Selfie")){
+                                if(Util.IMAGE_URL==null){
+                                    loginDetails.setEndPlaceID(Constants.IMAGE_URL+response.body().toString());
+                                }else{
+                                    loginDetails.setEndPlaceID(Util.IMAGE_URL+response.body().toString());
+                                }
+
+                                dispatchTakePictureIntent();
+
+                            }else if(type!=null&&type.equalsIgnoreCase("Done")){
+
+                                if(Util.IMAGE_URL==null){
+                                    loginDetails.setStartPlaceID(Constants.IMAGE_URL+response.body().toString());
+                                }else{
+                                    loginDetails.setStartPlaceID(Util.IMAGE_URL+response.body().toString());
+                                }
+                                addMeeting(loginDetails,md);
+
+                            }else{
+
+                                if(Util.IMAGE_URL==null){
+                                    loginDetails.setEndPlaceID(Constants.IMAGE_URL+response.body().toString());
+                                }else{
+                                    loginDetails.setEndPlaceID(Util.IMAGE_URL+response.body().toString());
+                                }
+                                addMeeting(loginDetails,md);
+                            }
+
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -801,7 +860,7 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
     }
 
 
-    public String compressImage(String filePath,final Meetings loginDetails, final MeetingDetailsNotificationManagers md) {
+    public String compressImage(String filePath,final Meetings loginDetails, final MeetingDetailsNotificationManagers md,final String type) {
 
         //String filePath = getRealPathFromURI(imageUri);
         Bitmap scaledBitmap = null;
@@ -914,7 +973,7 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
 //          write the compressed bitmap at the field_icon specified by filename.
             scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
 
-            uploadImage(filename,loginDetails,md);
+            uploadImage(filename,loginDetails,md,type);
 
 
         } catch (FileNotFoundException e) {
@@ -942,5 +1001,84 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
         }
 
         return inSampleSize;
+    }
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            saveSelfie(imageBitmap,StoredPathSelfie);
+
+        }
+    }
+
+    public void saveSelfie(Bitmap bitmap, String StoredPath) {
+
+        if (bitmap == null) {
+            Toast.makeText(MeetingAddWithSignScreen.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+        }
+
+        try {
+            // Output the file
+            FileOutputStream mFileOutStream = new FileOutputStream(StoredPath);
+
+
+            // Convert the output file to Image such as .png
+            bitmap.compress(Bitmap.CompressFormat.PNG, 90, mFileOutStream);
+            mFileOutStream.flush();
+            mFileOutStream.close();
+
+            File file = new File(StoredPath);
+
+            if(file.length() <= 1*1024*1024)
+            {
+                FileOutputStream out = null;
+                String[] filearray = StoredPath.split("/");
+                final String filename = getFilename(filearray[filearray.length-1]);
+
+                out = new FileOutputStream(filename);
+                Bitmap myBitmap = BitmapFactory.decodeFile(StoredPath);
+
+//          write the compressed bitmap at the field_icon specified by filename.
+                myBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+
+                uploadImage(filename,loginDetails,md,"Done");
+
+                mImageView.setVisibility(View.VISIBLE);
+                mImageView.setImageBitmap(bitmap);
+
+            }
+            else
+            {
+                 compressImage(StoredPath,loginDetails,md,"Done");
+            }
+
+        } catch (Exception e) {
+            Log.v("log_tag", e.toString());
+        }
+
     }
 }

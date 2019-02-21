@@ -20,6 +20,14 @@ public class LoginDetails implements Serializable {
     @SerializedName("Longitude")
     private String Longitude;
 
+    @SerializedName("Title")
+    private String Title;
+
+
+    @SerializedName("Status")
+    private String Status;
+
+
     @SerializedName("Location")
     private String Location;
 
@@ -40,6 +48,21 @@ public class LoginDetails implements Serializable {
 
     @SerializedName("EmployeeId")
     private int EmployeeId;
+
+    @SerializedName("IdleTime")
+    private String IdleTime;
+
+    @SerializedName("WorkedHours")
+    private String WorkedHours;
+
+    @SerializedName("TotalMeeting")
+    private String TotalMeeting;
+
+    @SerializedName("MeetingHours")
+    private String MeetingHours;
+
+    @SerializedName("TravelledDistance")
+    private String TravelledDistance;
 
 
     public int getLoginDetailsId() {
@@ -120,6 +143,62 @@ public class LoginDetails implements Serializable {
 
     public void setEmployeeId(int employeeId) {
         EmployeeId = employeeId;
+    }
+
+    public String getIdleTime() {
+        return IdleTime;
+    }
+
+    public void setIdleTime(String idleTime) {
+        IdleTime = idleTime;
+    }
+
+    public String getWorkedHours() {
+        return WorkedHours;
+    }
+
+    public void setWorkedHours(String workedHours) {
+        WorkedHours = workedHours;
+    }
+
+    public String getTotalMeeting() {
+        return TotalMeeting;
+    }
+
+    public void setTotalMeeting(String totalMeeting) {
+        TotalMeeting = totalMeeting;
+    }
+
+    public String getMeetingHours() {
+        return MeetingHours;
+    }
+
+    public void setMeetingHours(String meetingHours) {
+        MeetingHours = meetingHours;
+    }
+
+    public String getTravelledDistance() {
+        return TravelledDistance;
+    }
+
+    public void setTravelledDistance(String travelledDistance) {
+        TravelledDistance = travelledDistance;
+    }
+
+    public String getTitle() {
+        return Title;
+    }
+
+    public void setTitle(String title) {
+        Title = title;
+    }
+
+    public String getStatus() {
+        return Status;
+    }
+
+    public void setStatus(String status) {
+        Status = status;
     }
 
     public static Comparator compareLogin = new Comparator() {

@@ -89,7 +89,7 @@ public class EmployeeExpenseList extends AppCompatActivity {
 
                             }else{
 
-                                Toast.makeText(EmployeeExpenseList.this, "No leaves ", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(EmployeeExpenseList.this, "No Expenses ", Toast.LENGTH_SHORT).show();
 
                             }
 

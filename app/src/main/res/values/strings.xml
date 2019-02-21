@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Employee Management</string>
+    <string name="app_name">Zingy Employee Management</string>
 
     <!--Custom Font Type imported,refer main->assets->font folder-->
     <string name="ColonnaMT">ColonnaMT</string>
@@ -16,7 +16,7 @@
 
     <!--Splash screen-->
     <string name="splash_app_name">Employee Management</string>
-    <string name="powered_by_zingo">Powered By Zingo.tech</string>
+    <string name="powered_by_zingo">Powered By Lucida Technologies</string>
     <string name="copyright_lucida">&#9400; Lucida Hospitality Pvt Ltd</string>
 
     <!--Guest Login-->
@@ -56,6 +56,27 @@
         <item>On-Going</item>
         <item>Completed</item>
         <item>Closed</item>
+
+    </string-array>
+
+    <string-array name="break_status">
+        <item>Tea Break</item>
+        <item>Lunch Break</item>
+        <item>Others</item>
+    </string-array>
+
+    <string-array name="log_status">
+
+        <item>Absent</item>
+        <item>Present</item>
+
+    </string-array>
+
+    <string-array name="meeting_status">
+        <item>In-Meeting</item>
+        <item>Cancelled</item>
+        <item>Completed</item>
+
 
     </string-array>
 

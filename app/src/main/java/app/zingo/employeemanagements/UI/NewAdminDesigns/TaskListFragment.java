@@ -17,8 +17,10 @@ import android.widget.Toast;
 
 import com.google.android.gms.vision.text.Line;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,12 +28,14 @@ import java.util.Map;
 import app.zingo.employeemanagements.Adapter.EmployeeAdapter;
 import app.zingo.employeemanagements.Adapter.TaskEmployeeListAdapter;
 import app.zingo.employeemanagements.Model.Employee;
+import app.zingo.employeemanagements.Model.LoginDetails;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Employee.EmployeeListScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
+import app.zingo.employeemanagements.WebApi.LoginDetailsAPI;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -53,6 +57,7 @@ public class TaskListFragment extends Fragment {
 
     private RecyclerView mEmployeeRecyclerView;
 
+    ArrayList<Employee> employeesList;
 
     public TaskListFragment() {
         // Required empty public constructor
@@ -102,10 +107,10 @@ public class TaskListFragment extends Fragment {
     private void getEmployees(){
 
 
-        /*final ProgressDialog progressDialog = new ProgressDialog(getActivity());
+        final ProgressDialog progressDialog = new ProgressDialog(getActivity());
         progressDialog.setTitle("Loading Employees");
         progressDialog.setCancelable(false);
-        progressDialog.show();*/
+        progressDialog.show();
 
         new ThreadExecuter().execute(new Runnable() {
             @Override
@@ -120,33 +125,35 @@ public class TaskListFragment extends Fragment {
                         if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
 
 
-                           /* if (progressDialog!=null)
-                                progressDialog.dismiss();*/
+                            if (progressDialog!=null)
+                                progressDialog.dismiss();
                             ArrayList<Employee> list = response.body();
 
 
                             if (list !=null && list.size()!=0) {
 
-                                ArrayList<Employee> employees = new ArrayList<>();
+                                employeesList= new ArrayList<>();
                                 for(int i=0;i<list.size();i++){
 
                                     if(list.get(i).getEmployeeId()!=PreferenceHandler.getInstance(getActivity()).getUserId()){
 
-                                        employees.add(list.get(i));
+
+                                        employeesList.add(list.get(i));
+
 
                                     }
                                 }
 
-                                if(employees!=null&&employees.size()!=0){
+
+                                if(employeesList!=null&&employeesList.size()!=0){
                                     mNoEmployee.setVisibility(View.GONE);
-                                    Collections.sort(employees,Employee.compareEmployee);
-                                    mAdapter = new TaskEmployeeListAdapter(getActivity(), employees);
+                                    Collections.sort(employeesList,Employee.compareEmployee);
+                                    mAdapter = new TaskEmployeeListAdapter(getActivity(), employeesList);
                                     mEmployeeRecyclerView.setAdapter(mAdapter);
                                 }else{
 
                                     mNoEmployee.setVisibility(View.VISIBLE);
                                 }
-
 
                                 //}
 
@@ -164,8 +171,8 @@ public class TaskListFragment extends Fragment {
                     @Override
                     public void onFailure(Call<ArrayList<Employee>> call, Throwable t) {
                         // Log error here since request failed
-                      /*  if (progressDialog!=null)
-                            progressDialog.dismiss();*/
+                        if (progressDialog!=null)
+                            progressDialog.dismiss();
                         mNoEmployee.setVisibility(View.VISIBLE);
                         Log.e("TAG", t.toString());
                     }
@@ -175,5 +182,7 @@ public class TaskListFragment extends Fragment {
 
         });
     }
+
+
 
 }
