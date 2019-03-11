@@ -69,6 +69,7 @@ import java.util.TimerTask;
 import java.util.regex.Pattern;
 
 import app.zingo.employeemanagements.Adapter.MeetingDetailAdapter;
+import app.zingo.employeemanagements.BuildConfig;
 import app.zingo.employeemanagements.Custom.MyRegulerText;
 import app.zingo.employeemanagements.Custom.RoundImageView;
 import app.zingo.employeemanagements.FireBase.SharedPrefManager;
@@ -142,6 +143,9 @@ public class EmployeeNewMainScreen extends AppCompatActivity {
 
     LinearLayout mWhatsapp;
 
+    int pos;
+    boolean con = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -150,11 +154,20 @@ public class EmployeeNewMainScreen extends AppCompatActivity {
 
             setContentView(R.layout.activity_employee_new_main_screen);
             setupData();
+            Bundle extras = getIntent().getExtras();
+            if(extras != null) {
+                pos = extras.getInt("viewpager_position");
+                con = extras.getBoolean("Condition");
+            }
+
+            PreferenceHandler.getInstance(EmployeeNewMainScreen.this).setFirstCheck(con);
             setupViewPager((ViewPager) findViewById(R.id.viewPager));
             mWhatsapp = (LinearLayout)findViewById(R.id.whatsapp_open);
 
             mPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             medit = mPref.edit();
+
+
 
             getCurrentVersion();
             Intent serviceIntent = new Intent(EmployeeNewMainScreen.this,CheckDataAndLocation.class);
@@ -164,7 +177,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
 
-                    String message = "Hi I'm "+PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getUserFullName()+",\n My Organization Name is "+PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getCompanyName()+".I am writing about the feedback of Zingy app.";
+                    String message = "Hi I'm "+PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getUserFullName()+",\n My Organization Name is "+PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getCompanyName()+".I am writing about the feedback of Zingy app Ver: "+BuildConfig.VERSION_NAME+".";
 
                     PackageManager packageManager = getPackageManager();
                     Intent i = new Intent(Intent.ACTION_VIEW);
@@ -205,11 +218,11 @@ public class EmployeeNewMainScreen extends AppCompatActivity {
             fn_permission();
             if (boolean_permission) {
 
-                if (mPref.getString("service", "").matches("")) {
+                if (mPref.getString("service", "").matches("")&&PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getLoginStatus().equalsIgnoreCase("Login")&&!PreferenceHandler.getInstance(EmployeeNewMainScreen.this).isLocationOn()) {
                     medit.putString("service", "service").commit();
 
-                   /* Intent intent = new Intent(getApplicationContext(), DistanceCheck.class);
-                    startService(intent);*/
+                    Intent intent = new Intent(getApplicationContext(), DistanceCheck.class);
+                    startService(intent);
 
                 } else {
                    // Toast.makeText(getApplicationContext(), "Service is already running", Toast.LENGTH_SHORT).show();
@@ -313,6 +326,10 @@ public class EmployeeNewMainScreen extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons(tabLayout);
+
+        if(pos!=0){
+            viewPager.setCurrentItem(pos);
+        }
     }
 
     public void onBackPressed() {

@@ -1,10 +1,13 @@
 package app.zingo.employeemanagements.UI.NewAdminDesigns;
 
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +20,12 @@ import java.util.ArrayList;
 
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.R;
+import app.zingo.employeemanagements.Service.LocationForegroundService;
 import app.zingo.employeemanagements.UI.Admin.DashBoardAdmin;
+import app.zingo.employeemanagements.UI.Common.AllEmployeeLiveLocation;
 import app.zingo.employeemanagements.UI.Common.ChangePasswordScreen;
 import app.zingo.employeemanagements.UI.Common.CustomerCreation;
+import app.zingo.employeemanagements.UI.Common.NotificationShowActivity;
 import app.zingo.employeemanagements.UI.Common.ReportManagementScreen;
 import app.zingo.employeemanagements.UI.Company.OrganizationDetailScree;
 import app.zingo.employeemanagements.UI.Company.WorkingDaysScreen;
@@ -44,7 +50,9 @@ public class AdminHomeFragment extends Fragment {
     View layout;
     LinearLayout attendance,leaveApplications,employees;
     LinearLayout departments,liveTracking,tasks,expenses,team,client;
-    LinearLayout salary,logout,deptOrg,chngPwd,plans,reports,holiday;
+    LinearLayout salary,logout,deptOrg,chngPwd,plans,reports,holiday,settings;
+
+    Employee employee;
 
 
     public AdminHomeFragment() {
@@ -68,9 +76,12 @@ public class AdminHomeFragment extends Fragment {
 
         try{
             this.layout = layoutInflater.inflate(R.layout.fragment_admin_home, viewGroup, false);
+            getEmployees();
             setupListeners();
             viewGroup = this.layout.findViewById(R.id.renewWarning);
             viewGroup.setVisibility(View.GONE);
+
+
             /*if (layoutInflater != null) {
 
                 *//*long daysDiff = DateUtil.daysDiff(new Date(), new Date(layoutInflater.getSubscriptionEndDate()));
@@ -105,6 +116,7 @@ public class AdminHomeFragment extends Fragment {
         leaveApplications = (LinearLayout) this.layout.findViewById(R.id.leaveApplications);
         employees = (LinearLayout) this.layout.findViewById(R.id.employees);
         holiday = (LinearLayout) this.layout.findViewById(R.id.holiday);
+        settings = (LinearLayout) this.layout.findViewById(R.id.settings);
 
         departments = (LinearLayout) this.layout.findViewById(R.id.department);
         liveTracking = (LinearLayout) this.layout.findViewById(R.id.live_tracking);
@@ -240,6 +252,12 @@ public class AdminHomeFragment extends Fragment {
                 openMenuViews(client);
             }
         });
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMenuViews(settings);
+            }
+        });
 
     }
 
@@ -248,6 +266,10 @@ public class AdminHomeFragment extends Fragment {
         Intent intent;
         if (view.getId() == R.id.employees) {
             Intent employee = new Intent(getContext(), EmployeeUpdateListScreen.class);
+            getContext().startActivity(employee);
+
+        }else if (view.getId() == R.id.settings) {
+            Intent employee = new Intent(getContext(), NotificationShowActivity.class);
             getContext().startActivity(employee);
 
         } else if (view.getId() == R.id.plan_detail) {
@@ -289,7 +311,7 @@ public class AdminHomeFragment extends Fragment {
             Intent organization = new Intent(getActivity(), DepartmentLilstScreen.class);
             getContext().startActivity(organization);
         }else if (view.getId() == R.id.live_tracking) {
-            Intent live = new Intent(getActivity(), EmployeeListScreen.class);
+            Intent live = new Intent(getActivity(), AllEmployeeLiveLocation.class);
             live.putExtra("Type","Live");
             getContext().startActivity(live);
 
@@ -310,11 +332,85 @@ public class AdminHomeFragment extends Fragment {
 
             Toast.makeText(getActivity(), "Coming Soon", Toast.LENGTH_SHORT).show();
         }else if (view.getId() == R.id.logout) {
-           getProfile(PreferenceHandler.getInstance(getActivity()).getUserId());
+
+            if(employee!=null){
+
+                Employee profile = employee;
+
+                profile.setAppOpen(false);
+                updateProfile(profile);
+
+            }else{
+
+                getProfile(PreferenceHandler.getInstance(getActivity()).getUserId());
+
+            }
+
         }
     }
 
+    private void getEmployees(){
+
+
+
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+                EmployeeApi apiService = Util.getClient().create(EmployeeApi.class);
+                Call<ArrayList<Employee>> call = apiService.getProfileById(PreferenceHandler.getInstance(getActivity()).getUserId());
+
+                call.enqueue(new Callback<ArrayList<Employee>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<Employee>> call, Response<ArrayList<Employee>> response) {
+                        int statusCode = response.code();
+                        if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
+
+
+                           /* if (progressDialog!=null)
+                                progressDialog.dismiss();*/
+                            ArrayList<Employee> list = response.body();
+
+
+                            if (list !=null && list.size()!=0) {
+
+                                employee = list.get(0);
+
+
+                                //}
+
+                            }else{
+
+                            }
+
+                        }else {
+
+
+                            Toast.makeText(getActivity(), "Failed due to : "+response.message(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<Employee>> call, Throwable t) {
+                        // Log error here since request failed
+                      /*  if (progressDialog!=null)
+                            progressDialog.dismiss();*/
+
+                        Log.e("TAG", t.toString());
+                    }
+                });
+            }
+
+
+        });
+    }
+
     public void getProfile(final int id ){
+
+        final ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setCancelable(false);
+        dialog.setTitle("Saving Details...");
+        dialog.show();
 
         new ThreadExecuter().execute(new Runnable() {
             @Override
@@ -328,6 +424,11 @@ public class AdminHomeFragment extends Fragment {
 
                     @Override
                     public void onResponse(Call<ArrayList<Employee>> call, Response<ArrayList<Employee>> response) {
+
+                        if(dialog != null && dialog.isShowing())
+                        {
+                            dialog.dismiss();
+                        }
 
                         if (response.code() == 200)
                         {
@@ -344,6 +445,11 @@ public class AdminHomeFragment extends Fragment {
                     @Override
                     public void onFailure(Call<ArrayList<Employee>> call, Throwable t) {
 
+                        if(dialog != null && dialog.isShowing())
+                        {
+                            dialog.dismiss();
+                        }
+
                     }
                 });
 
@@ -354,7 +460,10 @@ public class AdminHomeFragment extends Fragment {
 
     public void updateProfile(final Employee employee){
 
-
+        final ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setCancelable(false);
+        dialog.setTitle("Saving Details...");
+        dialog.show();
 
         new ThreadExecuter().execute(new Runnable() {
             @Override
@@ -369,11 +478,25 @@ public class AdminHomeFragment extends Fragment {
                     @Override
                     public void onResponse(Call<Employee> call, Response<Employee> response) {
 
+                        if(dialog != null && dialog.isShowing())
+                        {
+                            dialog.dismiss();
+                        }
+
+                        Intent intent = new Intent(getActivity(), LocationForegroundService.class);
+                        intent.setAction(LocationForegroundService.ACTION_STOP_FOREGROUND_SERVICE);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            getActivity().startForegroundService(intent);
+                        } else {
+                            getActivity().startService(intent);
+                        }
 
                         if (response.code() == 200||response.code()==201||response.code()==204)
                         {
 
+
                             PreferenceHandler.getInstance(getActivity()).clear();
+
 
                             Intent log = new Intent(getActivity(), LandingScreen.class);
                             log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -398,6 +521,18 @@ public class AdminHomeFragment extends Fragment {
                     @Override
                     public void onFailure(Call<Employee> call, Throwable t) {
 
+                        if(dialog != null && dialog.isShowing())
+                        {
+                            dialog.dismiss();
+                        }
+
+                        Intent intent = new Intent(getActivity(), LocationForegroundService.class);
+                        intent.setAction(LocationForegroundService.ACTION_STOP_FOREGROUND_SERVICE);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            getActivity().startForegroundService(intent);
+                        } else {
+                            getActivity().startService(intent);
+                        }
 
                         PreferenceHandler.getInstance(getActivity()).clear();
 

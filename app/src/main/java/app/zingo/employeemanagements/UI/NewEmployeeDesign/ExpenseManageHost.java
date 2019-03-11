@@ -12,10 +12,12 @@ import android.view.View;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Employee.ApplyLeaveScreen;
 import app.zingo.employeemanagements.UI.Employee.LeaveManagementHost;
 import app.zingo.employeemanagements.UI.Employee.LeaveTakenDays;
+import app.zingo.employeemanagements.UI.NewAdminDesigns.ExpenseDashBoardAdmin;
 
 public class ExpenseManageHost extends TabActivity implements TabHost.OnTabChangeListener  {
 
@@ -34,6 +36,7 @@ public class ExpenseManageHost extends TabActivity implements TabHost.OnTabChang
     public static final int MY_PERMISSIONS_REQUEST_RESULT = 1;
 
     int employeeId;
+    Employee employee;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +63,7 @@ public class ExpenseManageHost extends TabActivity implements TabHost.OnTabChang
             if(bundle!=null){
 
                 employeeId = bundle.getInt("EmployeeId");
+                employee = (Employee)bundle.getSerializable("Employee");
             }
 
             /*9C9C9C*/
@@ -71,8 +75,11 @@ public class ExpenseManageHost extends TabActivity implements TabHost.OnTabChang
 
             labelRequest.setText("Expense List");
             tabMaps.setIndicator(tabRequest);
-            Intent maps = new Intent(this, ExpenseListScreen.class);
-            maps.putExtra("EmployeeId", employeeId);
+            Intent maps = new Intent(this, ExpenseDashBoardAdmin.class);
+            Bundle bundles = new Bundle();
+            bundles.putSerializable("Profile",employee);
+            bundles.putInt("EmployeeId",employeeId);
+            maps.putExtras(bundles);
             tabMaps.setContent(maps);
 
 

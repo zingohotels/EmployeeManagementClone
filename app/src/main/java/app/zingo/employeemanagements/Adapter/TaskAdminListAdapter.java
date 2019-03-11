@@ -46,7 +46,7 @@ import retrofit2.Response;
 
 import static android.text.TextUtils.isEmpty;
 
-public class TaskAdminListAdapter extends RecyclerView.Adapter<TaskAdminListAdapter.ViewHolder>{
+public class  TaskAdminListAdapter extends RecyclerView.Adapter<TaskAdminListAdapter.ViewHolder>{
 
     private Context context;
     private ArrayList<TaskAdminData> list;
@@ -189,7 +189,7 @@ public class TaskAdminListAdapter extends RecyclerView.Adapter<TaskAdminListAdap
                 holder.mStatusText.setBackground(context.getResources().getDrawable(R.drawable.oval_pink));
             }
 
-            if(PreferenceHandler.getInstance(context).getUserRoleUniqueID()==2){
+            if(PreferenceHandler.getInstance(context).getUserRoleUniqueID()==2||PreferenceHandler.getInstance(context).getUserRoleUniqueID()==9){
                 holder.mContact.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -274,78 +274,10 @@ public class TaskAdminListAdapter extends RecyclerView.Adapter<TaskAdminListAdap
                 @Override
                 public void onClick(View v) {
 
-
-                    /*try{
-
-                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
-                        LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                        View views = inflater.inflate(R.layout.alert_task_update, null);
-
-                        builder.setView(views);
-                        String[] taskStatus = context.getResources().getStringArray(R.array.task_status);
-
-
-
-
-
-                        final Spinner mTask = (Spinner) views.findViewById(R.id.task_status_update);
-                        final Button mSave = (Button) views.findViewById(R.id.save);
-                        final EditText desc = (EditText) views.findViewById(R.id.task_comments);
-
-                        final android.support.v7.app.AlertDialog dialogs = builder.create();
-                        dialogs.show();
-                        dialogs.setCanceledOnTouchOutside(true);
-
-                        if(dto.getTasks().getStatus().equalsIgnoreCase("Pending")){
-
-                            mTask.setSelection(0);
-                        }else if(dto.getTasks().getStatus().equalsIgnoreCase("On-Going")){
-                            mTask.setSelection(1);
-
-                        }else if(dto.getTasks().getStatus().equalsIgnoreCase("Completed")){
-                            mTask.setSelection(2);
-
-                        }else if(dto.getTasks().getStatus().equalsIgnoreCase("Closed")){
-                            mTask.setSelection(3);
-
-                        }
-
-
-
-                        mSave.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                                Tasks tasks = dto.getTasks();
-                                tasks.setStatus(mTask.getSelectedItem().toString());
-                                tasks.setRemarks(desc.getText().toString());
-                                try {
-                                    updateTasks(dto.getTasks(),dialogs);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-
-                            }
-                        });
-
-
-
-
-
-
-
-
-
-
-
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-*/
-
                     Intent updateSc = new Intent(context,UpdateTaskScreen.class);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("Task",dto.getTasks());
+                    bundle.putInt("Position",position);
                     updateSc.putExtras(bundle);
                     ((Activity)context).startActivity(updateSc);
 

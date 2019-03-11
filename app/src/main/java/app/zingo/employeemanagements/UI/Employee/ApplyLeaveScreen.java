@@ -265,14 +265,14 @@ public class ApplyLeaveScreen extends AppCompatActivity {
 
                         if(s!=null){
 
-
                             //ApplyLeaveScreen.this.finish();
                             LeaveNotificationManagers lm = new LeaveNotificationManagers();
                             lm.setTitle("Apply For Leave");
-                            lm.setMessage("Leave from "+s.getFromDate()+" to "+s.getToDate());
-                            lm.setReason(s.getLeaveId()+","+s.getLeaveComment());
-                            lm.setEmployeeId(s.getEmployeeId());
-                            lm.setManagerId(PreferenceHandler.getInstance(ApplyLeaveScreen.this).getManagerId());
+                            lm.setMessage(PreferenceHandler.getInstance(ApplyLeaveScreen.this).getUserFullName()+" is applying leave from "+mFrom.getText().toString()+" to "+mTo.getText().toString());
+                            lm.setReason(s.getLeaveComment());
+                            //lm.setEmployeeId(s.getEmployeeId());
+                            lm.setEmployeeId(PreferenceHandler.getInstance(ApplyLeaveScreen.this).getManagerId());
+                            lm.setManagerId(s.getEmployeeId());
                             lm.setEmployeeName(PreferenceHandler.getInstance(ApplyLeaveScreen.this).getUserFullName());
                             lm.setFromDate(leaves.getFromDate());
                             lm.setToDate(leaves.getToDate());

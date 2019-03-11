@@ -13,7 +13,7 @@
         <app.zingo.employeemanagements.Custom.MyRegulerText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+
             android:text="Create An Employee*"
             android:id="@+id/text"
             android:textSize="18sp"
@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
+
             android:gravity="center"
             android:layout_marginLeft="3dp"
             android:id="@+id/ask"
@@ -37,7 +37,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
         <TextView
@@ -74,7 +74,7 @@
         <app.zingo.employeemanagements.Custom.MyRegulerText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+
             android:text="Create Another Department"
             android:textSize="18sp"
             android:textColor="#000"
@@ -85,7 +85,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
+
             android:gravity="center"
             android:layout_marginLeft="3dp"
             android:text="(Optional)"
@@ -97,7 +97,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
         <TextView
             android:layout_width="match_parent"

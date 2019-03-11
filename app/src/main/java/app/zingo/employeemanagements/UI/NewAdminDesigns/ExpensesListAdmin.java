@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -17,7 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import junit.framework.Assert;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -37,6 +37,7 @@ import app.zingo.employeemanagements.Model.TaskAdminData;
 import app.zingo.employeemanagements.Model.Tasks;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Employee.EmployeeListScreen;
+import app.zingo.employeemanagements.UI.EmployeeSignUp;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
@@ -85,6 +86,9 @@ public class ExpensesListAdmin extends AppCompatActivity {
     int total=0,pending=0,complete=0,closed=0;
     int daytotal=0,daypending=0,daycomplete=0,dayclosed=0;
 
+    ArrayList<Employee> emplList;
+    String restartdate = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,7 +130,7 @@ public class ExpensesListAdmin extends AppCompatActivity {
             /*this.prevDay.setOnClickListener(new C13241());
             this.nextDay.setOnClickListener(new C13252());*/
 
-
+            emplList = new ArrayList<>();
             refresh.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -230,6 +234,8 @@ public class ExpensesListAdmin extends AppCompatActivity {
 
                         mDate.setText(dateFormat.format(date2));
 
+                        restartdate = new SimpleDateFormat("yyyy-MM-dd").format(date2);
+
                         taskFilter(new SimpleDateFormat("yyyy-MM-dd").format(date2));
 
 
@@ -252,6 +258,8 @@ public class ExpensesListAdmin extends AppCompatActivity {
                         Date date2 = calendar.getTime();
 
                         mDate.setText(dateFormat.format(date2));
+
+                        restartdate = new SimpleDateFormat("yyyy-MM-dd").format(date2);
 
                         taskFilter(new SimpleDateFormat("yyyy-MM-dd").format(date2));
 
@@ -280,7 +288,6 @@ public class ExpensesListAdmin extends AppCompatActivity {
     public void setupToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(mToolbar);
-        Assert.assertNotNull(getSupportActionBar());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Expenses");
     }
@@ -324,10 +331,13 @@ public class ExpensesListAdmin extends AppCompatActivity {
                                 daycompletedTasks = new ArrayList<>();
                                 dayclosedTasks = new ArrayList<>();
 
+                                emplList = list;
 
                                 for (Employee employee:list) {
                                     final Calendar calendar = Calendar.getInstance();
                                     Date date2 = calendar.getTime();
+
+                                    restartdate = new SimpleDateFormat("yyyy-MM-dd").format(date2);
 
                                     getExpenses(employee,new SimpleDateFormat("yyyy-MM-dd").format(date2));
                                 }
@@ -679,6 +689,8 @@ public class ExpensesListAdmin extends AppCompatActivity {
                                     String startDate = simpleDateFormat.format(fdate);
                                     tv.setText(""+startDate);
 
+                                    restartdate = new SimpleDateFormat("yyyy-MM-dd").format(fdate);
+
                                     taskFilter(new SimpleDateFormat("yyyy-MM-dd").format(fdate));
 
 
@@ -704,5 +716,31 @@ public class ExpensesListAdmin extends AppCompatActivity {
 
         datePickerDialog.show();
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        switch (id)
+        {
+            case android.R.id.home:
+
+                ExpensesListAdmin.this.finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        if(emplList!=null&&emplList.size()!=0&&restartdate!=null&&!restartdate.isEmpty()){
+
+            for (Employee e:emplList) {
+                getExpenses(e, restartdate);
+            }
+        }
     }
 }

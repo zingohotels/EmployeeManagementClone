@@ -309,7 +309,12 @@ public class OrganizationEditScreen extends AppCompatActivity {
     public void setDetails(final Organization org){
 
         mOrgName.setText(org.getOrganizationName());
-        mBuildYear.setText(org.getBuiltYear());
+        if(org.getBuiltYear()!=null&&!org.getBuiltYear().isEmpty()){
+            mBuildYear.setText(""+org.getBuiltYear());
+        }else{
+            //mBuildYear.setText("");
+        }
+
         mWebsite.setText(org.getWebsite());
         mAbout.setText(org.getAboutUs());
 

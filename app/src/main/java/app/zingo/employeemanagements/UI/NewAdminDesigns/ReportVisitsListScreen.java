@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import junit.framework.Assert;
 
 import java.util.ArrayList;
 
@@ -67,7 +66,6 @@ public class ReportVisitsListScreen extends AppCompatActivity {
     public void setupToolbar() {
         this.mToolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(this.mToolbar);
-        Assert.assertNotNull(getSupportActionBar());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Visits");
     }

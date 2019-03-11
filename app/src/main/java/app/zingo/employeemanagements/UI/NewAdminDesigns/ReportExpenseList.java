@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import junit.framework.Assert;
 
 import java.util.ArrayList;
 
@@ -20,6 +19,7 @@ import app.zingo.employeemanagements.Adapter.TaskListAdapter;
 import app.zingo.employeemanagements.Model.Expenses;
 import app.zingo.employeemanagements.Model.Tasks;
 import app.zingo.employeemanagements.R;
+import jxl.common.Assert;
 
 public class ReportExpenseList extends AppCompatActivity {
 
@@ -72,7 +72,6 @@ public class ReportExpenseList extends AppCompatActivity {
     public void setupToolbar() {
         this.mToolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(this.mToolbar);
-        Assert.assertNotNull(getSupportActionBar());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Expenses");
     }

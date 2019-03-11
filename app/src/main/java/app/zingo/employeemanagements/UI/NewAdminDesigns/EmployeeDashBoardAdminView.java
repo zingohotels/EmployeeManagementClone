@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Handler;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -22,12 +23,14 @@ import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,6 +67,8 @@ import app.zingo.employeemanagements.Model.Tasks;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Admin.CreateTaskScreen;
 import app.zingo.employeemanagements.UI.Admin.EmployeesDashBoard;
+import app.zingo.employeemanagements.UI.Common.ReportManagementScreen;
+import app.zingo.employeemanagements.UI.EmployeeSignUp;
 import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
 import app.zingo.employeemanagements.UI.NewEmployeeDesign.MeetingDetailList;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
@@ -83,11 +88,14 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
 
     Employee employee;
   //  MyRegulerText mWorkedDays,mCompletedtasks,mTotalMeetings,mTotalExpenses;
-    TextView mWorkedDays,mCompletedtasks,mTotalMeetings,mEmployeeName;
+    TextView mWorkedDays,mCompletedtasks,mTotalMeetings,mEmployeeName,mDate;
     MyRegulerText mLoginTime,mLoginText,mLoginAddress,mLogoutTime,mLogouText,
-            mLogoutAddress,mMeetingTime,mMetingAdrz,mTaskREad,mMeetingRead,mTitle,mExpeText,mExpAmt;//,mLogoutTime,mWorkingHours
+            mLogoutAddress,mMeetingTime,mMetingAdrz,mTaskREad,mMeetingRead,
+            mTitle,mExpeText,mExpAmt,mKmTravelled,mAvgtaskTime,mAvgMeetingTime,mIdleTime;//,mLogoutTime,mWorkingHours
     CircleImageView mProfilePic;
-    CustomSpinner mDay;
+   // CustomSpinner mDay;
+
+    ImageView mPrevious,mNext;
 
     boolean checkIn=false,checkout=false;
     LoginDetails checkLogIn,checkLogOut;
@@ -126,6 +134,14 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
     String passDate = "";
 
 
+    long meetDiff=0,workingDiff = 0;
+    boolean taslTrue = false;
+    boolean loginTrue = false;
+
+    Handler h;
+    Runnable runnable;
+    int delay = 5*1000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,7 +157,7 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
             mTotalMeetings = (TextView)findViewById(R.id.meeting_count_text);
             mEmployeeName = (TextView)findViewById(R.id.name);
             mProfilePic = (CircleImageView) findViewById(R.id.employee_pic);
-            mDay = (CustomSpinner) findViewById(R.id.spinner);
+            //mDay = (CustomSpinner) findViewById(R.id.spinner);
            // mTotalExpenses = (MyRegulerText)findViewById(R.id.expense_count_text);
             mTitle = (MyRegulerText)findViewById(R.id.atten_title);
             mLoginTime = (MyRegulerText)findViewById(R.id.login_time);
@@ -156,8 +172,16 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
             mMeetingRead = (MyRegulerText)findViewById(R.id.read_meeting);
             mExpeText = (MyRegulerText)findViewById(R.id.expenses_text);
             mExpAmt = (MyRegulerText)findViewById(R.id.expense_amount);
+            mKmTravelled = (MyRegulerText)findViewById(R.id.km_text);
+            mAvgMeetingTime = (MyRegulerText)findViewById(R.id.avg_meeting_time);
+            mAvgtaskTime = (MyRegulerText)findViewById(R.id.avg_task_time);
+            mIdleTime = (MyRegulerText)findViewById(R.id.idle_time);
            /* mLogoutTime = (MyRegulerText)findViewById(R.id.logout_time);
             mWorkingHours = (MyRegulerText)findViewById(R.id.working_hours);*/
+
+            mDate = (TextView) findViewById(R.id.presentDate);
+            mPrevious = (ImageView)findViewById(R.id.previousDay);
+            mNext = (ImageView)findViewById(R.id.nextDay);
 
             mTaskList = (RecyclerView) findViewById(R.id.targetList);
             mTaskList.setLayoutManager(new LinearLayoutManager(this));
@@ -176,23 +200,137 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                 employee = (Employee)bundle.getSerializable("Profile");
             }
 
-            String[] data = {"Filter By","Today", "Yesterday", "Date Picker", "Custom Date"};
+            String[] data = {"Filter By","Today", "Yesterday", "Date Picker"};
 
             ArrayAdapter adapter = new ArrayAdapter<>(EmployeeDashBoardAdminView.this, R.layout.spinner_item_selected, data);
             adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
 
+            dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            mDate.setText(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
 
-            mDay.setAdapter(adapter);
+            mPrevious.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try{
+                        final Date date = dateFormat.parse(mDate.getText().toString());
+                        final Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(date);
+                        calendar.add(Calendar.DAY_OF_YEAR, -1);
+
+                        Date date2 = calendar.getTime();
+
+                        mDate.setText(dateFormat.format(date2));
+
+
+
+                        //Today Summary
+                        LoginDetails ld  = new LoginDetails();
+                        ld.setEmployeeId(employee.getEmployeeId());
+                        ld.setLoginDate(new SimpleDateFormat("MM/dd/yyyy").format(date2));
+                        String logDate = new SimpleDateFormat("MMM dd,yyyy").format(date2);
+                        getLoginDetailsDate(ld,logDate);
+
+                        Meetings md  = new Meetings();
+                        md.setEmployeeId(employee.getEmployeeId());
+                        md.setMeetingDate(new SimpleDateFormat("MM/dd/yyyy").format(date2));
+                        String mdDate = new SimpleDateFormat("MMM dd,yyyy").format(date2);
+                        getMeetingsDetails(md,mdDate);
+
+                        LiveTracking lv = new LiveTracking();
+                        lv.setEmployeeId(employee.getEmployeeId());
+                        lv.setTrackingDate(new SimpleDateFormat("MM/dd/yyyy").format(date2));
+                        getLiveLocation(lv);
+
+                        getTasks(employee.getEmployeeId(),new SimpleDateFormat("yyyy-MM-dd").format(date2));
+                        getExpense(employee.getEmployeeId(),new SimpleDateFormat("yyyy-MM-dd").format(date2));
+                        //getLiveLocation(profile.getEmployeeId());
+                        valueCheck();
+
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            mNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                    try{
+                        final Date date = dateFormat.parse(mDate.getText().toString());
+                        String newDate = dateFormat.format(new Date());
+                        final Date newDates = dateFormat.parse(newDate);
+
+                        if(newDates.getTime()<=date.getTime()){
+
+                            Toast.makeText(EmployeeDashBoardAdminView.this, "Data will not available for future date", Toast.LENGTH_SHORT).show();
+
+                        }else{
+                            final Calendar calendar = Calendar.getInstance();
+                            calendar.setTime(date);
+                            calendar.add(Calendar.DAY_OF_YEAR, 1);
+
+                            Date date2 = calendar.getTime();
+
+                            mDate.setText(dateFormat.format(date2));
+
+
+
+                            //Today Summary
+                            LoginDetails ld  = new LoginDetails();
+                            ld.setEmployeeId(employee.getEmployeeId());
+                            ld.setLoginDate(new SimpleDateFormat("MM/dd/yyyy").format(date2));
+                            String logDate = new SimpleDateFormat("MMM dd,yyyy").format(date2);
+                            getLoginDetailsDate(ld,logDate);
+
+                            Meetings md  = new Meetings();
+                            md.setEmployeeId(employee.getEmployeeId());
+                            md.setMeetingDate(new SimpleDateFormat("MM/dd/yyyy").format(date2));
+                            String mdDate = new SimpleDateFormat("MMM dd,yyyy").format(date2);
+                            getMeetingsDetails(md,mdDate);
+
+                            LiveTracking lv = new LiveTracking();
+                            lv.setEmployeeId(employee.getEmployeeId());
+                            lv.setTrackingDate(new SimpleDateFormat("MM/dd/yyyy").format(date2));
+                            getLiveLocation(lv);
+
+                            getTasks(employee.getEmployeeId(),new SimpleDateFormat("yyyy-MM-dd").format(date2));
+                            getExpense(employee.getEmployeeId(),new SimpleDateFormat("yyyy-MM-dd").format(date2));
+
+                            valueCheck();
+                            //getLiveLocation(profile.getEmployeeId());
+                        }
+
+
+
+
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+
+            mDate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    openDatePicker(mDate);
+                }
+            });
+
+
+           /* mDay.setAdapter(adapter);
             mDay.setSpinnerEventsListener(new CustomSpinner.OnSpinnerEventsListener() {
                 public void onSpinnerOpened() {
                     mDay.setSelected(true);
                 }
                 public void onSpinnerClosed() {
-                    mDay.setSelected(false);
+                    mDay.setSelected(true);
                 }
             });
+*/
 
-            mDay.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+           /* mDay.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
@@ -288,7 +426,8 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                         }else if(position==3){
 
                             openDatePicker();
-                        }else if(position==4){
+                            mDay.setSelection(0);
+                        }*//*else if(position==4){
 
 
 
@@ -334,7 +473,7 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                                 }
                             });
 
-                        }
+                        }*//*
                     }else{
                         Toast.makeText(EmployeeDashBoardAdminView.this, "Data Unavailable", Toast.LENGTH_SHORT).show();
                     }
@@ -346,7 +485,7 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                 public void onNothingSelected(AdapterView<?> parent) {
 
                 }
-            });
+            });*/
 
             if(employee!=null){
 
@@ -381,14 +520,12 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    getLoginDetails(employee.getEmployeeId());
-                    getMeetingDetails(employee.getEmployeeId());
+                    //getLoginDetails(employee.getEmployeeId());
+                    //getMeetingDetails(employee.getEmployeeId());
 
                     final Calendar calendar = Calendar.getInstance();
                     Date date2 = calendar.getTime();
 
-                    getTasks(employee.getEmployeeId(),new SimpleDateFormat("yyyy-MM-dd").format(date2));
-                    getExpense(employee.getEmployeeId(),new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
 
                     //Today Summary
                     LoginDetails ld  = new LoginDetails();
@@ -403,6 +540,16 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                     String mdDate = new SimpleDateFormat("MMM dd,yyyy").format(date);
                     getMeetingsDetails(md,mdDate);
                     //getLiveLocation(profile.getEmployeeId());
+
+                    LiveTracking lv = new LiveTracking();
+                    lv.setEmployeeId(employee.getEmployeeId());
+                    lv.setTrackingDate(new SimpleDateFormat("MM/dd/yyyy").format(date));
+                    getLiveLocation(lv);
+
+                    getTasks(employee.getEmployeeId(),new SimpleDateFormat("yyyy-MM-dd").format(date2));
+                    getExpense(employee.getEmployeeId(),new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+                    valueCheck();
+
                 }catch (Exception e){
                     e.printStackTrace();
                     Intent error = new Intent(EmployeeDashBoardAdminView.this,InternalServerErrorScreen.class);
@@ -480,6 +627,26 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
 
                 }
             });
+
+            mCompletedtasks.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                    if(dayemployeeTasks!=null&&dayemployeeTasks.size()!=0){
+
+                        /*Intent pending = new Intent(EmployeeDashBoardAdminView.this,PendingTasks.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("PendingTasks",dayemployeeTasks);
+                        bundle.putString("Title","Task List");
+                        pending.putExtras(bundle);
+                        startActivity(pending);*/
+                    }
+
+                }
+            });
+
+
 
         }catch (Exception e){
             e.printStackTrace();
@@ -671,6 +838,22 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
 
     private void getTasks(final int employeeId,final String dateValue) throws Exception{
 
+        employeeTasks = new ArrayList<>();
+        pendingTasks = new ArrayList<>();
+        completedTasks = new ArrayList<>();
+        closedTasks = new ArrayList<>();
+        final ArrayList<Tasks> onTask = new ArrayList<>();
+
+
+        dayemployeeTasks = new ArrayList<>();
+        daypendingTasks = new ArrayList<>();
+        daycompletedTasks = new ArrayList<>();
+        dayclosedTasks = new ArrayList<>();
+
+        daytotal=0;
+        daypending=0;
+        daycomplete=0;
+        dayclosed=0;
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Loading Details..");
@@ -688,29 +871,17 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                     public void onResponse(Call<ArrayList<Tasks>> call, Response<ArrayList<Tasks>> response) {
                         int statusCode = response.code();
 
+
+
                         if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
 
+                            taslTrue = true;
 
                             if (progressDialog!=null)
                                 progressDialog.dismiss();
                             ArrayList<Tasks> list = response.body();
 
-                            employeeTasks = new ArrayList<>();
-                            pendingTasks = new ArrayList<>();
-                            completedTasks = new ArrayList<>();
-                            closedTasks = new ArrayList<>();
-                            ArrayList<Tasks> onTask = new ArrayList<>();
 
-
-                            dayemployeeTasks = new ArrayList<>();
-                            daypendingTasks = new ArrayList<>();
-                            daycompletedTasks = new ArrayList<>();
-                            dayclosedTasks = new ArrayList<>();
-
-                            daytotal=0;
-                            daypending=0;
-                            daycomplete=0;
-                            dayclosed=0;
 
                             Date date = new Date();
                             Date adate = new Date();
@@ -796,7 +967,7 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                                             }else if(task.getStatus().equalsIgnoreCase("Pending")){
                                                 daypendingTasks.add(task);
                                                 daypending = daypending+1;
-                                            }else if(task.getStatus().equalsIgnoreCase("Closed")){
+                                            }else if(task.getStatus().equalsIgnoreCase("On-Going")){
                                                 dayclosedTasks.add(task);
                                                 dayclosed = dayclosed+1;
                                             }
@@ -854,6 +1025,8 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
 
                             if (progressDialog!=null)
                                 progressDialog.dismiss();
+
+                            taslTrue = true;
                             mTaskList.removeAllViews();
                             mCompletedtasks.setText("0");
                             mNoRecord.setVisibility(View.VISIBLE);
@@ -868,6 +1041,7 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                         // Log error here since request failed
                         if (progressDialog!=null)
                             progressDialog.dismiss();
+                        taslTrue = true;
                         mTaskList.removeAllViews();
                         mCompletedtasks.setText("0");
                         mNoRecord.setVisibility(View.VISIBLE);
@@ -882,19 +1056,21 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
         });
     }
 
-    private void getLiveLocation(final int employeeId) throws Exception{
+    private void getLiveLocation(final LiveTracking lv) throws Exception{
 
 
-        final ProgressDialog progressDialog = new ProgressDialog(this);
+        final ProgressDialog progressDialog = new ProgressDialog(EmployeeDashBoardAdminView.this);
         progressDialog.setTitle("Loading Details..");
         progressDialog.setCancelable(false);
         progressDialog.show();
+
+
 
         new ThreadExecuter().execute(new Runnable() {
             @Override
             public void run() {
                 LiveTrackingAPI apiService = Util.getClient().create(LiveTrackingAPI.class);
-                Call<ArrayList<LiveTracking>> call = apiService.getLiveTrackingByEmployeeId(employeeId);
+                Call<ArrayList<LiveTracking>> call = apiService.getLiveTrackingByEmployeeIdAndDate(lv);
 
                 call.enqueue(new Callback<ArrayList<LiveTracking>>() {
                     @Override
@@ -906,70 +1082,109 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                             if (progressDialog!=null)
                                 progressDialog.dismiss();
                             ArrayList<LiveTracking> list = response.body();
-                            long hours=0;
-
-
                             float distance = 0;
+
 
                             if (list !=null && list.size()!=0) {
 
-                                for (int i=0;i<list.size();i++) {
+                                Collections.sort(list,LiveTracking.compareLiveTrack);
 
-                                    if(i==0){
-                                        Location locationA = new Location("point A");
 
-                                        locationA.setLatitude(Double.parseDouble(PreferenceHandler.getInstance(EmployeeDashBoardAdminView.this).getOrganizationLati()));
-                                        locationA.setLongitude(Double.parseDouble(PreferenceHandler.getInstance(EmployeeDashBoardAdminView.this).getOrganizationLongi()));
+                                double lati = 0,lngi=0;
+                                double latis = 0,lngis=0;
 
-                                        Location locationB = new Location("point B");
+                                Location locationA = new Location("point A");
+                                Location locationB = new Location("point B");
 
-                                        locationB.setLatitude(Double.parseDouble(list.get(0).getLatitude()));
-                                        locationB.setLongitude(Double.parseDouble(list.get(0).getLongitude()));
+                                for(int i=1;i<list.size();i++){
 
-                                        distance = distance+locationA.distanceTo(locationB);
-                                    }else if(i>0&&i<(list.size()-1)){
-                                        Location locationA = new Location("point A");
+                                    if(list.get(i).getLongitude()!=null||list.get(i).getLatitude()!=null){
 
-                                        locationA.setLatitude(Double.parseDouble(list.get(i-1).getLatitude()));
-                                        locationA.setLongitude(Double.parseDouble(list.get(i-1).getLongitude()));
+                                        double lat = Double.parseDouble(list.get(i).getLatitude());
+                                        double lng = Double.parseDouble(list.get(i).getLongitude());
 
-                                        Location locationB = new Location("point B");
 
-                                        locationB.setLatitude(Double.parseDouble(list.get(i).getLatitude()));
-                                        locationB.setLongitude(Double.parseDouble(list.get(i).getLongitude()));
 
-                                        distance = distance+locationA.distanceTo(locationB);
-                                    }else if(i==(list.size()-1)){
-                                        Location locationA = new Location("point A");
+                                        if(lat==0&&lng==0){
 
-                                        locationA.setLatitude(Double.parseDouble(list.get(i-1).getLatitude()));
-                                        locationA.setLongitude(Double.parseDouble(list.get(i-1).getLongitude()));
+                                        }else{
 
-                                        Location locationB = new Location("point B");
+                                            if(list.size()==1){
 
-                                        locationB.setLatitude(Double.parseDouble(list.get(i).getLatitude()));
-                                        locationB.setLongitude(Double.parseDouble(list.get(i).getLongitude()));
+                                            }else{
 
-                                        distance = distance+locationA.distanceTo(locationB);
+
+                                                lati = Double.parseDouble(list.get(i-1).getLatitude());
+                                                lngi = Double.parseDouble(list.get(i-1).getLongitude());
+
+
+                                                if(lati==0&&lngi==0){
+
+                                                    lati = Double.parseDouble(list.get(i-1).getLatitude());
+                                                    lngi = Double.parseDouble(list.get(i-1).getLongitude());
+
+
+                                                }else{
+
+                                                    latis = lati;
+                                                    lngis = lngi;
+
+                                                    locationA.setLatitude(latis);
+                                                    locationA.setLongitude(lngis);
+
+
+                                                    locationB.setLatitude(Double.parseDouble(list.get(i).getLatitude()));
+                                                    locationB.setLongitude(Double.parseDouble(list.get(i).getLongitude()));
+
+                                                    distance = distance+locationA.distanceTo(locationB);
+                                                    double kms = distance/1000.0;
+                                                    double miles = distance*0.000621371192;
+
+                                                    String kmValue = new DecimalFormat("#.##").format(kms);
+                                                    String mileValue = new DecimalFormat("#.##").format(miles);
+
+                                                   /* SpannableString ss1=  new SpannableString(kmValue);
+                                                    ss1.setSpan(new RelativeSizeSpan(1f), 0,kmValue.length()-1, 0); // set size
+                                                    ss1.setSpan(new ForegroundColorSpan(Color.RED), 0, kmValue.length()-1, 0);// set color
+
+                                                    SpannableString ss12=  new SpannableString(mileValue);
+                                                    ss12.setSpan(new RelativeSizeSpan(1f), 0,mileValue.length()-1, 0); // set size
+                                                    ss12.setSpan(new ForegroundColorSpan(Color.RED), 0, mileValue.length()-1, 0);// set color
+*/
+
+
+                                                    mKmTravelled.setText(kmValue+" Km/"+mileValue+" miles");
+
+                                                }
+
+
+                                            }
+
+
+
+                                        }
+
+
 
                                     }
+
 
                                 }
 
 
-                                double distanceValue = distance/1000.0;
-                                //mTotalKm.setText(""+new DecimalFormat("#.##").format(distanceValue));
 
 
 
                             }else{
 
+                                mKmTravelled.setText("0 km/0 mile");
+
                             }
 
                         }else {
 
+                            mKmTravelled.setText("0 km/0 mile");
 
-                            Toast.makeText(EmployeeDashBoardAdminView.this, "Failed due to : "+response.message(), Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -979,6 +1194,7 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                         if (progressDialog!=null)
                             progressDialog.dismiss();
                         Log.e("TAG", t.toString());
+                        mKmTravelled.setText("0 km/0 mile");
                     }
                 });
             }
@@ -1088,7 +1304,7 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                                     mWorkedDays.setText(""+todayTasks.size());
                                     mExpAmt.setText("₹ "+new DecimalFormat("#.##").format(amt));
 
-                                    mExpeText.setText(todayTasks.size()+" Expenses");
+                                    mExpeText.setText("Total Expenses Amount");
 
 
 
@@ -1142,6 +1358,7 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
 
     private void getLoginDetailsDate(final LoginDetails loginDetails,final String comDate){
 
+        workingDiff = 0;
 
         new ThreadExecuter().execute(new Runnable() {
             @Override
@@ -1155,7 +1372,7 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                         int statusCode = response.code();
                         if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
 
-
+                            loginTrue = true;
 
                             ArrayList<LoginDetails> list = response.body();
 
@@ -1200,6 +1417,52 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                                         mLogoutAddress.setText(""+address);
                                         checkLogOut = list.get(list.size()-1);
                                         checkout = true;
+
+                                        long diffHrs = 0;
+
+                                        for (LoginDetails lg:list) {
+
+                                            if((loginTime==null||loginTime.isEmpty())&&(lg.getLogOutTime()==null||lg.getLogOutTime().isEmpty())){
+
+                                            }else{
+                                                SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+                                                SimpleDateFormat sdfs = new SimpleDateFormat("MMM dd,yyyy");
+
+                                                Date fd=null,td=null;
+
+                                                String logoutT = lg.getLogOutTime();
+                                                String loginT = lg.getLoginTime();
+
+                                                if(loginT==null||loginT.isEmpty()){
+
+                                                    loginT = comDate +" 00:00 am";
+                                                }
+
+                                                if(logoutT==null||logoutT.isEmpty()){
+
+                                                    logoutT = comDate  +" "+new SimpleDateFormat("hh:mm a").format(new Date()) ;
+                                                }
+
+                                                try {
+                                                    fd = sdf.parse(""+loginT);
+                                                    td = sdf.parse(""+logoutT);
+
+                                                    long diff = td.getTime() - fd.getTime();
+                                                    diffHrs = diffHrs+diff;
+
+                                                } catch (ParseException e) {
+                                                    e.printStackTrace();
+
+                                                }
+                                            }
+
+                                        }
+
+
+                                        long Hours = diffHrs / (60 * 60 * 1000) ;
+                                        long Minutes = diffHrs / (60 * 1000);
+
+                                        workingDiff =diffHrs;
 
                                     }catch (Exception e){
                                         e.printStackTrace();
@@ -1251,6 +1514,8 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                                     long Hours = diffHrs / (60 * 60 * 1000) ;
                                     long Minutes = diffHrs / (60 * 1000);
 
+                                    workingDiff =diffHrs;
+
                                     int minutes = (int) ((diffHrs / (1000*60)) % 60);
                                     int hours   = (int) ((diffHrs / (1000*60*60)) % 24);
                                     int days   = (int) ((diffHrs / (1000*60*60*24)));
@@ -1282,6 +1547,8 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                                 mLogoutTime.setTextColor(Color.parseColor("#FF0000"));
                                 mLogouText.setText("");
                                 mLogoutAddress.setText("");
+                                mLoginText.setText("");
+                                mLoginAddress.setText("");
                               /*  mLogoutTime.setTextColor(Color.parseColor("#FF0000"));
                                 mLogoutTime.setText("ABSENT");
                                 mWorkingHours.setTextColor(Color.parseColor("#FF0000"));
@@ -1301,6 +1568,10 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                             mLogoutTime.setTextColor(Color.parseColor("#FF0000"));
                             mLogouText.setText("");
                             mLogoutAddress.setText("");
+                            mLoginText.setText("");
+                            mLoginAddress.setText("");
+
+                            loginTrue = true;
                             //Toast.makeText(DailyTargetsForEmployeeActivity.this, "Failed due to : "+response.message(), Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -1316,7 +1587,11 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                         mLogoutTime.setTextColor(Color.parseColor("#FF0000"));
                         mLogouText.setText("");
                         mLogoutAddress.setText("");
+                        mLoginText.setText("");
+                        mLoginAddress.setText("");
                         Log.e("TAG", t.toString());
+
+                        loginTrue = true;
                     }
                 });
             }
@@ -1355,6 +1630,7 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
     private void getMeetingsDetails(final Meetings loginDetails,final String comDate){
 
 
+        meetDiff = 0;
 
 
         new ThreadExecuter().execute(new Runnable() {
@@ -1485,12 +1761,12 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                                 }
 
 
-                                long Hours = diffHrs / (60 * 60 * 1000) ;
-                                long Minutes = diffHrs / (60 * 1000);
+
 
                                 int minutes = (int) ((diffHrs / (1000*60)) % 60);
                                 int hours   = (int) ((diffHrs / (1000*60*60)) % 24);
-                                int days   = (int) ((diffHrs / (1000*60*60*24)));
+                                meetDiff = diffHrs;
+
 
 
                                 DecimalFormat df = new DecimalFormat("00");
@@ -1502,7 +1778,20 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                                 ss1.setSpan(new RelativeSizeSpan(1f), 6,8, 0); // set size
                                 ss1.setSpan(new ForegroundColorSpan(Color.RED), 6, 8, 0);// set color
                                 mMetingAdrz.setText(ss1);
-                                mMeetingTime.setText(""+list.size()+" Meetings");
+                                mMeetingTime.setText("Total Meeting Time");
+
+                                long avgMeetingdiff = diffHrs/list.size();
+
+                                int avgminutes = (int) ((avgMeetingdiff / (1000*60)) % 60);
+                                int avghours   = (int) ((avgMeetingdiff / (1000*60*60)) % 24);
+
+                                String as= String.format("%02d", avghours) +" hr "+String.format("%02d", avgminutes)+" mins";
+                                SpannableString ss1a=  new SpannableString(as);
+                                ss1a.setSpan(new RelativeSizeSpan(1f), 0,2, 0); // set size
+                                ss1a.setSpan(new ForegroundColorSpan(Color.RED), 0, 2, 0);// set color
+                                ss1a.setSpan(new RelativeSizeSpan(1f), 6,8, 0); // set size
+                                ss1a.setSpan(new ForegroundColorSpan(Color.RED), 6, 8, 0);// set color
+                                mAvgMeetingTime.setText(ss1a);
 
 
                             }else{
@@ -1513,6 +1802,14 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                                 mMeetingList.setVisibility(View.GONE);
                                 mMeetingRead.setVisibility(View.GONE);
 
+                                String as= String.format("%02d", 00) +" hr "+String.format("%02d", 00)+" mins";
+                                SpannableString ss1a=  new SpannableString(as);
+                                ss1a.setSpan(new RelativeSizeSpan(1f), 0,2, 0); // set size
+                                ss1a.setSpan(new ForegroundColorSpan(Color.RED), 0, 2, 0);// set color
+                                ss1a.setSpan(new RelativeSizeSpan(1f), 6,8, 0); // set size
+                                ss1a.setSpan(new ForegroundColorSpan(Color.RED), 6, 8, 0);// set color
+                                mAvgMeetingTime.setText(ss1a);
+
                             }
 
                         }else {
@@ -1520,6 +1817,14 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                             mNoMeeting.setVisibility(View.VISIBLE);
                             mMeetingList.setVisibility(View.GONE);
                             mMeetingRead.setVisibility(View.GONE);
+
+                            String as= String.format("%02d", 00) +" hr "+String.format("%02d", 00)+" mins";
+                            SpannableString ss1a=  new SpannableString(as);
+                            ss1a.setSpan(new RelativeSizeSpan(1f), 0,2, 0); // set size
+                            ss1a.setSpan(new ForegroundColorSpan(Color.RED), 0, 2, 0);// set color
+                            ss1a.setSpan(new RelativeSizeSpan(1f), 6,8, 0); // set size
+                            ss1a.setSpan(new ForegroundColorSpan(Color.RED), 6, 8, 0);// set color
+                            mAvgMeetingTime.setText(ss1a);
                             //Toast.makeText(DailyTargetsForEmployeeActivity.this, "Failed due to : "+response.message(), Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -1533,6 +1838,14 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                         mNoMeeting.setVisibility(View.VISIBLE);
                         mMeetingList.setVisibility(View.GONE);
                         mMeetingRead.setVisibility(View.GONE);
+
+                        String as= String.format("%02d", 00) +" hr "+String.format("%02d", 00)+" mins";
+                        SpannableString ss1a=  new SpannableString(as);
+                        ss1a.setSpan(new RelativeSizeSpan(1f), 0,2, 0); // set size
+                        ss1a.setSpan(new ForegroundColorSpan(Color.RED), 0, 2, 0);// set color
+                        ss1a.setSpan(new RelativeSizeSpan(1f), 6,8, 0); // set size
+                        ss1a.setSpan(new ForegroundColorSpan(Color.RED), 6, 8, 0);// set color
+                        mAvgMeetingTime.setText(ss1a);
                     }
                 });
             }
@@ -1541,7 +1854,7 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
         });
     }
 
-    public void openDatePicker() {
+    public void openDatePicker(final TextView tv) {
         // Get Current Date
 
         final Calendar c = Calendar.getInstance();
@@ -1573,7 +1886,8 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
 
 
                                 String dateValue = new SimpleDateFormat("yyyy-MM-dd").format(fdate);
-                                mTitle.setText(dateValue+" Summary");
+                                //mTitle.setText(new SimpleDateFormat("dd-MM-yyyy").format(fdate)+" Summary");//dd-MM-yyyy
+                                tv.setText(new SimpleDateFormat("dd-MM-yyyy").format(fdate)+"");
 
                                 try{
 
@@ -1588,8 +1902,6 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
 
 
 
-                                    getTasks(employee.getEmployeeId(),new SimpleDateFormat("yyyy-MM-dd").format(fdate));
-                                    getExpense(employee.getEmployeeId(),new SimpleDateFormat("yyyy-MM-dd").format(fdate));
 
                                     //Today Summary
                                     LoginDetails ld  = new LoginDetails();
@@ -1603,7 +1915,18 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                                     md.setMeetingDate(new SimpleDateFormat("MM/dd/yyyy").format(date));
                                     String mdDate = new SimpleDateFormat("MMM dd,yyyy").format(date);
                                     getMeetingsDetails(md,mdDate);
+
+                                    LiveTracking lv = new LiveTracking();
+                                    lv.setEmployeeId(employee.getEmployeeId());
+                                    lv.setTrackingDate(new SimpleDateFormat("MM/dd/yyyy").format(date));
+                                    getLiveLocation(lv);
                                     //getLiveLocation(profile.getEmployeeId());
+
+                                    getTasks(employee.getEmployeeId(),new SimpleDateFormat("yyyy-MM-dd").format(fdate));
+                                    getExpense(employee.getEmployeeId(),new SimpleDateFormat("yyyy-MM-dd").format(fdate));
+
+                                    valueCheck();
+
                                 }catch (Exception e){
                                     e.printStackTrace();
                                     Intent error = new Intent(EmployeeDashBoardAdminView.this,InternalServerErrorScreen.class);
@@ -1684,5 +2007,180 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
 
         datePickerDialog.show();
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id)
+        {
+            case android.R.id.home:
+
+                EmployeeDashBoardAdminView.this.finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void valueCheck(){
+        if(taslTrue&&loginTrue){
+
+            //workingDiff/dayclosed;
+
+
+
+            if(workingDiff==0||dayclosed==0){
+
+
+
+                String as= String.format("%02d", 00) +" hr "+String.format("%02d", 00)+" mins";
+                SpannableString ss1a=  new SpannableString(as);
+                ss1a.setSpan(new RelativeSizeSpan(1f), 0,2, 0); // set size
+                ss1a.setSpan(new ForegroundColorSpan(Color.RED), 0, 2, 0);// set color
+                ss1a.setSpan(new RelativeSizeSpan(1f), 6,8, 0); // set size
+                ss1a.setSpan(new ForegroundColorSpan(Color.RED), 6, 8, 0);// set color
+                mAvgtaskTime.setText(ss1a);
+
+            }else{
+
+                long idleTime = workingDiff - (meetDiff);
+
+                long avgTaskdiff = workingDiff/dayclosed;
+
+                int avgminutes = (int) ((avgTaskdiff / (1000*60)) % 60);
+                int avghours   = (int) ((avgTaskdiff / (1000*60*60)) % 24);
+
+                String as= String.format("%02d", avghours) +" hr "+String.format("%02d", avgminutes)+" mins";
+                SpannableString ss1a=  new SpannableString(as);
+                ss1a.setSpan(new RelativeSizeSpan(1f), 0,2, 0); // set size
+                ss1a.setSpan(new ForegroundColorSpan(Color.RED), 0, 2, 0);// set color
+                ss1a.setSpan(new RelativeSizeSpan(1f), 6,8, 0); // set size
+                ss1a.setSpan(new ForegroundColorSpan(Color.RED), 6, 8, 0);// set color
+                mAvgtaskTime.setText(ss1a);
+
+                if(avgTaskdiff!=0||idleTime<0){
+                    String asi= String.format("%02d", 00) +" hr "+String.format("%02d", 00)+" mins";
+                    SpannableString ss1i=  new SpannableString(asi);
+                    ss1i.setSpan(new RelativeSizeSpan(1f), 0,2, 0); // set size
+                    ss1i.setSpan(new ForegroundColorSpan(Color.RED), 0, 2, 0);// set color
+                    ss1i.setSpan(new RelativeSizeSpan(1f), 6,8, 0); // set size
+                    ss1i.setSpan(new ForegroundColorSpan(Color.RED), 6, 8, 0);// set color
+                    mIdleTime.setText(ss1i);
+                }else{
+
+                    int avgminutesi = (int) ((idleTime / (1000*60)) % 60);
+                    int avghoursi   = (int) ((idleTime / (1000*60*60)) % 24);
+
+                    String asi= String.format("%02d", avghoursi) +" hr "+String.format("%02d", avgminutesi)+" mins";
+                    SpannableString ss1i=  new SpannableString(asi);
+                    ss1i.setSpan(new RelativeSizeSpan(1f), 0,2, 0); // set size
+                    ss1i.setSpan(new ForegroundColorSpan(Color.RED), 0, 2, 0);// set color
+                    ss1i.setSpan(new RelativeSizeSpan(1f), 6,8, 0); // set size
+                    ss1i.setSpan(new ForegroundColorSpan(Color.RED), 6, 8, 0);// set color
+                    mIdleTime.setText(ss1i);
+                }
+            }
+
+        }else{
+
+
+            h = new Handler();
+            //1 second=1000 milisecond, 15*1000=15seconds
+
+
+            h.postDelayed( runnable = new Runnable() {
+                public void run() {
+                    //do something
+                    if(taslTrue&&loginTrue){
+
+                        //workingDiff/dayclosed;
+
+
+
+                        if(workingDiff==0||dayclosed==0){
+
+
+
+                            String as= String.format("%02d", 00) +" hr "+String.format("%02d", 00)+" mins";
+                            SpannableString ss1a=  new SpannableString(as);
+                            ss1a.setSpan(new RelativeSizeSpan(1f), 0,2, 0); // set size
+                            ss1a.setSpan(new ForegroundColorSpan(Color.RED), 0, 2, 0);// set color
+                            ss1a.setSpan(new RelativeSizeSpan(1f), 6,8, 0); // set size
+                            ss1a.setSpan(new ForegroundColorSpan(Color.RED), 6, 8, 0);// set color
+                            mAvgtaskTime.setText(ss1a);
+
+                            long idleTime = workingDiff - (meetDiff);
+
+                            if(idleTime<0){
+                                String asi= String.format("%02d", 00) +" hr "+String.format("%02d", 00)+" mins";
+                                SpannableString ss1i=  new SpannableString(asi);
+                                ss1i.setSpan(new RelativeSizeSpan(1f), 0,2, 0); // set size
+                                ss1i.setSpan(new ForegroundColorSpan(Color.RED), 0, 2, 0);// set color
+                                ss1i.setSpan(new RelativeSizeSpan(1f), 6,8, 0); // set size
+                                ss1i.setSpan(new ForegroundColorSpan(Color.RED), 6, 8, 0);// set color
+                                mIdleTime.setText(ss1i);
+                            }else{
+
+                                int avgminutesi = (int) ((idleTime / (1000*60)) % 60);
+                                int avghoursi   = (int) ((idleTime / (1000*60*60)) % 24);
+
+                                String asi= String.format("%02d", avghoursi) +" hr "+String.format("%02d", avgminutesi)+" mins";
+                                SpannableString ss1i=  new SpannableString(asi);
+                                ss1i.setSpan(new RelativeSizeSpan(1f), 0,2, 0); // set size
+                                ss1i.setSpan(new ForegroundColorSpan(Color.RED), 0, 2, 0);// set color
+                                ss1i.setSpan(new RelativeSizeSpan(1f), 6,8, 0); // set size
+                                ss1i.setSpan(new ForegroundColorSpan(Color.RED), 6, 8, 0);// set color
+                                mIdleTime.setText(ss1i);
+                            }
+
+                        }else{
+
+                            long idleTime = workingDiff - (meetDiff);
+
+                            long avgTaskdiff = workingDiff/dayclosed;
+
+                            int avgminutes = (int) ((avgTaskdiff / (1000*60)) % 60);
+                            int avghours   = (int) ((avgTaskdiff / (1000*60*60)) % 24);
+
+                            String as= String.format("%02d", avghours) +" hr "+String.format("%02d", avgminutes)+" mins";
+                            SpannableString ss1a=  new SpannableString(as);
+                            ss1a.setSpan(new RelativeSizeSpan(1f), 0,2, 0); // set size
+                            ss1a.setSpan(new ForegroundColorSpan(Color.RED), 0, 2, 0);// set color
+                            ss1a.setSpan(new RelativeSizeSpan(1f), 6,8, 0); // set size
+                            ss1a.setSpan(new ForegroundColorSpan(Color.RED), 6, 8, 0);// set color
+                            mAvgtaskTime.setText(ss1a);
+
+                            if(avgTaskdiff!=0||idleTime<0){
+                                String asi= String.format("%02d", 00) +" hr "+String.format("%02d", 00)+" mins";
+                                SpannableString ss1i=  new SpannableString(asi);
+                                ss1i.setSpan(new RelativeSizeSpan(1f), 0,2, 0); // set size
+                                ss1i.setSpan(new ForegroundColorSpan(Color.RED), 0, 2, 0);// set color
+                                ss1i.setSpan(new RelativeSizeSpan(1f), 6,8, 0); // set size
+                                ss1i.setSpan(new ForegroundColorSpan(Color.RED), 6, 8, 0);// set color
+                                mIdleTime.setText(ss1i);
+                            }else{
+
+                                int avgminutesi = (int) ((idleTime / (1000*60)) % 60);
+                                int avghoursi   = (int) ((idleTime / (1000*60*60)) % 24);
+
+                                String asi= String.format("%02d", avghoursi) +" hr "+String.format("%02d", avgminutesi)+" mins";
+                                SpannableString ss1i=  new SpannableString(asi);
+                                ss1i.setSpan(new RelativeSizeSpan(1f), 0,2, 0); // set size
+                                ss1i.setSpan(new ForegroundColorSpan(Color.RED), 0, 2, 0);// set color
+                                ss1i.setSpan(new RelativeSizeSpan(1f), 6,8, 0); // set size
+                                ss1i.setSpan(new ForegroundColorSpan(Color.RED), 6, 8, 0);// set color
+                                mIdleTime.setText(ss1i);
+                            }
+                        }
+
+                        taslTrue = false;
+                        loginTrue = false;
+
+                    }
+                    h.postDelayed(runnable, delay);
+                }
+            }, delay);
+
+        }
     }
 }

@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -22,6 +24,7 @@ import app.zingo.employeemanagements.Model.MeetingDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.MeetingNotification;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.LoginMapScreenAdmin;
+import app.zingo.employeemanagements.UI.NewAdminDesigns.MeetingMapScreen;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -76,7 +79,9 @@ public class MeetingNotificationAdapter extends RecyclerView.Adapter<MeetingNoti
                 @Override
                 public void onClick(View v) {
 
-                    Intent map = new Intent(context,LoginMapScreenAdmin.class);
+
+
+                    Intent map = new Intent(context,MeetingMapScreen.class);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("Location",dto);
                     map.putExtras(bundle);

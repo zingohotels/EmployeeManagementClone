@@ -19,6 +19,12 @@ public class Expenses implements Serializable {
     @SerializedName("Amount")
     public double Amount;
 
+    @SerializedName("ClaimedAmount")
+    public double ClaimedAmount;
+
+    @SerializedName("DisbursedAmount")
+    public double DisbursedAmount;
+
     @SerializedName("date")
     public String date;
 
@@ -40,6 +46,9 @@ public class Expenses implements Serializable {
     @SerializedName("Status")
     public String Status;
 
+    @SerializedName("StatusRemarks")
+    public String StatusRemarks;
+
     @SerializedName("Location")
     public String Location;
 
@@ -54,6 +63,9 @@ public class Expenses implements Serializable {
 
     @SerializedName("OrganizationId")
     public int OrganizationId;
+
+    @SerializedName("ExpenseCategoryId")
+    public int ExpenseCategoryId;
 
     public int getExpenseId() {
         return ExpenseId;
@@ -173,5 +185,37 @@ public class Expenses implements Serializable {
 
     public void setOrganizationId(int organizationId) {
         OrganizationId = organizationId;
+    }
+
+    public double getClaimedAmount() {
+        return ClaimedAmount;
+    }
+
+    public void setClaimedAmount(double claimedAmount) {
+        ClaimedAmount = claimedAmount;
+    }
+
+    public double getDisbursedAmount() {
+        return DisbursedAmount;
+    }
+
+    public void setDisbursedAmount(double disbursedAmount) {
+        DisbursedAmount = disbursedAmount;
+    }
+
+    public String getStatusRemarks() {
+        return StatusRemarks;
+    }
+
+    public void setStatusRemarks(String statusRemarks) {
+        StatusRemarks = statusRemarks;
+    }
+
+    public int getExpenseCategoryId() {
+        return ExpenseCategoryId;
+    }
+
+    public void setExpenseCategoryId(int expenseCategoryId) {
+        ExpenseCategoryId = expenseCategoryId;
     }
 }

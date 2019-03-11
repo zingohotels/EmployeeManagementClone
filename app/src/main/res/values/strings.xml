@@ -48,6 +48,7 @@
         <item>Pending</item>
         <item>Approved</item>
         <item>Rejected</item>
+        <item>Cancelled</item>
 
     </string-array>
 
@@ -185,5 +186,26 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="renew_alert_message">Dear Customer, Your EMS Subscription Expired.\nUpdate your plan and use our services. </string>
     <string name="error_code_expire">Error Code: EC_E05</string>
+
+
+    <!--calendar -->
+    <string name="accounts">Accounts</string>
+    <string name="description_add">Add Calendar</string>
+    <string name="summary">Title</string>
+    <string name="summary_hint">Enter the calendar title</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="icon_desc">Application icon</string>
+    <string name="title_separator_desc">Title separator</string>
+    <string name="refresh">Refresh</string>
+    <string name="batchadd">Copy Calendar x3 (Batch)</string>
+    <string name="edit">Edit Calendar</string>
+    <string name="delete">Delete Calendar</string>
+    <string name="delete_title">Delete Calendar?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="error">Error</string>
+    <string name="error_format">[Error] %s</string>
+
 
 </resources>

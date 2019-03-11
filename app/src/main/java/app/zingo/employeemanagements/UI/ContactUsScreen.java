@@ -2,8 +2,10 @@ package app.zingo.employeemanagements.UI;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,7 +32,9 @@ public class ContactUsScreen extends AppCompatActivity {
     MyRegulerText mInfoNext,mCompanyNext,mCompanyPrev,mInquiryPrev,mInquirySubmit;
     TextInputEditText mName,mJob,mEmail,mPhoneNumber,mBusinessName,mEmployeeCount;
     CountryCodePicker mCCP,mCountry;
-    EditText mComments;
+    TextInputEditText mComments;
+
+    LinearLayout mWhatsapp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +51,7 @@ public class ContactUsScreen extends AppCompatActivity {
             mCompanyPrev = (MyRegulerText) findViewById(R.id.buttonCompanyPrevious);
             mInquirySubmit = (MyRegulerText) findViewById(R.id.buttonInquiryNext);
             mInquiryPrev = (MyRegulerText) findViewById(R.id.buttonInquiryPrevious);
+            mWhatsapp = (LinearLayout)findViewById(R.id.whatsapp_open);
 
             mName = (TextInputEditText)findViewById(R.id.user_name);
             mJob = (TextInputEditText)findViewById(R.id.user_job);
@@ -58,7 +63,27 @@ public class ContactUsScreen extends AppCompatActivity {
             mCCP = (CountryCodePicker) findViewById(R.id.ccp);
             mCountry = (CountryCodePicker)findViewById(R.id.ccp_country);
 
-            mComments = (EditText) findViewById(R.id.about_question);
+            mComments = (TextInputEditText) findViewById(R.id.location_text);
+
+            mWhatsapp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    String digits = "\\d+";
+
+                    try {
+
+                        Uri uri = Uri.parse("whatsapp://send?phone=+919986128021" );
+                        Intent i = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(i);
+                    }
+                    catch (ActivityNotFoundException e){
+                        e.printStackTrace();
+                        Toast.makeText(ContactUsScreen.this, "WhatsApp not installed.", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            });
 
 
             mInfoNext.setOnClickListener(new View.OnClickListener() {
@@ -152,7 +177,7 @@ public class ContactUsScreen extends AppCompatActivity {
     public void validateField(){
 
         String name = mName.getText().toString();
-        String job = mJob.getText().toString();
+       // String job = mJob.getText().toString();
         String email = mEmail.getText().toString();
         String mobile = mPhoneNumber.getText().toString();
         String mobileCountry = mCCP.getSelectedCountryCodeWithPlus();
@@ -163,9 +188,9 @@ public class ContactUsScreen extends AppCompatActivity {
 
         if(name==null||name.isEmpty()){
             Toast.makeText(this, "Your name is required", Toast.LENGTH_SHORT).show();
-        }else if(job==null||job.isEmpty()){
+        }/*else if(job==null||job.isEmpty()){
             Toast.makeText(this, "Job Title is required", Toast.LENGTH_SHORT).show();
-        }else if(email==null||email.isEmpty()){
+        }*/else if(email==null||email.isEmpty()){
             Toast.makeText(this, "Email is required", Toast.LENGTH_SHORT).show();
         }else if(mobile==null||mobile.isEmpty()){
             Toast.makeText(this, "Phone number is required", Toast.LENGTH_SHORT).show();
@@ -188,17 +213,17 @@ public class ContactUsScreen extends AppCompatActivity {
                     "<h2>Dear Team Members,</h2>" +
                     "<p><br>Please find below Client Details for Employee management App Request</p></br></br>"+
                     "<br><b>Client Name: </b>"+name+
-                    "</br><br><b>Job Title: </b>"+job+
+                  /*  "</br><br><b>Job Title: </b>"+job+*/
                     "</br><br><b>Email: </b>"+email+
                     "</br><br><b>Phone Number: </b>"+mobileCountry+""+mobile+
                     "</br><br><b>Business Name: </b>"+business+
                     "</br><br><b>No of Employees: </b>"+employee+
                     "</br><br><b>Country: </b>"+country+
-                    "</br><br><b>Inquiry: </b>"+inquiry+
+                    "</br><br><b>Location: </b>"+inquiry+
                     "</br><p><b>Thanks</b></p><br><br></body></html>";
 
             EmailData emailData = new EmailData();
-            emailData.setEmailAddress("nizsab@gmail.com");
+            emailData.setEmailAddress("abhinav@zingohotels.com");
             emailData.setBody(body);
             emailData.setSubject("Employee Management App Call Back Request");
             emailData.setUserName("nishar@zingohotels.com");
@@ -284,7 +309,7 @@ public class ContactUsScreen extends AppCompatActivity {
     private void showAlertBox() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ContactUsScreen.this);
-        builder.setMessage("Thank you for interesting in our services\nOur Sales team will get in touch with you");
+        builder.setMessage("Thank you for showing interest in our app\nOur Sales team will get in touch with you within 2 working days.");
         builder.setCancelable(false);
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override

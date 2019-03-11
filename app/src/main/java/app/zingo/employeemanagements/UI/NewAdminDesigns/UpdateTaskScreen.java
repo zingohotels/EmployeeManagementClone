@@ -4,8 +4,10 @@ import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.support.design.widget.TextInputEditText;
@@ -15,6 +17,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
@@ -77,7 +81,7 @@ public class UpdateTaskScreen extends AppCompatActivity {
     private GoogleMap mMap;
     MapViewScroll mapView;
     Marker marker;
-
+    static int  ADAPTER_POSITION = -1;
 
     double lati, lngi;
     Tasks updateTask;
@@ -91,6 +95,10 @@ public class UpdateTaskScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         try {
             setContentView(R.layout.activity_update_task_screen);
+
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            setTitle("Update Task");
 
             mTaskName = (TextInputEditText) findViewById(R.id.task_name);
             mFrom = (TextInputEditText) findViewById(R.id.from_date);
@@ -116,6 +124,7 @@ public class UpdateTaskScreen extends AppCompatActivity {
             if (bundle != null) {
 
                 updateTask = (Tasks)bundle.getSerializable("Task");
+                ADAPTER_POSITION = bundle.getInt("Position");
 
             }
 
@@ -612,6 +621,72 @@ public class UpdateTaskScreen extends AppCompatActivity {
 
                         Toast.makeText(UpdateTaskScreen.this, "Update Task succesfully", Toast.LENGTH_SHORT).show();
 
+                      //  AdminDashBoardFragment.mTaskList.getAdapter().notifyDataSetChanged();
+
+                    }else {
+                        Toast.makeText(UpdateTaskScreen.this, "Failed Due to "+response.message(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+                    ex.printStackTrace();
+                }
+//                callGetStartEnd();
+            }
+
+            @Override
+            public void onFailure(Call<Tasks> call, Throwable t) {
+
+                if(dialog != null && dialog.isShowing())
+                {
+                    dialog.dismiss();
+                }
+                Toast.makeText(UpdateTaskScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("TAG", t.toString());
+            }
+        });
+
+
+
+    }
+
+
+    public void deleteTasks(final Tasks tasks) throws Exception{
+
+
+
+        final ProgressDialog dialog = new ProgressDialog(UpdateTaskScreen.this);
+        dialog.setMessage("Deleting Details..");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        TasksAPI apiService = Util.getClient().create(TasksAPI.class);
+
+        Call<Tasks> call = apiService.deleteTasks(tasks.getTaskId());
+
+        call.enqueue(new Callback<Tasks>() {
+            @Override
+            public void onResponse(Call<Tasks> call, Response<Tasks> response) {
+//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
+                try
+                {
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+
+                    int statusCode = response.code();
+                    if (statusCode == 200 || statusCode == 201|| statusCode == 204) {
+
+
+                        Toast.makeText(UpdateTaskScreen.this, "Deleted Task succesfully", Toast.LENGTH_SHORT).show();
+                        UpdateTaskScreen.this.finish();
+
 
 
                     }else {
@@ -643,6 +718,102 @@ public class UpdateTaskScreen extends AppCompatActivity {
         });
 
 
+
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_delete, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        switch (id)
+        {
+            case android.R.id.home:
+
+                UpdateTaskScreen.this.finish();
+                break;
+
+            case R.id.action_delete:
+
+                showalertbox();
+
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void showalertbox(){
+
+
+
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(UpdateTaskScreen.this);
+        builder.setTitle("Do you want to Delete ?");
+        builder.setCancelable(true);
+        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                dialogInterface.dismiss();
+
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(UpdateTaskScreen.this);
+                builder.setTitle("Do you want to delete?");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        try {
+
+                            if(updateTask!=null){
+                                deleteTasks(updateTask);
+                                dialogInterface.dismiss();
+                            }else{
+                                Toast.makeText(UpdateTaskScreen.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                                dialogInterface.dismiss();
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+
+                    }
+                });
+                builder.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+
+
+                    }
+                });
+
+                android.app.AlertDialog dialog = builder.create();
+                dialog.show();
+
+
+
+
+
+
+            }
+        });
+        builder.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                    dialogInterface.dismiss();
+
+            }
+        });
+
+        android.app.AlertDialog dialog = builder.create();
+        dialog.show();
 
     }
 }

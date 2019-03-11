@@ -7,10 +7,13 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -27,6 +30,7 @@ import java.util.Date;
 
 import app.zingo.employeemanagements.Adapter.DepartmentSpinnerAdapter;
 import app.zingo.employeemanagements.Adapter.ManagerSpinnerAdapter;
+import app.zingo.employeemanagements.Custom.MyEditText;
 import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Designations;
 import app.zingo.employeemanagements.Model.Employee;
@@ -46,12 +50,13 @@ import retrofit2.Response;
 
 public class EmployeeEditScreen extends AppCompatActivity {
 
-    TextInputEditText mName,mDob,mDoj,mPrimaryEmail,mSecondaryEmail,
+    TextInputEditText mName,mPrimaryEmail,mSecondaryEmail,
             mMobile,mDesignation,mSalary,mPassword,mConfirm;
     EditText mAddress;
+    MyEditText mDob,mDoj;
     CheckBox mLocationCondition,mCheckTime;
     Spinner mDepartment,mtoReport;
-    Switch mAdmin;
+    Switch mAdmin,mActive;
     RadioButton mMale,mFemale,mOthers;
     AppCompatButton mCreate;
 
@@ -59,6 +64,10 @@ public class EmployeeEditScreen extends AppCompatActivity {
     ArrayList<Employee> employeeList;
 
     Employee employees;
+
+    private String current = "";
+    private String ddmmyyyy = "DDMMYYYY";
+    private Calendar cal = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,9 +81,10 @@ public class EmployeeEditScreen extends AppCompatActivity {
             setTitle("Update Employee");
 
             mAdmin = (Switch) findViewById(R.id.admin_switch);
+            mActive = (Switch) findViewById(R.id.active_employee);
             mName = (TextInputEditText)findViewById(R.id.name);
-            mDob = (TextInputEditText)findViewById(R.id.dob);
-            mDoj = (TextInputEditText)findViewById(R.id.doj);
+            mDob = (MyEditText)findViewById(R.id.dob);
+            mDoj = (MyEditText)findViewById(R.id.doj);
             mDesignation = (TextInputEditText)findViewById(R.id.designation);
             mSalary = (TextInputEditText)findViewById(R.id.salary);
             mPrimaryEmail = (TextInputEditText)findViewById(R.id.email);
@@ -96,7 +106,7 @@ public class EmployeeEditScreen extends AppCompatActivity {
 
             mCreate = (AppCompatButton)findViewById(R.id.createFounder);
 
-            mDob.setOnClickListener(new View.OnClickListener() {
+          /*  mDob.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
@@ -110,6 +120,141 @@ public class EmployeeEditScreen extends AppCompatActivity {
 
                     openDatePicker(mDoj);
                 }
+            });*/
+
+            mDob.addTextChangedListener(new TextWatcher() {
+
+
+
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    if (!s.toString().equals(current)) {
+                        String clean = s.toString().replaceAll("[^\\d.]|\\.", "");
+                        String cleanC = current.replaceAll("[^\\d.]|\\.", "");
+
+                        int cl = clean.length();
+                        int sel = cl;
+                        for (int i = 2; i <= cl && i < 6; i += 2) {
+                            sel++;
+                        }
+                        //Fix for pressing delete next to a forward slash
+                        if (clean.equals(cleanC)) sel--;
+
+                        if (clean.length() < 8){
+                            clean = clean + ddmmyyyy.substring(clean.length());
+                        }else{
+                            //This part makes sure that when we finish entering numbers
+                            //the date is correct, fixing it otherwise
+                            int day  = Integer.parseInt(clean.substring(0,2));
+                            int mon  = Integer.parseInt(clean.substring(2,4));
+                            int year = Integer.parseInt(clean.substring(4,8));
+
+                            String currentYear = new SimpleDateFormat("yyyy").format(new Date());
+
+                            int years = Integer.parseInt(currentYear);
+
+                            mon = mon < 1 ? 1 : mon > 12 ? 12 : mon;
+                            cal.set(Calendar.MONTH, mon-1);
+                            year = (year<1900)?1900:(year>years)?years:year;
+                            cal.set(Calendar.YEAR, year);
+                            // ^ first set year for the line below to work correctly
+                            //with leap years - otherwise, date e.g. 29/02/2012
+                            //would be automatically corrected to 28/02/2012
+
+                            day = (day > cal.getActualMaximum(Calendar.DATE))? cal.getActualMaximum(Calendar.DATE):day;
+                            clean = String.format("%02d%02d%02d",day, mon, year);
+                        }
+
+                        clean = String.format("%s/%s/%s", clean.substring(0, 2),
+                                clean.substring(2, 4),
+                                clean.substring(4, 8));
+
+                        sel = sel < 0 ? 0 : sel;
+                        current = clean;
+                        mDob.setText(current);
+                        mDob.setSelection(sel < current.length() ? sel : current.length());
+                    }
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+
+
+            mDoj.addTextChangedListener(new TextWatcher() {
+
+
+
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    if (!s.toString().equals(current)) {
+                        String clean = s.toString().replaceAll("[^\\d.]|\\.", "");
+                        String cleanC = current.replaceAll("[^\\d.]|\\.", "");
+
+                        int cl = clean.length();
+                        int sel = cl;
+                        for (int i = 2; i <= cl && i < 6; i += 2) {
+                            sel++;
+                        }
+                        //Fix for pressing delete next to a forward slash
+                        if (clean.equals(cleanC)) sel--;
+
+                        if (clean.length() < 8){
+                            clean = clean + ddmmyyyy.substring(clean.length());
+                        }else{
+                            //This part makes sure that when we finish entering numbers
+                            //the date is correct, fixing it otherwise
+                            int day  = Integer.parseInt(clean.substring(0,2));
+                            int mon  = Integer.parseInt(clean.substring(2,4));
+                            int year = Integer.parseInt(clean.substring(4,8));
+
+                            String currentYear = new SimpleDateFormat("yyyy").format(new Date());
+
+                            int years = Integer.parseInt(currentYear);
+
+                            mon = mon < 1 ? 1 : mon > 12 ? 12 : mon;
+                            cal.set(Calendar.MONTH, mon-1);
+                            year = (year<1900)?1900:(year>years)?years:year;
+                            cal.set(Calendar.YEAR, year);
+                            // ^ first set year for the line below to work correctly
+                            //with leap years - otherwise, date e.g. 29/02/2012
+                            //would be automatically corrected to 28/02/2012
+
+                            day = (day > cal.getActualMaximum(Calendar.DATE))? cal.getActualMaximum(Calendar.DATE):day;
+                            clean = String.format("%02d%02d%02d",day, mon, year);
+                        }
+
+                        clean = String.format("%s/%s/%s", clean.substring(0, 2),
+                                clean.substring(2, 4),
+                                clean.substring(4, 8));
+
+                        sel = sel < 0 ? 0 : sel;
+                        current = clean;
+                        mDoj.setText(current);
+                        mDoj.setSelection(sel < current.length() ? sel : current.length());
+                    }
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
             });
 
             mCreate.setOnClickListener(new View.OnClickListener() {
@@ -122,6 +267,43 @@ public class EmployeeEditScreen extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
+                }
+            });
+
+            if(mLocationCondition.isChecked()){
+
+                mLocationCondition.setText("Check-in Location (If Checked Employee has to Check-in from Office Only)");
+            }else{
+                mLocationCondition.setText("Check-in Location");
+            }
+
+            if(mCheckTime.isChecked()){
+                mCheckTime.setText("Check-in Time (If Checked Employee has to Check-in within Office Check-in Hours only)");
+            }else{
+                mCheckTime.setText("Check-in Time");
+            }
+
+            mLocationCondition.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                    if(isChecked){
+                        mLocationCondition.setText("Check-in Location (If Checked Employee has to Check-in from Office Only)");
+                    }else{
+                        mLocationCondition.setText("Check-in Location");
+                    }
+                }
+            });
+
+            mCheckTime.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                    if(isChecked){
+                        mCheckTime.setText("Check-in Time (If Checked Employee has to Check-in within Office Check-in Hours only)");
+                    }else{
+                        mCheckTime.setText("Check-in Time");
+                    }
                 }
             });
 
@@ -148,13 +330,40 @@ public class EmployeeEditScreen extends AppCompatActivity {
 
         String dob = employee.getDateOfBirth();
         String doj = employee.getDateOfJoining();
-        if(employee.getUserRoleId()==2){
+
+        String gender = employee.getGender();
+        if(employee.getUserRoleId()==9){
 
             mAdmin.setChecked(true);
         }else{
             mAdmin.setChecked(false);
         }
 
+        String statusEmp = employee.getStatus();
+
+        if(statusEmp!=null&&statusEmp.equalsIgnoreCase("Active")){
+
+            mActive.setChecked(true);
+
+        }else{
+
+            mActive.setChecked(false);
+        }
+
+        if(gender!=null&&!gender.isEmpty()){
+
+            if(gender.equalsIgnoreCase("Male")){
+
+                mMale.setChecked(true);
+
+            }else if(gender.equalsIgnoreCase("Female")){
+
+                mFemale.setChecked(true);
+            }else {
+
+                mOthers.setChecked(true);
+            }
+        }
         getDesignation(employee.getDesignationId());
         if(dob.contains("T")){
 
@@ -162,7 +371,7 @@ public class EmployeeEditScreen extends AppCompatActivity {
 
             try {
                 Date afromDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
-                dob = new SimpleDateFormat("MMM dd,yyyy").format(afromDate);
+                dob = new SimpleDateFormat("dd/MM/yyyy").format(afromDate);
                 mDob.setText(""+dob);
 
             } catch (ParseException e) {
@@ -178,7 +387,7 @@ public class EmployeeEditScreen extends AppCompatActivity {
 
             try {
                 Date afromDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
-                doj = new SimpleDateFormat("MMM dd,yyyy").format(afromDate);
+                doj = new SimpleDateFormat("dd/MM/yyyy").format(afromDate);
                 mDoj.setText(""+doj);
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -190,6 +399,8 @@ public class EmployeeEditScreen extends AppCompatActivity {
         boolean location = employee.isLocationOn();
 
         if(location){
+            mLocationCondition.setChecked(false);
+        }else{
             mLocationCondition.setChecked(true);
         }
 
@@ -197,7 +408,22 @@ public class EmployeeEditScreen extends AppCompatActivity {
         boolean time = employee.isDataOn();
 
         if(time){
+            mCheckTime.setChecked(false);
+        }else{
             mCheckTime.setChecked(true);
+        }
+
+        if(mLocationCondition.isChecked()){
+
+            mLocationCondition.setText("Check-in Location (If Checked Employee has to Check-in from Office Only)");
+        }else{
+            mLocationCondition.setText("Check-in Location");
+        }
+
+        if(mCheckTime.isChecked()){
+            mCheckTime.setText("Check-in Time (If Checked Employee has to Check-in within Office Check-in Hours only)");
+        }else{
+            mCheckTime.setText("Check-in Time");
         }
 
         mSalary.setText(""+employee.getSalary());
@@ -296,11 +522,11 @@ public class EmployeeEditScreen extends AppCompatActivity {
 
             Toast.makeText(this, "Primary Email is required", Toast.LENGTH_SHORT).show();
 
-        }else if(secondary.isEmpty()){
+        }/*else if(secondary.isEmpty()){
 
             Toast.makeText(this, "Secondary Email is required", Toast.LENGTH_SHORT).show();
 
-        }else if(password.isEmpty()){
+        }*/else if(password.isEmpty()){
 
             Toast.makeText(this, "Password is required", Toast.LENGTH_SHORT).show();
 
@@ -311,6 +537,7 @@ public class EmployeeEditScreen extends AppCompatActivity {
         }else if(!password.isEmpty()&&!confirm.isEmpty()&&!password.equals(confirm)){
 
             Toast.makeText(this, "Confirm password should be same as Password", Toast.LENGTH_SHORT).show();
+
         }else if(mobile.isEmpty()){
 
             Toast.makeText(this, "Mobile is required", Toast.LENGTH_SHORT).show();
@@ -323,11 +550,11 @@ public class EmployeeEditScreen extends AppCompatActivity {
 
             Toast.makeText(this, "Salary is required", Toast.LENGTH_SHORT).show();
 
-        }else if(address.isEmpty()) {
+        }/*else if(address.isEmpty()) {
 
             Toast.makeText(this, "Address is required", Toast.LENGTH_SHORT).show();
 
-        }else if(!mMale.isChecked()&&!mFemale.isChecked()&&!mOthers.isChecked()){
+        }*/else if(!mMale.isChecked()&&!mFemale.isChecked()&&!mOthers.isChecked()){
 
             Toast.makeText(this, "Please Select Gender", Toast.LENGTH_SHORT).show();
 
@@ -337,27 +564,38 @@ public class EmployeeEditScreen extends AppCompatActivity {
 
             Employee employee = employees;
             employee.setEmployeeName(name);
-            employee.setAddress(address);
+
+            if(address!=null&&!address.isEmpty()){
+                employee.setAddress(address);
+            }
+            //employee.setAddress(address);
             employee.setPassword(password);
 
 
             if(mAdmin.isChecked()){
 
-                employee.setUserRoleId(2);
+                employee.setUserRoleId(9);
             }else{
                 employee.setUserRoleId(1);
             }
 
-            if(mLocationCondition.isChecked()){
-                employee.setLocationOn(true);
+            if(mActive.isChecked()){
+
+                employee.setStatus("Active");
             }else{
+                employee.setStatus("Deactive");
+            }
+
+            if(mLocationCondition.isChecked()){
                 employee.setLocationOn(false);
+            }else{
+                employee.setLocationOn(true);
             }
 
             if(mCheckTime.isChecked()){
-                employee.setDataOn(true);
-            }else{
                 employee.setDataOn(false);
+            }else{
+                employee.setDataOn(true);
             }
             if(mMale.isChecked()){
                 employee.setGender("Male");
@@ -370,7 +608,7 @@ public class EmployeeEditScreen extends AppCompatActivity {
             }
             employee.setManagerId(employeeList.get(mtoReport.getSelectedItemPosition()).getEmployeeId());
 
-            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
             try {
                 Date fdate = sdf.parse(dob);
@@ -391,13 +629,15 @@ public class EmployeeEditScreen extends AppCompatActivity {
 
             employee.setPrimaryEmailAddress(primary);
             employee.setSalary(Double.parseDouble(salary));
-            employee.setAlternateEmailAddress(secondary);
+            if(secondary!=null&&!secondary.isEmpty()){
+                employee.setAlternateEmailAddress(secondary);
+            }
             employee.setPhoneNumber(mobile);
 
             employee.setDepartmentId(departmentData.get(mDepartment.getSelectedItemPosition()).getDepartmentId());
 
 
-            employee.setStatus("Active");
+
 
 
             Designations designations = new Designations();

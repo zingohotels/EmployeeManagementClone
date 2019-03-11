@@ -17,6 +17,7 @@ public interface Constants {
     String RESELLER_USER_ID = "reuser_id";
     String LOCATION_ON = "location_on";
     String DATA_ON = "data_on";
+    String FIRST_CHECK = "first_check";
     String MANAGER_ID = "manager_id";
     String COMPANY_ID = "company_id";
     String DESIGNATION_ID = "designation_id";

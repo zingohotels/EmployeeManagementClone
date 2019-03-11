@@ -46,12 +46,7 @@ import app.zingo.employeemanagements.UI.NewEmployeeDesign.EmployeeNewMainScreen;
 import app.zingo.employeemanagements.UI.Reseller.ResellerMainActivity;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
-import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
-import app.zingo.employeemanagements.WebApi.PlansAndRatesAPI;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class SplashScreen extends AppCompatActivity {
 
@@ -71,6 +66,8 @@ public class SplashScreen extends AppCompatActivity {
     private static final String APP_VERSION = "app_version";
 
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
+
+    private static final int MY_PERMISSIONS_REQUEST_READ_FINE_LOCATION = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -199,6 +196,7 @@ public class SplashScreen extends AppCompatActivity {
                         android.Manifest.permission.INTERNET,
                         android.Manifest.permission.ACCESS_NETWORK_STATE,
                         Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
                         android.Manifest.permission.ACCESS_WIFI_STATE,
                         android. Manifest.permission.NFC,
                         android.Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -227,98 +225,38 @@ public class SplashScreen extends AppCompatActivity {
 
     }
 
-    private void
-    getPlans(){
 
-
-        new ThreadExecuter().execute(new Runnable() {
-            @Override
-            public void run() {
-                PlansAndRatesAPI apiService = Util.getClient().create(PlansAndRatesAPI.class);
-                Call<ArrayList<Plans>> call = apiService.getPlans();
-
-                call.enqueue(new Callback<ArrayList<Plans>>() {
-                    @Override
-                    public void onResponse(Call<ArrayList<Plans>> call, Response<ArrayList<Plans>> response) {
-                        int statusCode = response.code();
-                        if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
-
-
-
-                            ArrayList<Plans> list = response.body();
-
-
-                            if (list !=null && list.size()!=0) {
-
-
-
-                            }else{
-
-                            }
-
-                        }else {
-
-                            if(response.code()==403){
-
-                                if(Util.BASE_URL.equalsIgnoreCase("http://locals.zingyapp.com/api/")){
-                                    Util.BASE_URL = Constants.BASE_URL_MAIN;
-                                    Util.IMAGE_URL = Constants.IMAGE_URL_MAIN;
-                                }else{
-                                    Util.BASE_URL = Constants.BASE_URL;
-                                    Util.IMAGE_URL = Constants.IMAGE_URL;
-                                }
-
-                            }
-
-
-
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ArrayList<Plans>> call, Throwable t) {
-                        // Log error here since request failed
-
-                        Log.e("TAG", t.toString());
-                    }
-                });
-            }
-
-
-        });
-    }
 
     public boolean checkPermission() {
-        if ((ContextCompat.checkSelfPermission(this, android.Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED)
-                &&(ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        if (((ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+                &&(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
                 && (ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
-                && (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
-                && (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED)) {
-            if ((ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.SEND_SMS))
-                    && (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION))
+                && (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED))) {
+            if ((ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION))
+                    && (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION))
                     && (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE))
-                    && (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_EXTERNAL_STORAGE))
-                    && (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.CALL_PHONE))) {
+                    && (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_EXTERNAL_STORAGE))) {
 
                 //Prompt the user once explanation has been shown
                 ActivityCompat.requestPermissions(this,
                         new String[]{
-                                android.Manifest.permission.SEND_SMS,
+
                                 android.Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.ACCESS_COARSE_LOCATION,
                                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
                                 android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                                android.Manifest.permission.CALL_PHONE},
+                                },
                         MY_PERMISSIONS_REQUEST_RESULT);
                 Log.d("checkPermission if","false");
 
             } else {
                 // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(this,
-                        new String[]{android.Manifest.permission.SEND_SMS,
+                        new String[]{
                                 android.Manifest.permission.ACCESS_FINE_LOCATION,
                                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
                                 android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                                android.Manifest.permission.CALL_PHONE},
+                                Manifest.permission.ACCESS_COARSE_LOCATION,},
                         MY_PERMISSIONS_REQUEST_RESULT);
                 Log.d("checkPermission else","true");
 
@@ -404,7 +342,7 @@ public class SplashScreen extends AppCompatActivity {
                                 SplashScreen.this.finish();
                             }else if(companyId!=0&&profileId!=0){
 
-                                if(PreferenceHandler.getInstance(SplashScreen.this).getUserRoleUniqueID()==2){
+                                if(PreferenceHandler.getInstance(SplashScreen.this).getUserRoleUniqueID()==2||PreferenceHandler.getInstance(SplashScreen.this).getUserRoleUniqueID()==9){
                                     //Intent verify = new Intent(SplashScreen.this,DashBoardEmployee.class);
                                     Intent verify = new Intent(SplashScreen.this,AdminNewMainScreen.class);
                                     startActivity(verify);

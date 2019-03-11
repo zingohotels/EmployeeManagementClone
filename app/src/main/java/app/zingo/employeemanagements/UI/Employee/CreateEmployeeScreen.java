@@ -435,7 +435,9 @@ public class CreateEmployeeScreen extends AppCompatActivity {
 
             Employee employee = new Employee();
             employee.setEmployeeName(name);
-            employee.setAddress(address);
+            if(address!=null&&!address.isEmpty()){
+                employee.setAddress(address);
+            }
 
             if(mLocationCondition.isChecked()){
                 employee.setLocationOn(false);
@@ -494,7 +496,7 @@ public class CreateEmployeeScreen extends AppCompatActivity {
             employee.setStatus("Active");
 
             if(mAdmin.isChecked()){
-                employee.setUserRoleId(2);
+                employee.setUserRoleId(9);
             }else{
                 employee.setUserRoleId(1);
             }

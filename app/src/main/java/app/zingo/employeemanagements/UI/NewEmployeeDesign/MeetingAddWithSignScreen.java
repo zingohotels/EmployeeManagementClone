@@ -268,6 +268,24 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
 
                         dialog_action(loginDetails,md,"Selfie");
 
+                    }else if (!mGetSign.isChecked()&&mTakeImage.isChecked()){
+
+                        file = new File(DIRECTORY);
+                        if (!file.exists()) {
+                            file.mkdir();
+                        }
+
+                       /* // Dialog Function
+                        dialog = new Dialog(MeetingAddWithSignScreen.this);
+                        // Removing the features of Normal Dialogs
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        dialog.setContentView(R.layout.dialog_signature);
+                        dialog.setCancelable(true);*/
+
+                       dispatchTakePictureIntent();
+
+                        //dialog_action(loginDetails,md,"Selfie");
+
                     }else{
                         addMeeting(loginDetails,md);
                     }

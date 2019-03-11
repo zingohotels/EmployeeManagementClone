@@ -73,6 +73,16 @@ public class PreferenceHandler {
         return sh.getBoolean(Constants.LOCATION_ON,false);
     }
 
+    public boolean isFirstCheck()
+    {
+        return sh.getBoolean(Constants.FIRST_CHECK,true);
+    }
+
+    public void setFirstCheck(boolean id)
+    {
+        sh.edit().putBoolean(Constants.FIRST_CHECK,id).apply();
+    }
+
     public void setManagerId(int id)
     {
         sh.edit().putInt(Constants.MANAGER_ID,id).apply();

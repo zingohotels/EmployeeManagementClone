@@ -11,6 +11,7 @@ import android.text.InputType;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -54,7 +55,7 @@ public class ResellerSignUpScree extends AppCompatActivity {
     MyTextView mCity,mCountry;
 
     RadioButton mMale,mFemale,mOthers;
-    AppCompatButton mCreate;
+    MyTextView mCreate;
 
     CheckBox mShowPwd;
 
@@ -69,6 +70,11 @@ public class ResellerSignUpScree extends AppCompatActivity {
 
             setContentView(R.layout.activity_reseller_sign_up_scree);
 
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            setTitle("Reseller Signup");
+
+
             mName = (MyEditText)findViewById(R.id.reseller_name);
             mUserName = (MyEditText)findViewById(R.id.reseller_user_name);
             mEmail = (MyEditText)findViewById(R.id.reseller_email);
@@ -82,7 +88,7 @@ public class ResellerSignUpScree extends AppCompatActivity {
             mFemale = (RadioButton)findViewById(R.id.reseller_female);
             mOthers = (RadioButton)findViewById(R.id.reseller_other);
 
-            mCreate = (AppCompatButton)findViewById(R.id.createReseller);
+            mCreate = (MyTextView)findViewById(R.id.createReseller);
             mShowPwd = (CheckBox) findViewById(R.id.show_hide_password);
 
             mShowPwd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -540,6 +546,20 @@ public class ResellerSignUpScree extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        switch (id)
+        {
+            case android.R.id.home:
+
+                ResellerSignUpScree.this.finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

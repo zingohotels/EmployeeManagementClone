@@ -249,7 +249,13 @@ public class OrganizationDetailScree extends AppCompatActivity {
                                 mName.setText(""+organization.getOrganizationName());
                                 mAbout.setText(""+organization.getAboutUs());
                                 mAddress.setText(""+organization.getAddress()+"\n"+organization.getCity()+"\n"+organization.getState());
-                                mBuild.setText(""+organization.getBuiltYear());
+
+                                if(organization.getBuiltYear()!=null&&!organization.getBuiltYear().isEmpty()){
+                                    mBuild.setText(""+organization.getBuiltYear());
+                                }else{
+                                    mBuild.setVisibility(View.GONE);
+                                }
+
                                 mWebsite.setText(""+organization.getWebsite());
 
 

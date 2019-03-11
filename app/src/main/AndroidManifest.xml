@@ -11,6 +11,11 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
 
     <uses-feature android:name="android.hardware.location.gps" />
     <uses-feature
@@ -53,6 +58,9 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBN_9MfDVrhG1_D9Q1XpakTiDkoqSU5gGA" />
         <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
             android:name="com.razorpay.ApiKey"
             android:value="rzp_live_tTRIgCc7PPKNq0" />
 
@@ -67,7 +75,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".UI.Company.CreateFounderScreen"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:configChanges="keyboardHidden|orientation|keyboard"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".UI.Login.LoginScreen"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -86,7 +95,13 @@
         </service>
         <service
             android:name=".Service.LocationSharingServices"
-            android:enabled="true" />
+            android:enabled="true"
+            android:exported="true"
+            android:process=":ServiceProcess" />
+        <service
+            android:name=".Service.LocationForegroundService"
+            android:enabled="true"
+            android:exported="true" />
         <service
             android:name=".Utils.TrackGPS"
             android:enabled="true" />
@@ -111,6 +126,18 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+        <service
+            android:name=".Service.LocationListenerService"
+            android:enabled="true" />
+        <service
+            android:name=".Service.LocaitionPassWithConditionServices"
+            android:enabled="true" />
+
+        <receiver
+            android:name=".Service.AlarmReceive"
+            android:enabled="true"
+            android:exported="true"
+            android:label="RestartServiceWhenStopped" />
 
         <activity
             android:name=".UI.Landing.SlideScreen"
@@ -181,8 +208,7 @@
         <activity
             android:name=".UI.GetStartedScreen"
             android:configChanges="keyboardHidden|orientation|keyboard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".UI.Admin.TaskManagementHost"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
@@ -203,7 +229,10 @@
         <activity
             android:name=".UI.SignUpOptioins"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".UI.EmployeeSignUp" />
+        <activity
+            android:name=".UI.EmployeeSignUp"
+            android:configChanges="keyboardHidden|orientation|keyboard"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".UI.NewEmployeeDesign.EmployeeNewMainScreen"
             android:configChanges="orientation|screenSize"
@@ -241,7 +270,8 @@
         <activity android:name=".UI.NewAdminDesigns.PendingTasks" />
         <activity
             android:name=".UI.Reseller.ResellerSignUpScree"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:configChanges="keyboardHidden|orientation|keyboard"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".UI.Landing.InternalServerErrorScreen"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -304,14 +334,32 @@
         <activity
             android:name=".UI.NewAdminDesigns.TaskAdminViewActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".UI.NewAdminDesigns.UpdateTaskScreen"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".UI.NewAdminDesigns.UpdateTaskScreen" />
         <activity
             android:name=".UI.NewAdminDesigns.ExpensesListAdmin"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".UI.NewAdminDesigns.EmployeeDashBoardAdminView" />
-        <activity android:name=".UI.NewAdminDesigns.CheckInMapScreen"></activity>
+        <activity android:name=".UI.NewAdminDesigns.CheckInMapScreen" />
+        <activity android:name=".UI.GooglePlaceMapActivity" />
+        <activity android:name=".UI.Common.NotificationShowActivity" />
+        <activity android:name=".UI.Common.LocationSharingEmplActivity" />
+        <activity
+            android:name=".UI.Calendar.CalendarSampleActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.Calendar.AddOrEditCalendarActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".UI.NewAdminDesigns.LeaveDashBoardAdminScreen" />
+        <activity android:name=".UI.Common.LeaveListScreen" />
+        <activity android:name=".UI.NewAdminDesigns.ExpenseDashBoardAdmin" />
+        <activity
+            android:name=".UI.Common.ImageFullScreenActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".UI.Common.ExpensesListAdmin" />
+        <activity android:name=".UI.NewAdminDesigns.UpdateExpenseScreen" />
+        <activity android:name=".UI.Common.AllEmployeeLiveLocation" />
+        <activity android:name=".UI.NewAdminDesigns.MeetingMapScreen"></activity>
     </application>
 
 </manifest>

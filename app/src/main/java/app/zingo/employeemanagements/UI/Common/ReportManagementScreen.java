@@ -511,7 +511,7 @@ public class ReportManagementScreen extends AppCompatActivity {
 
                                 for(int i=0;i<list.size();i++){
 
-                                    if(list.get(i).getEmployeeId()!=PreferenceHandler.getInstance(ReportManagementScreen.this).getUserId()){
+                                    if(list.get(i).getUserRoleId()!=2){
 
                                         employees.add(list.get(i));
                                        /* getTasks(list.get(i).getEmployeeId());
@@ -1192,6 +1192,9 @@ public class ReportManagementScreen extends AppCompatActivity {
                                     double lati = 0,lngi=0;
                                     double latis = 0,lngis=0;
 
+                                    Location locationA = new Location("point A");
+                                    Location locationB = new Location("point B");
+
                                     for(int i=1;i<list.size();i++){
 
                                         if(list.get(i).getLongitude()!=null||list.get(i).getLatitude()!=null){
@@ -1208,7 +1211,7 @@ public class ReportManagementScreen extends AppCompatActivity {
                                                 if(list.size()==1){
 
                                                 }else{
-                                                    Location locationA = new Location("point A");
+
 
                                                     lati = Double.parseDouble(list.get(i-1).getLatitude());
                                                     lngi = Double.parseDouble(list.get(i-1).getLongitude());
@@ -1227,7 +1230,7 @@ public class ReportManagementScreen extends AppCompatActivity {
 
                                                         locationA.setLatitude(latis);
                                                         locationA.setLongitude(lngis);
-                                                        Location locationB = new Location("point B");
+
 
                                                         locationB.setLatitude(Double.parseDouble(list.get(i).getLatitude()));
                                                         locationB.setLongitude(Double.parseDouble(list.get(i).getLongitude()));
@@ -1236,6 +1239,8 @@ public class ReportManagementScreen extends AppCompatActivity {
                                                         double kms = distance/1000.0;
                                                         double miles = distance*0.000621371192;
                                                         km.setText(new DecimalFormat("#.##").format(kms)+" Km/"+new DecimalFormat("#.##").format(miles)+" miles");
+
+
                                                         reportDataModel.setKmt(""+new DecimalFormat("#.##").format(kms)+" Km/"+new DecimalFormat("#.##").format(miles)+" miles");
 
                                                     }
@@ -1253,12 +1258,6 @@ public class ReportManagementScreen extends AppCompatActivity {
 
 
                                     }
-
-
-
-
-
-
 
 
 
@@ -1457,10 +1456,13 @@ public class ReportManagementScreen extends AppCompatActivity {
             case android.R.id.home:
 
                 ReportManagementScreen.this.finish();
+                break;
 
             case R.id.action_calendar:
 
                 openDatePicker();
+                break;
+
         }
         return super.onOptionsItemSelected(item);
     }

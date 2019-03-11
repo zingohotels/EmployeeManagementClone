@@ -19,7 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import junit.framework.Assert;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -132,7 +131,6 @@ public class MeetingDetailList extends AppCompatActivity {
     public void setupToolbar() {
         this.mToolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(this.mToolbar);
-        Assert.assertNotNull(getSupportActionBar());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Meetings");
     }

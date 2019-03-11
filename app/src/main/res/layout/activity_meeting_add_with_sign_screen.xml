@@ -188,6 +188,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:id="@+id/sign_lay"
                     android:layout_marginBottom="5dp"
                     >
 
@@ -220,6 +221,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:id="@+id/selfie_lay"
                     android:layout_marginBottom="5dp"
                     >
 

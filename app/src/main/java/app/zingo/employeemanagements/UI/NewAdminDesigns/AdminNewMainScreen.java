@@ -65,6 +65,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Pattern;
 
+import app.zingo.employeemanagements.BuildConfig;
 import app.zingo.employeemanagements.Custom.MyRegulerText;
 import app.zingo.employeemanagements.Custom.RoundImageView;
 import app.zingo.employeemanagements.FireBase.SharedPrefManager;
@@ -79,6 +80,7 @@ import app.zingo.employeemanagements.UI.Common.PlanExpireScreen;
 import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
 import app.zingo.employeemanagements.UI.Landing.SplashScreen;
 import app.zingo.employeemanagements.UI.LandingScreen;
+import app.zingo.employeemanagements.UI.NewEmployeeDesign.EmployeeLoginFragment;
 import app.zingo.employeemanagements.UI.SignUpOptioins;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
@@ -122,6 +124,8 @@ public class AdminNewMainScreen extends AppCompatActivity {
     String currentVersion, latestVersion;
     Dialog dialog;
 
+    int pos;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,14 +135,23 @@ public class AdminNewMainScreen extends AppCompatActivity {
             setContentView(R.layout.activity_admin_new_main_screen);
             mWhatsapp = (LinearLayout)findViewById(R.id.whatsapp_open);
             setupData();
-            setupViewPager((ViewPager) findViewById(R.id.viewPager));
+
+
+
+
             getCurrentVersion();
+
+            Bundle extras = getIntent().getExtras();
+            if(extras != null) {
+                pos = extras.getInt("viewpager_position");
+            }
+            setupViewPager((ViewPager) findViewById(R.id.viewPager));
 
             mWhatsapp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
-                    String message = "Hi I'm "+PreferenceHandler.getInstance(AdminNewMainScreen.this).getUserFullName()+",\n My Organization Name is "+PreferenceHandler.getInstance(AdminNewMainScreen.this).getCompanyName()+".I am writing about the feedback of Zingy app.";
+                    String message = "Hi I'm "+PreferenceHandler.getInstance(AdminNewMainScreen.this).getUserFullName()+",\n My Organization Name is "+PreferenceHandler.getInstance(AdminNewMainScreen.this).getCompanyName()+".I am writing about the feedback of Zingy app Ver: "+BuildConfig.VERSION_NAME+".";
 
                     PackageManager packageManager = getPackageManager();
                     Intent i = new Intent(Intent.ACTION_VIEW);
@@ -216,7 +229,13 @@ public class AdminNewMainScreen extends AppCompatActivity {
     }*/
 
     private void setupTabIcons(TabLayout tabLayout) {
-        tabLayout.getTabAt(3).setIcon(R.drawable.white_navigation);
+
+        if(PreferenceHandler.getInstance(AdminNewMainScreen.this).getUserRoleUniqueID()==9){
+            tabLayout.getTabAt(4).setIcon(R.drawable.white_navigation);
+        }else{
+            tabLayout.getTabAt(3).setIcon(R.drawable.white_navigation);
+        }
+
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -225,12 +244,21 @@ public class AdminNewMainScreen extends AppCompatActivity {
 
         viewPagerAdapter.addFragment(AdminDashBoardFragment.getInstance(), "Dash Board");
         viewPagerAdapter.addFragment(EmployerNotificationFragment.getInstance(), "Notifications");
+        if(PreferenceHandler.getInstance(AdminNewMainScreen.this).getUserRoleUniqueID()==9){
+            viewPagerAdapter.addFragment(EmployeeLoginFragment.getInstance(), "Attendance");
+        }else{
+            //tabLayout.getTabAt(3).setIcon(R.drawable.white_navigation);
+        }
         viewPagerAdapter.addFragment(TaskAdminFragment.getInstance(), "Tasks");
         viewPagerAdapter.addFragment(AdminHomeFragment.getInstance(), "");
         viewPager.setAdapter(viewPagerAdapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons(tabLayout);
+
+        if(pos!=0){
+            viewPager.setCurrentItem(pos);
+        }
     }
 
     public void onBackPressed() {

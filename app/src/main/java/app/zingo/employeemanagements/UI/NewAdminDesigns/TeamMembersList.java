@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ import retrofit2.Response;
 public class TeamMembersList extends AppCompatActivity {
 
     RecyclerView mTeamList;
+    LinearLayout mNoEmpl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,7 @@ public class TeamMembersList extends AppCompatActivity {
             setTitle("Team Details");
 
             mTeamList = (RecyclerView)findViewById(R.id.team_list);
+            mNoEmpl = (LinearLayout) findViewById(R.id.noEmployeeUpdate);
 
             getProfiles();
 
@@ -84,20 +87,36 @@ public class TeamMembersList extends AppCompatActivity {
 
                                 for (Employee emp:list) {
 
-                                    if(emp.getManagerId()==PreferenceHandler.getInstance(TeamMembersList.this).getUserId()){
-                                        teamlist.add(emp);
+                                    if(PreferenceHandler.getInstance(TeamMembersList.this).getUserRoleUniqueID()==2){
+
+                                        if(emp.getEmployeeId()!=PreferenceHandler.getInstance(TeamMembersList.this).getUserId()){
+                                            teamlist.add(emp);
+                                        }
+
+                                    }else{
+
+                                        if(emp.getManagerId()==PreferenceHandler.getInstance(TeamMembersList.this).getUserId()){
+                                            teamlist.add(emp);
+                                        }
+
                                     }
+
+
 
                                 }
 
                                 if(teamlist!=null&&teamlist.size()!=0){
 
                                     Collections.sort(teamlist,Employee.compareEmployee);
+                                    mNoEmpl.setVisibility(View.GONE);
+                                    mTeamList.setVisibility(View.VISIBLE);
                                     TeamMembersAdapter adapter = new TeamMembersAdapter(TeamMembersList.this, teamlist);
                                     mTeamList.setAdapter(adapter);
 
                                 }else{
                                     Toast.makeText(TeamMembersList.this, "You don't have any Team", Toast.LENGTH_SHORT).show();
+                                    mNoEmpl.setVisibility(View.VISIBLE);
+                                    mTeamList.setVisibility(View.GONE);
                                 }
 
 
@@ -106,6 +125,8 @@ public class TeamMembersList extends AppCompatActivity {
 
                             }else{
                                 Toast.makeText(TeamMembersList.this,"No Employees added",Toast.LENGTH_LONG).show();
+                                mNoEmpl.setVisibility(View.VISIBLE);
+                                mTeamList.setVisibility(View.GONE);
 
                             }
 
@@ -113,6 +134,8 @@ public class TeamMembersList extends AppCompatActivity {
 
 
                             Toast.makeText(TeamMembersList.this, "Failed due to : "+response.message(), Toast.LENGTH_SHORT).show();
+                            mNoEmpl.setVisibility(View.VISIBLE);
+                            mTeamList.setVisibility(View.GONE);
                         }
                     }
 
@@ -122,6 +145,8 @@ public class TeamMembersList extends AppCompatActivity {
                         if (progressDialog!=null)
                             progressDialog.dismiss();
                         Log.e("TAG", t.toString());
+                        mNoEmpl.setVisibility(View.VISIBLE);
+                        mTeamList.setVisibility(View.GONE);
                     }
                 });
             }

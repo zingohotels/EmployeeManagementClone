@@ -1,5 +1,6 @@
 package app.zingo.employeemanagements.Adapter;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -7,8 +8,12 @@ import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +38,9 @@ import app.zingo.employeemanagements.Model.ExpenseAdminData;
 import app.zingo.employeemanagements.Model.TaskAdminData;
 import app.zingo.employeemanagements.Model.Tasks;
 import app.zingo.employeemanagements.R;
+import app.zingo.employeemanagements.UI.Common.ImageFullScreenActivity;
+import app.zingo.employeemanagements.UI.NewAdminDesigns.UpdateExpenseScreen;
+import app.zingo.employeemanagements.UI.NewAdminDesigns.UpdateTaskScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
@@ -77,11 +85,34 @@ public class ExpenseListDataAdapter extends RecyclerView.Adapter<ExpenseListData
 
 
             holder.mTaskName.setText(dto.getExpenses().getExpenseTitle());
-            holder.mExpAmt.setText("₹ "+dto.getExpenses().getAmount());
+            holder.mExpAmt.setText("Amount: ₹ "+dto.getExpenses().getAmount());
             // holder.mTaskDesc.setText("Description: \n"+dto.getTaskDescription());
 
             String froms = dto.getExpenses().getDate();
 
+            if(dto.getExpenses().getImageUrl()!=null&&!dto.getExpenses().getImageUrl().isEmpty()){
+                holder.mAttach.setVisibility(View.VISIBLE);
+            }else{
+                holder.mAttach.setVisibility(View.GONE);
+            }
+
+            holder.mAttach.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if(dto.getExpenses().getImageUrl()!=null&&!dto.getExpenses().getImageUrl().isEmpty()){
+
+                        Intent img = new Intent(context,ImageFullScreenActivity.class);
+                        img.putExtra("Image",dto.getExpenses().getImageUrl());
+                        ((Activity)context).startActivity(img);
+
+
+                    }else{
+
+                    }
+
+                }
+            });
 
             Date afromDate = null;
             Date atoDate = null;
@@ -138,7 +169,16 @@ public class ExpenseListDataAdapter extends RecyclerView.Adapter<ExpenseListData
 
 
             holder.mToAllocate.setText(""+dto.getEmployee().getEmployeeName());
-            getManagers(dto.getExpenses().getManagerId(),holder.mCreatedBy,"Manager");
+           // getManagers(dto.getExpenses().getManagerId(),holder.mCreatedBy,"Manager");
+
+            String claimed = "Claimed: ₹ "+dto.getExpenses().getClaimedAmount();
+
+             SpannableString ss1=  new SpannableString(claimed);
+             ss1.setSpan(new RelativeSizeSpan(1f), 11,claimed.length()-1, 0); // set size
+             ss1.setSpan(new ForegroundColorSpan(Color.RED), 11, claimed.length()-1, 0);// set color
+
+
+            holder.mCreatedBy.setText(ss1);
             // holder.mCreatedBy.setText(dto.getStatus());
 
             if(status.equalsIgnoreCase("Pending")){
@@ -155,7 +195,7 @@ public class ExpenseListDataAdapter extends RecyclerView.Adapter<ExpenseListData
                 holder.mStatusText.setBackground(context.getResources().getDrawable(R.drawable.oval_red));
             }
 
-            if(PreferenceHandler.getInstance(context).getUserRoleUniqueID()==2){
+            if(PreferenceHandler.getInstance(context).getUserRoleUniqueID()==2||PreferenceHandler.getInstance(context).getUserRoleUniqueID()==9){
                 holder.mContact.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -239,6 +279,20 @@ public class ExpenseListDataAdapter extends RecyclerView.Adapter<ExpenseListData
             holder.mtaskUpdate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    if(PreferenceHandler.getInstance(context).getUserRoleUniqueID()==2||PreferenceHandler.getInstance(context).getUserRoleUniqueID()==9){
+
+                        Intent updateSc = new Intent(context,UpdateExpenseScreen.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("Expenses",dto.getExpenses());
+                        bundle.putInt("Position",position);
+                        updateSc.putExtras(bundle);
+                        ((Activity)context).startActivity(updateSc);
+
+                    }else{
+
+
+                    }
 
                 }
             });
@@ -345,7 +399,7 @@ public class ExpenseListDataAdapter extends RecyclerView.Adapter<ExpenseListData
         /*  public TextView mTaskName,mTaskDesc,mDuration,mDeadLine,mStatus,mCreatedBy,mLocation,mToAllocate;*/
 
         //   public LinearLayout mNotificationMain,mContact,mtaskUpdate;
-        public LinearLayout mContact,mtaskUpdate;
+        public LinearLayout mContact,mtaskUpdate,mAttach;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -365,74 +419,13 @@ public class ExpenseListDataAdapter extends RecyclerView.Adapter<ExpenseListData
             // mNotificationMain = (LinearLayout) itemView.findViewById(R.id.attendanceItem);
             mContact = (LinearLayout) itemView.findViewById(R.id.contact_employee);
             mtaskUpdate = (LinearLayout) itemView.findViewById(R.id.task_update);
+            mAttach = (LinearLayout) itemView.findViewById(R.id.attach_image);
 
 
         }
     }
 
-    public void updateTasks(final Tasks tasks, final AlertDialog dialogs) throws Exception{
 
-
-
-        final ProgressDialog dialog = new ProgressDialog(context);
-        dialog.setMessage("Saving Details..");
-        dialog.setCancelable(false);
-        dialog.show();
-
-        TasksAPI apiService = Util.getClient().create(TasksAPI.class);
-
-        Call<Tasks> call = apiService.updateTasks(tasks.getTaskId(),tasks);
-
-        call.enqueue(new Callback<Tasks>() {
-            @Override
-            public void onResponse(Call<Tasks> call, Response<Tasks> response) {
-//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
-                try
-                {
-                    if(dialog != null && dialog.isShowing())
-                    {
-                        dialog.dismiss();
-                    }
-
-                    int statusCode = response.code();
-                    if (statusCode == 200 || statusCode == 201|| statusCode == 204) {
-
-
-                        Toast.makeText(context, "Update Task succesfully", Toast.LENGTH_SHORT).show();
-
-                        dialogs.dismiss();
-
-                    }else {
-                        Toast.makeText(context, "Failed Due to "+response.message(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-                catch (Exception ex)
-                {
-
-                    if(dialog != null && dialog.isShowing())
-                    {
-                        dialog.dismiss();
-                    }
-                    ex.printStackTrace();
-                }
-//                callGetStartEnd();
-            }
-
-            @Override
-            public void onFailure(Call<Tasks> call, Throwable t) {
-
-                if(dialog != null && dialog.isShowing())
-                {
-                    dialog.dismiss();
-                }
-                Toast.makeText(context, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.e("TAG", t.toString());
-            }
-        });
-
-
-
-    }
 
     public void getAddress(final double longitude,final double latitude,final TextView textView )
     {
@@ -475,4 +468,6 @@ public class ExpenseListDataAdapter extends RecyclerView.Adapter<ExpenseListData
             ex.printStackTrace();
         }
     }
+
+
 }

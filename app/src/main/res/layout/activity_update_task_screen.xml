@@ -289,9 +289,6 @@
             </RelativeLayout>
 
 
-
-
-
             <android.support.v7.widget.AppCompatButton
                 android:textSize="@dimen/regularFont"
                 android:textColor="@color/white"

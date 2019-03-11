@@ -1,18 +1,26 @@
 package app.zingo.employeemanagements.UI.NewEmployeeDesign;
 
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -22,7 +30,9 @@ import java.util.Date;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.EmployeeImages;
 import app.zingo.employeemanagements.Model.LoginDetails;
+import app.zingo.employeemanagements.Model.LoginDetailsNotificationManagers;
 import app.zingo.employeemanagements.R;
+import app.zingo.employeemanagements.Service.LocationForegroundService;
 import app.zingo.employeemanagements.UI.Admin.EmployeesDashBoard;
 import app.zingo.employeemanagements.UI.Admin.TaskManagementHost;
 import app.zingo.employeemanagements.UI.Common.ChangePasswordScreen;
@@ -30,16 +40,22 @@ import app.zingo.employeemanagements.UI.Common.InvokeService;
 import app.zingo.employeemanagements.UI.Company.OrganizationDetailScree;
 import app.zingo.employeemanagements.UI.Employee.EmployeeListScreen;
 import app.zingo.employeemanagements.UI.Employee.LeaveManagementHost;
+import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
 import app.zingo.employeemanagements.UI.LandingScreen;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminNewMainScreen;
+import app.zingo.employeemanagements.UI.NewAdminDesigns.DailyTargetsForEmployeeActivity;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.DepartmentLilstScreen;
+import app.zingo.employeemanagements.UI.NewAdminDesigns.EmployeeDashBoardAdminView;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.EmployeeUpdateListScreen;
+import app.zingo.employeemanagements.UI.NewAdminDesigns.ExpenseDashBoardAdmin;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.LeaveEmployeeListScreen;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.TeamMembersList;
+import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
+import app.zingo.employeemanagements.WebApi.LoginDetailsAPI;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -79,6 +95,7 @@ public class EmployeeHomeFragment extends Fragment {
 
         try{
             this.layout = layoutInflater.inflate(R.layout.fragment_employee_home, viewGroup, false);
+
             setupListeners();
             viewGroup = this.layout.findViewById(R.id.renewWarning);
 
@@ -126,7 +143,7 @@ public class EmployeeHomeFragment extends Fragment {
         super.onSaveInstanceState(bundle);
     }
 
-    public void setupListeners() {
+    public void setupListeners() throws Exception {
 
         getEmployees();
         attendance = (LinearLayout) this.layout.findViewById(R.id.attendance);
@@ -152,31 +169,51 @@ public class EmployeeHomeFragment extends Fragment {
         updatedText.setVisibility(0);
         findViewById.setOnClickListener(this);*/
 
+        try{
+
+
+
         attendance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                openMenuViews(attendance);
+                try {
+                    openMenuViews(attendance);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
         leaveApplications.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openMenuViews(leaveApplications);
+                try {
+                    openMenuViews(leaveApplications);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
         expenses.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openMenuViews(expenses);
+                try {
+                    openMenuViews(expenses);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
         team.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openMenuViews(team);
+                try {
+                    openMenuViews(team);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -184,7 +221,11 @@ public class EmployeeHomeFragment extends Fragment {
         salary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openMenuViews(salary);
+                try {
+                    openMenuViews(salary);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -192,13 +233,21 @@ public class EmployeeHomeFragment extends Fragment {
         tasks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openMenuViews(tasks);
+                try {
+                    openMenuViews(tasks);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
         deptOrg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openMenuViews(deptOrg);
+                try {
+                    openMenuViews(deptOrg);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -206,34 +255,54 @@ public class EmployeeHomeFragment extends Fragment {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openMenuViews(logout);
+                try {
+                    openMenuViews(logout);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
         chngPwd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openMenuViews(chngPwd);
+                try {
+                    openMenuViews(chngPwd);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
         meeting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openMenuViews(meeting);
+                try {
+                    openMenuViews(meeting);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
         client.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openMenuViews(client);
+                try {
+                    openMenuViews(client);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
 
     }
 
-    public void openMenuViews(View view) {
+    public void openMenuViews(View view) throws Exception {
 
         Intent intent;
         if (view.getId() == R.id.employees) {
@@ -249,7 +318,7 @@ public class EmployeeHomeFragment extends Fragment {
             salary.putExtra("Type","Salary");
             startActivity(salary);
         } else if (view.getId() == R.id.attendance) {
-            Intent attnd = new Intent(getActivity(), EmployeesDashBoard.class);
+            Intent attnd = new Intent(getActivity(), EmployeeDashBoardAdminView.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable("Profile",employeed);
             bundle.putInt("ProfileId",employeed.getEmployeeId());
@@ -276,6 +345,8 @@ public class EmployeeHomeFragment extends Fragment {
             bundle.putSerializable("Employee",employeed);
             leave.putExtras(bundle);
             getActivity().startActivity(leave);
+
+
         }else if (view.getId() == R.id.department) {
             Intent organization = new Intent(getActivity(), OrganizationDetailScree.class);
             getContext().startActivity(organization);
@@ -291,12 +362,20 @@ public class EmployeeHomeFragment extends Fragment {
             Intent chnage = new Intent(getActivity(), ChangePasswordScreen.class);
             startActivity(chnage);
         }else if (view.getId() == R.id.task_layout) {
-            Intent task = new Intent(getActivity(), TaskManagementHost.class);
+
+            Intent task = new Intent(getActivity(), DailyTargetsForEmployeeActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("Profile",employeed);
+            bundle.putInt("ProfileId",employeed.getEmployeeId());
+            task.putExtras(bundle);
+            startActivity(task);
+
+           /* Intent task = new Intent(getActivity(), TaskManagementHost.class);
             Bundle bundle = new Bundle();
             bundle.putInt("EmployeeId",employeed.getEmployeeId());
             bundle.putSerializable("Employee",employeed);
             task.putExtras(bundle);
-            getActivity().startActivity(task);
+            getActivity().startActivity(task);*/
         }else if (view.getId() == R.id.salary) {
             Intent salary = new Intent(getActivity(), EmployeeListScreen.class);
             salary.putExtra("Type","Salary");
@@ -308,7 +387,67 @@ public class EmployeeHomeFragment extends Fragment {
             Toast.makeText(getActivity(), "Coming Soon", Toast.LENGTH_SHORT).show();
         }else if (view.getId() == R.id.logout) {
 
-            getProfile(PreferenceHandler.getInstance(getActivity()).getUserId());
+
+
+            String loginStatus = PreferenceHandler.getInstance(getActivity()).getLoginStatus();
+            String meetingStatus = PreferenceHandler.getInstance(getActivity()).getMeetingLoginStatus();
+
+            if (loginStatus != null && !loginStatus.isEmpty()) {
+
+                if (loginStatus.equalsIgnoreCase("Login")) {
+
+                    if (meetingStatus != null && meetingStatus.equalsIgnoreCase("Login")) {
+
+                        Toast.makeText(getActivity(), "You are in some meeting .So Please checkout", Toast.LENGTH_SHORT).show();
+
+                    } else {
+
+
+
+                        final android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(getActivity());
+                        LayoutInflater inflater = getLayoutInflater();
+                        View views = inflater.inflate(R.layout.absent_condition,null);
+                        Button agree = (Button) views.findViewById(R.id.dialog_ok);
+
+
+                        dialogBuilder.setView(views);
+                        final android.app.AlertDialog dialog = dialogBuilder.create();
+                        dialog.setCancelable(true);
+                        dialog.show();
+
+                        agree.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                                Intent intent = new Intent(getActivity(), EmployeeNewMainScreen.class);
+                                intent.putExtra("viewpager_position", 2);
+                                startActivity(intent);
+                            }
+                        });
+                    }
+
+
+                }else{
+                    if(employeed!=null){
+
+                        Employee profile = employeed;
+
+                        profile.setAppOpen(false);
+                        updateProfile(profile);
+
+                    }else{
+
+                        getProfile(PreferenceHandler.getInstance(getActivity()).getUserId());
+
+                    }
+                }
+
+            }
+
+
+
+
+
 
         }
     }
@@ -371,6 +510,11 @@ public class EmployeeHomeFragment extends Fragment {
 
     public void getProfile(final int id ){
 
+        final ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setCancelable(false);
+        dialog.setTitle("Saving Details...");
+        dialog.show();
+
         new ThreadExecuter().execute(new Runnable() {
             @Override
             public void run() {
@@ -383,6 +527,11 @@ public class EmployeeHomeFragment extends Fragment {
 
                     @Override
                     public void onResponse(Call<ArrayList<Employee>> call, Response<ArrayList<Employee>> response) {
+
+                        if(dialog != null && dialog.isShowing())
+                        {
+                            dialog.dismiss();
+                        }
 
                         if (response.code() == 200)
                         {
@@ -399,6 +548,11 @@ public class EmployeeHomeFragment extends Fragment {
                     @Override
                     public void onFailure(Call<ArrayList<Employee>> call, Throwable t) {
 
+                        if(dialog != null && dialog.isShowing())
+                        {
+                            dialog.dismiss();
+                        }
+
                     }
                 });
 
@@ -409,7 +563,10 @@ public class EmployeeHomeFragment extends Fragment {
 
     public void updateProfile(final Employee employee){
 
-
+        final ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setCancelable(false);
+        dialog.setTitle("Saving Details...");
+        dialog.show();
 
         new ThreadExecuter().execute(new Runnable() {
             @Override
@@ -424,11 +581,25 @@ public class EmployeeHomeFragment extends Fragment {
                     @Override
                     public void onResponse(Call<Employee> call, Response<Employee> response) {
 
+                        if(dialog != null && dialog.isShowing())
+                        {
+                            dialog.dismiss();
+                        }
+
+                        Intent intent = new Intent(getActivity(), LocationForegroundService.class);
+                        intent.setAction(LocationForegroundService.ACTION_STOP_FOREGROUND_SERVICE);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            getActivity().startForegroundService(intent);
+                        } else {
+                            getActivity().startService(intent);
+                        }
 
                         if (response.code() == 200||response.code()==201||response.code()==204)
                         {
 
+
                             PreferenceHandler.getInstance(getActivity()).clear();
+
 
                             Intent log = new Intent(getActivity(), LandingScreen.class);
                             log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -453,6 +624,18 @@ public class EmployeeHomeFragment extends Fragment {
                     @Override
                     public void onFailure(Call<Employee> call, Throwable t) {
 
+                        if(dialog != null && dialog.isShowing())
+                        {
+                            dialog.dismiss();
+                        }
+
+                        Intent intent = new Intent(getActivity(), LocationForegroundService.class);
+                        intent.setAction(LocationForegroundService.ACTION_STOP_FOREGROUND_SERVICE);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            getActivity().startForegroundService(intent);
+                        } else {
+                            getActivity().startService(intent);
+                        }
 
                         PreferenceHandler.getInstance(getActivity()).clear();
 
@@ -471,4 +654,6 @@ public class EmployeeHomeFragment extends Fragment {
 
         });
     }
+
+
 }

@@ -228,73 +228,6 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
                     updateSc.putExtras(bundle);
                     ((Activity)context).startActivity(updateSc);
 
-                    /*try{
-
-                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
-                        LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                        View views = inflater.inflate(R.layout.alert_task_update, null);
-
-                        builder.setView(views);
-                        String[] taskStatus = context.getResources().getStringArray(R.array.task_status);
-
-
-
-
-
-                        final Spinner mTask = (Spinner) views.findViewById(R.id.task_status_update);
-                        final Button mSave = (Button) views.findViewById(R.id.save);
-                        final EditText desc = (EditText) views.findViewById(R.id.task_comments);
-
-                        final android.support.v7.app.AlertDialog dialogs = builder.create();
-                        dialogs.show();
-                        dialogs.setCanceledOnTouchOutside(true);
-
-                        if(dto.getStatus().equalsIgnoreCase("Pending")){
-
-                            mTask.setSelection(0);
-                        }else if(dto.getStatus().equalsIgnoreCase("On-Going")){
-                            mTask.setSelection(1);
-
-                        }else if(dto.getStatus().equalsIgnoreCase("Completed")){
-                            mTask.setSelection(2);
-
-                        }else if(dto.getStatus().equalsIgnoreCase("Closed")){
-                            mTask.setSelection(3);
-
-                        }
-
-
-
-                        mSave.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                                Tasks tasks = dto;
-                                tasks.setStatus(mTask.getSelectedItem().toString());
-                                tasks.setRemarks(desc.getText().toString());
-                                try {
-                                    updateTasks(dto,dialogs);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-
-                            }
-                        });
-
-
-
-
-
-
-
-
-
-
-
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }*/
-
 
                 }
             });
@@ -302,16 +235,9 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
         }
 
 
-
-
-
-
     }
 
     private void getEmployees(final int id, final Tasks dto){
-
-
-
 
         new ThreadExecuter().execute(new Runnable() {
             @Override

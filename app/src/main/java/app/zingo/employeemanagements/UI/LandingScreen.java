@@ -244,12 +244,9 @@ public class LandingScreen extends AppCompatActivity {
                         if (statusCode == 200 || statusCode == 201) {
 
                             ArrayList<Employee> dto1 = response.body();//-------------------should not be list------------
+
                             if (dto1!=null && dto1.size()!=0) {
                                 final Employee dto = dto1.get(0);
-
-
-
-
 
 
                                 if(dto.getStatus().contains("Active")){
@@ -271,24 +268,9 @@ public class LandingScreen extends AppCompatActivity {
                                             @Override
                                             public void onClick(View v) {
 
+                                                dialog.dismiss();
 
 
-                                                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(LandingScreen.this);
-                                                SharedPreferences.Editor spe = sp.edit();
-                                                spe.putInt(Constants.USER_ID, dto.getEmployeeId());
-                                                PreferenceHandler.getInstance(LandingScreen.this).setUserId(dto.getEmployeeId());
-                                                PreferenceHandler.getInstance(LandingScreen.this).setLocationOn(dto.isLocationOn());
-                                                PreferenceHandler.getInstance(LandingScreen.this).setDataOn(dto.isDataOn());
-                                                PreferenceHandler.getInstance(LandingScreen.this).setManagerId(dto.getManagerId());
-                                                PreferenceHandler.getInstance(LandingScreen.this).setUserRoleUniqueID(dto.getUserRoleId());
-                                                PreferenceHandler.getInstance(LandingScreen.this).setUserName(dto.getEmployeeName());
-                                                PreferenceHandler.getInstance(LandingScreen.this).setUserEmail(dto.getPrimaryEmailAddress());
-                                                PreferenceHandler.getInstance(LandingScreen.this).setUserFullName(dto.getEmployeeName());
-                                                spe.putString("FullName", dto.getEmployeeName());
-                                                spe.putString("Password", dto.getPassword());
-                                                spe.putString("Email", dto.getPrimaryEmailAddress());
-                                                spe.putString("PhoneNumber", dto.getPhoneNumber());
-                                                spe.apply();
 
                                                 try {
                                                     getDepartment(dto.getDepartmentId(),dto);
@@ -305,22 +287,7 @@ public class LandingScreen extends AppCompatActivity {
 
                                     }else{
 
-                                        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(LandingScreen.this);
-                                        SharedPreferences.Editor spe = sp.edit();
-                                        spe.putInt(Constants.USER_ID, dto.getEmployeeId());
-                                        PreferenceHandler.getInstance(LandingScreen.this).setUserId(dto.getEmployeeId());
-                                        PreferenceHandler.getInstance(LandingScreen.this).setLocationOn(dto.isLocationOn());
-                                        PreferenceHandler.getInstance(LandingScreen.this).setDataOn(dto.isDataOn());
-                                        PreferenceHandler.getInstance(LandingScreen.this).setManagerId(dto.getManagerId());
-                                        PreferenceHandler.getInstance(LandingScreen.this).setUserRoleUniqueID(dto.getUserRoleId());
-                                        PreferenceHandler.getInstance(LandingScreen.this).setUserName(dto.getEmployeeName());
-                                        PreferenceHandler.getInstance(LandingScreen.this).setUserEmail(dto.getPrimaryEmailAddress());
-                                        PreferenceHandler.getInstance(LandingScreen.this).setUserFullName(dto.getEmployeeName());
-                                        spe.putString("FullName", dto.getEmployeeName());
-                                        spe.putString("Password", dto.getPassword());
-                                        spe.putString("Email", dto.getPrimaryEmailAddress());
-                                        spe.putString("PhoneNumber", dto.getPhoneNumber());
-                                        spe.apply();
+
 
                                         try {
                                             getDepartment(dto.getDepartmentId(),dto);
@@ -335,8 +302,8 @@ public class LandingScreen extends AppCompatActivity {
 
 
 
-                                }else if(dto.getStatus().equalsIgnoreCase("Disabled")){
-                                    Toast.makeText(LandingScreen.this, "Your Account is Disabled", Toast.LENGTH_SHORT).show();
+                                }else if(dto.getStatus().equalsIgnoreCase("Disabled")||dto.getStatus().equalsIgnoreCase("Deactive")){
+                                    Toast.makeText(LandingScreen.this, "Your Account is Disabled.Please contact your Admin", Toast.LENGTH_SHORT).show();
                                 }else{
 
                                 }
@@ -346,7 +313,7 @@ public class LandingScreen extends AppCompatActivity {
                             }else{
                                 if (progressDialog != null)
                                     progressDialog.dismiss();
-                                Toast.makeText(LandingScreen.this, "Login credentials are wrong..", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LandingScreen.this, "Invalid credentials/Account is disabled.Please try again sometime or Contact Admin", Toast.LENGTH_SHORT).show();
 
                             }
                         }else {
@@ -388,7 +355,7 @@ public class LandingScreen extends AppCompatActivity {
                             System.out.println("Inside api");
 
                             try {
-                                PreferenceHandler.getInstance(LandingScreen.this).setCompanyId(response.body().getOrganizationId());
+                                //PreferenceHandler.getInstance(LandingScreen.this).setCompanyId(response.body().getOrganizationId());
                                 //PreferenceHandler.getInstance(LandingScreen.this).setDepartmentName(response.body().getDepartmentName());
                                 getCompany(response.body().getOrganizationId(),dto);
 
@@ -439,22 +406,7 @@ public class LandingScreen extends AppCompatActivity {
                         if (response.code() == 200||response.code() == 201||response.code() == 204&&response.body().size()!=0)
                         {
                             Organization organization = response.body().get(0);
-                            System.out.println("Inside api");
-                            PreferenceHandler.getInstance(LandingScreen.this).setCompanyId(organization.getOrganizationId());
-                            PreferenceHandler.getInstance(LandingScreen.this).setCompanyName(organization.getOrganizationName());
-                            PreferenceHandler.getInstance(LandingScreen.this).setAppType(organization.getAppType());
 
-                            PreferenceHandler.getInstance(LandingScreen.this).setAppType(organization.getAppType());
-                            PreferenceHandler.getInstance(LandingScreen.this).setLicenseStartDate(organization.getLicenseStartDate());
-                            PreferenceHandler.getInstance(LandingScreen.this).setCheckInTime(organization.getPlaceId());
-                            PreferenceHandler.getInstance(LandingScreen.this).setLicenseEndDate(organization.getLicenseEndDate());
-                            PreferenceHandler.getInstance(LandingScreen.this).setSignupDate(organization.getSignupDate());
-                            PreferenceHandler.getInstance(LandingScreen.this).setOrganizationLongi(organization.getLongitude());
-                            PreferenceHandler.getInstance(LandingScreen.this).setOrganizationLati(organization.getLatitude());
-                            PreferenceHandler.getInstance(LandingScreen.this).setPlanType(organization.getPlanType());
-                            PreferenceHandler.getInstance(LandingScreen.this).setEmployeeLimit(organization.getEmployeeLimit());
-                            PreferenceHandler.getInstance(LandingScreen.this).setPlanId(organization.getPlanId());
-                            PreferenceHandler.getInstance(LandingScreen.this).setResellerUserId(organization.getResellerProfileId());
 
                             String licenseStartDate = organization.getLicenseStartDate();
                             String licenseEndDate = organization.getLicenseEndDate();
@@ -467,7 +419,7 @@ public class LandingScreen extends AppCompatActivity {
                                     if((smdf.parse(licenseEndDate).getTime()<smdf.parse(smdf.format(new Date())).getTime())){
 
 
-                                        if(PreferenceHandler.getInstance(LandingScreen.this).getUserRoleUniqueID()==2){
+                                        if(PreferenceHandler.getInstance(LandingScreen.this).getUserRoleUniqueID()==2||PreferenceHandler.getInstance(LandingScreen.this).getUserRoleUniqueID()==9){
 
                                             popupUpgrade("Your free trial version expired.Upgrade the app to continue the services","Any quieries about Plans contact our Customer Support team");
 
@@ -478,7 +430,42 @@ public class LandingScreen extends AppCompatActivity {
                                         }
 
                                     }else{
-                                        if(PreferenceHandler.getInstance(LandingScreen.this).getUserRoleUniqueID()==2){
+
+                                        System.out.println("Inside api");
+                                        PreferenceHandler.getInstance(LandingScreen.this).setCompanyId(organization.getOrganizationId());
+                                        PreferenceHandler.getInstance(LandingScreen.this).setCompanyName(organization.getOrganizationName());
+                                        PreferenceHandler.getInstance(LandingScreen.this).setAppType(organization.getAppType());
+
+                                        PreferenceHandler.getInstance(LandingScreen.this).setAppType(organization.getAppType());
+                                        PreferenceHandler.getInstance(LandingScreen.this).setLicenseStartDate(organization.getLicenseStartDate());
+                                        PreferenceHandler.getInstance(LandingScreen.this).setCheckInTime(organization.getPlaceId());
+                                        PreferenceHandler.getInstance(LandingScreen.this).setLicenseEndDate(organization.getLicenseEndDate());
+                                        PreferenceHandler.getInstance(LandingScreen.this).setSignupDate(organization.getSignupDate());
+                                        PreferenceHandler.getInstance(LandingScreen.this).setOrganizationLongi(organization.getLongitude());
+                                        PreferenceHandler.getInstance(LandingScreen.this).setOrganizationLati(organization.getLatitude());
+                                        PreferenceHandler.getInstance(LandingScreen.this).setPlanType(organization.getPlanType());
+                                        PreferenceHandler.getInstance(LandingScreen.this).setEmployeeLimit(organization.getEmployeeLimit());
+                                        PreferenceHandler.getInstance(LandingScreen.this).setPlanId(organization.getPlanId());
+                                        PreferenceHandler.getInstance(LandingScreen.this).setResellerUserId(organization.getResellerProfileId());
+
+                                        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(LandingScreen.this);
+                                        SharedPreferences.Editor spe = sp.edit();
+                                        spe.putInt(Constants.USER_ID, dto.getEmployeeId());
+                                        PreferenceHandler.getInstance(LandingScreen.this).setUserId(dto.getEmployeeId());
+                                        PreferenceHandler.getInstance(LandingScreen.this).setLocationOn(dto.isLocationOn());
+                                        PreferenceHandler.getInstance(LandingScreen.this).setDataOn(dto.isDataOn());
+                                        PreferenceHandler.getInstance(LandingScreen.this).setManagerId(dto.getManagerId());
+                                        PreferenceHandler.getInstance(LandingScreen.this).setUserRoleUniqueID(dto.getUserRoleId());
+                                        PreferenceHandler.getInstance(LandingScreen.this).setUserName(dto.getEmployeeName());
+                                        PreferenceHandler.getInstance(LandingScreen.this).setUserEmail(dto.getPrimaryEmailAddress());
+                                        PreferenceHandler.getInstance(LandingScreen.this).setUserFullName(dto.getEmployeeName());
+                                        spe.putString("FullName", dto.getEmployeeName());
+                                        spe.putString("Password", dto.getPassword());
+                                        spe.putString("Email", dto.getPrimaryEmailAddress());
+                                        spe.putString("PhoneNumber", dto.getPhoneNumber());
+                                        spe.apply();
+
+                                        if(PreferenceHandler.getInstance(LandingScreen.this).getUserRoleUniqueID()==2||PreferenceHandler.getInstance(LandingScreen.this).getUserRoleUniqueID()==9){
                                             Intent i = new Intent(LandingScreen.this, AdminNewMainScreen.class);
                                             //Intent i = new Intent(LandingScreen.this, DashBoardEmployee.class);
                                             i.putExtra("Profile",dto);
@@ -507,7 +494,41 @@ public class LandingScreen extends AppCompatActivity {
 
                             }else if(organization.getAppType()!=null&&organization.getAppType().equalsIgnoreCase("Paid")){
 
-                                if(PreferenceHandler.getInstance(LandingScreen.this).getUserRoleUniqueID()==2){
+                                System.out.println("Inside api");
+                                PreferenceHandler.getInstance(LandingScreen.this).setCompanyId(organization.getOrganizationId());
+                                PreferenceHandler.getInstance(LandingScreen.this).setCompanyName(organization.getOrganizationName());
+                                PreferenceHandler.getInstance(LandingScreen.this).setAppType(organization.getAppType());
+
+                                PreferenceHandler.getInstance(LandingScreen.this).setAppType(organization.getAppType());
+                                PreferenceHandler.getInstance(LandingScreen.this).setLicenseStartDate(organization.getLicenseStartDate());
+                                PreferenceHandler.getInstance(LandingScreen.this).setCheckInTime(organization.getPlaceId());
+                                PreferenceHandler.getInstance(LandingScreen.this).setLicenseEndDate(organization.getLicenseEndDate());
+                                PreferenceHandler.getInstance(LandingScreen.this).setSignupDate(organization.getSignupDate());
+                                PreferenceHandler.getInstance(LandingScreen.this).setOrganizationLongi(organization.getLongitude());
+                                PreferenceHandler.getInstance(LandingScreen.this).setOrganizationLati(organization.getLatitude());
+                                PreferenceHandler.getInstance(LandingScreen.this).setPlanType(organization.getPlanType());
+                                PreferenceHandler.getInstance(LandingScreen.this).setEmployeeLimit(organization.getEmployeeLimit());
+                                PreferenceHandler.getInstance(LandingScreen.this).setPlanId(organization.getPlanId());
+                                PreferenceHandler.getInstance(LandingScreen.this).setResellerUserId(organization.getResellerProfileId());
+
+                                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(LandingScreen.this);
+                                SharedPreferences.Editor spe = sp.edit();
+                                spe.putInt(Constants.USER_ID, dto.getEmployeeId());
+                                PreferenceHandler.getInstance(LandingScreen.this).setUserId(dto.getEmployeeId());
+                                PreferenceHandler.getInstance(LandingScreen.this).setLocationOn(dto.isLocationOn());
+                                PreferenceHandler.getInstance(LandingScreen.this).setDataOn(dto.isDataOn());
+                                PreferenceHandler.getInstance(LandingScreen.this).setManagerId(dto.getManagerId());
+                                PreferenceHandler.getInstance(LandingScreen.this).setUserRoleUniqueID(dto.getUserRoleId());
+                                PreferenceHandler.getInstance(LandingScreen.this).setUserName(dto.getEmployeeName());
+                                PreferenceHandler.getInstance(LandingScreen.this).setUserEmail(dto.getPrimaryEmailAddress());
+                                PreferenceHandler.getInstance(LandingScreen.this).setUserFullName(dto.getEmployeeName());
+                                spe.putString("FullName", dto.getEmployeeName());
+                                spe.putString("Password", dto.getPassword());
+                                spe.putString("Email", dto.getPrimaryEmailAddress());
+                                spe.putString("PhoneNumber", dto.getPhoneNumber());
+                                spe.apply();
+
+                                if(PreferenceHandler.getInstance(LandingScreen.this).getUserRoleUniqueID()==2||PreferenceHandler.getInstance(LandingScreen.this).getUserRoleUniqueID()==9){
                                     Intent i = new Intent(LandingScreen.this, AdminNewMainScreen.class);
                                     //Intent i = new Intent(LandingScreen.this, DashBoardEmployee.class);
                                     i.putExtra("Profile",dto);
@@ -531,7 +552,7 @@ public class LandingScreen extends AppCompatActivity {
 
                         }else{
 
-                            if(PreferenceHandler.getInstance(LandingScreen.this).getUserRoleUniqueID()==2){
+                            if(PreferenceHandler.getInstance(LandingScreen.this).getUserRoleUniqueID()==2||PreferenceHandler.getInstance(LandingScreen.this).getUserRoleUniqueID()==9){
                                 Intent i = new Intent(LandingScreen.this, AdminNewMainScreen.class);
                                 //Intent i = new Intent(LandingScreen.this, DashBoardEmployee.class);
                                 i.putExtra("Profile",dto);
@@ -582,7 +603,7 @@ public class LandingScreen extends AppCompatActivity {
             mDay.setText(""+days);
 
 
-            if(PreferenceHandler.getInstance(LandingScreen.this).getUserRoleUniqueID()==2){
+            if(PreferenceHandler.getInstance(LandingScreen.this).getUserRoleUniqueID()==2||PreferenceHandler.getInstance(LandingScreen.this).getUserRoleUniqueID()==9){
 
 
 

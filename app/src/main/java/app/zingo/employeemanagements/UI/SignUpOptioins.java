@@ -19,7 +19,7 @@ import app.zingo.employeemanagements.Utils.PreferenceHandler;
 
 public class SignUpOptioins extends AppCompatActivity {
 
-    CardView mOrganization,mEmployee;
+    CardView mOrganization,mEmployee,mResellerSign;
     LinearLayout mJoinCompany,mJoinEmployee,mReseller;
     LinearLayout mWhatsapp;
 
@@ -31,6 +31,7 @@ public class SignUpOptioins extends AppCompatActivity {
 
             mOrganization = (CardView)findViewById(R.id.organization_signup_card);
             mEmployee = (CardView)findViewById(R.id.employee_signup_card);
+            mResellerSign = (CardView)findViewById(R.id.reseller_signup_card);
 
             mJoinCompany = (LinearLayout)findViewById(R.id.join_company);
             mJoinEmployee = (LinearLayout)findViewById(R.id.join_employee);
@@ -38,7 +39,7 @@ public class SignUpOptioins extends AppCompatActivity {
             mWhatsapp = (LinearLayout)findViewById(R.id.whatsapp_open);
 
 
-            mJoinCompany.setOnClickListener(new View.OnClickListener() {
+            mOrganization.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
@@ -49,7 +50,7 @@ public class SignUpOptioins extends AppCompatActivity {
                 }
             });
 
-            mReseller.setOnClickListener(new View.OnClickListener() {
+            mResellerSign.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
@@ -60,7 +61,7 @@ public class SignUpOptioins extends AppCompatActivity {
                 }
             });
 
-            mJoinEmployee.setOnClickListener(new View.OnClickListener() {
+            mEmployee.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent started = new Intent(SignUpOptioins.this,PhoneVerificationScreen.class);

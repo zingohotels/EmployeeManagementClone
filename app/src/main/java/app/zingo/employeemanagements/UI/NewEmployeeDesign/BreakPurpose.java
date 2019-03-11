@@ -133,8 +133,8 @@ public class BreakPurpose extends AppCompatActivity {
 
                         if(s!=null){
 
-                         /*   Intent lintent = new Intent(BreakPurpose.this, DistanceCheck.class);
-                            stopService(lintent);*/
+                            Intent lintent = new Intent(BreakPurpose.this, DistanceCheck.class);
+                            stopService(lintent);
                             BreakPurpose.this.finish();
 
                         }

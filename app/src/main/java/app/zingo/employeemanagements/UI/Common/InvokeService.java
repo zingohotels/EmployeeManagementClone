@@ -229,17 +229,24 @@ public class InvokeService extends AppCompatActivity {
                         if(reportDataModel!=null){
 
                             EmailData emailData = new EmailData();
+                            final Calendar calendar = Calendar.getInstance();
+                            calendar.setTime(new Date());
+                            calendar.add(Calendar.DAY_OF_YEAR, -1);
 
                             String data = "";
                             for(int j=0;j<reportDataModel.getReportDataEmployees().size();j++){
-                                data = data+"<tr><td style=\"text-align:center\">"+reportDataModel.getReportDataEmployees().get(j).getName()+"</td>"
-                                        +"<td style=\"text-align:center\">"+reportDataModel.getReportDataEmployees().get(j).getLoginTime()+"</td>"
-                                        +"<td style=\"text-align:center\">"+reportDataModel.getReportDataEmployees().get(j).getLogoutTime()+"</td>"
-                                        +"<td style=\"text-align:center\">"+reportDataModel.getReportDataEmployees().get(j).getHours()+"</td>"
-                                        +"<td style=\"text-align:center\">"+reportDataModel.getReportDataEmployees().get(j).getVisits()+"</td>"
-                                        +"<td style=\"text-align:center\">"+reportDataModel.getReportDataEmployees().get(j).getTasks()+"</td>"
-                                        +"<td style=\"text-align:center\">"+reportDataModel.getReportDataEmployees().get(j).getExpenses()+"</td>"
-                                        +"<td style=\"text-align:center\">"+reportDataModel.getReportDataEmployees().get(j).getExpensesAmt()    +"</td></tr>";
+
+
+                                data = data+"<tr><td style=\"text-align:center; border: 2px solid green;\">"+reportDataModel.getReportDataEmployees().get(j).getName()+"</td>"
+                                        +"<td style=\"text-align:center; border: 2px solid green;\">"+reportDataModel.getReportDataEmployees().get(j).getLoginTime()+"</td>"
+                                        +"<td style=\"text-align:center; border: 2px solid green;\">"+reportDataModel.getReportDataEmployees().get(j).getLogoutTime()+"</td>"
+                                        +"<td style=\"text-align:center; border: 2px solid green;\">"+reportDataModel.getReportDataEmployees().get(j).getHours()+"</td>"
+                                        +"<td style=\"text-align:center; border: 2px solid green;\">"+reportDataModel.getReportDataEmployees().get(j).getVisits()+"</td>"
+                                        +"<td style=\"text-align:center; border: 2px solid green;\">"+reportDataModel.getReportDataEmployees().get(j).getTasks()+"</td>"
+                                        +"<td style=\"text-align:center; border: 2px solid green;\">"+reportDataModel.getReportDataEmployees().get(j).getExpenses()+"</td>"
+                                        +"<td style=\"text-align:center; border: 2px solid green;\">"+reportDataModel.getReportDataEmployees().get(j).getExpensesAmt()+"</td>"
+                                        +"<td style=\"text-align:center; border: 2px solid green;\">"+reportDataModel.getReportDataEmployees().get(j).getKms()
+                                        +"</td></tr>";
                             }
 
                             String body = "<!DOCTYPE html> \n" +
@@ -263,37 +270,38 @@ public class InvokeService extends AppCompatActivity {
                                     "\n" +
                                     "#form-check{\n" +
                                     "\ttext-align:center;\n" +
-                                    "\tpadding:100px 410px 0px 410px;\n" +
+                                   // "\tpadding:100px 410px 0px 410px;\n" +
                                     "}\n" +
                                     "\n" +
                                     ".bg-frm{\n" +
                                     "\tbackground-color: #EE596C;\n" +
-                                    "\tpadding:10px 10px 10px 10px;\n" +
+                                   // "\tpadding:10px 10px 10px 10px;\n" +
+                                    "\twidth:100%;\n" +
                                     "}\n" +
                                     "\n" +
                                     "\n" +
                                     "#form-check h5{\n" +
                                     "\tcolor:#fff;\n" +
                                     "\ttext-align:left;\n" +
-                                    "\tpadding:0px 13px;\n" +
+                                   // "\tpadding:0px 13px;\n" +
                                     "\tfont-size:15px;\n" +
                                     "}\n" +
                                     "\n" +
                                     "#form-check-one{\n" +
-                                    "\tpadding:0px 410px 0px 410px;\n" +
+                                   // "\tpadding:0px 410px 0px 410px;\n" +
                                     "}\n" +
                                     "\n" +
                                     ".box-check-one{\n" +
                                     "\twidth:100%;\n" +
                                     "\tborder:1px solid gray;\n" +
-                                    "\tpadding:10px 10px;\n" +
+                                  //  "\tpadding:10px 10px;\n" +
                                     "}\n" +
                                     "\n" +
                                     "#form-check-one form{\n" +
-                                    "\tpadding:10px 0px;\n" +
+                                    //"\tpadding:10px 0px;\n" +
                                     "}\n" +
                                     " table, th, td { \n" +
-                                    "                border: 2px solid green; \n" +
+                                    //"                border: 2px solid green; \n" +
                                     "                text-align:center; \n" +
                                     "                border-collapse: collapse;\n" +
                                     "                padding: 10px;\n" +
@@ -314,41 +322,42 @@ public class InvokeService extends AppCompatActivity {
                                     "\t\t\t\t  <h2 style=\"color: white\">"+orgName+"</h2>\t \t\t\t\n" +
                                     "\t\t\t</div>\t\n" +
                                     "\t\t\t<div class=\"col-lg-7 col-md-7 col-sm-7 col-xs-12\">\n" +
-                                    "\t\t\t\t<h4 style=\"color: white; text-align:right\">Team Activity Report</h4>\n" +
-                                    "\t\t\t\t<h4 style=\"color: white; text-align:right\">"+new SimpleDateFormat("dd MMM,yyyyy").format(new Date())+"</h4>\n" +
+                                    "\t\t\t\t<h4 style=\"color: white; text-align:left\">Team Activity Report</h4>\n" +
+                                    "\t\t\t\t<h4 style=\"color: white; text-align:left\">"+new SimpleDateFormat("dd MMM,yyyy").format(calendar.getTime())+"</h4>\n" +
                                     "\t\t\t</div>\t\t\n" +
                                     "\t\t</div>\n" +
                                     "\t\t<hr>\n" +
                                     "\t\t<div class=\"row\" style=\" position:center;>\n" +
                                     "\t\t\t<div class=\"col-lg-12 col-md-12 col-sm-12 col-xs-12\">\n" +
-                                    "\t\t\t\t<table style=\"background-color: white; color:black; position:center;\">\n" +
+                                    "\t\t\t\t<table style=\"background-color: white; margin:0 auto;  color:black; \">\n" +
                                     "\t\t\t\t\t<tr>\n" +
-                                    "\t\t\t\t\t\t<th>ATTENDANCE</th>\n" +
-                                    "\t\t\t\t\t\t<th>TASK</th>\n" +
-                                    "\t\t\t\t\t\t<th>VISIT</th>\n" +
-                                    "\t\t\t\t\t\t<th>EXPENSES</th>\n" +
+                                    "\t\t\t\t\t\t<th style=\"border: 2px solid green;\">ATTENDANCE</th>\n" +
+                                    "\t\t\t\t\t\t<th style=\"border: 2px solid green;\">TASK</th>\n" +
+                                    "\t\t\t\t\t\t<th style=\"border: 2px solid green;\">VISIT</th>\n" +
+                                    "\t\t\t\t\t\t<th style=\"border: 2px solid green;\">EXPENSES</th>\n" +
                                     "\t\t\t\t\t</tr>\n" +
                                     "\t\t\t\t\t<tr>\n" +
-                                    "\t\t\t\t\t\t<td>"+reportDataModel.getPreEmply()+""+reportDataModel.getTotalEmp()+"</td>\n" +
-                                    "\t\t\t\t\t\t<td>"+reportDataModel.getComplTask()+""+reportDataModel.getTotalTas()+"</td>\n" +
-                                    "\t\t\t\t\t\t<td>"+reportDataModel.getVisit()+"</td>\n" +
-                                    "\t\t\t\t\t\t<td>"+reportDataModel.getExpenses()+"</td>\n" +
+                                    "\t\t\t\t\t\t<td style=\"border: 2px solid green;\">"+reportDataModel.getPreEmply()+""+reportDataModel.getTotalEmp()+"</td>\n" +
+                                    "\t\t\t\t\t\t<td style=\"border: 2px solid green;\">"+reportDataModel.getComplTask()+""+reportDataModel.getTotalTas()+"</td>\n" +
+                                    "\t\t\t\t\t\t<td style=\"border: 2px solid green;\">"+reportDataModel.getVisit()+"</td>\n" +
+                                    "\t\t\t\t\t\t<td style=\"border: 2px solid green;\">"+reportDataModel.getExpenses()+"</td>\n" +
                                     "\t\t\t\t\t</tr>\n" +
                                     "\t\t\t\t</table>\n" +
                                     "\t\t\t</div>\n" +
                                     "\t\t</div>\t\t\n" +
                                     "\t\t<br /><div class=\"row\">\n" +
                                     "\t\t\t<div class=\"col-lg-12 col-md-12 col-sm-12 col-xs-12\">\n" +
-                                    "\t\t\t\t<table style=\"background-color: white; color:black;\">\n" +
+                                    "\t\t\t\t<table style=\"background-color: white; color:black; margin:0 auto; border: 2px solid green;\">\n" +
                                     "\t\t\t\t\t<tr>\n" +
-                                    "\t\t\t\t\t\t<th>NAME</th>\n" +
-                                    "\t\t\t\t\t\t<th>LOGIN</th>\n" +
-                                    "\t\t\t\t\t\t<th>LOGOUT</th>\n" +
-                                    "\t\t\t\t\t\t<th>HOURS</th>\n" +
-                                    "\t\t\t\t\t\t<th>VISITS</th>\n" +
-                                    "\t\t\t\t\t\t<th>TASKS</th>\n" +
-                                    "\t\t\t\t\t\t<th>EXPENSES</th>\n" +
-                                    "\t\t\t\t\t\t<th>EXP AMOUNT</th>\n" +
+                                    "\t\t\t\t\t\t<th style=\"border: 2px solid green;\">NAME</th>\n" +
+                                    "\t\t\t\t\t\t<th style=\"border: 2px solid green;\">LOGIN</th>\n" +
+                                    "\t\t\t\t\t\t<th style=\"border: 2px solid green;\">LOGOUT</th>\n" +
+                                    "\t\t\t\t\t\t<th style=\"border: 2px solid green;\">HOURS</th>\n" +
+                                    "\t\t\t\t\t\t<th style=\"border: 2px solid green;\">VISITS</th>\n" +
+                                    "\t\t\t\t\t\t<th style=\"border: 2px solid green;\">TASKS</th>\n" +
+                                    "\t\t\t\t\t\t<th style=\"border: 2px solid green;\">EXPENSES</th>\n" +
+                                    "\t\t\t\t\t\t<th style=\"border: 2px solid green;\">EXP AMOUNT</th>\n" +
+                                    "\t\t\t\t\t\t<th style=\"border: 2px solid green;\">Km</th>\n" +
                                     "\t\t\t\t\t</tr>\n" +
                                     "\t\t\t\t\t<tr>\n" +
                                     "\t\t\t\t\t\t"+data+"\n" +
@@ -357,12 +366,20 @@ public class InvokeService extends AppCompatActivity {
                                     "\t\t</div>\t\t\n" +
                                     "\t</div>\n" +
                                     "</div>\n" +
+                                    "</div>\n</br><p><h3>You can also view and download this report by login to our website <a href=\"www.zingyapp.com/Signin.php\" target = \"_blank\">Click here to login.</a> To View this report in our Zingy App <a href=\"https://play.google.com/store/apps/details?id=app.zingo.employeemanagements\" target = \"_blank\">Click here</a>.</h3></p><br><br>" +
+                                    "<div class=\"col-md-4\">\n" +
+                                    "      <h3>Download Now</h3>\n" +
+                                    "      <div class=\"contact-item\">\n" +
+                                    "        <a href=\"https://play.google.com/store/apps/details?id=app.zingo.employeemanagements\" target = \"_blank\"><img src=\"http://zingoapi.azurewebsites.net/HotelImage/g1.jpg\" alt=\"\" style=\"width:205px; height:125px;\"/></a>\n" +
+                                    "      </div>\n" +
+                                    "    </div>"+
                                     "</body>\n" +
                                     "</html>\n" +
                                     "\n";
-                            emailData.setEmailAddress(mEmail.getText().toString());
+                           emailData.setEmailAddress(mEmail.getText().toString());
+                            //emailData.setEmailAddress("nishar@zingohotels.com");
                             emailData.setBody(body);
-                            emailData.setSubject("Today Report");
+                            emailData.setSubject("Team Report for "+new SimpleDateFormat("dd MMM,yyyy").format(calendar.getTime()));
                             emailData.setUserName("zingyapp.com@gmail.com");
                             emailData.setPassword("zingy@123");
                             emailData.setFromName("Zingy App");
@@ -519,7 +536,8 @@ public class InvokeService extends AppCompatActivity {
 
                             if (progressDialog!=null)
                                 progressDialog.dismiss();
-                            ArrayList<Employee> list = response.body();
+                            ArrayList<Employee> lists = response.body();
+                            ArrayList<Employee> list = new ArrayList<>();
                             reportDataModel = new ReportDataModel();
 
                             employeeTasks = new ArrayList<>();
@@ -537,18 +555,20 @@ public class InvokeService extends AppCompatActivity {
                             visit=0;
                             expense=0;
 
-                            if (list !=null && list.size()!=0) {
+                            if (lists !=null && lists.size()!=0) {
 
                                 ArrayList<Employee> employees = new ArrayList<>();
 
-                                for(int i=0;i<list.size();i++){
+                                for(int i=0;i<lists.size();i++){
 
-                                    if(list.get(i).getUserRoleId()==2){
+                                    if(lists.get(i).getUserRoleId()==2){
 
-                                        mEmail.setText(""+list.get(i).getPrimaryEmailAddress());
+                                        mEmail.setText(""+lists.get(i).getPrimaryEmailAddress());
 
 
 
+                                    }else{
+                                        list.add(lists.get(i));
                                     }
                                 }
 

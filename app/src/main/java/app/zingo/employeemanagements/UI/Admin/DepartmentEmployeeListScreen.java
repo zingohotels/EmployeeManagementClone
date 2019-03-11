@@ -58,6 +58,10 @@ public class DepartmentEmployeeListScreen extends AppCompatActivity {
                 departments = (Departments)bundle.getSerializable("Department");
             }
 
+            if(departments!=null){
+                getProfiles(departments.getDepartmentId());
+            }
+
             mAddProfiles.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -77,9 +81,7 @@ public class DepartmentEmployeeListScreen extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        if(departments!=null){
-            getProfiles(departments.getDepartmentId());
-        }
+
 
     }
 

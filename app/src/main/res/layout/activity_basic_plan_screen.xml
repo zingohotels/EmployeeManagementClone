@@ -86,7 +86,7 @@
                 android:textStyle="bold"
                 android:textColor="@color/text_black"
                 android:layout_marginTop="5dp"
-                android:text="3 month Subscribtion"
+                android:text="3 month Subscription"
                 />
 
 
@@ -160,7 +160,7 @@
                 android:textStyle="bold"
                 android:textColor="@color/text_black"
                 android:layout_marginTop="5dp"
-                android:text="6 month Subscribtion"
+                android:text="6 month Subscription"
                 />
 
 
@@ -233,7 +233,7 @@
                 android:textStyle="bold"
                 android:textColor="@color/text_black"
                 android:layout_marginTop="5dp"
-                android:text="12 month Subscribtion"
+                android:text="12 month Subscription"
                 />
 
 

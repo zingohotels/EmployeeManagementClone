@@ -45,9 +45,12 @@ import app.zingo.employeemanagements.UI.Common.ReportManagementScreen;
 import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
 import app.zingo.employeemanagements.UI.Employee.EmployeeMeetingHost;
 import app.zingo.employeemanagements.UI.Employee.LeaveManagementHost;
+import app.zingo.employeemanagements.UI.NewAdminDesigns.DailyTargetsForEmployeeActivity;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.EmployeeDashBoardAdminView;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.EmployeeEditScreen;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.EmployeeExpenseList;
+import app.zingo.employeemanagements.UI.NewAdminDesigns.ExpenseDashBoardAdmin;
+import app.zingo.employeemanagements.UI.NewAdminDesigns.LeaveDashBoardAdminScreen;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.LeaveEmployeeListScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
@@ -116,6 +119,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
                     builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
 
                             try{
 
@@ -153,9 +157,11 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
                                           int valueCheck = Integer.parseInt(value);
 
                                           if(valueCheck==0){
+                                              dialogs.dismiss();
 
                                           }else{
-                                              getLoginDetailsById(Integer.parseInt(value),status);
+                                              getLoginDetailsById(Integer.parseInt(value),status,holder.mStatus);
+                                              dialogs.dismiss();
                                           }
 
 
@@ -188,8 +194,11 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
                                                   e.printStackTrace();
                                               }
 
+                                              dialogs.dismiss();
+
                                           }else{
-                                              getLoginDetailsById(Integer.parseInt(value),status);
+                                              getLoginDetailsById(Integer.parseInt(value),status,holder.mStatus);
+                                              dialogs.dismiss();
                                           }
 
 
@@ -202,6 +211,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
 
                             }catch (Exception e){
                                 e.printStackTrace();
+                                dialogInterface.dismiss();
                             }
 
                         }
@@ -231,7 +241,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
 
                 }else if(type!=null&&type.equalsIgnoreCase("Expense")){
 
-                    Intent intent = new Intent(context, EmployeeExpenseList.class);
+                    Intent intent = new Intent(context, ExpenseDashBoardAdmin.class);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("Profile",list.get(position));
                     bundle.putInt("EmployeeId",list.get(position).getEmployeeId());
@@ -258,17 +268,24 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
 
                 }else  if(type!=null&&type.equalsIgnoreCase("Task")){
 
-                    Intent intent = new Intent(context, TaskManagementHost.class);
+                   /* Intent intent = new Intent(context, TaskManagementHost.class);
                     Bundle bundle = new Bundle();
                     bundle.putInt("EmployeeId",list.get(position).getEmployeeId());
                     bundle.putInt("DepartmentId",list.get(position).getDepartmentId());
                     bundle.putSerializable("Employee",list.get(position));
                     intent.putExtras(bundle);
+                    context.startActivity(intent);*/
+
+                    Intent intent = new Intent(context, DailyTargetsForEmployeeActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("Profile",list.get(position));
+                    bundle.putInt("ProfileId",list.get(position).getEmployeeId());
+                    intent.putExtras(bundle);
                     context.startActivity(intent);
 
                 }else  if(type!=null&&type.equalsIgnoreCase("Leave")){
 
-                    Intent intent = new Intent(context, LeaveEmployeeListScreen.class);
+                    Intent intent = new Intent(context, LeaveDashBoardAdminScreen.class);
                     Bundle bundle = new Bundle();
                     bundle.putInt("EmployeeId",list.get(position).getEmployeeId());
                     bundle.putSerializable("Employee",list.get(position));
@@ -285,7 +302,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
                     context.startActivity(intent);
 
                 }*/else{
-                    Intent intent = new Intent(context, EmployeesDashBoard.class);
+                    Intent intent = new Intent(context, EmployeeDashBoardAdminView.class);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("Profile",list.get(position));
                     bundle.putInt("ProfileId",list.get(position).getEmployeeId());
@@ -428,7 +445,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
         });
     }
 
-    public void getLoginDetailsById(final int id,final String status){
+    public void getLoginDetailsById(final int id,final String status,final TextView statusText){
 
         final ProgressDialog dialog = new ProgressDialog(context);
         dialog.setMessage("Saving Details..");
@@ -466,7 +483,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
 
                                     LoginDetails loginDetails = dto;
                                     loginDetails.setTotalMeeting(status);
-                                    updateLogin(loginDetails);
+                                    updateLogin(loginDetails,statusText);
 
                                 }
                                 catch (Exception ex)
@@ -500,7 +517,13 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
     }
 
 
-    public void updateLogin(final LoginDetails loginDetails) throws Exception{
+    public void updateLogin(final LoginDetails loginDetails,final TextView statusText) throws Exception{
+
+        final ProgressDialog dialog = new ProgressDialog(context);
+        dialog.setMessage("Saving Details..");
+        dialog.setCancelable(false);
+        dialog.show();
+
 
 
         LoginDetailsAPI apiService = Util.getClient().create(LoginDetailsAPI.class);
@@ -513,9 +536,23 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
 //                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
                 try
                 {
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+
 
                     int statusCode = response.code();
                     if (statusCode == 200 || statusCode == 201||response.code()==204) {
+
+                        statusText.setText(loginDetails.getTotalMeeting()+"");
+
+                        if(loginDetails.getTotalMeeting().equalsIgnoreCase("Present")){
+                            statusText.setBackgroundColor(Color.parseColor("#00FF00"));
+                        }else{
+                            statusText.setBackgroundColor(Color.parseColor("#FF0000"));
+                        }
+
 
 
                     }else {
@@ -524,6 +561,11 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
                 }
                 catch (Exception ex)
                 {
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+
                     ex.printStackTrace();
                 }
 //                callGetStartEnd();
@@ -532,6 +574,10 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
             @Override
             public void onFailure(Call<LoginDetails> call, Throwable t) {
 
+                if(dialog != null && dialog.isShowing())
+                {
+                    dialog.dismiss();
+                }
 
                 Toast.makeText(context, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.e("TAG", t.toString());

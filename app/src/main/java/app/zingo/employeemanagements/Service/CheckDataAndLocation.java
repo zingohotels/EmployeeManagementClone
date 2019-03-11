@@ -19,7 +19,7 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.util.Log;
-
+import android.widget.Button;
 
 
 import java.net.URL;
@@ -436,3 +436,23 @@ public class CheckDataAndLocation extends Service {
 
     }
 }
+
+   /* Button startServiceButton = (Button)findViewById(R.id.start_foreground_service_button);
+            startServiceButton.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View v) {
+        Intent intent = new Intent(ServiceTestingActivity.this, LocaitionPassWithConditionServices.class);
+        intent.setAction(LocaitionPassWithConditionServices.ACTION_START_FOREGROUND_SERVICE);
+        startService(intent);
+        }
+        });
+
+        Button stopServiceButton = (Button)findViewById(R.id.stop_foreground_service_button);
+        stopServiceButton.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View v) {
+        Intent intent = new Intent(ServiceTestingActivity.this, LocaitionPassWithConditionServices.class);
+        intent.setAction(LocaitionPassWithConditionServices.ACTION_STOP_FOREGROUND_SERVICE);
+        startService(intent);
+        }
+        });*/

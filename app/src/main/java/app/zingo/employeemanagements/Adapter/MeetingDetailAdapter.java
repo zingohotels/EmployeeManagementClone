@@ -119,14 +119,23 @@ public class MeetingDetailAdapter extends RecyclerView.Adapter<MeetingDetailAdap
             String lngi = dto.getEndLongitude();
             String lati = dto.getEndLatitude();
 
-            if(lngi!=null&&lati!=null){
+            if(lngi!=null&&lati!=null&&!lngi.isEmpty()&&!lati.isEmpty()){
 
-                double lngiValue  = Double.parseDouble(lngi);
-                double latiValue  = Double.parseDouble(lati);
+                try{
 
-                if(lngiValue!=0&&latiValue!=0){
-                    getAddress(lngiValue,latiValue,holder.mLocation);
+                    double lngiValue  = Double.parseDouble(lngi);
+                    double latiValue  = Double.parseDouble(lati);
+
+                    if(lngiValue!=0&&latiValue!=0){
+                        getAddress(lngiValue,latiValue,holder.mLocation);
+                    }
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                    holder.mLocation.setText("Not Available");
                 }
+
+
             }
 
             getManagers(dto.getEmployeeId(),holder.mCreatedBy);
@@ -254,11 +263,24 @@ public class MeetingDetailAdapter extends RecyclerView.Adapter<MeetingDetailAdap
                         mMapView.getMapAsync(new OnMapReadyCallback() {
                             @Override
                             public void onMapReady(final GoogleMap googleMap) {
-                                LatLng posisiabsen = new LatLng(Double.parseDouble(dto.getEndLatitude()), Double.parseDouble(dto.getEndLongitude())); ////your lat lng
-                                googleMap.addMarker(new MarkerOptions().position(posisiabsen).title("Map View"));
-                                googleMap.moveCamera(CameraUpdateFactory.newLatLng(posisiabsen));
-                                googleMap.getUiSettings().setZoomControlsEnabled(true);
-                                googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+
+                                try{
+
+                                    LatLng posisiabsen = new LatLng(Double.parseDouble(dto.getEndLatitude()), Double.parseDouble(dto.getEndLongitude())); ////your lat lng
+                                    googleMap.addMarker(new MarkerOptions().position(posisiabsen).title("Map View"));
+                                    googleMap.moveCamera(CameraUpdateFactory.newLatLng(posisiabsen));
+                                    googleMap.getUiSettings().setZoomControlsEnabled(true);
+                                    googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+
+                                }catch (Exception e){
+                                    e.printStackTrace();
+                                    LatLng posisiabsen = new LatLng(Double.parseDouble(PreferenceHandler.getInstance(context).getOrganizationLati()), Double.parseDouble(PreferenceHandler.getInstance(context).getOrganizationLongi())); ////your lat lng
+                                    googleMap.addMarker(new MarkerOptions().position(posisiabsen).title("Map View"));
+                                    googleMap.moveCamera(CameraUpdateFactory.newLatLng(posisiabsen));
+                                    googleMap.getUiSettings().setZoomControlsEnabled(true);
+                                    googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+                                }
+
                             }
                         });
 

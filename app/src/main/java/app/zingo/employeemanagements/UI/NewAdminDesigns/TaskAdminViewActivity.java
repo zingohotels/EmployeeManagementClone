@@ -12,7 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import junit.framework.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +80,6 @@ public class TaskAdminViewActivity extends AppCompatActivity {
     public void setupToolbar() {
         this.mToolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(this.mToolbar);
-        Assert.assertNotNull(getSupportActionBar());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Employee View");
     }

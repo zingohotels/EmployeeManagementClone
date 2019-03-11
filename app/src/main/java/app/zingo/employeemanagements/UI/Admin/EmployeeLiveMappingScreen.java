@@ -1,39 +1,34 @@
 package app.zingo.employeemanagements.UI.Admin;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.LightingColorFilter;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Handler;
+import android.support.annotation.DrawableRes;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -55,6 +50,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
@@ -76,21 +72,22 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-import app.zingo.employeemanagements.Adapter.LocationLiveAdapter;
 import app.zingo.employeemanagements.Model.Employee;
+import app.zingo.employeemanagements.Model.EmployeeImages;
+import app.zingo.employeemanagements.Model.GeneralNotification;
 import app.zingo.employeemanagements.Model.LiveTraackingTime;
 import app.zingo.employeemanagements.Model.LiveTracking;
-import app.zingo.employeemanagements.Model.LoginDetails;
 import app.zingo.employeemanagements.Model.MarkerData;
 import app.zingo.employeemanagements.R;
-import app.zingo.employeemanagements.UI.Employee.EmployeeListScreen;
-import app.zingo.employeemanagements.UI.GetStartedScreen;
+import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.DataParser;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
+import app.zingo.employeemanagements.WebApi.EmployeeApi;
+import app.zingo.employeemanagements.WebApi.GeneralNotificationAPI;
 import app.zingo.employeemanagements.WebApi.LiveTrackingAPI;
-import app.zingo.employeemanagements.WebApi.LoginDetailsAPI;
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -103,31 +100,24 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
     private GoogleMap mMap;
     MapView mapView;
     LinearLayout mlocation;
-    int activityId;
-    Marker marker;
-    private MarkerOptions options = new MarkerOptions();
+    LinearLayout scrollableLay,mMapShow;
+    TextView mName,mUpdatingTime,mAddress,mLoadMap;
+    ImageView mShowHide;
 
     ArrayList<LatLng> MarkerPoints;
-    GoogleApiClient mGoogleApiClient;
-    Location mLastLocation;
-    LocationRequest mLocationRequest;
     private LatLng lastKnownLatLng;
     private Polyline gpsTrack;
 
     int employeeId;
     Employee employee;
+    String employeeImage="";
     ArrayList<Integer> colorValue;
 
-    Handler h = new Handler();
-    int delay = 15*1000; //1 second=1000 milisecond, 15*1000=15seconds
-    Runnable runnable;
+    boolean arrayValue = false;
+    int screenheight,screenwidth;
 
-    Dialog slideDialog;
-
-    private static final int VIEW_TYPE_TOP = 0;
-    private static final int VIEW_TYPE_MIDDLE = 1;
-    private static final int VIEW_TYPE_BOTTOM = 2;
-    private List<LiveTracking> mItems;
+    //Global var
+    ArrayList<LiveTracking> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,14 +132,28 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
 
             mapView = (MapView) findViewById(R.id.employee_live_list_map);
             mlocation = (LinearLayout) findViewById(R.id.location_list);
+            scrollableLay = (LinearLayout) findViewById(R.id.nestedScrollView);
+            mMapShow = (LinearLayout) findViewById(R.id.map_lay_short);
+            mShowHide = (ImageView) findViewById(R.id.show_lay_hide);
+            mName = (TextView) findViewById(R.id.emp_name_loca);
+            mUpdatingTime = (TextView) findViewById(R.id.updated_details);
+            mAddress = (TextView) findViewById(R.id.address);
+            mLoadMap = (TextView) findViewById(R.id.load_details);
+
+            final ViewGroup.LayoutParams params = scrollableLay.getLayoutParams();
+            final ViewGroup.LayoutParams paramsm = mMapShow.getLayoutParams();
+
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            screenheight = displayMetrics.heightPixels;
+            screenwidth = displayMetrics.widthPixels;
 
             mapView.onCreate(savedInstanceState);
             mapView.onResume();
 
             MarkerPoints = new ArrayList<>();
 
-           /* mDepartmentCard.setVisibility(View.GONE);
-            mDepartmentLay.setVisibility(View.GONE);*/
+
 
             Bundle bundle = getIntent().getExtras();
 
@@ -157,6 +161,29 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
 
                 employeeId = bundle.getInt("EmployeeId");
                 employee = (Employee)bundle.getSerializable("Employee");
+            }
+
+            if(employee!=null){
+
+                mName.setText(""+employee.getEmployeeName());
+
+                ArrayList<EmployeeImages> images = employee.getEmployeeImages();
+
+                if(images!=null&&images.size()!=0){
+                    EmployeeImages employeeImages = images.get(0);
+
+                    if(employeeImages!=null){
+
+
+                        employeeImage = employeeImages.getImage();
+
+                    }
+
+                }
+            }else{
+
+                getProfile(employeeId);
+
             }
 
             try {
@@ -177,21 +204,61 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
                     }
                     mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                     mMap.getProjection().getVisibleRegion().latLngBounds.getCenter();
+                    mMap.setMyLocationEnabled(true);
 
 
                     try{
 
+                        mLoadMap.setText(""+new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
 
                         LiveTracking lv = new LiveTracking();
                         lv.setEmployeeId(employeeId);
                         lv.setTrackingDate(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
-
                         getLiveLocation(lv);
-                        //getMeetingDetails(11);
+
                     }catch (Exception e){
                         e.printStackTrace();
                     }
 
+
+                }
+            });
+
+            mShowHide.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if(mlocation.getVisibility()==View.VISIBLE){
+
+
+                        // Changes the height and width to the specified *pixels*
+                        params.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+                        params.width = screenwidth;
+                        scrollableLay.setLayoutParams(params);
+
+                        paramsm.height = LinearLayout.LayoutParams.MATCH_PARENT;
+                        paramsm.width = screenwidth;
+                        mMapShow.setLayoutParams(paramsm);
+
+                        mlocation.setVisibility(View.GONE);
+                        mShowHide.setImageResource(R.drawable.up_arrow_location);
+
+
+                    }else{
+
+                        // Changes the height and width to the specified *pixels*
+
+                        params.width = screenwidth;
+                        params.height = screenheight/2;
+                        scrollableLay.setLayoutParams(params);
+
+                        paramsm.width = screenwidth;
+                        paramsm.height = screenheight/2;
+                        mMapShow .setLayoutParams(paramsm);
+
+                        mlocation.setVisibility(View.VISIBLE);
+                        mShowHide.setImageResource(R.drawable.down_arrow_location);
+                    }
 
                 }
             });
@@ -229,13 +296,13 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
 
                             if (progressDialog!=null)
                                 progressDialog.dismiss();
-                            ArrayList<LiveTracking> list = response.body();
-                            long hours=0;
 
-                            ArrayList<MarkerData> markerData = new ArrayList<>();
+                            list = response.body();
 
 
                             if (list !=null && list.size()!=0) {
+
+                                arrayValue = true;
 
                                 Collections.sort(list,LiveTracking.compareLiveTrack);
                                 colorValue = new ArrayList<>();
@@ -253,25 +320,24 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
                                 gpsTrack = mMap.addPolyline(polylineOptions);
 
                                 ArrayList<LiveTracking> lt = new ArrayList<>();
-                                ArrayList<LiveTraackingTime> lts = new ArrayList<>();
 
                                 int k=0;
 
 
-                                for(int i=0;i<list.size();i++){
+                                /*for(int i=0;i<list.size();i++){
 
 
 
                                     if(list.get(i).getLongitude()!=null||list.get(i).getLatitude()!=null){
 
-                                        double lat = Double.parseDouble(list.get(i).getLatitude());
-                                        double lng = Double.parseDouble(list.get(i).getLongitude());
 
-                                        if(lat==0&&lng==0){
+
+                                        if(Double.parseDouble(list.get(i).getLatitude())==0&&Double.parseDouble(list.get(i).getLongitude())==0){
 
                                         }else{
                                             lastKnownLatLng = new LatLng(Double.parseDouble(list.get(i).getLatitude()), Double.parseDouble(list.get(i).getLongitude()));
-                                            updateTrack();
+
+                                            updateTrack(lastKnownLatLng);
 
                                             k=i;
 
@@ -284,74 +350,62 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
 
                                 }
 
-                                String snippetL = getAddress(Double.parseDouble(list.get(k).getLongitude()),Double.parseDouble(list.get(k).getLatitude()));
-
-                                createMarker(Double.parseDouble(list.get(k).getLatitude()), Double.parseDouble(list.get(k).getLongitude()),employee.getEmployeeName()+"\nLast Location",""+snippetL);
-
-                                if(lastKnownLatLng!=null){
+*/
+                               /* if(lastKnownLatLng!=null){
                                     CameraPosition cameraPosition = new CameraPosition.Builder().zoom(60).target(lastKnownLatLng).build();
                                     mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                                 }
-
+*/
 
 
                                 if(list.size()==3){
 
 
-                                    LiveTraackingTime ltt = new LiveTraackingTime();
-                                    ltt.setLiveTracking(list.get(0));
-                                    ltt.setPreviousTime("Starts at "+list.get(0).getTrackingTime());
-                                    ltt.setDuration("0");
-                                    ltt.setKm("0");
-                                    lts.add(ltt);
+
+
+                                    updateTrack(new LatLng(Double.parseDouble(list.get(0).getLatitude()), Double.parseDouble(list.get(0).getLongitude())));
+
                                     lt.add(list.get(0));
 
-                                    String snippet = getAddress(Double.parseDouble(list.get(0).getLongitude()),Double.parseDouble(list.get(0).getLatitude()));
-
-                                    createMarker(Double.parseDouble(list.get(0).getLatitude()), Double.parseDouble(list.get(0).getLongitude()),employee.getEmployeeName()+"\nLocation 1",""+snippet);
 
 
-                                   /* ltt = new LiveTraackingTime();
-                                    ltt.setLiveTracking(list.get(1));
-                                    ltt.setPreviousTime(list.get(0).getTrackingTime());
-                                    ltt.setDuration("0");
-                                    ltt.setKm("0");
-                                    lts.add(ltt);*/
+                                    createMarkerwithCustom(Double.parseDouble(list.get(0).getLatitude()),
+                                            Double.parseDouble(list.get(0).getLongitude()),employee.getEmployeeName()+"\nLocation 1",""+getAddress(Double.parseDouble(list.get(0).getLongitude()),Double.parseDouble(list.get(0).getLatitude())),
+                                            createCustomMarker(EmployeeLiveMappingScreen.this,null,employee.getEmployeeName(),R.drawable.home_map));
+
                                     lt.add(list.get(1));
+                                    updateTrack(new LatLng(Double.parseDouble(list.get(1).getLatitude()), Double.parseDouble(list.get(1).getLongitude())));
 
-                                    String snippets = getAddress(Double.parseDouble(list.get(1).getLongitude()),Double.parseDouble(list.get(1).getLatitude()));
 
-                                    createMarker(Double.parseDouble(list.get(1).getLatitude()), Double.parseDouble(list.get(1).getLongitude()),employee.getEmployeeName()+"\nLocation 2",""+snippets);
 
-                                    ltt = new LiveTraackingTime();
-                                    ltt.setLiveTracking(list.get(0));
-                                    ltt.setPreviousTime("Ends at "+list.get(2).getTrackingTime());
-                                    ltt.setDuration("0");
-                                    ltt.setKm("0");
-                                    lts.add(ltt);
+                                    createMarker(Double.parseDouble(list.get(1).getLatitude()),
+                                            Double.parseDouble(list.get(1).getLongitude()),
+                                            employee.getEmployeeName()+"\nLocation 2",""+getAddress(Double.parseDouble(list.get(1).getLongitude()),Double.parseDouble(list.get(1).getLatitude())));
+
+
                                     lt.add(list.get(2));
+                                    updateTrack(new LatLng(Double.parseDouble(list.get(2).getLatitude()), Double.parseDouble(list.get(2).getLongitude())));
 
-                                    String snippetr = getAddress(Double.parseDouble(list.get(2).getLongitude()),Double.parseDouble(list.get(2).getLatitude()));
 
-                                    createMarker(Double.parseDouble(list.get(2).getLatitude()), Double.parseDouble(list.get(2).getLongitude()),employee.getEmployeeName()+"\nLocation 3",""+snippetr);
+
+                                    createMarkerwithCustom(Double.parseDouble(list.get(2).getLatitude()),
+                                            Double.parseDouble(list.get(2).getLongitude()),
+                                            employee.getEmployeeName()+"\nLocation 3",""+getAddress(Double.parseDouble(list.get(2).getLongitude()),Double.parseDouble(list.get(2).getLatitude())),
+                                            createCustomMarker(EmployeeLiveMappingScreen.this,employeeImage,employee.getEmployeeName(),R.drawable.live_location_black));
+
 
                                 }else if(list.size()>3){
 
-                                    LiveTraackingTime ltt = new LiveTraackingTime();
-                                    ltt.setLiveTracking(list.get(0));
-                                    ltt.setPreviousTime("Starts at "+list.get(0).getTrackingTime());
-                                    ltt.setDuration("0");
-                                    ltt.setKm("0");
-                                    lts.add(ltt);
+                                    ArrayList<LatLng> latLngs = new ArrayList<>();
+
 
                                     lt.add(list.get(0));
 
                                     String snippets = getAddress(Double.parseDouble(list.get(0).getLongitude()),Double.parseDouble(list.get(0).getLatitude()));
 
-                                    createMarker(Double.parseDouble(list.get(0).getLatitude()), Double.parseDouble(list.get(0).getLongitude()),employee.getEmployeeName()+"\nLocation "+lt.size(),""+snippets);
+                                    createMarkerwithCustom(Double.parseDouble(list.get(0).getLatitude()), Double.parseDouble(list.get(0).getLongitude()),employee.getEmployeeName()+"\nLocation "+lt.size(),""+snippets,createCustomMarker(EmployeeLiveMappingScreen.this,null,employee.getEmployeeName(),R.drawable.home_map));
+                                    latLngs.add(new LatLng(Double.parseDouble(list.get(0).getLatitude()), Double.parseDouble(list.get(0).getLongitude())));
 
-                                    String lati = list.get(0).getLatitude();
-                                    String lngi = list.get(0).getLongitude();
                                     String time = list.get(0).getTrackingTime();
 
                                     int durationValue =0;
@@ -360,43 +414,36 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
                                     boolean addValue = false;
                                     int indexValue = 0;
 
+                                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+                                    Date fd=null,td=null;
+                                    String logoutT = "",loginT="";
+                                    long diff=0;
+                                    int minutes =0;
+                                    Location locationA = new Location("point A");
+                                    Location locationB = new Location("point B");
+                                    float distance=0;
+                                    String snippet="";
+
                                     for(int i=1;i<list.size()-1;i++){
 
-                                        if(list.get(i-1).getLatitude().equalsIgnoreCase(list.get(i).getLatitude())&&list.get(i-1).getLongitude().equalsIgnoreCase(list.get(i).getLongitude())){
+                                        logoutT = list.get(i).getTrackingTime();
+                                        loginT = time;
+                                       latLngs.add(new LatLng(Double.parseDouble(list.get(i).getLatitude()), Double.parseDouble(list.get(i).getLongitude())));
 
-                                          /*  int minutes = (int) ((diffHrs / (1000*60)) % 60);
-                                            int hoursValue  = (int) ((diffHrs / (1000*60*60)) % 24);
-                                            int days   = (int) ((diffHrs / (1000*60*60*24)));*/
+                                        if(list.get(i-1).getLatitude().equalsIgnoreCase(list.get(i).getLatitude())
+                                                &&list.get(i-1).getLongitude().equalsIgnoreCase(list.get(i).getLongitude())
+                                                &&(loginT!=null&&!loginT.isEmpty())&&(logoutT!=null&&!logoutT.isEmpty())){
 
-                                            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-
-
-                                            Date fd=null,td=null;
-
-                                            String logoutT = list.get(i).getTrackingTime();
-                                            String loginT = time;
-
-                                            if(loginT==null||loginT.isEmpty()){
-
-                                                loginT = "00:00:00";
-                                            }
-
-                                            if(logoutT==null||logoutT.isEmpty()){
-
-                                                logoutT ="00:00:00";
-                                            }
 
                                             try {
                                                 fd = sdf.parse(""+loginT);
                                                 td = sdf.parse(""+logoutT);
 
-                                                long diff = td.getTime() - fd.getTime();
+                                                diff = td.getTime() - fd.getTime();
 
-                                                int minutes = (int) ((diff / (1000*60)) % 60);
-                                                int hoursValue   = (int) ((diff / (1000*60*60)) % 24);
-                                                int days   = (int) ((diff / (1000*60*60*24)));
+                                                minutes = (int) ((diff / (1000*60)) % 60);
 
-                                                if(minutes>=5){
+                                                if(minutes>=10){
 
                                                    addValue = true;
                                                    indexValue = i;
@@ -411,115 +458,130 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
                                             }
 
 
-
-
                                         }else{
 
                                             if(addValue){
-                                                addValue = false;
-                                                time = list.get(indexValue).getTrackingTime();
-                                                lt.add(list.get(indexValue));
 
 
-                                                String snippet = getAddress(Double.parseDouble(list.get(indexValue).getLongitude()),Double.parseDouble(list.get(indexValue).getLatitude()));
 
-                                                createMarker(Double.parseDouble(list.get(indexValue).getLatitude()), Double.parseDouble(list.get(indexValue).getLongitude()),employee.getEmployeeName()+"\nLocation "+lt.size(),""+snippet);
-                                            }
-
-                                            Location locationA = new Location("point A");
-
-                                            locationA.setLatitude(Double.parseDouble(list.get(i-1).getLatitude()));
-                                            locationA.setLongitude(Double.parseDouble(list.get(i-1).getLongitude()));
-
-                                            Location locationB = new Location("point B");
-
-                                            locationB.setLatitude(Double.parseDouble(list.get(i).getLatitude()));
-                                            locationB.setLongitude(Double.parseDouble(list.get(i).getLongitude()));
-
-                                            float distance = locationA.distanceTo(locationB);
-
-                                            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+                                                locationA.setLatitude(Double.parseDouble(list.get(indexValue).getLatitude()));
+                                                locationA.setLongitude(Double.parseDouble(list.get(indexValue).getLongitude()));
 
 
-                                            Date fd=null,td=null;
 
-                                            String logoutT = list.get(i).getTrackingTime();
-                                            String loginT = list.get(i-1).getTrackingTime();
+                                                locationB.setLatitude(Double.parseDouble(list.get(i).getLatitude()));
+                                                locationB.setLongitude(Double.parseDouble(list.get(i).getLongitude()));
 
-                                            if(loginT==null||loginT.isEmpty()){
+                                                distance = locationA.distanceTo(locationB);
 
-                                                loginT = "00:00:00";
-                                            }
+                                                if(distance>=50){
 
-                                            if(logoutT==null||logoutT.isEmpty()){
+                                                    addValue = false;
+                                                    time = list.get(indexValue).getTrackingTime();
+                                                    lt.add(list.get(indexValue));
 
-                                                logoutT ="00:00:00";
-                                            }
 
-                                            try {
-                                                fd = sdf.parse(""+loginT);
-                                                td = sdf.parse(""+logoutT);
+                                                    snippet = getAddress(Double.parseDouble(list.get(indexValue).getLongitude()),Double.parseDouble(list.get(indexValue).getLatitude()));
 
-                                                long diff = td.getTime() - fd.getTime();
-
-                                                int minutes = (int) ((diff / (1000*60)) % 60);
-                                                int hoursValue   = (int) ((diff / (1000*60*60)) % 24);
-                                                int days   = (int) ((diff / (1000*60*60*24)));
-
-                                                if(minutes>=5&&distance>=500){
-
-                                                    lt.add(list.get(i));
-                                                    lati = list.get(i).getLatitude();
-                                                    lngi = list.get(i).getLongitude();
-
-                                                    String snippet = getAddress(Double.parseDouble(lngi),Double.parseDouble(lati));
-
-                                                    createMarker(Double.parseDouble(list.get(i).getLatitude()), Double.parseDouble(list.get(i).getLongitude()),employee.getEmployeeName()+"\nLocation "+lt.size(),""+snippet);
+                                                    createMarker(Double.parseDouble(list.get(indexValue).getLatitude()), Double.parseDouble(list.get(indexValue).getLongitude()),employee.getEmployeeName()+"\nLocation "+lt.size(),""+snippet);
 
                                                 }
 
 
+                                            }else if((logoutT!=null&&!logoutT.isEmpty())&&(loginT!=null&&!loginT.isEmpty())){
 
-                                            } catch (ParseException e) {
-                                                e.printStackTrace();
-                                                if(distance>=500){
-                                                    lt.add(list.get(i));
-                                                    lati = list.get(i).getLatitude();
-                                                    lngi = list.get(i).getLongitude();
+                                                locationA.setLatitude(Double.parseDouble(list.get(i-1).getLatitude()));
+                                                locationA.setLongitude(Double.parseDouble(list.get(i-1).getLongitude()));
 
-                                                    String snippet = getAddress(Double.parseDouble(lngi),Double.parseDouble(lati));
+                                                locationB.setLatitude(Double.parseDouble(list.get(i).getLatitude()));
+                                                locationB.setLongitude(Double.parseDouble(list.get(i).getLongitude()));
 
-                                                    createMarker(Double.parseDouble(list.get(i).getLatitude()), Double.parseDouble(list.get(i).getLongitude()),employee.getEmployeeName()+"\nLocation "+lt.size(),""+snippet);
+                                                distance = locationA.distanceTo(locationB);
+
+
+                                                logoutT = list.get(i).getTrackingTime();
+                                                loginT = list.get(i-1).getTrackingTime();
+
+
+                                                try {
+                                                    fd = sdf.parse(""+loginT);
+                                                    td = sdf.parse(""+logoutT);
+
+                                                    diff = td.getTime() - fd.getTime();
+
+                                                    minutes = (int) ((diff / (1000*60)) % 60);
+
+                                                    if(minutes>=10&&distance>=50){
+
+                                                        lt.add(list.get(i));
+
+
+                                                        snippet = getAddress(Double.parseDouble(list.get(i).getLongitude()),Double.parseDouble(list.get(i).getLatitude()));
+
+                                                        createMarker(Double.parseDouble(list.get(i).getLatitude()), Double.parseDouble(list.get(i).getLongitude()),employee.getEmployeeName()+"\nLocation "+lt.size(),""+snippet);
+
+                                                    }
+
+
+
+                                                } catch (ParseException e) {
+                                                    e.printStackTrace();
+                                                    if(distance>=50){
+                                                        lt.add(list.get(i));
+
+
+                                                        snippet = getAddress(Double.parseDouble(list.get(i).getLatitude()),Double.parseDouble(list.get(i).getLongitude()));
+
+                                                        createMarker(Double.parseDouble(list.get(i).getLatitude()), Double.parseDouble(list.get(i).getLongitude()),employee.getEmployeeName()+"\nLocation "+lt.size(),""+snippet);
+                                                    }
+
                                                 }
 
                                             }
-
-
 
 
                                         }
                                     }
-                                    String snippetsr = getAddress(Double.parseDouble(list.get(list.size()-1).getLongitude()),Double.parseDouble(list.get(list.size()-1).getLatitude()));
 
-                                    createMarker(Double.parseDouble(list.get(list.size()-1).getLatitude()), Double.parseDouble(list.get(list.size()-1).getLongitude()),employee.getEmployeeName()+"\nLocation "+lt.size(),""+snippetsr);
+
+                                    //createMarker(Double.parseDouble(list.get(list.size()-1).getLatitude()), Double.parseDouble(list.get(list.size()-1).getLongitude()),employee.getEmployeeName()+"\nLocation "+lt.size(),""+snippetsr);
+                                    createMarkerwithCustom(Double.parseDouble(list.get(list.size()-1).getLatitude()),
+                                            Double.parseDouble(list.get(list.size()-1).getLongitude()),
+                                            employee.getEmployeeName()+"\nLocation "+lt.size(),
+                                            ""+getAddress(Double.parseDouble(list.get(list.size()-1).getLongitude()),Double.parseDouble(list.get(list.size()-1).getLatitude())),createCustomMarker(EmployeeLiveMappingScreen.this,employeeImage,employee.getEmployeeName(),R.drawable.live_location_black));
+                                    latLngs.add(new LatLng(Double.parseDouble(list.get(list.size()-1).getLatitude()), Double.parseDouble(list.get(list.size()-1).getLongitude())));
                                     lt.add(list.get(list.size()-1));
+
+
+                                    if(latLngs!=null&&latLngs.size()!=0){
+
+                                        loadMap(latLngs);
+                                    }
 
                                 } else if(list.size()<3){
                                     lt.add(list.get(0));
-                                    String snippet = getAddress(Double.parseDouble(list.get(0).getLongitude()),Double.parseDouble(list.get(0).getLatitude()));
 
-                                    createMarker(Double.parseDouble(list.get(0).getLatitude()), Double.parseDouble(list.get(0).getLongitude()),employee.getEmployeeName()+"\nLocation 1",""+snippet);
+
+                                    //createMarker(Double.parseDouble(list.get(0).getLatitude()), Double.parseDouble(list.get(0).getLongitude()),employee.getEmployeeName()+"\nLocation 1",""+snippet);
+                                    createMarkerwithCustom(Double.parseDouble(list.get(0).getLatitude()),
+                                            Double.parseDouble(list.get(0).getLongitude()),employee.getEmployeeName()+"\nLocation 1",""+getAddress(Double.parseDouble(list.get(0).getLongitude()),Double.parseDouble(list.get(0).getLatitude())),
+                                            createCustomMarker(EmployeeLiveMappingScreen.this,null,employee.getEmployeeName(),R.drawable.home_map));
 
                                     lt.add(list.get(0));
 
-                                    String snippets = getAddress(Double.parseDouble(list.get(0).getLongitude()),Double.parseDouble(list.get(0).getLatitude()));
+                                    updateTrack(new LatLng(Double.parseDouble(list.get(0).getLatitude()), Double.parseDouble(list.get(0).getLongitude())));
 
-                                    createMarker(Double.parseDouble(list.get(0).getLatitude()), Double.parseDouble(list.get(0).getLongitude()),employee.getEmployeeName()+"\nLocation 2",""+snippets);
+                                    createMarker(Double.parseDouble(list.get(0).getLatitude()),
+                                            Double.parseDouble(list.get(0).getLongitude()),
+                                            employee.getEmployeeName()+"\nLocation 2",""+getAddress(Double.parseDouble(list.get(0).getLongitude()),Double.parseDouble(list.get(0).getLatitude())));
+
                                     lt.add(list.get(list.size()-1));
 
-                                    String snippetr = getAddress(Double.parseDouble(list.get(list.size()-1).getLongitude()),Double.parseDouble(list.get(list.size()-1).getLatitude()));
-
-                                    createMarker(Double.parseDouble(list.get(list.size()-1).getLatitude()), Double.parseDouble(list.get(list.size()-1).getLongitude()),employee.getEmployeeName()+"\nLocation 3",""+snippetr);
+                                    updateTrack(new LatLng(Double.parseDouble(list.get(list.size()-1).getLatitude()), Double.parseDouble(list.get(list.size()-1).getLongitude())));
+                                  //  createMarker(Double.parseDouble(list.get(list.size()-1).getLatitude()), Double.parseDouble(list.get(list.size()-1).getLongitude()),employee.getEmployeeName()+"\nLocation 3",""+snippetr);
+                                   createMarkerwithCustom(Double.parseDouble(list.get(list.size()-1).getLatitude()),
+                                           Double.parseDouble(list.get(list.size()-1).getLongitude()),
+                                           employee.getEmployeeName()+"\nLocation 3",""+getAddress(Double.parseDouble(list.get(list.size()-1).getLongitude()),Double.parseDouble(list.get(list.size()-1).getLatitude())),createCustomMarker(EmployeeLiveMappingScreen.this,employeeImage,employee.getEmployeeName(),R.drawable.live_location_black));
                                 }
 
 
@@ -529,6 +591,8 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
                                     onAddField(lt);
                                 }else{
 
+                                    mAddress.setText("No Location found");
+                                    mShowHide.setVisibility(View.GONE);
                                 }
 
 
@@ -537,7 +601,9 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
 
                             }else{
 
-                                Toast.makeText(EmployeeLiveMappingScreen.this, "No Location found", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(EmployeeLiveMappingScreen.this, "No Location found", Toast.LENGTH_SHORT).show();
+                                mAddress.setText("No Location found");
+                                mShowHide.setVisibility(View.GONE);
 
                             }
 
@@ -574,6 +640,20 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
                 .title(title)
                 .snippet(snippet)
                 .icon( BitmapDescriptorFactory.defaultMarker(color)));
+
+
+    }
+
+    protected Marker createMarkerwithCustom(double latitude, double longitude, String title, String snippet,Bitmap ima) {
+
+
+
+        return mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(latitude, longitude))
+                .anchor(0.5f, 0.5f)
+                .title(title)
+                .snippet(snippet)
+                .icon( BitmapDescriptorFactory.fromBitmap(ima)));
 
 
     }
@@ -750,17 +830,17 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
         return data;
     }
 
-    private void updateTrack() {
+    private void updateTrack(final LatLng lastKnownLatLng) {
+
         List<LatLng> points = gpsTrack.getPoints();
         points.add(lastKnownLatLng);
         gpsTrack.setPoints(points);
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(lastKnownLatLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
+
     }
 
      public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_calendar, menu);
+        getMenuInflater().inflate(R.menu.refresh_calendar_menu, menu);
         return true;
     }
 
@@ -784,10 +864,23 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
             case android.R.id.home:
 
                 EmployeeLiveMappingScreen.this.finish();
+                break;
 
             case R.id.action_calendar:
 
                openDatePicker();
+               break;
+
+            case R.id.action_request:
+
+                requestLocation();
+                break;
+
+            case R.id.action_refresh:
+
+                restartActivity(EmployeeLiveMappingScreen.this);
+                //recreate();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -813,7 +906,7 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
 
                             String date1 = (monthOfYear + 1)  + "/" + (dayOfMonth) + "/" + year;
 
-                            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy");
+                            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
 
 
@@ -821,6 +914,7 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
                             try {
                                 Date fdate = simpleDateFormat.parse(date1);
 
+                                mLoadMap.setText(""+sdf.format(fdate));
                                 LiveTracking lv = new LiveTracking();
                                 lv.setEmployeeId(employeeId);
                                 lv.setTrackingDate(date1);
@@ -849,19 +943,42 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
     }
 
     public void onAddField(final  ArrayList<LiveTracking> liveTrackingArrayList) {
+
+        ViewGroup.LayoutParams params = scrollableLay.getLayoutParams();
+// Changes the height and width to the specified *pixels*
+        params.height = screenheight/2;
+        params.width = screenwidth;
+        scrollableLay.setLayoutParams(params);
+
+        ViewGroup.LayoutParams paramsm = mMapShow.getLayoutParams();
+        paramsm.width = screenwidth;
+        paramsm.height = screenheight/2;
+        mMapShow.setLayoutParams(paramsm);
+
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.bottom_location_places, null);
 
+
+
         TextView mNo = (TextView) rowView.findViewById(R.id.no_result);
         mNo.setVisibility(View.GONE);
-        RecyclerView list = (RecyclerView)rowView.findViewById(R.id.location_list);
+        RecyclerView list = (RecyclerView)rowView.findViewById(R.id.location_lists);
 
         list.removeAllViews();
 
         if(liveTrackingArrayList!=null&&liveTrackingArrayList.size()!=0){
-            colorValue.remove(0);
+            mShowHide.setVisibility(View.VISIBLE);
+
+            if(colorValue!=null&&colorValue.size()!=0){
+                colorValue.remove(0);
+            }
+
             LocationLiveAdapter adapter = new LocationLiveAdapter(EmployeeLiveMappingScreen.this,liveTrackingArrayList,colorValue);
             list.setAdapter(adapter);
+            double lng = Double.parseDouble(liveTrackingArrayList.get(liveTrackingArrayList.size()-1).getLongitude());
+            double lat = Double.parseDouble(liveTrackingArrayList.get(liveTrackingArrayList.size()-1).getLatitude());
+            getAddressValue(lng,lat,mAddress);
+            mUpdatingTime.setText("Last updated at : "+liveTrackingArrayList.get(liveTrackingArrayList.size()-1).getTrackingTime());
         }
 
         mlocation.addView(rowView);
@@ -1078,7 +1195,7 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
                     if(position==0){
                         holder.mItemTime.setText("Started at "+parses);
                     }else if(position==(list.size()-1)){
-                        holder.mItemTime.setText("Ended at "+parses);
+                        holder.mItemTime.setText("Last Updated at "+parses);
                     }else{
 
                         if(list.get(position-1).getTrackingTime()!=null){
@@ -1239,6 +1356,263 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
                 ex.printStackTrace();
             }
         }
+    }
+
+    public void getAddressValue(final double longitude,final double latitude,final TextView textView  )
+    {
+
+        try
+        {
+            Geocoder geocoder;
+            List<Address> addresses;
+            geocoder = new Geocoder(EmployeeLiveMappingScreen.this, Locale.ENGLISH);
+
+
+            addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+
+            String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+
+            String state = addresses.get(0).getAdminArea();
+            String country = addresses.get(0).getCountryName();
+            String postalCode = addresses.get(0).getPostalCode();
+            String knownName = addresses.get(0).getFeatureName();
+            String local = addresses.get(0).getSubLocality();
+
+
+
+            System.out.println("address = "+address);
+
+            String currentLocation;
+
+            if(!isEmpty(address))
+            {
+                currentLocation=address;
+
+
+
+                textView.setText(currentLocation);
+
+            }
+            else{
+
+                textView.setText("Unknown");
+
+            }
+
+
+
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public  Bitmap createCustomMarker(Context context, String urlImage, String _name, @DrawableRes int resource) {
+
+        View marker = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.custom_marker_location, null);
+
+        CircleImageView markerImage = (CircleImageView) marker.findViewById(R.id.user_dp);
+
+
+
+
+        if(urlImage != null && !urlImage.isEmpty()){
+            Picasso.with(EmployeeLiveMappingScreen.this).load(urlImage).placeholder(R.drawable.profile).error(R.drawable.profile).into(markerImage);
+
+
+        }else{
+
+            try {
+
+                markerImage.setImageResource(resource);
+
+            }catch (Exception e){
+                e.printStackTrace();
+                markerImage.setImageResource(R.drawable.location);
+            }
+
+        }
+        //markerImage.setImageResource(resource);
+       /* TextView txt_name = (TextView)marker.findViewById(R.id.name);
+        txt_name.setText(_name);*/
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        marker.setLayoutParams(new ViewGroup.LayoutParams(52, ViewGroup.LayoutParams.WRAP_CONTENT));
+        marker.measure(displayMetrics.widthPixels, displayMetrics.heightPixels);
+        marker.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels);
+        marker.buildDrawingCache();
+        Bitmap bitmap = Bitmap.createBitmap(marker.getMeasuredWidth(), marker.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        marker.draw(canvas);
+
+        return bitmap;
+    }
+
+    public static void restartActivity(Activity activity){
+        if (Build.VERSION.SDK_INT >= 11) {
+            activity.recreate();
+        } else {
+            activity.finish();
+            activity.startActivity(activity.getIntent());
+        }
+    }
+
+
+    public void requestLocation(){
+
+        GeneralNotification gm = new GeneralNotification();
+        gm.setEmployeeId(employeeId);
+        gm.setSenderId(Constants.SENDER_ID);
+        gm.setServerId(Constants.SERVER_ID);
+        gm.setTitle("Location Request");
+        gm.setMessage(PreferenceHandler.getInstance(EmployeeLiveMappingScreen.this).getUserFullName()+" is requesting your live location.%"+PreferenceHandler.getInstance(EmployeeLiveMappingScreen.this).getUserId());
+        sendNotification(gm);
+    }
+
+    public void sendNotification(final GeneralNotification md){
+
+
+        final ProgressDialog progressDialog = new ProgressDialog(EmployeeLiveMappingScreen.this);
+        progressDialog.setTitle("Sending Request..");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        GeneralNotificationAPI apiService = Util.getClient().create(GeneralNotificationAPI.class);
+
+        Call<ArrayList<String>> call = apiService.sendGeneralNotification(md);
+
+        call.enqueue(new Callback<ArrayList<String>>() {
+            @Override
+            public void onResponse(Call<ArrayList<String>> call, Response<ArrayList<String>> response) {
+//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
+
+                if(progressDialog!=null){
+
+                    progressDialog.dismiss();
+                }
+                try
+                {
+
+
+                    int statusCode = response.code();
+                    if (statusCode == 200 || statusCode == 201) {
+
+
+                        Toast.makeText(EmployeeLiveMappingScreen.this, "Request Sent", Toast.LENGTH_SHORT).show();
+
+
+
+                    }else {
+                    }
+                }
+                catch (Exception ex)
+                {
+
+
+                    ex.printStackTrace();
+                }
+//                callGetStartEnd();
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<String>> call, Throwable t) {
+
+                if(progressDialog!=null){
+
+                    progressDialog.dismiss();
+                }
+                Toast.makeText(EmployeeLiveMappingScreen.this, "Request failed", Toast.LENGTH_SHORT).show();
+
+                Log.e("TAG", t.toString());
+            }
+        });
+
+
+
+    }
+
+
+    public void getProfile(final int id){
+
+        final ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setCancelable(false);
+        dialog.setTitle("Please Wait..");
+        dialog.show();
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+
+                final EmployeeApi subCategoryAPI = Util.getClient().create(EmployeeApi.class);
+                Call<ArrayList<Employee>> getProf = subCategoryAPI.getProfileById(id);
+                //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
+
+                getProf.enqueue(new Callback<ArrayList<Employee>>() {
+
+                    @Override
+                    public void onResponse(Call<ArrayList<Employee>> call, Response<ArrayList<Employee>> response) {
+
+                        if(dialog != null)
+                        {
+                            dialog.dismiss();
+                        }
+                        if (response.code() == 200)
+                        {
+                            System.out.println("Inside api");
+
+
+
+                            if(response.body()!=null){
+                                employee = response.body().get(0);
+
+                                mName.setText(""+employee.getEmployeeName());
+
+                                ArrayList<EmployeeImages> images = employee.getEmployeeImages();
+
+                                if(images!=null&&images.size()!=0){
+                                    EmployeeImages employeeImages = images.get(0);
+
+                                    if(employeeImages!=null){
+
+
+                                        employeeImage = employeeImages.getImage();
+
+                                    }
+
+                                }
+                            }
+
+                        }else{
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<Employee>> call, Throwable t) {
+
+                        if(dialog != null)
+                        {
+                            dialog.dismiss();
+                        }
+
+
+                    }
+                });
+
+            }
+
+        });
+    }
+
+
+    public void loadMap(final ArrayList<LatLng> latLngs){
+
+        List<LatLng> points = gpsTrack.getPoints();
+        points.addAll(latLngs);
+        gpsTrack.setPoints(points);
+
     }
 
 

@@ -135,7 +135,7 @@ public class TaskListFragment extends Fragment {
                                 employeesList= new ArrayList<>();
                                 for(int i=0;i<list.size();i++){
 
-                                    if(list.get(i).getEmployeeId()!=PreferenceHandler.getInstance(getActivity()).getUserId()){
+                                    if(list.get(i).getUserRoleId()!=2){
 
 
                                         employeesList.add(list.get(i));

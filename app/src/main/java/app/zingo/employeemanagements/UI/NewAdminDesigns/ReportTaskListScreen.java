@@ -13,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import junit.framework.Assert;
 
 import java.util.ArrayList;
 
@@ -205,7 +204,7 @@ public class ReportTaskListScreen extends AppCompatActivity {
     public void setupToolbar() {
         this.mToolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(this.mToolbar);
-        Assert.assertNotNull(getSupportActionBar());
+//        Assert.assertNotNull(getSupportActionBar());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Tasks");
     }

@@ -35,7 +35,9 @@ import java.util.Date;
 
 import app.zingo.employeemanagements.Adapter.DepartmentSpinnerAdapter;
 import app.zingo.employeemanagements.Adapter.EmailEndAdapter;
+import app.zingo.employeemanagements.Custom.CustomSpinner;
 import app.zingo.employeemanagements.Custom.MyEditText;
+import app.zingo.employeemanagements.Custom.MyTextView;
 import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Designations;
 import app.zingo.employeemanagements.Model.Employee;
@@ -47,6 +49,7 @@ import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
 import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
 import app.zingo.employeemanagements.UI.Login.LoginScreen;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminNewMainScreen;
+import app.zingo.employeemanagements.UI.NewAdminDesigns.EmployeeDashBoardAdminView;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
@@ -65,12 +68,13 @@ public class EmployeeSignUp extends AppCompatActivity {
 
     MyEditText mName,mPrimaryEmail,mSecondaryEmail,
             mMobile,mPassword,mConfirm,mOrganizationCode,mDesignation;//,mDob,mDoj
-    EditText mAddress;
+    MyEditText mAddress;
     CardView mOrganizationCodeLayout;
     NestedScrollView mEmployeeLayout;
-    Spinner mDepartment;//mEmailEnd
+    CustomSpinner mDepartment;//mEmailEnd
     RadioButton mMale,mFemale,mOthers;
-    AppCompatButton mCreate,mVerifyCode;
+    MyTextView mCreate;
+    AppCompatButton mVerifyCode;
 
     ArrayList<Departments> departmentData;
 
@@ -92,7 +96,7 @@ public class EmployeeSignUp extends AppCompatActivity {
 
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            setTitle("Create Employee");
+            setTitle("Employee Signup");
 
 
 
@@ -109,21 +113,31 @@ public class EmployeeSignUp extends AppCompatActivity {
             mMobile = (MyEditText)findViewById(R.id.mobile);
             mPassword = (MyEditText)findViewById(R.id.password);
             mConfirm = (MyEditText)findViewById(R.id.confirmpwd);
-            mDepartment = (Spinner) findViewById(R.id.android_material_design_spinner);
+            mDepartment = (CustomSpinner) findViewById(R.id.android_material_design_spinner);
           //  mEmailEnd = (Spinner) findViewById(R.id.primary_email_end);
 
-            mAddress = (EditText)findViewById(R.id.address);
+            mAddress = (MyEditText)findViewById(R.id.address);
 
             mMale = (RadioButton)findViewById(R.id.founder_male);
             mFemale = (RadioButton)findViewById(R.id.founder_female);
             mOthers = (RadioButton)findViewById(R.id.founder_other);
 
-            mCreate = (AppCompatButton)findViewById(R.id.createFounder);
+            mCreate = (MyTextView)findViewById(R.id.createFounder);
             mVerifyCode = (AppCompatButton)findViewById(R.id.verify_org_code);
 
             mShowPwd = (CheckBox) findViewById(R.id.show_hide_password);
 
             mMobile.setText(""+PreferenceHandler.getInstance(EmployeeSignUp.this).getPhoneNumber());
+            mMobile.setEnabled(false);
+
+            mDepartment.setSpinnerEventsListener(new CustomSpinner.OnSpinnerEventsListener() {
+                public void onSpinnerOpened() {
+                    mDepartment.setSelected(true);
+                }
+                public void onSpinnerClosed() {
+                    mDepartment.setSelected(false);
+                }
+            });
 
             /*mDob.addTextChangedListener(new TextWatcher() {
 
@@ -265,7 +279,9 @@ public class EmployeeSignUp extends AppCompatActivity {
                 public void onClick(View view) {
 
                     try{
+
                         validate();
+
                     }catch (Exception e){
                         e.printStackTrace();
                     }
@@ -502,7 +518,7 @@ public class EmployeeSignUp extends AppCompatActivity {
             employee.setDepartmentId(departmentData.get(mDepartment.getSelectedItemPosition()).getDepartmentId());
 
 
-            employee.setStatus("Active");
+            employee.setStatus("Deactive");
             employee.setUserRoleId(1);
 
             Designations designations = new Designations();
@@ -826,19 +842,24 @@ public class EmployeeSignUp extends AppCompatActivity {
                             {
 
                                 departmentData = new ArrayList<>();
+                                ArrayList<String> depaName = new ArrayList<>();
 
                                 for(int i=0;i<departmentsList.size();i++){
 
                                     if(!departmentsList.get(i).getDepartmentName().equalsIgnoreCase("Founders")){
 
                                         departmentData.add(departmentsList.get(i));
+                                        depaName.add(departmentsList.get(i).getDepartmentName());
                                     }
                                 }
 
                                 if(departmentData!=null&&departmentData.size()!=0){
 
-                                    DepartmentSpinnerAdapter arrayAdapter = new DepartmentSpinnerAdapter(EmployeeSignUp.this, departmentData);
-                                    mDepartment.setAdapter(arrayAdapter);
+                                    ArrayAdapter adapter = new ArrayAdapter<>(EmployeeSignUp.this, R.layout.spinner_item_selected, depaName);
+                                    adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+
+                                   // DepartmentSpinnerAdapter arrayAdapter = new DepartmentSpinnerAdapter(EmployeeSignUp.this, departmentData);
+                                    mDepartment.setAdapter(adapter);
 
                                 }
 

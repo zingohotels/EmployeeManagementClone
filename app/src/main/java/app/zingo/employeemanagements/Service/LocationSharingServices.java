@@ -58,23 +58,14 @@ public class LocationSharingServices extends Service {
         // TODO Auto-generated method stub
         gps = new TrackGPS(LocationSharingServices.this);
 
-        /*Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() { // Function runs every MINUTES minutes."Longitude": "77.6157732","Latitude": "12.9334382",
-                // Run the code you want here
 
-            }
-        }, 0, 1000 * SECONDS);*/
-
-        //getLiveLocation(PreferenceHandler.getInstance(LocationSharingServices.this).getUserId()); // If the function you wanted was static
         try {
 
-            if(locationCheck()){
-                gps= new TrackGPS(LocationSharingServices.this);
+            if(locationCheck()&&PreferenceHandler.getInstance(getApplicationContext()).getUserId()!=0&&PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()!=2&&PreferenceHandler.getInstance(getApplicationContext()).getLoginStatus().equalsIgnoreCase("Login")){
+
                 if(gps.canGetLocation())
                 {
-                    System.out.println("Long and lat Rev"+gps.getLatitude()+" = "+gps.getLongitude());
+                    System.out.println("Long and lat Rev "+gps.getLatitude()+" = "+gps.getLongitude());
                     double latitude = gps.getLatitude();
                     double longitude = gps.getLongitude();
 
@@ -116,7 +107,7 @@ public class LocationSharingServices extends Service {
 
 
         AlarmManager alarmService = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-        alarmService.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 6000, restartServicePI);
+        alarmService.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 30000, restartServicePI);
 
         return START_STICKY;
     }
@@ -135,7 +126,7 @@ public class LocationSharingServices extends Service {
 
 
         AlarmManager alarmService = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-        alarmService.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 100, restartServicePI);
+        alarmService.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 30000, restartServicePI);
 
     }
 
@@ -150,112 +141,7 @@ public class LocationSharingServices extends Service {
     }
 
 
-    public void getLiveLocation(final int id){
 
-        new ThreadExecuter().execute(new Runnable() {
-            @Override
-            public void run() {
-
-                final LiveTrackingAPI subCategoryAPI = Util.getClient().create(LiveTrackingAPI.class);
-                Call<ArrayList<LiveTracking>> getProf = subCategoryAPI.getLiveTrackingByEmployeeId(id);
-                //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
-
-                getProf.enqueue(new Callback<ArrayList<LiveTracking>>() {
-
-                    @Override
-                    public void onResponse(Call<ArrayList<LiveTracking>> call, Response<ArrayList<LiveTracking>> response) {
-
-                        if (response.code() == 200||response.code() == 201||response.code() == 204)
-                        {
-                            System.out.println("Inside api");
-
-                            final ArrayList<LiveTracking> dto = response.body();
-
-                            if(dto!=null&&dto.size()!=0){
-
-                                try {
-
-                                    if(locationCheck()){
-                                    if(gps.canGetLocation())
-                                    {
-                                        System.out.println("Long and lat Rev"+gps.getLatitude()+" = "+gps.getLongitude());
-                                        double latitude = gps.getLatitude();
-                                        double longitude = gps.getLongitude();
-
-                                        liveTracking= dto.get(0);
-                                        liveTracking.setEmployeeId(PreferenceHandler.getInstance(LocationSharingServices.this).getUserId());
-                                        liveTracking.setLatitude(""+latitude);
-                                        liveTracking.setLongitude(""+longitude);
-                                        updateLiveTracking(liveTracking);
-
-                                    }
-                                    else
-                                    {
-
-                                    }
-                                }
-
-
-                                }
-                                catch (Exception ex)
-                                {
-                                    ex.printStackTrace();
-                                }
-
-                            }else{
-
-                                try {
-
-                                    if(locationCheck()){
-                                        if(gps.canGetLocation())
-                                        {
-                                            System.out.println("Long and lat Rev"+gps.getLatitude()+" = "+gps.getLongitude());
-                                            double latitude = gps.getLatitude();
-                                            double longitude = gps.getLongitude();
-
-                                            LiveTracking liveTracking = new LiveTracking();
-                                            liveTracking.setEmployeeId(PreferenceHandler.getInstance(LocationSharingServices.this).getUserId());
-                                            liveTracking.setLatitude(""+latitude);
-                                            liveTracking.setLongitude(""+longitude);
-                                            liveTracking.setTrackingDate(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
-                                            addLiveTracking(liveTracking);
-
-                                        }
-                                        else
-                                        {
-
-                                        }
-                                    }
-
-
-                                }
-                                catch (Exception ex)
-                                {
-                                    ex.printStackTrace();
-                                }
-
-                            }
-
-
-
-
-                        }else{
-
-
-                            //meet
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ArrayList<LiveTracking>> call, Throwable t) {
-
-                    }
-                });
-
-            }
-
-        });
-    }
 
     public boolean locationCheck(){
 
@@ -357,59 +243,29 @@ public class LocationSharingServices extends Service {
 
     }
 
-    public void updateLiveTracking(final LiveTracking liveTracking) throws Exception{
-
-
-
-
-
-        LiveTrackingAPI apiService = Util.getClient().create(LiveTrackingAPI.class);
-
-        Call<LiveTracking> call = apiService.updateLiveTrackingById(liveTracking.getLiveTrackingDetailsId(),liveTracking);
-
-        call.enqueue(new Callback<LiveTracking>() {
-            @Override
-            public void onResponse(Call<LiveTracking> call, Response<LiveTracking> response) {
-//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
-                try
-                {
-
-
-                    int statusCode = response.code();
-                    if (statusCode == 200 || statusCode == 201||response.code()==204) {
-
-
-                        Log.e("TAG", "Updated");
-
-
-                    }else {
-
-                    }
-                }
-                catch (Exception ex)
-                {
-
-
-                    ex.printStackTrace();
-                }
-//                callGetStartEnd();
-            }
-
-            @Override
-            public void onFailure(Call<LiveTracking> call, Throwable t) {
-
-
-                Log.e("TAG", t.toString());
-            }
-        });
-
-
-
-    }
-
     @Override
     public void onDestroy() {
 
-        super.onDestroy();
+        if(PreferenceHandler.getInstance(getApplicationContext()).getUserId()!=0&&PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()!=2&&PreferenceHandler.getInstance(getApplicationContext()).getLoginStatus().equalsIgnoreCase("Login")){
+
+
+            Intent restartService = new Intent(getApplicationContext(),
+                    LocationSharingServices.class);
+            restartService.setPackage(getPackageName());
+            PendingIntent restartServicePI = PendingIntent.getService(
+                    getApplicationContext(), 1, restartService,
+                    PendingIntent.FLAG_ONE_SHOT);
+
+            //Restart the service once it has been killed android
+
+
+            AlarmManager alarmService = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+            alarmService.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 30000, restartServicePI);
+        }else{
+
+            super.onDestroy();
+        }
+
+
     }
 }

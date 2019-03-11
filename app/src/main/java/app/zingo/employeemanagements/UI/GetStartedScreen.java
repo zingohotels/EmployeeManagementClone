@@ -1,13 +1,22 @@
 package app.zingo.employeemanagements.UI;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,6 +31,7 @@ import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -35,9 +45,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
@@ -74,7 +89,9 @@ import app.zingo.employeemanagements.UI.Company.CreateFounderScreen;
 import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
 import app.zingo.employeemanagements.UI.Employee.EmployeeMeetingHost;
 import app.zingo.employeemanagements.UI.Landing.PhoneVerificationScreen;
+import app.zingo.employeemanagements.UI.NewEmployeeDesign.EmployeeNewMainScreen;
 import app.zingo.employeemanagements.UI.Reseller.ResellerMainActivity;
+import app.zingo.employeemanagements.UI.Reseller.ResellerSignUpScree;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.TrackGPS;
@@ -92,7 +109,9 @@ import retrofit2.Response;
 import static android.text.TextUtils.isEmpty;
 import static java.security.AccessController.getContext;
 
-public class GetStartedScreen extends AppCompatActivity  implements PaymentResultListener {
+public class GetStartedScreen extends AppCompatActivity  implements PaymentResultListener , GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        com.google.android.gms.location.LocationListener{
 
     boolean popUp = false;
     String appType = "Trial",planType="",paymentId="";
@@ -102,14 +121,14 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
 
     RecyclerView mPlanList;
     LinearLayout mPlanLayout;//mEmailExtnLay
-    AppCompatTextView myLocation;
+    MyTextView myLocation;
     ImageView mAddEmail,mDeleteEmail;
     MyEditText mOrganizationName,mBuildYear,mNoEmployee,mWebsite,mResellerCode;//mEmailExt
     MyTextView mCity,mState;
     //TextInputEditText mOrganizationName,mCity,mState,mBuildYear,mNoEmployee,mWebsite;
     //TextInputEditText ;
-    EditText mAbout,mAddress;
-    AppCompatButton mCreate;
+    MyEditText mAbout,mAddress;
+    MyTextView mCreate;
 
 
     public static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
@@ -127,12 +146,29 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
     //PaymentGateway
     private static final String TAG = GetStartedScreen.class.getSimpleName();
 
+    //Google Api Locatin
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    private GoogleApiClient mLocationClient;
+    Location currentLocation;
+
+    private LocationRequest mLocationRequest;
+    private long UPDATE_INTERVAL = 10000;  /* 15 secs */
+    private long FASTEST_INTERVAL = 5000; /* 5 secs */
+
+    private static final int REQUEST_PERMISSIONS = 100;
+    boolean boolean_permission;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         try{
             setContentView(R.layout.activity_new_company_create);
+
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            setTitle("Create Organization");
             popupOne();
 
             mPlanList = (RecyclerView)findViewById(R.id.plans);
@@ -143,6 +179,23 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
             mPlanLayout.setVisibility(View.GONE);
             getPlans();
             gps = new TrackGPS(GetStartedScreen.this);
+
+            fn_permission();
+            if (boolean_permission){
+
+                if (mLocationClient == null) {
+
+
+
+                    mLocationClient = new GoogleApiClient.Builder(GetStartedScreen.this)
+                            .addConnectionCallbacks(this)
+                            .addOnConnectionFailedListener(this)
+                            .addApi(LocationServices.API)
+                            .build();
+                }
+
+            }
+
 
             String currentYear = new SimpleDateFormat("yyyyy").format(new Date());
 
@@ -157,11 +210,11 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
             mResellerCode = (MyEditText)findViewById(R.id.reseller_code);
             mNoEmployee = (MyEditText)findViewById(R.id.employee_count);
 
-            mAbout = (EditText)findViewById(R.id.about);
-            mAddress = (EditText)findViewById(R.id.address);
-            myLocation = (AppCompatTextView) findViewById(R.id.my_location);
+            mAbout = (MyEditText)findViewById(R.id.about);
+            mAddress = (MyEditText)findViewById(R.id.address);
+            myLocation = (MyTextView) findViewById(R.id.my_location);
 
-            mCreate = (AppCompatButton)findViewById(R.id.createCompany);
+            mCreate = (MyTextView)findViewById(R.id.createCompany);
 
            // onAddField();
 
@@ -200,17 +253,29 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
                 @Override
                 public void onClick(View view) {
 
-                    if(gps.canGetLocation())
+                    if (locationCheck()) {
+
+                        if (currentLocation != null) {
+
+                            latitude = currentLocation.getLatitude();
+                            longitude = currentLocation.getLongitude();
+                            getAddress(latitude,longitude);
+
+                        }
+
+                    }
+
+                    /*if(gps.canGetLocation())
                     {
                         System.out.println(gps.getLatitude()+" = "+gps.getLongitude());
                         latitude = gps.getLatitude();
                         longitude = gps.getLongitude();
-                        getAddress();
+                        getAddress(latitude,longitude);
                     }
                     else
                     {
                         Toast.makeText(GetStartedScreen.this, "Couldn't get the location. Make sure location is enabled on the device", Toast.LENGTH_SHORT).show();
-                    }
+                    }*/
                 }
             });
 
@@ -248,8 +313,8 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
                         int value = Integer.parseInt(currentYear);
 
                         if(value>year){
-                            mBuildYear.setError("Build year is not valid");
-                            Toast.makeText(GetStartedScreen.this, "Build year is not validate", Toast.LENGTH_SHORT).show();
+                            mBuildYear.setError("Enter valid year");
+                            Toast.makeText(GetStartedScreen.this, "Please enter valid Build Year", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -578,15 +643,15 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
 
             Toast.makeText(GetStartedScreen.this, "State required", Toast.LENGTH_SHORT).show();
 
-        }else if(build.isEmpty()){
+        }/*else if(build.isEmpty()){
 
             Toast.makeText(GetStartedScreen.this, "Build year required", Toast.LENGTH_SHORT).show();
 
-        }else if(web.isEmpty()){
+        }*//*else if(web.isEmpty()){
 
             Toast.makeText(GetStartedScreen.this, "Websites required", Toast.LENGTH_SHORT).show();
 
-        }else if(employeeCount.isEmpty()){
+        }*/else if(employeeCount.isEmpty()){
 
             Toast.makeText(GetStartedScreen.this, "Employee Nos required", Toast.LENGTH_SHORT).show();
 
@@ -619,8 +684,16 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
                 organization.setAddress(address);
                 organization.setCity(city);
                 organization.setState(state);
-                organization.setBuiltYear(build);
-                organization.setWebsite(web);
+
+                if(build!=null&&!build.isEmpty()){
+                    organization.setBuiltYear(build);
+                }
+
+                if(web!=null&&!web.isEmpty()){
+                    organization.setWebsite(web);
+                }
+
+
                 organization.setEmployeeLimit(Integer.parseInt(employeeCount));
                 organization.setLatitude(String.valueOf(latLng.latitude));
                 organization.setLongitude(String.valueOf(latLng.longitude));
@@ -755,6 +828,23 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
         }
 
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case REQUEST_PERMISSIONS: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    boolean_permission = true;
+
+                } else {
+                    Toast.makeText(getApplicationContext(), "Please allow the permission", Toast.LENGTH_LONG).show();
+
+                }
+            }
+        }
     }
 
     public LatLng convertAddressToLatLang(String strAddress)
@@ -1167,7 +1257,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
 
     }
 
-    public void getAddress()
+    public void getAddress(final double latitude,final double longitude)
     {
 
         try
@@ -1387,5 +1477,179 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
         });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mLocationClient != null) {
+            mLocationClient.connect();
+        }
+    }
+
+    public boolean locationCheck(){
+
+        final boolean status = false;
+        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        boolean gps_enabled = false;
+        boolean network_enabled = false;
+
+        try {
+            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch(Exception ex) {}
+
+        try {
+            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        } catch(Exception ex) {}
+
+        if(!gps_enabled && !network_enabled) {
+            // notify user
+            android.app.AlertDialog.Builder dialog = new android.app.AlertDialog.Builder(GetStartedScreen.this);
+            dialog.setMessage("Location is not enable");
+            dialog.setPositiveButton("Open Settings", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                    // TODO Auto-generated method stub
+                    Intent myIntent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(myIntent);
+                    //get gps
+                }
+            });
+            dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                    // TODO Auto-generated method stub
+
+
+                }
+            });
+            dialog.show();
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        Log.i("salam", " Connected");
+
+        if (ActivityCompat.checkSelfPermission(GetStartedScreen.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(GetStartedScreen.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        currentLocation = LocationServices.FusedLocationApi.getLastLocation(mLocationClient);
+
+
+        if (currentLocation != null) {
+            //  latLong.setText("Latitude : " + currentLocation.getLatitude() + " , Longitude : " + currentLocation.getLongitude());
+
+            latitude = currentLocation.getLatitude();
+            longitude = currentLocation.getLongitude();
+
+
+        }
+        startLocationUpdates();
+
+
+
+    }
+
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+
+        if(location!=null){
+
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+
+
+
+        }
+
+
+
+    }
+
+
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(GetStartedScreen.this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(GetStartedScreen.this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
+                        .show();
+            } else
+                Toast.makeText(GetStartedScreen.this, "Google Play Services not install", Toast.LENGTH_SHORT).show();
+
+            return false;
+        }
+        return true;
+    }
+    protected void startLocationUpdates() {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(UPDATE_INTERVAL);
+        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+        if (ActivityCompat.checkSelfPermission(GetStartedScreen.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(GetStartedScreen.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(GetStartedScreen.this, "Enable Permissions", Toast.LENGTH_LONG).show();
+        }
+
+        LocationServices.FusedLocationApi.requestLocationUpdates(
+                mLocationClient, mLocationRequest, this);
+
+
+    }
+
+    private void fn_permission() {
+        if ((ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
+
+            if ((ActivityCompat.shouldShowRequestPermissionRationale(GetStartedScreen.this, android.Manifest.permission.ACCESS_FINE_LOCATION))) {
+
+
+            } else {
+                ActivityCompat.requestPermissions(GetStartedScreen.this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION
+
+                        },
+                        REQUEST_PERMISSIONS);
+
+            }
+        } else {
+            boolean_permission = true;
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        switch (id)
+        {
+            case android.R.id.home:
+
+                GetStartedScreen.this.finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 }

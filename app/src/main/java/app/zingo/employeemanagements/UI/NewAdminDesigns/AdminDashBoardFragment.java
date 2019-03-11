@@ -1,6 +1,7 @@
 package app.zingo.employeemanagements.UI.NewAdminDesigns;
 
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -24,40 +25,34 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
+import app.zingo.employeemanagements.Adapter.LiveTrackingAdapter;
 import app.zingo.employeemanagements.Adapter.TaskAdminListAdapter;
-import app.zingo.employeemanagements.Adapter.TaskEmployeeListAdapter;
-import app.zingo.employeemanagements.Adapter.TaskListAdapter;
 import app.zingo.employeemanagements.Custom.MyRegulerText;
 import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.Leaves;
+import app.zingo.employeemanagements.Model.LiveTracking;
 import app.zingo.employeemanagements.Model.LoginDetails;
-import app.zingo.employeemanagements.Model.LoginDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.TaskAdminData;
 import app.zingo.employeemanagements.Model.Tasks;
 import app.zingo.employeemanagements.R;
-import app.zingo.employeemanagements.UI.Admin.CreatePaySlip;
-import app.zingo.employeemanagements.UI.Company.OrganizationDetailScree;
 import app.zingo.employeemanagements.UI.Employee.CreateEmployeeScreen;
 import app.zingo.employeemanagements.UI.Employee.EmployeeListScreen;
 import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
+import app.zingo.employeemanagements.UI.NewEmployeeDesign.EmployeeLoginFragment;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.DepartmentApi;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
 import app.zingo.employeemanagements.WebApi.LeaveAPI;
+import app.zingo.employeemanagements.WebApi.LiveTrackingAPI;
 import app.zingo.employeemanagements.WebApi.LoginDetailsAPI;
 import app.zingo.employeemanagements.WebApi.TasksAPI;
 import retrofit2.Call;
@@ -71,20 +66,20 @@ public class AdminDashBoardFragment extends Fragment {
 
     final String TAG = "Employer Dash";
     View layout;
-    RecyclerView mTaskList;
-    LinearLayout mTaskLayout,mPendingLayout,mOnTaskLay,mDepartmentLay,mEmployeeLay,mPresenEmploLay,mAbEmLayy,mLeaveLay;
+    RecyclerView mTaskList,mLiveList;
+    LinearLayout mPendingLayout,mOnTaskLay,mDepartmentLay,mEmployeeLay,mPresenEmploLay,mAbEmLayy,mLeaveLay;//mTaskLayout
     private TaskAdminListAdapter mAdapter;
+    private LiveTrackingAdapter mLiveAdapter;
     MyRegulerText mDeptCount,mEmployeeCount,mOnTask,mPending,mEmployeePresent,mEmployeeAbsent,
-                    mLeaveEmployee;//mUnmarkedEmployee
+                    mLeaveEmployee,mTaskREad,mLiveRead;//mUnmarkedEmployee
 
     static Context mContext;
+    LinearLayout mNoRecord,mLiveLay;
 
-    private static List<Employee> mEmployeeList = new ArrayList();
-    private static List<Employee> searchList = new ArrayList();
-    private Map<String, String> countMap = new HashMap();
 
-    int deptCount=0,employee=0,onTasks=0,pendingTask=0,presentEmployee=0,
-                absentEmployee=0,leaveEmployee=0,unMarkedEmployee=0;
+
+    int employee=0,onTasks=0,pendingTask=0,presentEmployee=0,
+                absentEmployee=0,leaveEmployee=0;
 
     boolean checkValue = false;
 
@@ -94,6 +89,7 @@ public class AdminDashBoardFragment extends Fragment {
     ArrayList<TaskAdminData> closedTasks ;
     ArrayList<TaskAdminData> onTask ;
     ArrayList<TaskAdminData> todayTasks;
+    ArrayList<LiveTracking> todayLIve;
 
     ArrayList<Employee> presentEmployees;
     ArrayList<Employee> absentEmployees;
@@ -107,6 +103,8 @@ public class AdminDashBoardFragment extends Fragment {
     Handler h;
     Runnable runnable;
     int delay = 5*1000;
+
+    TaskAdminListAdapter adminListAdapter;
 
     public AdminDashBoardFragment() {
         // Required empty public constructor
@@ -134,7 +132,11 @@ public class AdminDashBoardFragment extends Fragment {
             mContext = getContext();
 
             mTaskList = (RecyclerView) layout.findViewById(R.id.task_list_dash);
-            mTaskLayout = (LinearLayout) layout.findViewById(R.id.today_task_list);
+            mTaskList.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+            mLiveList = (RecyclerView) layout.findViewById(R.id.location_list_track);
+            mLiveList.setLayoutManager(new LinearLayoutManager(getActivity()));
+           // mTaskLayout = (LinearLayout) layout.findViewById(R.id.today_task_list);
             mPendingLayout = (LinearLayout) layout.findViewById(R.id.pending_task_layout);
             mOnTaskLay = (LinearLayout) layout.findViewById(R.id.on_task_count_layout);
             mDepartmentLay = (LinearLayout) layout.findViewById(R.id.dept_count_layout);
@@ -142,7 +144,7 @@ public class AdminDashBoardFragment extends Fragment {
             mPresenEmploLay = (LinearLayout) layout.findViewById(R.id.present_count_layout);
             mAbEmLayy = (LinearLayout) layout.findViewById(R.id.absent_count_layout);
             mLeaveLay = (LinearLayout) layout.findViewById(R.id.leave_count_layout);
-            mTaskLayout.setVisibility(View.GONE);
+          //  mTaskLayout.setVisibility(View.GONE);
             mDeptCount = (MyRegulerText)layout.findViewById(R.id.dept_count_text);
             mEmployeeCount = (MyRegulerText)layout.findViewById(R.id.employee_count_text);
             mOnTask = (MyRegulerText)layout.findViewById(R.id.on_task_count_text);
@@ -150,7 +152,12 @@ public class AdminDashBoardFragment extends Fragment {
             mEmployeePresent = (MyRegulerText)layout.findViewById(R.id.today_employee_present);
             mEmployeeAbsent = (MyRegulerText)layout.findViewById(R.id.absent_employee);
             mLeaveEmployee = (MyRegulerText)layout.findViewById(R.id.leave_employees);
+            mTaskREad = (MyRegulerText)layout.findViewById(R.id.read_more);
+            mLiveRead = (MyRegulerText)layout.findViewById(R.id.read_more_live);
            // mUnmarkedEmployee = (MyRegulerText)layout.findViewById(R.id.unmarked_employees);
+
+            mNoRecord = (LinearLayout)  layout.findViewById(R.id.noRecordFound);
+            mLiveLay = (LinearLayout)  layout.findViewById(R.id.noLocationFound);
 
 
             leaEmpId = new ArrayList<>();
@@ -167,6 +174,42 @@ public class AdminDashBoardFragment extends Fragment {
                 startActivity(error);
             }
 
+            mTaskREad.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if(todayTasks!=null&&todayTasks.size()!=0){
+
+                        Intent intent = new Intent(getActivity(), AdminNewMainScreen.class);
+                        if(PreferenceHandler.getInstance(getActivity()).getUserRoleUniqueID()==9){
+                            intent.putExtra("viewpager_position", 3);
+                        }else{
+                            intent.putExtra("viewpager_position", 2);
+                        }
+
+                        startActivity(intent);
+
+                    }
+
+
+                }
+            });
+
+            mLiveRead.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if(todayLIve!=null&&todayLIve.size()!=0){
+
+                        Intent live = new Intent(getActivity(), EmployeeListScreen.class);
+                        live.putExtra("Type","Live");
+                        getContext().startActivity(live);
+
+                    }
+
+
+                }
+            });
 
          //   showalertbox();
 
@@ -366,6 +409,7 @@ public class AdminDashBoardFragment extends Fragment {
 
                             employeeTasks = new ArrayList<>();
                             todayTasks = new ArrayList<>();
+                            todayLIve = new ArrayList<>();
                             pendingTasks = new ArrayList<>();
                             completedTasks = new ArrayList<>();
                             closedTasks = new ArrayList<>();
@@ -380,7 +424,7 @@ public class AdminDashBoardFragment extends Fragment {
                                 ArrayList<Employee> employees = new ArrayList<>();
                                 for(int i=0;i<list.size();i++){
 
-                                    if(list.get(i).getEmployeeId()!=PreferenceHandler.getInstance(getActivity()).getUserId()){
+                                    if(list.get(i).getUserRoleId()!=2){
 
                                         allEmployees.add(list.get(i));
                                         employees.add(list.get(i));
@@ -395,6 +439,11 @@ public class AdminDashBoardFragment extends Fragment {
                                         loginDetails.setEmployeeId(list.get(i).getEmployeeId());
                                         loginDetails.setLoginDate(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
                                         getLoginDetails(loginDetails,list.get(i));
+
+                                        LiveTracking lv = new LiveTracking();
+                                        lv.setEmployeeId(list.get(i).getEmployeeId());
+                                        lv.setTrackingDate(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
+                                        getLiveLocation(lv);
 
                                     }
                                 }
@@ -783,12 +832,30 @@ public class AdminDashBoardFragment extends Fragment {
                                 if(employeeTasks!=null&&employeeTasks.size()!=0){
 
                                     if(todayTasks!=null&&todayTasks.size()!=0){
-                                        mTaskLayout.setVisibility(View.VISIBLE);
+                                        //mTaskLayout.setVisibility(View.VISIBLE);
 
+                                        mNoRecord.setVisibility(View.GONE);
+                                        mTaskList.setVisibility(View.VISIBLE);
                                         mTaskList.removeAllViews();
 
-                                        mAdapter = new TaskAdminListAdapter(getContext(),todayTasks);
-                                        mTaskList.setAdapter(mAdapter);
+                                        if(todayTasks.size()<=2){
+                                            mTaskList.removeAllViews();
+
+                                            mAdapter = new TaskAdminListAdapter(getContext(),todayTasks);
+                                            mTaskList.setAdapter(mAdapter);
+                                            mTaskREad.setVisibility(View.GONE);
+                                        }else if(todayTasks.size()>2){
+
+                                            mTaskList.removeAllViews();
+                                            ArrayList<TaskAdminData> twoArray = new ArrayList<>();
+                                            twoArray.add(todayTasks.get(0));
+                                            twoArray.add(todayTasks.get(1));
+                                            mAdapter = new TaskAdminListAdapter(getContext(),twoArray);
+                                            mTaskList.setAdapter(mAdapter);
+                                            mTaskREad.setVisibility(View.VISIBLE);
+                                        }
+
+
                                     }
 
 
@@ -819,6 +886,90 @@ public class AdminDashBoardFragment extends Fragment {
 
                     @Override
                     public void onFailure(Call<ArrayList<Tasks>> call, Throwable t) {
+                        // Log error here since request failed
+                       /* if (progressDialog!=null)
+                            progressDialog.dismiss();*/
+                        Log.e("TAG", t.toString());
+                    }
+                });
+            }
+
+
+        });
+    }
+    private void getLiveLocation(final LiveTracking lv){
+
+
+
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+                LiveTrackingAPI apiService = Util.getClient().create(LiveTrackingAPI.class);
+                Call<ArrayList<LiveTracking>> call = apiService.getLiveTrackingByEmployeeIdAndDate(lv);
+
+                call.enqueue(new Callback<ArrayList<LiveTracking>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<LiveTracking>> call, Response<ArrayList<LiveTracking>> response) {
+                        int statusCode = response.code();
+                        if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
+
+
+
+                            ArrayList<LiveTracking> list = response.body();
+
+
+
+
+
+                            if (list !=null && list.size()!=0) {
+
+                                todayLIve.add(list.get(list.size()-1));
+
+                                    if(todayLIve!=null&&todayLIve.size()!=0){
+                                        //mTaskLayout.setVisibility(View.VISIBLE);
+
+                                        mLiveLay.setVisibility(View.GONE);
+                                        mLiveList.setVisibility(View.VISIBLE);
+                                        mLiveList.removeAllViews();
+
+                                        if(todayLIve.size()<=2){
+                                            mLiveList.removeAllViews();
+
+                                            mLiveAdapter = new LiveTrackingAdapter(getContext(),todayLIve);
+                                            mLiveList.setAdapter(mLiveAdapter);
+                                            mLiveRead.setVisibility(View.GONE);
+                                        }else if(todayLIve.size()>2){
+
+                                            mLiveList.removeAllViews();
+                                            ArrayList<LiveTracking> twoArray = new ArrayList<>();
+                                            twoArray.add(todayLIve.get(0));
+                                            twoArray.add(todayLIve.get(1));
+                                            mLiveAdapter = new LiveTrackingAdapter(getContext(),twoArray);
+                                            mLiveList.setAdapter(mLiveAdapter);
+                                            mLiveRead.setVisibility(View.VISIBLE);
+                                        }
+
+
+                                    }
+
+
+                            }else{
+
+                               // Toast.makeText(DailyTargetsForEmployeeActivity.this, "No Tasks given for this employee ", Toast.LENGTH_SHORT).show();
+
+                            }
+
+                        }else {
+
+
+
+                            //Toast.makeText(DailyTargetsForEmployeeActivity.this, "Failed due to : "+response.message(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<LiveTracking>> call, Throwable t) {
                         // Log error here since request failed
                        /* if (progressDialog!=null)
                             progressDialog.dismiss();*/
@@ -1254,6 +1405,21 @@ public class AdminDashBoardFragment extends Fragment {
                 }
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+                int updatedPositions = data.getIntExtra("Position",UpdateTaskScreen.ADAPTER_POSITION);
+
+                if(updatedPositions!=-1){
+
+                    mAdapter.notifyItemChanged(updatedPositions);
+                }
+
+            }
+        }
     }
 
 }

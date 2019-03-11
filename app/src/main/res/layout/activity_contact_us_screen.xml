@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:descendantFocusability="beforeDescendants"
-    android:focusableInTouchMode="true"
     xmlns:card-view="http://schemas.android.com/tools"
-    tools:context="app.zingo.employeemanagements.UI.ContactUsScreen">
+    android:background="@color/white"
+    android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="none"
+            android:layout_marginBottom="70dp"
             android:layout_alignParentTop="true"
             >
             <LinearLayout
@@ -63,6 +60,36 @@
                     android:textSize="22dp"
                     android:textColor="#000000"
                     />
+
+              <!--  <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/gradient_rect"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingLeft="15dp"
+                        android:paddingTop="5dp"
+                        android:id="@+id/whatsapp_open"
+                        android:paddingRight="15dp"
+                        android:paddingBottom="5dp">
+
+
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_whatsapp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>-->
             </LinearLayout>
                 <ImageView
                     android:layout_width="match_parent"
@@ -108,6 +135,7 @@
                                     android:gravity="center"
                                     android:background="@drawable/circle_grey"
                                     android:text="1"
+                                    android:visibility="gone"
                                     android:textSize="20dp"
                                     android:textColor="#FFFFFF"
                                     />
@@ -119,7 +147,7 @@
                                     android:gravity="center_vertical"
                                     android:layout_weight="1"
                                     android:padding="5dp"
-                                    android:text="Your Info"
+                                    android:text="Basic Details"
                                     android:textSize="22dp"
                                     android:textColor="#000000"
                                     />
@@ -150,6 +178,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
+                            android:visibility="gone"
                             android:layout_marginTop="5dp"
                             >
                             <android.support.design.widget.TextInputLayout
@@ -232,6 +261,7 @@
                             <app.zingo.employeemanagements.Custom.MyRegulerText
                                 android:id="@+id/buttonInfoNext"
                                 android:layout_width="120dp"
+                                android:visibility="gone"
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/button_primary_dark"
                                 android:layout_marginBottom="5dp"
@@ -250,12 +280,13 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:id="@+id/company_layout"
-                            android:visibility="gone"
+
                             android:orientation="vertical">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:visibility="gone"
                                 android:orientation="horizontal"
 
                                 >
@@ -358,7 +389,8 @@
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:visibility="gone">
 
 
                             <app.zingo.employeemanagements.Custom.MyRegulerText
@@ -404,13 +436,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:id="@+id/inqiury_layout"
-                            android:visibility="gone"
+
                             android:orientation="vertical">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
+                                android:visibility="gone"
 
                                 >
 
@@ -445,32 +478,28 @@
                                 android:orientation="vertical"
                                 >
 
-                                <android.support.v7.widget.AppCompatTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-
-                                    android:layout_marginTop="20.0dip"
-                                    android:textColor="#04BEBD"
-
-                                    android:text="Questions And Comments"/>
-
-                                <EditText
-                                    android:id="@+id/about_question"
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:orientation="vertical"
                                     android:layout_marginTop="5dp"
-                                    android:layout_gravity="start"
-                                    android:gravity="start"
-                                    android:hint="Please tell us about your questions"
-                                    android:scrollbarAlwaysDrawVerticalTrack="true"
-                                    android:overScrollMode="always"
-                                    android:scrollbarStyle="insideInset"
-                                    android:scrollbars="vertical"
-                                    android:keepScreenOn="true"
-                                    android:lines="10"
-                                    android:background="@drawable/spinner_background"
-                                    android:maxLines="10"
-                                    />
+                                    >
+                                    <android.support.design.widget.TextInputLayout
+                                        android:id="@+id/locationLayout"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="10.0dip"
+                                        android:hint="Location*"
+
+                                        >
+                                        <android.support.design.widget.TextInputEditText
+                                            android:id="@+id/location_text"
+                                            android:maxLength="3"
+                                            android:inputType="text"
+                                            style="@style/fp_editText" />
+                                    </android.support.design.widget.TextInputLayout>
+
+                                </LinearLayout>
 
                             </LinearLayout>
 
@@ -484,6 +513,7 @@
                                     android:id="@+id/buttonInquiryPrevious"
                                     android:layout_width="120dp"
                                     android:layout_weight="1"
+                                    android:visibility="gone"
                                     android:layout_height="wrap_content"
                                     android:background="@drawable/button_primary_dark"
                                     android:layout_marginBottom="5dp"
@@ -523,6 +553,89 @@
             </LinearLayout>
         </ScrollView>
 
-    </RelativeLayout>
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:layout_gravity="bottom"
+            android:background="#000000"
+            app:contentInsetEnd="0dp"
+            app:contentInsetLeft="0dp"
+            app:contentInsetRight="0dp"
+            app:contentInsetStart="0dp"
+            android:fitsSystemWindows="true"
+            android:minHeight="?attr/actionBarSize"
+            app:layout_behavior="app.zingo.employeemanagements.Custom.ScrollingToolbarBehavior">
 
-</android.support.constraint.ConstraintLayout>
+
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="67dp"
+                android:background="#000000"
+                android:orientation="vertical"
+                app:layout_behavior="app.zingo.employeemanagements.Custom.ScrollingToolbarBehavior">
+
+
+
+
+
+
+                <app.zingo.employeemanagements.Custom.MyRegulerText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:text="For business inquiry, lets chat on whatsapp"
+                    android:textColor="#ffffff"
+                    android:textSize="11.3sp" />
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/gradient_rect"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingLeft="15dp"
+                        android:paddingTop="5dp"
+                        android:id="@+id/whatsapp_open"
+                        android:paddingRight="15dp"
+                        android:paddingBottom="5dp">
+
+
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_whatsapp" />
+
+                        <app.zingo.employeemanagements.Custom.MyRegulerText
+                            android:id="@+id/number"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="5dp"
+                            android:gravity="center"
+                            android:text="+919986128021"
+                            android:textColor="#ffffff"
+                            android:textSize="12.7sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </android.support.v7.widget.Toolbar>
+
+
+
+
+
+</android.support.design.widget.CoordinatorLayout>

@@ -2,11 +2,13 @@ package app.zingo.employeemanagements.UI.NewAdminDesigns;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -25,6 +27,7 @@ import app.zingo.employeemanagements.Model.LeaveNotificationManagers;
 import app.zingo.employeemanagements.Model.Leaves;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Employee.ApplyLeaveScreen;
+import app.zingo.employeemanagements.UI.Landing.SplashScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
@@ -51,6 +54,11 @@ public class UpdateLeaveScreen extends AppCompatActivity {
         try{
 
             setContentView(R.layout.activity_update_leave_screen);
+
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            setTitle("Leave Details");
+
             mLeaveType = (Spinner) findViewById(R.id.leave_type_spinner);
             mLeaveStatus = (Spinner) findViewById(R.id.leave_status_spinner);
 
@@ -398,11 +406,11 @@ public class UpdateLeaveScreen extends AppCompatActivity {
 
                             if (progressDialog!=null)
                                 progressDialog.dismiss();
-                            Leaves list = response.body();
+                            leavess = response.body();
 
-                            if(list!=null){
+                            if(leavess!=null){
 
-                                setData(list);
+                                setData(leavess);
 
                             }else{
                                 Toast.makeText(UpdateLeaveScreen.this, "Something went wrong", Toast.LENGTH_SHORT).show();
@@ -433,5 +441,32 @@ public class UpdateLeaveScreen extends AppCompatActivity {
 
 
         });
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        switch (id){
+
+            case android.R.id.home:
+
+                if(leaveId!=0){
+
+                    Intent splash = new Intent(UpdateLeaveScreen.this,SplashScreen.class);
+                    startActivity(splash);
+                    UpdateLeaveScreen.this.finish();
+
+                }else{
+
+                    UpdateLeaveScreen.this.finish();
+                }
+
+        }
+
+        return super.onOptionsItemSelected(item);
+
     }
 }

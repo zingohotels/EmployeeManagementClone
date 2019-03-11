@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@drawable/banner"
+
     android:fitsSystemWindows="true"
 
     >
@@ -15,7 +15,7 @@
 
         <android.support.v7.widget.CardView
             android:id="@+id/card"
-            android:visibility="gone"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.AppCompatTextView
+               <!-- <android.support.v7.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:layout_gravity="right"
@@ -33,7 +33,7 @@
                     android:layout_weight="1"
                     android:textSize="24dp"
                     android:textStyle="bold"
-                    android:text="Enter your Organization Code"/>
+                    android:text="Enter your Organization Code"/>-->
 
 
 
@@ -42,21 +42,34 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <app.zingo.employeemanagements.Custom.MyEditText
-                        android:id="@+id/organization_code"
                         android:layout_width="match_parent"
-                        android:layout_height="35dp"
+                        android:layout_height="wrap_content"
+                        android:hint="Organization Code *"
+                        android:inputType="text"
+                        android:id="@+id/organization_code"
+                        android:textColorHint="@color/grey_charcoal"
+                        android:textSize="18dp"
+                        android:background="#00000000"
                         android:layout_marginLeft="@dimen/activity_large_margin"
                         android:layout_marginTop="20.0dip"
                         android:layout_marginRight="@dimen/activity_large_margin"
-                        android:background="@drawable/test_background"
-                        android:hint="Organization Code"
-                        android:singleLine="true"
-                        android:textColor="#000000"
-                        android:textColorHint="#ffffff"
+
                         />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="#a9b0c3"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="@dimen/activity_large_margin"
+                        android:layout_marginRight="@dimen/activity_large_margin"
+
+                        />
+
 
 
 
@@ -87,104 +100,150 @@
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#98000000" />
 
         <android.support.v4.widget.NestedScrollView
+            android:id="@+id/employee_detail_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fillViewport="true"
-            android:id="@+id/employee_detail_layout"
             android:scrollbars="none"
+            android:visibility="gone"
+
 
 
             >
 
             <LinearLayout
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="16dp">
 
-                <android.support.v7.widget.AppCompatTextView
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_gravity="right"
-                    android:textColor="@color/white"
-                    android:gravity="center"
-                    android:layout_weight="1"
-                    android:textSize="24dp"
-                    android:textStyle="bold"
-                    android:text="Basic Information"/>
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
-                    android:layout_marginTop="20.0dip"
-                    android:textColor="@color/white"
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    android:text="* Fields are Mandatory"/>
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/zoologo"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ems_round" />
+
+                    <app.zingo.employeemanagements.Custom.MyTextView
+                        android:id="@+id/signin"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:text="Employee Information"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="20dp"
+
+                        />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+
+                        >
+
+                        <app.zingo.employeemanagements.Custom.MyTextView
+                            android:id="@+id/signin1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:gravity="end"
+                            android:text="Signin"
+                            android:textColor="#2C3646"
+                            android:textSize="16dp" />
+
+                        <LinearLayout
+                            android:layout_width="39dp"
+                            android:layout_height="1.5dp"
+                            android:layout_gravity="end"
+                            android:layout_marginTop="2dp"
+                            android:background="#2C3646"
+
+                            />
+
+                    </LinearLayout>
+                </LinearLayout>
+
 
                 <app.zingo.employeemanagements.Custom.MyEditText
                     android:id="@+id/name"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
-                    android:layout_marginTop="10.0dip"
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    android:background="@drawable/test_background"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:background="#00000000"
                     android:hint="Employee Name *"
-                    android:singleLine="true"
-                    android:textColor="#ffffff"
-                    android:textColorHint="#ffffff"
+                    android:inputType="text"
+                    android:textColorHint="@color/grey_charcoal"
+                    android:textSize="18dp"
+
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#a9b0c3"
+
                     />
 
                 <RadioGroup
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="10dp"
                     android:layout_gravity="center"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
                     <RadioButton
-                        android:layout_width="70dp"
-                        android:layout_height="match_parent"
-                        android:button="@drawable/editext_border"
-                        android:background="@drawable/radio_btn_selector"
-                        android:textColor="@drawable/rbtn_textcolor_selector"
-                        android:text="Male"
                         android:id="@+id/founder_male"
-                        android:textSize="16sp"
-                        android:gravity="center"
-                        />
-                    <RadioButton
                         android:layout_width="70dp"
                         android:layout_height="match_parent"
-                        android:button="@drawable/editext_border"
                         android:background="@drawable/radio_btn_selector"
+                        android:button="@drawable/editext_border"
+                        android:gravity="center"
+                        android:text="Male"
                         android:textColor="@drawable/rbtn_textcolor_selector"
-                        android:text="Female"
+                        android:textSize="16sp" />
 
-                        android:id="@+id/founder_female"
-                        android:textSize="16sp"
-                        android:gravity="center"/>
                     <RadioButton
+                        android:id="@+id/founder_female"
                         android:layout_width="70dp"
                         android:layout_height="match_parent"
-                        android:button="@drawable/editext_border"
                         android:background="@drawable/radio_btn_selector"
-                        android:textColor="@drawable/rbtn_textcolor_selector"
-                        android:text="Other"
-                        android:id="@+id/founder_other"
-                        android:textSize="16sp"
+                        android:button="@drawable/editext_border"
                         android:gravity="center"
+
+                        android:text="Female"
+                        android:textColor="@drawable/rbtn_textcolor_selector"
+                        android:textSize="16sp" />
+
+                    <RadioButton
+                        android:id="@+id/founder_other"
+                        android:layout_width="70dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/radio_btn_selector"
+                        android:button="@drawable/editext_border"
+                        android:gravity="center"
+                        android:text="Other"
+                        android:textColor="@drawable/rbtn_textcolor_selector"
+                        android:textSize="16sp"
 
                         />
                 </RadioGroup>
@@ -192,8 +251,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <app.zingo.employeemanagements.Custom.MyEditText
                         android:id="@+id/dob"
@@ -202,14 +261,13 @@
                         android:layout_marginLeft="@dimen/activity_large_margin"
                         android:layout_marginTop="20.0dip"
                         android:layout_marginRight="@dimen/activity_large_margin"
+                        android:layout_weight="1"
                         android:background="@drawable/test_background"
                         android:hint="DOB"
                         android:inputType="date"
-                        android:layout_weight="1"
                         android:singleLine="true"
                         android:textColor="#ffffff"
-                        android:textColorHint="#ffffff"
-                        />
+                        android:textColorHint="#ffffff" />
 
                     <app.zingo.employeemanagements.Custom.MyEditText
                         android:id="@+id/doj"
@@ -218,14 +276,13 @@
                         android:layout_marginLeft="@dimen/activity_large_margin"
                         android:layout_marginTop="20.0dip"
                         android:layout_marginRight="@dimen/activity_large_margin"
-                        android:background="@drawable/test_background"
-                        android:hint="DOJ"
-                        android:inputType="date"
                         android:layout_weight="1"
+                        android:background="@drawable/test_background"
+                        android:hint="Founded Year"
+                        android:inputType="date"
                         android:singleLine="true"
                         android:textColor="#ffffff"
-                        android:textColorHint="#ffffff"
-                        />
+                        android:textColorHint="#ffffff" />
 
                     <!--    <android.support.design.widget.TextInputLayout
                             android:id="@+id/cityInputLayout"
@@ -270,88 +327,101 @@
 
                 </LinearLayout>
 
-                <LinearLayout
+                <app.zingo.employeemanagements.Custom.MyEditText
+                    android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
-                    android:layout_marginTop="20.0dip"
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    >
-                    <app.zingo.employeemanagements.Custom.MyEditText
-                        android:id="@+id/email"
-                        android:layout_width="match_parent"
-                        android:layout_height="35dp"
-                        android:background="@drawable/test_background"
-                        android:layout_weight="1"
-                        android:hint="Primary/Organization Email Id *"
-                        android:singleLine="true"
-                        android:textColor="#ffffff"
-                        android:textColorHint="#ffffff"
-                        />
+                    android:layout_marginTop="20dp"
+                    android:background="#00000000"
+                    android:hint="Primary/Organization Email Id *"
+                    android:inputType="text"
+                    android:textColorHint="@color/grey_charcoal"
+                    android:textSize="18dp"
 
+                    />
 
-
-
-                </LinearLayout>
-
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#a9b0c3" />
 
                 <app.zingo.employeemanagements.Custom.MyEditText
                     android:id="@+id/semail"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
-                    android:layout_marginTop="20.0dip"
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    android:background="@drawable/test_background"
-                    android:hint="Alternate Email Id(Optional)"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="#00000000"
+                    android:hint="Alternate Email Id(Optional) "
+                    android:inputType="text"
+                    android:textColorHint="@color/grey_charcoal"
+                    android:textSize="18dp"
 
-                    android:singleLine="true"
-                    android:textColor="#ffffff"
-                    android:textColorHint="#ffffff"
-                    />
-
-
-                <app.zingo.employeemanagements.Custom.MyEditText
-                    android:id="@+id/mobile"
-                    android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
-                    android:layout_marginTop="20.0dip"
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    android:background="@drawable/test_background"
-                    android:hint="Mobile Number *"
-                    android:inputType="number"
-                    android:maxLength="15"
-
-                    android:singleLine="true"
-                    android:textColor="#ffffff"
-                    android:textColorHint="#ffffff"
                     />
 
                 <LinearLayout
                     android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#a9b0c3" />
+
+                <app.zingo.employeemanagements.Custom.MyEditText
+                    android:id="@+id/mobile"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="#00000000"
+                    android:hint="Mobile Number *"
+                    android:inputType="number"
+                    android:textColorHint="@color/grey_charcoal"
+                    android:textSize="18dp"
+
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#a9b0c3" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
                     android:orientation="horizontal"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
-                    android:layout_marginTop="20.0dip"
-                    android:layout_marginRight="@dimen/activity_large_margin"
+
                     >
-                    <android.support.v7.widget.AppCompatTextView
+
+                    <app.zingo.employeemanagements.Custom.MyTextView
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_gravity="right"
-                        android:textColor="@color/white"
-                        android:gravity="center"
                         android:layout_weight="2"
-                        android:textSize="18dp"
-                        android:text="Department"/>
-                    <Spinner
+                        android:gravity="center_vertical"
+                        android:text="Department"
+                        android:textColor="@color/grey_charcoal"
+                        android:textSize="18dp" />
+
+                    <app.zingo.employeemanagements.Custom.CustomSpinner
+                        android:id="@+id/android_material_design_spinner"
+                        style="@style/Widget.AppCompat.Spinner"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:layout_width="300dp"
+                        android:dropDownWidth="wrap_content"
+                        android:layout_height="50dp"
+                        android:dropDownVerticalOffset="?attr/dropdownListPreferredItemHeight"
+                        android:background="@drawable/spinner_bg"
+                        android:popupBackground="@android:color/white"
+                        android:stateListAnimator="@drawable/spinner_sla"
+                        android:popupElevation="3dp" />
+
+                   <!-- <Spinner
                         android:id="@+id/android_material_design_spinner"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_weight="1"
-                        android:background="@drawable/spinner_background"/>
+                        android:background="@drawable/spinner_background" />-->
 
 
                 </LinearLayout>
@@ -359,72 +429,59 @@
                 <app.zingo.employeemanagements.Custom.MyEditText
                     android:id="@+id/designation"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
-                    android:layout_marginTop="20.0dip"
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    android:background="@drawable/test_background"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="#00000000"
                     android:hint="Designation *"
+                    android:inputType="text"
+                    android:textColorHint="@color/grey_charcoal"
+                    android:textSize="18dp"
 
-                    android:singleLine="true"
-                    android:textColor="#ffffff"
-                    android:textColorHint="#ffffff"
                     />
 
-
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/salaryInputLayout"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
-                    android:layout_marginTop="20.0dip"
-                    android:visibility="gone"
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    android:hint="Salary *"
-
-                    >
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/salary"
-                        android:maxLength="50"
-                        android:inputType="numberDecimal"
-                        style="@style/fp_editText" />
-                </android.support.design.widget.TextInputLayout>
-
-
-
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#a9b0c3" />
 
                 <app.zingo.employeemanagements.Custom.MyEditText
                     android:id="@+id/password"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
-                    android:layout_marginTop="20.0dip"
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    android:background="@drawable/test_background"
-                    android:hint="Password *"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="#00000000"
+                    android:hint="Password * "
                     android:inputType="textPassword"
+                    android:textColorHint="@color/grey_charcoal"
+                    android:textSize="18dp"
 
-                    android:singleLine="true"
-                    android:textColor="#ffffff"
-                    android:textColorHint="#ffffff"
                     />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#a9b0c3" />
 
                 <app.zingo.employeemanagements.Custom.MyEditText
                     android:id="@+id/confirmpwd"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
-                    android:layout_marginTop="20.0dip"
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    android:background="@drawable/test_background"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="#00000000"
                     android:hint="Confirm Password *"
                     android:inputType="textPassword"
+                    android:textColorHint="@color/grey_charcoal"
+                    android:textSize="18dp"
 
-                    android:singleLine="true"
-                    android:textColor="#ffffff"
-                    android:textColorHint="#ffffff"
                     />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#a9b0c3" />
 
                 <CheckBox
                     android:id="@+id/show_hide_password"
@@ -432,127 +489,89 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Show Password"
-                    android:textColor="#FFFFFF"
+                    android:textColor="@color/text_black"
                     android:textSize="14sp" />
-
-
-                <!--<android.support.design.widget.TextInputLayout
-                    android:id="@+id/nameInputLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
-                    android:layout_marginTop="20.0dip"
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    android:textColorHint="@color/colorPrimary"
-                    android:hint="Organization Name"
-
-                    >
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/name"
-                        android:maxLength="50"
-                        android:inputType="text"
-                        style="@style/fp_editText" />
-                </android.support.design.widget.TextInputLayout>-->
-
 
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
-                    <LinearLayout
-
+                    <app.zingo.employeemanagements.Custom.MyTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        >
+                        android:layout_marginTop="20dp"
+                        android:layout_weight="1"
+                        android:background="#00000000"
+                        android:inputType="text"
+                        android:text="Address"
+                        android:textColor="@color/grey_charcoal"
+                        android:textColorHint="#a9b0c3"
+                        android:textSize="18dp"
 
-                        <android.support.v7.widget.AppCompatTextView
-                            android:layout_width="match_parent"
-                            android:layout_weight="1"
-                            android:textColor="@color/white"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/activity_large_margin"
-                            android:layout_marginTop="20.0dip"
-                            android:layout_marginRight="@dimen/activity_large_margin"
-                            android:text="Address(Optional)"/>
-
-
-                    </LinearLayout>
-
-
-
-
-                    <EditText
-                        android:id="@+id/address"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_gravity="start"
-                        android:gravity="start"
-                        android:hint="Your Address"
-                        android:textColorHint="@color/white"
-                        android:padding="8dp"
-                        android:scrollbarAlwaysDrawVerticalTrack="true"
-                        android:overScrollMode="always"
-                        android:scrollbarStyle="insideInset"
-                        android:scrollbars="vertical"
-                        android:textColor="@color/white"
-                        android:keepScreenOn="true"
-                        android:layout_marginLeft="@dimen/activity_large_margin"
-                        android:layout_marginRight="@dimen/activity_large_margin"
-                        android:lines="5"
-                        android:background="@drawable/white_box"
                         />
 
-
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/my_location"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="20dip"
+                        android:layout_weight="1"
+                        android:drawableLeft="@drawable/ic_my_location_primary_24dp"
+                        android:drawablePadding="5dp"
+                        android:text="Current Location"
+                        android:textColor="@color/grey_charcoal"
+                        android:textSize="18dp"
+                        android:visibility="gone" />
                 </LinearLayout>
 
 
-
-
-
-
-
-
-                <!--  <android.support.design.widget.TextInputLayout
-                      android:id="@+id/websiteInputLayout"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:textColorHint="@color/colorPrimary"
-                      android:layout_marginLeft="@dimen/activity_large_margin"
-                      android:layout_marginTop="20.0dip"
-                      android:layout_marginRight="@dimen/activity_large_margin"
-                      android:hint="Website"
-
-                      >
-                      <android.support.design.widget.TextInputEditText
-                          android:id="@+id/website"
-                          android:maxLength="50"
-                          android:textColor="@color/colorPrimary"
-                          android:inputType="textUri"
-                          style="@style/fp_editText" />
-                  </android.support.design.widget.TextInputLayout>-->
-
-
-
-                <android.support.v7.widget.AppCompatButton
-                    android:textSize="@dimen/regularFont"
-                    android:textColor="@color/white"
-                    android:id="@+id/createFounder"
-                    android:background="@drawable/selector_button_app"
+                <app.zingo.employeemanagements.Custom.MyEditText
+                    android:id="@+id/address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
-                    android:layout_marginTop="20.0dip"
-                    android:layout_marginBottom="20.0dip"
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    android:text="Employee SignUp"
-                    android:textAllCaps="false"
+                    android:layout_gravity="start"
+                    android:layout_marginTop="5dp"
+                    android:background="#f0f0f4"
+                    android:gravity="start"
+                    android:hint="Your Address(Optional)"
+                    android:keepScreenOn="true"
+                    android:lines="5"
+                    android:maxLines="5"
+                    android:overScrollMode="always"
+                    android:padding="8dp"
+                    android:scrollbarAlwaysDrawVerticalTrack="true"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="vertical"
+                    android:textColor="@color/text_black"
+                    android:textSize="15dp" />
 
-                    />
 
+                <app.zingo.employeemanagements.Custom.MyTextView
+                    android:id="@+id/createFounder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/round_button"
+                    android:gravity="center"
+                    android:padding="14dp"
+                    android:text="Create Employee"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <app.zingo.employeemanagements.Custom.MyTextView
+                    android:id="@+id/ter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="16dp"
+
+                    android:gravity="center"
+                    android:text="By Signing up you agree with our terms and conditions"
+                    android:textColor="@color/grey"
+                    android:textSize="12dp" />
 
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>

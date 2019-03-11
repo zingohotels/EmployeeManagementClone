@@ -15,9 +15,11 @@ import android.view.View;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.R;
 import app.zingo.employeemanagements.UI.Common.EmployeeMeetingList;
 import app.zingo.employeemanagements.UI.Common.EmployeeMeetingMap;
+import app.zingo.employeemanagements.UI.NewAdminDesigns.LeaveDashBoardAdminScreen;
 
 //activity_leave_management_host
 
@@ -38,7 +40,7 @@ public class LeaveManagementHost extends TabActivity implements TabHost.OnTabCha
     public static final int MY_PERMISSIONS_REQUEST_RESULT = 1;
 
     int employeeId;
-
+    Employee employee;
 
 
     @Override
@@ -67,6 +69,7 @@ public class LeaveManagementHost extends TabActivity implements TabHost.OnTabCha
             if(bundle!=null){
 
                 employeeId = bundle.getInt("EmployeeId");
+                employee = (Employee)bundle.getSerializable("Employee");
             }
 
 /*9C9C9C*/
@@ -78,9 +81,14 @@ public class LeaveManagementHost extends TabActivity implements TabHost.OnTabCha
 
             labelRequest.setText(getResources().getString(R.string.leaveRequest));
             tabMaps.setIndicator(tabRequest);
-            Intent maps = new Intent(this, LeaveTakenDays.class);
-            maps.putExtra("EmployeeId", employeeId);
+            Intent maps = new Intent(this, LeaveDashBoardAdminScreen.class);
+            Bundle bundles = new Bundle();
+            bundles.putInt("EmployeeId",employeeId);
+            bundles.putSerializable("Employee",employee);
+            maps.putExtras(bundles);
             tabMaps.setContent(maps);
+
+
 
 
             tabHost.setOnTabChangedListener(this);

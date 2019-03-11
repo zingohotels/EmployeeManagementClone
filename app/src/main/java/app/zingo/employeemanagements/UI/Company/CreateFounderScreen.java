@@ -18,6 +18,7 @@ import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -37,6 +38,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import app.zingo.employeemanagements.Custom.MyEditText;
+import app.zingo.employeemanagements.Custom.MyTextView;
 import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Designations;
 import app.zingo.employeemanagements.Model.Employee;
@@ -47,6 +49,7 @@ import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
 import app.zingo.employeemanagements.UI.LandingScreen;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminNewMainScreen;
 import app.zingo.employeemanagements.UI.NewEmployeeDesign.EmployeeNewMainScreen;
+import app.zingo.employeemanagements.UI.Reseller.ResellerSignUpScree;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
@@ -62,9 +65,9 @@ import retrofit2.Response;
 public class CreateFounderScreen extends AppCompatActivity {
 
     MyEditText mName,mPrimaryEmail,mSecondaryEmail,mMobile,mPassword,mConfirm;//mDob,mDoj,
-    EditText mAddress;
+    MyEditText mAddress;
     RadioButton mMale,mFemale,mOthers;
-    AppCompatButton mCreate;
+    MyTextView mCreate;
 
     Organization organization;
     String phone;
@@ -85,6 +88,9 @@ public class CreateFounderScreen extends AppCompatActivity {
             setContentView(R.layout.activity_new_create_founder);
 
 
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            setTitle("Founder/Owner Signup");
 
             mName = (MyEditText)findViewById(R.id.name);
            /* mDob = (MyEditText)findViewById(R.id.dob);
@@ -95,13 +101,13 @@ public class CreateFounderScreen extends AppCompatActivity {
             mPassword = (MyEditText)findViewById(R.id.password);
             mConfirm = (MyEditText)findViewById(R.id.confirmpwd);
 
-            mAddress = (EditText)findViewById(R.id.address);
+            mAddress = (MyEditText) findViewById(R.id.address);
 
             mMale = (RadioButton)findViewById(R.id.founder_male);
             mFemale = (RadioButton)findViewById(R.id.founder_female);
             mOthers = (RadioButton)findViewById(R.id.founder_other);
 
-            mCreate = (AppCompatButton)findViewById(R.id.createFounder);
+            mCreate = (MyTextView) findViewById(R.id.createFounder);
             mShowPwd = (CheckBox) findViewById(R.id.show_hide_password);
 
             Bundle bundle = getIntent().getExtras();
@@ -910,8 +916,8 @@ public class CreateFounderScreen extends AppCompatActivity {
 
                                 if(organization.isWorking()){
 
-                                    Intent serviceIntent = new Intent(CreateFounderScreen.this,LocationSharingServices.class);
-                                    startService(serviceIntent);
+                                   /* Intent serviceIntent = new Intent(CreateFounderScreen.this,LocationSharingServices.class);
+                                    startService(serviceIntent);*/
                                 }
                                 startActivity(i);
                                 finish();
@@ -948,5 +954,19 @@ public class CreateFounderScreen extends AppCompatActivity {
             }
 
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        switch (id)
+        {
+            case android.R.id.home:
+
+                CreateFounderScreen.this.finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
