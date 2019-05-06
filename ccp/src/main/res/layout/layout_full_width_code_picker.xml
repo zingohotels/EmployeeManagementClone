@@ -32,7 +32,8 @@
                     android:layout_height="18dp"
                     android:layout_margin="0.5dp"
                     android:adjustViewBounds="true"
-                    android:src="@drawable/flag_india"/>
+                    android:src="@drawable/flag_india"
+                    android:contentDescription="TODO" />
             </LinearLayout>
         </LinearLayout>
 
@@ -61,6 +62,7 @@
             android:adjustViewBounds="true"
             android:alpha="0.6"
             android:src="@drawable/ccp_down_arrow"
-            android:tint="@android:color/black"/>
+            android:tint="@android:color/black"
+            android:contentDescription="TODO" />
     </RelativeLayout>
 </RelativeLayout>

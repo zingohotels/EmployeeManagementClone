@@ -1,0 +1,1177 @@
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card-view="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:focusableInTouchMode="true"
+    android:id="@+id/scroll_view"
+    android:focusable="false"
+    android:scrollbars="none"
+    tools:context="app.zingo.employeemanagements.UI.NewAdminDesigns.AdminDashBoardFragment">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="4dp"
+                android:layout_marginBottom="4dp">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/employee_pic"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/profile"/>
+                <TextView
+                    android:textColor="@color/text_grey"
+                    android:gravity="center_vertical"
+                    android:id="@+id/name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:text="Name"
+                    android:textSize="18dp"
+                    android:layout_weight="1"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:gravity="center"
+                android:orientation="horizontal"
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp">
+                <ImageView
+                    android:id="@+id/previousDay"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/back_arrow"
+                    android:contentDescription="TODO" />
+                <TextView
+                    android:textColor="@color/colorPrimary"
+                    android:gravity="center"
+                    android:id="@+id/presentDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Current Day"
+                    android:layout_weight="1"/>
+                <ImageView
+                    android:id="@+id/nextDay"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/front_arrow"
+                    android:contentDescription="TODO" />
+            </LinearLayout>
+
+            <include
+                layout="@layout/divider_grey"/>
+
+            <app.zingo.employeemanagements.Custom.MyRegulerText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:id="@+id/atten_title"
+                android:layout_below="@+id/cardview_data_count"
+                android:gravity="left"
+                android:text="Summary"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:textColor="#000"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp">
+
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/completed_task_count_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="25dp"
+                        android:textColor="#009293"
+                        android:gravity="center"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:id="@+id/bookmark"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tasks"
+                        android:textColor="#000"
+                        android:gravity="center"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/meeting_count_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="25dp"
+                        android:textColor="#009293"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        />
+                    <TextView
+                        android:id="@+id/channel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Meetings"
+                        android:textColor="#000"
+                        android:gravity="center"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/worked_days_count"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="25dp"
+                        android:textColor="#009293"
+                        android:gravity="center"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:id="@+id/comment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Expenses"
+                        android:textColor="#000"
+                        android:gravity="center"/>
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:id="@+id/cardview_data_count"
+                android:visibility="gone"
+                android:layout_height="100dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                card-view:cardElevation="5dp"
+                card_view:cardCornerRadius="20dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:id="@+id/worked_days_layout"
+                        android:orientation="vertical">
+
+                        <app.zingo.employeemanagements.Custom.MyRegulerText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+
+                            android:gravity="center_horizontal"
+                            android:text="Worked Days"
+                            android:paddingLeft="10dp"
+                            android:paddingTop="10dp"
+                            android:textColor="#000"
+                            />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_horizontal"
+                            android:orientation="horizontal">
+                            <app.zingo.employeemanagements.Custom.MyRegulerText
+
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:textSize="30sp"
+
+                                android:gravity="center"
+                                android:text="0"
+                                android:paddingTop="5dp"
+                                android:paddingLeft="15dp"
+                                android:textColor="#AFB42B"
+                                />
+
+
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:id="@+id/task_completed_layout"
+                        android:orientation="vertical">
+
+                        <app.zingo.employeemanagements.Custom.MyRegulerText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:gravity="center_horizontal"
+                            android:text="Completed Tasks"
+                            android:paddingLeft="10dp"
+                            android:paddingTop="10dp"
+                            android:textColor="#000"
+                            />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_horizontal"
+                            android:orientation="horizontal">
+                            <app.zingo.employeemanagements.Custom.MyRegulerText
+
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:textSize="30sp"
+                                android:text="0"
+                                android:paddingTop="5dp"
+                                android:paddingLeft="15dp"
+                                android:textColor="#FBC02D"
+                                />
+
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:id="@+id/meeting_count_lay"
+                        android:orientation="vertical">
+
+                        <app.zingo.employeemanagements.Custom.MyRegulerText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:gravity="center_horizontal"
+                            android:text="Total Meetings"
+                            android:paddingLeft="10dp"
+                            android:paddingTop="10dp"
+                            android:textColor="#000"
+                            />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_horizontal"
+                            android:orientation="horizontal">
+                            <app.zingo.employeemanagements.Custom.MyRegulerText
+
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:textSize="30sp"
+                                android:text="0"
+                                android:paddingTop="5dp"
+                                android:paddingLeft="15dp"
+                                android:textColor="#D81B60"
+                                />
+
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:id="@+id/expenses_lay"
+                        android:orientation="vertical">
+
+                        <app.zingo.employeemanagements.Custom.MyRegulerText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:gravity="center_horizontal"
+                            android:text="Total Expenses"
+                            android:paddingLeft="10dp"
+                            android:paddingTop="10dp"
+                            android:textColor="#000"
+                            />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_horizontal"
+                            android:orientation="horizontal">
+                            <app.zingo.employeemanagements.Custom.MyRegulerText
+                                android:id="@+id/expense_count_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:textSize="30sp"
+
+                                android:text="0"
+                                android:paddingTop="5dp"
+                                android:paddingLeft="15dp"
+                                android:textColor="#F44336"
+                                />
+
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="50dp"
+                    android:background="@drawable/login_time"
+                    android:layout_gravity="center"
+                    android:contentDescription="TODO" />
+
+
+                <app.zingo.employeemanagements.Custom.MyRegulerText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18dp"
+                    android:id="@+id/login_time"
+                    android:textColor="@color/text_black"
+                    android:letterSpacing="0.025"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="10dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <app.zingo.employeemanagements.Custom.MyRegulerText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:id="@+id/logged_text"
+                        android:textColor="@color/schedulecolor"
+                        android:letterSpacing="0.025"
+                        android:layout_marginLeft="30dp"
+                        android:textSize="18dp"
+
+                        />
+
+
+                    <app.zingo.employeemanagements.Custom.MyRegulerText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:id="@+id/check_in_address"
+                        android:textColor="@color/statementcolor"
+                        android:letterSpacing="0.025"
+                        android:layout_marginLeft="30dp"
+                        android:textSize="12dp"
+                        android:layout_marginTop="5dp"/>
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.3dp"
+                android:background="#99A1AC"
+                android:layout_marginTop="2dp"/>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="50dp"
+                    android:background="@drawable/logout_time"
+                    android:contentDescription="TODO" />
+
+
+                <app.zingo.employeemanagements.Custom.MyRegulerText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18dp"
+                    android:id="@+id/logout_time"
+                    android:textColor="@color/text_black"
+                    android:letterSpacing="0.025"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="10dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <app.zingo.employeemanagements.Custom.MyRegulerText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:id="@+id/log_out__text"
+                        android:textColor="@color/schedulecolor"
+                        android:letterSpacing="0.025"
+                        android:layout_marginLeft="30dp"
+                        android:textSize="18dp"
+
+                        />
+
+
+                    <app.zingo.employeemanagements.Custom.MyRegulerText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:id="@+id/check_out_address"
+                        android:textColor="@color/statementcolor"
+                        android:letterSpacing="0.025"
+                        android:layout_marginLeft="30dp"
+                        android:textSize="12dp"
+                        android:layout_marginTop="5dp"/>
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.3dp"
+                android:background="#99A1AC"
+                android:layout_marginTop="2dp"/>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="50dp"
+                    android:background="@drawable/meeting_time"
+                    android:contentDescription="TODO" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <app.zingo.employeemanagements.Custom.MyRegulerText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16dp"
+                        android:text=""
+                        android:layout_weight="1"
+                        android:id="@+id/meeting_time"
+                        android:textColor="@color/text_black"
+                        android:letterSpacing="0.025"
+                        android:layout_marginLeft="15dp"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <app.zingo.employeemanagements.Custom.MyRegulerText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:gravity="right"
+                            android:layout_gravity="center"
+                            android:id="@+id/meeting__text"
+                            android:textColor="@color/schedulecolor"
+                            android:letterSpacing="0.025"
+                            android:textSize="18dp"
+
+                            />
+
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+
+
+
+
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.3dp"
+                android:background="#99A1AC"
+                android:layout_marginTop="2dp"/>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="50dp"
+                    android:background="@drawable/expense_admin"
+                    android:contentDescription="TODO" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+
+                    <app.zingo.employeemanagements.Custom.MyRegulerText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16dp"
+                        android:text=""
+                        android:layout_weight="1"
+                        android:id="@+id/expenses_text"
+                        android:textColor="@color/text_black"
+                        android:letterSpacing="0.025"
+                        android:layout_marginLeft="15dp"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <app.zingo.employeemanagements.Custom.MyRegulerText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:layout_gravity="center"
+                            android:id="@+id/expense_amount"
+                            android:textColor="@color/schedulecolor"
+                            android:letterSpacing="0.025"
+
+                            android:textSize="18dp"
+
+                            />
+
+
+
+                    </LinearLayout>
+
+
+
+                </LinearLayout>
+
+
+
+
+
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.3dp"
+                android:background="#99A1AC"
+                android:layout_marginTop="2dp"/>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="50dp"
+                    android:background="@drawable/km_travelled"
+                    android:contentDescription="TODO" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <app.zingo.employeemanagements.Custom.MyRegulerText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textSize="16dp"
+
+                        android:layout_gravity="center"
+                        android:text="Travelled"
+                        android:layout_weight="1"
+                        android:textColor="@color/text_black"
+                        android:letterSpacing="0.025"
+                        android:layout_marginLeft="15dp"
+                        />
+
+                    <app.zingo.employeemanagements.Custom.MyRegulerText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textSize="18dp"
+                        android:id="@+id/km_text"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:layout_gravity="center"
+                        android:text="0 km/0 miles"
+                        android:textColor="@color/text_black"
+                        android:letterSpacing="0.025"
+
+                        />
+
+                </LinearLayout>
+
+
+
+
+
+
+
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.3dp"
+                android:background="#99A1AC"
+                android:layout_marginTop="2dp"/>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="50dp"
+                    android:background="@drawable/meetiing_avg_time"
+                    android:contentDescription="TODO" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <app.zingo.employeemanagements.Custom.MyRegulerText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16dp"
+                        android:layout_weight="1"
+                        android:text="Avg Meeting Time"
+                        android:textColor="@color/text_black"
+                        android:letterSpacing="0.025"
+                        android:layout_marginLeft="15dp"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <app.zingo.employeemanagements.Custom.MyRegulerText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:gravity="right"
+                            android:layout_gravity="center"
+                            android:id="@+id/avg_meeting_time"
+                            android:textColor="@color/schedulecolor"
+                            android:letterSpacing="0.025"
+                            android:textSize="18dp"
+
+                            />
+
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.3dp"
+                android:background="#99A1AC"
+                android:layout_marginTop="2dp"/>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="50dp"
+                    android:background="@drawable/schedule"
+                    android:contentDescription="TODO" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <app.zingo.employeemanagements.Custom.MyRegulerText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16dp"
+                        android:layout_weight="1"
+                        android:text="Avg Task Time"
+                        android:textColor="@color/text_black"
+                        android:letterSpacing="0.025"
+                        android:layout_marginLeft="15dp"
+                        />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <app.zingo.employeemanagements.Custom.MyRegulerText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:gravity="right"
+                            android:layout_gravity="center"
+                            android:id="@+id/avg_task_time"
+                            android:textColor="@color/schedulecolor"
+                            android:letterSpacing="0.025"
+
+                            android:textSize="18dp"
+
+                            />
+
+
+
+                    </LinearLayout>
+                </LinearLayout>
+
+
+
+
+
+
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.3dp"
+                android:background="#99A1AC"
+                android:layout_marginTop="2dp"/>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="50dp"
+                    android:background="@drawable/lazy"
+                    android:contentDescription="TODO" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <app.zingo.employeemanagements.Custom.MyRegulerText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16dp"
+                        android:layout_weight="1"
+                        android:text="Idle Time"
+                        android:textColor="@color/text_black"
+                        android:letterSpacing="0.025"
+                        android:layout_marginLeft="15dp"
+                        />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <app.zingo.employeemanagements.Custom.MyRegulerText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:gravity="right"
+                            android:layout_gravity="center"
+                            android:id="@+id/idle_time"
+                            android:textColor="@color/schedulecolor"
+                            android:letterSpacing="0.025"
+
+                            android:textSize="18dp"
+
+                            />
+
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+
+
+
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.3dp"
+                android:background="#99A1AC"
+                android:layout_marginTop="2dp"/>
+
+            <app.zingo.employeemanagements.Custom.MyRegulerText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+
+                android:layout_below="@+id/cardview_data_count"
+                android:gravity="left"
+                android:text="Tasks"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:textColor="#000"
+                />
+
+            <LinearLayout
+                android:gravity="center"
+                android:orientation="vertical"
+                android:id="@+id/noRecordFound"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+
+                android:layout_below="@+id/linearLayout2">
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:background="@color/white"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/search"
+                    android:minHeight="100dp"
+                    android:alpha="0.7"
+                    android:contentDescription="TODO" />
+                <TextView
+                    android:textSize="15sp"
+                    android:textColor="@color/text_grey"
+                    android:gravity="center_horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="No Task Found"/>
+            </LinearLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/targetList"
+                android:visibility="gone"
+                android:focusable="false"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"/>
+
+            <app.zingo.employeemanagements.Custom.MyRegulerText
+                android:id="@+id/read_task"
+                android:layout_weight="1"
+                android:layout_width="150dp"
+                android:visibility="gone"
+                android:layout_height="45dp"
+                android:background="@drawable/button_primary_dark"
+                android:layout_margin="5dp"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:focusable="false"
+                android:layout_gravity="right"
+                android:padding="5dp"
+                android:text="Read More"
+                android:textSize="22dp"
+                android:textColor="@color/white"
+                />
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.3dp"
+                android:background="#99A1AC"
+                android:layout_marginTop="2dp"/>
+
+            <app.zingo.employeemanagements.Custom.MyRegulerText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+
+                android:layout_below="@+id/cardview_data_count"
+                android:gravity="left"
+                android:text="Meetings"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:textColor="#000"
+                />
+
+            <LinearLayout
+                android:gravity="center"
+                android:orientation="vertical"
+                android:id="@+id/noRecordFound_meetings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+
+                android:layout_below="@+id/linearLayout2">
+                <ImageView
+                    android:id="@+id/imageView2_meeting"
+                    android:background="@color/white"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/search"
+                    android:minHeight="100dp"
+                    android:alpha="0.7"
+                    android:contentDescription="TODO" />
+                <TextView
+                    android:textSize="15sp"
+                    android:textColor="@color/text_grey"
+                    android:gravity="center_horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="No Meetings Found"/>
+            </LinearLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/targetList_meeting"
+                android:visibility="gone"
+                android:focusable="false"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"/>
+
+            <app.zingo.employeemanagements.Custom.MyRegulerText
+                android:id="@+id/read_meeting"
+                android:layout_weight="1"
+                android:layout_width="150dp"
+                android:visibility="gone"
+                android:layout_height="45dp"
+                android:background="@drawable/button_primary_dark"
+                android:layout_margin="5dp"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:focusable="false"
+                android:layout_gravity="right"
+                android:padding="5dp"
+                android:text="Read More"
+                android:textSize="22dp"
+                android:textColor="@color/white"
+                />
+
+
+
+
+
+            <!--  <android.support.v7.widget.CardView
+                  android:layout_width="match_parent"
+                  android:layout_height="40dp"
+                  card-view:cardElevation="10dp"
+                  android:layout_margin="10dp"
+                  card_view:cardCornerRadius="10dp">
+
+                  <LinearLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:layout_weight="1"
+                      android:layout_gravity="center"
+                      android:gravity="center"
+                      android:orientation="horizontal">
+
+                      <app.zingo.employeemanagements.Custom.MyRegulerText
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:textSize="14sp"
+                          android:layout_weight="1"
+                          android:gravity="left"
+                          android:text="Check-In Time"
+                          android:paddingLeft="10dp"
+                          android:paddingTop="10dp"
+                          android:textColor="#000"
+                          />
+
+                      <app.zingo.employeemanagements.Custom.MyRegulerText
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:textSize="15sp"
+                          android:layout_weight="1"
+                          android:gravity="right"
+                          android:id="@+id/login_time"
+                          android:text=""
+                          android:paddingRight="10dp"
+                          android:textColor="@color/subtext"
+                          />
+
+                  </LinearLayout>
+
+
+              </android.support.v7.widget.CardView>
+              <android.support.v7.widget.CardView
+                  android:layout_width="match_parent"
+                  android:layout_height="40dp"
+                  card-view:cardElevation="10dp"
+                  android:layout_margin="10dp"
+                  card_view:cardCornerRadius="10dp">
+
+                  <LinearLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:layout_weight="1"
+                      android:layout_gravity="center"
+                      android:gravity="center"
+                      android:orientation="horizontal">
+
+                      <app.zingo.employeemanagements.Custom.MyRegulerText
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:textSize="14sp"
+                          android:layout_weight="1"
+                          android:gravity="left"
+                          android:text="Check-Out Time"
+                          android:paddingLeft="10dp"
+                          android:paddingTop="10dp"
+                          android:textColor="#000"
+                          />
+
+                      <app.zingo.employeemanagements.Custom.MyRegulerText
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:textSize="15sp"
+                          android:layout_weight="1"
+                          android:gravity="right"
+                          android:id="@+id/logout_time"
+                          android:text=""
+                          android:paddingRight="10dp"
+                          android:textColor="@color/subtext"
+                          />
+
+                  </LinearLayout>
+
+
+              </android.support.v7.widget.CardView>
+              <android.support.v7.widget.CardView
+                  android:layout_width="match_parent"
+                  android:layout_height="40dp"
+                  card-view:cardElevation="10dp"
+                  android:layout_margin="10dp"
+                  card_view:cardCornerRadius="10dp">
+
+                  <LinearLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:layout_weight="1"
+                      android:layout_gravity="center"
+                      android:gravity="center"
+                      android:orientation="horizontal">
+
+                      <app.zingo.employeemanagements.Custom.MyRegulerText
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:textSize="14sp"
+                          android:layout_weight="1"
+                          android:gravity="left"
+                          android:text="Working Hours"
+                          android:paddingLeft="10dp"
+                          android:paddingTop="10dp"
+                          android:textColor="#000"
+                          />
+
+                      <app.zingo.employeemanagements.Custom.MyRegulerText
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:textSize="15sp"
+                          android:layout_weight="1"
+                          android:gravity="right"
+                          android:id="@+id/working_hours"
+                          android:text=""
+                          android:paddingRight="10dp"
+                          android:textColor="@color/subtext"
+                          />
+
+                  </LinearLayout>
+
+
+              </android.support.v7.widget.CardView>-->
+
+
+        </LinearLayout>
+
+
+
+
+</android.support.v4.widget.NestedScrollView>
+

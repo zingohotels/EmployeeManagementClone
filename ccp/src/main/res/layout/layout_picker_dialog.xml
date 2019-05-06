@@ -33,7 +33,9 @@
             android:background="@drawable/ccp_selectable_bg"
             android:clickable="true"
             android:padding="4dp"
-            android:src="@drawable/ic_clear_black_24dp" />
+            android:src="@drawable/ic_clear_black_24dp"
+            android:contentDescription="TODO"
+            android:focusable="true" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -65,7 +67,9 @@
             android:background="@drawable/ccp_selectable_bg"
             android:clickable="true"
             android:padding="10dp"
-            android:src="@drawable/ic_backspace_black_24dp" />
+            android:src="@drawable/ic_backspace_black_24dp"
+            android:contentDescription="TODO"
+            android:focusable="true" />
     </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/main_contenier"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center"
+    android:layout_gravity="center"
+    android:layout_marginTop="15dp"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/ems"
+            android:contentDescription="TODO" />
+
+        <app.zingo.employeemanagements.Custom.MyRegulerText
+
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:text="Plan Overview:"
+            android:textSize="24dp"
+            android:textColor="#000000"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Plan Name :"
+                android:layout_weight="2"
+                android:textSize="18dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:textColor="#000000"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/plan_name"
+                android:layout_weight="2"
+                android:textSize="18dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:textColor="#000000"/>
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Validity :"
+                android:layout_weight="2"
+                android:textSize="18dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:textColor="#000000"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/plan_validity"
+                android:layout_weight="2"
+                android:textSize="18dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:textColor="#000000"/>
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Employee Limit :"
+                android:layout_weight="2"
+                android:textSize="18dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:textColor="#000000"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/plan_empl_limit"
+                android:layout_weight="2"
+                android:textSize="18dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:textColor="#000000"/>
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Amount :"
+                android:layout_weight="2"
+                android:textSize="18dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:textColor="#000000"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/plan_amount"
+                android:layout_weight="2"
+                android:textSize="18dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:textColor="#000000"/>
+
+
+
+        </LinearLayout>
+
+
+
+
+        <Button
+            android:id="@+id/paid_version"
+            android:layout_below="@+id/text_internal"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:text="Proceed to Payment"
+            android:layout_centerInParent="true"
+            android:layout_margin="10dp"
+            android:background="#04BEBD"
+            android:textColor="#ffffff"/>
+
+
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>

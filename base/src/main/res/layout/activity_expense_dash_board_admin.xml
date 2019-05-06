@@ -1,0 +1,338 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card-view="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:focusable="false"
+    tools:context=".UI.NewAdminDesigns.ExpenseDashBoardAdmin">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="false"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical">
+
+
+
+
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/scroll_view"
+            android:focusable="false"
+            android:scrollbars="none">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+
+                <LinearLayout
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="4dp"
+                    android:layout_marginBottom="4dp">
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/employee_pic"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:src="@drawable/profile"/>
+                    <TextView
+                        android:textColor="@color/text_grey"
+                        android:gravity="center_vertical"
+                        android:id="@+id/name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:text="Name"
+                        android:textSize="18dp"
+                        android:layout_weight="1"/>
+
+                </LinearLayout>
+
+                <LinearLayout android:gravity="center"
+                    android:orientation="horizontal"
+                    android:id="@+id/linearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp">
+                    <ImageView
+                        android:id="@+id/previousDay"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/back_arrow"
+                        android:contentDescription="TODO" />
+                    <TextView
+                        android:textColor="@color/colorPrimary"
+                        android:gravity="center"
+                        android:id="@+id/presentDate"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Current Day"
+                        android:layout_weight="1"/>
+                    <ImageView
+                        android:id="@+id/nextDay"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/front_arrow"
+                        android:contentDescription="TODO" />
+                </LinearLayout>
+                <include
+                    layout="@layout/divider_grey"/>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="16dp">
+
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/approved_expenses"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textSize="25dp"
+                            android:textColor="#009293"
+                            android:gravity="center"
+                            android:textStyle="bold"/>
+                        <TextView
+                            android:id="@+id/bookmark_approved"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Approved"
+                            android:textColor="#000"
+                            android:gravity="center"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/rejected_expenses"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textSize="25dp"
+                            android:textColor="#009293"
+                            android:gravity="center"
+                            android:textStyle="bold"
+                            />
+                        <TextView
+                            android:id="@+id/channel_rejected"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Rejected"
+                            android:textColor="#000"
+                            android:gravity="center"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/pending_expenses"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textSize="25dp"
+                            android:textColor="#009293"
+                            android:gravity="center"
+                            android:textStyle="bold"/>
+                        <TextView
+                            android:id="@+id/comment_pending"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Pending"
+                            android:textColor="#000"
+                            android:gravity="center"/>
+                    </LinearLayout>
+
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="16dp">
+
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/expense_amount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textSize="25dp"
+                            android:textColor="#009293"
+                            android:gravity="center"
+                            android:textStyle="bold"/>
+                        <TextView
+                            android:id="@+id/bookmark"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Clamied Amount"
+                            android:textColor="#000"
+                            android:gravity="center"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/claimed_amount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textSize="25dp"
+                            android:textColor="#009293"
+                            android:gravity="center"
+                            android:textStyle="bold"
+                            />
+                        <TextView
+                            android:id="@+id/channel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Granted Amount"
+                            android:textColor="#000"
+                            android:gravity="center"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/total_expenses"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textSize="25dp"
+                            android:textColor="#009293"
+                            android:gravity="center"
+                            android:textStyle="bold"/>
+                        <TextView
+                            android:id="@+id/comment"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Total"
+                            android:textColor="#000"
+                            android:gravity="center"/>
+                    </LinearLayout>
+
+
+
+                </LinearLayout>
+
+
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.3dp"
+                    android:background="#99A1AC"
+                    android:layout_marginTop="5dp"/>
+
+                <app.zingo.employeemanagements.Custom.MyRegulerText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+
+                    android:layout_below="@+id/cardview_data_count"
+                    android:gravity="left"
+                    android:text="Expenses"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="10dp"
+                    android:textColor="#000"
+                    />
+
+                <LinearLayout
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:id="@+id/noRecordFound"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+
+                    android:layout_below="@+id/linearLayout2">
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:background="@color/white"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/search"
+                        android:minHeight="100dp"
+                        android:alpha="0.7"
+                        android:contentDescription="TODO" />
+                    <TextView
+                        android:textSize="15sp"
+                        android:textColor="@color/text_grey"
+                        android:gravity="center_horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="No Expenses Found"/>
+                </LinearLayout>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/expenses_list_dash"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"/>
+
+                <app.zingo.employeemanagements.Custom.MyRegulerText
+                    android:id="@+id/read_expenses"
+                    android:layout_weight="1"
+                    android:layout_width="150dp"
+                    android:visibility="gone"
+                    android:layout_height="0dp"
+                    android:background="@drawable/button_primary_dark"
+                    android:layout_margin="5dp"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:focusable="false"
+                    android:layout_gravity="right"
+                    android:padding="5dp"
+                    android:text="Read More"
+                    android:textSize="22dp"
+                    android:textColor="@color/white"
+                    />
+
+
+
+
+
+
+
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+
+    </LinearLayout>
+
+</FrameLayout>
+

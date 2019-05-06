@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="app.zingo.employeemanagements.UI.FAQ.FAQFragment">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.AppBarLayout
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tabs_faq"
+                android:background="@color/colorPrimaryDark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tabGravity="center"
+                app:tabMode="scrollable"
+                app:tabTextAppearance="@style/AppTabTextAppearances"
+                />
+
+        </android.support.design.widget.AppBarLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewPager_faq"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+
+
+
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:src="@drawable/spin"
+                android:visibility="gone"
+                android:id="@+id/spin_loader"
+                android:layout_gravity="center"/>
+
+
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,644 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:card-view="http://schemas.android.com/tools"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none"
+            android:layout_marginBottom="70dp"
+            android:layout_alignParentTop="true"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <app.zingo.employeemanagements.Custom.MyRegulerText
+
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    android:text="Fill out the form and we'll be in touch. Or call us at:"
+                    android:textSize="22dp"
+                    android:textColor="#000000"
+                    />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="5dp"
+                android:id="@+id/phone_number_lay"
+                >
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:padding="5dp"
+                    android:src="@drawable/phone"
+                    android:contentDescription="TODO" />
+                <app.zingo.employeemanagements.Custom.MyRegulerText
+
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    android:autoLink="phone"
+                    android:text="+91 99861 28021"
+                    android:textSize="22dp"
+                    android:textColor="#000000"
+                    />
+
+              <!--  <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/gradient_rect"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingLeft="15dp"
+                        android:paddingTop="5dp"
+                        android:id="@+id/whatsapp_open"
+                        android:paddingRight="15dp"
+                        android:paddingBottom="5dp">
+
+
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_whatsapp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>-->
+            </LinearLayout>
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/demo_back_image"
+                    android:contentDescription="TODO" />
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="-60dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    card-view:cardElevation="10dp"
+                    android:elevation="10dp"
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+
+                            android:id="@+id/info_layout"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+
+                                >
+
+                                <app.zingo.employeemanagements.Custom.MyRegulerText
+                                    android:layout_width="31dp"
+                                    android:layout_height="31dp"
+                                    android:layout_margin="5dp"
+                                    android:gravity="center"
+                                    android:background="@drawable/circle_grey"
+                                    android:text="1"
+                                    android:visibility="gone"
+                                    android:textSize="20dp"
+                                    android:textColor="#FFFFFF"
+                                    />
+                                <app.zingo.employeemanagements.Custom.MyRegulerText
+
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:padding="5dp"
+                                    android:text="Basic Details"
+                                    android:textSize="22dp"
+                                    android:textColor="#000000"
+                                    />
+                            </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            >
+                            <android.support.design.widget.TextInputLayout
+                                android:id="@+id/usernameInputLayout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10.0dip"
+                                android:hint="Your Name*"
+
+                                >
+                                <android.support.design.widget.TextInputEditText
+                                    android:id="@+id/user_name"
+                                    android:maxLength="50"
+                                    android:inputType="text"
+                                    style="@style/fp_editText" />
+                            </android.support.design.widget.TextInputLayout>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone"
+                            android:layout_marginTop="5dp"
+                            >
+                            <android.support.design.widget.TextInputLayout
+                                android:id="@+id/userJobInputLayout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="20.0dip"
+                                android:hint="Job Title*"
+
+                                >
+                                <android.support.design.widget.TextInputEditText
+                                    android:id="@+id/user_job"
+                                    android:maxLength="50"
+                                    android:inputType="text"
+                                    style="@style/fp_editText" />
+                            </android.support.design.widget.TextInputLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginTop="5dp">
+                            <android.support.design.widget.TextInputLayout
+                                android:id="@+id/userEmailInputLayout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="20.0dip"
+                                android:hint="Business Email*"
+
+                                >
+                                <android.support.design.widget.TextInputEditText
+                                    android:id="@+id/user_email"
+                                    android:maxLength="50"
+                                    android:inputType="text"
+                                    style="@style/fp_editText" />
+                            </android.support.design.widget.TextInputLayout>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginTop="5dp">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                >
+
+                                <com.hbb20.CountryCodePicker
+                                    android:id="@+id/ccp"
+                                    android:layout_marginTop="30.0dip"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    app:ccpDialog_keyboardAutoPopup="false"
+                                    app:ccp_defaultNameCode="IN"/>
+
+                                <android.support.design.widget.TextInputLayout
+                                    android:id="@+id/phoneInputEditText"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="20.0dip"
+                                    android:backgroundTint="@color/colorAccent"
+
+                                    android:hint="Phone Number*"
+
+                                    >
+                                    <android.support.design.widget.TextInputEditText
+                                        android:id="@+id/phone_number"
+                                        android:maxLength="15"
+                                        android:inputType="number"
+                                        style="@style/fp_editText" />
+                                </android.support.design.widget.TextInputLayout>
+
+
+                            </LinearLayout>
+                        </LinearLayout>
+
+
+
+                            <app.zingo.employeemanagements.Custom.MyRegulerText
+                                android:id="@+id/buttonInfoNext"
+                                android:layout_width="120dp"
+                                android:visibility="gone"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/button_primary_dark"
+                                android:layout_marginBottom="5dp"
+                                android:layout_marginTop="20.0dip"
+                                android:layout_gravity="right"
+                                android:layout_marginRight="10dp"
+                                android:textAlignment="center"
+                                android:padding="10dp"
+                                android:text="Next"
+                                android:textSize="18dp"
+                                android:textColor="#fff"
+                                />
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/company_layout"
+
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone"
+                                android:orientation="horizontal"
+
+                                >
+
+                                <app.zingo.employeemanagements.Custom.MyRegulerText
+                                    android:layout_width="31dp"
+                                    android:layout_height="31dp"
+                                    android:layout_margin="5dp"
+                                    android:gravity="center"
+                                    android:background="@drawable/circle_grey"
+                                    android:text="2"
+                                    android:textSize="20dp"
+                                    android:textColor="#FFFFFF"
+                                    />
+                                <app.zingo.employeemanagements.Custom.MyRegulerText
+
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:padding="5dp"
+                                    android:text="Company"
+                                    android:textSize="22dp"
+                                    android:textColor="#000000"
+                                    />
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                >
+                                <android.support.design.widget.TextInputLayout
+                                    android:id="@+id/companynameInputLayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="10.0dip"
+                                    android:hint="Business Name*"
+
+                                    >
+                                    <android.support.design.widget.TextInputEditText
+                                        android:id="@+id/company_name"
+                                        android:maxLength="50"
+                                        android:inputType="text"
+                                        style="@style/fp_editText" />
+                                </android.support.design.widget.TextInputLayout>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_marginTop="5dp"
+                                >
+                                <android.support.design.widget.TextInputLayout
+                                    android:id="@+id/companyEmployeeInputLayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="10.0dip"
+                                    android:hint="Number of Employee*"
+
+                                    >
+                                    <android.support.design.widget.TextInputEditText
+                                        android:id="@+id/company_employee"
+                                        android:maxLength="3"
+                                        android:inputType="number"
+                                        style="@style/fp_editText" />
+                                </android.support.design.widget.TextInputLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_marginTop="5dp">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Country*"
+                                    android:layout_marginTop="10.0dip"
+                                    style="@style/TextView.InputLabel"
+                                    />
+
+                                <com.hbb20.CountryCodePicker
+                                    android:id="@+id/ccp_country"
+
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    app:ccpDialog_keyboardAutoPopup="false"
+                                    app:ccp_defaultNameCode="IN"
+                                    app:ccp_showFullName="true"
+                                    app:ccp_showPhoneCode="false"
+                                    />
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone">
+
+
+                            <app.zingo.employeemanagements.Custom.MyRegulerText
+                                android:id="@+id/buttonCompanyPrevious"
+                                android:layout_width="120dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/button_primary_dark"
+                                android:layout_marginBottom="5dp"
+                                android:layout_marginTop="20.0dip"
+                                android:layout_gravity="left"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginRight="5dp"
+                                android:textAlignment="center"
+                                android:padding="10dp"
+                                android:text="Previous"
+                                android:textSize="18dp"
+                                android:textColor="#fff"
+                                />
+
+                                <app.zingo.employeemanagements.Custom.MyRegulerText
+                                    android:id="@+id/buttonCompanyNext"
+                                    android:layout_width="120dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/button_primary_dark"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_marginTop="20.0dip"
+                                    android:layout_gravity="right"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_marginLeft="5dp"
+                                    android:textAlignment="center"
+                                    android:padding="10dp"
+                                    android:text="Next"
+                                    android:textSize="18dp"
+                                    android:textColor="#fff"
+                                    />
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/inqiury_layout"
+
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:visibility="gone"
+
+                                >
+
+                                <app.zingo.employeemanagements.Custom.MyRegulerText
+                                    android:layout_width="31dp"
+                                    android:layout_height="31dp"
+                                    android:layout_margin="5dp"
+                                    android:gravity="center"
+                                    android:background="@drawable/circle_grey"
+                                    android:text="3"
+                                    android:textSize="20dp"
+                                    android:textColor="#FFFFFF"
+                                    />
+                                <app.zingo.employeemanagements.Custom.MyRegulerText
+
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:padding="5dp"
+                                    android:text="Inquiry"
+                                    android:textSize="22dp"
+                                    android:textColor="#000000"
+                                    />
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                >
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:layout_marginTop="5dp"
+                                    >
+                                    <android.support.design.widget.TextInputLayout
+                                        android:id="@+id/locationLayout"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="10.0dip"
+                                        android:hint="Location*"
+
+                                        >
+                                        <android.support.design.widget.TextInputEditText
+                                            android:id="@+id/location_text"
+                                            android:maxLength="3"
+                                            android:inputType="text"
+                                            style="@style/fp_editText" />
+                                    </android.support.design.widget.TextInputLayout>
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp">
+
+
+                                <app.zingo.employeemanagements.Custom.MyRegulerText
+                                    android:id="@+id/buttonInquiryPrevious"
+                                    android:layout_width="120dp"
+                                    android:layout_weight="1"
+                                    android:visibility="gone"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/button_primary_dark"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_marginTop="20.0dip"
+                                    android:layout_gravity="left"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginRight="5dp"
+                                    android:textAlignment="center"
+                                    android:padding="10dp"
+                                    android:text="Previous"
+                                    android:textSize="18dp"
+                                    android:textColor="#fff"
+                                    />
+
+                            <app.zingo.employeemanagements.Custom.MyRegulerText
+                                android:id="@+id/buttonInquiryNext"
+                                android:layout_width="120dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@drawable/button_primary_dark"
+                                android:layout_marginBottom="5dp"
+                                android:layout_marginTop="20.0dip"
+                                android:layout_gravity="right"
+                                android:layout_marginRight="10dp"
+                                android:layout_margin="5dp"
+                                android:textAlignment="center"
+                                android:padding="10dp"
+                                android:text="Submit"
+                                android:textSize="18dp"
+                                android:textColor="#fff"
+                                />
+                            </LinearLayout>
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+        </ScrollView>
+
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:layout_gravity="bottom"
+            android:background="#000000"
+            app:contentInsetEnd="0dp"
+            app:contentInsetLeft="0dp"
+            app:contentInsetRight="0dp"
+            app:contentInsetStart="0dp"
+            android:fitsSystemWindows="true"
+            android:minHeight="?attr/actionBarSize"
+            app:layout_behavior="app.zingo.employeemanagements.Custom.ScrollingToolbarBehavior">
+
+
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="67dp"
+                android:background="#000000"
+                android:orientation="vertical"
+                app:layout_behavior="app.zingo.employeemanagements.Custom.ScrollingToolbarBehavior">
+
+
+
+
+
+
+                <app.zingo.employeemanagements.Custom.MyRegulerText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:text="For business inquiry, lets chat on whatsapp"
+                    android:textColor="#ffffff"
+                    android:textSize="11.3sp" />
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/gradient_rect"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingLeft="15dp"
+                        android:paddingTop="5dp"
+                        android:id="@+id/whatsapp_open"
+                        android:paddingRight="15dp"
+                        android:paddingBottom="5dp">
+
+
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_whatsapp"
+                            android:contentDescription="TODO" />
+
+                        <app.zingo.employeemanagements.Custom.MyRegulerText
+                            android:id="@+id/number"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="5dp"
+                            android:gravity="center"
+                            android:text="+919986128021"
+                            android:textColor="#ffffff"
+                            android:textSize="12.7sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </android.support.v7.widget.Toolbar>
+
+
+
+
+
+</android.support.design.widget.CoordinatorLayout>

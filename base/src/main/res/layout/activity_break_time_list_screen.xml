@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f5f5f5">
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:gravity="center"
+            android:orientation="vertical"
+            android:id="@+id/noBranchFound"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+
+            android:layout_below="@+id/linearLayout2">
+            <ImageView
+                android:id="@+id/imageView2"
+                android:background="@color/white"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/search"
+                android:minHeight="100dp"
+                android:alpha="0.7"
+                android:contentDescription="TODO" />
+            <TextView
+                android:textSize="15sp"
+                android:textColor="@color/text_grey"
+                android:gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="No Break Timing Found"/>
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/break_list_data"
+            android:focusable="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/spin"
+        android:id="@+id/spin_loader"
+        android:layout_gravity="center"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_gravity="bottom|right|center_vertical|center_horizontal|center|end"
+        android:id="@+id/add_break_float"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:src="@drawable/follow_add"
+        android:tint="@color/white"
+        app:backgroundTint="@color/designBlueGreen"
+        app:elevation="6dp"
+        app:fabSize="normal"/>
+
+
+</FrameLayout>

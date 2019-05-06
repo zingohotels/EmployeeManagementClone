@@ -1,0 +1,245 @@
+<resources>
+    <string name="app_name">Zingy Employee Management</string>
+
+    <!--Custom Font Type imported,refer main->assets->font folder-->
+    <string name="ColonnaMT">ColonnaMT</string>
+    <string name="Leprosy">Leprosy</string>
+    <string name="BomBardment">bombardment_shadow</string>
+    <string name="mina">Mina_is_gone_3D</string>
+    <string name="Yeysk">Yeysk</string>
+    <string name="Maribel_Suit">Maribel_Suit</string>
+    <string name="arial">arial</string>
+    <string name="Mistral">Mistral</string>
+    <string name="CooperBlack">Cooper_Black_Regular</string>
+
+    <string name="file_provider_authority" translatable="false">app.zingo.employeemanagements.fileprovider</string>
+
+    <!--Splash screen-->
+    <string name="splash_app_name">Employee Management</string>
+    <string name="powered_by_zingo">Powered By Lucida Technologies</string>
+    <string name="copyright_lucida">&#9400; Lucida Hospitality Pvt Ltd</string>
+
+    <!--Guest Login-->
+    <string name="login_app_name">Employee Management</string>
+    <string name="login_app_desc">Manage your Organization</string>
+    <string name="verify_text">Verify your Mobile Number</string>
+    <string name="verify_msg">Enter the 6-digit code we sent to </string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Zingo Hotels</string>
+
+
+    <string name="textMeeting">Details</string>
+    <string name="mapView">Map View</string>
+
+    <string name="workingDays">Worked Days</string>
+    <string name="leaveDays">Leave Taken</string>
+
+    <string name="leaveNew">Apply Leave</string>
+    <string name="leaveRequest">Leaves</string>
+
+    <string-array name="leave_type">
+        <item>Paid</item>
+        <item>Un Paid</item>
+
+    </string-array>
+
+    <string-array name="leave_status">
+        <item>Pending</item>
+        <item>Approved</item>
+        <item>Rejected</item>
+        <item>Cancelled</item>
+
+    </string-array>
+
+    <string-array name="task_status">
+        <item>Pending</item>
+        <item>On-Going</item>
+        <item>Completed</item>
+        <item>Closed</item>
+
+    </string-array>
+
+    <string-array name="break_status">
+        <item>Tea Break</item>
+        <item>Lunch Break</item>
+        <item>Others</item>
+    </string-array>
+
+    <string-array name="log_status">
+
+        <item>Absent</item>
+        <item>Present</item>
+
+    </string-array>
+
+    <string-array name="meeting_status">
+        <item>In-Meeting</item>
+        <item>Cancelled</item>
+        <item>Completed</item>
+
+
+    </string-array>
+
+
+    <array name="navbar_items">
+        <!--<item>Home</item>-->
+        <item>Profile</item>
+        <item>Organization</item>
+        <item>Employees</item>
+        <item>Salary</item>
+        <item>Change Password</item>
+        <item>Logout</item>
+    </array>
+    <array name="navnar_item_images">
+        <item>@drawable/profile</item>
+        <item>@drawable/organization_icon</item>
+        <item>@drawable/employee</item>
+        <item>@drawable/salary</item>
+        <item>@drawable/password</item>
+        <item>@drawable/logout</item>
+    </array>
+
+    <array name="navbar_items_advance">
+        <item>Profile</item>
+        <item>Organization</item>
+        <item>Employees</item>
+        <item>Salary</item>
+        <item>Meetings</item>
+        <item>Task Management</item>
+        <item>Live Tracking</item>
+        <item>Change Password</item>
+        <item>Logout</item>
+    </array>
+    <array name="navnar_item_images_advance">
+        <item>@drawable/profile</item>
+        <item>@drawable/organization_icon</item>
+        <item>@drawable/employee</item>
+        <item>@drawable/salary</item>
+        <item>@drawable/interview</item>
+        <item>@drawable/interview</item>
+        <item>@drawable/location</item>
+        <item>@drawable/password</item>
+        <item>@drawable/logout</item>
+    </array>
+
+    <array name="navbar_items_employee">
+        <!--<item>Home</item>-->
+        <item>Profile</item>
+        <item>Organization</item>
+
+        <item>Attendance</item>
+        <item>Leave Management</item>
+        <item>Change Password</item>
+        <item>Logout</item>
+    </array>
+    <array name="navnar_item_images_employee">
+        <item>@drawable/profile</item>
+        <item>@drawable/organization_icon</item>
+
+        <item>@drawable/build_year</item>
+        <item>@drawable/checklist</item>
+        <item>@drawable/password</item>
+        <item>@drawable/logout</item>
+    </array>
+
+    <array name="navbar_items_employee_advance">
+        <!--<item>Home</item>-->
+        <item>Profile</item>
+        <item>Organization</item>
+        <item>Meetings</item>
+        <item>Live Tracking</item>
+        <item>Attendance</item>
+        <item>Leave Management</item>
+        <item>Change Password</item>
+        <item>Logout</item>
+    </array>
+    <array name="navnar_item_images_employee_advance">
+        <item>@drawable/profile</item>
+        <item>@drawable/organization_icon</item>
+        <item>@drawable/interview</item>
+        <item>@drawable/location</item>
+        <item>@drawable/build_year</item>
+        <item>@drawable/checklist</item>
+        <item>@drawable/password</item>
+        <item>@drawable/logout</item>
+    </array>
+
+    <array name="month">
+        <!--<item>Home</item>-->
+        <item>Jan</item>
+        <item>Feb</item>
+        <item>Mar</item>
+        <item>Apr</item>
+        <item>May</item>
+        <item>Jun</item>
+        <item>Jul</item>
+        <item>Aug</item>
+        <item>Sep</item>
+        <item>Oct</item>
+        <item>Nov</item>
+        <item>Dec</item>
+
+    </array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="renew_alert_message">Dear Customer, Your EMS Subscription Expired.\nUpdate your plan and use our services. </string>
+    <string name="error_code_expire">Error Code: EC_E05</string>
+
+
+    <!--calendar -->
+    <string name="accounts">Accounts</string>
+    <string name="description_add">Add Calendar</string>
+    <string name="summary">Title</string>
+    <string name="summary_hint">Enter the calendar title</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="icon_desc">Application icon</string>
+    <string name="title_separator_desc">Title separator</string>
+    <string name="refresh">Refresh</string>
+    <string name="batchadd">Copy Calendar x3 (Batch)</string>
+    <string name="edit">Edit Calendar</string>
+    <string name="delete">Delete Calendar</string>
+    <string name="delete_title">Delete Calendar?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="error">Error</string>
+    <string name="error_format">[Error] %s</string>
+
+    <string name="barcode_reader">QrCode Reader</string>
+    <string name="company_step_one">Choose your User type as a Company &amp; Employer and click \"Join\" button.</string>
+    <string name="employee_step_one">Choose your User type as an Employee and click \"Join\" button.</string>
+    <string name="reseller_step_one">Choose your User type as a Company &amp; Employer and click \"Join\" button.</string>
+    <string name="company_step_ones">If you did not add any department ,you will get a pop-up to add a department when you logged in using your Founder/Manager/Super admin credentials.\n Mention Department Name and Description then click on \"Create Department\".</string>
+    <string name="company_step_3">Enter your organization basic info based on given fields and Click on \"Create Organization\" button.</string>
+    <string name="company_step_2">Choose your Plan type as a PAID VERSION or TRIAL VERSION.If you choose TRIAL VERSION, Try it free for 30 Days. \nIf you choose PAID VERSION, based on your plan subscription you will get our Services.</string>
+    <string name="company_step_4">Enter \"Founder\" mobile number and click on Verify button.You will get OTP within few seconds. Enter OTP to verify it.</string>
+    <string name="employee_step_4">Enter \"Employee\" mobile number and click on Verify button.You will get OTP within few seconds. Enter OTP to verify it.</string>
+    <string name="company_step_5">Enter Founder\'s Basic information and based on given fields and Click on \"Create Founder\" button.</string>
+    <string name="employee_step_5">Verify Organization code which shared on email or by Manager.\nEnter Employees\'s Basic information and based on given fields and Click on \"Create Employee\" button.</string>
+    <string name="company_step_2s">Click on \"Hamburger Icon(three horizontal lines which is in top right)\" and Click on \"Department\".You will get department list and \"Add Department\" button.\nClick on \"Add Department\" button,you will get pop-up. Mention Department Name and Description then click on \"Create Department\".</string>
+    <string name="company_step_4s">Click on \"Hamburger Icon(three horizontal lines which is in top right)\" and Click on \"Attendance\".You will get employees list with their attendance status(Present/Absent).\nClick on Employee\'s Name,you will get two options there.\n • By clicking on \"UPDATE\" you can change attendance status of employee for example present to absent or vice versa.\n • By clicking \"VIEW\" you can see related employee dashboard . In this dashboard it will show current date details of employee</string>
+    <string name="employees_step_4s">Click on \"Attendance\". \n•If you want to put check-in , click on Check-In Icon before that you need to on GPS in your mobile.After successful check-in. your check-in time will display below on icon.\n•If you want to put check-in , click on Check-Out Icon before that you need to on GPS in your mobile.\n•You can also able to put your attendance by scaning QR Code if it is placed on your Organization.</string>
+    <string name="employees_step_5s">Click on \"Attendance\". \n•If you want to put Meeting check-in , click on Meeting Check-In Icon before that you need to on GPS in your mobile.You will get pop-up to fill basic meeting details.\nAfter successful check-in. your check-in time will display below on icon.\n•If you want to put Meeting check-in , click on Meeting Check-Out Icon before that you need to on GPS in your mobile.</string>
+    <string name="company_step_6s">Click on \"Hamburger Icon(three horizontal lines which is in top right)\" and Click on \"Task\".You will get employees list with their attendance status(Present/Absent).\nClick on Employee\'s Name,you will able to see task list of that particular employee for today.\n • By clicking on \"Date\" you can change date and see the task list on selected date with status .\n • By clicking \"Pencil\" you can create task for that employee. you can assign task with Geo fencing(optional)</string>
+    <string name="company_step_6sd">Click on \"Task\".You will get task list of all employees for current date.\nClick on Employee\'s Icon,You will get employees list with their attendance status(Present/Absent).\nClick on Employee\'s Name,you will able to see task list of that particular employee for today.\n • By clicking on \"Date\" you can change date and see the task list on selected date with status .\n • By clicking \"Pencil\" you can create task for that employee. you can assign task with Geo fencing(optional)</string>
+    <string name="employee_step_6s">Click on \"Hamburger Icon(three horizontal lines which is in top right)\" and Click on \"Task\".you will able to see task list of yours for today.\n • By clicking on \"Date\" you can change date and see the task list on selected date with status .\n • By clicking \"Pencil\" you can create task for you. you can assign task with Geo fencing(optional)</string>
+    <string name="employee_step_6sd">Click on \"Task\".you will able to see task list of yours for today.\n • By clicking on \"Date\" you can change date and see the task list on selected date with status .\n • By clicking \"Pencil\" you can create task for you. you can assign task with Geo fencing(optional)</string>
+    <string name="company_step_7s">Click on \"Hamburger Icon(three horizontal lines which is in top right)\" and Click on \"Expenses\".You will get expenses list of all employees for current date.\nClick on Employee\'s Icon,You will get employees list with their attendance status(Present/Absent).\nClick on Employee\'s Name,you will able to see expense dashboard of that particular employee for current month.\n • By clicking on \"Date\" you can change month and see the expense dashboard on selected month.\n</string>
+    <string name="employee_step_7s">Click on \"Hamburger Icon(three horizontal lines which is in top right)\" and Click on \"Expenses\".You will get two tab Create Expense and Expense List.\nClick on Expense List,you will able to see expense dashboard of yours for current month.\n • By clicking on \"Date\" you can change month and see the expense dashboard on selected month.\n</string>
+    <string name="employee_step_8s">Click on \"Hamburger Icon(three horizontal lines which is in top right)\" and Click on \"Leaves\".You will get two tab Apply Leave and Leaves.\nClick on Leaves,you will able to see leave dashboard of yours for current month.\n • By clicking on \"Date\" you can change month and see the leave dashboard on selected month.\n</string>
+    <string name="company_step_8s">Click on \"Hamburger Icon(three horizontal lines which is in top right)\" and Click on \"Leaves\".You will get employees list with their attendance status(Present/Absent).\nClick on Employee\'s Name,you will able to see leaves dashboard of that particular employee for current month.\n • By clicking on \"Date\" you can change month and see the leaves dashboard on selected month.\n</string>
+    <string name="company_step_7sd">Click on \"Notifications\" and Click on \"Expenses\".You will get expenses list of all employees for current date.\nClick on Employee\'s Icon,You will get employees list with their attendance status(Present/Absent).\nClick on Employee\'s Name,you will able to see expense dashboard of that particular employee for current month.\n • By clicking on \"Date\" you can change month and see the expense dashboard on selected month.\n</string>
+    <string name="employee_step_7sd">Click on \"Notifications\" and Click on \"Expenses\".You will get expenses list of yours for current date.• By clicking on \"Date\" you can change date and see the expense list on selected date.\n</string>
+    <string name="company_step_5s">Click on \"Hamburger Icon(three horizontal lines which is in top right)\" and Click on \"Live Tracking\".You will get employee\'s updated last location.\n•Click on Employee\'s Icon(top on Title bar),you will get employees list.\n • By clicking on employee name you can check employees location based on data also •\n By clicking \"Calendar Icon\" you can change date and check location of employees</string>
+
+    <string name="company_step_3s">Click on \"Hamburger Icon(three horizontal lines which is in top right)\" and Click on \"Employees\".You will get employees list and \"Floating\" button(bottom right corner).\nClick on \"Floating\" button,you will redirect to \"Create Employee\" screen. Mention Employees info based on given fields then click on \"Create Employee\".\n •Admin : If  Related Employee is Manager or Super Admin Or Team Leader or You want to make him/her as a Admin for other Employees then Admin Button Should be “Yes”.
+\n • Check in Location: If your employee has to check in from only office location the checked in this check box.\nIf your employee is sales employee and he/ she has to check in from any location then don’t checked in this check box.
+\n• Check in Time : If your Employee has to check in within office check-in hours Only then Checked in this check box.(Suppose Your Office timing is Morning 9 O’clock then Employee has to Check in Before 9 O’clock  ).
+</string>
+
+    <string name="rfab_rfal__float_convert_color_alpha">0.7</string>
+
+
+</resources>

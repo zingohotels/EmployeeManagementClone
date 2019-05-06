@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:dist="http://schemas.android.com/apk/distribution"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="app.zingo.employeemanagements.base">
+
+    <dist:module dist:instant="true" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.hardware.camera.autofocus" />
+
+    <uses-feature android:name="android.hardware.location.gps" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true" />
+
+    <application
+        android:name="android.support.multidex.MultiDexApplication"
+        android:allowBackup="true"
+        android:extractNativeLibs="false"
+        android:hardwareAccelerated="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Landing.SplashScreen"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" >
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Landing.PhoneVerificationScreen"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBN_9MfDVrhG1_D9Q1XpakTiDkoqSU5gGA" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.razorpay.ApiKey"
+            android:value="rzp_live_tTRIgCc7PPKNq0" />
+
+        <!--
+            <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyD7wKDeCjNaLc8OjxHhYFVieOsL9lXhFZQ" />
+        -->
+
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Company.CreateCompany"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Company.CreateFounderScreen"
+            android:configChanges="keyboardHidden|orientation|keyboard"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Login.LoginScreen"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Admin.DashBoardAdmin"
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="app.zingo.employeemanagements.UI.Company.OrganizationDetailScree" />
+        <activity android:name="app.zingo.employeemanagements.UI.Employee.EmployeeListScreen" />
+        <activity android:name="app.zingo.employeemanagements.UI.Employee.CreateEmployeeScreen" />
+
+        <service android:name="app.zingo.employeemanagements.FireBase.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="app.zingo.employeemanagements.Service.LocationSharingServices"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":ServiceProcess" />
+        <service
+            android:name="app.zingo.employeemanagements.Service.LocationForegroundService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name="app.zingo.employeemanagements.Utils.TrackGPS"
+            android:enabled="true" />
+        <service
+            android:name="app.zingo.employeemanagements.Service.CheckDataAndLocation"
+            android:enabled="true" />
+        <service
+            android:name="app.zingo.employeemanagements.Service.SendEmailToAll"
+            android:enabled="true" />
+        <service
+            android:name="app.zingo.employeemanagements.Service.DistanceCheck"
+            android:enabled="true" />
+        <service
+            android:name="app.zingo.employeemanagements.Service.LocationTrackEmplService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name="app.zingo.employeemanagements.FireBase.MyFirebaseMessagingService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="app.zingo.employeemanagements.Service.LocationListenerService"
+            android:enabled="true" />
+        <service
+            android:name="app.zingo.employeemanagements.Service.LocaitionPassWithConditionServices"
+            android:enabled="true" />
+
+        <receiver
+            android:name="app.zingo.employeemanagements.Service.AlarmReceive"
+            android:enabled="true"
+            android:exported="true"
+            android:label="RestartServiceWhenStopped" />
+
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Landing.SlideScreen"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Employee.DashBoardEmployee"
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="app.zingo.employeemanagements.UI.Admin.DepartmentEmployeeListScreen" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Admin.EmployeesDashBoard"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Common.EmployeeMeetingMap"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name="app.zingo.employeemanagements.UI.Employee.MapsActivity" />
+        <activity android:name="app.zingo.employeemanagements.UI.Common.ChangePasswordScreen" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Employee.EmployeeMeetingHost"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Common.EmployeeMeetingList"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Employee.AttendanceScreen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Employee.WorkedDaysListScreen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Employee.LeaveTakenDays"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Employee.LeaveManagementHost"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Employee.ApplyLeaveScreen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name="app.zingo.employeemanagements.UI.Admin.CreatePaySlip" />
+        <activity android:name="app.zingo.employeemanagements.UI.Admin.LoginDetailsHost" />
+        <activity android:name="app.zingo.employeemanagements.UI.Admin.EmployeeLoginList" />
+        <activity android:name="app.zingo.employeemanagements.UI.Admin.EmployeeLoginMapView" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="@string/file_provider_authority"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_provider_path" />
+        </provider>
+
+        <activity android:name="app.zingo.employeemanagements.UI.Admin.LeaveApprovalScreen" />
+        <activity android:name="app.zingo.employeemanagements.UI.Admin.EmployeeLiveMappingScreen" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.LandingScreen"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoAction">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="http"
+                    android:host="zingyapp.com"
+                    android:pathPattern="/checkout.php" />
+
+                <data
+                    android:scheme="https"
+                    android:host="zingyapp.com"
+                    android:pathPattern="/checkout.php" />
+
+
+            </intent-filter>
+            <meta-data
+                android:name="default-url"
+                android:value="https://zingyapp.com/checkout.php" />
+
+
+        </activity>
+        <activity
+            android:name="app.zingo.employeemanagements.UI.ContactUsScreen"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.SupportScreen"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.GetStartedScreen"
+            android:configChanges="keyboardHidden|orientation|keyboard"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Admin.TaskManagementHost"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Admin.CreateTaskScreen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Admin.TaskListScreen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.AdminNewMainScreen"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.DailyTargetsForEmployeeActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.SignUpOptioins"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.EmployeeSignUp"
+            android:configChanges="keyboardHidden|orientation|keyboard"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.NewEmployeeDesign.EmployeeNewMainScreen"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.EmployeeUpdateListScreen" />
+        <activity android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.EmployeeEditScreen" />
+        <activity android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.LeaveEmployeeListScreen" />
+        <activity android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.UpdateLeaveScreen" />
+        <activity android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.DepartmentLilstScreen" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.PlanMainHostScreen"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.BasicPlanScreen"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.AdvancePlanScreen"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="app.zingo.employeemanagements.FireBase.EmailVerificationTesting" />
+        <activity android:name="app.zingo.employeemanagements.UI.NewEmployeeDesign.ExpenseManageHost" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.NewEmployeeDesign.CreateExpensesScreen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Common.PlanExpireScreen"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.NewEmployeeDesign.ExpensesListScreen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.NewEmployeeDesign.ExpenseListScreen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.EmployeeExpenseList" />
+        <activity android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.PendingTasks" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Reseller.ResellerSignUpScree"
+            android:configChanges="keyboardHidden|orientation|keyboard"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Reseller.ResellerMainActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Reseller.ResellerDashBoard"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Reseller.ResellerOrganizationList"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Reseller.ResellerPaymentListScreen"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Reseller.ResellerProfileScreen"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="app.zingo.employeemanagements.UI.Reseller.ChangePasswordReseller" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Common.DigitalSignature"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="app.zingo.employeemanagements.UI.NewEmployeeDesign.MeetingAddWithSignScreen" />
+        <activity android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.LoginMapScreenAdmin" />
+        <activity android:name="app.zingo.employeemanagements.UI.Common.ReportManagementScreen" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Login.ForgotPhoneVerfi"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="app.zingo.employeemanagements.UI.Common.ForgotPasswordScreen" />
+        <activity android:name="app.zingo.employeemanagements.UI.Common.ForgotResellPwd" />
+        <activity android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.TeamMembersList" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Common.GeneralNotificationScreen"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="app.zingo.employeemanagements.UI.Admin.EmployeeTaskMapScreen" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.ReportTaskListScreen"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.ReportExpenseList"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.ReportVisitsListScreen"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="app.zingo.employeemanagements.UI.Company.OrganizationEditScreen" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.NewEmployeeDesign.MeetingDetailList"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="app.zingo.employeemanagements.UI.Company.WorkingDaysScreen" />
+        <activity android:name="app.zingo.employeemanagements.UI.NewEmployeeDesign.ViewPaySlipScreen" />
+        <activity android:name="app.zingo.employeemanagements.UI.Common.InvokeService" />
+        <activity android:name="app.zingo.employeemanagements.UI.Common.CustomerCreation" />
+        <activity android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.PlanSubscribtionScreen" />
+        <activity android:name="app.zingo.employeemanagements.UI.NewEmployeeDesign.BreakPurpose" />
+        <activity android:name="app.zingo.employeemanagements.UI.NewEmployeeDesign.WalkieTalkie" />
+        <activity android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.PresentEmployeeListScreen" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.TaskAdminViewActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.UpdateTaskScreen" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.ExpensesListAdmin"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.EmployeeDashBoardAdminView" />
+        <activity android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.CheckInMapScreen" />
+        <activity android:name="app.zingo.employeemanagements.UI.GooglePlaceMapActivity" />
+        <activity android:name="app.zingo.employeemanagements.UI.Common.NotificationShowActivity" />
+        <activity android:name="app.zingo.employeemanagements.UI.Common.LocationSharingEmplActivity" />
+        <activity android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.LeaveDashBoardAdminScreen" />
+        <activity android:name="app.zingo.employeemanagements.UI.Common.LeaveListScreen" />
+        <activity android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.ExpenseDashBoardAdmin" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Common.ImageFullScreenActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="app.zingo.employeemanagements.UI.Common.ExpensesListAdmin" />
+        <activity android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.UpdateExpenseScreen" />
+        <activity android:name="app.zingo.employeemanagements.UI.Common.AllEmployeeLiveLocation" />
+        <activity android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.MeetingMapScreen" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.QrCodePrintScreen"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.NewEmployeeDesign.ScannedQrScreen"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="app.zingo.employeemanagements.UI.NewEmployeeDesign.EmployeeQrCodeGenerate" />
+        <activity android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.AdminQrTabScreen" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.AdminScanEmployee"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.OrganizationProfileScreen" />
+        <activity android:name="app.zingo.employeemanagements.UI.Common.HolidayListActivityScreen" />
+        <activity android:name="app.zingo.employeemanagements.UI.Common.BranchListScreen" />
+        <activity android:name="app.zingo.employeemanagements.UI.Common.CreateBranchesScreen" />
+        <activity android:name="app.zingo.employeemanagements.UI.Common.BreakTimeListScreen" />
+        <activity android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.BranchOptionScreen" />
+        <activity android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.BranchInfoScreen" />
+        <activity android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.BranchEditScreen" />
+        <activity android:name="app.zingo.employeemanagements.UI.Common.CustomerList" />
+        <activity android:name="app.zingo.employeemanagements.UI.FAQScreen" />
+        <activity android:name="app.zingo.employeemanagements.UI.FAQ.FAQFragment" >
+
+
+
+        </activity>
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Plan.PlanDesignActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+        <activity android:name="app.zingo.employeemanagements.UI.Plan.BasicPlanSubscription" />
+        <activity android:name="app.zingo.employeemanagements.UI.Plan.AdvancePlanSubscription"></activity>
+
+        <activity android:name="com.airpay.airpaysdk_simplifiedotp.AirpayActivity">
+        </activity>
+    </application>
+
+</manifest>

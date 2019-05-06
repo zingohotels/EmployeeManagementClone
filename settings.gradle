@@ -1,1 +1,1 @@
-include ':app', ':ccp'
+include ':base', ':ccp', ':instant', ':installed', ':library'

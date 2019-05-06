@@ -1,0 +1,679 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card-view="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <app.zingo.employeemanagements.Custom.MyRegulerText
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:textColor="@color/white"
+        android:text="Get started"
+
+        android:gravity="center"
+        android:textSize="16sp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
+        android:id="@+id/get_set_go_btn"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        android:layout_alignParentTop="true"
+        android:layout_above="@id/get_set_go_btn"
+        android:id="@+id/screen_other_info">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <app.zingo.employeemanagements.Custom.MyTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:visibility="gone"
+                android:layout_margin="5dp"
+
+                android:gravity="center"
+                android:text="Join Zingy as a Company and a Founder"
+                android:textColor="#000"/>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:background="@drawable/banner"/>
+            
+            <app.zingo.employeemanagements.Custom.MyTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="Join Zingy as a Company and a Founder with following steps"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <app.zingo.employeemanagements.Custom.MyArialText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:textColor="#000"
+                    android:id="@+id/step_one"
+                    android:text="Step 1: Click on Get Started"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+
+                    />
+                <app.zingo.employeemanagements.Custom.MyArialText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/company_step_one"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <app.zingo.employeemanagements.Custom.MyArialText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:textColor="#000"
+                    android:text="Step 2: Choose your Plan Type"
+                    android:id="@+id/step_two"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+
+                    />
+                <app.zingo.employeemanagements.Custom.MyArialText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    
+
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/company_step_2"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <app.zingo.employeemanagements.Custom.MyArialText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:textColor="#000"
+                    android:text="Step 3: Create Organization"
+                    android:id="@+id/step_three"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+
+                    />
+                <app.zingo.employeemanagements.Custom.MyArialText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/company_step_3"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <app.zingo.employeemanagements.Custom.MyArialText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:textColor="#000"
+                    android:text="Step 3: Verify Mobile Number"
+
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+
+                    />
+                <app.zingo.employeemanagements.Custom.MyArialText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/company_step_4"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <app.zingo.employeemanagements.Custom.MyArialText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:textColor="#000"
+                    android:text="Step 5: Create Founder"
+
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+
+                    />
+                <app.zingo.employeemanagements.Custom.MyArialText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/company_step_5"
+                    />
+            </LinearLayout>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/get_app_and_go"/>
+          <!--  <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <app.zingo.employeemanagements.Custom.MyTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    
+                    android:textSize="18sp"
+                    android:textColor="#000"
+                    android:text="@string/heading_1"
+
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+
+                    />
+                <app.zingo.employeemanagements.Custom.MyTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/heading_one"
+                    />
+            </LinearLayout>-->
+          <!--  <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <app.zingo.employeemanagements.Custom.MyTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    
+                    android:textSize="18sp"
+                    android:textColor="#000"
+                    android:text="@string/heading_2"
+
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+
+                    />
+                <app.zingo.employeemanagements.Custom.MyTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/heading_two"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <app.zingo.employeemanagements.Custom.MyTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    
+                    android:textSize="18sp"
+                    android:textColor="#000"
+                    android:text="@string/heading_3"
+
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+
+                    />
+                <app.zingo.employeemanagements.Custom.MyTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/heading_three"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <app.zingo.employeemanagements.Custom.MyTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    
+                    android:textSize="18sp"
+                    android:textColor="#000"
+                    android:text="@string/heading_4"
+
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+
+                    />
+                <app.zingo.employeemanagements.Custom.MyTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/heading_four"
+                    />
+            </LinearLayout>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:src="@drawable/happy_icon"/>-->
+            <app.zingo.employeemanagements.Custom.MyTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="FAQ"
+                android:textSize="20dp"
+                android:layout_marginLeft="20dp"
+                android:textColor="#000"
+                />
+
+         <!--   <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <app.zingo.employeemanagements.Custom.MyTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    
+                    android:textSize="18sp"
+                    android:textColor="#000"
+                    android:text="@string/question_1"
+
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+
+                    />
+                &lt;!&ndash;<app.zingo.employeemanagements.Custom.MyTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/heading_four"
+                    />&ndash;&gt;
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/question_one_list"></ListView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <app.zingo.employeemanagements.Custom.MyTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    
+                    android:textSize="18sp"
+                    android:textColor="#000"
+                    android:text="@string/question_2"
+
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+
+                    />
+                &lt;!&ndash;<app.zingo.employeemanagements.Custom.MyTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/heading_four"
+                    />&ndash;&gt;
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="140dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:dividerHeight="0dp"
+                    android:divider="@color/white"
+                    android:id="@+id/question_two_list"></ListView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <app.zingo.employeemanagements.Custom.MyTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    
+                    android:textSize="18sp"
+                    android:textColor="#000"
+                    android:text="@string/question_3"
+
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+
+                    />
+                &lt;!&ndash;<app.zingo.employeemanagements.Custom.MyTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/heading_four"
+                    />&ndash;&gt;
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/question_three_list"></ListView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <app.zingo.employeemanagements.Custom.MyTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    
+                    android:textSize="18sp"
+                    android:textColor="#000"
+                    android:text="@string/question_4"
+
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+
+                    />
+                &lt;!&ndash;<app.zingo.employeemanagements.Custom.MyTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/heading_four"
+                    />&ndash;&gt;
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/question_four_list"></ListView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <app.zingo.employeemanagements.Custom.MyTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    
+                    android:textSize="18sp"
+                    android:textColor="#000"
+                    android:text="@string/question_5"
+
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+
+                    />
+                &lt;!&ndash;<app.zingo.employeemanagements.Custom.MyTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/heading_four"
+                    />&ndash;&gt;
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/question_five_list"></ListView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <app.zingo.employeemanagements.Custom.MyTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    
+                    android:textSize="18sp"
+                    android:textColor="#000"
+                    android:text="@string/question_6"
+
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+
+                    />
+                &lt;!&ndash;<app.zingo.employeemanagements.Custom.MyTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/heading_four"
+                    />&ndash;&gt;
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/question_six_list"></ListView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <app.zingo.employeemanagements.Custom.MyTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    
+                    android:textSize="18sp"
+                    android:textColor="#000"
+                    android:text="@string/question_7"
+
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+
+                    />
+                &lt;!&ndash;<app.zingo.employeemanagements.Custom.MyTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/heading_four"
+                    />&ndash;&gt;
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/question_seven_list"></ListView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <app.zingo.employeemanagements.Custom.MyTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    
+                    android:textSize="18sp"
+                    android:textColor="#000"
+                    android:text="@string/question_8"
+
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+
+                    />
+                &lt;!&ndash;<app.zingo.employeemanagements.Custom.MyTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/heading_four"
+                    />&ndash;&gt;
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/question_eight_list"></ListView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <app.zingo.employeemanagements.Custom.MyTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    
+                    android:textSize="18sp"
+                    android:textColor="#000"
+                    android:text="@string/question_9"
+
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+
+                    />
+                &lt;!&ndash;<app.zingo.employeemanagements.Custom.MyTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/heading_four"
+                    />&ndash;&gt;
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/question_nine_list"></ListView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <app.zingo.employeemanagements.Custom.MyTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    
+                    android:textSize="18sp"
+                    android:textColor="#000"
+                    android:text="@string/question_10"
+
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+
+                    />
+                &lt;!&ndash;<app.zingo.employeemanagements.Custom.MyTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/heading_four"
+                    />&ndash;&gt;
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/question_ten_list"></ListView>
+            </LinearLayout>-->
+
+        </LinearLayout>
+
+    </ScrollView>
+</RelativeLayout>

@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="20dp"
+        android:layout_weight="1">
+        <fragment
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:uiCompass="true"
+            app:uiZoomControls="true"
+            app:uiZoomGestures="true"
+            class="com.google.android.gms.maps.SupportMapFragment"/>
+        <LinearLayout
+            android:orientation="horizontal"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_alignParentTop="true">
+            <LinearLayout
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+
+                android:id="@+id/refreshLocation"
+                android:padding="4dp"
+                android:focusable="true"
+                android:clickable="true"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp">
+                <ImageView
+                    android:padding="8dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/location"
+                    style="@style/OvalGreen"
+                    android:contentDescription="TODO" />
+                <TextView android:textSize="10sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Refresh"/>
+            </LinearLayout>
+            <TextView
+                android:textColor="@color/colorAccent"
+                android:gravity="center"
+                android:layout_gravity="center_vertical"
+                android:id="@+id/latLong"
+                android:background="@drawable/started_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:maxLines="4"
+                android:lines="4"
+                android:layout_margin="8dp"
+                android:layout_weight="1"/>
+            <LinearLayout
+                android:gravity="center"
+                android:visibility="gone"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:id="@+id/locationSender"
+                android:padding="4dp"
+                android:focusable="true"
+                android:clickable="true"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp">
+                <ImageView
+                    android:padding="8dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/location"
+                    style="@style/OvalRed"
+                    android:contentDescription="TODO" />
+                <TextView
+                    android:textSize="10sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Share Loc"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:background="#80000000"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="4"
+            android:layout_above="@+id/master_login_layut"
+            >
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_weight="1">
+                <LinearLayout
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:id="@+id/punchIn"
+                    android:padding="8dp"
+                    android:clickable="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:minWidth="70dp"
+                    android:layout_weight="1"
+                    android:focusable="true">
+                    <ImageView
+                        android:padding="8dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/master_login"
+                        style="@style/OvalGreen"
+                        android:contentDescription="TODO" />
+                    <TextView
+                        android:textSize="10sp"
+                        android:textColor="@color/white"
+                        android:gravity="center"
+                        android:id="@+id/punchInText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Check In"/>
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_weight="1">
+                <LinearLayout android:gravity="center"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:id="@+id/punchOut"
+                    android:padding="8dp"
+                    android:clickable="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:minWidth="70dp"
+                    android:layout_weight="1"
+                    android:focusable="true">
+                    <ImageView android:padding="8dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/master_login"
+                        style="@style/OvalRed"
+                        android:contentDescription="TODO" />
+                    <TextView android:textSize="10sp"
+                        android:textColor="@color/white"
+                        android:gravity="center"
+                        android:id="@+id/punchOutText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Check Out"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_weight="1">
+                <LinearLayout
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:id="@+id/punchIn_qr"
+                    android:padding="8dp"
+                    android:clickable="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:minWidth="70dp"
+                    android:layout_weight="1"
+                    android:focusable="true">
+                    <ImageView
+                        android:padding="8dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/qr_check_in"
+                        style="@style/OvalGreen"
+                        android:contentDescription="TODO" />
+                    <TextView
+                        android:textSize="10sp"
+                        android:textColor="@color/white"
+                        android:gravity="center"
+                        android:id="@+id/punchInText_qr"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="QR Check In"/>
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_weight="1">
+                <LinearLayout android:gravity="center"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:id="@+id/punchOut_qr"
+                    android:padding="8dp"
+                    android:clickable="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:minWidth="70dp"
+                    android:layout_weight="1"
+                    android:focusable="true">
+                    <ImageView android:padding="8dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/qr_check_out"
+                        style="@style/OvalRed"
+                        android:contentDescription="TODO" />
+                    <TextView android:textSize="10sp"
+                        android:textColor="@color/white"
+                        android:gravity="center"
+                        android:id="@+id/punchOutText_qr"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="QR Check Out"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:background="#80000000"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="4"
+            android:id="@+id/master_login_layut"
+            android:layout_alignParentBottom="true">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_weight="1">
+                <LinearLayout
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:id="@+id/punchInMeeting"
+                    android:padding="8dp"
+                    android:clickable="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:minWidth="70dp"
+                    android:layout_weight="1"
+                    android:focusable="true">
+                    <ImageView
+                        android:padding="8dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/meeting"
+                        style="@style/OvalGreen"
+                        android:contentDescription="TODO" />
+                    <TextView
+                        android:textSize="10sp"
+                        android:textColor="@color/white"
+                        android:gravity="center"
+                        android:id="@+id/punchInTextMeeting"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Meeting In"/>
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_weight="1">
+                <LinearLayout android:gravity="center"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:id="@+id/punchOutMeeting"
+                    android:padding="8dp"
+                    android:clickable="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:minWidth="70dp"
+                    android:layout_weight="1"
+                    android:focusable="true">
+                    <ImageView android:padding="8dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/meeting"
+                        style="@style/OvalRed"
+                        android:contentDescription="TODO" />
+                    <TextView android:textSize="10sp"
+                        android:textColor="@color/white"
+                        android:gravity="center"
+                        android:id="@+id/punchOutTextMeeting"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Meeting Out"/>
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_weight="1">
+                <LinearLayout android:gravity="center"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:id="@+id/lunch_break"
+                    android:padding="8dp"
+                    android:clickable="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:minWidth="70dp"
+                    android:layout_weight="1"
+                    android:focusable="true">
+                    <ImageView android:padding="8dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/dinner"
+                        style="@style/OvalBack"
+                        android:contentDescription="TODO" />
+                    <TextView android:textSize="10sp"
+                        android:textColor="@color/white"
+                        android:gravity="center"
+                        android:id="@+id/lunch_break_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Lunch Break"/>
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_weight="1">
+                <LinearLayout android:gravity="center"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:id="@+id/tea_break"
+                    android:padding="8dp"
+                    android:clickable="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:minWidth="70dp"
+                    android:layout_weight="1"
+                    android:focusable="true">
+                    <ImageView android:padding="8dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/coffee"
+                        style="@style/OvalBack"
+                        android:contentDescription="TODO" />
+                    <TextView android:textSize="10sp"
+                        android:textColor="@color/white"
+                        android:gravity="center"
+                        android:id="@+id/tea_break_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tea Break"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

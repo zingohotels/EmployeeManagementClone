@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp">
+        <LinearLayout
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/task_update"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp">
+
+            <app.zingo.employeemanagements.Custom.MyRegulerText
+                android:id="@+id/to_allocated"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|start"
+                android:textSize="16sp"
+                android:textColor="#A9A9A9"
+                android:layout_margin="2dp"
+                android:text=""
+                />
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <View
+                    android:background="@color/highLight"
+                    android:layout_width="5dp"
+                    android:id="@+id/status"
+                    android:layout_gravity="center_vertical|start"
+                    android:layout_height="match_parent"/>
+
+
+
+                <app.zingo.employeemanagements.Custom.MyRegulerText
+                    android:id="@+id/title_task"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|start"
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:textColor="@color/text_black"
+                    android:layout_margin="5dp"
+                    android:text=""
+                    />
+
+                <LinearLayout
+                    android:gravity="right"
+                    android:orientation="vertical"
+                    android:id="@+id/contact_employee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="5dp"
+                    android:minWidth="70dp">
+                    <ImageView
+
+
+
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:src="@drawable/contact"
+                        style="@style/OvalBack"
+                        android:contentDescription="TODO" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:orientation="horizontal">
+
+
+
+
+                <app.zingo.employeemanagements.Custom.MyRegulerText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|start"
+                    android:textSize="16sp"
+                    android:textColor="#A9A9A9"
+                    android:layout_margin="2dp"
+                    android:text="Date :"
+                    />
+
+
+
+                <app.zingo.employeemanagements.Custom.MyRegulerText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|start"
+                    android:textSize="14sp"
+                    android:id="@+id/time_task"
+                    android:textColor="@color/text_grey"
+                    android:layout_margin="2dp"
+                    android:text=""
+                    />
+
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+
+                <View
+                    android:background="@color/highLight"
+                    android:layout_width="5dp"
+                    android:layout_gravity="center_vertical|start"
+                    android:layout_height="10dp"/>
+
+
+                <app.zingo.employeemanagements.Custom.MyRegulerText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical|start"
+                    android:textSize="14sp"
+                    android:id="@+id/created_by"
+                    android:textColor="#A9A9A9"
+                    android:layout_margin="2dp"
+                    android:text=""
+                    />
+
+                <TextView
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:id="@+id/status_text"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginRight="5dp"
+                    android:text="P"
+                    android:background="@drawable/oval_green"
+                    />
+
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+    <View
+        android:background="@color/highLight"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+</LinearLayout>

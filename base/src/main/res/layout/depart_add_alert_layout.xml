@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+        <app.zingo.employeemanagements.Custom.MyRegulerText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="Create An Employee*"
+            android:id="@+id/text"
+            android:textSize="18sp"
+            android:textColor="#000"
+            android:layout_gravity="center"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+
+            android:gravity="center"
+            android:layout_marginLeft="3dp"
+            android:id="@+id/ask"
+            android:text="(Mandatory)"
+            android:textSize="16sp"
+
+            android:textColor="#494949"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:id="@+id/exit_app_btn"
+            android:layout_margin="5dp"
+            android:text="Add Employee"
+            android:background="@drawable/button_primary_dark"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            android:textColor="#ffffff"/>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:layout_marginLeft="3dp"
+        android:text="(Or)"
+        android:textSize="16sp"
+
+        android:textColor="#494949"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+        <app.zingo.employeemanagements.Custom.MyRegulerText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="Create Another Department"
+            android:textSize="18sp"
+            android:textColor="#000"
+            android:layout_gravity="center"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+
+            android:gravity="center"
+            android:layout_marginLeft="3dp"
+            android:text="(Optional)"
+            android:textSize="16sp"
+
+            android:textColor="#494949"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Add Department"
+            android:id="@+id/no_btn"
+            android:layout_margin="5dp"
+            android:textSize="16sp"
+            android:background="@drawable/button_primary_dark"
+            android:layout_weight="1"
+            android:textColor="#ffffff"/>
+
+    </LinearLayout>
+
+</LinearLayout>

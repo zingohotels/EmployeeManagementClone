@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/colorPrimary"
+    tools:context=".UI.Landing.SplashScreen">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:text="Ver: 1.0"
+            android:textColor="@color/white"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="10dp"
+            android:id="@+id/version_name" />
+
+
+
+        <app.zingo.employeemanagements.Custom.CustomFontTextView
+            android:id="@+id/employee_splash"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginBottom="12dp"
+            android:text="Zingy"
+
+            android:textColor="@color/white"
+            android:textSize="50dp"
+            android:layout_centerInParent="true"
+
+            android:textStyle="normal"
+            app:fontName="Mistral">
+
+        </app.zingo.employeemanagements.Custom.CustomFontTextView>
+
+
+        <app.zingo.employeemanagements.Custom.CustomFontTextView
+            android:id="@+id/app_name"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_margin="5dp"
+            android:layout_below="@+id/employee_splash"
+            android:text="Employee Management App"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="normal"
+            app:fontName="arial">
+
+        </app.zingo.employeemanagements.Custom.CustomFontTextView>
+
+
+
+
+        <app.zingo.employeemanagements.Custom.CustomFontTextView
+            android:id="@+id/powered_by"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginBottom="12dp"
+            android:text="@string/powered_by_zingo"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:layout_alignParentBottom="true"
+            android:textStyle="normal"
+            app:fontName="Mistral">
+
+        </app.zingo.employeemanagements.Custom.CustomFontTextView>
+
+
+
+
+
+</RelativeLayout>

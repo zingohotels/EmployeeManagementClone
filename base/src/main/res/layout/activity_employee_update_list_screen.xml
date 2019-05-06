@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UI.NewAdminDesigns.EmployeeUpdateListScreen">
+
+    <LinearLayout
+        android:gravity="center"
+        android:orientation="vertical"
+        android:id="@+id/noEmployeeUpdate"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <ImageView
+            android:id="@+id/imageView2"
+            android:background="@color/white"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/employee_no"
+            android:minHeight="100dp"
+            android:layout_alignParentLeft="true"
+            android:alpha="0.7"
+            android:contentDescription="TODO" />
+        <TextView
+            android:textSize="12sp"
+            android:textColor="@color/grey_charcoal"
+            android:gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No Employee added."/>
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/profile_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:layout_marginTop="15dp"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        android:focusable="true" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/add_profile"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/blue_combo"
+        android:src="@drawable/employee_add_icon"
+        android:layout_marginRight="5dp"
+        />
+</RelativeLayout>

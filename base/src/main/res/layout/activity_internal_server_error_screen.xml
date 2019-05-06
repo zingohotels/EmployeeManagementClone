@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/main_contenier"
+    android:gravity="center"
+    >
+    <Button
+        android:id="@+id/btnClose"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp"
+        android:paddingTop="2dp"
+        android:visibility="gone"
+        android:paddingBottom="2dp"
+        android:background="#ff0000"
+        android:textColor="#ffffff"
+        android:text="Close" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:id="@+id/internal_image"
+            android:src="@drawable/internal_server_error"
+            android:contentDescription="TODO" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/internal_image"
+            android:id="@+id/text_internal"
+            android:layout_centerInParent="true"
+            android:textColor="#000000"
+            android:text="Please Retry again sometime later"/>
+        <Button
+            android:id="@+id/retry_button"
+            android:layout_below="@+id/text_internal"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:text="Retry"
+            android:visibility="gone"
+            android:layout_centerInParent="true"
+            android:layout_margin="10dp"
+            android:background="#ff0000"
+            android:textColor="#ffffff"/>
+    </RelativeLayout>
+
+
+
+
+</RelativeLayout>

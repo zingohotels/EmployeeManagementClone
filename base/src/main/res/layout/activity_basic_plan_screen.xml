@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="app.zingo.employeemanagements.UI.BasicPlanScreen">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+
+        android:layout_height="wrap_content">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <app.zingo.employeemanagements.Custom.MyRegulerText
+
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|start"
+                android:layout_weight="3"
+                android:textSize="18sp"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_margin="5dp"
+                android:text="Key features"
+                />
+
+
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <app.zingo.employeemanagements.Custom.MyRegulerText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="\u25BA Attendance Management"
+                android:layout_margin="5dp"
+                android:textColor="@color/text_black"
+                />
+
+            <app.zingo.employeemanagements.Custom.MyRegulerText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="\u25BA Leave Management"
+                android:layout_margin="5dp"
+                android:textColor="@color/text_black"
+                />
+
+            <app.zingo.employeemanagements.Custom.MyRegulerText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="\u25BA Salary Management"
+                android:layout_margin="5dp"
+                android:textColor="@color/text_black"
+                />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content">
+
+            <app.zingo.employeemanagements.Custom.MyTextView
+
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center|start"
+                android:layout_weight="1"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_black"
+                android:layout_marginTop="5dp"
+                android:text="3 month Subscription"
+                />
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+
+                <app.zingo.employeemanagements.Custom.MyTextView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|start"
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_margin="5dp"
+                    android:text="Rs 80/mo per Employee"
+                    />
+
+                <app.zingo.employeemanagements.Custom.MyRegulerText
+                    android:id="@+id/button_three_month"
+                    android:layout_weight="1"
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/button_primary_dark"
+                    android:layout_margin="5dp"
+                    android:textAlignment="center"
+
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="Buy Now"
+                    android:textSize="18dp"
+                    android:textColor="@color/white"
+                    />
+
+
+            </LinearLayout>
+
+
+
+
+
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="0.1dp"
+                android:layout_marginRight="35dp"
+                android:layout_marginLeft="25dp"
+                android:background="#393D46"
+                />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content">
+
+            <app.zingo.employeemanagements.Custom.MyTextView
+
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center|start"
+                android:layout_weight="1"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_black"
+                android:layout_marginTop="5dp"
+                android:text="6 month Subscription"
+                />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+
+                <app.zingo.employeemanagements.Custom.MyTextView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|start"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_margin="5dp"
+                    android:text="Rs 68/mo per Employee"
+                    />
+
+                <app.zingo.employeemanagements.Custom.MyRegulerText
+                    android:id="@+id/button_six_month"
+                    android:layout_weight="1"
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/button_primary_dark"
+                    android:layout_margin="5dp"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:padding="5dp"
+
+                    android:text="Buy Now"
+                    android:textSize="18dp"
+                    android:textColor="@color/white"
+                    />
+
+
+            </LinearLayout>
+
+
+
+
+
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="0.1dp"
+                android:layout_marginRight="35dp"
+                android:layout_marginLeft="25dp"
+                android:background="#393D46"
+                />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content">
+
+            <app.zingo.employeemanagements.Custom.MyTextView
+
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center|start"
+                android:layout_weight="1"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_black"
+                android:layout_marginTop="5dp"
+                android:text="12 month Subscription"
+                />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+
+                <app.zingo.employeemanagements.Custom.MyTextView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|start"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_margin="5dp"
+                    android:text="Rs 60/mo per Employee"
+                    />
+
+                <app.zingo.employeemanagements.Custom.MyRegulerText
+                    android:id="@+id/button_one_year"
+                    android:layout_weight="1"
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/button_primary_dark"
+                    android:layout_margin="5dp"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="Buy Now"
+                    android:textSize="18dp"
+
+                    android:textColor="@color/white"
+                    />
+
+
+            </LinearLayout>
+
+
+
+
+
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="0.1dp"
+                android:layout_marginRight="35dp"
+                android:layout_marginLeft="25dp"
+                android:background="#393D46"
+                />
+
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+</ScrollView>
