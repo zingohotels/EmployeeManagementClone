@@ -667,7 +667,7 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
 
 
 
-    @Override
+   /* @Override
     public void handleIntent(Intent intent) {
         try
         {
@@ -691,7 +691,7 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
         {
             super.handleIntent(intent);
         }
-    }
+    }*/
 
 
 

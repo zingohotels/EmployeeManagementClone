@@ -38,6 +38,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import com.google.android.gms.maps.SupportMapFragment;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -266,10 +268,10 @@ public class MeetingDetailAdapter extends RecyclerView.Adapter<MeetingDetailAdap
 
                                 try{
 
-                                    LatLng posisiabsen = new LatLng(Double.parseDouble(dto.getEndLatitude()), Double.parseDouble(dto.getEndLongitude())); ////your lat lng
-                                    googleMap.addMarker(new MarkerOptions().position(posisiabsen).title("Map View"));
+                                    //LatLng posisiabsen = new LatLng(Double.parseDouble(dto.getEndLatitude()), Double.parseDouble(dto.getEndLongitude())); ////your lat lng
+                                   googleMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(dto.getEndLatitude()), Double.parseDouble(dto.getEndLongitude()))).title("Map View"));
 
-                                    googleMap.moveCamera(CameraUpdateFactory.newLatLng(posisiabsen));
+                                    googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(Double.parseDouble(dto.getEndLatitude()), Double.parseDouble(dto.getEndLongitude()))));
                                     googleMap.getUiSettings().setZoomControlsEnabled(true);
                                     googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
 

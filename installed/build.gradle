@@ -10,8 +10,8 @@ android {
         applicationId "app.zingo.employeemanagements"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 25
-        versionName "1.25"
+        versionCode 26
+        versionName "1.26"
 
     }
 
@@ -24,3 +24,5 @@ dependencies {
     implementation project(':base')
 
 }
+apply plugin: 'com.google.gms.google-services'
+com.google.gms.googleservices.GoogleServicesPlugin.config.disableVersionCheck = true

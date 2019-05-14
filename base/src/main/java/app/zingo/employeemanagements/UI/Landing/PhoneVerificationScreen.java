@@ -123,7 +123,7 @@ public class PhoneVerificationScreen extends AppCompatActivity {
                 }
             });
 
-            FirebaseApp.initializeApp(this);
+            FirebaseApp.initializeApp(PhoneVerificationScreen.this);
 
             mAuth = FirebaseAuth.getInstance();
             // [END initialize_auth]
