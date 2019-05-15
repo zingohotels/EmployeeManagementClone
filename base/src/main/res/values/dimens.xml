@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="activity_small_width">40dp</dimen>
     <dimen name="activity_large_margin">30.0dip</dimen>
     <dimen name="tinyFont">12.0sp</dimen>
     <dimen name="veryTinyFont">11.0sp</dimen>
@@ -13,7 +14,7 @@
     <dimen name="socialMediaButtonPadding">13.0dip</dimen>
     <dimen name="largeRadius">6.0dip</dimen>
     <dimen name="height">60.0dip</dimen>
-
+    <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="title_height">45dip</dimen>
     <dimen name="text_size_small">14sp</dimen>
     <dimen name="text_size_medium">18sp</dimen>

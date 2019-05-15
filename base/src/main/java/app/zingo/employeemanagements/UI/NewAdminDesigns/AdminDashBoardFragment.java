@@ -546,7 +546,7 @@ public class AdminDashBoardFragment extends Fragment {
                         if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
 
 
-                            if (progressDialog!=null&&progressDialog.isShowing())
+                          //  if (progressDialog!=null&&progressDialog.isShowing())
                                 progressDialog.dismiss();
                             ArrayList<Departments> list = response.body();
                             ArrayList<Departments> deptList = new ArrayList<>();

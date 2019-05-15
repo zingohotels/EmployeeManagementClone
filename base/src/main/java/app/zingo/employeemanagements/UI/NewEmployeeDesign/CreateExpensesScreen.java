@@ -54,6 +54,7 @@ import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeImageAPI;
 import app.zingo.employeemanagements.WebApi.ExpensesApi;
 import app.zingo.employeemanagements.WebApi.UploadApi;
+import info.hoang8f.widget.FButton;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -64,15 +65,13 @@ import retrofit2.Response;
 public class CreateExpensesScreen extends AppCompatActivity {
 
     TextInputEditText mExpenseType,mAmount,mTo;
+    FButton disabledBtn;
     EditText mExpenseComment;
-    LinearLayout mExpenseImages,mUploadImages;
+    LinearLayout mExpenseImages,mUploadImages,to_date_TextInputEditText;
     AppCompatButton mApply;
-
     static int REQUEST_GALLERY = 200;
     String selectedImage;
-
     Expenses expenses;
-
 
     private int REQUEST_CAMERA = 0, SELECT_FILE = 1;
 
@@ -82,30 +81,24 @@ public class CreateExpensesScreen extends AppCompatActivity {
         try{
 
             setContentView(R.layout.activity_create_expenses_screen);
-
             mExpenseType = findViewById(R.id.expense_title);
-
             mAmount = findViewById(R.id.amount_expense);
             mTo = findViewById(R.id.to_date);
             mExpenseComment = findViewById(R.id.expense_description);
+            to_date_TextInputEditText = findViewById(R.id.to_date_TextInputEditText);
             mApply = findViewById(R.id.apply_expense);
-
             mExpenseImages = findViewById(R.id.expense_image);
             mUploadImages = findViewById(R.id.image_layout);
-
 
             mTo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     openDatePicker(mTo);
                 }
             });
-
             mApply.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     validate();
                 }
             });
@@ -119,19 +112,16 @@ public class CreateExpensesScreen extends AppCompatActivity {
         }catch(Exception e){
             e.printStackTrace();
         }
-
     }
 
     private void selectImage() {
-        final CharSequence[] items = {"Choose from Library",
-                "Cancel" };
+        final CharSequence[] items = {"Choose from Library", "Cancel" };
         AlertDialog.Builder builder = new AlertDialog.Builder(CreateExpensesScreen.this);
         builder.setTitle("Add Image!");
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
                 if (items[item].equals("Choose from Library")) {
-
                     galleryIntent();
                 } else if (items[item].equals("Cancel")) {
                     dialog.dismiss();
@@ -156,15 +146,12 @@ public class CreateExpensesScreen extends AppCompatActivity {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == SELECT_FILE)
                 onSelectFromGalleryResult(data);
-
         }
     }
 
     private void onSelectFromGalleryResult(Intent data) {
 
         try{
-
-
             Uri selectedImageUri = data.getData( );
             String picturePath = getPath( CreateExpensesScreen.this, selectedImageUri );
             Log.d("Picture Path", picturePath);
@@ -188,10 +175,10 @@ public class CreateExpensesScreen extends AppCompatActivity {
 
     }
 
-    public static String getPath(Context context, Uri uri ) {
+    private String getPath(CreateExpensesScreen createExpensesScreen, Uri selectedImageUri) {
         String result = null;
         String[] proj = { MediaStore.Images.Media.DATA };
-        Cursor cursor = context.getContentResolver( ).query( uri, proj, null, null, null );
+        Cursor cursor = getApplication().getContentResolver( ).query( selectedImageUri, proj, null, null, null );
         if(cursor != null){
             if ( cursor.moveToFirst( ) ) {
                 int column_index = cursor.getColumnIndexOrThrow( proj[0] );
@@ -450,7 +437,6 @@ public class CreateExpensesScreen extends AppCompatActivity {
         while (totalPixels / (inSampleSize * inSampleSize) > totalReqPixelsCap) {
             inSampleSize++;
         }
-
         return inSampleSize;
     }
 
@@ -470,13 +456,9 @@ public class CreateExpensesScreen extends AppCompatActivity {
             uriSting = (file.getAbsolutePath() + "/" + filePath+".jpg" );
         }
         return uriSting;
-
     }
 
-
-
     private void addExpense(final Expenses expenses) {
-
 
         final ProgressDialog dialog = new ProgressDialog(this);
         dialog.setCancelable(false);
@@ -496,7 +478,6 @@ public class CreateExpensesScreen extends AppCompatActivity {
                             dialog.dismiss();
                         }
                         System.out.println(response.code());
-
                         if(response.code() == 201||response.code() == 200||response.code() == 204)
                         {
                             Toast.makeText(CreateExpensesScreen.this,"Expense added",Toast.LENGTH_SHORT).show();
@@ -514,7 +495,6 @@ public class CreateExpensesScreen extends AppCompatActivity {
                             dialog.dismiss();
                         }
                         Toast.makeText(CreateExpensesScreen.this,t.getMessage(),Toast.LENGTH_SHORT).show();
-
                     }
                 });
             }
@@ -525,53 +505,37 @@ public class CreateExpensesScreen extends AppCompatActivity {
         // Get Current Date
 
         final Calendar c = Calendar.getInstance();
-        int mYear  = c.get(Calendar.YEAR);
+        int mYear = c.get(Calendar.YEAR);
         int mMonth = c.get(Calendar.MONTH);
-        int mDay   = c.get(Calendar.DAY_OF_MONTH);
+        int mDay = c.get(Calendar.DAY_OF_MONTH);
         //launch datepicker modal
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         try {
-                            Log.d("Date", "DATE SELECTED "+dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-
+                            Log.d("Date", "DATE SELECTED " + dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
                             Calendar newDate = Calendar.getInstance();
-                            newDate.set(year,monthOfYear,dayOfMonth);
+                            newDate.set(year, monthOfYear, dayOfMonth);
 
-
-                            String date1 = (monthOfYear + 1)  + "/" + (dayOfMonth) + "/" + year;
+                            String date1 = (monthOfYear + 1) + "/" + (dayOfMonth) + "/" + year;
 
                             SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy");
-
-
 
                             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
                             try {
                                 Date fdate = simpleDateFormat.parse(date1);
-
                                 String from1 = sdf.format(fdate);
-
                                 tv.setText(from1);
-
-
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
-
-                        }
-                        catch (Exception ex)
-                        {
+                        } catch (Exception ex) {
                             ex.printStackTrace();
                         }
-
-
                     }
                 }, mYear, mMonth, mDay);
-
-
         datePickerDialog.show();
-
     }
 
     public void validate(){
@@ -580,22 +544,13 @@ public class CreateExpensesScreen extends AppCompatActivity {
         String from = mAmount.getText().toString();
         String to = mTo.getText().toString();
         String leaveComment = mExpenseComment.getText().toString();
-
-
         if(expenseTitle.isEmpty()){
-
             Toast.makeText(this, "Expense title is required", Toast.LENGTH_SHORT).show();
-
         }else if(from.isEmpty()){
-
             Toast.makeText(this, "Amount is required", Toast.LENGTH_SHORT).show();
-
         }else if(to.isEmpty()){
-
             Toast.makeText(this, "Date is required", Toast.LENGTH_SHORT).show();
-
         }else if(leaveComment.isEmpty()){
-
             Toast.makeText(this, "Expense Comment is required", Toast.LENGTH_SHORT).show();
 
         }else{
@@ -624,32 +579,22 @@ public class CreateExpensesScreen extends AppCompatActivity {
 
                             out = new FileOutputStream(filename);
                             Bitmap myBitmap = BitmapFactory.decodeFile(selectedImage);
-
-//          write the compressed bitmap at the field_icon specified by filename.
+                            //write the compressed bitmap at the field_icon specified by filename.
                             myBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
 
                             uploadImage(filename,expenses);
-
-
-
                         }
                         else
                         {
                             compressImage(selectedImage,expenses);
                         }
                     }
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }catch (Exception e){
                 e.printStackTrace();
             }
-
-
         }
     }
-
-
-
 }

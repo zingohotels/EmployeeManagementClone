@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
+    android:id="@+id/activity_create_task"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/rootView"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
+    android:weightSum="10"
+    tools:ignore="NamespaceTypo">
 
-
-    <android.support.v4.widget.NestedScrollView
-        android:background="#FFFFFFFF"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@id/appBar"
-        android:layout_alignParentBottom="true">
+    <ScrollView
+        android:id="@+id/scrollbar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="9.5"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -24,25 +27,19 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/typeInputLayout"
+                android:layout_margin="5dp"
+                android:id="@+id/task_InputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_large_margin"
-                android:layout_marginTop="20.0dip"
-                android:layout_marginRight="@dimen/activity_large_margin"
-                android:hint="Task Name"
-
-                >
+                android:layout_height="wrap_content">
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/task_name"
-                    android:maxLength="50"
-                    android:inputType="text"
-                    style="@style/fp_editText" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:hint="Task Name" />
             </android.support.design.widget.TextInputLayout>
-
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -50,78 +47,105 @@
                 android:orientation="horizontal">
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/fromInputLayout"
+                    android:layout_margin="5dp"
+                    android:id="@+id/from_date_TextInputEditText"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
-                    android:layout_marginTop="20.0dip"
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    android:hint="From"
-                    >
+                    android:layout_weight="1">
+
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/from_date"
-                        android:maxLength="50"
+                        android:layout_width="match_parent"
+                        android:textSize="12sp"
+                        android:layout_height="wrap_content"
+                        android:hint="Start Date"
                         android:focusableInTouchMode="false"
-                        android:inputType="text"
-                        style="@style/fp_editText" />
+                        android:drawableRight="@drawable/ic_date"
+                        android:inputType="date" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/toInputLayout"
+                    android:layout_margin="5dp"
+                    android:id="@+id/to_date_TextInputEditText"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
-                    android:layout_marginTop="20.0dip"
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    android:hint="To"
+                    android:layout_weight="1">
 
-                    >
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/to_date"
-                        android:maxLength="50"
+                        android:layout_width="match_parent"
+                        android:textSize="12sp"
+                        android:layout_height="wrap_content"
+                        android:hint="End Date"
                         android:focusableInTouchMode="false"
-                        android:inputType="text"
-                        style="@style/fp_editText" />
+                        android:drawableRight="@drawable/ic_date"
+                        android:inputType="date" />
                 </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
 
-         <!--   <android.support.design.widget.TextInputLayout
-                android:id="@+id/deadInputLayout"
-                android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_large_margin"
-                android:layout_marginTop="20.0dip"
-                android:layout_marginRight="@dimen/activity_large_margin"
-                android:hint="Dead Line"
-                >
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/dead_line"
-                    android:maxLength="50"
-                    android:focusableInTouchMode="false"
-                    android:inputType="text"
-                    style="@style/fp_editText" />
-            </android.support.design.widget.TextInputLayout>-->
-
-
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_margin="5dp"
+                    android:id="@+id/from_time_TextInputEditText"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/from_time"
+                        android:layout_width="match_parent"
+                        android:textSize="12sp"
+                        android:layout_height="wrap_content"
+                        android:hint="Start Time"
+                        android:focusableInTouchMode="false"
+                        android:drawableRight="@drawable/ic_time"
+                        android:inputType="date" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_margin="5dp"
+                    android:id="@+id/to_time_TextInputEditText"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/to_time"
+                        android:layout_width="match_parent"
+                        android:textSize="12sp"
+                        android:layout_height="wrap_content"
+                        android:hint="End Time"
+                        android:focusableInTouchMode="false"
+                        android:drawableRight="@drawable/ic_time"
+                        android:inputType="date" />
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <!--<LinearLayout
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
                 android:orientation="vertical">
 
-                <android.support.v7.widget.AppCompatTextView
+               &lt;!&ndash; <android.support.v7.widget.AppCompatTextView
+                    android:layout_margin="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
-                    android:layout_marginTop="20.0dip"
-                    android:layout_marginRight="@dimen/activity_large_margin"
                     android:text="Task Description"/>
 
                 <EditText
+                    android:layout_margin="5dp"
                     android:id="@+id/task_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -133,27 +157,46 @@
                     android:scrollbarStyle="insideInset"
                     android:scrollbars="vertical"
                     android:keepScreenOn="true"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
-                    android:layout_marginRight="@dimen/activity_large_margin"
                     android:lines="5"
-                    android:background="@drawable/spinner_background"
-                    />
-
-
-            </LinearLayout>
+                    android:background="@drawable/spinner_background" />
+&ndash;&gt;
 
 
 
+            </LinearLayout>-->
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/task_desc_TextInputEditText"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_margin="5dp"
+                android:layout_height="150dp">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/task_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="140dp"
+                    android:textSize="12sp"
+                    android:gravity="left"
+                    android:lines="5"
+                    android:hint="Description"
+                    android:inputType="text" />
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
             <Switch
+                android:layout_margin="5dp"
                 android:id="@+id/show_map"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="false"
-
                 android:text="Mark on map"
-                android:layout_marginLeft="@dimen/activity_large_margin"
-                android:layout_marginTop="20.0dip"
-                android:layout_marginRight="@dimen/activity_large_margin"
+                android:layout_marginTop="20dp"
                 android:textOff="No"
                 android:textOn="Yes"/>
 
@@ -161,8 +204,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/map_layout"
-                android:visibility="gone"
-                >
+                android:visibility="gone">
+
                 <TextView
                     android:id="@+id/location_et"
                     android:layout_width="match_parent"
@@ -216,20 +259,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
                     android:layout_below="@+id/lan_lat"
-                    android:layout_margin="10dp"
-                    />
+                    android:layout_margin="10dp" />
 
 
             </RelativeLayout>
 
-
-
-
-
             <android.support.v7.widget.AppCompatButton
                 android:textSize="@dimen/regularFont"
                 android:textColor="@color/white"
-                android:id="@+id/apply_leave"
+                android:id="@+id/create_task"
                 android:background="@drawable/selector_button_app"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -244,6 +282,6 @@
 
 
         </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </ScrollView>
 
-</RelativeLayout>
+</LinearLayout>

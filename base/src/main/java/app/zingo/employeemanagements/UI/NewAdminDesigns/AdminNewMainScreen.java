@@ -171,8 +171,7 @@ public class AdminNewMainScreen extends AppCompatActivity  implements RapidFloat
     int spinnerPos = -1;
     boolean don  = false;
 
-    private  final String SHOWCASE_ID_ADMIN = "ToolsAdmin"+PreferenceHandler.getInstance(AdminNewMainScreen.this).getUserId();
-
+    private String SHOWCASE_ID_ADMIN ;
 
     private RapidFloatingActionLayout rfaLayout;
     private RapidFloatingActionButton rfaButton;
@@ -188,6 +187,8 @@ public class AdminNewMainScreen extends AppCompatActivity  implements RapidFloat
             mWhatsapp = findViewById(R.id.whatsapp_open);
             rfaLayout = (RapidFloatingActionLayout) findViewById(R.id.rfab_group_sample_fragment_a_rfal);
             rfaButton = (RapidFloatingActionButton) findViewById(R.id.label_list_sample_rfab);
+
+            SHOWCASE_ID_ADMIN = "ToolsAdmin"+PreferenceHandler.getInstance(AdminNewMainScreen.this).getUserId();
 
           /*  mLoader = findViewById(R.id.spin_loader);
 

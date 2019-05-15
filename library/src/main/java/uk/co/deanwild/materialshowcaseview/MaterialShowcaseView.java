@@ -54,7 +54,6 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
     private boolean mWasDismissed = false, mWasSkipped = false;
     private int mShapePadding = ShowcaseConfig.DEFAULT_SHAPE_PADDING;
     private int tooltipMargin = ShowcaseConfig.DEFAULT_TOOLTIP_MARGIN;
-
     private View mContentBox;
     private TextView mTitleTextView;
     private TextView mContentTextView;
@@ -82,7 +81,6 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
     private IDetachedListener mDetachedListener;
     private boolean mTargetTouchable = false;
     private boolean mDismissOnTargetTouch = true;
-
     private boolean isSequence = false;
 
     private ShowcaseTooltip toolTip;

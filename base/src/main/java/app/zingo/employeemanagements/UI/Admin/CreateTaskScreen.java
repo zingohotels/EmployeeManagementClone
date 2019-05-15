@@ -77,8 +77,7 @@ import retrofit2.Response;
 
 public class CreateTaskScreen extends AppCompatActivity {
 
-    TextInputEditText mTaskName, mFrom, mTo;//mDead
-    EditText mdesc;
+    TextInputEditText mTaskName, mFrom, mTo, mFromTime, mToTime,mdesc;//mDead
     AppCompatButton mCreate;
     RelativeLayout mMapLay;
     Switch mShow;
@@ -108,19 +107,17 @@ public class CreateTaskScreen extends AppCompatActivity {
             mTaskName = findViewById(R.id.task_name);
             mFrom = findViewById(R.id.from_date);
             mTo = findViewById(R.id.to_date);
+            mFromTime = findViewById(R.id.from_time);
+            mToTime = findViewById(R.id.to_time);
            // mDead = (TextInputEditText) findViewById(R.id.dead_line);
-            mdesc = findViewById(R.id.task_description);
-            mCreate = findViewById(R.id.apply_leave);
+            mdesc = findViewById(R.id.task_desc);
+            mCreate = findViewById(R.id.create_task);
             mapView = findViewById(R.id.task_location_map);
             mShow = findViewById(R.id.show_map);
             mMapLay = findViewById(R.id.map_layout);
-
             location = findViewById(R.id.location_et);
-
             lat = findViewById(R.id.lat_et);
             lng = findViewById(R.id.lng_et);
-
-
 
             Bundle bundle = getIntent().getExtras();
 
@@ -145,6 +142,64 @@ public class CreateTaskScreen extends AppCompatActivity {
                 public void onClick(View view) {
 
                     openDatePicker(mTo);
+                }
+            });
+
+            mFromTime.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //openTimePicker();
+                    // TODO Auto-generated method stub
+                    Calendar mcurrentTime = Calendar.getInstance();
+                    int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                    int minute = mcurrentTime.get(Calendar.MINUTE);
+                    TimePickerDialog mTimePicker;
+                    mTimePicker = new TimePickerDialog(CreateTaskScreen.this, new TimePickerDialog.OnTimeSetListener() {
+                        @Override
+                        public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+
+                            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+
+                            try{
+                                Date fromTime = sdf.parse(selectedHour + ":" + selectedMinute);
+                                mFromTime.setText( sdf.format(fromTime));
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }, hour, minute, true);//Yes 24 hour time
+                    mTimePicker.setTitle("Select Time");
+                    mTimePicker.show();
+                }
+            });
+
+            mToTime.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //openTimePicker();
+
+                    // TODO Auto-generated method stub
+                    Calendar mcurrentTime = Calendar.getInstance();
+                    int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                    int minute = mcurrentTime.get(Calendar.MINUTE);
+                    TimePickerDialog mTimePicker;
+                    mTimePicker = new TimePickerDialog(CreateTaskScreen.this, new TimePickerDialog.OnTimeSetListener() {
+                        @Override
+                        public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+
+                            try{
+                                Date totime = sdf.parse(selectedHour + ":" + selectedMinute);
+                                mToTime.setText( sdf.format(totime));
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }, hour, minute, true);//Yes 24 hour time
+                    mTimePicker.setTitle("Select Time");
+                    mTimePicker.show();
                 }
             });
 
@@ -269,6 +324,11 @@ public class CreateTaskScreen extends AppCompatActivity {
 
     }
 
+    private void openTimePicker() {
+
+
+    }
+
     public void openDatePicker(final TextInputEditText tv) {
         // Get Current Date
 
@@ -284,12 +344,30 @@ public class CreateTaskScreen extends AppCompatActivity {
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, final int year, final int monthOfYear, final int dayOfMonth) {
-                        try {
-                            Log.d("Date", "DATE SELECTED "+dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-
+                        try
+                        {
                             newDate.set(year,monthOfYear,dayOfMonth);
+                            String date = ((monthOfYear+1)+"/"+dayOfMonth+"/"+year);
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+                            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy");
+                            try {
+                                Date parse_date = simpleDateFormat.parse(date);
+                                String date_format = sdf.format(parse_date);
 
-                            new TimePickerDialog(CreateTaskScreen.this, new TimePickerDialog.OnTimeSetListener() {
+                                if(tv.equals(mFrom))
+                                {
+                                    tv.setText(date_format);
+                                }
+                                else if(tv.equals(mTo))
+                                {
+                                    tv.setText(date_format);
+                                }
+
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                           /* new TimePickerDialog(CreateTaskScreen.this, new TimePickerDialog.OnTimeSetListener() {
                                 @Override
                                 public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                                     newDate.set(Calendar.HOUR_OF_DAY, hourOfDay);
@@ -316,20 +394,12 @@ public class CreateTaskScreen extends AppCompatActivity {
                                     }
 
                                 }
-                            }, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), false).show();
-
-
-
-
-
-
+                            }, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), false).show();*/
                         }
                         catch (Exception ex)
                         {
                             ex.printStackTrace();
                         }
-
-
                     }
                 }, mYear, mMonth, mDay);
 
@@ -342,28 +412,26 @@ public class CreateTaskScreen extends AppCompatActivity {
 
 
         String from = mFrom.getText().toString();
-        String to = mTo.getText().toString();
+        String
+                to = mTo.getText().toString();
+        String fromTime = mFromTime.getText().toString();
+        String toTime = mToTime.getText().toString();
      //   String dead = mDead.getText().toString();
         String taskName = mTaskName.getText().toString();
         String desc = mdesc.getText().toString();
 
-
         if(taskName.isEmpty()){
-
             Toast.makeText(this, "Task Name is required", Toast.LENGTH_SHORT).show();
-
         }else if(from.isEmpty()){
-
             Toast.makeText(this, "From date is required", Toast.LENGTH_SHORT).show();
-
         }else if(to.isEmpty()){
-
             Toast.makeText(this, "To date is required", Toast.LENGTH_SHORT).show();
-
+        }else if(fromTime.isEmpty()){
+            Toast.makeText(this, "Please Select Time To Date", Toast.LENGTH_SHORT).show();
+        }else if(toTime.isEmpty()){
+            Toast.makeText(this, "Please Select Time To Date", Toast.LENGTH_SHORT).show();
         }else if(desc.isEmpty()){
-
             Toast.makeText(this, "Leave Comment is required", Toast.LENGTH_SHORT).show();
-
         }else{
 
             try{
@@ -373,9 +441,9 @@ public class CreateTaskScreen extends AppCompatActivity {
                 tasks.setTaskName(taskName);
                 tasks.setTaskDescription(desc);
                 tasks.setDeadLine(to);
-                tasks.setStartDate(new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(sdf.parse(from)));
-                tasks.setReminderDate(new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(sdf.parse(from)));
-                tasks.setEndDate(new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(sdf.parse(to)));
+                tasks.setStartDate(new SimpleDateFormat("MM/dd/yyyy HH:mm").format(sdf.parse(from+" "+fromTime)));
+                tasks.setReminderDate(new SimpleDateFormat("MM/dd/yyyy HH:mm").format(sdf.parse(from+" "+fromTime)));
+                tasks.setEndDate(new SimpleDateFormat("MM/dd/yyyy HH:mm").format(sdf.parse(to+" "+toTime)));
                 tasks.setStatus("Pending");
                 tasks.setComments("");
                 tasks.setRemarks("");
@@ -384,8 +452,6 @@ public class CreateTaskScreen extends AppCompatActivity {
                     tasks.setLatitude(lati+"");
                     tasks.setLongitude(lngi+"");
                 }
-
-
                 if(type!=null&&type.equalsIgnoreCase("Employee")){
                     tasks.setToReportEmployeeId(PreferenceHandler.getInstance(CreateTaskScreen.this).getManagerId());
                     tasks.setEmployeeId(employeeId);
@@ -441,13 +507,9 @@ public class CreateTaskScreen extends AppCompatActivity {
             e.printStackTrace();
             return 0;
         }
-
-
     }
 
     public void addTask(final Tasks tasks) {
-
-
 
         final ProgressDialog dialog = new ProgressDialog(this);
         dialog.setMessage("Saving Details..");
@@ -489,16 +551,10 @@ public class CreateTaskScreen extends AppCompatActivity {
                             tn.setToReportEmployeeId(s.getToReportEmployeeId());
                             tn.setTitle("Task Allocated");
                             tn.setMessage(""+s.getTaskName());
-
                             tn.setTaskId(s.getTaskId());
                             tn.setDepartmentId(1);
                             savetask(tn);
-
-
                         }
-
-
-
 
                     }else {
                         Toast.makeText(CreateTaskScreen.this, "Failed Due to "+response.message(), Toast.LENGTH_SHORT).show();
