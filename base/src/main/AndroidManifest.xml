@@ -44,6 +44,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
+
+
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
@@ -51,12 +53,12 @@
         <activity
             android:name="app.zingo.employeemanagements.UI.Landing.SplashScreen"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name="app.zingo.employeemanagements.UI.Landing.PhoneVerificationScreen"
@@ -72,13 +74,11 @@
         <meta-data
             android:name="com.razorpay.ApiKey"
             android:value="rzp_live_tTRIgCc7PPKNq0" />
-
         <!--
             <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyD7wKDeCjNaLc8OjxHhYFVieOsL9lXhFZQ" />
         -->
-
         <activity
             android:name="app.zingo.employeemanagements.UI.Company.CreateCompany"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -213,22 +213,18 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:scheme="http"
                     android:host="zingyapp.com"
-                    android:pathPattern="/checkout.php" />
-
+                    android:pathPattern="/checkout.php"
+                    android:scheme="http" />
                 <data
-                    android:scheme="https"
                     android:host="zingyapp.com"
-                    android:pathPattern="/checkout.php" />
-
-
+                    android:pathPattern="/checkout.php"
+                    android:scheme="https" />
             </intent-filter>
+
             <meta-data
                 android:name="default-url"
                 android:value="https://zingyapp.com/checkout.php" />
-
-
         </activity>
         <activity
             android:name="app.zingo.employeemanagements.UI.ContactUsScreen"
@@ -409,21 +405,13 @@
         <activity android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.BranchEditScreen" />
         <activity android:name="app.zingo.employeemanagements.UI.Common.CustomerList" />
         <activity android:name="app.zingo.employeemanagements.UI.FAQScreen" />
-        <activity android:name="app.zingo.employeemanagements.UI.FAQ.FAQFragment" >
-
-
-
-        </activity>
+        <activity android:name="app.zingo.employeemanagements.UI.FAQ.FAQFragment"></activity>
         <activity
             android:name="app.zingo.employeemanagements.UI.Plan.PlanDesignActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name="app.zingo.employeemanagements.UI.Plan.BasicPlanSubscription" />
-        <activity android:name="app.zingo.employeemanagements.UI.Plan.AdvancePlanSubscription"></activity>
-
-        <activity android:name="com.airpay.airpaysdk_simplifiedotp.AirpayActivity">
-        </activity>
+        <activity android:name="app.zingo.employeemanagements.UI.Plan.AdvancePlanSubscription" />
+        <activity android:name="com.airpay.airpaysdk_simplifiedotp.AirpayActivity"></activity>
     </application>
 
 </manifest>

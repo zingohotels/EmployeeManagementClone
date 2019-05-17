@@ -133,9 +133,8 @@
 
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginTop="10dp"/>
 
-                            />
                         <app.zingo.employeemanagements.Custom.MyArialText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -625,11 +624,7 @@
 
                 </LinearLayout>
 
-
-
             </LinearLayout>
-
-
 
         </LinearLayout>
 

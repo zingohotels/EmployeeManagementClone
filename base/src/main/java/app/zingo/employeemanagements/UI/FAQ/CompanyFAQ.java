@@ -50,50 +50,34 @@ public class CompanyFAQ extends Fragment {
     ImageView[] dotemp;
     int currentPageemp = 0,startemp = 0,endemp = 0;
     Timer timeremp;
-
     ViewPager emp_attendance_vp;
-
     LinearLayout dotsatndz;
     ImageView[] dotatndz;
     int currentPageatndz = 0,startatndz = 0,endatndz = 0;
     Timer timeratndz;
-
-
     ViewPager emp_location_vp;
-
     LinearLayout dotsloc;
     ImageView[] dotloc;
     int currentPageloc = 0,startloc = 0,endloc = 0;
     Timer timerloc;
-
     ViewPager emp_task_vp;
-
     LinearLayout dotstask;
     ImageView[] dottask;
     int currentPagetask = 0,starttask = 0,endtask = 0;
     Timer timertask;
-
     ViewPager emp_exp_vp;
-
     LinearLayout dotsexp;
     ImageView[] dotexp;
     int currentPageexp = 0,startexp = 0,endexp = 0;
     Timer timerexp;
-
     ViewPager emp_leave_vp;
-
     LinearLayout dotsleave;
     ImageView[] dotleave;
     int currentPageleave= 0,startleave = 0,endleave = 0;
     Timer timerleave;
-
     final long DELAY_MS = 2000;
     final long PERIOD_MS = 3000;
-
-
     FAQImageVp adapter;
-
-
     public CompanyFAQ() {
         // Required empty public constructor
     }
@@ -188,7 +172,7 @@ public class CompanyFAQ extends Fragment {
             }, DELAY_MS, PERIOD_MS);
 
 
-            createDot(0,dotsCompany,images);
+           // createDot(0,dotsCompany,images);
 
             company_create_vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
@@ -199,7 +183,7 @@ public class CompanyFAQ extends Fragment {
                 @Override
                 public void onPageSelected(int position) {
 
-                    createDot(position,dotsCompany,images);
+                //    createDot(position,dotsCompany,images);
                 }
 
                 @Override
@@ -254,7 +238,7 @@ public class CompanyFAQ extends Fragment {
             }, DELAY_MS, PERIOD_MS);
 
 
-            createDot(0,dotsdep,imagesdep);
+           // createDot(0,dotsdep,imagesdep);
 
             dep_create_vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
@@ -265,7 +249,7 @@ public class CompanyFAQ extends Fragment {
                 @Override
                 public void onPageSelected(int position) {
 
-                    createDot(position,dotsdep,imagesdep);
+                  //  createDot(position,dotsdep,imagesdep);
                 }
 
                 @Override
@@ -322,7 +306,7 @@ public class CompanyFAQ extends Fragment {
             }, DELAY_MS, PERIOD_MS);
 
 
-            createDot(0,dotsemp,imagesempl);
+          //  createDot(0,dotsemp,imagesempl);
 
             emp_create_vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
@@ -333,7 +317,7 @@ public class CompanyFAQ extends Fragment {
                 @Override
                 public void onPageSelected(int position) {
 
-                    createDot(position,dotsemp,imagesempl);
+                   // createDot(position,dotsemp,imagesempl);
                 }
 
                 @Override
@@ -390,7 +374,7 @@ public class CompanyFAQ extends Fragment {
             }, DELAY_MS, PERIOD_MS);
 
 
-            createDot(0,dotsatndz,imagesatndz);
+            //createDot(0,dotsatndz,imagesatndz);
 
             emp_attendance_vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
@@ -401,7 +385,7 @@ public class CompanyFAQ extends Fragment {
                 @Override
                 public void onPageSelected(int position) {
 
-                    createDot(position,dotsatndz,imagesatndz);
+                  //  createDot(position,dotsatndz,imagesatndz);
                 }
 
                 @Override
@@ -459,7 +443,7 @@ public class CompanyFAQ extends Fragment {
             }, DELAY_MS, PERIOD_MS);
 
 
-            createDot(0,dotsloc,imagesloc);
+           /// createDot(0,dotsloc,imagesloc);
 
             emp_location_vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
@@ -470,7 +454,7 @@ public class CompanyFAQ extends Fragment {
                 @Override
                 public void onPageSelected(int position) {
 
-                    createDot(position,dotsloc,imagesloc);
+                   // createDot(position,dotsloc,imagesloc);
                 }
 
                 @Override
@@ -528,7 +512,7 @@ public class CompanyFAQ extends Fragment {
             }, DELAY_MS, PERIOD_MS);
 
 
-            createDot(0,dotstask,imagestask);
+           // createDot(0,dotstask,imagestask);
 
             emp_task_vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
@@ -539,7 +523,7 @@ public class CompanyFAQ extends Fragment {
                 @Override
                 public void onPageSelected(int position) {
 
-                    createDot(position,dotstask,imagestask);
+                    //createDot(position,dotstask,imagestask);
                 }
 
                 @Override
@@ -596,7 +580,7 @@ public class CompanyFAQ extends Fragment {
             }, DELAY_MS, PERIOD_MS);
 
 
-            createDot(0,dotsexp,imagesexp);
+            //createDot(0,dotsexp,imagesexp);
 
             emp_exp_vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
@@ -607,7 +591,7 @@ public class CompanyFAQ extends Fragment {
                 @Override
                 public void onPageSelected(int position) {
 
-                    createDot(position,dotsexp,imagesexp);
+                    //createDot(position,dotsexp,imagesexp);
                 }
 
                 @Override
@@ -664,7 +648,7 @@ public class CompanyFAQ extends Fragment {
             }, DELAY_MS, PERIOD_MS);
 
 
-            createDot(0,dotsleave,imagesleave);
+            //createDot(0,dotsleave,imagesleave);
 
             emp_leave_vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
@@ -675,7 +659,7 @@ public class CompanyFAQ extends Fragment {
                 @Override
                 public void onPageSelected(int position) {
 
-                    createDot(position,dotsleave,imagesleave);
+                    //createDot(position,dotsleave,imagesleave);
                 }
 
                 @Override
@@ -828,10 +812,9 @@ public class CompanyFAQ extends Fragment {
             e.printStackTrace();
             return null;
         }
-
     }
 
-    private void createDot(int current, final LinearLayout dots,final int[] layouts){
+    /*private void createDot(int current, final LinearLayout dots,final int[] layouts){
         if(dots != null){
             dots.removeAllViews();
         }
@@ -841,6 +824,7 @@ public class CompanyFAQ extends Fragment {
 
             for (int i =0;i<layouts.length;i++){
                 dot[i] = new ImageView(getActivity());
+
                 if(i==current){
                     dot[i].setImageDrawable(ContextCompat.getDrawable(getActivity(),R.drawable.active_dots));
                 }else {
@@ -851,7 +835,5 @@ public class CompanyFAQ extends Fragment {
                 dots.addView(dot[i],params);
             }
         }
-
-    }
-
+    }*/
 }

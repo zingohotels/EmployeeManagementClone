@@ -88,10 +88,7 @@ public class PlanDesignActivity extends AppCompatActivity {
             advances.setFeature("Expenses Management");
             advanceFeatures.add(advances);
             advanceDesign.setFeatures(advanceFeatures);
-
             planDesigns.add(advanceDesign);
-
-
 
             PlanDesignAdapter slider = new PlanDesignAdapter(PlanDesignActivity.this,planDesigns);
             slidePager.setAdapter(slider);
@@ -141,25 +138,18 @@ public class PlanDesignActivity extends AppCompatActivity {
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
                 }
-
                 @Override
                 public void onPageSelected(int position) {
-
                     createDot(position);
                 }
-
                 @Override
                 public void onPageScrollStateChanged(int state) {
 
                 }
             });
-
-
-
         }catch (Exception e){
             e.printStackTrace();
         }
-
     }
 
     private void createDot(int current){

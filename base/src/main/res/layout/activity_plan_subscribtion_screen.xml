@@ -31,7 +31,7 @@
                 android:layout_marginLeft="12dp"
                 android:layout_margin="5dp"
                 android:layout_marginBottom="2dp"
-                android:src="@drawable/ems"
+                android:src="@drawable/ems_ems"
                 android:contentDescription="TODO" />
 
             <LinearLayout
