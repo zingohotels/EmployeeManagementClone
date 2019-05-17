@@ -83,8 +83,7 @@
                                         android:id="@+id/present_employee_count_text"
                                         android:layout_width="wrap_content"
                                         android:layout_height="match_parent"
-
-                                        android:textSize="30sp"
+                                        android:textSize="20sp"
                                         android:text="0"
                                         android:paddingTop="5dp"
                                         android:paddingLeft="10dp"
@@ -97,8 +96,6 @@
                                             android:textSize="15sp"
                                             android:id="@+id/total_employee_count"
                                             android:text="/0"
-
-
                                             android:paddingTop="5dp"
                                             android:layout_marginLeft="5dp"
                                             android:textColor="#000000"
@@ -139,8 +136,7 @@
                                         android:id="@+id/completed_task_count_text"
                                         android:layout_width="wrap_content"
                                         android:layout_height="match_parent"
-
-                                        android:textSize="30sp"
+                                        android:textSize="20sp"
                                         android:text="0"
                                         android:paddingTop="5dp"
                                         android:paddingLeft="15dp"
@@ -152,8 +148,6 @@
                                         android:textSize="15sp"
                                         android:id="@+id/total_tasks"
                                         android:text="/0"
-
-
                                         android:paddingTop="5dp"
                                         android:layout_marginLeft="5dp"
                                         android:textColor="#000000"
@@ -191,16 +185,12 @@
                                         android:id="@+id/meeting_count"
                                         android:layout_width="wrap_content"
                                         android:layout_height="match_parent"
-
-                                        android:textSize="30sp"
-
+                                        android:textSize="20sp"
                                         android:text="0"
                                         android:paddingTop="5dp"
                                         android:paddingLeft="15dp"
                                         android:textColor="#F44336"
                                         />
-
-
 
 
                                 </LinearLayout>
@@ -217,7 +207,6 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:textSize="14sp"
-
                                     android:gravity="center_horizontal"
                                     android:text="Expenses"
                                     android:paddingLeft="10dp"
@@ -235,9 +224,7 @@
                                         android:id="@+id/expense_count_text"
                                         android:layout_width="wrap_content"
                                         android:layout_height="match_parent"
-                                        android:textSize="30sp"
-
-
+                                        android:textSize="20sp"
                                         android:text="0"
                                         android:paddingTop="5dp"
                                         android:paddingLeft="15dp"

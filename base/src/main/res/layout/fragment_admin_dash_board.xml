@@ -17,9 +17,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-
-            
-
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -66,7 +63,6 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:textSize="12sp"
-                                    
                                     android:gravity="center_horizontal"
                                     android:text="Department"
                                     android:paddingLeft="10dp"
@@ -83,15 +79,12 @@
                                         android:id="@+id/dept_count_text"
                                         android:layout_width="wrap_content"
                                         android:layout_height="match_parent"
-                                        android:textSize="30sp"
-                                        
+                                        android:textSize="20sp"
                                         android:gravity="center"
                                         android:text="0"
                                         android:paddingTop="5dp"
                                         android:paddingLeft="15dp"
-                                        android:textColor="#AFB42B"
-                                        />
-
+                                        android:textColor="#AFB42B" />
 
                                 </LinearLayout>
                             </LinearLayout>
@@ -123,7 +116,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="match_parent"
                                         android:gravity="center"
-                                        android:textSize="30sp"
+                                        android:textSize="20sp"
                                         android:text="0"
                                         android:paddingTop="5dp"
                                         android:paddingLeft="15dp"
@@ -162,7 +155,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="match_parent"
                                         android:gravity="center"
-                                        android:textSize="30sp"
+                                        android:textSize="20sp"
                                         android:text="0"
                                         android:paddingTop="5dp"
                                         android:paddingLeft="15dp"
@@ -201,8 +194,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="match_parent"
                                         android:gravity="center"
-                                        android:textSize="30sp"
-                                        
+                                        android:textSize="20sp"
                                         android:text="0"
                                         android:paddingTop="5dp"
                                         android:paddingLeft="15dp"
@@ -256,7 +248,6 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:textSize="12sp"
-
                                     android:gravity="center_horizontal"
                                     android:text="Present"
                                     android:paddingLeft="10dp"
@@ -273,15 +264,13 @@
                                         android:id="@+id/today_employee_present"
                                         android:layout_width="wrap_content"
                                         android:layout_height="match_parent"
-                                        android:textSize="30sp"
-
+                                        android:textSize="20sp"
                                         android:gravity="center"
                                         android:text="0"
                                         android:paddingTop="5dp"
                                         android:paddingLeft="15dp"
                                         android:textColor="#4CAF50"
                                         />
-
 
                                 </LinearLayout>
                             </LinearLayout>
@@ -313,7 +302,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="match_parent"
                                         android:gravity="center"
-                                        android:textSize="30sp"
+                                        android:textSize="20sp"
                                         android:text="0"
                                         android:paddingTop="5dp"
                                         android:paddingLeft="15dp"
@@ -352,7 +341,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="match_parent"
                                         android:gravity="center"
-                                        android:textSize="30sp"
+                                        android:textSize="20sp"
                                         android:text="0"
                                         android:paddingTop="5dp"
                                         android:paddingLeft="15dp"
