@@ -241,7 +241,14 @@ public class AdminNewMainScreen extends AppCompatActivity  implements RapidFloat
                 }
             });
 
-            presentShowcaseSequence();
+            try{
+
+                presentShowcaseSequence();
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
 
             RapidFloatingActionContentLabelList rfaContent = new RapidFloatingActionContentLabelList(this);
             rfaContent.setOnRapidFloatingActionContentLabelListListener(this);
@@ -440,8 +447,16 @@ public class AdminNewMainScreen extends AppCompatActivity  implements RapidFloat
             @Override
             public void onClick(View v) {
 
-                MaterialShowcaseView.resetAll(AdminNewMainScreen.this);
-                presentShowcaseSequence();
+                try{
+
+                    MaterialShowcaseView.resetAll(AdminNewMainScreen.this);
+                    presentShowcaseSequence();
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+
 
             }
         });
@@ -1958,7 +1973,7 @@ public class AdminNewMainScreen extends AppCompatActivity  implements RapidFloat
 
     }
 
-    private void presentShowcaseSequence() {
+    public void presentShowcaseSequence() throws Exception{
 
         ShowcaseConfig config = new ShowcaseConfig();
         config.setDelay(500); // half second between each showcase view

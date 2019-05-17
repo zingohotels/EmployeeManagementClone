@@ -206,7 +206,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
             mPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             medit = mPref.edit();
 
-           // getCurrentVersion();
+            // getCurrentVersion();
             Intent serviceIntent = new Intent(EmployeeNewMainScreen.this,CheckDataAndLocation.class);
             startService(serviceIntent);
 
@@ -247,13 +247,14 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
                     startService(intent);*/
 
                 } else {
-                   // Toast.makeText(getApplicationContext(), "Service is already running", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(getApplicationContext(), "Service is already running", Toast.LENGTH_SHORT).show();
                 }
             } else {
 
             }
 
-            presentShowcaseView(); // one second delay
+
+
 
             RapidFloatingActionContentLabelList rfaContent = new RapidFloatingActionContentLabelList(this);
             rfaContent.setOnRapidFloatingActionContentLabelListListener(this);
@@ -306,6 +307,13 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
                     rfaContent
             ).build();
 
+            try{
+                presentShowcaseView(); // one second delay
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
 
         }catch(Exception e){
             e.printStackTrace();
@@ -333,7 +341,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
             } else {
                 Log.d("TAG","@@@ IN ELSE hasPermissions");
                 boolean_permission = true;
-               // callNextActivity();
+                // callNextActivity();
             }
         } else {
             Log.d("TAG","@@@ IN ELSE  Build.VERSION.SDK_INT >= 23");
@@ -359,7 +367,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
             } else {
                 Log.d("TAG","@@@ IN ELSE hasPermissions");
                 boolean_permissions = true;
-               // callNextActivity();
+                // callNextActivity();
             }
         } else {
             Log.d("TAG","@@@ IN ELSE  Build.VERSION.SDK_INT >= 23");
@@ -384,7 +392,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
             } else {
                 Log.d("TAG","@@@ IN ELSE hasPermissions");
                 boolean_permissiont = true;
-               // callNextActivity();
+                // callNextActivity();
             }
         } else {
             Log.d("TAG","@@@ IN ELSE  Build.VERSION.SDK_INT >= 23");
@@ -498,7 +506,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
 
     public void onBackPressed() {
 
-       if (this.doubleBackToExitPressedOnce) {
+        if (this.doubleBackToExitPressedOnce) {
             super.onBackPressed();
             finish();
         } else {
@@ -795,7 +803,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
                 } else if (items[item].equals("Cancel")) {
 
                     if(dialog!=null)
-                    dialog.dismiss();
+                        dialog.dismiss();
                 }
             }
         });
@@ -1381,13 +1389,13 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
                                         }else{
                                             //mTrialMsgInfo.setText("Your Trial version is going to expiry in "+days+" days");
                                             if(days>=1&&days<=5){
-                                                 //popupUpgrade("Hope your enjoying to use our Trial version.Get more features You need to Upgrade App","Your trial period is going to expire in "+days+" days");
+                                                //popupUpgrade("Hope your enjoying to use our Trial version.Get more features You need to Upgrade App","Your trial period is going to expire in "+days+" days");
 
 
 
                                             }else if(days==0){
-                                               // popupUpgrade("Hope your enjoying to use our Trial version.Get more features You need to Upgrade App","Today is last day for your free trial");
-                                               // mTrialMsgInfo.setText("Your Trial version is going to expiry in today");
+                                                // popupUpgrade("Hope your enjoying to use our Trial version.Get more features You need to Upgrade App","Today is last day for your free trial");
+                                                // mTrialMsgInfo.setText("Your Trial version is going to expiry in today");
 
                                             }else if(days<0){
                                                 Toast.makeText(EmployeeNewMainScreen.this, "Your Trial Period is Expired", Toast.LENGTH_SHORT).show();
@@ -1563,7 +1571,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
         return true;
     }
 
-    void presentShowcaseView() {
+    public void presentShowcaseView() throws Exception {
 
         MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, SHOWCASE_ID);
 
@@ -1669,7 +1677,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
             startActivity(branch);
 
         }
-}
+    }
 
 
 
