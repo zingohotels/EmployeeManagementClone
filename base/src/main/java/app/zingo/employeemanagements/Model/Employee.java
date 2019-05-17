@@ -112,6 +112,15 @@ public class Employee implements Serializable {
     private boolean IsAppOpen;
 
     String present;
+    String dataValue;
+
+    public String getDataValue() {
+        return dataValue;
+    }
+
+    public void setDataValue(String dataValue) {
+        this.dataValue = dataValue;
+    }
 
     public String getPresent() {
         return present;

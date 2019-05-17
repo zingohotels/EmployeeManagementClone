@@ -87,7 +87,7 @@ public class EmployerNotificationFragment extends Fragment {
 
     private RecyclerView mNotificatioinRecyclerView;
 
-    private  final String SHOWCASE_ID_ADMIN = "ToolsAdminsn"+PreferenceHandler.getInstance(getActivity()).getUserId();
+    private  String SHOWCASE_ID_ADMIN;
 
 
     public EmployerNotificationFragment() {
@@ -114,6 +114,8 @@ public class EmployerNotificationFragment extends Fragment {
             this.layout = layoutInflater.inflate(R.layout.fragment_employer_notification, viewGroup, false);
             mNotificatioinRecyclerView = this.layout.findViewById(R.id.listNotifications);
             mNoNotification = this.layout.findViewById(R.id.noRecordFound);
+
+            SHOWCASE_ID_ADMIN = "ToolsAdminsn"+PreferenceHandler.getInstance(getActivity()).getUserId();
 
             mLoginNotification = this.layout.findViewById(R.id.loginNotiLay);
             mTaskNotification = this.layout.findViewById(R.id.taskNotiLay);

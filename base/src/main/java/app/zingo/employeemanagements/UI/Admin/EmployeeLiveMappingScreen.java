@@ -15,7 +15,9 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.annotation.DrawableRes;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -29,6 +31,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -108,6 +112,8 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
     private LatLng lastKnownLatLng;
     private Polyline gpsTrack;
 
+    PolylineOptions polylineOptions;
+
     int employeeId;
     Employee employee;
     String employeeImage="";
@@ -117,6 +123,17 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
 
     //Global var
     ArrayList<LiveTracking> list;
+    String date = "";
+
+    int sizeCount = 0;
+
+    ArrayList<LiveTracking> lt;
+    ArrayList<LatLng> latLngs;
+
+    boolean currentDate = false;
+    CountDownTimer timerValue ;
+
+    Marker markerLast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,6 +178,8 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
                 employeeId = bundle.getInt("EmployeeId");
                 employee = (Employee)bundle.getSerializable("Employee");
             }
+
+            date = new SimpleDateFormat("MM/dd/yyyy").format(new Date());
 
             if(employee!=null){
 
@@ -212,7 +231,7 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
 
                         LiveTracking lv = new LiveTracking();
                         lv.setEmployeeId(employeeId);
-                        lv.setTrackingDate(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
+                        lv.setTrackingDate(date);
                         getLiveLocation(lv);
 
                     }catch (Exception e){
@@ -301,6 +320,14 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
 
                             if (list !=null && list.size()!=0) {
 
+                                if(date.equalsIgnoreCase(new SimpleDateFormat("MM/dd/yyyy").format(new Date()))){
+
+                                    sizeCount = list.size();
+                                    currentDate = true;
+                                }else{
+                                    currentDate = false;
+                                }
+
 
                                 Collections.sort(list,LiveTracking.compareLiveTrack);
                                 colorValue = new ArrayList<>();
@@ -311,13 +338,13 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
                                 mMap.moveCamera(CameraUpdateFactory.newLatLng(calymayor));
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(calymayor, 15));
 
-                                PolylineOptions polylineOptions = new PolylineOptions();
+                                polylineOptions = new PolylineOptions();
                                 polylineOptions.color(Color.parseColor("#EE596C"));
                                 polylineOptions.width(10);
 
                                 gpsTrack = mMap.addPolyline(polylineOptions);
 
-                                ArrayList<LiveTracking> lt = new ArrayList<>();
+                                 lt = new ArrayList<>();
 
                                 int k=0;
 
@@ -392,7 +419,7 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
 
 
                                     try {
-                                        createMarkerwithCustom(Double.parseDouble(list.get(2).getLatitude()),
+                                        markerLast =  createMarkerwithCustom(Double.parseDouble(list.get(2).getLatitude()),
                                                 Double.parseDouble(list.get(2).getLongitude()),
                                                 employee.getEmployeeName()+"\nLocation 3",""+getAddress(Double.parseDouble(list.get(2).getLongitude()),Double.parseDouble(list.get(2).getLatitude())),
                                                 createCustomMarker(EmployeeLiveMappingScreen.this,employeeImage,employee.getEmployeeName(),R.drawable.live_location_black));
@@ -403,7 +430,7 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
 
                                 }else if(list.size()>3){
 
-                                    ArrayList<LatLng> latLngs = new ArrayList<>();
+                                    latLngs = new ArrayList<>();
 
 
                                     lt.add(list.get(0));
@@ -570,7 +597,7 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
 
                                     //createMarker(Double.parseDouble(list.get(list.size()-1).getLatitude()), Double.parseDouble(list.get(list.size()-1).getLongitude()),employee.getEmployeeName()+"\nLocation "+lt.size(),""+snippetsr);
                                     try {
-                                        createMarkerwithCustom(Double.parseDouble(list.get(list.size()-1).getLatitude()),
+                                        markerLast = createMarkerwithCustom(Double.parseDouble(list.get(list.size()-1).getLatitude()),
                                                 Double.parseDouble(list.get(list.size()-1).getLongitude()),
                                                 employee.getEmployeeName()+"\nLocation "+lt.size(),
                                                 ""+getAddress(Double.parseDouble(list.get(list.size()-1).getLongitude()),Double.parseDouble(list.get(list.size()-1).getLatitude())),createCustomMarker(EmployeeLiveMappingScreen.this,employeeImage,employee.getEmployeeName(),R.drawable.live_location_black));
@@ -616,7 +643,7 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
                                     updateTrack(new LatLng(Double.parseDouble(list.get(list.size()-1).getLatitude()), Double.parseDouble(list.get(list.size()-1).getLongitude())));
                                   //  createMarker(Double.parseDouble(list.get(list.size()-1).getLatitude()), Double.parseDouble(list.get(list.size()-1).getLongitude()),employee.getEmployeeName()+"\nLocation 3",""+snippetr);
                                     try {
-                                        createMarkerwithCustom(Double.parseDouble(list.get(list.size()-1).getLatitude()),
+                                        markerLast = createMarkerwithCustom(Double.parseDouble(list.get(list.size()-1).getLatitude()),
                                                 Double.parseDouble(list.get(list.size()-1).getLongitude()),
                                                 employee.getEmployeeName()+"\nLocation 3",""+getAddress(Double.parseDouble(list.get(list.size()-1).getLongitude()),Double.parseDouble(list.get(list.size()-1).getLatitude())),createCustomMarker(EmployeeLiveMappingScreen.this,employeeImage,employee.getEmployeeName(),R.drawable.live_location_black));
                                     } catch (Exception e) {
@@ -636,6 +663,16 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
                                 }
 
 
+
+                                if(currentDate){
+
+                                    startTimer();
+
+                                }else{
+
+                                    stopTimer();
+
+                                }
 
 
 
@@ -944,6 +981,8 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
                             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
                             try {
                                 Date fdate = simpleDateFormat.parse(date1);
+
+                                date = date1;
 
                                 mLoadMap.setText(""+sdf.format(fdate));
                                 LiveTracking lv = new LiveTracking();
@@ -1642,6 +1681,227 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
         List<LatLng> points = gpsTrack.getPoints();
         points.addAll(latLngs);
         gpsTrack.setPoints(points);
+
+    }
+
+    private void getLiveLocationCurrent(final LiveTracking lv){
+
+
+
+
+
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+                LiveTrackingAPI apiService = Util.getClient().create(LiveTrackingAPI.class);
+                Call<ArrayList<LiveTracking>> call = apiService.getLiveTrackingByEmployeeIdAndDate(lv);
+
+                call.enqueue(new Callback<ArrayList<LiveTracking>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<LiveTracking>> call, Response<ArrayList<LiveTracking>> response) {
+                        int statusCode = response.code();
+                        if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
+
+
+
+
+                            ArrayList<LiveTracking> lists = response.body();
+
+                            int size = lists.size() - list.size();
+
+
+                            if (lists !=null && lists.size()!=0) {
+
+                                if(date.equalsIgnoreCase(new SimpleDateFormat("MM/dd/yyyy").format(new Date()))){
+
+                                    if(sizeCount<lists.size()){
+                                        sizeCount = lists.size();
+
+                                        Collections.sort(lists,LiveTracking.compareLiveTrack);
+
+
+
+
+
+
+
+                                        polylineOptions.color(Color.parseColor("#EE596C"));
+                                        polylineOptions.width(10);
+
+                                        gpsTrack = mMap.addPolyline(polylineOptions);
+
+
+
+                                        int k=0;
+
+
+
+
+                                        if(lists.size()>3){
+
+
+
+                                            String snippet = "";
+
+                                            try {
+                                                snippet = getAddress(Double.parseDouble(list.get(list.size()-1).getLongitude()),Double.parseDouble(list.get(list.size()-1).getLatitude()));
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+
+                                            final LatLng startPosition = markerLast.getPosition();
+                                            final LatLng finalPosition = new LatLng(Double.parseDouble(lists.get(lists.size()-1).getLatitude()),Double.parseDouble(lists.get(lists.size()-1).getLongitude()));
+                                            final Handler handler = new Handler();
+                                            final long start = SystemClock.uptimeMillis();
+                                            final Interpolator interpolator = new AccelerateDecelerateInterpolator();
+                                            final float durationInMs = 3000;
+                                            final boolean hideMarker = false;
+
+                                            handler.post(new Runnable() {
+                                                             long elapsed;
+                                                             float t;
+                                                             float v;
+
+                                                             @Override
+                                                             public void run() {
+                                                                 // Calculate progress using interpolator
+                                                                 elapsed = SystemClock.uptimeMillis() - start;
+                                                                 t = elapsed / durationInMs;
+                                                                 v = interpolator.getInterpolation(t);
+
+                                                                 LatLng currentPosition = new LatLng(
+                                                                         startPosition.latitude * (1 - t) + finalPosition.latitude * t,
+                                                                         startPosition.longitude * (1 - t) + finalPosition.longitude * t);
+
+                                                                 markerLast.setPosition(currentPosition);
+
+                                                                 // Repeat till progress is complete.
+                                                                 if (t < 1) {
+                                                                     // Post again 16ms later.
+                                                                     handler.postDelayed(this, 16);
+                                                                 } else {
+                                                                     if (hideMarker) {
+                                                                         markerLast.setVisible(false);
+                                                                     } else {
+                                                                         markerLast.setVisible(true);
+                                                                     }
+                                                                 }
+                                                             }
+                                                         });
+
+                                                    //createMarker(Double.parseDouble(list.get(list.size()-1).getLatitude()), Double.parseDouble(list.get(list.size()-1).getLongitude()),employee.getEmployeeName()+"\nLocation "+lt.size(),""+snippetsr);
+                                           /* try {
+                                                createMarkerwithCustom(Double.parseDouble(lists.get(lists.size()-1).getLatitude()),
+                                                        Double.parseDouble(lists.get(lists.size()-1).getLongitude()),
+                                                        employee.getEmployeeName()+"\nLocation "+lt.size(),
+                                                        ""+getAddress(Double.parseDouble(lists.get(lists.size()-1).getLongitude()),Double.parseDouble(lists.get(lists.size()-1).getLatitude())),createCustomMarker(EmployeeLiveMappingScreen.this,employeeImage,employee.getEmployeeName(),R.drawable.live_location_black));
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }*/
+                                            latLngs.add(new LatLng(Double.parseDouble(lists.get(lists.size()-1).getLatitude()), Double.parseDouble(lists.get(lists.size()-1).getLongitude())));
+                                            lt.add(lists.get(lists.size()-1));
+
+
+                                            if(latLngs!=null&&latLngs.size()!=0){
+
+                                                loadMap(latLngs);
+                                            }
+
+                                            list = lists;
+
+                                        }
+
+
+                                        if(lt!=null&&lt.size()!=0){
+                                            mlocation.setVisibility(View.VISIBLE);
+                                            mlocation.removeAllViews();
+                                            onAddField(lt);
+                                        }else{
+
+                                            mAddress.setText("No Location found");
+                                            mShowHide.setVisibility(View.GONE);
+                                        }
+
+
+
+
+                                    }
+
+                                }
+
+
+
+                                if(currentDate){
+
+                                    startTimer();
+
+                                }else{
+
+                                    stopTimer();
+
+                                }
+
+
+                            }else{
+
+                                //Toast.makeText(EmployeeLiveMappingScreen.this, "No Location found", Toast.LENGTH_SHORT).show();
+                                mAddress.setText("No Location found");
+                                mShowHide.setVisibility(View.GONE);
+
+                            }
+
+                        }else {
+
+
+                            Toast.makeText(EmployeeLiveMappingScreen.this, "Failed due to : "+response.message(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+
+                    @Override
+                    public void onFailure(Call<ArrayList<LiveTracking>> call, Throwable t) {
+                        // Log error here since request failed
+
+                        Log.e("TAG", t.toString());
+                    }
+                });
+            }
+
+
+        });
+    }
+
+    public void startTimer(){
+
+       timerValue =  new CountDownTimer(30000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            public void onFinish() {
+
+                LiveTracking lv = new LiveTracking();
+                lv.setEmployeeId(employeeId);
+                lv.setTrackingDate(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
+
+
+                getLiveLocationCurrent(lv);
+
+            }
+
+        }.start();
+    }
+
+
+    public void stopTimer(){
+
+        if(timerValue!=null){
+
+            timerValue.cancel();
+        }
+
 
     }
 

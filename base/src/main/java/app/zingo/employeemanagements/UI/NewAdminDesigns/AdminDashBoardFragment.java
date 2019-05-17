@@ -109,7 +109,7 @@ public class AdminDashBoardFragment extends Fragment {
     Runnable runnable;
     int delay = 2*1000;
 
-    private  final String SHOWCASE_ID_ADMIN = "ToolsAdmins"+PreferenceHandler.getInstance(getActivity()).getUserId();
+    private  String SHOWCASE_ID_ADMIN ;
 
 
     public AdminDashBoardFragment() {
@@ -134,6 +134,8 @@ public class AdminDashBoardFragment extends Fragment {
             this.layout = layoutInflater.inflate(R.layout.fragment_admin_dash_board, viewGroup, false);
 
             mContext = getContext();
+
+            SHOWCASE_ID_ADMIN = "ToolsAdmins"+PreferenceHandler.getInstance(getActivity()).getUserId();
 
             mTaskList = layout.findViewById(R.id.task_list_dash);
             mTaskList.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -529,7 +531,7 @@ public class AdminDashBoardFragment extends Fragment {
 
 
         final ProgressDialog progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setTitle("Loading Employees");
+        progressDialog.setTitle("Loading Department");
         progressDialog.setCancelable(false);
         progressDialog.show();
 
@@ -546,7 +548,7 @@ public class AdminDashBoardFragment extends Fragment {
                         if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
 
 
-                          //  if (progressDialog!=null&&progressDialog.isShowing())
+                           if (progressDialog!=null&&progressDialog.isShowing())
                                 progressDialog.dismiss();
                             ArrayList<Departments> list = response.body();
                             ArrayList<Departments> deptList = new ArrayList<>();

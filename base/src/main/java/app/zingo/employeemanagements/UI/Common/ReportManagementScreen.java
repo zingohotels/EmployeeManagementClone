@@ -116,6 +116,8 @@ public class ReportManagementScreen extends AppCompatActivity {
 
     int totalEmp,preEmp=0,totaltask =0,compTask=0,visit=0,expense=0;
 
+    ArrayList<Employee> employees;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,6 +144,7 @@ public class ReportManagementScreen extends AppCompatActivity {
             mReport = findViewById(R.id.generate_report_btn);
 
             preEmpId = new ArrayList<>();
+            employees = new ArrayList<>();
 
             /*getDashBoard();
             getExpenses(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));*/
@@ -507,6 +510,7 @@ public class ReportManagementScreen extends AppCompatActivity {
 
                             if (list !=null && list.size()!=0) {
 
+
                                 ArrayList<Employee> employees = new ArrayList<>();
 
                                 for(int i=0;i<list.size();i++){
@@ -729,12 +733,29 @@ public class ReportManagementScreen extends AppCompatActivity {
                                             if(loginT==null||loginT.isEmpty()){
 
                                                 loginT = comDate +" 00:00 am";
+                                            }else if(loginT.contains(" a.m.")){
+
+
+                                                loginT = loginT.replace(" a.m."," AM");
+
+                                            }else if(logoutT.contains(" p.m.")){
+
+                                                loginT = loginT.replace(" p.m."," PM");
                                             }
 
                                             if(logoutT==null||logoutT.isEmpty()){
 
                                                 logoutT = comDate  +" "+new SimpleDateFormat("hh:mm a").format(new Date()) ;
+                                            }else if(logoutT.contains(" a.m.")){
+
+
+                                                logoutT = logoutT.replace(" a.m."," AM");
+
+                                            }else if(logoutT.contains(" p.m.")){
+
+                                                logoutT = logoutT.replace(" p.m."," PM");
                                             }
+
 
                                             try {
                                                 fd = sdf.parse(""+loginT);
@@ -1162,6 +1183,8 @@ public class ReportManagementScreen extends AppCompatActivity {
 
 
 
+
+
             new ThreadExecuter().execute(new Runnable() {
                 @Override
                 public void run() {
@@ -1172,6 +1195,8 @@ public class ReportManagementScreen extends AppCompatActivity {
                         @Override
                         public void onResponse(Call<ArrayList<LiveTracking>> call, Response<ArrayList<LiveTracking>> response) {
                             int statusCode = response.code();
+
+                            System.out.println("Live Tracking "+lv.getEmployeeId()+" "+lv.getTrackingDate()+" "+statusCode);
                             if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
 
 
@@ -1269,14 +1294,16 @@ public class ReportManagementScreen extends AppCompatActivity {
 
                                 }else{
 
-
+                                    if (progressDialog!=null)
+                                        progressDialog.dismiss();
 
                                 }
 
                             }else {
 
 
-
+                                if (progressDialog!=null)
+                                    progressDialog.dismiss();
                             }
                         }
 
@@ -1286,6 +1313,8 @@ public class ReportManagementScreen extends AppCompatActivity {
                             if (progressDialog!=null)
                                 progressDialog.dismiss();
                             Log.e("TAG", t.toString());
+
+                            System.out.println("Live Tracking "+lv.getEmployeeId()+" "+lv.getTrackingDate()+" Error");
                         }
                     });
                 }
@@ -1489,6 +1518,13 @@ public class ReportManagementScreen extends AppCompatActivity {
 
                             SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy");
 
+                            ArrayList<Date> dates = new ArrayList<Date>();
+                            SimpleDateFormat df1 = new SimpleDateFormat("yyyy-MM-dd");
+
+
+
+
+
 
 
                             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
@@ -1499,6 +1535,7 @@ public class ReportManagementScreen extends AppCompatActivity {
 new SimpleDateFormat("yyyy-MM-dd").format(new Date())
                                 lv.setTrackingDate(date1);
                                 getLiveLocation(lv);*/
+
 
                                 getEmployees(date2);
 

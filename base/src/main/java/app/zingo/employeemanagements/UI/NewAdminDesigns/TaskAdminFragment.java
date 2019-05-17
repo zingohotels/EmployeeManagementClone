@@ -95,7 +95,7 @@ public class TaskAdminFragment extends Fragment {
 
     int total=0,pending=0,complete=0,closed=0;
     int daytotal=0,daypending=0,daycomplete=0,dayclosed=0;
-    private  final String SHOWCASE_ID_ADMIN = "ToolsAdminst"+PreferenceHandler.getInstance(getActivity()).getUserId();
+    private   String SHOWCASE_ID_ADMIN;
 
 
     public TaskAdminFragment() {
@@ -122,6 +122,7 @@ public class TaskAdminFragment extends Fragment {
             this.layout = layoutInflater.inflate(R.layout.fragment_task_admin, viewGroup, false);
 
             this.presentDate = this.layout.findViewById(R.id.presentDate);
+            SHOWCASE_ID_ADMIN = "ToolsAdminst"+PreferenceHandler.getInstance(getActivity()).getUserId();
             // this.presentDate.setText(DateUtil.getReadableDate(this.mCalendarDay));
             mTaskList = this.layout.findViewById(R.id.targetList);
             mTaskList.setLayoutManager(new LinearLayoutManager(getActivity()));

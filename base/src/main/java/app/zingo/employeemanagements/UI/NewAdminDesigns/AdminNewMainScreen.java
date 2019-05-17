@@ -171,7 +171,8 @@ public class AdminNewMainScreen extends AppCompatActivity  implements RapidFloat
     int spinnerPos = -1;
     boolean don  = false;
 
-    private String SHOWCASE_ID_ADMIN ;
+    private  String SHOWCASE_ID_ADMIN ;
+
 
     private RapidFloatingActionLayout rfaLayout;
     private RapidFloatingActionButton rfaButton;

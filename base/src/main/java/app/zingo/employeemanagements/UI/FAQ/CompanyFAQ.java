@@ -836,17 +836,22 @@ public class CompanyFAQ extends Fragment {
             dots.removeAllViews();
         }
         dot = new ImageView[layouts.length];
-        for (int i =0;i<layouts.length;i++){
-            dot[i] = new ImageView(getActivity());
-            if(i==current){
-                dot[i].setImageDrawable(ContextCompat.getDrawable(getActivity(),R.drawable.active_dots));
-            }else {
-                dot[i].setImageDrawable(ContextCompat.getDrawable(getActivity(),R.drawable.inactive_dots));
+
+        if(dot!=null&&dot.length!=0){
+
+            for (int i =0;i<layouts.length;i++){
+                dot[i] = new ImageView(getActivity());
+                if(i==current){
+                    dot[i].setImageDrawable(ContextCompat.getDrawable(getActivity(),R.drawable.active_dots));
+                }else {
+                    dot[i].setImageDrawable(ContextCompat.getDrawable(getActivity(),R.drawable.inactive_dots));
+                }
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.setMargins(4,0,4,0);
+                dots.addView(dot[i],params);
             }
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.setMargins(4,0,4,0);
-            dots.addView(dot[i],params);
         }
+
     }
 
 }

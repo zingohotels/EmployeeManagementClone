@@ -67,7 +67,7 @@ public class AdminHomeFragment extends Fragment {
 
     Employee employee;
 
-    private  final String SHOWCASE_ID_ADMIN = "ToolsAdminshome"+PreferenceHandler.getInstance(getActivity()).getUserId();
+    private   String SHOWCASE_ID_ADMIN ;
 
 
     public AdminHomeFragment() {
@@ -98,7 +98,7 @@ public class AdminHomeFragment extends Fragment {
 
             qr_OrgId = this.layout.findViewById(R.id.organization_id);
 
-
+            SHOWCASE_ID_ADMIN = "ToolsAdminshome"+PreferenceHandler.getInstance(getActivity()).getUserId();
 
             if(PreferenceHandler.getInstance(getActivity()).getCompanyName().length()>=4){
                 String upToNCharacters = PreferenceHandler.getInstance(getActivity()).getCompanyName().substring(0, Math.min(PreferenceHandler.getInstance(getActivity()).getCompanyName().length(), 4));

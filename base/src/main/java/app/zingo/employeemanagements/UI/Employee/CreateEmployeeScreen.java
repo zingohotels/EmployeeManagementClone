@@ -758,7 +758,7 @@ public class CreateEmployeeScreen extends AppCompatActivity {
                             if(departmentsList != null && departmentsList.size()!=0 )
                             {
 
-                                departmentData = response.body();
+                                departmentData = new ArrayList<>();
 
                                 for(int i=0;i<departmentsList.size();i++){
 
