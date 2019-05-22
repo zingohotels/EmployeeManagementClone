@@ -1475,7 +1475,7 @@ public class ReportManagementScreen extends AppCompatActivity {
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_calendar, menu);
+        getMenuInflater().inflate(R.menu.menu_custom_report, menu);
         return true;
     }
 
@@ -1489,6 +1489,11 @@ public class ReportManagementScreen extends AppCompatActivity {
 
         } else if (id == R.id.action_calendar) {
             openDatePicker();
+
+        }else if (id == R.id.action_calendar_past) {
+
+            Intent custom = new Intent(ReportManagementScreen.this,ReportBulkdataScreen.class);
+            startActivity(custom);
 
         }
         return super.onOptionsItemSelected(item);

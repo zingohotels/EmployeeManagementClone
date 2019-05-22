@@ -33,7 +33,7 @@ public interface EmployeeApi {
     @GET("Employees")
     Call<ArrayList<Employee>> getEmployees();
 
-    @GET("Employees/GetEmployeesByOrganizationId/{OrganizationId}")
+    @GET("Employees/GetEmployeesByOrganizationIdCustom/{OrganizationId}")
     Call<ArrayList<Employee>> getEmployeesByOrgId(@Path("OrganizationId") int id);
 
     @GET("Employees/GetEmployeeByDepartmentId/{DepartmentId}")

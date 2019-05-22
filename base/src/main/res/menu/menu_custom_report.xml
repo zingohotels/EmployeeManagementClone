@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:aapt="http://schemas.android.com/aapt">
+
+    <item
+        android:icon="@drawable/past_data"
+        android:id="@+id/action_calendar_past"
+        android:orderInCategory="100"
+        android:title="Calendar"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:icon="@drawable/calendar_menu"
+        android:id="@+id/action_calendar"
+        android:orderInCategory="100"
+        android:title="Calendar"
+        app:showAsAction="ifRoom"/>
+</menu>

@@ -21,6 +21,9 @@ public class LiveTracking implements Serializable {
     @SerializedName("EmployeeId")
     public int EmployeeId;
 
+    @SerializedName("OrganizationId")
+    public int OrganizationId;
+
     @SerializedName("Longitude")
     public String Longitude;
 
@@ -153,6 +156,14 @@ public class LiveTracking implements Serializable {
 
     public String getDuration() {
         return duration;
+    }
+
+    public int getOrganizationId() {
+        return OrganizationId;
+    }
+
+    public void setOrganizationId(int organizationId) {
+        OrganizationId = organizationId;
     }
 
     public void setDuration(String duration) {

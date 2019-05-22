@@ -92,6 +92,7 @@ public class AllEmployeeLiveLocation extends AppCompatActivity {
     int listSize = 0,countValue=0;
     ArrayList<Employee> employees;
     String dateActivity = "";
+
     CountDownTimer countTimer;
     //maps related
     private GoogleMap mMap;
@@ -185,6 +186,7 @@ public class AllEmployeeLiveLocation extends AppCompatActivity {
                         try{
 
                             dateActivity = new SimpleDateFormat("MM/dd/yyyy").format(new Date());
+
 
                             mLoadMap.setText(""+new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
 
@@ -792,6 +794,7 @@ public class AllEmployeeLiveLocation extends AppCompatActivity {
 
                                 dateActivity = new SimpleDateFormat("MM/dd/yyyy").format(fdate);
 
+
                                 if(employees!=null&&employees.size()!=0){
 
                                     listSize = employees.size();
@@ -889,6 +892,7 @@ public class AllEmployeeLiveLocation extends AppCompatActivity {
 
                         LiveTracking lv = new LiveTracking();
                         lv.setEmployeeId(e.getEmployeeId());
+                        //lv.setOrganizationId(e.getEmployeeId());
                         lv.setTrackingDate(dateActivity);
                         getLiveLocations(lv,e,listLives,1);
 

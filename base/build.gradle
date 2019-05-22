@@ -32,6 +32,10 @@ android {
             signingConfig signingConfigs.config
         }
     }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
 }
 
 dependencies {
@@ -64,7 +68,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-config:11.8.0'
     implementation 'com.google.firebase:firebase-core:11.8.0'
 
-   /* // 2 - FirebaseUI for Firebase Auth (Or whatever you need...)
+    /* // 2 - FirebaseUI for Firebase Auth (Or whatever you need...)
     implementation 'com.firebaseui:firebase-ui-auth:3.2.2'
 */
     //round image
@@ -106,6 +110,14 @@ dependencies {
     implementation 'com.google.http-client:google-http-client-gson:1.23.0' exclude module: 'httpclient'
 
     implementation 'info.hoang8f:fbutton:1.0.5'
+
+        // implementation 'com.netflix.rxjava:rxjava-android:0.16.1'
+//    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
+
+    implementation 'io.reactivex:rxjava:1.0.15'
+    implementation 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

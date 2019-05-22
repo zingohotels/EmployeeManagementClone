@@ -6,6 +6,7 @@ public class ReportDataEmployee implements Serializable {
 
 
     String name;
+    String date;
     String loginTime;
     String logoutTime;
     String hours;
@@ -85,5 +86,13 @@ public class ReportDataEmployee implements Serializable {
 
     public void setKms(String kms) {
         this.kms = kms;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }
