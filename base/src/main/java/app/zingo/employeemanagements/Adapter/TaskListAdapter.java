@@ -227,14 +227,9 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
                     bundle.putSerializable("Task",dto);
                     updateSc.putExtras(bundle);
                     context.startActivity(updateSc);
-
-
                 }
             });
-
         }
-
-
     }
 
     private void getEmployees(final int id, final Tasks dto){

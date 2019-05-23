@@ -1,65 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<RelativeLayout android:id="@+id/activity_item_details"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/rootView"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
-
-
-    <android.support.v4.widget.NestedScrollView
-        android:background="#FFFFFFFF"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@id/appBar"
-        android:layout_alignParentBottom="true">
+    android:weightSum="10"
+    xmlns:custom="custome"
+    tools:ignore="NamespaceTypo"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ScrollView android:id="@+id/scrollbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:layout_above="@+id/apply_leave"
+        android:paddingTop="@dimen/activity_vertical_margin">
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusableInTouchMode="false"
+            android:focusable="false"
             android:orientation="vertical">
 
-
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/typeInputLayout"
+                android:focusableInTouchMode="false"
+                android:focusable="false"
+                android:id="@+id/expense_title_InputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_large_margin"
-                android:layout_marginTop="20.0dip"
-                android:layout_marginRight="@dimen/activity_large_margin"
-                android:hint="Expense Title"
+                android:layout_height="wrap_content">
 
-                >
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/expense_title"
-                    android:maxLength="50"
-                    android:inputType="text"
-                    android:enabled="false"
-                    style="@style/fp_editText" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:hint="Expense Title" />
+
             </android.support.design.widget.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/toInputLayout"
-                android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:layout_height="0dp"
-                android:layout_marginLeft="@dimen/activity_large_margin"
-                android:layout_marginTop="20.0dip"
-                android:layout_marginRight="@dimen/activity_large_margin"
-                android:hint="Date"
 
-                >
+            <android.support.design.widget.TextInputLayout
+                android:focusableInTouchMode="false"
+                android:focusable="false"
+                android:id="@+id/expense_toInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/to_date"
-                    android:maxLength="50"
-                    android:focusableInTouchMode="false"
-                    android:inputType="text"
-                    style="@style/fp_editText" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:hint="Date" />
+
             </android.support.design.widget.TextInputLayout>
 
 
@@ -69,174 +67,140 @@
                 android:orientation="horizontal">
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/amountInputLayout"
+                    android:layout_margin="5dp"
+                    android:id="@+id/expense_amountInputLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
-                    android:layout_marginTop="20.0dip"
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    android:hint="Amount"
-                    >
+                    android:layout_weight="1">
+
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/amount_expense"
-                        android:maxLength="50"
-                        android:enabled="false"
-                        android:inputType="numberDecimal"
-                        style="@style/fp_editText" />
+                        android:layout_width="match_parent"
+                        android:textSize="12sp"
+                        android:layout_height="wrap_content"
+                        android:hint="Amount"
+                        android:focusableInTouchMode="true"
+                        android:inputType="number" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/camountInputLayout"
+                    android:layout_margin="5dp"
+                    android:id="@+id/expense_claimed_amountInputLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
-                    android:layout_marginTop="20.0dip"
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    android:hint="Claimed Amount"
-                    >
+                    android:layout_weight="1">
+
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/camount_expense"
-                        android:maxLength="50"
-
-                        android:inputType="numberDecimal"
-                        style="@style/fp_editText" />
+                        android:layout_width="match_parent"
+                        android:textSize="12sp"
+                        android:layout_height="wrap_content"
+                        android:hint="Claimed Amount"
+                        android:focusableInTouchMode="false"
+                        android:inputType="number" />
                 </android.support.design.widget.TextInputLayout>
-
-
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginLeft="@dimen/activity_large_margin"
                 android:layout_marginTop="20.0dip"
-                android:layout_marginRight="@dimen/activity_large_margin"
-                >
-                <TextView
+                android:id="@+id/status_layout"
+                android:layout_marginRight="@dimen/activity_large_margin">
+
+                <app.zingo.employeemanagements.Custom.MyTextView
+                    android:id="@+id/email"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="35dp"
+                    android:background="@drawable/test_background"
+                    android:layout_weight="1"
+
                     android:text="Status"
-                    android:layout_weight="2"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:textColor="#000000"/>
+                    android:textSize="16sp"
+                    android:singleLine="true"
+                    android:textColor="#000"
+                    android:textStyle="normal" />
+
                 <Spinner
                     android:id="@+id/expense_status_spinner"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:entries="@array/leave_status"
+                    android:layout_height="25dp"
                     android:layout_weight="1"
+                    android:entries="@array/leave_status"
                     android:background="@drawable/spinner_background"/>
 
-
             </LinearLayout>
 
-
             <LinearLayout
+                android:layout_marginTop="30dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
-                    android:layout_marginTop="20.0dip"
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    android:text="Description"/>
-
-                <EditText
-                    android:id="@+id/expense_description"
+                <android.support.design.widget.TextInputLayout
+                    android:layout_margin="5dp"
+                    android:id="@+id/expense_description_InputLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="start"
-                    android:gravity="start"
-                    android:scrollbarAlwaysDrawVerticalTrack="true"
-                    android:overScrollMode="always"
-                    android:scrollbarStyle="insideInset"
-                    android:scrollbars="vertical"
-                    android:keepScreenOn="true"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    android:lines="5"
-                    android:background="@drawable/spinner_background"
-                    />
+                    android:layout_height="match_parent">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/expense_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="0dip"
+                        android:layout_marginRight="0dip"
+                        android:hint="Description"
+                        android:gravity="top|left"
+                        android:lines="5"
+                        android:singleLine="false"
+                        android:textSize="12sp" />
+
+                </android.support.design.widget.TextInputLayout>
 
 
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
-                    android:layout_marginTop="20.0dip"
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    android:text="Remarks"/>
-
-                <EditText
-                    android:id="@+id/expense_remarks"
+                <android.support.design.widget.TextInputLayout
+                    android:layout_margin="5dp"
+                    android:id="@+id/expense_remars_InputLayout"
+                    android:layout_marginTop="20dp"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="start"
-                    android:gravity="start"
-                    android:scrollbarAlwaysDrawVerticalTrack="true"
-                    android:overScrollMode="always"
-                    android:scrollbarStyle="insideInset"
-                    android:scrollbars="vertical"
-                    android:keepScreenOn="true"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    android:lines="5"
-                    android:background="@drawable/spinner_background"
-                    />
+                    android:layout_height="match_parent">
 
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/expense_remarks"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="0dip"
+                        android:layout_marginRight="0dip"
+                        android:hint="Remarks"
+                        android:gravity="top|left"
+                        android:lines="5"
+                        android:singleLine="false"
+                        android:textSize="12sp" />
 
-            </LinearLayout>
-
-
-
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:id="@+id/expense_image">
+                </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
-
-
-
-            <android.support.v7.widget.AppCompatButton
-                android:textSize="@dimen/regularFont"
-                android:textColor="@color/white"
-                android:id="@+id/apply_expense"
-                android:background="@drawable/selector_button_app"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_large_margin"
-                android:layout_marginTop="20.0dip"
-                android:layout_marginBottom="20.0dip"
-                android:layout_marginRight="@dimen/activity_large_margin"
-                android:text="Update Expense"
-                android:textAllCaps="false"
-
-                />
-
 
         </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
 
+    </ScrollView>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/apply_expense"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_weight="1"
+        android:background="@color/colorPrimary"
+        android:text="Update Task"
+        android:textSize="14dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:gravity="center"/>
 </RelativeLayout>

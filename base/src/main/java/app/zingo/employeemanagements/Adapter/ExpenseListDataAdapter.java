@@ -193,6 +193,10 @@ public class ExpenseListDataAdapter extends RecyclerView.Adapter<ExpenseListData
                 holder.mStatus.setBackgroundColor(Color.parseColor("#FF0000"));
                 holder.mStatusText.setText("R");
                 holder.mStatusText.setBackground(context.getResources().getDrawable(R.drawable.oval_red));
+            }else{
+                holder.mStatus.setBackgroundColor(Color.parseColor("#FF0000"));
+                holder.mStatusText.setText("C");
+                holder.mStatusText.setBackground(context.getResources().getDrawable(R.drawable.oval_red));
             }
 
             if(PreferenceHandler.getInstance(context).getUserRoleUniqueID()==2||PreferenceHandler.getInstance(context).getUserRoleUniqueID()==9){
@@ -290,6 +294,18 @@ public class ExpenseListDataAdapter extends RecyclerView.Adapter<ExpenseListData
                         context.startActivity(updateSc);
 
                     }else{
+
+                        if(dto.getExpenses().getStatus()!=null&&!dto.getExpenses().getStatus().equalsIgnoreCase("Pending")){
+
+                        }else{
+
+                            Intent updateSc = new Intent(context,UpdateExpenseScreen.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("Expenses",dto.getExpenses());
+                            bundle.putInt("Position",position);
+                            updateSc.putExtras(bundle);
+                            context.startActivity(updateSc);
+                        }
 
 
                     }

@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -68,7 +69,7 @@ import retrofit2.Response;
 
 public class UpdateTaskScreen extends AppCompatActivity {
 
-    TextInputEditText mTaskName, mFrom, mTo;//mDead
+    TextInputEditText mTaskName, mFrom, mTo, mFromTime, mToTime;//mDead
     EditText mdesc,mComments;
     Spinner mStatus;
     AppCompatButton mCreate;
@@ -103,6 +104,8 @@ public class UpdateTaskScreen extends AppCompatActivity {
             mTaskName = findViewById(R.id.task_name);
             mFrom = findViewById(R.id.from_date);
             mTo = findViewById(R.id.to_date);
+            mFromTime = findViewById(R.id.from_time);
+            mToTime = findViewById(R.id.to_time);
             // mDead = (TextInputEditText) findViewById(R.id.dead_line);
             mdesc = findViewById(R.id.task_description);
             mComments = findViewById(R.id.task_comments);
@@ -111,31 +114,24 @@ public class UpdateTaskScreen extends AppCompatActivity {
             mShow = findViewById(R.id.show_map);
             mMapLay = findViewById(R.id.map_layout);
             mStatus = findViewById(R.id.task_status_update);
-
             location = findViewById(R.id.location_et);
-
             lat = findViewById(R.id.lat_et);
             lng = findViewById(R.id.lng_et);
 
-
-
             Bundle bundle = getIntent().getExtras();
-
             if (bundle != null) {
-
                 updateTask = (Tasks)bundle.getSerializable("Task");
                 ADAPTER_POSITION = bundle.getInt("Position");
-
             }
-
 
             if(updateTask!=null){
 
                 mTaskName.setText(""+updateTask.getTaskName());
 
-
                 String froms = updateTask.getStartDate();
                 String tos = updateTask.getEndDate();
+                String fromTime = "";
+                String toTime = "";
 
                 Date afromDate = null;
                 Date atoDate = null;
@@ -150,23 +146,24 @@ public class UpdateTaskScreen extends AppCompatActivity {
                             try {
                                 afromDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
                                 froms = new SimpleDateFormat("MMM dd,yyyy").format(afromDate);
+                                fromTime = "00:00";
 
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
                         }else{
                             try {
-                                afromDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dojs[0]+" "+dojs[1]);
-                                froms = new SimpleDateFormat("MMM dd,yyyy HH:mm").format(afromDate);
+                               // afromDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dojs[0]+" "+dojs[1]);
+                                afromDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
+                                Date time = new SimpleDateFormat("HH:mm:ss").parse(dojs[1]);
+                                //froms = new SimpleDateFormat("MMM dd,yyyy HH:mm").format(afromDate);
+                                froms = new SimpleDateFormat("MMM dd,yyyy").format(afromDate);
+                                fromTime = new SimpleDateFormat("HH:mm").format(time);
 
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
                         }
-
-
-
-
                     }
 
                 }
@@ -181,13 +178,20 @@ public class UpdateTaskScreen extends AppCompatActivity {
                             try {
                                 atoDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
                                 tos = new SimpleDateFormat("MMM dd,yyyy").format(atoDate);
+                                toTime = "00:00";
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
                         }else{
                             try {
-                                atoDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dojs[0]+" "+dojs[1]);
-                                tos = new SimpleDateFormat("MMM dd,yyyy HH:mm").format(atoDate);
+                               /* atoDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]+" "+dojs[1]);
+                                tos = new SimpleDateFormat("MMM dd,yyyy").format(atoDate);*/
+
+                                atoDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
+                                Date time = new SimpleDateFormat("HH:mm:ss").parse(dojs[1]);
+                                //tos = new SimpleDateFormat("MMM dd,yyyy HH:mm").format(afromDate);
+                                tos = new SimpleDateFormat("MMM dd,yyyy").format(atoDate);
+                                toTime = new SimpleDateFormat("HH:mm").format(time);
 
                             } catch (ParseException e) {
                                 e.printStackTrace();
@@ -204,6 +208,8 @@ public class UpdateTaskScreen extends AppCompatActivity {
 
                 mFrom.setText(""+froms);
                 mTo.setText(""+tos);
+                mFromTime.setText(""+fromTime);
+                mToTime.setText(""+toTime);
                 mComments.setText(""+updateTask.getComments());
                 mdesc.setText(""+updateTask.getTaskDescription());
 
@@ -244,6 +250,63 @@ public class UpdateTaskScreen extends AppCompatActivity {
                 }
             });
 
+            mFromTime.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //openTimePicker();
+                    // TODO Auto-generated method stub
+                    Calendar mcurrentTime = Calendar.getInstance();
+                    int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                    int minute = mcurrentTime.get(Calendar.MINUTE);
+                    TimePickerDialog mTimePicker;
+                    mTimePicker = new TimePickerDialog(UpdateTaskScreen.this, new TimePickerDialog.OnTimeSetListener() {
+                        @Override
+                        public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+
+                            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+
+                            try{
+                                Date fromTime = sdf.parse(selectedHour + ":" + selectedMinute);
+                                mFromTime.setText( sdf.format(fromTime));
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }, hour, minute, true);//Yes 24 hour time
+                    mTimePicker.setTitle("Select Time");
+                    mTimePicker.show();
+                }
+            });
+
+            mToTime.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //openTimePicker();
+
+                    // TODO Auto-generated method stub
+                    Calendar mcurrentTime = Calendar.getInstance();
+                    int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                    int minute = mcurrentTime.get(Calendar.MINUTE);
+                    TimePickerDialog mTimePicker;
+                    mTimePicker = new TimePickerDialog(UpdateTaskScreen.this, new TimePickerDialog.OnTimeSetListener() {
+                        @Override
+                        public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+
+                            try{
+                                Date totime = sdf.parse(selectedHour + ":" + selectedMinute);
+                                mToTime.setText( sdf.format(totime));
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }, hour, minute, true);//Yes 24 hour time
+                    mTimePicker.setTitle("Select Time");
+                    mTimePicker.show();
+                }
+            });
            /* mDead.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -354,18 +417,13 @@ public class UpdateTaskScreen extends AppCompatActivity {
                         }
                     }
 
-
                     mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                         @Override
                         public void onMapClick(LatLng latLng) {
                             DecimalFormat df2 = new DecimalFormat(".##########");
 
-
                             lati = latLng.latitude;
                             lngi = latLng.longitude;
-
-
-
 
                             lat.setText(df2.format(latLng.latitude)+"");
                             lng.setText(df2.format(latLng.longitude)+"");
@@ -383,128 +441,95 @@ public class UpdateTaskScreen extends AppCompatActivity {
                 }
             });
 
-
         }catch (Exception e){
             e.printStackTrace();
         }
     }
-
     public void openDatePicker(final TextInputEditText tv) {
         // Get Current Date
-
         final Calendar c = Calendar.getInstance();
         int mYear  = c.get(Calendar.YEAR);
         int mMonth = c.get(Calendar.MONTH);
         int mDay   = c.get(Calendar.DAY_OF_MONTH);
 
         final Calendar newDate = Calendar.getInstance();
-
         //launch datepicker modal
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, final int year, final int monthOfYear, final int dayOfMonth) {
-                        try {
-                            Log.d("Date", "DATE SELECTED "+dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-
+                        try
+                        {
                             newDate.set(year,monthOfYear,dayOfMonth);
+                            String date = ((monthOfYear+1)+"/"+dayOfMonth+"/"+year);
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+                            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy");
+                            try {
+                                Date parse_date = simpleDateFormat.parse(date);
+                                String date_format = sdf.format(parse_date);
 
-                            new TimePickerDialog(UpdateTaskScreen.this, new TimePickerDialog.OnTimeSetListener() {
-                                @Override
-                                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                    newDate.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                                    newDate.set(Calendar.MINUTE, minute);
-
-                                    String date1 = (monthOfYear + 1)  + "/" + (dayOfMonth) + "/" + year +" "+hourOfDay+":"+minute;
-
-                                    SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm");
-
-
-
-                                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm");
-                                    try {
-                                        Date fdate = simpleDateFormat.parse(date1);
-
-                                        String from1 = sdf.format(fdate);
-
-
-                                        tv.setText(from1);
-
-
-                                    } catch (ParseException e) {
-                                        e.printStackTrace();
-                                    }
-
+                                if(tv.equals(mFrom))
+                                {
+                                    tv.setText(date_format);
                                 }
-                            }, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), false).show();
+                                else if(tv.equals(mTo))
+                                {
+                                    tv.setText(date_format);
+                                }
 
-
-
-
-
-
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
                         }
                         catch (Exception ex)
                         {
                             ex.printStackTrace();
                         }
-
-
                     }
                 }, mYear, mMonth, mDay);
 
-
         datePickerDialog.show();
-
     }
 
     public void validate(){
-
-
         String from = mFrom.getText().toString();
         String to = mTo.getText().toString();
+        String fromTime = mFromTime.getText().toString();
+        String toTime = mToTime.getText().toString();
         //   String dead = mDead.getText().toString();
         String taskName = mTaskName.getText().toString();
         String desc = mdesc.getText().toString();
 
-
         if(taskName.isEmpty()){
-
             Toast.makeText(this, "Task Name is required", Toast.LENGTH_SHORT).show();
-
         }else if(from.isEmpty()){
-
             Toast.makeText(this, "From date is required", Toast.LENGTH_SHORT).show();
-
         }else if(to.isEmpty()){
-
             Toast.makeText(this, "To date is required", Toast.LENGTH_SHORT).show();
-
+        }else if(fromTime.isEmpty()){
+            Toast.makeText(this, "Please Select Time To Date", Toast.LENGTH_SHORT).show();
+        }else if(toTime.isEmpty()){
+            Toast.makeText(this, "Please Select Time To Date", Toast.LENGTH_SHORT).show();
         }else if(desc.isEmpty()){
-
             Toast.makeText(this, "Leave Comment is required", Toast.LENGTH_SHORT).show();
-
         }else{
-
             try{
-
                 SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm");
                 Tasks tasks = updateTask;
                 tasks.setTaskName(taskName);
                 tasks.setTaskDescription(desc);
                 tasks.setDeadLine(to);
-                tasks.setStartDate(new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(sdf.parse(from)));
-                tasks.setReminderDate(new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(sdf.parse(from)));
-                tasks.setEndDate(new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(sdf.parse(to)));
-                tasks.setStatus(mStatus.getSelectedItem().toString());
-                tasks.setComments(mComments.getText().toString());
+                tasks.setStartDate(new SimpleDateFormat("MM/dd/yyyy HH:mm").format(sdf.parse(from+" "+fromTime)));
+                tasks.setReminderDate(new SimpleDateFormat("MM/dd/yyyy HH:mm").format(sdf.parse(from+" "+fromTime)));
+                tasks.setEndDate(new SimpleDateFormat("MM/dd/yyyy HH:mm").format(sdf.parse(to+" "+toTime)));
+                tasks.setStatus(""+mStatus.getSelectedItem().toString());
+                tasks.setComments(""+mComments.getText().toString());
                 tasks.setRemarks("");
 
                 if(mShow.isChecked()){
                     tasks.setLatitude(lati+"");
                     tasks.setLongitude(lngi+"");
                 }
-
                 tasks.setDepartmentId(0);
                 try {
                     updateTasks(tasks);
@@ -514,8 +539,6 @@ public class UpdateTaskScreen extends AppCompatActivity {
             }catch (Exception e){
                 e.printStackTrace();
             }
-
-
         }
     }
 
@@ -531,10 +554,7 @@ public class UpdateTaskScreen extends AppCompatActivity {
                 for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
                     sb.append(address.getAddressLine(i)).append(",");
                 }
-
                 result = address.getAddressLine(0);
-
-
 
                 return result;
             }
@@ -543,7 +563,6 @@ public class UpdateTaskScreen extends AppCompatActivity {
             Log.e("MapLocation", "Unable connect to Geocoder", e);
             return result;
         }
-
     }
 
     @Override
@@ -587,13 +606,9 @@ public class UpdateTaskScreen extends AppCompatActivity {
         }catch (Exception e){
             e.printStackTrace();
         }
-
-
     }
 
     public void updateTasks(final Tasks tasks) {
-
-
 
         final ProgressDialog dialog = new ProgressDialog(UpdateTaskScreen.this);
         dialog.setMessage("Saving Details..");

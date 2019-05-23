@@ -217,9 +217,7 @@
                                 android:text="0"
                                 android:paddingTop="5dp"
                                 android:paddingLeft="15dp"
-                                android:textColor="#AFB42B"
-                                />
-
+                                android:textColor="#AFB42B"/>
 
                         </LinearLayout>
                     </LinearLayout>

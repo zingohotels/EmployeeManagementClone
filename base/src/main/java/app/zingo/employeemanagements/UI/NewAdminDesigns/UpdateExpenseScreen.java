@@ -24,6 +24,7 @@ import java.util.Date;
 
 import app.zingo.employeemanagements.Model.Expenses;
 import app.zingo.employeemanagements.Model.Tasks;
+import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.ExpensesApi;
@@ -38,7 +39,7 @@ public class UpdateExpenseScreen extends AppCompatActivity {
     LinearLayout mExpenseImages;
     Spinner mStatus;
     AppCompatButton mApply;
-
+    LinearLayout statusLayout;
     Expenses expenses;
 
     @Override
@@ -61,16 +62,20 @@ public class UpdateExpenseScreen extends AppCompatActivity {
             mStatusRem = findViewById(R.id.expense_remarks);
             mStatus = findViewById(R.id.expense_status_spinner);
             mApply = findViewById(R.id.apply_expense);
-
+            statusLayout = findViewById(R.id.status_layout);
             mExpenseImages = findViewById(R.id.expense_image);
 
             Bundle bundle = getIntent().getExtras();
 
             if (bundle != null) {
-
                 expenses = (Expenses) bundle.getSerializable("Expenses");
+            }
 
+            if(PreferenceHandler.getInstance(UpdateExpenseScreen.this).getUserRoleUniqueID()==2||PreferenceHandler.getInstance(UpdateExpenseScreen.this).getUserRoleUniqueID()==9){
 
+            }else{
+                mStatus.setEnabled(false);
+                mCAmount.setFocusableInTouchMode(false);
             }
 
             if(expenses!=null){
@@ -78,7 +83,6 @@ public class UpdateExpenseScreen extends AppCompatActivity {
                 mExpenseType.setText(""+expenses.getExpenseTitle());
                 mAmount.setText(""+expenses.getAmount());
                 mCAmount.setText(""+expenses.getClaimedAmount());
-
 
                 String froms = expenses.getDate();
 

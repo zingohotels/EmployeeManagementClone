@@ -684,7 +684,7 @@ public class EmployeeTaskMapScreen extends AppCompatActivity {
             EmployeeTaskMapScreen.this.finish();
 
 
-            openDatePicker();
+
         } else if (id == R.id.action_calendar) {
             openDatePicker();
         }
@@ -740,11 +740,12 @@ public class EmployeeTaskMapScreen extends AppCompatActivity {
                             ex.printStackTrace();
                         }
 
-
                     }
                 }, mYear, mMonth, mDay);
 
         datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+
+        if(datePickerDialog!=null)
         datePickerDialog.show();
 
     }

@@ -412,8 +412,7 @@ public class CreateTaskScreen extends AppCompatActivity {
 
 
         String from = mFrom.getText().toString();
-        String
-                to = mTo.getText().toString();
+        String to = mTo.getText().toString();
         String fromTime = mFromTime.getText().toString();
         String toTime = mToTime.getText().toString();
      //   String dead = mDead.getText().toString();

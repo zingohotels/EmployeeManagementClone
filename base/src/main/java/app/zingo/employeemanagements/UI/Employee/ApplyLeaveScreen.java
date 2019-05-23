@@ -278,12 +278,7 @@ public class ApplyLeaveScreen extends AppCompatActivity {
                             lm.setToDate(leaves.getToDate());
                             lm.setLeaveId(s.getLeaveId()+"");
                             saveLeave(lm);
-
-
                         }
-
-
-
 
                     }else {
                         Toast.makeText(ApplyLeaveScreen.this, "Failed Due to "+response.message(), Toast.LENGTH_SHORT).show();
