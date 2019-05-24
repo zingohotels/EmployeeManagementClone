@@ -139,7 +139,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
     static final String TAG = "FounderMainScreen";
     RoundImageView mProfileImage;
     //TextView mTrialMsgInfo;
-    LinearLayout mTrialInfoLay,mShareLayout,mQrLayout;
+    LinearLayout mShareLayout,mQrLayout;//mTrialInfoLay
 
     boolean doubleBackToExitPressedOnce = false;
     public long[] mTimer = new long[1];
@@ -560,7 +560,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
         View profileView = findViewById(R.id.profile);
         TextView userName = findViewById(R.id.userName);
         mProfileImage = findViewById(R.id.profilePicture);
-        mTrialInfoLay = findViewById(R.id.trial_version_info_layout);
+        //mTrialInfoLay = findViewById(R.id.trial_version_info_layout);
        /* mTrialMsgInfo = (TextView) findViewById(R.id.trial_version_info_msg);
         mTrialMsgInfo.setVisibility(View.GONE);*/
         mShareLayout = findViewById(R.id.share_layout);
@@ -1373,7 +1373,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
                                         long days = dateCal(licenseEndDate);
 
 
-                                        mTrialInfoLay.setVisibility(View.VISIBLE);
+                                        //mTrialInfoLay.setVisibility(View.VISIBLE);
                                         if((smdf.parse(licenseEndDate).getTime()<smdf.parse(smdf.format(new Date())).getTime())){
 
                                             Toast.makeText(EmployeeNewMainScreen.this, "Your Trial Period is Expired", Toast.LENGTH_SHORT).show();
@@ -1412,7 +1412,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
                                         }
 
                                     }else if(appType.equalsIgnoreCase("Paid")){
-                                        mTrialInfoLay.setVisibility(View.GONE);
+                                        //mTrialInfoLay.setVisibility(View.GONE);
                                     }
                                 }
 

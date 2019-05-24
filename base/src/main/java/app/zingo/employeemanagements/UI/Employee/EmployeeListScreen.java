@@ -88,6 +88,12 @@ public class EmployeeListScreen extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        getProfiles();
+    }
+
     private void getProfiles(){
 
 

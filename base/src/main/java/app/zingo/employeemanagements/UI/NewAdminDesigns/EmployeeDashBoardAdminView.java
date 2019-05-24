@@ -32,6 +32,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -88,7 +89,7 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
 
     Employee employee;
   //  MyRegulerText mWorkedDays,mCompletedtasks,mTotalMeetings,mTotalExpenses;
-    TextView mWorkedDays,mCompletedtasks,mTotalMeetings,mEmployeeName,mDate;
+    TextView mWorkedDays,mCompletedtasks,mTotalMeetings,mEmployeeName,mDate,mStatus,mLoginId;
     MyRegulerText mLoginTime,mLoginText,mLoginAddress,mLogoutTime,mLogouText,
             mLogoutAddress,mMeetingTime,mMetingAdrz,mTaskREad,mMeetingRead,
             mTitle,mExpeText,mExpAmt,mKmTravelled,mAvgtaskTime,mAvgMeetingTime,mIdleTime;//,mLogoutTime,mWorkingHours
@@ -147,7 +148,6 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         try{
-
             setContentView(R.layout.activity_employee_dash_board_admin_view);
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -176,6 +176,8 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
             mAvgMeetingTime = findViewById(R.id.avg_meeting_time);
             mAvgtaskTime = findViewById(R.id.avg_task_time);
             mIdleTime = findViewById(R.id.idle_time);
+            mStatus = findViewById(R.id.status);
+            mLoginId = findViewById(R.id.hidden_login_id);
            /* mLogoutTime = (MyRegulerText)findViewById(R.id.logout_time);
             mWorkingHours = (MyRegulerText)findViewById(R.id.working_hours);*/
 
@@ -200,6 +202,107 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                 employee = (Employee)bundle.getSerializable("Profile");
             }
 
+            if(PreferenceHandler.getInstance(EmployeeDashBoardAdminView.this).getUserRoleUniqueID()==2||PreferenceHandler.getInstance(EmployeeDashBoardAdminView.this).getUserRoleUniqueID()==9){
+
+            }else{
+                mStatus.setEnabled(false);
+
+            }
+
+
+            mStatus.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+
+                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(EmployeeDashBoardAdminView.this);
+                        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        View views = inflater.inflate(R.layout.alert_update_login, null);
+
+                        builder.setView(views);
+
+
+                        final Spinner mTask = views.findViewById(R.id.task_status_update);
+                        final Button mSave = views.findViewById(R.id.save);
+
+                        final android.support.v7.app.AlertDialog dialogs = builder.create();
+                        dialogs.show();
+                        dialogs.setCanceledOnTouchOutside(true);
+
+                        if (mStatus.getText().toString().equalsIgnoreCase("Absent")) {
+
+                            mTask.setSelection(0);
+                            //mTask.setEnabled(false);
+                        } else {
+                            mTask.setSelection(1);
+                        }
+
+
+                        mSave.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                String status = mTask.getSelectedItem().toString();
+                                if (status != null && status.equalsIgnoreCase("Absent")) {
+
+                                    String value = mLoginId.getText().toString();
+
+                                    int valueCheck = Integer.parseInt(value);
+
+                                    if (valueCheck == 0) {
+                                        dialogs.dismiss();
+
+                                    } else {
+                                        getLoginDetailsById(Integer.parseInt(value), status, mStatus);
+                                        dialogs.dismiss();
+                                    }
+
+
+                                } else {
+
+                                    String value = mLoginId.getText().toString();
+
+                                    int valueCheck = Integer.parseInt(value);
+
+                                    if (valueCheck == 0) {
+
+                                        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+                                        SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+
+                                        LoginDetails loginDetails = new LoginDetails();
+                                        loginDetails.setEmployeeId(employee.getEmployeeId());
+                                        loginDetails.setLatitude("" + PreferenceHandler.getInstance(getApplicationContext()).getOrganizationLati());
+                                        loginDetails.setLongitude("" + PreferenceHandler.getInstance(getApplicationContext()).getOrganizationLongi());
+
+                                        LatLng master = new LatLng(Double.parseDouble(PreferenceHandler.getInstance(getApplicationContext()).getOrganizationLati()), Double.parseDouble(PreferenceHandler.getInstance(getApplicationContext()).getOrganizationLongi()));
+                                        String address = getAddress(master);
+
+                                        loginDetails.setLocation("" + address);
+                                        loginDetails.setLoginTime("" + sdt.format(new Date()));
+                                        loginDetails.setLoginDate("" + sdf.format(new Date()));
+                                        loginDetails.setLogOutTime("");
+                                        try {
+                                            addLogin(loginDetails, mLoginId, mStatus);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+
+                                        dialogs.dismiss();
+
+                                    } else {
+                                        getLoginDetailsById(Integer.parseInt(value), status, mStatus);
+                                        dialogs.dismiss();
+                                    }
+                                }
+                            }
+                        });
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+
+                    }
+                }
+            });
             String[] data = {"Filter By","Today", "Yesterday", "Date Picker"};
 
             ArrayAdapter adapter = new ArrayAdapter<>(EmployeeDashBoardAdminView.this, R.layout.spinner_item_selected, data);
@@ -974,10 +1077,6 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
 
                                         }
                                     }
-
-
-
-
                                 }
 
 
@@ -1218,8 +1317,6 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                         int statusCode = response.code();
                         if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
 
-
-
                             ArrayList<Expenses> list = response.body();
                             ArrayList<Expenses> todayTasks = new ArrayList<>();
 
@@ -1228,30 +1325,20 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                             Date adate = new Date();
                             Date edate = new Date();
 
-
-
                             try {
                                 date = new SimpleDateFormat("yyyy-MM-dd").parse(dateValue);
-
 
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
 
-
-
                             if (list !=null && list.size()!=0) {
-
 
                                 double amt = 0;
 
                                 for (Expenses task:list) {
 
-
-
                                     String froms = task.getDate();
-
-
                                     Date afromDate = null;
                                     Date atoDate = null;
 
@@ -1270,54 +1357,31 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                                                 fromDate = new SimpleDateFormat("MMM yyyy").parse(parse);*/
 
                                         }
-
                                     }
 
-
-
                                     if(afromDate!=null){
-
-
 
                                         if(date.getTime() == afromDate.getTime() ){
 
                                            // employeeExpense.add(task);
-
                                             todayTasks.add(task);
                                             amt = amt+task.getAmount();
-
-
                                         }
                                     }
-
-
-
-
-
-
                                 }
 
                                 if(todayTasks!=null&&todayTasks.size()!=0){
 
-
-
                                     mWorkedDays.setText(""+todayTasks.size());
                                     mExpAmt.setText("₹ "+new DecimalFormat("#.##").format(amt));
-
                                     mExpeText.setText("Total Expenses Amount");
-
-
 
                                 }else{
                                     //mExpenses.setText(""+expense);
                                     mExpAmt.setText("₹ 0");
 
                                     mExpeText.setText("No Expenses");
-
-
                                 }
-
-
 
                             }else{
 
@@ -1326,7 +1390,6 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                                 mExpeText.setText("No Expenses");
 
                                 // Toast.makeText(DailyTargetsForEmployeeActivity.this, "No Tasks given for this employee ", Toast.LENGTH_SHORT).show();
-
                             }
 
                         }else {
@@ -1351,8 +1414,6 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                     }
                 });
             }
-
-
         });
     }
 
@@ -1371,17 +1432,31 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                     public void onResponse(Call<ArrayList<LoginDetails>> call, Response<ArrayList<LoginDetails>> response) {
                         int statusCode = response.code();
                         if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
-
                             loginTrue = true;
-
                             ArrayList<LoginDetails> list = response.body();
 
                             if (list !=null && list.size()!=0) {
 
-
-
                                 String loginTime = list.get(0).getLoginTime();
                                 String logoutTime = list.get(list.size()-1).getLogOutTime();
+
+                                if(list.get(0).getTotalMeeting()!=null&&!list.get(0).getTotalMeeting().isEmpty()){
+
+                                    if(list.get(0).getTotalMeeting().equalsIgnoreCase("Absent")){
+                                        mStatus.setText("Absent");
+                                        mStatus.setBackgroundColor(Color.parseColor("#FF0000"));
+                                        mStatus.setVisibility(View.VISIBLE);
+                                    }else{
+                                        mStatus.setText("Present");
+                                        mStatus.setBackgroundColor(Color.parseColor("#00FF00"));
+                                        mStatus.setVisibility(View.VISIBLE);
+                                    }
+                                }else{
+                                    mStatus.setText("Present");
+                                    mStatus.setBackgroundColor(Color.parseColor("#00FF00"));
+                                    mStatus.setVisibility(View.VISIBLE);
+                                }
+                                mLoginId.setText(list.get(0).getLoginDetailsId()+"");
 
                                 if(loginTime!=null&&!loginTime.isEmpty()){
 
@@ -1390,7 +1465,6 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                                         Date dateLog = new SimpleDateFormat("MMM dd,yyyy hh:mm a").parse(loginTime);
                                         mLoginTime.setText(""+new SimpleDateFormat("hh:mm a").format(dateLog));
                                         mLoginText.setText("Check-In");
-
                                         LatLng latLng = new LatLng(Double.parseDouble(list.get(0).getLatitude()),Double.parseDouble(list.get(0).getLongitude()));
                                         String address = getAddress(latLng);
                                         mLoginAddress.setText(""+address);
@@ -1400,7 +1474,6 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                                     }catch (Exception e){
                                         e.printStackTrace();
                                     }
-
 
                                 }else{
                                     mLoginTime.setText("");
@@ -1455,9 +1528,7 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
 
                                                 }
                                             }
-
                                         }
-
 
                                         long Hours = diffHrs / (60 * 60 * 1000) ;
                                         long Minutes = diffHrs / (60 * 1000);
@@ -1507,9 +1578,7 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
 
                                             }
                                         }
-
                                     }
-
 
                                     long Hours = diffHrs / (60 * 60 * 1000) ;
                                     long Minutes = diffHrs / (60 * 1000);
@@ -1519,8 +1588,6 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                                     int minutes = (int) ((diffHrs / (1000*60)) % 60);
                                     int hours   = (int) ((diffHrs / (1000*60*60)) % 24);
                                     int days   = (int) ((diffHrs / (1000*60*60*24)));
-
-
                                     DecimalFormat df = new DecimalFormat("00");
 
                                     String s= String.format("%02d", hours) +" hr "+String.format("%02d", minutes)+" mins";
@@ -1532,15 +1599,16 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                                     mLogouText.setText(ss1);
                                    // mLogoutAddress.setVisibility(View.GONE);
                                 }
-
-
-
                                 //mWorkingHours.setText(ss1);
 
                                 //mWorkingHours.setText(String.format("%02d", days)+":"+String.format("%02d", hours) +":"+String.format("%02d", minutes));
 
                             }else{
 
+                                mStatus.setText("Absent");
+                                mStatus.setBackgroundColor(Color.parseColor("#FF0000"));
+                                mStatus.setVisibility(View.VISIBLE);
+                                mLoginId.setText(0+"");
                                 mLoginTime.setText("ABSENT");
                                 mLoginTime.setTextColor(Color.parseColor("#FF0000"));
                                 mLogoutTime.setText("ABSENT");
@@ -1556,7 +1624,6 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
 
 
                                 // Toast.makeText(DailyTargetsForEmployeeActivity.this, "No Tasks given for this employee ", Toast.LENGTH_SHORT).show();
-
                             }
 
                         }else {
@@ -1595,8 +1662,6 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                     }
                 });
             }
-
-
         });
     }
 
@@ -1629,9 +1694,7 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
 
     private void getMeetingsDetails(final Meetings loginDetails,final String comDate){
 
-
         meetDiff = 0;
-
 
         new ThreadExecuter().execute(new Runnable() {
             @Override
@@ -1644,17 +1707,12 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                     public void onResponse(Call<ArrayList<Meetings>> call, Response<ArrayList<Meetings>> response) {
                         int statusCode = response.code();
                         if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
-
-
-
                             ArrayList<Meetings> list = response.body();
 
                             employeeMeetings = new ArrayList<>();
                             pendingMeetings = new ArrayList<>();
                             completedMeetings = new ArrayList<>();
                             closedMeetings = new ArrayList<>();
-
-
 
                             dayemployeeMeetings = new ArrayList<>();
                             daypendingMeetings = new ArrayList<>();
@@ -1709,7 +1767,6 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                                             e.printStackTrace();
 
                                         }
-
                                     }
 
                                     if(lg.getStatus()!=null&&lg.getStatus().equalsIgnoreCase("Completed")){
@@ -1725,12 +1782,9 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                                         closedMeetings.add(lg);
                                         dayclosedMeetings.add(lg);
                                     }
-
-
                                 }
 
                                 if(dayemployeeMeetings!=null&&dayemployeeMeetings.size()!=0){
-
                                     mNoMeeting.setVisibility(View.GONE);
                                     mMeetingList.setVisibility(View.VISIBLE);
                                     mMeetingList.removeAllViews();
@@ -1747,8 +1801,6 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                                         MeetingDetailAdapter adapter = new MeetingDetailAdapter(EmployeeDashBoardAdminView.this,dayemployeeMeetings);
                                         mMeetingList.setAdapter(adapter);
                                     }
-
-
                                     /*totalTargets.setText(""+daytotal);
                                     openTargets.setText(""+daypending);
                                     closedTargets.setText(""+daycomplete);
@@ -1760,14 +1812,9 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                                     mMeetingRead.setVisibility(View.GONE);
                                 }
 
-
-
-
                                 int minutes = (int) ((diffHrs / (1000*60)) % 60);
                                 int hours   = (int) ((diffHrs / (1000*60*60)) % 24);
                                 meetDiff = diffHrs;
-
-
 
                                 DecimalFormat df = new DecimalFormat("00");
 
@@ -1779,9 +1826,7 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                                 ss1.setSpan(new ForegroundColorSpan(Color.RED), 6, 8, 0);// set color
                                 mMetingAdrz.setText(ss1);
                                 mMeetingTime.setText("Total Meeting Time");
-
                                 long avgMeetingdiff = diffHrs/list.size();
-
                                 int avgminutes = (int) ((avgMeetingdiff / (1000*60)) % 60);
                                 int avghours   = (int) ((avgMeetingdiff / (1000*60*60)) % 24);
 
@@ -1849,8 +1894,6 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                     }
                 });
             }
-
-
         });
     }
 
@@ -1868,23 +1911,15 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         try {
                             Log.d("Date", "DATE SELECTED "+dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-
                             Calendar newDate = Calendar.getInstance();
                             newDate.set(year,monthOfYear,dayOfMonth);
-
-
                             String date1 = (monthOfYear + 1)  + "/" + (dayOfMonth) + "/" + year;
                             String date2 = year  + "-" +(monthOfYear + 1)+ "-" +  (dayOfMonth);
-
                             SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy");
-
-
 
                             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
                             try {
                                 Date fdate = simpleDateFormat.parse(date1);
-
-
                                 String dateValue = new SimpleDateFormat("yyyy-MM-dd").format(fdate);
                                 //mTitle.setText(new SimpleDateFormat("dd-MM-yyyy").format(fdate)+" Summary");//dd-MM-yyyy
                                 tv.setText(new SimpleDateFormat("dd-MM-yyyy").format(fdate)+"");
@@ -1897,11 +1932,6 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                                     } catch (ParseException e) {
                                         e.printStackTrace();
                                     }
-
-
-
-
-
 
                                     //Today Summary
                                     LoginDetails ld  = new LoginDetails();
@@ -1936,14 +1966,11 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
-
                         }
                         catch (Exception ex)
                         {
                             ex.printStackTrace();
                         }
-
-
                     }
                 }, mYear, mMonth, mDay);
 
@@ -1968,11 +1995,8 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
 
                         Calendar newDate = Calendar.getInstance();
                         newDate.set(year,monthOfYear,dayOfMonth);
-
                         String date1 =  year+ "-" +(monthOfYear + 1)+"-"+ dayOfMonth  ;
-
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
 
                         if (type!=null&&type.equalsIgnoreCase("allFromDate")){
 
@@ -1985,8 +2009,6 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                                 e.printStackTrace();
                             }
 
-
-
                         }else if (type!=null&&type.equalsIgnoreCase("allToDate")) {
 
                             try {
@@ -1998,15 +2020,9 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                         }
-
-
-
                     }
                 }, mYear, mMonth, mDay);
-
-
         datePickerDialog.show();
-
     }
 
     @Override
@@ -2026,12 +2042,7 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
         if(taslTrue&&loginTrue){
 
             //workingDiff/dayclosed;
-
-
-
             if(workingDiff==0||dayclosed==0){
-
-
 
                 String as= String.format("%02d", 00) +" hr "+String.format("%02d", 00)+" mins";
                 SpannableString ss1a=  new SpannableString(as);
@@ -2083,23 +2094,15 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
 
         }else{
 
-
             h = new Handler();
             //1 second=1000 milisecond, 15*1000=15seconds
-
-
             h.postDelayed( runnable = new Runnable() {
                 public void run() {
                     //do something
                     if(taslTrue&&loginTrue){
 
                         //workingDiff/dayclosed;
-
-
-
                         if(workingDiff==0||dayclosed==0){
-
-
 
                             String as= String.format("%02d", 00) +" hr "+String.format("%02d", 00)+" mins";
                             SpannableString ss1a=  new SpannableString(as);
@@ -2182,5 +2185,192 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
             }, delay);
 
         }
+    }
+
+
+    public void getLoginDetailsById(final int id,final String status,final TextView statusText){
+
+        final ProgressDialog dialog = new ProgressDialog(EmployeeDashBoardAdminView.this);
+        dialog.setMessage("Saving Details..");
+        dialog.setCancelable(false);
+        dialog.show();
+
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+
+                final LoginDetailsAPI subCategoryAPI = Util.getClient().create(LoginDetailsAPI.class);
+                Call<LoginDetails> getProf = subCategoryAPI.getLoginById(id);
+                //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
+
+                getProf.enqueue(new Callback<LoginDetails>() {
+
+                    @Override
+                    public void onResponse(Call<LoginDetails> call, Response<LoginDetails> response) {
+
+                        if(dialog != null && dialog.isShowing())
+                        {
+                            dialog.dismiss();
+                        }
+
+                        if (response.code() == 200||response.code() == 201||response.code() == 204)
+                        {
+                            System.out.println("Inside api");
+
+                            final LoginDetails dto = response.body();
+
+                            if(dto!=null){
+
+                                try {
+
+                                    LoginDetails loginDetails = dto;
+                                    loginDetails.setTotalMeeting(status);
+                                    updateLogin(loginDetails,statusText);
+
+                                }
+                                catch (Exception ex)
+                                {
+                                    ex.printStackTrace();
+                                }
+                            }
+
+                        }else{
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<LoginDetails> call, Throwable t) {
+
+                        if(dialog != null && dialog.isShowing())
+                        {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    public void updateLogin(final LoginDetails loginDetails,final TextView statusText) {
+
+        final ProgressDialog dialog = new ProgressDialog(EmployeeDashBoardAdminView.this);
+        dialog.setMessage("Saving Details..");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        LoginDetailsAPI apiService = Util.getClient().create(LoginDetailsAPI.class);
+        Call<LoginDetails> call = apiService.updateLoginById(loginDetails.getLoginDetailsId(),loginDetails);
+        call.enqueue(new Callback<LoginDetails>() {
+            @Override
+            public void onResponse(Call<LoginDetails> call, Response<LoginDetails> response) {
+//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
+                try
+                {
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+
+                    int statusCode = response.code();
+                    if (statusCode == 200 || statusCode == 201||response.code()==204) {
+
+                        statusText.setText(loginDetails.getTotalMeeting()+"");
+
+                        if(loginDetails.getTotalMeeting().equalsIgnoreCase("Present")){
+                            statusText.setBackgroundColor(Color.parseColor("#00FF00"));
+                        }else{
+                            statusText.setBackgroundColor(Color.parseColor("#FF0000"));
+                        }
+
+                    }else {
+                        Toast.makeText(getApplicationContext(), "Failed Due to "+response.message(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+
+                    ex.printStackTrace();
+                }
+//                callGetStartEnd();
+            }
+
+            @Override
+            public void onFailure(Call<LoginDetails> call, Throwable t) {
+
+                if(dialog != null && dialog.isShowing())
+                {
+                    dialog.dismiss();
+                }
+
+                Toast.makeText(getApplicationContext(), "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("TAG", t.toString());
+            }
+        });
+    }
+
+    public void addLogin(final LoginDetails loginDetails,final TextView loginId,final TextView status) {
+        final ProgressDialog dialog = new ProgressDialog(EmployeeDashBoardAdminView.this);
+        dialog.setMessage("Saving Details..");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        LoginDetailsAPI apiService = Util.getClient().create(LoginDetailsAPI.class);
+        Call<LoginDetails> call = apiService.addLogin(loginDetails);
+        call.enqueue(new Callback<LoginDetails>() {
+            @Override
+            public void onResponse(Call<LoginDetails> call, Response<LoginDetails> response) {
+//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
+                try
+                {
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+
+                    int statusCode = response.code();
+                    if (statusCode == 200 || statusCode == 201) {
+
+                        LoginDetails s = response.body();
+
+                        if(s!=null){
+
+                            status.setText("Present");
+                            loginId.setText(""+s.getLoginDetailsId());
+                            status.setBackgroundColor(Color.parseColor("#00FF00"));
+                        }
+
+                    }else {
+                        Toast.makeText(getApplicationContext(), "Failed Due to "+response.message(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+                    ex.printStackTrace();
+                }
+//                callGetStartEnd();
+            }
+
+            @Override
+            public void onFailure(Call<LoginDetails> call, Throwable t) {
+
+                if(dialog != null && dialog.isShowing())
+                {
+                    dialog.dismiss();
+                }
+                Toast.makeText(getApplicationContext(), "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("TAG", t.toString());
+            }
+        });
     }
 }

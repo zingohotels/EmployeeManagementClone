@@ -906,130 +906,118 @@ public class EmployerNotificationFragment extends Fragment {
     private void getExpense(final int employeeId,final String dateValue){
 
 
-    /*    final ProgressDialog progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setTitle("Loading Details");
-        progressDialog.setCancelable(false);
-        progressDialog.show();*/
 
+        ExpensesApi apiService = Util.getClient().create(ExpensesApi.class);
+        Call<ArrayList<Expenses>> call = apiService.getExpenseByManagerIdAndOrganizationId(PreferenceHandler.getInstance(getActivity()).getCompanyId(),employeeId);
 
-        new ThreadExecuter().execute(new Runnable() {
+        call.enqueue(new Callback<ArrayList<Expenses>>() {
             @Override
-            public void run() {
-                ExpensesApi apiService = Util.getClient().create(ExpensesApi.class);
-                Call<ArrayList<Expenses>> call = apiService.getExpenseByManagerIdAndOrganizationId(PreferenceHandler.getInstance(getActivity()).getCompanyId(),employeeId);
-
-                call.enqueue(new Callback<ArrayList<Expenses>>() {
-                    @Override
-                    public void onResponse(Call<ArrayList<Expenses>> call, Response<ArrayList<Expenses>> response) {
+            public void onResponse(Call<ArrayList<Expenses>> call, Response<ArrayList<Expenses>> response) {
 
                         /*if (progressDialog!=null)
                             progressDialog.dismiss();
 */
-                        int statusCode = response.code();
-                        if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
+                int statusCode = response.code();
+                if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
 
 
 
-                            ArrayList<Expenses> list = response.body();
-                            todayExpenses = new ArrayList<>();
+                    ArrayList<Expenses> list = response.body();
+                    todayExpenses = new ArrayList<>();
 
-                            Date date = new Date();
-                            Date adate = new Date();
-                            Date edate = new Date();
+                    Date date = new Date();
+                    Date adate = new Date();
+                    Date edate = new Date();
 
-                            try {
-                                date = new SimpleDateFormat("yyyy-MM-dd").parse(dateValue);
-
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                            if (list !=null && list.size()!=0) {
+                    try {
+                        date = new SimpleDateFormat("yyyy-MM-dd").parse(dateValue);
 
 
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
-                                for (Expenses task:list) {
-
-                                    String froms = task.getDate();
-
-
-                                    Date afromDate = null;
+                    if (list !=null && list.size()!=0) {
 
 
-                                    if(froms!=null&&!froms.isEmpty()){
 
-                                        if(froms.contains("T")){
+                        for (Expenses task:list) {
 
-                                            String dojs[] = froms.split("T");
-
-                                            try {
-                                                afromDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
-                                            } catch (ParseException e) {
-                                                e.printStackTrace();
-                                            }
+                            String froms = task.getDate();
 
 
-                                        }
+                            Date afromDate = null;
 
+
+                            if(froms!=null&&!froms.isEmpty()){
+
+                                if(froms.contains("T")){
+
+                                    String dojs[] = froms.split("T");
+
+                                    try {
+                                        afromDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
                                     }
 
-                                    if(afromDate!=null){
-
-                                        if(date.getTime() == afromDate.getTime() ){
-
-                                            todayExpenses.add(task);
-
-                                        }
-                                    }
 
                                 }
 
-                                if(todayExpenses!=null&&todayExpenses.size()!=0){
+                            }
+
+                            if(afromDate!=null){
+
+                                if(date.getTime() == afromDate.getTime() ){
+
+                                    todayExpenses.add(task);
+
+                                }
+                            }
+
+                        }
+
+                        if(todayExpenses!=null&&todayExpenses.size()!=0){
 
 
-                                    mExpenseCount.setText(""+todayExpenses.size());
+                            mExpenseCount.setText(""+todayExpenses.size());
                                    /* mNoNotification.setVisibility(View.GONE);
                                     mNotificatioinRecyclerView.setVisibility(View.VISIBLE);
                                     mNotificatioinRecyclerView.removeAllViews();
                                     ExpenseReportAdapter adapter = new ExpenseReportAdapter(getActivity(), todayExpenses);
                                     mNotificatioinRecyclerView.setAdapter(adapter);*/
-                                }else{
-                                    mExpenseCount.setText("0");
+                        }else{
+                            mExpenseCount.setText("0");
                                    /* mNoNotification.setVisibility(View.VISIBLE);
                                     mNotificatioinRecyclerView.setVisibility(View.GONE);*/
-                                }
+                        }
 
 
 
-                            }else{
-                                mExpenseCount.setText("0");
+                    }else{
+                        mExpenseCount.setText("0");
                                /* mNoNotification.setVisibility(View.VISIBLE);
                                 mNotificatioinRecyclerView.setVisibility(View.GONE);*/
-                            }
+                    }
 
-                        }else {
+                }else {
 
-                            mExpenseCount.setText("0");
+                    mExpenseCount.setText("0");
 /*                            mNoNotification.setVisibility(View.VISIBLE);
                             mNotificatioinRecyclerView.setVisibility(View.GONE);*/
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ArrayList<Expenses>> call, Throwable t) {
-                        // Log error here since request failed
-                   /*     if (progressDialog!=null)
-                            progressDialog.dismiss();*/
-                        Log.e("TAG", t.toString());
-                        mExpenseCount.setText("0");
-                      /*  mNoNotification.setVisibility(View.VISIBLE);
-                        mNotificatioinRecyclerView.setVisibility(View.GONE);*/
-                    }
-                });
+                }
             }
 
-
+            @Override
+            public void onFailure(Call<ArrayList<Expenses>> call, Throwable t) {
+                // Log error here since request failed
+                   /*     if (progressDialog!=null)
+                            progressDialog.dismiss();*/
+                Log.e("TAG", t.toString());
+                mExpenseCount.setText("0");
+                      /*  mNoNotification.setVisibility(View.VISIBLE);
+                        mNotificatioinRecyclerView.setVisibility(View.GONE);*/
+            }
         });
     }
 

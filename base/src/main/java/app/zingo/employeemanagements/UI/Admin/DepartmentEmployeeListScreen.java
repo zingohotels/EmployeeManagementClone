@@ -131,15 +131,11 @@ public class DepartmentEmployeeListScreen extends AppCompatActivity {
                                     Toast.makeText(DepartmentEmployeeListScreen.this,"No Employees added",Toast.LENGTH_LONG).show();
                                 }
 
-
-                                //}
-
                             }else{
                                 Toast.makeText(DepartmentEmployeeListScreen.this,"No Employees added",Toast.LENGTH_LONG).show();
                             }
 
                         }else {
-
 
                             Toast.makeText(DepartmentEmployeeListScreen.this, "Failed due to : "+response.message(), Toast.LENGTH_SHORT).show();
                         }
@@ -154,8 +150,6 @@ public class DepartmentEmployeeListScreen extends AppCompatActivity {
                     }
                 });
             }
-
-
         });
     }
 

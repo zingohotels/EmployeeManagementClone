@@ -30,13 +30,11 @@ public class EmployeeDepartmentAdapter extends RecyclerView.Adapter<EmployeeDepa
 
         this.context = context;
         this.list = list;
-
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.adapter_profile_list, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_profile_list, parent, false);
         ViewHolder viewHolder = new ViewHolder(v);
         return viewHolder;
     }
@@ -59,17 +57,9 @@ public class EmployeeDepartmentAdapter extends RecyclerView.Adapter<EmployeeDepa
                 bundle.putInt("ProfileId",list.get(position).getEmployeeId());
                 intent.putExtras(bundle);
                 context.startActivity(intent);
-
             }
         });
-
-
-
-
-
     }
-
-
 
 
     @Override

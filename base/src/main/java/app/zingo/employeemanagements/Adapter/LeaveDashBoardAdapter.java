@@ -43,7 +43,6 @@ public class LeaveDashBoardAdapter extends RecyclerView.Adapter<LeaveDashBoardAd
 
         this.context = context;
         this.list = list;
-
     }
 
     @Override
@@ -57,7 +56,6 @@ public class LeaveDashBoardAdapter extends RecyclerView.Adapter<LeaveDashBoardAd
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final Leaves dto = list.get(position);
-
 
         if(dto!=null){
 
@@ -74,9 +72,6 @@ public class LeaveDashBoardAdapter extends RecyclerView.Adapter<LeaveDashBoardAd
                     bundle.putSerializable("Leaves",list.get(position));
                     intent.putExtras(bundle);
                     context.startActivity(intent);
-
-
-
                 }
             });
 
@@ -84,11 +79,7 @@ public class LeaveDashBoardAdapter extends RecyclerView.Adapter<LeaveDashBoardAd
                 holder.mEmpContact.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                         getEmployee(dto.getEmployeeId(),holder.mEmpName,"contact");
-
-
-
                     }
                 });
 
@@ -109,12 +100,9 @@ public class LeaveDashBoardAdapter extends RecyclerView.Adapter<LeaveDashBoardAd
                     Date afromDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
                     froms = new SimpleDateFormat("MMM dd,yyyy").format(afromDate);
 
-
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-
-
             }
 
             if(tos.contains("T")){
@@ -128,8 +116,6 @@ public class LeaveDashBoardAdapter extends RecyclerView.Adapter<LeaveDashBoardAd
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-
-
             }
 
 

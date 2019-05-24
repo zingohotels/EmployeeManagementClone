@@ -32,11 +32,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -52,10 +54,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import app.zingo.employeemanagements.Adapter.CustomerAdapter;
+import app.zingo.employeemanagements.Adapter.CustomerSpinnerAdapter;
+import app.zingo.employeemanagements.Model.Customer;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.EmployeeImages;
 import app.zingo.employeemanagements.Model.MeetingDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.Meetings;
+import app.zingo.employeemanagements.UI.Common.CustomerList;
+import app.zingo.employeemanagements.Utils.ThreadExecuter;
+import app.zingo.employeemanagements.WebApi.CustomerAPI;
 import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.UI.Common.DigitalSignature;
 import app.zingo.employeemanagements.UI.EmployeeSignUp;
@@ -81,7 +89,8 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
     CheckBox mGetSign,mTakeImage;
     ImageView mImageView;
     Button mSave;
-
+    Spinner customerSpinner;
+    LinearLayout ClientNameLayout;
     Toolbar toolbar;
     Button  mClear, mGetSigns, mCancel;
 
@@ -110,14 +119,14 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
     Meetings loginDetails;
     MeetingDetailsNotificationManagers md;
 
+    ArrayList<Customer> customerArrayList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         try{
-
             setContentView(R.layout.activity_meeting_add_with_sign_screen);
-
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             setTitle("Client Meeting");
@@ -131,23 +140,97 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
             mGetSign = findViewById(R.id.get_sign_check);
             mTakeImage = findViewById(R.id.get_image_check);
             mImageView = findViewById(R.id.selfie_pic);
+            customerSpinner = findViewById(R.id.customer_spinner_adpter);
+            ClientNameLayout = findViewById(R.id.client_name_layout);
+
+            getCustomers(PreferenceHandler.getInstance(MeetingAddWithSignScreen.this).getCompanyId());
 
             mSave.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     validate();
+                }
+            });
 
+            customerSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+                    if(customerArrayList!=null && customerArrayList.size()!=0){
+
+                        if(customerArrayList.get(position).getCustomerName()!=null && customerArrayList.get(position).getCustomerName().equalsIgnoreCase("Others"))
+                        {
+                            mClientMobile.setText("");
+                            mClientName.setText("");
+                            mClientMail.setText("");
+                            ClientNameLayout.setVisibility(View.VISIBLE);
+
+                        }
+                        else {
+                            mClientMobile.setText(""+customerArrayList.get(position).getCustomerMobile());
+                            mClientName.setText(""+customerArrayList.get(position).getCustomerName());
+                            mClientMail.setText(""+customerArrayList.get(position).getCustomerEmail());
+                            ClientNameLayout.setVisibility(View.GONE);
+
+                        }
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
                 }
             });
 
-
-
         }catch(Exception e){
             e.printStackTrace();
         }
+    }
 
+    public void getCustomers(final int id) {
+        final ProgressDialog dialog = new ProgressDialog(MeetingAddWithSignScreen.this);
+        dialog.setMessage("Loading Details..");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        final CustomerAPI orgApi = Util.getClient().create(CustomerAPI.class);
+                Call<ArrayList<Customer>> getProf = orgApi.getCustomerByOrganizationId(id);
+                getProf.enqueue(new Callback<ArrayList<Customer>>() {
+
+                    @Override
+                    public void onResponse(Call<ArrayList<Customer>> call, Response<ArrayList<Customer>> response) {
+
+                        if (response.code() == 200||response.code() == 201||response.code() == 204)
+                        {
+                            dialog.dismiss();
+                            customerArrayList = response.body();
+
+                            if(customerArrayList!=null&&customerArrayList.size()!=0){
+
+                                Customer customer = new Customer();
+                                customer.setCustomerName("Others");
+                                customerArrayList.add(customer);
+
+                                CustomerSpinnerAdapter adapter = new CustomerSpinnerAdapter(MeetingAddWithSignScreen.this,customerArrayList);
+                                customerSpinner.setAdapter(adapter);
+                            }
+                            else {
+                                ClientNameLayout.setVisibility(View.VISIBLE);
+                                customerSpinner.setVisibility(View.GONE);
+                            }
+
+                        }else{
+                            dialog.dismiss();
+                            Toast.makeText(MeetingAddWithSignScreen.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<Customer>> call, Throwable t) {
+                        dialog.dismiss();
+                        Toast.makeText(MeetingAddWithSignScreen.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     public void validate(){
@@ -181,10 +264,8 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
                 latitude = gps.getLatitude();
                 longitude = gps.getLongitude();
 
-
                 SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
                 SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
-
                 LatLng master = new LatLng(latitude,longitude);
                 String address = getAddress(master);
 
@@ -234,15 +315,12 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
                     md.setMeetingsDetails(purpose);
                     md.setMeetingComments(detail);
 
-
-
                     if (mGetSign.isChecked()&&!mTakeImage.isChecked()){
                         // Method to create Directory, if the Directory doesn't exists
                         file = new File(DIRECTORY);
                         if (!file.exists()) {
                             file.mkdir();
                         }
-
                         // Dialog Function
                         dialog = new Dialog(MeetingAddWithSignScreen.this);
                         // Removing the features of Normal Dialogs
@@ -258,7 +336,6 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
                         if (!file.exists()) {
                             file.mkdir();
                         }
-
                         // Dialog Function
                         dialog = new Dialog(MeetingAddWithSignScreen.this);
                         // Removing the features of Normal Dialogs
@@ -274,7 +351,6 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
                         if (!file.exists()) {
                             file.mkdir();
                         }
-
                        /* // Dialog Function
                         dialog = new Dialog(MeetingAddWithSignScreen.this);
                         // Removing the features of Normal Dialogs
@@ -293,13 +369,11 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
             }
             else
             {
 
             }
-
         }
     }
 
@@ -325,12 +399,9 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
             Log.e("MapLocation", "Unable connect to Geocoder", e);
             return result;
         }
-
     }
 
     public void addMeeting(final Meetings loginDetails, final MeetingDetailsNotificationManagers md) {
-
-
 
         final ProgressDialog dialog = new ProgressDialog(MeetingAddWithSignScreen.this);
         dialog.setMessage("Saving Details..");
@@ -338,9 +409,7 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
         dialog.show();
 
         MeetingsAPI apiService = Util.getClient().create(MeetingsAPI.class);
-
         Call<Meetings> call = apiService.addMeeting(loginDetails);
-
         call.enqueue(new Callback<Meetings>() {
             @Override
             public void onResponse(Call<Meetings> call, Response<Meetings> response) {
@@ -351,28 +420,14 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
                     {
                         dialog.dismiss();
                     }
-
                     int statusCode = response.code();
                     if (statusCode == 200 || statusCode == 201) {
-
                         Meetings s = response.body();
-
                         if(s!=null){
-
-
-
                             md.setMeetingsId(s.getMeetingsId());
                             Toast.makeText(MeetingAddWithSignScreen.this, "Meeting Saved", Toast.LENGTH_SHORT).show();
-
-
-
                             saveMeetingNotification(md);
-
                         }
-
-
-
-
                     }else {
                         Toast.makeText(MeetingAddWithSignScreen.this, "Failed Due to "+response.message(), Toast.LENGTH_SHORT).show();
                     }
@@ -386,7 +441,6 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
                     }
                     ex.printStackTrace();
                 }
-//                callGetStartEnd();
             }
 
             @Override
@@ -400,24 +454,16 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
                 Log.e("TAG", t.toString());
             }
         });
-
-
-
     }
 
     public void saveMeetingNotification(final MeetingDetailsNotificationManagers md) {
-
-
 
         final ProgressDialog dialog = new ProgressDialog(MeetingAddWithSignScreen.this);
         dialog.setMessage("Saving Details..");
         dialog.setCancelable(false);
         dialog.show();
-
         MeetingNotificationAPI apiService = Util.getClient().create(MeetingNotificationAPI.class);
-
         Call<MeetingDetailsNotificationManagers> call = apiService.saveMeetingNotification(md);
-
         call.enqueue(new Callback<MeetingDetailsNotificationManagers>() {
             @Override
             public void onResponse(Call<MeetingDetailsNotificationManagers> call, Response<MeetingDetailsNotificationManagers> response) {
@@ -431,11 +477,8 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
 
                     int statusCode = response.code();
                     if (statusCode == 200 || statusCode == 201) {
-
                         MeetingDetailsNotificationManagers s = response.body();
-
                         if(s!=null){
-
                             MeetingDetailsNotificationManagers md = new MeetingDetailsNotificationManagers();
                             md.setTitle(s.getTitle());
                             md.setMessage(s.getMessage());
@@ -456,24 +499,18 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
                             sendMeetingNotification(md);
 
                         }
-
-
-
-
                     }else {
                         Toast.makeText(MeetingAddWithSignScreen.this, "Failed Due to "+response.message(), Toast.LENGTH_SHORT).show();
                     }
                 }
                 catch (Exception ex)
                 {
-
                     if(dialog != null && dialog.isShowing())
                     {
                         dialog.dismiss();
                     }
                     ex.printStackTrace();
                 }
-//                callGetStartEnd();
             }
 
             @Override
@@ -487,24 +524,16 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
                 Log.e("TAG", t.toString());
             }
         });
-
-
-
     }
 
     public void sendMeetingNotification(final MeetingDetailsNotificationManagers md) {
-
-
 
         final ProgressDialog dialog = new ProgressDialog(MeetingAddWithSignScreen.this);
         dialog.setMessage("Sending Details..");
         dialog.setCancelable(false);
         dialog.show();
-
         MeetingNotificationAPI apiService = Util.getClient().create(MeetingNotificationAPI.class);
-
         Call<ArrayList<String>> call = apiService.sendMeetingNotification(md);
-
         call.enqueue(new Callback<ArrayList<String>>() {
             @Override
             public void onResponse(Call<ArrayList<String>> call, Response<ArrayList<String>> response) {
@@ -519,10 +548,7 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
                     int statusCode = response.code();
                     if (statusCode == 200 || statusCode == 201) {
 
-
                         MeetingAddWithSignScreen.this.finish();
-
-
 
                     }else {
                         Toast.makeText(MeetingAddWithSignScreen.this, "Failed Due to "+response.message(), Toast.LENGTH_SHORT).show();
@@ -537,7 +563,6 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
                     }
                     ex.printStackTrace();
                 }
-//                callGetStartEnd();
             }
 
             @Override
@@ -551,9 +576,6 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
                 Log.e("TAG", t.toString());
             }
         });
-
-
-
     }
 
     @Override
@@ -668,11 +690,7 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
 
 //          write the compressed bitmap at the field_icon specified by filename.
                     myBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-
                     uploadImage(filename,loginDetails,md,type);
-
-
-
                 }
                 else
                 {
@@ -682,10 +700,7 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
             } catch (Exception e) {
                 Log.v("log_tag", e.toString());
             }
-
         }
-
-
 
         public void clear() {
             path.reset();
@@ -823,11 +838,6 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
                         {
                             dialog.dismiss();
                         }
-
-
-
-
-
                         try {
 
                             if(type!=null&&type.equalsIgnoreCase("Selfie")){

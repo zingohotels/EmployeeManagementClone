@@ -114,6 +114,16 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
 
                 }else if(type!=null&&type.equalsIgnoreCase("attendance")){
 
+                    Intent intent = new Intent(context, EmployeeDashBoardAdminView.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("Profile",list.get(position));
+                    bundle.putInt("ProfileId",list.get(position).getEmployeeId());
+                    intent.putExtras(bundle);
+                    context.startActivity(intent);
+
+
+                    //REMOVE
+                    /*
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setTitle("Do you want to do ?");
                     builder.setCancelable(true);
@@ -237,8 +247,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
 
                     AlertDialog dialog = builder.create();
                     dialog.show();
-
-
+                */
 
                 }else if(type!=null&&type.equalsIgnoreCase("Expense")){
 

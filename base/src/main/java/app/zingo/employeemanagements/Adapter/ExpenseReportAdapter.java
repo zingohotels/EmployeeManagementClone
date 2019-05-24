@@ -2,10 +2,16 @@ package app.zingo.employeemanagements.Adapter;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,9 +32,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
+import app.zingo.employeemanagements.Custom.MyRegulerText;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.Expenses;
 import app.zingo.employeemanagements.Model.Tasks;
+import app.zingo.employeemanagements.UI.Common.ImageFullScreenActivity;
+import app.zingo.employeemanagements.UI.NewAdminDesigns.UpdateExpenseScreen;
+import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
@@ -54,7 +64,7 @@ public class ExpenseReportAdapter  extends RecyclerView.Adapter<ExpenseReportAda
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.adapter_expense_report_list, parent, false);
+                .inflate(R.layout.expense_admin_adapter, parent, false);
         ViewHolder viewHolder = new ViewHolder(v);
         return viewHolder;
     }
@@ -69,112 +79,230 @@ public class ExpenseReportAdapter  extends RecyclerView.Adapter<ExpenseReportAda
 
 
 
-            holder.mExpenseTitle.setText(""+dto.getExpenseTitle());
-            //holder.mExpenseComment.setText(""+dto.getDescription());
-            getEmployee(dto.getEmployeeId(),holder.mExpEmName);
-            holder.mExpAmt.setText("Rs."+dto.getAmount());
+            String status = dto.getStatus();
 
-            holder.mstatus.setText(""+dto.getStatus());
+
+            holder.mTaskName.setText(dto.getExpenseTitle());
+            holder.mExpAmt.setText("Amount: ₹ "+dto.getAmount());
+            // holder.mTaskDesc.setText("Description: \n"+dto.getTaskDescription());
 
             String froms = dto.getDate();
 
-
-            if(froms.contains("T")){
-
-                String dojs[] = froms.split("T");
-
-                try {
-                    Date afromDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
-                    froms = new SimpleDateFormat("MMM dd,yyyy").format(afromDate);
-                    holder.mExpDate.setText(""+froms);
-
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-
+            if(dto.getImageUrl()!=null&&!dto.getImageUrl().isEmpty()){
+                holder.mAttach.setVisibility(View.VISIBLE);
+            }else{
+                holder.mAttach.setVisibility(View.GONE);
             }
 
-            String image = dto.getImageUrl();
-
-            if(image!=null&&!image.isEmpty()){
-
-                Picasso.with(context).load(image).placeholder(R.drawable.profile_image).
-                        error(R.drawable.profile_image).into(holder.mExpImg);
-
-            }
-
-            holder.mExpUpdate.setOnClickListener(new View.OnClickListener() {
+            holder.mAttach.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(View view) {
+
+                    if(dto.getImageUrl()!=null&&!dto.getImageUrl().isEmpty()){
+
+                        Intent img = new Intent(context, ImageFullScreenActivity.class);
+                        img.putExtra("Image",dto.getImageUrl());
+                        context.startActivity(img);
 
 
-                    try{
+                    }else{
 
-                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
-                        LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                        View views = inflater.inflate(R.layout.expense_update_dialog, null);
-
-                        builder.setView(views);
-                        String[] taskStatus = context.getResources().getStringArray(R.array.task_status);
-
-                        final Spinner mTask = views.findViewById(R.id.task_status_update);
-                        final Button mSave = views.findViewById(R.id.save);
-                        final EditText desc = views.findViewById(R.id.task_comments);
-
-                        final android.support.v7.app.AlertDialog dialogs = builder.create();
-                        dialogs.show();
-                        dialogs.setCanceledOnTouchOutside(true);
-
-                        if(dto.getStatus().equalsIgnoreCase("Pending")){
-
-                            mTask.setSelection(0);
-                        }else if(dto.getStatus().equalsIgnoreCase("Approved")){
-                            mTask.setSelection(1);
-
-                        }else if(dto.getStatus().equalsIgnoreCase("Rejected")){
-                            mTask.setSelection(2);
-
-                        }
-
-                        desc.setText(""+dto.getDescription());
-
-
-
-                        mSave.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                                Expenses tasks = dto;
-                                tasks.setStatus(mTask.getSelectedItem().toString());
-                                tasks.setDescription(desc.getText().toString());
-                                try {
-                                    updateExpenses(dto,dialogs);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-
-                            }
-                        });
-
-
-
-
-
-
-
-
-
-
-
-                    }catch (Exception e){
-                        e.printStackTrace();
                     }
-
 
                 }
             });
 
+            Date afromDate = null;
+            Date atoDate = null;
+
+            if(froms!=null&&!froms.isEmpty()){
+
+                if(froms.contains("T")){
+
+                    String dojs[] = froms.split("T");
+
+                    if(dojs[1].equalsIgnoreCase("00:00:00")){
+                        try {
+                            afromDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
+                            froms = new SimpleDateFormat("dd MMM yyyy").format(afromDate);
+
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }else{
+                        try {
+                            afromDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dojs[0]+" "+dojs[1]);
+                            froms = new SimpleDateFormat("dd MMM yyyy HH:mm").format(afromDate);
+
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+
+
+
+                }
+
+            }
+
+
+            holder.mDuration.setText(froms+"");
+            // holder.mDeadLine.setText(dto.getDeadLine());
+            //holder.mStatus.setText(dto.getStatus());
+
+            String lngi = dto.getLongititude();
+            String lati = dto.getLatitude();
+
+            if(lngi!=null&&lati!=null){
+
+                double lngiValue  = Double.parseDouble(lngi);
+                double latiValue  = Double.parseDouble(lati);
+
+                if(lngiValue!=0&&latiValue!=0){
+                    // getAddress(lngiValue,latiValue,holder.mLocation);
+                }
+            }
+
+
+            getEmployee(dto.getEmployeeId(),holder.mToAllocate);
+
+            //holder.mToAllocate.setText(""+dto.getEmployee().getEmployeeName());
+            // getManagers(dto.getExpenses().getManagerId(),holder.mCreatedBy,"Manager");
+
+            String claimed = "Claimed: ₹ "+dto.getClaimedAmount();
+
+            SpannableString ss1=  new SpannableString(claimed);
+            ss1.setSpan(new RelativeSizeSpan(1f), 11,claimed.length()-1, 0); // set size
+            ss1.setSpan(new ForegroundColorSpan(Color.RED), 11, claimed.length()-1, 0);// set color
+
+
+            holder.mCreatedBy.setText(ss1);
+            // holder.mCreatedBy.setText(dto.getStatus());
+
+            if(status.equalsIgnoreCase("Pending")){
+                holder.mStatus.setBackgroundColor(Color.parseColor("#FFFF00"));
+                holder.mStatusText.setBackground(context.getResources().getDrawable(R.drawable.oval_yellow));
+                holder.mStatusText.setText("P");
+            }else if(status.equalsIgnoreCase("Approved")){
+                holder.mStatus.setBackgroundColor(Color.parseColor("#00FF00"));
+                holder.mStatusText.setBackground(context.getResources().getDrawable(R.drawable.oval_green));
+                holder.mStatusText.setText("A");
+            }else if(status.equalsIgnoreCase("Rejected")){
+                holder.mStatus.setBackgroundColor(Color.parseColor("#FF0000"));
+                holder.mStatusText.setText("R");
+                holder.mStatusText.setBackground(context.getResources().getDrawable(R.drawable.oval_red));
+            }else{
+                holder.mStatus.setBackgroundColor(Color.parseColor("#FF0000"));
+                holder.mStatusText.setText("C");
+                holder.mStatusText.setBackground(context.getResources().getDrawable(R.drawable.oval_red));
+            }
+
+            if(PreferenceHandler.getInstance(context).getUserRoleUniqueID()==2||PreferenceHandler.getInstance(context).getUserRoleUniqueID()==9){
+                holder.mContact.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+
+                        try{
+
+
+                            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
+                            LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                            View views = inflater.inflate(R.layout.alert_contact_employee, null);
+
+                            builder.setView(views);
+
+
+
+                            final MyRegulerText mEmpName = views.findViewById(R.id.employee_name);
+                            final MyRegulerText mPhone = views.findViewById(R.id.call_employee);
+                            final MyRegulerText mEmail = views.findViewById(R.id.email_employee);
+
+                            final android.support.v7.app.AlertDialog dialogs = builder.create();
+                            dialogs.show();
+                            dialogs.setCanceledOnTouchOutside(true);
+
+                            final Employee employees = dto.getEmployee();
+
+                            mEmpName.setText("Contact "+employees.getEmployeeName());
+                            mPhone.setText("Call "+employees.getPhoneNumber());
+                            mEmail.setText("Email "+employees.getPrimaryEmailAddress());
+
+
+                            mPhone.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                                    intent.setData(Uri.parse("tel:"+employees.getPhoneNumber()));
+                                    context.startActivity(intent);
+                                }
+                            });
+
+                            mEmail.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+
+                                    /* Fill it with Data */
+                                    emailIntent.setType("plain/text");
+                                    emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{""+employees.getPrimaryEmailAddress()});
+                                    emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, ""+dto.getExpenseTitle());
+                                    emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "");
+
+                                    /* Send it off to the Activity-Chooser */
+                                    context.startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+
+                                }
+                            });
+
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+
+                    }
+                });
+
+
+            }else{
+                holder.mContact.setVisibility(View.GONE);
+            }
+
+
+            holder.mtaskUpdate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if(PreferenceHandler.getInstance(context).getUserRoleUniqueID()==2||PreferenceHandler.getInstance(context).getUserRoleUniqueID()==9){
+
+                        Intent updateSc = new Intent(context, UpdateExpenseScreen.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("Expenses",dto);
+                        bundle.putInt("Position",position);
+                        updateSc.putExtras(bundle);
+                        context.startActivity(updateSc);
+
+                    }else{
+
+                        if(dto.getStatus()!=null&&!dto.getStatus().equalsIgnoreCase("Pending")){
+
+                        }else{
+
+                            Intent updateSc = new Intent(context,UpdateExpenseScreen.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("Expenses",dto);
+                            bundle.putInt("Position",position);
+                            updateSc.putExtras(bundle);
+                            context.startActivity(updateSc);
+                        }
+
+
+                    }
+
+                }
+            });
 
 
         }
@@ -197,7 +325,7 @@ public class ExpenseReportAdapter  extends RecyclerView.Adapter<ExpenseReportAda
     class ViewHolder extends RecyclerView.ViewHolder /*implements View.OnClickListener*/ {
 
 
-        TextView mExpenseTitle,mExpAmt,mExpDate,mExpEmName,mstatus;
+      /*  TextView mExpenseTitle,mExpAmt,mExpDate,mExpEmName,mstatus;
         ImageView mExpImg;
         LinearLayout mExpUpdate;
 
@@ -218,6 +346,37 @@ public class ExpenseReportAdapter  extends RecyclerView.Adapter<ExpenseReportAda
 
 
 
+
+        }*/
+
+        MyRegulerText mToAllocate,mTaskName,mDuration,mCreatedBy,mExpAmt;
+        View mStatus;
+        TextView mStatusText;
+
+        /*  public TextView mTaskName,mTaskDesc,mDuration,mDeadLine,mStatus,mCreatedBy,mLocation,mToAllocate;*/
+
+        //   public LinearLayout mNotificationMain,mContact,mtaskUpdate;
+        public LinearLayout mContact,mtaskUpdate,mAttach;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            itemView.setClickable(true);
+
+            mTaskName = itemView.findViewById(R.id.title_task);
+            mExpAmt = itemView.findViewById(R.id.exp_amount);
+            // mTaskDesc = (TextView)itemView.findViewById(R.id.title_description);
+            mDuration = itemView.findViewById(R.id.time_task);
+            // mDeadLine = (TextView)itemView.findViewById(R.id.dead_line_task);
+            mStatus = itemView.findViewById(R.id.status);
+            mStatusText = itemView.findViewById(R.id.status_text);
+            mCreatedBy = itemView.findViewById(R.id.created_by);
+            //  mLocation = (TextView)itemView.findViewById(R.id.task_location);
+            mToAllocate = itemView.findViewById(R.id.to_allocated);
+
+            // mNotificationMain = (LinearLayout) itemView.findViewById(R.id.attendanceItem);
+            mContact = itemView.findViewById(R.id.contact_employee);
+            mtaskUpdate = itemView.findViewById(R.id.task_update);
+            mAttach = itemView.findViewById(R.id.attach_image);
 
 
         }
@@ -282,53 +441,33 @@ public class ExpenseReportAdapter  extends RecyclerView.Adapter<ExpenseReportAda
                 Log.e("TAG", t.toString());
             }
         });
-
-
-
     }
 
-    private void getEmployee(final int id, final TextView textView){
-
-
-
-
+    private void getEmployee(final int id, final MyRegulerText textView){
         new ThreadExecuter().execute(new Runnable() {
             @Override
             public void run() {
                 EmployeeApi apiService = Util.getClient().create(EmployeeApi.class);
                 Call<ArrayList<Employee>> call = apiService.getProfileById(id);
-
                 call.enqueue(new Callback<ArrayList<Employee>>() {
                     @Override
                     public void onResponse(Call<ArrayList<Employee>> call, Response<ArrayList<Employee>> response) {
                         int statusCode = response.code();
                         if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
-
-
                            /* if (progressDialog != null&&progressDialog.isShowing())
                                 progressDialog.dismiss();*/
                             ArrayList<Employee> list = response.body();
-
-
                             if (list !=null && list.size()!=0) {
-
                                 final Employee employees = list.get(0);
                                 if(employees!=null){
                                     try{
 
                                         textView.setText("Created By "+employees.getEmployeeName());
 
-
                                     }catch (Exception e){
                                         e.printStackTrace();
                                     }
                                 }
-
-
-
-
-
-                                //}
 
                             }else{
 

@@ -738,6 +738,25 @@ public class ExpensesListAdmin extends AppCompatActivity {
 
         if(emplList!=null&&emplList.size()!=0&&restartdate!=null&&!restartdate.isEmpty()){
 
+            employeeTasks = new ArrayList<>();
+            pendingTasks = new ArrayList<>();
+            completedTasks = new ArrayList<>();
+            closedTasks = new ArrayList<>();
+
+            dayemployeeTasks = new ArrayList<>();
+            daypendingTasks = new ArrayList<>();
+            daycompletedTasks = new ArrayList<>();
+            dayclosedTasks = new ArrayList<>();
+
+            total=0;
+            pending=0;
+            complete=0;
+            closed=0;
+            daytotal=0;
+            daypending=0;
+            daycomplete=0;
+            dayclosed=0;
+
             for (Employee e:emplList) {
                 getExpenses(e, restartdate);
             }

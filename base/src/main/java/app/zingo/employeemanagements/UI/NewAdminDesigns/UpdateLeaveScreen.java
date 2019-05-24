@@ -416,10 +416,6 @@ public class UpdateLeaveScreen extends AppCompatActivity {
                                 Toast.makeText(UpdateLeaveScreen.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                             }
 
-
-
-
-
                         }else {
 
                             if (progressDialog!=null)
@@ -455,7 +451,7 @@ public class UpdateLeaveScreen extends AppCompatActivity {
 
                 if(leaveId!=0){
 
-                    Intent splash = new Intent(UpdateLeaveScreen.this,SplashScreen.class);
+                    Intent splash = new Intent(UpdateLeaveScreen.this,AdminHomeFragment.class);
                     startActivity(splash);
                     UpdateLeaveScreen.this.finish();
 

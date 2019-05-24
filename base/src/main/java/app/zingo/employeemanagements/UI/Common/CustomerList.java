@@ -70,15 +70,12 @@ public class CustomerList extends AppCompatActivity {
             });
 
 
-        }catch(Exception e){
+        }catch(Exception e) {
             e.printStackTrace();
         }
-
     }
 
     public void getCustomers(final int id) {
-
-
 
         new ThreadExecuter().execute(new Runnable() {
             @Override
@@ -87,33 +84,23 @@ public class CustomerList extends AppCompatActivity {
                 final CustomerAPI orgApi = Util.getClient().create(CustomerAPI.class);
                 Call<ArrayList<Customer>> getProf = orgApi.getCustomerByOrganizationId(id);
                 //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
-
                 getProf.enqueue(new Callback<ArrayList<Customer>>() {
 
                     @Override
                     public void onResponse(Call<ArrayList<Customer>> call, Response<ArrayList<Customer>> response) {
 
-
-
                         if (response.code() == 200||response.code() == 201||response.code() == 204)
                         {
                             mLoader.setVisibility(View.GONE);
-
                             ArrayList<Customer> branches = response.body();
 
                             if(branches!=null&&branches.size()!=0){
-
                                 mLoader.setVisibility(View.GONE);
                                 mNoCustomers.setVisibility(View.GONE);
-
                                 mCustomerList.removeAllViews();
-
                                 CustomerAdapter adapter = new CustomerAdapter(CustomerList.this,branches);
                                 mCustomerList.setAdapter(adapter);
-
-
                             }
-
 
                         }else{
 
@@ -126,17 +113,11 @@ public class CustomerList extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ArrayList<Customer>> call, Throwable t) {
-
                         mLoader.setVisibility(View.GONE);
-
-
                         Toast.makeText(CustomerList.this, "Something went wrong", Toast.LENGTH_SHORT).show();
-
                     }
                 });
-
             }
-
         });
     }
 

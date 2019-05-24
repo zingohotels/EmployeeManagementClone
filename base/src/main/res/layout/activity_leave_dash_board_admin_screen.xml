@@ -16,10 +16,6 @@
         android:focusableInTouchMode="true"
         android:orientation="vertical">
 
-
-
-
-
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -213,8 +209,8 @@
                             android:textSize="25dp"
                             android:textColor="#009293"
                             android:gravity="center"
-                            android:textStyle="bold"
-                            />
+                            android:textStyle="bold" />
+
                         <TextView
                             android:id="@+id/channel_rejected"
                             android:layout_width="match_parent"
@@ -246,11 +242,7 @@
                             android:textColor="#000"
                             android:gravity="center"/>
                     </LinearLayout>
-
-
-
                 </LinearLayout>
-
 
                 <View
                     android:layout_width="match_parent"
@@ -262,14 +254,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-
                     android:layout_below="@+id/cardview_data_count"
                     android:gravity="left"
                     android:text="Leaves"
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
-                    android:textColor="#000"
-                    />
+                    android:textColor="#000" />
 
                 <LinearLayout
                     android:gravity="center"
