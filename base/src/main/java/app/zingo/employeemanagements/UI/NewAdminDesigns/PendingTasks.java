@@ -1,19 +1,15 @@
 package app.zingo.employeemanagements.UI.NewAdminDesigns;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
-import android.view.View;
 
 import java.util.ArrayList;
 
 import app.zingo.employeemanagements.Adapter.TaskAdminListAdapter;
-import app.zingo.employeemanagements.Adapter.TaskListAdapter;
 import app.zingo.employeemanagements.Model.TaskAdminData;
-import app.zingo.employeemanagements.Model.Tasks;
 import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.EmployeeSignUp;
 
 public class PendingTasks extends AppCompatActivity {
 

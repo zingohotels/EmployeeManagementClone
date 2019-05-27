@@ -3,11 +3,11 @@ package app.zingo.employeemanagements.UI.NewEmployeeDesign;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -34,18 +34,14 @@ import java.util.Date;
 
 import app.zingo.employeemanagements.Custom.MyEditText;
 import app.zingo.employeemanagements.Model.Employee;
-import app.zingo.employeemanagements.Model.EmployeeDocuments;
 import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.Model.PaySlips;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Admin.CreatePaySlip;
-import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.TeamMembersList;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.OrganizationApi;
 import app.zingo.employeemanagements.WebApi.PayslipAPI;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -619,7 +615,7 @@ public class ViewPaySlipScreen extends AppCompatActivity {
                 paySlips.setProfessionalTax(pts);
                 paySlips.setLeaves(leavess);
                 paySlips.setAdvance(advances);
-                paySlips.setCreatedBy(""+PreferenceHandler.getInstance(ViewPaySlipScreen.this).getUserFullName());
+                paySlips.setCreatedBy(""+ PreferenceHandler.getInstance(ViewPaySlipScreen.this).getUserFullName());
                 paySlips.setCreatedDate(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
 
 

@@ -3,15 +3,12 @@ package app.zingo.employeemanagements.UI;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.support.design.widget.TextInputEditText;
+import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.CardView;
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -21,10 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.RadioButton;
-import android.widget.ScrollView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.text.ParseException;
@@ -33,8 +27,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import app.zingo.employeemanagements.Adapter.DepartmentSpinnerAdapter;
-import app.zingo.employeemanagements.Adapter.EmailEndAdapter;
 import app.zingo.employeemanagements.Custom.CustomSpinner;
 import app.zingo.employeemanagements.Custom.MyEditText;
 import app.zingo.employeemanagements.Custom.MyTextView;
@@ -42,14 +34,7 @@ import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Designations;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.Organization;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Company.CreateFounderScreen;
-import app.zingo.employeemanagements.UI.Employee.CreateEmployeeScreen;
-import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
 import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
-import app.zingo.employeemanagements.UI.Login.LoginScreen;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminNewMainScreen;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.EmployeeDashBoardAdminView;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
@@ -57,6 +42,7 @@ import app.zingo.employeemanagements.WebApi.DepartmentApi;
 import app.zingo.employeemanagements.WebApi.DesignationsAPI;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
 import app.zingo.employeemanagements.WebApi.OrganizationApi;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -127,7 +113,7 @@ public class EmployeeSignUp extends AppCompatActivity {
 
             mShowPwd = findViewById(R.id.show_hide_password);
 
-            mMobile.setText(""+PreferenceHandler.getInstance(EmployeeSignUp.this).getPhoneNumber());
+            mMobile.setText(""+ PreferenceHandler.getInstance(EmployeeSignUp.this).getPhoneNumber());
             mMobile.setEnabled(false);
 
             mDepartment.setSpinnerEventsListener(new CustomSpinner.OnSpinnerEventsListener() {
@@ -613,7 +599,7 @@ public class EmployeeSignUp extends AppCompatActivity {
 
     }
 
-    private void checkUserByEmailId(final Employee userProfile,final Designations designations){
+    private void checkUserByEmailId(final Employee userProfile, final Designations designations){
 
 
         userProfile.setEmail(userProfile.getPrimaryEmailAddress());
@@ -687,7 +673,7 @@ public class EmployeeSignUp extends AppCompatActivity {
         });
     }
 
-    private void checkUserByPhone(final Employee userProfile,final Designations designations){
+    private void checkUserByPhone(final Employee userProfile, final Designations designations){
 
         new ThreadExecuter().execute(new Runnable() {
             @Override
@@ -744,7 +730,7 @@ public class EmployeeSignUp extends AppCompatActivity {
             }
         });
     }
-    public void addDesignations(final Designations designations,final Employee employee) {
+    public void addDesignations(final Designations designations, final Employee employee) {
 
 
 

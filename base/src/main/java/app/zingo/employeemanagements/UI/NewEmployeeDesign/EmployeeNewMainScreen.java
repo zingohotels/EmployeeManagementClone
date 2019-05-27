@@ -5,12 +5,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -21,32 +18,27 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.location.LocationManager;
+import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.text.Html;
+import android.support.v7.widget.CardView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -54,15 +46,11 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -70,50 +58,25 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
-import java.util.regex.Pattern;
 
-import app.zingo.employeemanagements.Adapter.MeetingDetailAdapter;
-import app.zingo.employeemanagements.Custom.Floating.RFABShape;
 import app.zingo.employeemanagements.Custom.Floating.RFABTextUtil;
 import app.zingo.employeemanagements.Custom.Floating.RFACLabelItem;
 import app.zingo.employeemanagements.Custom.Floating.RapidFloatingActionButton;
 import app.zingo.employeemanagements.Custom.Floating.RapidFloatingActionContentLabelList;
 import app.zingo.employeemanagements.Custom.Floating.RapidFloatingActionHelper;
 import app.zingo.employeemanagements.Custom.Floating.RapidFloatingActionLayout;
-import app.zingo.employeemanagements.UI.Admin.CreateTaskScreen;
-import app.zingo.employeemanagements.UI.Common.CustomerCreation;
-import app.zingo.employeemanagements.UI.Common.CustomerList;
-import app.zingo.employeemanagements.UI.Employee.CreateEmployeeScreen;
-import app.zingo.employeemanagements.UI.Employee.EmployeeListScreen;
-import app.zingo.employeemanagements.UI.Employee.LeaveManagementHost;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.DailyTargetsForEmployeeActivity;
-import app.zingo.employeemanagements.base.BuildConfig;
-import app.zingo.employeemanagements.Custom.MyRegulerText;
 import app.zingo.employeemanagements.Custom.RoundImageView;
 import app.zingo.employeemanagements.FireBase.SharedPrefManager;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.EmployeeDeviceMapping;
 import app.zingo.employeemanagements.Model.EmployeeImages;
-import app.zingo.employeemanagements.Model.EmployeeQrCode;
-import app.zingo.employeemanagements.Model.Meetings;
 import app.zingo.employeemanagements.Model.Organization;
-import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.Service.CheckDataAndLocation;
-import app.zingo.employeemanagements.Service.DistanceCheck;
-import app.zingo.employeemanagements.Service.LocationSharingServices;
-import app.zingo.employeemanagements.UI.Admin.CreatePaySlip;
-import app.zingo.employeemanagements.UI.Admin.DashBoardAdmin;
+import app.zingo.employeemanagements.UI.Admin.CreateTaskScreen;
+import app.zingo.employeemanagements.UI.Common.CustomerCreation;
 import app.zingo.employeemanagements.UI.Common.PlanExpireScreen;
-import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
 import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
-import app.zingo.employeemanagements.UI.LandingScreen;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminDashBoardFragment;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminHomeFragment;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminNewMainScreen;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.EmployerNotificationFragment;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.TaskListFragment;
-import app.zingo.employeemanagements.UI.SignUpOptioins;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
@@ -121,9 +84,10 @@ import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
 import app.zingo.employeemanagements.WebApi.EmployeeDeviceApi;
 import app.zingo.employeemanagements.WebApi.EmployeeImageAPI;
-import app.zingo.employeemanagements.WebApi.MeetingsAPI;
 import app.zingo.employeemanagements.WebApi.OrganizationApi;
 import app.zingo.employeemanagements.WebApi.UploadApi;
+import app.zingo.employeemanagements.base.BuildConfig;
+import app.zingo.employeemanagements.base.R;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -138,8 +102,11 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
 
     static final String TAG = "FounderMainScreen";
     RoundImageView mProfileImage;
+    TextView mCardName,mCardMobile,mCardEmail,mCardDesign,mCardAddress;
+    ImageView mCardLogo;
+    CardView  mCardView;
     //TextView mTrialMsgInfo;
-    LinearLayout mShareLayout,mQrLayout;//mTrialInfoLay
+    LinearLayout mTrialInfoLay,mShareLayout,mQrLayout;
 
     boolean doubleBackToExitPressedOnce = false;
     public long[] mTimer = new long[1];
@@ -192,7 +159,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
             rfaLayout = (RapidFloatingActionLayout) findViewById(R.id.rfab_group_sample_fragment_a_rfal);
             rfaButton = (RapidFloatingActionButton) findViewById(R.id.label_list_sample_rfab);
 
-            setupData();
+
             Bundle extras = getIntent().getExtras();
             if(extras != null) {
                 pos = extras.getInt("viewpager_position");
@@ -203,18 +170,30 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
             setupViewPager((ViewPager) findViewById(R.id.viewPager));
             mWhatsapp = findViewById(R.id.whatsapp_open);
 
+            mCardLogo = findViewById(R.id.logo);
+            mCardName = findViewById(R.id.name_text);
+            mCardDesign = findViewById(R.id.designation_text);
+            mCardMobile = findViewById(R.id.phone_text);
+            mCardEmail = findViewById(R.id.email_text);
+            mCardAddress = findViewById(R.id.address_text);
+            mCardView = findViewById(R.id.card);
+
+            mCardView.setDrawingCacheEnabled(true);
+
+            setupData();
+
             mPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             medit = mPref.edit();
 
             // getCurrentVersion();
-            Intent serviceIntent = new Intent(EmployeeNewMainScreen.this,CheckDataAndLocation.class);
+            Intent serviceIntent = new Intent(EmployeeNewMainScreen.this, CheckDataAndLocation.class);
             startService(serviceIntent);
 
             mWhatsapp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
-                    String message = "Hi I'm "+PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getUserFullName()+",\n My Organization Name is "+PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getCompanyName()+".I am writing about the feedback of Zingy app Ver: "+BuildConfig.VERSION_NAME+".";
+                    String message = "Hi I'm "+ PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getUserFullName()+",\n My Organization Name is "+ PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getCompanyName()+".I am writing about the feedback of Zingy app Ver: "+ BuildConfig.VERSION_NAME+".";
 
                     PackageManager packageManager = getPackageManager();
                     Intent i = new Intent(Intent.ACTION_VIEW);
@@ -240,7 +219,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
 
             if (boolean_permission) {
 
-                if (mPref.getString("service", "").matches("")&&PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getLoginStatus().equalsIgnoreCase("Login")&&!PreferenceHandler.getInstance(EmployeeNewMainScreen.this).isLocationOn()) {
+                if (mPref.getString("service", "").matches("")&& PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getLoginStatus().equalsIgnoreCase("Login")&&!PreferenceHandler.getInstance(EmployeeNewMainScreen.this).isLocationOn()) {
                     medit.putString("service", "service").commit();
 
                    /* Intent intent = new Intent(getApplicationContext(), DistanceCheck.class);
@@ -327,10 +306,10 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
             Log.d("TAG","@@@ IN IF Build.VERSION.SDK_INT >= 23");
             String[] PERMISSIONS = {
 
-                    android.Manifest.permission.ACCESS_NETWORK_STATE,
+                    Manifest.permission.ACCESS_NETWORK_STATE,
                     Manifest.permission.ACCESS_COARSE_LOCATION,
                     Manifest.permission.ACCESS_FINE_LOCATION,
-                    android.Manifest.permission.ACCESS_WIFI_STATE
+                    Manifest.permission.ACCESS_WIFI_STATE
 
             };
 
@@ -354,9 +333,9 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
         if (Build.VERSION.SDK_INT >= 23) {
             Log.d("TAG","@@@ IN IF Build.VERSION.SDK_INT >= 23");
             String[] PERMISSIONS = {
-                    android.Manifest.permission.CAMERA,
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
 
             };
 
@@ -560,7 +539,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
         View profileView = findViewById(R.id.profile);
         TextView userName = findViewById(R.id.userName);
         mProfileImage = findViewById(R.id.profilePicture);
-        //mTrialInfoLay = findViewById(R.id.trial_version_info_layout);
+        mTrialInfoLay = findViewById(R.id.trial_version_info_layout);
        /* mTrialMsgInfo = (TextView) findViewById(R.id.trial_version_info_msg);
         mTrialMsgInfo.setVisibility(View.GONE);*/
         mShareLayout = findViewById(R.id.share_layout);
@@ -569,6 +548,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
 
         organizationName.setText(PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getCompanyName());
         userName.setText(PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getUserFullName());
+
 
 
         Bundle bundle = getIntent().getExtras();
@@ -617,6 +597,24 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
             String app_version = PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getAppVersion();
             profile.setLastUpdated(""+ BuildConfig.VERSION_NAME);
             profile.setLastseen(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
+            mCardName.setText(""+ PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getUserFullName());
+            if(profile.getDesignation()!=null){
+                mCardDesign.setText(""+profile.getDesignation().getDesignationTitle());
+            }else{
+                mCardDesign.setText("");
+            }
+
+            String imageLogo = PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getLogo();
+            if(imageLogo!=null&&!imageLogo.isEmpty()){
+
+                Picasso.with(EmployeeNewMainScreen.this).load(imageLogo).placeholder(R.drawable.profile_image).error(R.drawable.profile_image).into(mCardLogo);
+            }
+            mCardMobile.setText(""+ PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getPhoneNumber());
+            mCardEmail.setText(""+ PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getUserEmail());
+            mCardAddress.setText(""+ PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getCompanyName()+"\n"+ PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getCompanyAddress());
+
+
+
             updateProfile(profile);
 
             ArrayList<EmployeeImages> images = profile.getEmployeeImages();
@@ -648,7 +646,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
 
                 if(boolean_permissiont){
 
-                    Intent qr = new Intent(EmployeeNewMainScreen.this,EmployeeQrCodeGenerate.class);
+                    Intent qr = new Intent(EmployeeNewMainScreen.this, EmployeeQrCodeGenerate.class);
                     startActivity(qr);
                 }else{
 
@@ -691,7 +689,67 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
             @Override
             public void onClick(View view) {
 
-                String upToNCharacters = PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getCompanyName().substring(0, Math.min(PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getCompanyName().length(), 4));
+                try{
+
+                  /*  Bitmap bitmap = Bitmap.createBitmap(mCardView.getDrawingCache());
+                    //Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                    mCardView.setDrawingCacheEnabled(false);
+                    String mPath = Environment.getExternalStorageDirectory().toString() + "/" + PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getUserFullName()+"_Card" + ".jpg";
+                    File imageFile = new File(mPath);
+                    FileOutputStream outputStream = new FileOutputStream(imageFile);
+                    int quality = 100;
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+                    outputStream.flush();
+                    outputStream.close();
+
+                    saveBitMap(EmployeeNewMainScreen.this,mCardView);*/
+
+                  String imageUrl  = PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getLogo();
+
+                  if(imageUrl!=null&&!imageUrl.isEmpty()){
+
+                      try {
+                          URL url = new URL(imageUrl);
+                          Bitmap src = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+
+
+                          Bitmap dest = Bitmap.createBitmap(src.getWidth(), src.getHeight(), Bitmap.Config.ARGB_8888);
+
+                          String yourText = "My custom Text adding to Image";
+
+                          Canvas cs = new Canvas(dest);
+                          Paint tPaint = new Paint();
+                          tPaint.setTextSize(35);
+                          tPaint.setColor(Color.BLUE);
+                          tPaint.setStyle(Paint.Style.FILL);
+                          cs.drawBitmap(src, 0f, 0f, null);
+                          float height = tPaint.measureText("yY");
+                          float width = tPaint.measureText(yourText);
+                          float x_coord = (src.getWidth() - width)/2;
+                          cs.drawText(yourText, x_coord, height+15f, tPaint); // 15f is to put space between top edge and the text, if you want to change it, you can
+                          try {
+                              dest.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(new File("/sdcard/ImageAfterAddingText.jpg")));
+                              // dest is Bitmap, if you want to preview the final image, you can display it on screen also before saving
+                          } catch (FileNotFoundException e) {
+                              // TODO Auto-generated catch block
+                              e.printStackTrace();
+                          }
+                      } catch(IOException e) {
+                          System.out.println(e);
+                      }
+
+
+                  }
+
+                    openScreenshot(saveBitMap(EmployeeNewMainScreen.this,mCardView));
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+
+
+                /*String upToNCharacters = PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getCompanyName().substring(0, Math.min(PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getCompanyName().length(), 4));
 
 
                 String body = "<html><head>" +
@@ -720,7 +778,9 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
                         .append(body)
                         .toString()));
                 //emailIntent.putExtra(Intent.EXTRA_HTML_TEXT, body);
-                startActivity(Intent.createChooser(emailIntent, "Send email.."));
+                startActivity(Intent.createChooser(emailIntent, "Send email.."));*/
+
+
             }
         });
     }
@@ -756,6 +816,24 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
                             profile.setLastUpdated(""+ BuildConfig.VERSION_NAME);
                             profile.setLastseen(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
                             updateProfile(profile);
+
+                            mCardName.setText(""+ PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getUserFullName());
+                            if(profile.getDesignation()!=null){
+                                mCardDesign.setText(""+profile.getDesignation().getDesignationTitle());
+                            }else{
+                                mCardDesign.setText("");
+                            }
+
+                            mCardMobile.setText(""+ PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getPhoneNumber());
+                            mCardEmail.setText(""+ PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getUserEmail());
+                            mCardAddress.setText(""+ PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getCompanyName()+"\n"+ PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getCompanyAddress());
+
+                            String imageLogo = PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getLogo();
+                            if(imageLogo!=null&&!imageLogo.isEmpty()){
+
+                                Picasso.with(EmployeeNewMainScreen.this).load(imageLogo).placeholder(R.drawable.profile_image).error(R.drawable.profile_image).into(mCardLogo);
+                            }
+
 
                             ArrayList<EmployeeImages> images = profile.getEmployeeImages();
 
@@ -847,7 +925,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
                 if(imgFile.exists()) {
                     Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                     //addView(null,Util.getResizedBitmap(myBitmap,400));
-                    addImage(null,Util.getResizedBitmap(myBitmap,700));
+                    addImage(null, Util.getResizedBitmap(myBitmap,700));
                 }
             }
         }catch (Exception e){
@@ -1002,7 +1080,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
         }
     }
 
-    public String compressImage(String filePath,final  Employee Employee) {
+    public String compressImage(String filePath,final Employee Employee) {
 
         //String filePath = getRealPathFromURI(imageUri);
         Bitmap scaledBitmap = null;
@@ -1373,7 +1451,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
                                         long days = dateCal(licenseEndDate);
 
 
-                                        //mTrialInfoLay.setVisibility(View.VISIBLE);
+                                        mTrialInfoLay.setVisibility(View.VISIBLE);
                                         if((smdf.parse(licenseEndDate).getTime()<smdf.parse(smdf.format(new Date())).getTime())){
 
                                             Toast.makeText(EmployeeNewMainScreen.this, "Your Trial Period is Expired", Toast.LENGTH_SHORT).show();
@@ -1412,7 +1490,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
                                         }
 
                                     }else if(appType.equalsIgnoreCase("Paid")){
-                                        //mTrialInfoLay.setVisibility(View.GONE);
+                                        mTrialInfoLay.setVisibility(View.GONE);
                                     }
                                 }
 
@@ -1612,9 +1690,20 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
 
         if(position==0){
 
-            Intent createTask = new Intent(EmployeeNewMainScreen.this, MeetingAddWithSignScreen.class);
-            createTask.putExtra("EmployeeId", PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getUserId());
-            startActivity(createTask);
+            String loginStatus = PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getMeetingLoginStatus();
+            String masterloginStatus = PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getLoginStatus();
+
+
+            if (masterloginStatus.equals("Login")) {
+
+                Intent createTask = new Intent(EmployeeNewMainScreen.this, MeetingAddWithSignScreen.class);
+                createTask.putExtra("EmployeeId", PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getUserId());
+                startActivity(createTask);
+
+            } else {
+                Toast.makeText(EmployeeNewMainScreen.this, "First Check-in Master", Toast.LENGTH_SHORT).show();
+            }
+
 
 
         }else if(position==1){
@@ -1635,7 +1724,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
 
         }else if(position==3){
 
-            Intent branch = new Intent(EmployeeNewMainScreen.this,CustomerCreation.class);
+            Intent branch = new Intent(EmployeeNewMainScreen.this, CustomerCreation.class);
             startActivity(branch);
 
         }
@@ -1673,9 +1762,80 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
 
         }else if(position==3){
 
-            Intent branch = new Intent(EmployeeNewMainScreen.this,CustomerCreation.class);
+            Intent branch = new Intent(EmployeeNewMainScreen.this, CustomerCreation.class);
             startActivity(branch);
 
+        }
+    }
+
+    private void openScreenshot(File imageFile) {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+
+        Uri uri = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            uri = FileProvider.getUriForFile(EmployeeNewMainScreen.this, "app.zingo.employeemanagements.fileprovider", imageFile);
+        }else{
+            uri = Uri.fromFile(imageFile);
+        }
+
+        intent.setDataAndType(uri, "image/*");
+        startActivity(intent);
+    }
+
+    private File saveBitMap(Context context, View drawView){
+        File pictureFileDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"Handcare");
+        if (!pictureFileDir.exists()) {
+            boolean isDirectoryCreated = pictureFileDir.mkdirs();
+            if(!isDirectoryCreated)
+                Log.i("ATG", "Can't create directory to save the image");
+            return null;
+        }
+        String filename = pictureFileDir.getPath() +File.separator+ System.currentTimeMillis()+".jpg";
+        File pictureFile = new File(filename);
+        Bitmap bitmap =getBitmapFromView(drawView);
+        try {
+            pictureFile.createNewFile();
+            FileOutputStream oStream = new FileOutputStream(pictureFile);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, oStream);
+            oStream.flush();
+            oStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.i("TAG", "There was an issue saving the image.");
+        }
+        scanGallery( context,pictureFile.getAbsolutePath());
+        return pictureFile;
+    }
+    //create bitmap from view and returns it
+    private Bitmap getBitmapFromView(View view) {
+        //Define a bitmap with the same size as the view
+        Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(),Bitmap.Config.ARGB_8888);
+        //Bind a canvas to it
+        Canvas canvas = new Canvas(returnedBitmap);
+        //Get the view's background
+        Drawable bgDrawable =view.getBackground();
+        if (bgDrawable!=null) {
+            //has background drawable, then draw it on the canvas
+            bgDrawable.draw(canvas);
+        }   else{
+            //does not have background drawable, then draw white background on the canvas
+            canvas.drawColor(Color.WHITE);
+        }
+        // draw the view on the canvas
+        view.draw(canvas);
+        //return the bitmap
+        return returnedBitmap;
+    }
+    // used for scanning gallery
+    private void scanGallery(Context cntx, String path) {
+        try {
+            MediaScannerConnection.scanFile(cntx, new String[] { path },null, new MediaScannerConnection.OnScanCompletedListener() {
+                public void onScanCompleted(String path, Uri uri) {
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

@@ -328,13 +328,10 @@ public class ExpenseReportAdapter  extends RecyclerView.Adapter<ExpenseReportAda
       /*  TextView mExpenseTitle,mExpAmt,mExpDate,mExpEmName,mstatus;
         ImageView mExpImg;
         LinearLayout mExpUpdate;
-
         public View mView;
-
         public ViewHolder(View itemView) {
             super(itemView);
             itemView.setClickable(true);
-
             mExpenseTitle = itemView.findViewById(R.id.expense_title);
             mExpAmt = itemView.findViewById(R.id.expense_amount_report);
             mExpDate = itemView.findViewById(R.id.expense_date);
@@ -342,11 +339,6 @@ public class ExpenseReportAdapter  extends RecyclerView.Adapter<ExpenseReportAda
             mstatus = itemView.findViewById(R.id.status_expense);
             mExpImg = itemView.findViewById(R.id.expense_image);
             mExpUpdate = itemView.findViewById(R.id.expense_update);
-
-
-
-
-
         }*/
 
         MyRegulerText mToAllocate,mTaskName,mDuration,mCreatedBy,mExpAmt;

@@ -2,9 +2,9 @@ package app.zingo.employeemanagements.UI.Common;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,12 +13,12 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import app.zingo.employeemanagements.Model.Employee;
-import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.UI.LandingScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

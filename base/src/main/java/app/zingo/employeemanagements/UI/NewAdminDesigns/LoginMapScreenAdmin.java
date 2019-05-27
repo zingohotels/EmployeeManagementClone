@@ -1,18 +1,12 @@
 package app.zingo.employeemanagements.UI.NewAdminDesigns;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.Location;
 import android.os.AsyncTask;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -39,10 +33,8 @@ import java.util.List;
 
 import app.zingo.employeemanagements.Model.LoginDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.MarkerData;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Common.EmployeeMeetingMap;
-import app.zingo.employeemanagements.UI.EmployeeSignUp;
 import app.zingo.employeemanagements.Utils.DataParser;
+import app.zingo.employeemanagements.base.R;
 
 public class LoginMapScreenAdmin extends AppCompatActivity {
 

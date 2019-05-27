@@ -2,10 +2,9 @@ package app.zingo.employeemanagements.UI.NewAdminDesigns;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.support.design.widget.TextInputEditText;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,11 +22,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import app.zingo.employeemanagements.Model.Expenses;
-import app.zingo.employeemanagements.Model.Tasks;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
-import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.ExpensesApi;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -71,7 +69,7 @@ public class UpdateExpenseScreen extends AppCompatActivity {
                 expenses = (Expenses) bundle.getSerializable("Expenses");
             }
 
-            if(PreferenceHandler.getInstance(UpdateExpenseScreen.this).getUserRoleUniqueID()==2||PreferenceHandler.getInstance(UpdateExpenseScreen.this).getUserRoleUniqueID()==9){
+            if(PreferenceHandler.getInstance(UpdateExpenseScreen.this).getUserRoleUniqueID()==2|| PreferenceHandler.getInstance(UpdateExpenseScreen.this).getUserRoleUniqueID()==9){
 
             }else{
                 mStatus.setEnabled(false);

@@ -101,6 +101,17 @@ public class Organization implements Serializable {
     @SerializedName("HeadOrganizationId")
     private int HeadOrganizationId;
 
+    @SerializedName("DeductionType")
+    private String DeductionType;
+
+    public String getDeductionType() {
+        return DeductionType;
+    }
+
+    public void setDeductionType(String deductionType) {
+        DeductionType = deductionType;
+    }
+
     public int getOrganizationId() {
         return OrganizationId;
     }

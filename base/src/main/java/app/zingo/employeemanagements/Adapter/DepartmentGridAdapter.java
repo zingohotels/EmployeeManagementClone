@@ -11,13 +11,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 
 import app.zingo.employeemanagements.Model.Departments;
-import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.UI.Admin.DepartmentEmployeeListScreen;
+import app.zingo.employeemanagements.base.R;
 
 /**
  * Created by ZingoHotels Tech on 29-09-2018.

@@ -5,17 +5,14 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.text.InputType;
-import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,33 +31,24 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import app.zingo.employeemanagements.Adapter.DepartmentAdapter;
 import app.zingo.employeemanagements.Model.Departments;
-import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.Organization;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Admin.DashBoardAdmin;
-import app.zingo.employeemanagements.UI.Common.ReportManagementScreen;
 import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
-import app.zingo.employeemanagements.UI.LandingScreen;
-import app.zingo.employeemanagements.UI.Login.LoginScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.DepartmentApi;
-import app.zingo.employeemanagements.WebApi.EmployeeApi;
 import app.zingo.employeemanagements.WebApi.OrganizationApi;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -149,7 +137,7 @@ public class OrganizationDetailScree extends AppCompatActivity {
                         if(PreferenceHandler.getInstance(OrganizationDetailScree.this).getCompanyId()!=0){
                             getCompany(PreferenceHandler.getInstance(OrganizationDetailScree.this).getCompanyId());
                         }else{
-                            Intent intent = new Intent(OrganizationDetailScree.this,InternalServerErrorScreen.class);
+                            Intent intent = new Intent(OrganizationDetailScree.this, InternalServerErrorScreen.class);
                             startActivity(intent);
                         }
 
@@ -414,7 +402,7 @@ public class OrganizationDetailScree extends AppCompatActivity {
         final TextInputEditText mName = views.findViewById(R.id.department_name);
 
 
-        final android.support.v7.app.AlertDialog dialog = builder.create();
+        final AlertDialog dialog = builder.create();
         dialog.show();
         dialog.setCanceledOnTouchOutside(false);
 
@@ -454,7 +442,7 @@ public class OrganizationDetailScree extends AppCompatActivity {
     }
 
 
-    public void addDepartments(final Departments departments,final AlertDialog dialogs) {
+    public void addDepartments(final Departments departments, final AlertDialog dialogs) {
 
 
         final ProgressDialog dialog = new ProgressDialog(this);

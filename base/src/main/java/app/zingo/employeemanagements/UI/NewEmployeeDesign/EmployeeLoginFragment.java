@@ -2,7 +2,6 @@ package app.zingo.employeemanagements.UI.NewEmployeeDesign;
 
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -22,10 +21,8 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.location.Address;
-import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.ExifInterface;
 import android.os.Build;
@@ -57,8 +54,6 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -66,9 +61,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -78,28 +71,18 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Timer;
 
-import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.LoginDetails;
 import app.zingo.employeemanagements.Model.LoginDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.MeetingDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.Meetings;
-import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.Service.AlarmReceive;
 import app.zingo.employeemanagements.Service.LocationForegroundService;
-import app.zingo.employeemanagements.Service.LocationListenerService;
-import app.zingo.employeemanagements.Service.LocationServicesOptimize;
 import app.zingo.employeemanagements.Service.LocationSharingServices;
-import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.EmployeeDashBoardAdminView;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
@@ -110,6 +93,7 @@ import app.zingo.employeemanagements.WebApi.LoginNotificationAPI;
 import app.zingo.employeemanagements.WebApi.MeetingNotificationAPI;
 import app.zingo.employeemanagements.WebApi.MeetingsAPI;
 import app.zingo.employeemanagements.WebApi.UploadApi;
+import app.zingo.employeemanagements.base.R;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -318,7 +302,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                         }
 
                         latLong.setText(address);
-                        centreMapOnLocationWithLatLng(master,""+PreferenceHandler.getInstance(getActivity()).getUserFullName());
+                        centreMapOnLocationWithLatLng(master,""+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
 
                     }
 
@@ -541,8 +525,11 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
                 if (locationCheck()) {
                     //gps = new TrackGPS(getActivity());
+                    String value = PreferenceHandler.getInstance(getActivity()).getTeaBreakStatus();
 
-                    if (currentLocation != null) {
+
+
+                    if (currentLocation != null&&value!=null&&!value.equalsIgnoreCase("true") ) {
 
                         latitude = currentLocation.getLatitude();
                         longitude = currentLocation.getLongitude();
@@ -552,8 +539,8 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
 
                         LoginDetailsNotificationManagers md = new LoginDetailsNotificationManagers();
-                        md.setTitle("Break taken from "+PreferenceHandler.getInstance(getActivity()).getUserFullName());
-                        md.setMessage("Break taken at"+""+sdt.format(new Date()));
+                        md.setTitle("Break taken from "+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
+                        md.setMessage("Break ended at "+""+sdt.format(new Date()));
                         LatLng master = new LatLng(latitude,longitude);
                         String address = getAddress(master);
                         md.setLocation(address);
@@ -564,6 +551,37 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                         md.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
                         md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
                         try {
+                            PreferenceHandler.getInstance(getActivity()).setLunchBreakStatus("false");
+                            teaText.setText(new SimpleDateFormat("hh:mm a").format(new Date()));
+                            saveLoginNotification(md);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }else if (currentLocation != null ) {
+
+                        latitude = currentLocation.getLatitude();
+                        longitude = currentLocation.getLongitude();
+
+
+                        SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+
+
+                        LoginDetailsNotificationManagers md = new LoginDetailsNotificationManagers();
+                        md.setTitle("Break taken from "+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
+                        md.setMessage("Break taken at "+""+sdt.format(new Date()));
+                        LatLng master = new LatLng(latitude,longitude);
+                        String address = getAddress(master);
+                        md.setLocation(address);
+                        md.setLongitude(""+longitude);
+                        md.setLatitude(""+latitude);
+                        md.setLoginDate(""+sdt.format(new Date()));
+                        md.setStatus("Tea Break");
+                        md.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
+                        md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
+                        try {
+                            PreferenceHandler.getInstance(getActivity()).setLunchBreakStatus("true");
+                            teaText.setText(new SimpleDateFormat("hh:mm a").format(new Date()));
                             saveLoginNotification(md);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -579,14 +597,18 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
             }
         });
 
-        dinnerLay.setOnClickListener(new View.OnClickListener() {
+            dinnerLay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 if (locationCheck()) {
                     //gps = new TrackGPS(getActivity());
 
-                    if (currentLocation != null) {
+                    String value = PreferenceHandler.getInstance(getActivity()).getLunchBreakStatus();
+
+
+
+                    if (currentLocation != null&&value!=null&&!value.equalsIgnoreCase("true") ) {
 
                         latitude = currentLocation.getLatitude();
                         longitude = currentLocation.getLongitude();
@@ -596,8 +618,8 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
 
                         LoginDetailsNotificationManagers md = new LoginDetailsNotificationManagers();
-                        md.setTitle("Break taken from "+PreferenceHandler.getInstance(getActivity()).getUserFullName());
-                        md.setMessage("Break taken at"+""+sdt.format(new Date()));
+                        md.setTitle("Break taken from "+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
+                        md.setMessage("Break ended at "+""+sdt.format(new Date()));
                         LatLng master = new LatLng(latitude,longitude);
                         String address = getAddress(master);
                         md.setLocation(address);
@@ -608,6 +630,39 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                         md.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
                         md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
                         try {
+                            PreferenceHandler.getInstance(getActivity()).setLunchBreakStatus("false");
+                            dinnerText.setText(new SimpleDateFormat("hh:mm a").format(new Date()));
+                            saveLoginNotification(md);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }else if (currentLocation != null ) {
+
+                        latitude = currentLocation.getLatitude();
+                        longitude = currentLocation.getLongitude();
+
+
+                        SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+
+
+                        LoginDetailsNotificationManagers md = new LoginDetailsNotificationManagers();
+                        md.setTitle("Break taken from "+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
+                        md.setMessage("Break taken at "+""+sdt.format(new Date()));
+                        LatLng master = new LatLng(latitude,longitude);
+                        String address = getAddress(master);
+                        md.setLocation(address);
+                        md.setLongitude(""+longitude);
+                        md.setLatitude(""+latitude);
+                        md.setLoginDate(""+sdt.format(new Date()));
+                        md.setStatus("Lunch Break");
+                        md.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
+                        md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
+                        try {
+
+                            PreferenceHandler.getInstance(getActivity()).setLunchBreakStatus("true");
+
+                            dinnerText.setText(new SimpleDateFormat("hh:mm a").format(new Date()));
                             saveLoginNotification(md);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -645,7 +700,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
 
                             ArrayList<LoginDetails> list = response.body();
-                            Collections.sort(list,LoginDetails.compareLogin);
+                            Collections.sort(list, LoginDetails.compareLogin);
 
 
                             if (list != null && list.size() != 0) {
@@ -676,17 +731,17 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                                 String newDateS = sdf.format(new Date());
                                                 Date newDate = sdf.parse(newDateS);
 
-                                                if(newDate.getTime()>dt.getTime()&&PreferenceHandler.getInstance(getActivity()).isFirstCheck()){
+                                                if(newDate.getTime()>dt.getTime()&& PreferenceHandler.getInstance(getActivity()).isFirstCheck()){
 
 
-                                                    final android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(getActivity());
+                                                    final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
                                                     LayoutInflater inflater = getLayoutInflater();
                                                     View views = inflater.inflate(R.layout.check_in_pop,null);
                                                     Button agree = views.findViewById(R.id.dialog_ok);
 
 
                                                     dialogBuilder.setView(views);
-                                                    final android.app.AlertDialog dialog = dialogBuilder.create();
+                                                    final AlertDialog dialog = dialogBuilder.create();
                                                     dialog.setCancelable(true);
                                                     dialog.show();
 
@@ -775,14 +830,14 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                             } else {
                                 if(PreferenceHandler.getInstance(getActivity()).isFirstCheck()){
 
-                                    final android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(getActivity());
+                                    final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
                                     LayoutInflater inflater = getLayoutInflater();
                                     View views = inflater.inflate(R.layout.check_in_pop,null);
                                     Button agree = views.findViewById(R.id.dialog_ok);
 
 
                                     dialogBuilder.setView(views);
-                                    final android.app.AlertDialog dialog = dialogBuilder.create();
+                                    final AlertDialog dialog = dialogBuilder.create();
                                     dialog.setCancelable(true);
                                     dialog.show();
 
@@ -943,7 +998,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
                                                             builder.create().dismiss();
 
-                                                            Intent qr = new Intent(getActivity(),ScannedQrScreen.class);
+                                                            Intent qr = new Intent(getActivity(), ScannedQrScreen.class);
                                                             Bundle bundle = new Bundle();
                                                             bundle.putSerializable("LoginDetails",loginDetails);
                                                             bundle.putSerializable("LoginNotification",md);
@@ -1033,7 +1088,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
                                                             builder.create().dismiss();
 
-                                                            Intent qr = new Intent(getActivity(),ScannedQrScreen.class);
+                                                            Intent qr = new Intent(getActivity(), ScannedQrScreen.class);
                                                             Bundle bundle = new Bundle();
                                                             bundle.putSerializable("LoginDetails",loginDetails);
                                                             bundle.putSerializable("LoginNotification",md);
@@ -1342,7 +1397,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
                                dialogInterface.dismiss();
 
-                                Intent qr = new Intent(getActivity(),ScannedQrScreen.class);
+                                Intent qr = new Intent(getActivity(), ScannedQrScreen.class);
                                 Bundle bundle = new Bundle();
                                 bundle.putSerializable("LoginDetails",loginDetails);
                                 bundle.putSerializable("LoginNotification",md);
@@ -1491,7 +1546,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
                                 dialogInterface.dismiss();
 
-                                Intent qr = new Intent(getActivity(),ScannedQrScreen.class);
+                                Intent qr = new Intent(getActivity(), ScannedQrScreen.class);
                                 Bundle bundle = new Bundle();
                                 bundle.putSerializable("LoginDetails",loginDetails);
                                 bundle.putSerializable("LoginNotification",md);
@@ -1757,7 +1812,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
     public void onConnected(@Nullable Bundle bundle) {
         Log.i("salam", " Connected");
 
-        if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -1788,7 +1843,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
             if(firstTime){
                 latLong.setText(address);
-                centreMapOnLocationWithLatLng(master,""+PreferenceHandler.getInstance(getActivity()).getUserFullName());
+                centreMapOnLocationWithLatLng(master,""+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
                 firstTime = false;
             }
 
@@ -1811,7 +1866,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(UPDATE_INTERVAL);
         mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
-        if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(getActivity(), "Enable Permissions", Toast.LENGTH_LONG).show();
         }
 
@@ -1840,7 +1895,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
             if(firstTime){
                 latLong.setText(address);
-                centreMapOnLocationWithLatLng(master,""+PreferenceHandler.getInstance(getActivity()).getUserFullName());
+                centreMapOnLocationWithLatLng(master,""+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
                 firstTime =false;
             }
 
@@ -2185,7 +2240,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                     try {
 
                                         md = new MeetingDetailsNotificationManagers();
-                                        md.setTitle("Meeting Details from "+PreferenceHandler.getInstance(getActivity()).getUserFullName());
+                                        md.setTitle("Meeting Details from "+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
                                         md.setMessage("Meeting with "+client+" for "+purpose);
                                         md.setLocation(address);
                                         md.setLongitude(""+longitude);
@@ -2306,7 +2361,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                     try {
 
                                         md = new MeetingDetailsNotificationManagers();
-                                        md.setTitle("Meeting Details from "+PreferenceHandler.getInstance(getActivity()).getUserFullName());
+                                        md.setTitle("Meeting Details from "+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
                                         md.setMessage("Meeting with "+client+" for "+purpose);
                                         md.setLocation(address);
                                         md.setLongitude(""+longitude);
@@ -2385,7 +2440,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
     }
 
-    public void addMeeting(final Meetings loginDetails,final MeetingDetailsNotificationManagers md) {
+    public void addMeeting(final Meetings loginDetails, final MeetingDetailsNotificationManagers md) {
 
 
 
@@ -2656,7 +2711,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                                             try {
 
                                                                 md = new MeetingDetailsNotificationManagers();
-                                                                md.setTitle("Meeting Details from "+PreferenceHandler.getInstance(getActivity()).getUserFullName());
+                                                                md.setTitle("Meeting Details from "+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
                                                                 md.setMessage("Meeting with "+client+" for "+purpose);
                                                                 md.setLocation(address);
                                                                 md.setLongitude(""+longitude);
@@ -2795,7 +2850,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                                             try {
 
                                                                 md = new MeetingDetailsNotificationManagers();
-                                                                md.setTitle("Meeting Details from "+PreferenceHandler.getInstance(getActivity()).getUserFullName());
+                                                                md.setTitle("Meeting Details from "+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
                                                                 md.setMessage("Meeting with "+client+" for "+purpose);
                                                                 md.setLocation(address);
                                                                 md.setLongitude(""+longitude);
@@ -2925,7 +2980,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
         });
     }
 
-    public void updateMeeting(final Meetings loginDetails,final MeetingDetailsNotificationManagers md) {
+    public void updateMeeting(final Meetings loginDetails, final MeetingDetailsNotificationManagers md) {
 
 
 
@@ -3214,7 +3269,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
     }
 
     // Function for Digital Signature
-    public void dialog_action(final Meetings loginDetails, final MeetingDetailsNotificationManagers md,final String type,final AlertDialog alertDialog) {
+    public void dialog_action(final Meetings loginDetails, final MeetingDetailsNotificationManagers md, final String type, final AlertDialog alertDialog) {
 
         mContent = dialogs.findViewById(R.id.linearLayout);
         mSignature = new signature(getActivity(), null);
@@ -3289,7 +3344,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
             paint.setStrokeWidth(STROKE_WIDTH);
         }
 
-        public void save(View v, String StoredPath,final Meetings loginDetails, final MeetingDetailsNotificationManagers md,final String type,final AlertDialog alertDialog) {
+        public void save(View v, String StoredPath, final Meetings loginDetails, final MeetingDetailsNotificationManagers md, final String type, final AlertDialog alertDialog) {
             Log.v("log_tag", "Width: " + v.getWidth());
             Log.v("log_tag", "Height: " + v.getHeight());
             if (bitmap == null) {
@@ -3439,7 +3494,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
     }
 
-    private void uploadImage(final String filePath,final Meetings loginDetails, final MeetingDetailsNotificationManagers md,final String type)
+    private void uploadImage(final String filePath, final Meetings loginDetails, final MeetingDetailsNotificationManagers md, final String type)
     {
         //String filePath = getRealPathFromURIPath(uri, ImageUploadActivity.this);
 
@@ -3539,7 +3594,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
     }
 
 
-    public String compressImage(String filePath,final Meetings loginDetails, final MeetingDetailsNotificationManagers md,final String type) {
+    public String compressImage(String filePath, final Meetings loginDetails, final MeetingDetailsNotificationManagers md, final String type) {
 
         //String filePath = getRealPathFromURI(imageUri);
         Bitmap scaledBitmap = null;

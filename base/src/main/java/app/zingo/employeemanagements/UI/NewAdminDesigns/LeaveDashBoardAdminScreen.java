@@ -1,30 +1,24 @@
 package app.zingo.employeemanagements.UI.NewAdminDesigns;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v4.app.DialogFragment;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,25 +27,17 @@ import java.util.Date;
 import java.util.Locale;
 
 import app.zingo.employeemanagements.Adapter.LeaveDashBoardAdapter;
-import app.zingo.employeemanagements.Adapter.TaskListAdapter;
 import app.zingo.employeemanagements.Custom.CustomCalendar.CustomMonthPicker;
 import app.zingo.employeemanagements.Custom.CustomCalendar.DateMonthDialogListener;
 import app.zingo.employeemanagements.Custom.CustomCalendar.OnCancelMonthDialogListener;
-import app.zingo.employeemanagements.Custom.MyRegulerText;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.EmployeeImages;
 import app.zingo.employeemanagements.Model.Leaves;
-import app.zingo.employeemanagements.Model.LiveTracking;
-import app.zingo.employeemanagements.Model.LoginDetails;
-import app.zingo.employeemanagements.Model.Meetings;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Admin.CreatePaySlip;
-import app.zingo.employeemanagements.UI.Common.AllEmployeeLiveLocation;
 import app.zingo.employeemanagements.UI.Common.LeaveListScreen;
-import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.LeaveAPI;
+import app.zingo.employeemanagements.base.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -97,12 +83,14 @@ public class LeaveDashBoardAdminScreen extends AppCompatActivity {
         try{
 
             setContentView(R.layout.activity_leave_dash_board_admin_screen);
-           /* getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             setTitle("Leave Dashboard");
-*/
+
             Bundle bundle = getIntent().getExtras();
+
             if(bundle!=null){
+
                 employee = (Employee)bundle.getSerializable("Employee");
             }
 
@@ -141,11 +129,16 @@ public class LeaveDashBoardAdminScreen extends AppCompatActivity {
                     EmployeeImages employeeImages = images.get(0);
 
                     if(employeeImages!=null){
+
+
                         String base=employeeImages.getImage();
                         if(base != null && !base.isEmpty()){
                             Picasso.with(LeaveDashBoardAdminScreen.this).load(base).placeholder(R.drawable.profile_image).error(R.drawable.profile_image).into(mProfilePic);
+
+
                         }
                     }
+
                 }
 
                 Calendar cal = Calendar.getInstance();
@@ -154,7 +147,11 @@ public class LeaveDashBoardAdminScreen extends AppCompatActivity {
 
                 monthValue = monthCal+1;
                 yearValue = yearCal;
+
                 getLeaveDetails(employee.getEmployeeId(), monthValue,yearValue);
+
+
+
             }
 
             mPrevious.setOnClickListener(new View.OnClickListener() {
@@ -167,6 +164,7 @@ public class LeaveDashBoardAdminScreen extends AppCompatActivity {
                         calendar.add(Calendar.MONTH, -1);
 
                         Date date2 = calendar.getTime();
+
 
                         mDate.setText(dateFormat.format(date2));
                         int month = calendar.get(Calendar.MONTH);
@@ -181,6 +179,8 @@ public class LeaveDashBoardAdminScreen extends AppCompatActivity {
 
                             mNoLeavesLay.setVisibility(View.VISIBLE);
                         }
+
+
                     }catch (Exception e){
                         e.printStackTrace();
                     }
@@ -204,8 +204,11 @@ public class LeaveDashBoardAdminScreen extends AppCompatActivity {
                             final Calendar calendar = Calendar.getInstance();
                             calendar.setTime(date);
                             calendar.add(Calendar.MONTH, 1);
+
                             Date date2 = calendar.getTime();
+
                             mDate.setText(dateFormat.format(date2));
+
                             int month = calendar.get(Calendar.MONTH);
                             int year = calendar.get(Calendar.YEAR);
 
@@ -218,33 +221,47 @@ public class LeaveDashBoardAdminScreen extends AppCompatActivity {
 
                                 mNoLeavesLay.setVisibility(View.VISIBLE);
                             }
+
+
                         }
+
+
+
+
                     }catch (Exception e){
                         e.printStackTrace();
                     }
+
                 }
             });
+
 
             mDate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                    // openDatePicker(mDate);
+
+
                     monthYearPicker().show();
+
+
                 }
             });
+
 
             mPaidCount.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
                     if(monthpaidLeaves!=null&&monthpaidLeaves.size()!=0){
-                        Intent pending = new Intent(LeaveDashBoardAdminScreen.this,LeaveListScreen.class);
+                        Intent pending = new Intent(LeaveDashBoardAdminScreen.this, LeaveListScreen.class);
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("Leaves",monthpaidLeaves);
                         bundle.putString("Title","Paid Leaves");
                         pending.putExtras(bundle);
                         startActivity(pending);
                     }
+
                 }
             });
 
@@ -253,7 +270,7 @@ public class LeaveDashBoardAdminScreen extends AppCompatActivity {
                 public void onClick(View v) {
 
                     if(monthunpaidLeaves!=null&&monthunpaidLeaves.size()!=0){
-                        Intent pending = new Intent(LeaveDashBoardAdminScreen.this,LeaveListScreen.class);
+                        Intent pending = new Intent(LeaveDashBoardAdminScreen.this, LeaveListScreen.class);
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("Leaves",monthunpaidLeaves);
                         bundle.putString("Title","Un paid Leaves");
@@ -269,7 +286,7 @@ public class LeaveDashBoardAdminScreen extends AppCompatActivity {
                 public void onClick(View v) {
 
                     if(monthtotalLeaves!=null&&monthtotalLeaves.size()!=0){
-                        Intent pending = new Intent(LeaveDashBoardAdminScreen.this,LeaveListScreen.class);
+                        Intent pending = new Intent(LeaveDashBoardAdminScreen.this, LeaveListScreen.class);
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("Leaves",monthtotalLeaves);
                         bundle.putString("Title","Total Leaves");
@@ -285,7 +302,7 @@ public class LeaveDashBoardAdminScreen extends AppCompatActivity {
                 public void onClick(View v) {
 
                     if(monthapprovedLeaves!=null&&monthapprovedLeaves.size()!=0){
-                        Intent pending = new Intent(LeaveDashBoardAdminScreen.this,LeaveListScreen.class);
+                        Intent pending = new Intent(LeaveDashBoardAdminScreen.this, LeaveListScreen.class);
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("Leaves",monthapprovedLeaves);
                         bundle.putString("Title","Approved Leaves");
@@ -301,7 +318,7 @@ public class LeaveDashBoardAdminScreen extends AppCompatActivity {
                 public void onClick(View v) {
 
                     if(monthrejectedLeaves!=null&&monthrejectedLeaves.size()!=0){
-                        Intent pending = new Intent(LeaveDashBoardAdminScreen.this,LeaveListScreen.class);
+                        Intent pending = new Intent(LeaveDashBoardAdminScreen.this, LeaveListScreen.class);
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("Leaves",monthrejectedLeaves);
                         bundle.putString("Title","Rejected Leaves");
@@ -317,7 +334,7 @@ public class LeaveDashBoardAdminScreen extends AppCompatActivity {
                 public void onClick(View v) {
 
                     if(monthpendingLeaves!=null&&monthpendingLeaves.size()!=0){
-                        Intent pending = new Intent(LeaveDashBoardAdminScreen.this,LeaveListScreen.class);
+                        Intent pending = new Intent(LeaveDashBoardAdminScreen.this, LeaveListScreen.class);
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("Leaves",monthpendingLeaves);
                         bundle.putString("Title","Pending Leaves");
@@ -331,10 +348,12 @@ public class LeaveDashBoardAdminScreen extends AppCompatActivity {
         }catch(Exception e){
             e.printStackTrace();
         }
+
     }
 
     public void openDatePicker(final TextView tv) {
         // Get Current Date
+
         final Calendar c = Calendar.getInstance();
         int mYear  = c.get(Calendar.YEAR);
         int mMonth = c.get(Calendar.MONTH);
@@ -434,6 +453,8 @@ public class LeaveDashBoardAdminScreen extends AppCompatActivity {
 
                             mNoLeavesLay.setVisibility(View.VISIBLE);
                         }
+
+                        //String date =
                     }
                 })
                 .setNegativeButton(new OnCancelMonthDialogListener() {
@@ -449,6 +470,7 @@ public class LeaveDashBoardAdminScreen extends AppCompatActivity {
     private void getLeaveDetails(final int employeeId,final int month,final int year){
 
         totalLeaves = new ArrayList<>();
+
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Loading Leaves Details..");
@@ -470,7 +492,9 @@ public class LeaveDashBoardAdminScreen extends AppCompatActivity {
 
                             if (progressDialog!=null)
                                 progressDialog.dismiss();
+
                             try{
+
                                 totalLeaves = response.body();
                                 approvedLeaves = new ArrayList<>();
                                 rejectedLeaves = new ArrayList<>();
@@ -478,15 +502,23 @@ public class LeaveDashBoardAdminScreen extends AppCompatActivity {
                                 unpaidLeaves = new ArrayList<>();
                                 pendingLeaves = new ArrayList<>();
 
+
+
                                 if (totalLeaves !=null && totalLeaves.size()!=0) {
+
                                     getMonthlyLeave(totalLeaves,month,year);
+
+
                                 }else{
+
                                     mNoLeavesLay.setVisibility(View.VISIBLE);
+
                                 }
                             }catch (Exception e){
                                 e.printStackTrace();
                                 mNoLeavesLay.setVisibility(View.VISIBLE);
                             }
+
 
                         }else {
 
@@ -507,11 +539,13 @@ public class LeaveDashBoardAdminScreen extends AppCompatActivity {
                     }
                 });
             }
+
+
         });
     }
 
 
-    public void getMonthlyLeave(ArrayList<Leaves> list,final int month,final int year) throws Exception{
+    public void getMonthlyLeave(ArrayList<Leaves> list, final int month, final int year) throws Exception{
 
         monthtotalLeaves = new ArrayList<>();
         monthpaidLeaves = new ArrayList<>();
@@ -519,6 +553,7 @@ public class LeaveDashBoardAdminScreen extends AppCompatActivity {
         monthapprovedLeaves = new ArrayList<>();
         monthrejectedLeaves = new ArrayList<>();
         monthpendingLeaves = new ArrayList<>();
+
 
         Date date = new Date();
         Date adate = new Date();
@@ -541,7 +576,10 @@ public class LeaveDashBoardAdminScreen extends AppCompatActivity {
 
             } catch (ParseException e) {
                 e.printStackTrace();
+
             }
+
+
         }
 
 
@@ -556,65 +594,108 @@ public class LeaveDashBoardAdminScreen extends AppCompatActivity {
             if(froms!=null&&!froms.isEmpty()){
 
                 if(froms.contains("T")){
+
                     String dojs[] = froms.split("T");
+
                     afromDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
+
+
                 }
+
             }
 
             if(tos!=null&&!tos.isEmpty()){
 
                 if(tos.contains("T")){
+
                     String dojs[] = tos.split("T");
+
                     atoDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
 
+
                 }
+
             }
+
 
             if(afromDate!=null&&atoDate!=null){
 
                 if((edate.getTime()>=afromDate.getTime())
                         &&(adate.getTime()<=atoDate.getTime()))
                 {
+
                     monthtotalLeaves.add(leaves);
+
                     if(leaves.getStatus()!=null&&!leaves.getStatus().isEmpty()){
+
                         if(leaves.getStatus().equalsIgnoreCase("Approved")){
+
                             monthapprovedLeaves.add(leaves);
+
                         }else if(leaves.getStatus().equalsIgnoreCase("Rejected")){
+
                             monthrejectedLeaves.add(leaves);
+
                         }else if(leaves.getStatus().equalsIgnoreCase("Pending")){
+
                             monthpendingLeaves.add(leaves);
+
                         }
                     }
 
                     if(leaves.getLeaveType()!=null&&!leaves.getLeaveType().isEmpty()){
+
                         if(leaves.getLeaveType().equalsIgnoreCase("Paid")){
+
                             monthpaidLeaves.add(leaves);
+
                         }else if(leaves.getLeaveType().equalsIgnoreCase("Un Paid")){
+
                             monthunpaidLeaves.add(leaves);
+
                         }
                     }
 
                 }else{
+
                 }
+
                 if(leaves.getStatus()!=null&&!leaves.getStatus().isEmpty()){
+
                     if(leaves.getStatus().equalsIgnoreCase("Approved")){
+
                         approvedLeaves.add(leaves);
+
                     }else if(leaves.getStatus().equalsIgnoreCase("Rejected")){
+
                         rejectedLeaves.add(leaves);
+
                     }else if(leaves.getStatus().equalsIgnoreCase("Pending")){
+
                         pendingLeaves.add(leaves);
+
                     }
                 }
 
                 if(leaves.getLeaveType()!=null&&!leaves.getLeaveType().isEmpty()){
+
                     if(leaves.getLeaveType().equalsIgnoreCase("Paid")){
+
                         paidLeaves.add(leaves);
+
                     }else if(leaves.getLeaveType().equalsIgnoreCase("Un Paid")){
 
                         unpaidLeaves.add(leaves);
+
                     }
                 }
             }
+
+
+
+
+
+
         }
 
         if(monthtotalLeaves!=null&&monthtotalLeaves.size()!=0){
@@ -649,6 +730,7 @@ public class LeaveDashBoardAdminScreen extends AppCompatActivity {
             mRejectedCount.setText("0");
             mPendingCount.setText("0");
         }
+
     }
 
     @Override
@@ -661,11 +743,15 @@ public class LeaveDashBoardAdminScreen extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
+
         switch (id)
         {
             case android.R.id.home:
+
                 LeaveDashBoardAdminScreen.this.finish();
                 break;
+
+
         }
         return super.onOptionsItemSelected(item);
     }

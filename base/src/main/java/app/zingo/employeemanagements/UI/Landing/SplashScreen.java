@@ -6,48 +6,28 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.os.Handler;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 
-import java.util.ArrayList;
-
-import app.zingo.employeemanagements.base.BuildConfig;
 import app.zingo.employeemanagements.FireBase.SharedPrefManager;
-import app.zingo.employeemanagements.Model.Plans;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Admin.DashBoardAdmin;
-import app.zingo.employeemanagements.UI.Company.CreateCompany;
 import app.zingo.employeemanagements.UI.Company.CreateFounderScreen;
-import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
-import app.zingo.employeemanagements.UI.EmployeeSignUp;
-import app.zingo.employeemanagements.UI.GetStartedScreen;
 import app.zingo.employeemanagements.UI.LandingScreen;
-
-
 import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminNewMainScreen;
 import app.zingo.employeemanagements.UI.NewEmployeeDesign.EmployeeNewMainScreen;
 import app.zingo.employeemanagements.UI.Reseller.ResellerMainActivity;
-import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
-import app.zingo.employeemanagements.Utils.Util;
+import app.zingo.employeemanagements.base.BuildConfig;
+import app.zingo.employeemanagements.base.R;
 
 public class SplashScreen extends AppCompatActivity {
 
@@ -178,20 +158,20 @@ public class SplashScreen extends AppCompatActivity {
 
             SharedPrefManager.getInstance(SplashScreen.this).getDeviceToken();
 
-            Animation right_anim = AnimationUtils.loadAnimation(this,R.anim.right_trans);
+            Animation right_anim = AnimationUtils.loadAnimation(this, R.anim.right_trans);
             mPowered.startAnimation(right_anim);
 
             if (Build.VERSION.SDK_INT >= 23) {
                 Log.d("TAG","@@@ IN IF Build.VERSION.SDK_INT >= 23");
                 String[] PERMISSIONS = {
-                        android.Manifest.permission.CAMERA,
-                        android.Manifest.permission.ACCESS_NETWORK_STATE,
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.ACCESS_NETWORK_STATE,
                         Manifest.permission.READ_PHONE_STATE,
                         Manifest.permission.ACCESS_COARSE_LOCATION,
                         Manifest.permission.ACCESS_FINE_LOCATION,
-                        android.Manifest.permission.ACCESS_WIFI_STATE,
-                        android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                        android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        Manifest.permission.ACCESS_WIFI_STATE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
 
                 };
 
@@ -253,14 +233,14 @@ public class SplashScreen extends AppCompatActivity {
 
         if(resprofileId!=0&&profileId==0){
 
-            Intent verify = new Intent(SplashScreen.this,ResellerMainActivity.class);
+            Intent verify = new Intent(SplashScreen.this, ResellerMainActivity.class);
             startActivity(verify);
             SplashScreen.this.finish();
 
         }else if(mobilenumber.equals("")&&profileId==0&&resprofileId==0)
         {
 
-            Intent verify = new Intent(SplashScreen.this,LandingScreen.class);
+            Intent verify = new Intent(SplashScreen.this, LandingScreen.class);
             startActivity(verify);
             SplashScreen.this.finish();
         }
@@ -271,25 +251,25 @@ public class SplashScreen extends AppCompatActivity {
 
             if(companyId!=0&&profileId==0){
 
-                Intent verify = new Intent(SplashScreen.this,CreateFounderScreen.class);
+                Intent verify = new Intent(SplashScreen.this, CreateFounderScreen.class);
                 startActivity(verify);
                 SplashScreen.this.finish();
 
             }else if(companyId==0&&profileId!=0){
 
-                Intent verify = new Intent(SplashScreen.this,LandingScreen.class);
+                Intent verify = new Intent(SplashScreen.this, LandingScreen.class);
                 startActivity(verify);
                 SplashScreen.this.finish();
 
             }else if(companyId!=0&&profileId!=0){
 
-                if(PreferenceHandler.getInstance(SplashScreen.this).getUserRoleUniqueID()==2||PreferenceHandler.getInstance(SplashScreen.this).getUserRoleUniqueID()==9){
+                if(PreferenceHandler.getInstance(SplashScreen.this).getUserRoleUniqueID()==2|| PreferenceHandler.getInstance(SplashScreen.this).getUserRoleUniqueID()==9){
                     //Intent verify = new Intent(SplashScreen.this,DashBoardEmployee.class);
-                    Intent verify = new Intent(SplashScreen.this,AdminNewMainScreen.class);
+                    Intent verify = new Intent(SplashScreen.this, AdminNewMainScreen.class);
                     startActivity(verify);
                     SplashScreen.this.finish();
                 }else{
-                    Intent verify = new Intent(SplashScreen.this,EmployeeNewMainScreen.class);
+                    Intent verify = new Intent(SplashScreen.this, EmployeeNewMainScreen.class);
                     startActivity(verify);
                     SplashScreen.this.finish();
                 }
@@ -299,11 +279,11 @@ public class SplashScreen extends AppCompatActivity {
                 String type = PreferenceHandler.getInstance(SplashScreen.this).getSignUpType();
 
                 if(profileId==0&&type.equalsIgnoreCase("Organization")){
-                    Intent verify = new Intent(SplashScreen.this,CreateFounderScreen.class);
+                    Intent verify = new Intent(SplashScreen.this, CreateFounderScreen.class);
                     startActivity(verify);
                     SplashScreen.this.finish();
                 }else  if(profileId==0&&type.equalsIgnoreCase("Employee")){
-                    Intent verify = new Intent(SplashScreen.this,LandingScreen.class);
+                    Intent verify = new Intent(SplashScreen.this, LandingScreen.class);
                     startActivity(verify);
                     SplashScreen.this.finish();
                 }

@@ -1,8 +1,6 @@
 package app.zingo.employeemanagements.Service;
 
 import android.Manifest;
-import android.app.AlarmManager;
-
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -10,7 +8,6 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -22,29 +19,19 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
-
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import app.zingo.employeemanagements.Model.LiveTracking;
-import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.UI.NewEmployeeDesign.BreakPurpose;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
-import app.zingo.employeemanagements.Utils.Util;
-import app.zingo.employeemanagements.WebApi.LiveTrackingAPI;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import app.zingo.employeemanagements.base.R;
 
 
 public  class DistanceCheck extends Service implements LocationListener {
@@ -177,7 +164,7 @@ public  class DistanceCheck extends Service implements LocationListener {
                 @Override
                 public void run() {
 
-                    if(PreferenceHandler.getInstance(DistanceCheck.this).getUserId()!=0&&PreferenceHandler.getInstance(DistanceCheck.this).getUserRoleUniqueID()==1){
+                    if(PreferenceHandler.getInstance(DistanceCheck.this).getUserId()!=0&& PreferenceHandler.getInstance(DistanceCheck.this).getUserRoleUniqueID()==1){
 
                         fn_getlocation();
                     }else{
@@ -222,7 +209,7 @@ public  class DistanceCheck extends Service implements LocationListener {
 
                URL url = null;
 
-               Intent intents = new Intent(DistanceCheck.this,BreakPurpose.class);
+               Intent intents = new Intent(DistanceCheck.this, BreakPurpose.class);
                intents.putExtra("Longi",""+location.getLongitude());
                intents.putExtra("Lati",""+location.getLatitude());
 

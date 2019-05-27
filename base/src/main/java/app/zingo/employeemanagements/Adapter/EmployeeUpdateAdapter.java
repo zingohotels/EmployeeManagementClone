@@ -19,18 +19,12 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import app.zingo.employeemanagements.Model.Employee;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Admin.CreatePaySlip;
-import app.zingo.employeemanagements.UI.Admin.EmployeeLiveMappingScreen;
-import app.zingo.employeemanagements.UI.Admin.EmployeesDashBoard;
-import app.zingo.employeemanagements.UI.Admin.TaskManagementHost;
-import app.zingo.employeemanagements.UI.Employee.EmployeeMeetingHost;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.EmployeeEditScreen;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.EmployeeUpdateListScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -45,7 +39,7 @@ public class EmployeeUpdateAdapter  extends RecyclerView.Adapter<EmployeeUpdateA
     private ArrayList<Employee> list;
     String type;
 
-    public EmployeeUpdateAdapter(Context context, ArrayList<Employee> list,String type) {
+    public EmployeeUpdateAdapter(Context context, ArrayList<Employee> list, String type) {
 
         this.context = context;
         this.list = list;
@@ -83,7 +77,7 @@ public class EmployeeUpdateAdapter  extends RecyclerView.Adapter<EmployeeUpdateA
                         Intent intent = new Intent(context, EmployeeEditScreen.class);
                         Bundle bundle = new Bundle();
                         bundle.putInt("EmployeeId",list.get(position).getEmployeeId());
-                        bundle.putInt("OrganizationId",PreferenceHandler.getInstance(context).getBranchId());
+                        bundle.putInt("OrganizationId", PreferenceHandler.getInstance(context).getBranchId());
                         bundle.putSerializable("Employee",list.get(position));
                         intent.putExtras(bundle);
                         context.startActivity(intent);

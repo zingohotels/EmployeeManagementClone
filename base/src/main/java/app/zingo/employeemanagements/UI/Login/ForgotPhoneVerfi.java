@@ -1,12 +1,12 @@
 package app.zingo.employeemanagements.UI.Login;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
@@ -31,18 +31,13 @@ import java.util.concurrent.TimeUnit;
 
 import app.zingo.employeemanagements.Custom.CustomFontTextView;
 import app.zingo.employeemanagements.Model.Employee;
-import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.Model.ResellerProfiles;
-import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.UI.Common.ForgotPasswordScreen;
 import app.zingo.employeemanagements.UI.Common.ForgotResellPwd;
-import app.zingo.employeemanagements.UI.Company.CreateFounderScreen;
-import app.zingo.employeemanagements.UI.EmployeeSignUp;
-import app.zingo.employeemanagements.UI.Landing.PhoneVerificationScreen;
-import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
 import app.zingo.employeemanagements.WebApi.ResellerAPI;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

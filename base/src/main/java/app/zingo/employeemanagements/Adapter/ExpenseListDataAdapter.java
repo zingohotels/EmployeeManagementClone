@@ -1,7 +1,5 @@
 package app.zingo.employeemanagements.Adapter;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -18,10 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,17 +30,13 @@ import java.util.Locale;
 import app.zingo.employeemanagements.Custom.MyRegulerText;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.ExpenseAdminData;
-import app.zingo.employeemanagements.Model.TaskAdminData;
-import app.zingo.employeemanagements.Model.Tasks;
-import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.UI.Common.ImageFullScreenActivity;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.UpdateExpenseScreen;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.UpdateTaskScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
-import app.zingo.employeemanagements.WebApi.TasksAPI;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -102,7 +93,7 @@ public class ExpenseListDataAdapter extends RecyclerView.Adapter<ExpenseListData
 
                     if(dto.getExpenses().getImageUrl()!=null&&!dto.getExpenses().getImageUrl().isEmpty()){
 
-                        Intent img = new Intent(context,ImageFullScreenActivity.class);
+                        Intent img = new Intent(context, ImageFullScreenActivity.class);
                         img.putExtra("Image",dto.getExpenses().getImageUrl());
                         context.startActivity(img);
 
@@ -199,7 +190,7 @@ public class ExpenseListDataAdapter extends RecyclerView.Adapter<ExpenseListData
                 holder.mStatusText.setBackground(context.getResources().getDrawable(R.drawable.oval_red));
             }
 
-            if(PreferenceHandler.getInstance(context).getUserRoleUniqueID()==2||PreferenceHandler.getInstance(context).getUserRoleUniqueID()==9){
+            if(PreferenceHandler.getInstance(context).getUserRoleUniqueID()==2|| PreferenceHandler.getInstance(context).getUserRoleUniqueID()==9){
                 holder.mContact.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -208,7 +199,7 @@ public class ExpenseListDataAdapter extends RecyclerView.Adapter<ExpenseListData
                         try{
 
 
-                            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
+                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
                             LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                             View views = inflater.inflate(R.layout.alert_contact_employee, null);
 
@@ -220,7 +211,7 @@ public class ExpenseListDataAdapter extends RecyclerView.Adapter<ExpenseListData
                             final MyRegulerText mPhone = views.findViewById(R.id.call_employee);
                             final MyRegulerText mEmail = views.findViewById(R.id.email_employee);
 
-                            final android.support.v7.app.AlertDialog dialogs = builder.create();
+                            final AlertDialog dialogs = builder.create();
                             dialogs.show();
                             dialogs.setCanceledOnTouchOutside(true);
 
@@ -245,13 +236,13 @@ public class ExpenseListDataAdapter extends RecyclerView.Adapter<ExpenseListData
                                 @Override
                                 public void onClick(View v) {
 
-                                    final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+                                    final Intent emailIntent = new Intent(Intent.ACTION_SEND);
 
                                     /* Fill it with Data */
                                     emailIntent.setType("plain/text");
-                                    emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{""+employees.getPrimaryEmailAddress()});
-                                    emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, ""+dto.getExpenses().getExpenseTitle());
-                                    emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "");
+                                    emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{""+employees.getPrimaryEmailAddress()});
+                                    emailIntent.putExtra(Intent.EXTRA_SUBJECT, ""+dto.getExpenses().getExpenseTitle());
+                                    emailIntent.putExtra(Intent.EXTRA_TEXT, "");
 
                                     /* Send it off to the Activity-Chooser */
                                     context.startActivity(Intent.createChooser(emailIntent, "Send mail..."));
@@ -284,9 +275,9 @@ public class ExpenseListDataAdapter extends RecyclerView.Adapter<ExpenseListData
                 @Override
                 public void onClick(View v) {
 
-                    if(PreferenceHandler.getInstance(context).getUserRoleUniqueID()==2||PreferenceHandler.getInstance(context).getUserRoleUniqueID()==9){
+                    if(PreferenceHandler.getInstance(context).getUserRoleUniqueID()==2|| PreferenceHandler.getInstance(context).getUserRoleUniqueID()==9){
 
-                        Intent updateSc = new Intent(context,UpdateExpenseScreen.class);
+                        Intent updateSc = new Intent(context, UpdateExpenseScreen.class);
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("Expenses",dto.getExpenses());
                         bundle.putInt("Position",position);
@@ -299,7 +290,7 @@ public class ExpenseListDataAdapter extends RecyclerView.Adapter<ExpenseListData
 
                         }else{
 
-                            Intent updateSc = new Intent(context,UpdateExpenseScreen.class);
+                            Intent updateSc = new Intent(context, UpdateExpenseScreen.class);
                             Bundle bundle = new Bundle();
                             bundle.putSerializable("Expenses",dto.getExpenses());
                             bundle.putInt("Position",position);
@@ -324,7 +315,7 @@ public class ExpenseListDataAdapter extends RecyclerView.Adapter<ExpenseListData
     }
 
 
-    private void getManagers(final int id, final MyRegulerText textView,final String type){
+    private void getManagers(final int id, final MyRegulerText textView, final String type){
 
 
 

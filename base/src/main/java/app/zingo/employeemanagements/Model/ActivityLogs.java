@@ -31,7 +31,7 @@ public class ActivityLogs implements Serializable {
     public  int EmployeeId;
 
     @SerializedName("employee")
-    public  Employee employee;
+    public Employee employee;
 
     @SerializedName("ActivityDetails")
     public  String ActivityDetails;

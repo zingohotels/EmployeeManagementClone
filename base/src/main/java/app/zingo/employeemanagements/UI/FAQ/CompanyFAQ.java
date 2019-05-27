@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +12,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.itextpdf.text.pdf.parser.Line;
-
 import java.util.Timer;
 import java.util.TimerTask;
 
-import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminHomeFragment;
 import app.zingo.employeemanagements.base.R;
 
 /**
@@ -263,7 +259,7 @@ public class CompanyFAQ extends Fragment {
             emp_create_vp = view.findViewById(R.id.empl_create_vp);
             dotsemp = view.findViewById(R.id.dots_layout_empl_create);
 
-            final int imagesempl[] = {R.drawable.dash, R.drawable.home, R.drawable.admin_empl_list, R.drawable.admin_create_emp,R.drawable.admin_create_emp_two};
+            final int imagesempl[] = {R.drawable.dash, R.drawable.home, R.drawable.admin_empl_list, R.drawable.admin_create_emp, R.drawable.admin_create_emp_two};
 
             adapter = new FAQImageVp(getActivity(), imagesempl);
             emp_create_vp.setAdapter(adapter);
@@ -537,7 +533,7 @@ public class CompanyFAQ extends Fragment {
             emp_exp_vp = view.findViewById(R.id.empl_exp_vp);
             dotsexp = view.findViewById(R.id.dots_layout_empl_exp);
 
-            final int imagesexp[] = {R.drawable.dash, R.drawable.home, R.drawable.emp_list, R.drawable.expense_dash,R.drawable.update_expense,R.drawable.update_expense_two};
+            final int imagesexp[] = {R.drawable.dash, R.drawable.home, R.drawable.emp_list, R.drawable.expense_dash, R.drawable.update_expense, R.drawable.update_expense_two};
 
             adapter = new FAQImageVp(getActivity(), imagesexp);
             emp_exp_vp.setAdapter(adapter);
@@ -605,7 +601,7 @@ public class CompanyFAQ extends Fragment {
             emp_leave_vp = view.findViewById(R.id.empl_lea_vp);
             dotsleave = view.findViewById(R.id.dots_layout_empl_lea);
 
-            final int imagesleave[] = {R.drawable.dash, R.drawable.home, R.drawable.emp_list, R.drawable.leave_dashboard,R.drawable.update_leave};
+            final int imagesleave[] = {R.drawable.dash, R.drawable.home, R.drawable.emp_list, R.drawable.leave_dashboard, R.drawable.update_leave};
 
             adapter = new FAQImageVp(getActivity(), imagesleave);
             emp_leave_vp.setAdapter(adapter);

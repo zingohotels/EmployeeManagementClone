@@ -4,16 +4,13 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
-import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -24,19 +21,15 @@ import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.util.List;
 
 import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Organization;
-import app.zingo.employeemanagements.Model.Places;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.DepartmentApi;
 import app.zingo.employeemanagements.WebApi.OrganizationApi;
-import app.zingo.employeemanagements.WebApi.PlaceAPI;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -337,7 +330,7 @@ public class CreateCompany extends AppCompatActivity {
 
     }
 
-    public void addDepartments(final Organization organization,final Departments departments) {
+    public void addDepartments(final Organization organization, final Departments departments) {
 
 
         final ProgressDialog dialog = new ProgressDialog(this);

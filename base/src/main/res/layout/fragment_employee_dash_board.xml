@@ -229,7 +229,7 @@
                         android:layout_below="@+id/log_out_time"
                         android:id="@+id/meeting_info"/>
 
-                   <!-- <LinearLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/meeting_info"
@@ -240,6 +240,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="14sp"
+
                             android:gravity="left"
                             android:text="Today Tasks"
                             android:paddingLeft="10dp"
@@ -247,17 +248,23 @@
                             android:textColor="#000"
                             />
 
+
+
+
                         <android.support.v7.widget.RecyclerView
                         android:id="@+id/task_list_dash"
                         android:layout_width="match_parent"
+
                         android:layout_height="match_parent"
                         android:clickable="true"
                         android:layout_margin="8dp"
                         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
                             android:focusable="true" />
+
                         <Button
                             android:layout_width="150dp"
                             android:layout_height="50dp"
+
                             android:layout_below="@+id/today_task_list"
                             android:id="@+id/read_more"
                             android:visibility="gone"
@@ -269,153 +276,9 @@
                             android:layout_gravity="right"
                             android:textSize="16sp"/>
 
-                    </LinearLayout>-->
+                    </LinearLayout>
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_below="@+id/meeting_info">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.3dp"
-                    android:background="#99A1AC"
-                    android:layout_marginTop="2dp"/>
-
-                <app.zingo.employeemanagements.Custom.MyRegulerText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:layout_below="@+id/cardview_data_count"
-                    android:gravity="left"
-                    android:text="Tasks"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="10dp"
-                    android:textColor="#000"
-                    />
-
-                <LinearLayout
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:id="@+id/noRecordFound"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="40dp"
-
-                    android:layout_below="@+id/linearLayout2">
-                    <ImageView
-                        android:id="@+id/imageView2"
-                        android:background="@color/white"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:src="@drawable/search"
-                        android:minHeight="100dp"
-                        android:alpha="0.7"
-                        android:contentDescription="TODO" />
-                    <TextView
-                        android:textSize="15sp"
-                        android:textColor="@color/text_grey"
-                        android:gravity="center_horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="No Task Found"/>
-                </LinearLayout>
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/target_task_List"
-                    android:visibility="gone"
-                    android:focusable="false"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"/>
-
-                <app.zingo.employeemanagements.Custom.MyRegulerText
-                    android:id="@+id/read_task"
-                    android:layout_weight="1"
-                    android:layout_width="150dp"
-                    android:visibility="gone"
-                    android:layout_height="45dp"
-                    android:background="@drawable/button_primary_dark"
-                    android:layout_margin="5dp"
-                    android:textAlignment="center"
-                    android:gravity="center"
-                    android:focusable="false"
-                    android:layout_gravity="right"
-                    android:padding="5dp"
-                    android:text="Read More"
-                    android:textSize="22dp"
-                    android:textColor="@color/white" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.3dp"
-                    android:background="#99A1AC"
-                    android:layout_marginTop="2dp"/>
-
-                <app.zingo.employeemanagements.Custom.MyRegulerText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:layout_below="@+id/cardview_data_count"
-                    android:gravity="left"
-                    android:text="Meetings"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="10dp"
-                    android:textColor="#000" />
-
-                <LinearLayout
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:id="@+id/noRecordFound_meetings"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="40dp"
-
-                    android:layout_below="@+id/linearLayout2">
-                    <ImageView
-                        android:id="@+id/imageView2_meeting"
-                        android:background="@color/white"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:src="@drawable/search"
-                        android:minHeight="100dp"
-                        android:alpha="0.7"
-                        android:contentDescription="TODO" />
-                    <TextView
-                        android:textSize="15sp"
-                        android:textColor="@color/text_grey"
-                        android:gravity="center_horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="No Meetings Found"/>
-                </LinearLayout>
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/targetList_meeting"
-                    android:visibility="gone"
-                    android:focusable="false"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"/>
-
-                <app.zingo.employeemanagements.Custom.MyRegulerText
-                    android:id="@+id/read_meeting"
-                    android:layout_weight="1"
-                    android:layout_width="150dp"
-                    android:visibility="gone"
-                    android:layout_height="45dp"
-                    android:background="@drawable/button_primary_dark"
-                    android:layout_margin="5dp"
-                    android:textAlignment="center"
-                    android:gravity="center"
-                    android:focusable="false"
-                    android:layout_gravity="right"
-                    android:padding="5dp"
-                    android:text="Read More"
-                    android:textSize="22dp"
-                    android:textColor="@color/white"/>
-
-            </LinearLayout>
 
                 </RelativeLayout>
             </ScrollView>

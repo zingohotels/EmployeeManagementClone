@@ -15,27 +15,19 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import app.zingo.employeemanagements.Adapter.EmployeeAdapter;
 import app.zingo.employeemanagements.Adapter.TaskEmployeeListAdapter;
 import app.zingo.employeemanagements.Model.Employee;
-import app.zingo.employeemanagements.Model.LoginDetails;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Employee.EmployeeListScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
-import app.zingo.employeemanagements.WebApi.LoginDetailsAPI;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -147,7 +139,7 @@ public class TaskListFragment extends Fragment {
 
                                 if(employeesList!=null&&employeesList.size()!=0){
                                     mNoEmployee.setVisibility(View.GONE);
-                                    Collections.sort(employeesList,Employee.compareEmployee);
+                                    Collections.sort(employeesList, Employee.compareEmployee);
                                     mAdapter = new TaskEmployeeListAdapter(getActivity(), employeesList);
                                     mEmployeeRecyclerView.setAdapter(mAdapter);
                                 }else{

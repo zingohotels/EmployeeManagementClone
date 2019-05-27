@@ -21,7 +21,7 @@ public class HolidayList implements Serializable {
     public  String HolidayDay;
 
     @SerializedName("organization")
-    public  Organization organization;
+    public Organization organization;
 
     @SerializedName("OrganizationId")
     public  int OrganizationId;

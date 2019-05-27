@@ -1,8 +1,8 @@
 package app.zingo.employeemanagements.UI.NewAdminDesigns;
 
 import android.app.ProgressDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
@@ -11,12 +11,11 @@ import java.util.ArrayList;
 
 import app.zingo.employeemanagements.Adapter.ExpenseListAdapter;
 import app.zingo.employeemanagements.Model.Expenses;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.NewEmployeeDesign.ExpenseListScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.ExpensesApi;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

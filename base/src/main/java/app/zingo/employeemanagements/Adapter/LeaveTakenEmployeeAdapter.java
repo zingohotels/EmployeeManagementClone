@@ -20,9 +20,8 @@ import java.util.Date;
 import java.util.Random;
 
 import app.zingo.employeemanagements.Model.Leaves;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.EmployeeEditScreen;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.UpdateLeaveScreen;
+import app.zingo.employeemanagements.base.R;
 
 /**
  * Created by ZingoHotels Tech on 10-01-2019.
@@ -37,6 +36,7 @@ public class LeaveTakenEmployeeAdapter extends RecyclerView.Adapter<LeaveTakenEm
 
         this.context = context;
         this.list = list;
+
     }
 
     @Override
@@ -50,6 +50,8 @@ public class LeaveTakenEmployeeAdapter extends RecyclerView.Adapter<LeaveTakenEm
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final Leaves dto = list.get(position);
+
+
         if(dto!=null){
 
             Random rnd = new Random();
@@ -58,12 +60,17 @@ public class LeaveTakenEmployeeAdapter extends RecyclerView.Adapter<LeaveTakenEm
             holder.mUpdate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
+
                     Intent intent = new Intent(context, UpdateLeaveScreen.class);
                     Bundle bundle = new Bundle();
                     bundle.putInt("LeaveId",list.get(position).getLeaveId());
                     bundle.putSerializable("Leaves",list.get(position));
                     intent.putExtras(bundle);
                     context.startActivity(intent);
+
+
+
                 }
             });
 
@@ -73,7 +80,9 @@ public class LeaveTakenEmployeeAdapter extends RecyclerView.Adapter<LeaveTakenEm
 
             String froms = dto.getFromDate();
             String tos = dto.getToDate();
+
             if(froms.contains("T")){
+
                 String dojs[] = froms.split("T");
 
                 try {
@@ -84,6 +93,8 @@ public class LeaveTakenEmployeeAdapter extends RecyclerView.Adapter<LeaveTakenEm
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+
+
             }
 
             if(tos.contains("T")){
@@ -97,17 +108,34 @@ public class LeaveTakenEmployeeAdapter extends RecyclerView.Adapter<LeaveTakenEm
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+
+
             }
+
+
+
             holder.mLeaveType.setText(""+dto.getLeaveType());
             holder.mLeaveStatus.setText(""+dto.getStatus());
             holder.mLeaveComment.setText(""+dto.getLeaveComment());
+
+
+
         }
+
+
+
+
+
     }
+
+
+
 
     @Override
     public int getItemCount() {
         return list.size();
     }
+
 
     class ViewHolder extends RecyclerView.ViewHolder /*implements View.OnClickListener*/ {
 
@@ -116,6 +144,7 @@ public class LeaveTakenEmployeeAdapter extends RecyclerView.Adapter<LeaveTakenEm
         TextView mUpdate;
         TextView mLeaveCount;
         LinearLayout mRoot;
+
         public View mView;
 
         public ViewHolder(final View itemView) {
@@ -130,7 +159,12 @@ public class LeaveTakenEmployeeAdapter extends RecyclerView.Adapter<LeaveTakenEm
             mUpdate = itemView.findViewById(R.id.leave_update);
             mTo = itemView.findViewById(R.id.to_date);
             mLeaveComment = itemView.findViewById(R.id.leave_comment);
+
             mView = itemView.findViewById(R.id.view_color);
+
+
+
+
         }
     }
 }

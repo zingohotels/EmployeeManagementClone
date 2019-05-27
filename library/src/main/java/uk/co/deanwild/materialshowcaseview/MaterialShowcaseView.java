@@ -306,7 +306,7 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
                 mBottomMargin = getSoftButtonsBarSizePort();
 
 
-                FrameLayout.LayoutParams contentLP = (LayoutParams) getLayoutParams();
+                LayoutParams contentLP = (LayoutParams) getLayoutParams();
 
                 if (contentLP != null && contentLP.bottomMargin != mBottomMargin)
                     contentLP.bottomMargin = mBottomMargin;
@@ -350,7 +350,7 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
     private void applyLayoutParams() {
 
         if (mContentBox != null && mContentBox.getLayoutParams() != null) {
-            FrameLayout.LayoutParams contentLP = (LayoutParams) mContentBox.getLayoutParams();
+            LayoutParams contentLP = (LayoutParams) mContentBox.getLayoutParams();
 
             boolean layoutParamsChanged = false;
 

@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.DecimalFormat;
@@ -18,12 +17,11 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import app.zingo.employeemanagements.Custom.MyTextView;
-import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.Model.OrganizationPayments;
 import app.zingo.employeemanagements.Model.Tasks;
-import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.TasksAPI;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

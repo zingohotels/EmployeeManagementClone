@@ -194,43 +194,43 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
         dialog.show();
 
         final CustomerAPI orgApi = Util.getClient().create(CustomerAPI.class);
-                Call<ArrayList<Customer>> getProf = orgApi.getCustomerByOrganizationId(id);
-                getProf.enqueue(new Callback<ArrayList<Customer>>() {
+        Call<ArrayList<Customer>> getProf = orgApi.getCustomerByOrganizationId(id);
+        getProf.enqueue(new Callback<ArrayList<Customer>>() {
 
-                    @Override
-                    public void onResponse(Call<ArrayList<Customer>> call, Response<ArrayList<Customer>> response) {
+            @Override
+            public void onResponse(Call<ArrayList<Customer>> call, Response<ArrayList<Customer>> response) {
 
-                        if (response.code() == 200||response.code() == 201||response.code() == 204)
-                        {
-                            dialog.dismiss();
-                            customerArrayList = response.body();
+                if (response.code() == 200||response.code() == 201||response.code() == 204)
+                {
+                    dialog.dismiss();
+                    customerArrayList = response.body();
 
-                            if(customerArrayList!=null&&customerArrayList.size()!=0){
+                    if(customerArrayList!=null&&customerArrayList.size()!=0){
 
-                                Customer customer = new Customer();
-                                customer.setCustomerName("Others");
-                                customerArrayList.add(customer);
+                        Customer customer = new Customer();
+                        customer.setCustomerName("Others");
+                        customerArrayList.add(customer);
 
-                                CustomerSpinnerAdapter adapter = new CustomerSpinnerAdapter(MeetingAddWithSignScreen.this,customerArrayList);
-                                customerSpinner.setAdapter(adapter);
-                            }
-                            else {
-                                ClientNameLayout.setVisibility(View.VISIBLE);
-                                customerSpinner.setVisibility(View.GONE);
-                            }
-
-                        }else{
-                            dialog.dismiss();
-                            Toast.makeText(MeetingAddWithSignScreen.this, "Something went wrong", Toast.LENGTH_SHORT).show();
-                        }
+                        CustomerSpinnerAdapter adapter = new CustomerSpinnerAdapter(MeetingAddWithSignScreen.this,customerArrayList);
+                        customerSpinner.setAdapter(adapter);
+                    }
+                    else {
+                        ClientNameLayout.setVisibility(View.VISIBLE);
+                        customerSpinner.setVisibility(View.GONE);
                     }
 
-                    @Override
-                    public void onFailure(Call<ArrayList<Customer>> call, Throwable t) {
-                        dialog.dismiss();
-                        Toast.makeText(MeetingAddWithSignScreen.this, "Something went wrong", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                }else{
+                    dialog.dismiss();
+                    Toast.makeText(MeetingAddWithSignScreen.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Customer>> call, Throwable t) {
+                dialog.dismiss();
+                Toast.makeText(MeetingAddWithSignScreen.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void validate(){
@@ -287,7 +287,7 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
                 String contact = "";
 
                 if(email!=null&&!email.isEmpty()){
-                        contact = contact+"%"+email;
+                    contact = contact+"%"+email;
                 }
 
                 if(mobile!=null&&!mobile.isEmpty()){
@@ -358,7 +358,7 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
                         dialog.setContentView(R.layout.dialog_signature);
                         dialog.setCancelable(true);*/
 
-                       dispatchTakePictureIntent();
+                        dispatchTakePictureIntent();
 
                         //dialog_action(loginDetails,md,"Selfie");
 
@@ -1101,7 +1101,7 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
             }
             else
             {
-                 compressImage(StoredPath,loginDetails,md,"Done");
+                compressImage(StoredPath,loginDetails,md,"Done");
             }
 
         } catch (Exception e) {

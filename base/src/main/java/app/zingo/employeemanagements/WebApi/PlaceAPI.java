@@ -1,11 +1,8 @@
 package app.zingo.employeemanagements.WebApi;
 
-import com.google.android.gms.location.places.Place;
-
 import app.zingo.employeemanagements.Model.Places;
 import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
 import retrofit2.http.Query;
 
 /**

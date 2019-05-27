@@ -11,24 +11,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Employee;
-import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.UI.Admin.EmployeesDashBoard;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.EmployeeEditScreen;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.TeamMembersList;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -161,7 +156,7 @@ public class TeamMembersAdapter extends RecyclerView.Adapter<TeamMembersAdapter.
 
                                 if(teamlist!=null&&teamlist.size()!=0){
 
-                                    Collections.sort(teamlist,Employee.compareEmployee);
+                                    Collections.sort(teamlist, Employee.compareEmployee);
                                     TeamMembersAdapter adapter = new TeamMembersAdapter(context, teamlist);
                                     mEmList.setAdapter(adapter);
 

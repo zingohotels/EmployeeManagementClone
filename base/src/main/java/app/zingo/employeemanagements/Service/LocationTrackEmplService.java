@@ -11,12 +11,10 @@ import android.os.SystemClock;
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 import app.zingo.employeemanagements.Model.LiveTracking;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
-import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.TrackGPS;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.LiveTrackingAPI;
@@ -138,7 +136,7 @@ public class LocationTrackEmplService extends Service {
     public boolean locationCheck(){
 
         final boolean status = false;
-        LocationManager lm = (LocationManager)LocationTrackEmplService.this.getSystemService(Context.LOCATION_SERVICE);
+        LocationManager lm = (LocationManager) LocationTrackEmplService.this.getSystemService(Context.LOCATION_SERVICE);
         boolean gps_enabled = false;
         boolean network_enabled = false;
 

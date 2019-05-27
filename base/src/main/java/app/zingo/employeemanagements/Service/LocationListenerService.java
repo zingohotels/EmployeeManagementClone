@@ -2,7 +2,6 @@ package app.zingo.employeemanagements.Service;
 
 import android.Manifest;
 import android.app.AlarmManager;
-import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -11,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -20,12 +18,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Timer;
 import java.util.TimerTask;
 
 import app.zingo.employeemanagements.Model.LiveTracking;
@@ -112,7 +108,7 @@ public class LocationListenerService   extends Service implements LocationListen
 
         Log.i("EXIT", "ondestroy!");
 
-        if(PreferenceHandler.getInstance(context).getUserId()!=0&&PreferenceHandler.getInstance(context).getLoginStatus().equalsIgnoreCase("Login")){
+        if(PreferenceHandler.getInstance(context).getUserId()!=0&& PreferenceHandler.getInstance(context).getLoginStatus().equalsIgnoreCase("Login")){
             Intent restartService = new Intent(getApplicationContext(),
                     this.getClass());
             restartService.setPackage(getPackageName());

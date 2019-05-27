@@ -1,42 +1,31 @@
 package app.zingo.employeemanagements.UI.NewEmployeeDesign;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import app.zingo.employeemanagements.Custom.EncryptionHelper;
 import app.zingo.employeemanagements.Model.LoginDetails;
 import app.zingo.employeemanagements.Model.LoginDetailsNotificationManagers;
-import app.zingo.employeemanagements.Model.Meetings;
-import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.Service.LocationForegroundService;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminNewMainScreen;
 import app.zingo.employeemanagements.Utils.Constants;
@@ -44,6 +33,7 @@ import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.LoginDetailsAPI;
 import app.zingo.employeemanagements.WebApi.LoginNotificationAPI;
+import app.zingo.employeemanagements.base.R;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -112,7 +102,7 @@ public class ScannedQrScreen extends AppCompatActivity implements ZXingScannerVi
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
 
-                String[] PERMISSIONS = {android.Manifest.permission.CAMERA};
+                String[] PERMISSIONS = {Manifest.permission.CAMERA};
                 ActivityCompat.requestPermissions(ScannedQrScreen.this,PERMISSIONS, MY_CAMERA_REQUEST_CODE);
 
                 return;
@@ -126,15 +116,20 @@ public class ScannedQrScreen extends AppCompatActivity implements ZXingScannerVi
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == MY_CAMERA_REQUEST_CODE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                openCamera();
-            else if (grantResults[0] == PackageManager.PERMISSION_DENIED)
-                showCameraSnackBar();
+            if(grantResults!=null&&grantResults.length!=0){
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                    openCamera();
+                else if (grantResults[0] == PackageManager.PERMISSION_DENIED)
+                    //showCameraSnackBar();
+                    Toast.makeText(ScannedQrScreen.this, "Camera Permission required", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(ScannedQrScreen.this, "Camera Permission required", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
 
-    private void showCameraSnackBar() {
+    /*private void showCameraSnackBar() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
             Snackbar snackbar = Snackbar.make(scanQrCodeRootView, "App needs camera permission to scan QR Code", Snackbar.LENGTH_LONG);
             View view1 = snackbar.getView();
@@ -143,7 +138,7 @@ public class ScannedQrScreen extends AppCompatActivity implements ZXingScannerVi
                     textView.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
             snackbar.show();
         }
-    }
+    }*/
 
     private void openCamera() {
         qrCodeScanner.startCamera();
@@ -463,12 +458,12 @@ public class ScannedQrScreen extends AppCompatActivity implements ZXingScannerVi
 
                         if(PreferenceHandler.getInstance(ScannedQrScreen.this).getUserRoleUniqueID()==9){
 
-                            Intent main = new Intent(ScannedQrScreen.this,AdminNewMainScreen.class);
+                            Intent main = new Intent(ScannedQrScreen.this, AdminNewMainScreen.class);
                             startActivity(main);
                             ScannedQrScreen.this.finish();
                         }else if(PreferenceHandler.getInstance(ScannedQrScreen.this).getUserRoleUniqueID()==1){
 
-                            Intent main = new Intent(ScannedQrScreen.this,EmployeeNewMainScreen.class);
+                            Intent main = new Intent(ScannedQrScreen.this, EmployeeNewMainScreen.class);
                             startActivity(main);
                             ScannedQrScreen.this.finish();
                         }
@@ -502,7 +497,7 @@ public class ScannedQrScreen extends AppCompatActivity implements ZXingScannerVi
     }
 
 
-    public void updateLogin(final LoginDetails loginDetails,final LoginDetailsNotificationManagers md) {
+    public void updateLogin(final LoginDetails loginDetails, final LoginDetailsNotificationManagers md) {
 
 
         final ProgressDialog dialog = new ProgressDialog(ScannedQrScreen.this);

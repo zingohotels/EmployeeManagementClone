@@ -1,25 +1,20 @@
 package app.zingo.employeemanagements.UI.Admin;
 
 import android.app.ProgressDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import app.zingo.employeemanagements.Adapter.LeaveTakenAdapter;
-import app.zingo.employeemanagements.Adapter.TaskAdapter;
 import app.zingo.employeemanagements.Adapter.TaskListAdapter;
-import app.zingo.employeemanagements.Model.Leaves;
 import app.zingo.employeemanagements.Model.Tasks;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Employee.LeaveTakenDays;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
-import app.zingo.employeemanagements.WebApi.LeaveAPI;
 import app.zingo.employeemanagements.WebApi.TasksAPI;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

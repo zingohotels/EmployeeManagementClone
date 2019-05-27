@@ -2,10 +2,10 @@ package app.zingo.employeemanagements.UI.NewAdminDesigns;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -23,12 +23,11 @@ import java.util.ArrayList;
 
 import app.zingo.employeemanagements.Adapter.DepartmentAdapter;
 import app.zingo.employeemanagements.Model.Departments;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Company.OrganizationDetailScree;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.DepartmentApi;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -201,7 +200,7 @@ public class DepartmentLilstScreen extends AppCompatActivity {
         final TextInputEditText mName = views.findViewById(R.id.department_name);
 
 
-        final android.support.v7.app.AlertDialog dialog = builder.create();
+        final AlertDialog dialog = builder.create();
         dialog.show();
         dialog.setCanceledOnTouchOutside(false);
 
@@ -241,7 +240,7 @@ public class DepartmentLilstScreen extends AppCompatActivity {
     }
 
 
-    public void addDepartments(final Departments departments,final AlertDialog dialogs) {
+    public void addDepartments(final Departments departments, final AlertDialog dialogs) {
 
 
         final ProgressDialog dialog = new ProgressDialog(this);

@@ -1,6 +1,5 @@
 package app.zingo.employeemanagements.WebApi;
 
-import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.Model.OrganizationPayments;
 import retrofit2.Call;
 import retrofit2.http.Body;

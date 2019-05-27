@@ -1,7 +1,7 @@
 package app.zingo.employeemanagements.UI;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import app.zingo.employeemanagements.base.R;
 

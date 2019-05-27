@@ -14,17 +14,16 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import app.zingo.employeemanagements.Model.Navigation_Model;
-import app.zingo.employeemanagements.UI.Common.BreakTimeListScreen;
-import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.UI.Common.BranchListScreen;
+import app.zingo.employeemanagements.UI.Common.BreakTimeListScreen;
 import app.zingo.employeemanagements.UI.Common.HolidayListActivityScreen;
 import app.zingo.employeemanagements.UI.Company.OrganizationDetailScree;
 import app.zingo.employeemanagements.UI.Company.WorkingDaysScreen;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.BranchInfoScreen;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.DepartmentLilstScreen;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.EmployeeUpdateListScreen;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.OrganizationProfileScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
+import app.zingo.employeemanagements.base.R;
 
 public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.ViewHolder> {
 
@@ -78,19 +77,19 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.Vi
 
                         case "Holidays":
                             Intent holidays = new Intent(context, HolidayListActivityScreen.class);
-                            holidays.putExtra("OrganizationId",PreferenceHandler.getInstance(context).getBranchId());
+                            holidays.putExtra("OrganizationId", PreferenceHandler.getInstance(context).getBranchId());
                             ((Activity)context).startActivity(holidays);
                             break;
 
                         case "Office Timing":
                             Intent office = new Intent(context, WorkingDaysScreen.class);
-                            office.putExtra("OrganizationId",PreferenceHandler.getInstance(context).getBranchId());
+                            office.putExtra("OrganizationId", PreferenceHandler.getInstance(context).getBranchId());
                             ((Activity)context).startActivity(office);
                             break;
 
                         case "Break Timing":
                             Intent breakTime = new Intent(context, BreakTimeListScreen.class);
-                            breakTime.putExtra("OrganizationId",PreferenceHandler.getInstance(context).getBranchId());
+                            breakTime.putExtra("OrganizationId", PreferenceHandler.getInstance(context).getBranchId());
                             ((Activity)context).startActivity(breakTime);
                             break;
 
@@ -101,13 +100,13 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.Vi
 
                         case "Departments":
                             Intent dept = new Intent(context, DepartmentLilstScreen.class);
-                            dept.putExtra("OrganizationId",PreferenceHandler.getInstance(context).getBranchId());
+                            dept.putExtra("OrganizationId", PreferenceHandler.getInstance(context).getBranchId());
                             ((Activity)context).startActivity(dept);
                             break;
 
                             case "Employees":
                             Intent employees = new Intent(context, EmployeeUpdateListScreen.class);
-                            employees.putExtra("OrganizationId",PreferenceHandler.getInstance(context).getBranchId());
+                            employees.putExtra("OrganizationId", PreferenceHandler.getInstance(context).getBranchId());
                             ((Activity)context).startActivity(employees);
                             break;
 

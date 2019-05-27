@@ -15,11 +15,11 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,24 +36,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import app.zingo.employeemanagements.Model.Employee;
-import app.zingo.employeemanagements.Model.EmployeeImages;
 import app.zingo.employeemanagements.Model.Expenses;
-import app.zingo.employeemanagements.Model.Leaves;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Employee.ApplyLeaveScreen;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminNewMainScreen;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
-import app.zingo.employeemanagements.WebApi.EmployeeImageAPI;
 import app.zingo.employeemanagements.WebApi.ExpensesApi;
 import app.zingo.employeemanagements.WebApi.UploadApi;
+import app.zingo.employeemanagements.base.R;
 import info.hoang8f.widget.FButton;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -165,7 +158,7 @@ public class CreateExpensesScreen extends AppCompatActivity {
                 if(imgFile.exists()) {
                     Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                     //addView(null,Util.getResizedBitmap(myBitmap,400));
-                    addImage(null,Util.getResizedBitmap(myBitmap,700));
+                    addImage(null, Util.getResizedBitmap(myBitmap,700));
                 }
             }
         }catch (Exception e){
@@ -298,7 +291,7 @@ public class CreateExpensesScreen extends AppCompatActivity {
         }
     }
 
-    public String compressImage(String filePath,final  Expenses expenses) {
+    public String compressImage(String filePath,final Expenses expenses) {
 
         //String filePath = getRealPathFromURI(imageUri);
         Bitmap scaledBitmap = null;

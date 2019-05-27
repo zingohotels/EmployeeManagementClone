@@ -21,17 +21,11 @@ import java.util.Date;
 
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.LoginDetails;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Admin.CreatePaySlip;
-import app.zingo.employeemanagements.UI.Admin.EmployeeLiveMappingScreen;
-import app.zingo.employeemanagements.UI.Admin.EmployeesDashBoard;
-import app.zingo.employeemanagements.UI.Admin.TaskManagementHost;
-import app.zingo.employeemanagements.UI.Employee.EmployeeMeetingHost;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminNewMainScreen;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.DailyTargetsForEmployeeActivity;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.LoginDetailsAPI;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -139,7 +133,7 @@ public class TaskEmployeeListAdapter  extends RecyclerView.Adapter<TaskEmployeeL
         }
     }
 
-    private void getLoginDetails(final LoginDetails loginDetails,final TextView employees){
+    private void getLoginDetails(final LoginDetails loginDetails, final TextView employees){
 
 
 

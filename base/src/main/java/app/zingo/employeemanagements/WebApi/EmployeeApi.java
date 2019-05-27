@@ -2,7 +2,6 @@ package app.zingo.employeemanagements.WebApi;
 
 import java.util.ArrayList;
 
-import app.zingo.employeemanagements.Model.Designations;
 import app.zingo.employeemanagements.Model.Employee;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -22,7 +21,7 @@ public interface EmployeeApi {
     Call<Employee> addEmployee(@Body Employee details);
 
     @PUT("Employees/{id}")
-    Call<Employee> updateEmployee(@Path("id") int id,@Body Employee details);
+    Call<Employee> updateEmployee(@Path("id") int id, @Body Employee details);
 
     @GET("Employees/GetEmployeeByPhoneNumber/{PhoneNumber}")
     Call<ArrayList<Employee>> getUserByPhone(@Path("PhoneNumber") String phone);

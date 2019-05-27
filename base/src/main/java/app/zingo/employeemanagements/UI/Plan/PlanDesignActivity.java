@@ -1,12 +1,10 @@
 package app.zingo.employeemanagements.UI.Plan;
 
-import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -17,17 +15,15 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import app.zingo.employeemanagements.Adapter.PlanDesignAdapter;
-import app.zingo.employeemanagements.Adapter.SplashSlider;
 import app.zingo.employeemanagements.Model.PlanDesign;
 import app.zingo.employeemanagements.Model.PlanFeatures;
-import app.zingo.employeemanagements.UI.SupportScreen;
 import app.zingo.employeemanagements.base.R;
 
 public class PlanDesignActivity extends AppCompatActivity {
 
     ViewPager slidePager;
     Button basic_buy;
-    int[] layouts = {R.layout.basic_plan_design,R.layout.advance_plan_design};
+    int[] layouts = {R.layout.basic_plan_design, R.layout.advance_plan_design};
     LinearLayout dots;
     ImageView[] dot;
 
@@ -160,9 +156,9 @@ public class PlanDesignActivity extends AppCompatActivity {
         for (int i =0;i<layouts.length;i++){
             dot[i] = new ImageView(this);
             if(i==current){
-                dot[i].setImageDrawable(ContextCompat.getDrawable(this,R.drawable.active_dots));
+                dot[i].setImageDrawable(ContextCompat.getDrawable(this, R.drawable.active_dots));
             }else {
-                dot[i].setImageDrawable(ContextCompat.getDrawable(this,R.drawable.inactive_dots));
+                dot[i].setImageDrawable(ContextCompat.getDrawable(this, R.drawable.inactive_dots));
             }
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             params.setMargins(4,0,4,0);

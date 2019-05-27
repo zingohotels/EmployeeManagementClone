@@ -12,9 +12,9 @@ import android.net.sip.SipException;
 import android.net.sip.SipManager;
 import android.net.sip.SipProfile;
 import android.net.sip.SipRegistrationListener;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,9 +28,9 @@ import android.widget.ToggleButton;
 
 import java.text.ParseException;
 
-import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.Service.IncomingCallReceiver;
 import app.zingo.employeemanagements.Service.SipSettings;
+import app.zingo.employeemanagements.base.R;
 
 public class WalkieTalkie extends AppCompatActivity implements View.OnTouchListener  {
 

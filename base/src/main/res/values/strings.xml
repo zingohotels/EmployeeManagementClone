@@ -37,6 +37,12 @@
 
     <string name="leaveNew">Apply Leave</string>
     <string name="leaveRequest">Leaves</string>
+    <string name="share_app_text">Share App</string>
+
+    <string name="hint_contact_add_email">Email Id</string>
+    <string name="hint_contact_add_mobile">Mobile Number</string>
+
+    <string name="uploadImages">Set your image</string>
 
     <string-array name="leave_type">
         <item>Paid</item>

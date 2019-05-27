@@ -3,9 +3,9 @@ package app.zingo.employeemanagements.UI.NewAdminDesigns;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,20 +33,18 @@ import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.Model.OrganizationPayments;
 import app.zingo.employeemanagements.Model.PlanIntentData;
 import app.zingo.employeemanagements.Utils.Constants;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.AdvancePlanScreen;
-import app.zingo.employeemanagements.UI.BasicPlanScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
 import app.zingo.employeemanagements.WebApi.OrganizationApi;
 import app.zingo.employeemanagements.WebApi.OrganizationPaymentAPI;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PlanSubscribtionScreen extends AppCompatActivity implements PaymentResultListener,ResponseMessage {
+public class PlanSubscribtionScreen extends AppCompatActivity implements PaymentResultListener, ResponseMessage {
 
 
     MyRegulerText mPlanName,mStratDate,mEndDate,mSubTotal,mTaxes;
@@ -372,7 +370,7 @@ public class PlanSubscribtionScreen extends AppCompatActivity implements Payment
 
     }
 
-    public void addOrgaPay(final Organization organization,final OrganizationPayments organizationPayments) {
+    public void addOrgaPay(final Organization organization, final OrganizationPayments organizationPayments) {
 
 
         final ProgressDialog dialog = new ProgressDialog(this);

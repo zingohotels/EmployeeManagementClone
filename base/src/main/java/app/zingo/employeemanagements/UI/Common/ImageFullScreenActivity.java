@@ -2,17 +2,15 @@ package app.zingo.employeemanagements.UI.Common;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
-import app.zingo.employeemanagements.Custom.Zoom;
 import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.EmployeeDashBoardAdminView;
 
 public class ImageFullScreenActivity extends AppCompatActivity {
 

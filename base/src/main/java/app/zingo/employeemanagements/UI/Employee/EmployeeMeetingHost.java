@@ -5,20 +5,18 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TabHost;
 import android.widget.TextView;
 
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Admin.EmployeeLiveMappingScreen;
 import app.zingo.employeemanagements.UI.Common.EmployeeMeetingList;
 import app.zingo.employeemanagements.UI.Common.EmployeeMeetingMap;
-import app.zingo.employeemanagements.Utils.PreferenceHandler;
+import app.zingo.employeemanagements.base.R;
 
 public class EmployeeMeetingHost extends TabActivity implements TabHost.OnTabChangeListener {
 

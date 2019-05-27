@@ -4,7 +4,6 @@ import android.app.TabActivity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -12,10 +11,7 @@ import android.view.View;
 import android.widget.TabHost;
 import android.widget.TextView;
 
-import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.NewEmployeeDesign.CreateExpensesScreen;
-import app.zingo.employeemanagements.UI.NewEmployeeDesign.ScannedQrScreen;
 
 public class AdminQrTabScreen extends TabActivity implements TabHost.OnTabChangeListener {
 

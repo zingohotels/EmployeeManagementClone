@@ -16,7 +16,7 @@ public interface OrganizationTimingsAPI {
     Call<WorkingDay> addOrganizationTimings(@Body WorkingDay details);
 
     @PUT("OrganizationTimings/{id}")
-    Call<WorkingDay> updateOrganizationTimings(@Path("id") int id,@Body WorkingDay details);
+    Call<WorkingDay> updateOrganizationTimings(@Path("id") int id, @Body WorkingDay details);
 
     @GET("OrganizationTimings/GetOrganizationTimingsByOrganizationId/{OrganizationId}")
     Call<ArrayList<WorkingDay>> getOrganizationTimingByOrgId(@Path("OrganizationId") int OrganizationId);

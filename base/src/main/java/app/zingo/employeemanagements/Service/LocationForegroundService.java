@@ -29,14 +29,14 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import app.zingo.employeemanagements.UI.NewEmployeeDesign.BreakPurpose;
-import app.zingo.employeemanagements.base.BuildConfig;
 import app.zingo.employeemanagements.Model.LiveTracking;
-import app.zingo.employeemanagements.base.R;
+import app.zingo.employeemanagements.UI.NewEmployeeDesign.BreakPurpose;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.TrackGPS;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.LiveTrackingAPI;
+import app.zingo.employeemanagements.base.BuildConfig;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -130,7 +130,7 @@ public class LocationForegroundService extends Service {
 
 
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
             String NOTIFICATION_CHANNEL_ID = "app.zingo.employeemanagements";
             String channelName = "Location Background Service";
@@ -169,7 +169,7 @@ public class LocationForegroundService extends Service {
             CharSequence name = "Zingo" ;// The user-visible name of the channel.
             int importance = NotificationManager.IMPORTANCE_LOW;
             NotificationChannel mChannel=null;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
             }
 
@@ -189,7 +189,7 @@ public class LocationForegroundService extends Service {
             Notification notification = builder.build();
 
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 assert notificationManager != null;
                 notificationManager.createNotificationChannel(mChannel);
             }
@@ -231,7 +231,7 @@ public class LocationForegroundService extends Service {
 
             telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
 
-            if(locationCheck()&&PreferenceHandler.getInstance(getApplicationContext()).getUserId()!=0&&PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()!=2&&PreferenceHandler.getInstance(getApplicationContext()).getLoginStatus().equalsIgnoreCase("Login")){
+            if(locationCheck()&& PreferenceHandler.getInstance(getApplicationContext()).getUserId()!=0&& PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()!=2&& PreferenceHandler.getInstance(getApplicationContext()).getLoginStatus().equalsIgnoreCase("Login")){
 
                 if(gps.canGetLocation())
                 {
@@ -250,7 +250,7 @@ public class LocationForegroundService extends Service {
                         liveTracking.setEmployeeId(PreferenceHandler.getInstance(LocationForegroundService.this).getUserId());
                         liveTracking.setLatitude(""+latitude);
                         liveTracking.setLongitude(""+longitude);
-                        liveTracking.setAppVersion(""+BuildConfig.VERSION_NAME);
+                        liveTracking.setAppVersion(""+ BuildConfig.VERSION_NAME);
                         liveTracking.setTrackingDate(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
                         liveTracking.setTrackingTime(new SimpleDateFormat("HH:mm:ss").format(new Date()));
 
@@ -269,7 +269,7 @@ public class LocationForegroundService extends Service {
 
                             String imei = ""+Build.MANUFACTURER
                                     + "*" + Build.MODEL + "*" + Build.VERSION.RELEASE
-                                    + "*" + Build.VERSION_CODES.class.getFields()[android.os.Build.VERSION.SDK_INT].getName();
+                                    + "*" + Build.VERSION_CODES.class.getFields()[Build.VERSION.SDK_INT].getName();
 
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                 if(telephonyManager.getPhoneCount()>1) {
@@ -328,7 +328,7 @@ public class LocationForegroundService extends Service {
     public boolean locationCheck(){
 
         final boolean status = false;
-        LocationManager lm = (LocationManager)LocationForegroundService.this.getSystemService(Context.LOCATION_SERVICE);
+        LocationManager lm = (LocationManager) LocationForegroundService.this.getSystemService(Context.LOCATION_SERVICE);
         boolean gps_enabled = false;
         boolean network_enabled = false;
 
@@ -420,7 +420,7 @@ public class LocationForegroundService extends Service {
 
             URL url = null;
 
-            Intent intents = new Intent(LocationForegroundService.this,BreakPurpose.class);
+            Intent intents = new Intent(LocationForegroundService.this, BreakPurpose.class);
             intents.putExtra("Longi",""+longi);
             intents.putExtra("Lati",""+lati);
 
@@ -437,12 +437,12 @@ public class LocationForegroundService extends Service {
             CharSequence name = "Zingo" ;// The user-visible name of the channel.
             int importance = NotificationManager.IMPORTANCE_LOW;
             NotificationChannel mChannel=null;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
             }
 
             Notification.Builder notificationBuilder = null;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 notificationBuilder = new Notification.Builder(this)
                         .setTicker("You are moving far away from your organization").setWhen(0)
                         .setContentTitle("You are moving far away from your organization")
@@ -488,7 +488,7 @@ public class LocationForegroundService extends Service {
 
 
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 notificationManager.createNotificationChannel(mChannel);
             }
 

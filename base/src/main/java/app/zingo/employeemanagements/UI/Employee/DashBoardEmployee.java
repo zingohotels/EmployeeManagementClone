@@ -21,6 +21,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -31,7 +32,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -55,16 +55,13 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import app.zingo.employeemanagements.Adapter.EmployeeAdapter;
 import app.zingo.employeemanagements.Adapter.NavigationListAdapter;
 import app.zingo.employeemanagements.Custom.MyRegulerText;
 import app.zingo.employeemanagements.FireBase.SharedPrefManager;
-import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.EmployeeDeviceMapping;
 import app.zingo.employeemanagements.Model.EmployeeImages;
@@ -74,20 +71,16 @@ import app.zingo.employeemanagements.Model.MeetingDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.Meetings;
 import app.zingo.employeemanagements.Model.NavBarItems;
 import app.zingo.employeemanagements.Model.Organization;
-import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.Service.LocationSharingServices;
-import app.zingo.employeemanagements.UI.Admin.DashBoardAdmin;
 import app.zingo.employeemanagements.UI.Admin.EmployeeLiveMappingScreen;
 import app.zingo.employeemanagements.UI.Common.ChangePasswordScreen;
 import app.zingo.employeemanagements.UI.Company.OrganizationDetailScree;
 import app.zingo.employeemanagements.UI.LandingScreen;
-import app.zingo.employeemanagements.UI.Login.LoginScreen;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.TrackGPS;
 import app.zingo.employeemanagements.Utils.Util;
-import app.zingo.employeemanagements.WebApi.DepartmentApi;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
 import app.zingo.employeemanagements.WebApi.EmployeeDeviceApi;
 import app.zingo.employeemanagements.WebApi.EmployeeImageAPI;
@@ -97,6 +90,7 @@ import app.zingo.employeemanagements.WebApi.MeetingNotificationAPI;
 import app.zingo.employeemanagements.WebApi.MeetingsAPI;
 import app.zingo.employeemanagements.WebApi.OrganizationApi;
 import app.zingo.employeemanagements.WebApi.UploadApi;
+import app.zingo.employeemanagements.base.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -324,7 +318,7 @@ public class DashBoardEmployee extends AppCompatActivity {
                             masterloginalert("Logout");
 
                             if(planType.contains("Advance")){
-                                Intent serviceIntent = new Intent(DashBoardEmployee.this,LocationSharingServices.class);
+                                Intent serviceIntent = new Intent(DashBoardEmployee.this, LocationSharingServices.class);
                                 startService(serviceIntent);
                             }
 
@@ -333,7 +327,7 @@ public class DashBoardEmployee extends AppCompatActivity {
                     }else{
                         masterloginalert("Logout");
                         if(planType.contains("Advance")){
-                            Intent serviceIntent = new Intent(DashBoardEmployee.this,LocationSharingServices.class);
+                            Intent serviceIntent = new Intent(DashBoardEmployee.this, LocationSharingServices.class);
                             startService(serviceIntent);
                         }
                     }
@@ -384,23 +378,23 @@ public class DashBoardEmployee extends AppCompatActivity {
 
     public boolean checkPermission() {
         if ((ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-                &&(ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-                && (ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
-                && (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+                &&(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+                && (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+                && (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
                 ) {
             if ((ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION))
-                    && (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION))
-                    && (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE))
-                    && (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_EXTERNAL_STORAGE))
+                    && (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION))
+                    && (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE))
+                    && (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE))
                     ) {
 
                 //Prompt the user once explanation has been shown
                 ActivityCompat.requestPermissions(this,
                         new String[]{
 
-                                android.Manifest.permission.ACCESS_FINE_LOCATION,
-                                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
                                 Manifest.permission.ACCESS_COARSE_LOCATION},
                         MY_PERMISSIONS_REQUEST_RESULT);
                 Log.d("checkPermission if","false");
@@ -409,9 +403,9 @@ public class DashBoardEmployee extends AppCompatActivity {
                 // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(this,
                         new String[]{
-                                android.Manifest.permission.ACCESS_FINE_LOCATION,
-                                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
                                 Manifest.permission.ACCESS_COARSE_LOCATION},
                         MY_PERMISSIONS_REQUEST_RESULT);
                 Log.d("checkPermission else","true");
@@ -590,7 +584,7 @@ public class DashBoardEmployee extends AppCompatActivity {
                 if(imgFile.exists()) {
                     Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                     //addView(null,Util.getResizedBitmap(myBitmap,400));
-                    addImage(null,Util.getResizedBitmap(myBitmap,700));
+                    addImage(null, Util.getResizedBitmap(myBitmap,700));
                 }
             }
         }catch (Exception e){
@@ -736,7 +730,7 @@ public class DashBoardEmployee extends AppCompatActivity {
         }
     }
 
-    public String compressImage(String filePath,final  Employee Employee) {
+    public String compressImage(String filePath,final Employee Employee) {
 
         //String filePath = getRealPathFromURI(imageUri);
         Bitmap scaledBitmap = null;
@@ -1011,7 +1005,7 @@ public class DashBoardEmployee extends AppCompatActivity {
             case "Live Tracking":
 
                 Intent live = new Intent(DashBoardEmployee.this, EmployeeLiveMappingScreen.class);
-                live.putExtra("EmployeeId",PreferenceHandler.getInstance(DashBoardEmployee.this).getUserId());
+                live.putExtra("EmployeeId", PreferenceHandler.getInstance(DashBoardEmployee.this).getUserId());
                 startActivity(live);
                 break;
 
@@ -1022,13 +1016,13 @@ public class DashBoardEmployee extends AppCompatActivity {
 
             case "Meetings":
                 Intent meetings = new Intent(DashBoardEmployee.this, EmployeeMeetingHost.class);
-                meetings.putExtra("EmployeeId",PreferenceHandler.getInstance(DashBoardEmployee.this).getUserId());
+                meetings.putExtra("EmployeeId", PreferenceHandler.getInstance(DashBoardEmployee.this).getUserId());
                 startActivity(meetings);
                 break;
 
             case "Attendance":
                 Intent attendance = new Intent(DashBoardEmployee.this, AttendanceScreen.class);
-                attendance.putExtra("EmployeeId",PreferenceHandler.getInstance(DashBoardEmployee.this).getUserId());
+                attendance.putExtra("EmployeeId", PreferenceHandler.getInstance(DashBoardEmployee.this).getUserId());
                 startActivity(attendance);
                 break;
 
@@ -1039,7 +1033,7 @@ public class DashBoardEmployee extends AppCompatActivity {
 
             case "Leave Management":
             Intent leave = new Intent(DashBoardEmployee.this, LeaveManagementHost.class);
-            leave.putExtra("EmployeeId",PreferenceHandler.getInstance(DashBoardEmployee.this).getUserId());
+            leave.putExtra("EmployeeId", PreferenceHandler.getInstance(DashBoardEmployee.this).getUserId());
             startActivity(leave);
             break;
 
@@ -1333,7 +1327,7 @@ public class DashBoardEmployee extends AppCompatActivity {
                                 try {
 
                                     LoginDetailsNotificationManagers md = new LoginDetailsNotificationManagers();
-                                    md.setTitle("Login Details from "+PreferenceHandler.getInstance(DashBoardEmployee.this).getUserFullName());
+                                    md.setTitle("Login Details from "+ PreferenceHandler.getInstance(DashBoardEmployee.this).getUserFullName());
                                     md.setMessage("Log in at  "+""+sdt.format(new Date()));
                                     md.setLocation(address);
                                     md.setLongitude(""+longitude);
@@ -1477,7 +1471,7 @@ public class DashBoardEmployee extends AppCompatActivity {
                                 try {
 
                                     MeetingDetailsNotificationManagers md = new MeetingDetailsNotificationManagers();
-                                    md.setTitle("Meeting Details from "+PreferenceHandler.getInstance(DashBoardEmployee.this).getUserFullName());
+                                    md.setTitle("Meeting Details from "+ PreferenceHandler.getInstance(DashBoardEmployee.this).getUserFullName());
                                     md.setMessage("Meeting with "+client+" for "+purpose);
                                     md.setLocation(address);
                                     md.setLongitude(""+longitude);
@@ -1523,7 +1517,7 @@ public class DashBoardEmployee extends AppCompatActivity {
     public boolean locationCheck(){
 
         final boolean status = false;
-        LocationManager lm = (LocationManager)DashBoardEmployee.this.getSystemService(Context.LOCATION_SERVICE);
+        LocationManager lm = (LocationManager) DashBoardEmployee.this.getSystemService(Context.LOCATION_SERVICE);
         boolean gps_enabled = false;
         boolean network_enabled = false;
 
@@ -1601,7 +1595,7 @@ public class DashBoardEmployee extends AppCompatActivity {
 
     }
 
-    public void addLogin(final LoginDetails loginDetails,final AlertDialog dialogs,final LoginDetailsNotificationManagers md) {
+    public void addLogin(final LoginDetails loginDetails, final AlertDialog dialogs, final LoginDetailsNotificationManagers md) {
 
 
 
@@ -1698,7 +1692,7 @@ public class DashBoardEmployee extends AppCompatActivity {
 
     }
 
-    public void addMeeting(final Meetings loginDetails,final AlertDialog dialogs,final MeetingDetailsNotificationManagers md) {
+    public void addMeeting(final Meetings loginDetails, final AlertDialog dialogs, final MeetingDetailsNotificationManagers md) {
 
 
 
@@ -1780,7 +1774,7 @@ public class DashBoardEmployee extends AppCompatActivity {
 
     }
 
-    public void updateMeeting(final Meetings loginDetails,final AlertDialog dialogs,final MeetingDetailsNotificationManagers md) {
+    public void updateMeeting(final Meetings loginDetails, final AlertDialog dialogs, final MeetingDetailsNotificationManagers md) {
 
 
 
@@ -1854,7 +1848,7 @@ public class DashBoardEmployee extends AppCompatActivity {
 
     }
 
-    public void updateLogin(final LoginDetails loginDetails,final AlertDialog dialogs,final LoginDetailsNotificationManagers md) {
+    public void updateLogin(final LoginDetails loginDetails, final AlertDialog dialogs, final LoginDetailsNotificationManagers md) {
 
 
 
@@ -2047,7 +2041,7 @@ public class DashBoardEmployee extends AppCompatActivity {
                                                         try {
 
                                                             MeetingDetailsNotificationManagers md = new MeetingDetailsNotificationManagers();
-                                                            md.setTitle("Meeting Details from "+PreferenceHandler.getInstance(DashBoardEmployee.this).getUserFullName());
+                                                            md.setTitle("Meeting Details from "+ PreferenceHandler.getInstance(DashBoardEmployee.this).getUserFullName());
                                                             md.setMessage("Meeting with "+client+" for "+purpose);
                                                             md.setLocation(address);
                                                             md.setLongitude(""+longitude);
@@ -2182,7 +2176,7 @@ public class DashBoardEmployee extends AppCompatActivity {
 
                                                     try {
                                                         LoginDetailsNotificationManagers md = new LoginDetailsNotificationManagers();
-                                                        md.setTitle("Login Details from "+PreferenceHandler.getInstance(DashBoardEmployee.this).getUserFullName());
+                                                        md.setTitle("Login Details from "+ PreferenceHandler.getInstance(DashBoardEmployee.this).getUserFullName());
                                                         md.setMessage("Log out at  "+""+sdt.format(new Date()));
                                                         md.setLocation(address);
                                                         md.setLongitude(""+longitude);
@@ -2788,7 +2782,7 @@ public class DashBoardEmployee extends AppCompatActivity {
             dialogs.show();
             dialogs.setCanceledOnTouchOutside(true);
 
-            mCompanyName.setText("Dear "+PreferenceHandler.getInstance(DashBoardEmployee.this).getCompanyName());
+            mCompanyName.setText("Dear "+ PreferenceHandler.getInstance(DashBoardEmployee.this).getCompanyName());
             mText.setText(""+text);
             mDay.setText(""+days);
 

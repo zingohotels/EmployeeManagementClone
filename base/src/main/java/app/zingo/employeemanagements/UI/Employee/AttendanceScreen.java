@@ -2,12 +2,8 @@ package app.zingo.employeemanagements.UI.Employee;
 
 import android.app.TabActivity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -16,8 +12,6 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Common.EmployeeMeetingList;
-import app.zingo.employeemanagements.UI.Common.EmployeeMeetingMap;
 
 //activity_attendance_screen
 
@@ -78,7 +72,7 @@ public class AttendanceScreen extends TabActivity implements TabHost.OnTabChange
 
             labelLeave.setText(getResources().getString(R.string.leaveDays));
             tabMaps.setIndicator(tabLeave);
-            Intent maps = new Intent(this,LeaveTakenDays.class);
+            Intent maps = new Intent(this, LeaveTakenDays.class);
             maps.putExtra("EmployeeId", employeeId);
             tabMaps.setContent(maps);
 

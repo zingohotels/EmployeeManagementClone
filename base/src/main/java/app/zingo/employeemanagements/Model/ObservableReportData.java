@@ -6,6 +6,7 @@ import java.util.ArrayList;
 public class ObservableReportData implements Serializable {
 
     String empName;
+    String date;
     ArrayList<LoginDetails> loginDetailsArrayList;
     ArrayList<Meetings> meetingsArrayList;
     ArrayList<Tasks> tasksArrayList;
@@ -18,6 +19,14 @@ public class ObservableReportData implements Serializable {
 
     public void setEmpName(String empName) {
         this.empName = empName;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public ArrayList<LoginDetails> getLoginDetailsArrayList() {
@@ -60,7 +69,7 @@ public class ObservableReportData implements Serializable {
         this.expensesArrayList = expensesArrayList;
     }
 
-    public ObservableReportData(ArrayList<LoginDetails> loginDetailsArrayList,  ArrayList<LiveTracking> liveTrackingArrayList, ArrayList<Meetings> meetingsArrayList,ArrayList<Tasks> tasksArrayList, ArrayList<Expenses> expensesArrayList) {
+    public ObservableReportData(ArrayList<LoginDetails> loginDetailsArrayList, ArrayList<LiveTracking> liveTrackingArrayList, ArrayList<Meetings> meetingsArrayList, ArrayList<Tasks> tasksArrayList, ArrayList<Expenses> expensesArrayList) {
         this.loginDetailsArrayList = loginDetailsArrayList;
         this.meetingsArrayList = meetingsArrayList;
         this.tasksArrayList = tasksArrayList;

@@ -8,6 +8,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,7 +66,7 @@ public class AdminHomeFragment extends Fragment {
     LinearLayout attendance,leaveApplications,employees;
     TextView qr_OrgId;
     LinearLayout departments,liveTracking,tasks,expenses,team,client;
-    LinearLayout salary,logout,deptOrg,chngPwd,plans,reports,holiday,settings,faq;
+    LinearLayout salary,logout,deptOrg,chngPwd,plans,reports,holiday,settings,faq,calender;
 
     Employee employee;
 
@@ -162,6 +164,7 @@ public class AdminHomeFragment extends Fragment {
         logout = this.layout.findViewById(R.id.logout);
         chngPwd = this.layout.findViewById(R.id.change_password);
         reports = this.layout.findViewById(R.id.report_mgmt);
+        calender = this.layout.findViewById(R.id.admin_calender);
 
         if(PreferenceHandler.getInstance(getActivity()).getResellerUserId()!=0){
             plans.setVisibility(View.GONE);
@@ -176,6 +179,20 @@ public class AdminHomeFragment extends Fragment {
         updatedText.setVisibility(0);
         findViewById.setOnClickListener(this);*/
 
+
+        calender.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*MyFragment newGamefragment = new MyFragment();
+                FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.frame_container, newGamefragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();*/
+
+                Intent intent = new Intent(getContext(), CalenderDashBoardActivity.class);
+                startActivity(intent);
+            }
+        });
         attendance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -4,7 +4,6 @@ import android.app.TabActivity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -13,11 +12,8 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import app.zingo.employeemanagements.Model.Employee;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Employee.ApplyLeaveScreen;
-import app.zingo.employeemanagements.UI.Employee.LeaveManagementHost;
-import app.zingo.employeemanagements.UI.Employee.LeaveTakenDays;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.ExpenseDashBoardAdmin;
+import app.zingo.employeemanagements.base.R;
 
 public class ExpenseManageHost extends TabActivity implements TabHost.OnTabChangeListener  {
 

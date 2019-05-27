@@ -23,7 +23,7 @@ public class OrganizationPayments implements Serializable {
     public int OrganizationId;
 
     @SerializedName("Organization")
-    public Organization Organization;
+    public app.zingo.employeemanagements.Model.Organization Organization;
 
     @SerializedName("PaymentBy")
     public String PaymentBy;

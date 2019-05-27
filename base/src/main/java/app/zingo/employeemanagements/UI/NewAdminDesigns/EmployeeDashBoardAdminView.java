@@ -88,13 +88,13 @@ import retrofit2.Response;
 public class EmployeeDashBoardAdminView extends AppCompatActivity {
 
     Employee employee;
-  //  MyRegulerText mWorkedDays,mCompletedtasks,mTotalMeetings,mTotalExpenses;
+    //  MyRegulerText mWorkedDays,mCompletedtasks,mTotalMeetings,mTotalExpenses;
     TextView mWorkedDays,mCompletedtasks,mTotalMeetings,mEmployeeName,mDate,mStatus,mLoginId;
     MyRegulerText mLoginTime,mLoginText,mLoginAddress,mLogoutTime,mLogouText,
             mLogoutAddress,mMeetingTime,mMetingAdrz,mTaskREad,mMeetingRead,
             mTitle,mExpeText,mExpAmt,mKmTravelled,mAvgtaskTime,mAvgMeetingTime,mIdleTime;//,mLogoutTime,mWorkingHours
     CircleImageView mProfilePic;
-   // CustomSpinner mDay;
+    // CustomSpinner mDay;
 
     ImageView mPrevious,mNext;
 
@@ -158,7 +158,7 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
             mEmployeeName = findViewById(R.id.name);
             mProfilePic = findViewById(R.id.employee_pic);
             //mDay = (CustomSpinner) findViewById(R.id.spinner);
-           // mTotalExpenses = (MyRegulerText)findViewById(R.id.expense_count_text);
+            // mTotalExpenses = (MyRegulerText)findViewById(R.id.expense_count_text);
             mTitle = findViewById(R.id.atten_title);
             mLoginTime = findViewById(R.id.login_time);
             mLoginText = findViewById(R.id.logged_text);
@@ -436,40 +436,27 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
            /* mDay.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-
                     if(employee!=null){
-
                         if(position==0){
-
                         }else if(position==1){
-
                             String dateValue = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-
                             try{
-
                                 Date date=null;
                                 try {
                                     date = new SimpleDateFormat("yyyy-MM-dd").parse(dateValue);
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-
-
-
                                 final Calendar calendar = Calendar.getInstance();
                                 Date date2 = calendar.getTime();
-
                                 getTasks(employee.getEmployeeId(),new SimpleDateFormat("yyyy-MM-dd").format(date2));
                                 getExpense(employee.getEmployeeId(),new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-
                                 //Today Summary
                                 LoginDetails ld  = new LoginDetails();
                                 ld.setEmployeeId(employee.getEmployeeId());
                                 ld.setLoginDate(new SimpleDateFormat("MM/dd/yyyy").format(date));
                                 String logDate = new SimpleDateFormat("MMM dd,yyyy").format(date);
                                 getLoginDetailsDate(ld,logDate);
-
                                 Meetings md  = new Meetings();
                                 md.setEmployeeId(employee.getEmployeeId());
                                 md.setMeetingDate(new SimpleDateFormat("MM/dd/yyyy").format(date));
@@ -481,38 +468,26 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                                 Intent error = new Intent(EmployeeDashBoardAdminView.this,InternalServerErrorScreen.class);
                                 startActivity(error);
                             }
-
                         }else if(position==2){
-
                             final Calendar cal = Calendar.getInstance();
                             cal.add(Calendar.DATE, -1);
-
                             String dateValue = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
                             mTitle.setText("Yesterday Summary");
-
                             try{
-
                                 Date date=null;
                                 try {
                                     date = new SimpleDateFormat("yyyy-MM-dd").parse(dateValue);
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-
-
-
-
-
                                 getTasks(employee.getEmployeeId(),new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()));
                                 getExpense(employee.getEmployeeId(),new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()));
-
                                 //Today Summary
                                 LoginDetails ld  = new LoginDetails();
                                 ld.setEmployeeId(employee.getEmployeeId());
                                 ld.setLoginDate(new SimpleDateFormat("MM/dd/yyyy").format(date));
                                 String logDate = new SimpleDateFormat("MMM dd,yyyy").format(date);
                                 getLoginDetailsDate(ld,logDate);
-
                                 Meetings md  = new Meetings();
                                 md.setEmployeeId(employee.getEmployeeId());
                                 md.setMeetingDate(new SimpleDateFormat("MM/dd/yyyy").format(date));
@@ -524,69 +499,44 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                                 Intent error = new Intent(EmployeeDashBoardAdminView.this,InternalServerErrorScreen.class);
                                 startActivity(error);
                             }
-
-
                         }else if(position==3){
-
                             openDatePicker();
                             mDay.setSelection(0);
                         }*//*else if(position==4){
-
-
-
                             AlertDialog.Builder builder = new AlertDialog.Builder(EmployeeDashBoardAdminView.this);
                             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                             View views = inflater.inflate(R.layout.custom_date_picker, null);
-
                             builder.setView(views);
-
-
                             final Button all_search_bookings = (Button) views.findViewById(R.id.all_search_bookings);
                             final TextView all_book_from_date = (TextView) views.findViewById(R.id.all_book_from_date);
                             final TextView all_book_to_date = (TextView) views.findViewById(R.id.all_book_to_date);
-
-
                             final android.support.v7.app.AlertDialog dialog = builder.create();
                             dialog.show();
                             dialog.setCanceledOnTouchOutside(true);
-
                             all_search_bookings.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-
-
                                 }
                             });
-
                             all_book_from_date.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-
                                     openDatePickers(all_book_from_date,"allFromDate");
-
                                 }
                             });
-
                             all_book_to_date.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-
                                     openDatePickers(all_book_to_date,"allToDate");
-
                                 }
                             });
-
                         }*//*
                     }else{
                         Toast.makeText(EmployeeDashBoardAdminView.this, "Data Unavailable", Toast.LENGTH_SHORT).show();
                     }
-
-
                 }
-
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
-
                 }
             });*/
 
@@ -1011,7 +961,7 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
 
                                         onTask.add(task);
 
-                                      }else if(task.getStatus().equalsIgnoreCase("Completed")&&(task.getStartDate()!=null&&task.getEndDate()!=null)){
+                                    }else if(task.getStatus().equalsIgnoreCase("Completed")&&(task.getStartDate()!=null&&task.getEndDate()!=null)){
 
                                         completedTasks.add(task);
                                     }
@@ -1245,7 +1195,6 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                                                    /* SpannableString ss1=  new SpannableString(kmValue);
                                                     ss1.setSpan(new RelativeSizeSpan(1f), 0,kmValue.length()-1, 0); // set size
                                                     ss1.setSpan(new ForegroundColorSpan(Color.RED), 0, kmValue.length()-1, 0);// set color
-
                                                     SpannableString ss12=  new SpannableString(mileValue);
                                                     ss12.setSpan(new RelativeSizeSpan(1f), 0,mileValue.length()-1, 0); // set size
                                                     ss12.setSpan(new ForegroundColorSpan(Color.RED), 0, mileValue.length()-1, 0);// set color
@@ -1363,7 +1312,7 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
 
                                         if(date.getTime() == afromDate.getTime() ){
 
-                                           // employeeExpense.add(task);
+                                            // employeeExpense.add(task);
                                             todayTasks.add(task);
                                             amt = amt+task.getAmount();
                                         }
@@ -1597,7 +1546,7 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                                     ss1.setSpan(new RelativeSizeSpan(1f), 6,8, 0); // set size
                                     ss1.setSpan(new ForegroundColorSpan(Color.RED), 6, 8, 0);// set color
                                     mLogouText.setText(ss1);
-                                   // mLogoutAddress.setVisibility(View.GONE);
+                                    // mLogoutAddress.setVisibility(View.GONE);
                                 }
                                 //mWorkingHours.setText(ss1);
 

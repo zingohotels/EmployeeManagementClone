@@ -120,7 +120,7 @@
                     android:layout_marginLeft="5dp"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:text="Past Month"
+                    android:text="Custom Data"
                     android:textColor="#4a4a4a"
                     android:textSize="15dp" />
 

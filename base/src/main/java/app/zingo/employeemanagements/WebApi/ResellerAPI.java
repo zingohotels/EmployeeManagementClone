@@ -2,12 +2,9 @@ package app.zingo.employeemanagements.WebApi;
 
 import java.util.ArrayList;
 
-import app.zingo.employeemanagements.Model.Employee;
-import app.zingo.employeemanagements.Model.EmployeeImages;
 import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.Model.OrganizationPayments;
 import app.zingo.employeemanagements.Model.ResellerProfiles;
-import app.zingo.employeemanagements.Model.Tasks;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;

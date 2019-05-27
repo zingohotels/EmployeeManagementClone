@@ -3,7 +3,6 @@ package app.zingo.employeemanagements.Adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.design.widget.TextInputEditText;
-import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -22,9 +20,7 @@ import java.util.Date;
 import java.util.Random;
 
 import app.zingo.employeemanagements.Model.Expenses;
-import app.zingo.employeemanagements.Model.Leaves;
 import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminNewMainScreen;
 
 public class ExpenseListAdapter  extends RecyclerView.Adapter<ExpenseListAdapter.ViewHolder>{
 

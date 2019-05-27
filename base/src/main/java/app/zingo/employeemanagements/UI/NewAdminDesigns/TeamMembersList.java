@@ -1,9 +1,8 @@
 package app.zingo.employeemanagements.UI.NewAdminDesigns;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
@@ -14,15 +13,13 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import app.zingo.employeemanagements.Adapter.EmployeeUpdateAdapter;
 import app.zingo.employeemanagements.Adapter.TeamMembersAdapter;
 import app.zingo.employeemanagements.Model.Employee;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Employee.CreateEmployeeScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -89,13 +86,13 @@ public class TeamMembersList extends AppCompatActivity {
 
                                     if(PreferenceHandler.getInstance(TeamMembersList.this).getUserRoleUniqueID()==2){
 
-                                        if(emp.getEmployeeId()!=PreferenceHandler.getInstance(TeamMembersList.this).getUserId()){
+                                        if(emp.getEmployeeId()!= PreferenceHandler.getInstance(TeamMembersList.this).getUserId()){
                                             teamlist.add(emp);
                                         }
 
                                     }else{
 
-                                        if(emp.getManagerId()==PreferenceHandler.getInstance(TeamMembersList.this).getUserId()){
+                                        if(emp.getManagerId()== PreferenceHandler.getInstance(TeamMembersList.this).getUserId()){
                                             teamlist.add(emp);
                                         }
 
@@ -107,7 +104,7 @@ public class TeamMembersList extends AppCompatActivity {
 
                                 if(teamlist!=null&&teamlist.size()!=0){
 
-                                    Collections.sort(teamlist,Employee.compareEmployee);
+                                    Collections.sort(teamlist, Employee.compareEmployee);
                                     mNoEmpl.setVisibility(View.GONE);
                                     mTeamList.setVisibility(View.VISIBLE);
                                     TeamMembersAdapter adapter = new TeamMembersAdapter(TeamMembersList.this, teamlist);

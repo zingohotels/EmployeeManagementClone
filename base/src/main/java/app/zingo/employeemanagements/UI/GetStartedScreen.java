@@ -11,25 +11,18 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
-import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,18 +30,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationRequest;
@@ -56,10 +44,8 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
-import com.itextpdf.text.Utilities;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
@@ -71,43 +57,28 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import app.zingo.employeemanagements.Adapter.EmployeeAdapter;
 import app.zingo.employeemanagements.Custom.MyEditText;
 import app.zingo.employeemanagements.Custom.MyTextView;
 import app.zingo.employeemanagements.Model.Departments;
-import app.zingo.employeemanagements.Model.Employee;
-import app.zingo.employeemanagements.Model.Meetings;
 import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.Model.OrganizationPayments;
 import app.zingo.employeemanagements.Model.Plans;
 import app.zingo.employeemanagements.Model.ResellerProfiles;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Admin.CreatePaySlip;
-import app.zingo.employeemanagements.UI.Admin.EmployeesDashBoard;
-import app.zingo.employeemanagements.UI.Company.CreateCompany;
-import app.zingo.employeemanagements.UI.Company.CreateFounderScreen;
-import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
-import app.zingo.employeemanagements.UI.Employee.EmployeeMeetingHost;
 import app.zingo.employeemanagements.UI.Landing.PhoneVerificationScreen;
-import app.zingo.employeemanagements.UI.NewEmployeeDesign.EmployeeNewMainScreen;
-import app.zingo.employeemanagements.UI.Reseller.ResellerMainActivity;
-import app.zingo.employeemanagements.UI.Reseller.ResellerSignUpScree;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.TrackGPS;
 import app.zingo.employeemanagements.Utils.Util;
-import app.zingo.employeemanagements.WebApi.DepartmentApi;
-import app.zingo.employeemanagements.WebApi.MeetingsAPI;
 import app.zingo.employeemanagements.WebApi.OrganizationApi;
 import app.zingo.employeemanagements.WebApi.OrganizationPaymentAPI;
 import app.zingo.employeemanagements.WebApi.PlansAndRatesAPI;
 import app.zingo.employeemanagements.WebApi.ResellerAPI;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.text.TextUtils.isEmpty;
-import static java.security.AccessController.getContext;
 
 public class GetStartedScreen extends AppCompatActivity  implements PaymentResultListener , GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
@@ -885,7 +856,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
 
 
 
-    public void addOrganization(final Organization organization,final String payment) {
+    public void addOrganization(final Organization organization, final String payment) {
 
 
         final ProgressDialog dialog = new ProgressDialog(this);
@@ -962,7 +933,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
                             }else{
                                 Bundle bundle = new Bundle();
                                 bundle.putSerializable("Company",organization);
-                                Intent profile = new Intent(GetStartedScreen.this,PhoneVerificationScreen.class);
+                                Intent profile = new Intent(GetStartedScreen.this, PhoneVerificationScreen.class);
                                 profile.putExtras(bundle);
                                 profile.putExtra("Screen","Organization");
                                 startActivity(profile);
@@ -1008,7 +979,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
     }
 
 
-    public void addOrgaPay(final Organization organization,final OrganizationPayments organizationPayments) {
+    public void addOrgaPay(final Organization organization, final OrganizationPayments organizationPayments) {
 
 
         final ProgressDialog dialog = new ProgressDialog(this);
@@ -1046,7 +1017,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
 
                                 Bundle bundle = new Bundle();
                                 bundle.putSerializable("Company",organization);
-                                Intent profile = new Intent(GetStartedScreen.this,PhoneVerificationScreen.class);
+                                Intent profile = new Intent(GetStartedScreen.this, PhoneVerificationScreen.class);
                                 profile.putExtras(bundle);
                                 profile.putExtra("Screen","Organization");
                                 startActivity(profile);
@@ -1262,7 +1233,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
     }*/
 
 
-    public void getProfile(final int id,final Organization organization,final String code ){
+    public void getProfile(final int id, final Organization organization, final String code ){
 
         new ThreadExecuter().execute(new Runnable() {
             @Override
@@ -1323,7 +1294,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
         });
     }
 
-    public void getProfiles(final int id,final Organization organization,final String code ){
+    public void getProfiles(final int id, final Organization organization, final String code ){
 
         new ThreadExecuter().execute(new Runnable() {
             @Override
@@ -1439,7 +1410,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
     public void onConnected(@Nullable Bundle bundle) {
         Log.i("salam", " Connected");
 
-        if (ActivityCompat.checkSelfPermission(GetStartedScreen.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(GetStartedScreen.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(GetStartedScreen.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(GetStartedScreen.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -1516,7 +1487,7 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(UPDATE_INTERVAL);
         mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
-        if (ActivityCompat.checkSelfPermission(GetStartedScreen.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(GetStartedScreen.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(GetStartedScreen.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(GetStartedScreen.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(GetStartedScreen.this, "Enable Permissions", Toast.LENGTH_LONG).show();
         }
 
@@ -1527,13 +1498,13 @@ public class GetStartedScreen extends AppCompatActivity  implements PaymentResul
     }
 
     private void fn_permission() {
-        if ((ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
+        if ((ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
 
-            if ((ActivityCompat.shouldShowRequestPermissionRationale(GetStartedScreen.this, android.Manifest.permission.ACCESS_FINE_LOCATION))) {
+            if ((ActivityCompat.shouldShowRequestPermissionRationale(GetStartedScreen.this, Manifest.permission.ACCESS_FINE_LOCATION))) {
 
 
             } else {
-                ActivityCompat.requestPermissions(GetStartedScreen.this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION
+                ActivityCompat.requestPermissions(GetStartedScreen.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION
 
                         },
                         REQUEST_PERMISSIONS);

@@ -1,35 +1,25 @@
 package app.zingo.employeemanagements.Service;
 
-import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
-import android.location.LocationManager;
-import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
-import android.telephony.TelephonyManager;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -40,9 +30,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.SplittableRandom;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.Expenses;
@@ -51,18 +38,13 @@ import app.zingo.employeemanagements.Model.LoginDetails;
 import app.zingo.employeemanagements.Model.Meetings;
 import app.zingo.employeemanagements.Model.ObservableReportData;
 import app.zingo.employeemanagements.Model.ReportDataEmployee;
-import app.zingo.employeemanagements.Model.ReportDataModel;
 import app.zingo.employeemanagements.Model.Tasks;
-import app.zingo.employeemanagements.UI.Common.ReportManagementScreen;
-import app.zingo.employeemanagements.UI.NewEmployeeDesign.BreakPurpose;
+import app.zingo.employeemanagements.UI.Common.ReportBulkDataDisplayScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
-import app.zingo.employeemanagements.Utils.TrackGPS;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
-import app.zingo.employeemanagements.WebApi.LiveTrackingAPI;
 import app.zingo.employeemanagements.WebApi.MultpleAPI;
-import app.zingo.employeemanagements.base.BuildConfig;
 import app.zingo.employeemanagements.base.R;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
@@ -85,6 +67,8 @@ import rx.schedulers.Schedulers;
 
 public class ReportDownloadingDataService extends Service {
 
+    private static final String AUTHORITY="app.zingo.employeemanagements";
+
     private static final String TAG_FOREGROUND_SERVICE = "FOREGROUND_SERVICE";
 
     public static final String ACTION_START_FOREGROUND_SERVICE = "ACTION_START_FOREGROUND_SERVICE";
@@ -98,7 +82,8 @@ public class ReportDownloadingDataService extends Service {
 
     int totalDataCount = 0;
 
-    
+    String startDateValue = "";
+    String endDateValue = "";
 
 
     public ReportDownloadingDataService() {
@@ -156,6 +141,11 @@ public class ReportDownloadingDataService extends Service {
 
                 startDate = bundle.getString("StartDate");
                 endDate = bundle.getString("EndDate");
+
+                startDateValue = bundle.getString("StartDate");
+                endDateValue = bundle.getString("EndDate");
+
+
             }
 
 
@@ -188,7 +178,7 @@ public class ReportDownloadingDataService extends Service {
 
 
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
             String NOTIFICATION_CHANNEL_ID = "app.zingo.employeemanagements";
             String channelName = "Report Data Downloading";
@@ -223,7 +213,7 @@ public class ReportDownloadingDataService extends Service {
             CharSequence name = "Zingo" ;// The user-visible name of the channel.
             int importance = NotificationManager.IMPORTANCE_LOW;
             NotificationChannel mChannel=null;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
             }
 
@@ -243,7 +233,7 @@ public class ReportDownloadingDataService extends Service {
             Notification notification = builder.build();
 
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 assert notificationManager != null;
                 notificationManager.createNotificationChannel(mChannel);
             }
@@ -328,9 +318,8 @@ public class ReportDownloadingDataService extends Service {
 
                                     for (Employee e:employees) {
 
-                                            ReportDataEmployee reportDataEmployee = new ReportDataEmployee();
-                                            reportDataEmployee.setName(e.getEmployeeName());
-                                            getData(reportDataEmployee,e,new SimpleDateFormat("yyyy-MM-dd").format(date));
+
+                                            getData(e,new SimpleDateFormat("yyyy-MM-dd").format(date));
 
                                         }
 
@@ -398,7 +387,7 @@ public class ReportDownloadingDataService extends Service {
         return dates;
     }
 
-    public void getData(final ReportDataEmployee reportDataEmployee,final Employee dto,final String dateValue){
+    public void getData(final Employee dto, final String dateValue){
 
 
         Date date=null;
@@ -466,7 +455,8 @@ public class ReportDownloadingDataService extends Service {
                     result.setMeetingsArrayList((ArrayList<Meetings>)args[2]);
                     result.setTasksArrayList((ArrayList<Tasks>)args[3]);
                     result.setExpensesArrayList((ArrayList<Expenses>)args[4]);
-                    result.setEmpName(reportDataEmployee.getName());
+                    result.setEmpName(dto.getEmployeeName());
+                    result.setDate(dateValue);
 
                     data.add(result);
                     checkData(data,dateValue);
@@ -505,7 +495,7 @@ public class ReportDownloadingDataService extends Service {
 
     }
 
-    public void checkData(ArrayList<ObservableReportData> datapassing,final String dateValue){
+    public void checkData(ArrayList<ObservableReportData> datapassing, final String dateValue){
 
         if(datapassing!=null&&datapassing.size()!=0&&datapassing.size()==totalDataCount){
 
@@ -638,7 +628,7 @@ public class ReportDownloadingDataService extends Service {
 
 
                 }else{
-                    reportDataEmployee.setVisits("0"+meetingsArrayList.size());
+                    reportDataEmployee.setVisits("0");
 
                     // Toast.makeText(DailyTargetsForEmployeeActivity.this, "No Tasks given for this employee ", Toast.LENGTH_SHORT).show();
 
@@ -877,7 +867,7 @@ public class ReportDownloadingDataService extends Service {
 
                 if (liveTrackingArrayList !=null && liveTrackingArrayList.size()!=0) {
 
-                    Collections.sort(liveTrackingArrayList,LiveTracking.compareLiveTrack);
+                    Collections.sort(liveTrackingArrayList, LiveTracking.compareLiveTrack);
 
 
 
@@ -966,14 +956,105 @@ public class ReportDownloadingDataService extends Service {
                 }
 
                 reportDataEmployee.setName(data.getEmpName());
+                reportDataEmployee.setDate(data.getDate());
 
                 reportDataEmployeeArrayList.add(reportDataEmployee);
 
                 if(reportDataEmployeeArrayList.size()==datapassing.size()){
 
+                    Collections.sort(reportDataEmployeeArrayList, ReportDataEmployee.compareList);
+
                     if(generateReport(reportDataEmployeeArrayList)){
+
+                        try{
+
+                            File sd = Environment.getExternalStorageDirectory();
+                            String csvFile = "TeamActivity_"+startDateValue+"_"+endDateValue+".xls";
+
+                            File directory = new File(sd.getAbsolutePath()+"/Zingy App/Team Activity");
+                            //create directory if not exist
+
+                            File file = new File(directory, csvFile);
+
+
+                            // System.out.println("File Name="+root+pathToMyAttachedFile);
+
+                            if (!file.exists() || !file.canRead()) {
+
+
+                                return;
+                            }
+
+                            final int NOTIFY_ID = 11;
+                            String name = getString(R.string.app_name);
+                            String id = "1"; // The user-visible name of the channel.
+                            String description = getString(R.string.app_name); // The user-visible description of the channel.
+                            NotificationCompat.Builder builder;
+                            NotificationManager notifManager = null;
+                            if (notifManager == null) {
+                                notifManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+                            }
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                int importance = NotificationManager.IMPORTANCE_HIGH;
+                                NotificationChannel mChannel = notifManager.getNotificationChannel(id);
+                                if (mChannel == null) {
+                                    mChannel = new NotificationChannel(""+1, "Zingo", importance);
+                                    mChannel.setDescription("Report Data Completed");
+                                    mChannel.enableVibration(true);
+                                    mChannel.setLightColor(getColor(R.color.colorPrimaryDark));
+                                    mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+                                    notifManager.createNotificationChannel(mChannel);
+                                }
+                            } else {
+
+                            }
+
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("Data",reportDataEmployeeArrayList);
+                            Intent Off_broadcastIntent = new Intent();
+                            Off_broadcastIntent.setAction("Show");
+                            Off_broadcastIntent.setClass(this, ReportBulkDataDisplayScreen.class);
+                            Off_broadcastIntent.putExtras(bundle);
+                            Off_broadcastIntent.putExtra("toastMessage", "1");
+                            PendingIntent Off_actionIntent = PendingIntent.getActivity(this, 0, Off_broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                            Intent on_broadcastIntent = new Intent(Intent.ACTION_VIEW, FileProvider.getUriForFile(this, "app.zingo.employeemanagements.fileprovider", file));
+                            on_broadcastIntent.setAction("Display");
+                            on_broadcastIntent.putExtra("toastMessage", "0");
+                            on_broadcastIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                            PendingIntent on_actionIntent = PendingIntent.getActivity(this, 0, on_broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+                            Intent content_intent = new Intent(this, ReportBulkDataDisplayScreen.class);
+                            content_intent.putExtras(bundle);
+                            content_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, content_intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+                            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, id)
+                                    .setSmallIcon(R.mipmap.ic_launcher)
+                                    .setContentTitle(name)
+                                    .setContentText("Download Completed")
+                                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                                    .setContentIntent(pendingIntent)
+                                    .setAutoCancel(false)
+                                    .setVibrate(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400})
+                                    .addAction(R.drawable.build_year, "Show", Off_actionIntent)
+                                    .addAction(R.drawable.home_map, "Display", on_actionIntent);
+
+                            Notification notification = mBuilder.build();
+                           // notification.flags = Notification.FLAG_NO_CLEAR|Notification.FLAG_ONGOING_EVENT;
+                            notifManager.notify(1, notification);
+
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+
+
+
+
                         reportDataEmployeeArrayList = new ArrayList<>();
-                    }
+                     }
 
                 }
 
@@ -995,17 +1076,19 @@ public class ReportDownloadingDataService extends Service {
 
         stopForegroundService();
 
+        String csvFile="";
+
         try {
             File sd = Environment.getExternalStorageDirectory();
-            String csvFile = "TeamActivity"+new SimpleDateFormat("ddMMyy").format(new Date())+".xls";
+            csvFile = "TeamActivity_"+startDateValue+"_"+endDateValue+".xls";
 
-            File directory = new File(sd.getAbsolutePath()+"/TeamActivity");
+            File directory = new File(sd.getAbsolutePath()+"/Zingy App/Team Activity");
             //create directory if not exist
             if (!directory.exists() && !directory.isDirectory()) {
                 directory.mkdirs();
             }
             File file = new File(directory, csvFile);
-            String sheetName = "TeamActivity_"+new SimpleDateFormat("ddMMyy").format(new Date());//name of sheet
+            String sheetName = "TeamActivity_"+startDateValue+"_"+endDateValue+"";;//name of sheet
 
             WorkbookSettings wbSettings = new WorkbookSettings();
             wbSettings.setLocale(new Locale("en", "EN"));
@@ -1015,7 +1098,7 @@ public class ReportDownloadingDataService extends Service {
             WritableSheet sheet = workbook.createSheet(sheetName, 0);
 
 
-            sheet.addCell(new Label(5,0,PreferenceHandler.getInstance(ReportDownloadingDataService.this).getCompanyName()));
+            sheet.addCell(new Label(5,0, PreferenceHandler.getInstance(ReportDownloadingDataService.this).getCompanyName()));
 
             sheet.mergeCells(5,0,10,0);
 
@@ -1027,7 +1110,7 @@ public class ReportDownloadingDataService extends Service {
             sheet.addCell(new Label(3,3,"Generated On "+new SimpleDateFormat("dd/MM/yyyy, hh:mm aa").format(new Date())));
             sheet.mergeCells(3,3,6,3);
 
-            sheet.addCell(new Label(7,3,"User : "+PreferenceHandler.getInstance(ReportDownloadingDataService.this).getUserFullName()));
+            sheet.addCell(new Label(7,3,"User : "+ PreferenceHandler.getInstance(ReportDownloadingDataService.this).getUserFullName()));
             sheet.mergeCells(7,3,10,3);
 
             sheet.setColumnView(0, 20);
@@ -1066,15 +1149,16 @@ public class ReportDownloadingDataService extends Service {
 
 
 
-            sheet.addCell(new Label(0, 6, "Name",cellFormats));
-            sheet.addCell(new Label(1, 6, "Login",cellFormats));
-            sheet.addCell(new Label(2, 6, "Logout",cellFormats));
-            sheet.addCell(new Label(3, 6, "Hours",cellFormats));
-            sheet.addCell(new Label(4, 6, "Visits",cellFormats));
-            sheet.addCell(new Label(5, 6, "Tasks",cellFormats));
-            sheet.addCell(new Label(6, 6, "Expense",cellFormats));
-            sheet.addCell(new Label(7, 6, "Expense Amount",cellFormats));
-            sheet.addCell(new Label(8, 6, "Kms",cellFormats));
+            sheet.addCell(new Label(0, 6, "Date",cellFormats));
+            sheet.addCell(new Label(1, 6, "Name",cellFormats));
+            sheet.addCell(new Label(2, 6, "Login",cellFormats));
+            sheet.addCell(new Label(3, 6, "Logout",cellFormats));
+            sheet.addCell(new Label(4, 6, "Hours",cellFormats));
+            sheet.addCell(new Label(5, 6, "Visits",cellFormats));
+            sheet.addCell(new Label(6, 6, "Tasks",cellFormats));
+            sheet.addCell(new Label(7, 6, "Expense",cellFormats));
+            sheet.addCell(new Label(8, 6, "Expense Amount",cellFormats));
+            sheet.addCell(new Label(9, 6, "Kms",cellFormats));
 
 
             if(list != null)
@@ -1089,15 +1173,16 @@ public class ReportDownloadingDataService extends Service {
                         /*CellView cell=sheet.getColumnView(i);
                         cell.setAutosize(true);
                         sheet.setColumnView(i, cell);*/
-                        sheet.addCell(new Label(0, i+7, rd.getName(),cellFormats));
-                        sheet.addCell(new Label(1, i+7, rd.getLoginTime(),cellFormats));
-                        sheet.addCell(new Label(2, i+7, rd.getLogoutTime(),cellFormats));
-                        sheet.addCell(new Label(3, i+7, rd.getHours(),cellFormats));
-                        sheet.addCell(new Label(4, i+7, rd.getVisits(),cellFormats));
-                        sheet.addCell(new Label(5, i+7, rd.getTasks(),cellFormats));
-                        sheet.addCell(new Label(6, i+7, rd.getExpenses(),cellFormats));
-                        sheet.addCell(new Label(7, i+7, rd.getExpensesAmt(),cellFormats));
-                        sheet.addCell(new Label(8, i+7, rd.getKms(),cellFormats));
+                        sheet.addCell(new Label(0, i+7, rd.getDate(),cellFormats));
+                        sheet.addCell(new Label(1, i+7, rd.getName(),cellFormats));
+                        sheet.addCell(new Label(2, i+7, rd.getLoginTime(),cellFormats));
+                        sheet.addCell(new Label(3, i+7, rd.getLogoutTime(),cellFormats));
+                        sheet.addCell(new Label(4, i+7, rd.getHours(),cellFormats));
+                        sheet.addCell(new Label(5, i+7, rd.getVisits(),cellFormats));
+                        sheet.addCell(new Label(6, i+7, rd.getTasks(),cellFormats));
+                        sheet.addCell(new Label(7, i+7, rd.getExpenses(),cellFormats));
+                        sheet.addCell(new Label(8, i+7, rd.getExpensesAmt(),cellFormats));
+                        sheet.addCell(new Label(9, i+7, rd.getKms(),cellFormats));
 
 
 
@@ -1130,6 +1215,8 @@ public class ReportDownloadingDataService extends Service {
                 }
             }
         }
+
+
 
 
     }

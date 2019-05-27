@@ -45,6 +45,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute"
         tools:replace="android:allowBackup">
+
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
@@ -110,7 +111,6 @@
             android:name="app.zingo.employeemanagements.Service.LocationForegroundService"
             android:enabled="true"
             android:exported="true" />
-
         <service
             android:name="app.zingo.employeemanagements.Service.ReportDownloadingDataService"
             android:enabled="true"
@@ -416,7 +416,11 @@
         <activity android:name="app.zingo.employeemanagements.UI.Plan.BasicPlanSubscription" />
         <activity android:name="app.zingo.employeemanagements.UI.Plan.AdvancePlanSubscription" />
         <activity android:name="com.airpay.airpaysdk_simplifiedotp.AirpayActivity" />
-        <activity android:name="app.zingo.employeemanagements.UI.Common.ReportBulkdataScreen"></activity>
+        <activity android:name="app.zingo.employeemanagements.UI.Common.ReportBulkdataScreen" />
+        <activity android:name="app.zingo.employeemanagements.UI.Common.ReportBulkDataDisplayScreen" />
+        <activity android:name="app.zingo.employeemanagements.UI.Common.VisitingCard" />
+        <activity android:name="app.zingo.employeemanagements.UI.Common.CustomerMapViewScreen"></activity>
+        <activity android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.CalenderDashBoardActivity"/>
     </application>
 
 </manifest>

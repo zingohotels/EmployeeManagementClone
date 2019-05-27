@@ -1,19 +1,20 @@
 package app.zingo.employeemanagements.UI.NewAdminDesigns;
 
 import android.app.ProgressDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
+
 import java.util.ArrayList;
+
 import app.zingo.employeemanagements.Adapter.LeaveTakenEmployeeAdapter;
 import app.zingo.employeemanagements.Model.Leaves;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Employee.LeaveTakenDays;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.LeaveAPI;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,28 +29,33 @@ public class LeaveEmployeeListScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        try {
+        try{
             setContentView(R.layout.activity_leave_employee_list_screen);
 
             mLeaveList = findViewById(R.id.leave_list);
 
             Bundle bundle = getIntent().getExtras();
 
-            if (bundle != null) {
+            if(bundle!=null){
 
                 employeeId = bundle.getInt("EmployeeId");
             }
 
-            if (employeeId != 0) {
+
+
+            if(employeeId!=0){
                 getLeaveDetails(employeeId);
             }
 
-        } catch (Exception e) {
+
+        }catch (Exception e){
             e.printStackTrace();
         }
+
     }
 
     private void getLeaveDetails(final int employeeId){
+
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Loading Details..");
@@ -68,17 +74,22 @@ public class LeaveEmployeeListScreen extends AppCompatActivity {
                         int statusCode = response.code();
                         if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
 
+
                             if (progressDialog!=null)
                                 progressDialog.dismiss();
                             ArrayList<Leaves> list = response.body();
 
+
+
                             if (list !=null && list.size()!=0) {
+
                                 LeaveTakenEmployeeAdapter adapter = new LeaveTakenEmployeeAdapter(LeaveEmployeeListScreen.this,list);
                                 mLeaveList.setAdapter(adapter);
 
                             }else{
 
                                 Toast.makeText(LeaveEmployeeListScreen.this, "No leaves ", Toast.LENGTH_SHORT).show();
+
                             }
 
                         }else {

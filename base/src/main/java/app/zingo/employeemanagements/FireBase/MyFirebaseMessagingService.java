@@ -10,25 +10,20 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.net.URL;
 import java.util.Date;
 import java.util.Map;
-import java.util.Objects;
 
 import app.zingo.employeemanagements.Model.LeaveNotificationManagers;
 import app.zingo.employeemanagements.Model.LoginDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.MeetingDetailsNotificationManagers;
-import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.UI.Admin.EmployeeLiveMappingScreen;
 import app.zingo.employeemanagements.UI.Admin.LoginDetailsHost;
 import app.zingo.employeemanagements.UI.Admin.TaskListScreen;
@@ -40,6 +35,7 @@ import app.zingo.employeemanagements.UI.NewAdminDesigns.LoginMapScreenAdmin;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.MeetingMapScreen;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.UpdateLeaveScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
+import app.zingo.employeemanagements.base.R;
 
 /**
  * Created by ZingoHotels Tech on 17-10-2018.
@@ -187,7 +183,7 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }else if(PreferenceHandler.getInstance(getApplicationContext()).getUserId()==Integer.parseInt(map.get("EmployeeId"))&&(PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()==2||PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()==9)&&notification.getTitle().equalsIgnoreCase("Location Shared")){
+            }else if(PreferenceHandler.getInstance(getApplicationContext()).getUserId()==Integer.parseInt(map.get("EmployeeId"))&&(PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()==2|| PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()==9)&&notification.getTitle().equalsIgnoreCase("Location Shared")){
                 try {
                     sendPopNotification(notification.getTitle(), notification.getBody(), map);
                 } catch (Exception e) {
@@ -199,7 +195,7 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }else if(PreferenceHandler.getInstance(getApplicationContext()).getUserId()==Integer.parseInt(map.get("EmployeeId"))&&PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()!=2&&(notification.getTitle().equalsIgnoreCase("Task Allocated")||notification.getTitle().equalsIgnoreCase("Location Request"))){
+            }else if(PreferenceHandler.getInstance(getApplicationContext()).getUserId()==Integer.parseInt(map.get("EmployeeId"))&& PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()!=2&&(notification.getTitle().equalsIgnoreCase("Task Allocated")||notification.getTitle().equalsIgnoreCase("Location Request"))){
                 try {
                     sendPopNotifications(notification.getTitle(), notification.getBody(), map);
                 } catch (Exception e) {
@@ -282,7 +278,7 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
             intent.putExtras(bundle);
 
 
-        }else if(title.contains("Location Shared")&&PreferenceHandler.getInstance(getApplicationContext()).getUserId()==Integer.parseInt(map.get("EmployeeId"))){
+        }else if(title.contains("Location Shared")&& PreferenceHandler.getInstance(getApplicationContext()).getUserId()==Integer.parseInt(map.get("EmployeeId"))){
 
             intent = new Intent(this, EmployeeLiveMappingScreen.class);
             int employeeId = Integer.parseInt(map.get("EmployeeId"));
@@ -295,7 +291,7 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
             intent.putExtras(bundle);
 
 
-        }else if(title.contains("Task Allocated")&&PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()!=2){
+        }else if(title.contains("Task Allocated")&& PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()!=2){
 
             intent = new Intent(this, TaskListScreen.class);
             int employeeId = Integer.parseInt(map.get("EmployeeId"));
@@ -310,7 +306,7 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
             intent.putExtras(bundle);
 
 
-        }else if(title.contains("Login Details from")&&(PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()==2||PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()==9)){
+        }else if(title.contains("Login Details from")&&(PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()==2|| PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()==9)){
             //JSONObject object = new JSONObject(map);
 
             LoginDetailsNotificationManagers ld = new LoginDetailsNotificationManagers();
@@ -458,7 +454,7 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
             intent.putExtras(bundle);
 
 
-        }else if(title.contains("Task Allocated")&&PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()!=2){
+        }else if(title.contains("Task Allocated")&& PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()!=2){
 
             intent = new Intent(this, TaskListScreen.class);
             int employeeId = Integer.parseInt(map.get("EmployeeId"));
@@ -473,7 +469,7 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
             intent.putExtras(bundle);
 
 
-        }else if(title.contains("Location Request")&&PreferenceHandler.getInstance(getApplicationContext()).getUserId()==Integer.parseInt(map.get("EmployeeId"))){
+        }else if(title.contains("Location Request")&& PreferenceHandler.getInstance(getApplicationContext()).getUserId()==Integer.parseInt(map.get("EmployeeId"))){
 
             intent = new Intent(this, LocationSharingEmplActivity.class);
             int employeeId = Integer.parseInt(map.get("EmployeeId"));

@@ -1,8 +1,8 @@
 package app.zingo.employeemanagements.UI.Admin;
 
+import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.widget.EditText;
 import android.widget.Spinner;

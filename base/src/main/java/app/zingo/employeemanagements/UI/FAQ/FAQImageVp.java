@@ -48,7 +48,7 @@ public class FAQImageVp  extends PagerAdapter {
             @Override
             public void onClick(View v) {
 
-                Intent img = new Intent(context,ImageFullScreenActivity.class);
+                Intent img = new Intent(context, ImageFullScreenActivity.class);
                 img.putExtra("Images",images[position]);
                 context.startActivity(img);
 

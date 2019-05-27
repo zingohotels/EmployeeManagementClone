@@ -3,19 +3,17 @@ package app.zingo.employeemanagements.UI;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import app.zingo.employeemanagements.Custom.MyRegulerText;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Admin.DashBoardAdmin;
 import app.zingo.employeemanagements.UI.Landing.PhoneVerificationScreen;
 import app.zingo.employeemanagements.UI.Reseller.ResellerSignUpScree;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
+import app.zingo.employeemanagements.base.R;
 
 public class SignUpOptioins extends AppCompatActivity {
 
@@ -54,7 +52,7 @@ public class SignUpOptioins extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
 
-                    Intent started = new Intent(SignUpOptioins.this,ResellerSignUpScree.class);
+                    Intent started = new Intent(SignUpOptioins.this, ResellerSignUpScree.class);
                     PreferenceHandler.getInstance(SignUpOptioins.this).setSignUpType("Reseller");
                     startActivity(started);
 
@@ -64,7 +62,7 @@ public class SignUpOptioins extends AppCompatActivity {
             mEmployee.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent started = new Intent(SignUpOptioins.this,PhoneVerificationScreen.class);
+                    Intent started = new Intent(SignUpOptioins.this, PhoneVerificationScreen.class);
                     PreferenceHandler.getInstance(SignUpOptioins.this).setSignUpType("Employee");
                     started.putExtra("Screen","Employee");
                     startActivity(started);

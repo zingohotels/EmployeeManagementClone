@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,11 +14,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
 
@@ -29,24 +24,19 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import app.zingo.employeemanagements.Adapter.DepartmentAdapter;
 import app.zingo.employeemanagements.Custom.MyRegulerText;
-import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.Model.OrganizationPayments;
 import app.zingo.employeemanagements.Model.PlanIntentData;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Company.OrganizationDetailScree;
-import app.zingo.employeemanagements.UI.Landing.PhoneVerificationScreen;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.PlanSubscribtionScreen;
-import app.zingo.employeemanagements.UI.Reseller.ResellerDashBoard;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
 import app.zingo.employeemanagements.WebApi.OrganizationApi;
 import app.zingo.employeemanagements.WebApi.OrganizationPaymentAPI;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -116,7 +106,7 @@ public class BasicPlanScreen extends AppCompatActivity implements PaymentResultL
                                 bundlePlan.putSerializable("Organization",organization);
 
 
-                                Intent plan  = new Intent(BasicPlanScreen.this,PlanSubscribtionScreen.class);
+                                Intent plan  = new Intent(BasicPlanScreen.this, PlanSubscribtionScreen.class);
                                 plan.putExtras(bundlePlan);
                                 startActivity(plan);
 
@@ -172,7 +162,7 @@ public class BasicPlanScreen extends AppCompatActivity implements PaymentResultL
                                 bundlePlan.putSerializable("Organization",organization);
 
 
-                                Intent plan  = new Intent(BasicPlanScreen.this,PlanSubscribtionScreen.class);
+                                Intent plan  = new Intent(BasicPlanScreen.this, PlanSubscribtionScreen.class);
                                 plan.putExtras(bundlePlan);
                                 startActivity(plan);
 
@@ -232,7 +222,7 @@ public class BasicPlanScreen extends AppCompatActivity implements PaymentResultL
                                 bundlePlan.putSerializable("Organization",organization);
 
 
-                                Intent plan  = new Intent(BasicPlanScreen.this,PlanSubscribtionScreen.class);
+                                Intent plan  = new Intent(BasicPlanScreen.this, PlanSubscribtionScreen.class);
                                 plan.putExtras(bundlePlan);
                                 startActivity(plan);
 
@@ -318,7 +308,7 @@ public class BasicPlanScreen extends AppCompatActivity implements PaymentResultL
         });
     }
 
-    private void getEmployees(final int id,final Organization organization,final int plan){
+    private void getEmployees(final int id, final Organization organization, final int plan){
 
 
         final ProgressDialog progressDialog = new ProgressDialog(BasicPlanScreen.this);
@@ -396,7 +386,7 @@ public class BasicPlanScreen extends AppCompatActivity implements PaymentResultL
         });
     }
 
-    public void popupOne(final Organization org,final String planName,final double amount){
+    public void popupOne(final Organization org, final String planName, final double amount){
 
         try{
 
@@ -569,7 +559,7 @@ public class BasicPlanScreen extends AppCompatActivity implements PaymentResultL
 
     }
 
-    public void addOrgaPay(final Organization organization,final OrganizationPayments organizationPayments) {
+    public void addOrgaPay(final Organization organization, final OrganizationPayments organizationPayments) {
 
 
         final ProgressDialog dialog = new ProgressDialog(this);

@@ -34,8 +34,6 @@ import app.zingo.employeemanagements.Model.Expenses;
 import app.zingo.employeemanagements.Model.LoginDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.MeetingDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.Tasks;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.EmployerNotificationFragment;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
@@ -43,6 +41,7 @@ import app.zingo.employeemanagements.WebApi.ExpensesApi;
 import app.zingo.employeemanagements.WebApi.LoginNotificationAPI;
 import app.zingo.employeemanagements.WebApi.MeetingNotificationAPI;
 import app.zingo.employeemanagements.WebApi.TasksAPI;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -424,7 +423,7 @@ public class EmployeeNotificationScrenFragment extends Fragment {
 
                             if (list !=null && list.size()!=0) {
 
-                                Collections.sort(list,LoginDetailsNotificationManagers.compareLoginNM);
+                                Collections.sort(list, LoginDetailsNotificationManagers.compareLoginNM);
                                 Collections.reverse(list);
 
                                 Date date = new Date();

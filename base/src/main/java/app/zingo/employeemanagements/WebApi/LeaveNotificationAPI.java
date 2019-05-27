@@ -3,8 +3,6 @@ package app.zingo.employeemanagements.WebApi;
 import java.util.ArrayList;
 
 import app.zingo.employeemanagements.Model.LeaveNotificationManagers;
-import app.zingo.employeemanagements.Model.Leaves;
-import app.zingo.employeemanagements.Model.MeetingDetailsNotificationManagers;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;

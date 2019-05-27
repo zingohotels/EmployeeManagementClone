@@ -11,6 +11,8 @@
     <color name="text_black">#000000</color>
     <color name="transparentBlack">#5e000000</color>
 
+    <color name="colorAppBackground">#f2f2f2</color>
+
     <color name="text_blue">#3700B3</color>
     <color name="text_grey">#424D58</color>
     <color name="white">#FFFFFF</color>

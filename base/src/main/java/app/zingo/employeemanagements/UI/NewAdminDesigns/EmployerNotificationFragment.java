@@ -2,9 +2,7 @@ package app.zingo.employeemanagements.UI.NewAdminDesigns;
 
 
 import android.app.DatePickerDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,40 +19,29 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import app.zingo.employeemanagements.Adapter.ExpenseReportAdapter;
 import app.zingo.employeemanagements.Adapter.LoginDetailsNotificationAdapter;
 import app.zingo.employeemanagements.Adapter.MeetingNotificationAdapter;
-import app.zingo.employeemanagements.Adapter.TaskEmployeeListAdapter;
 import app.zingo.employeemanagements.Adapter.TaskListAdapter;
-import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.Expenses;
-import app.zingo.employeemanagements.Model.LoginDetails;
 import app.zingo.employeemanagements.Model.LoginDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.MeetingDetailsNotificationManagers;
-import app.zingo.employeemanagements.Model.ReportDataModel;
 import app.zingo.employeemanagements.Model.Tasks;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Common.ReportManagementScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
-import app.zingo.employeemanagements.WebApi.EmployeeApi;
 import app.zingo.employeemanagements.WebApi.ExpensesApi;
-import app.zingo.employeemanagements.WebApi.LoginDetailsAPI;
 import app.zingo.employeemanagements.WebApi.LoginNotificationAPI;
 import app.zingo.employeemanagements.WebApi.MeetingNotificationAPI;
 import app.zingo.employeemanagements.WebApi.TasksAPI;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -115,7 +102,7 @@ public class EmployerNotificationFragment extends Fragment {
             mNotificatioinRecyclerView = this.layout.findViewById(R.id.listNotifications);
             mNoNotification = this.layout.findViewById(R.id.noRecordFound);
 
-            SHOWCASE_ID_ADMIN = "ToolsAdminsn"+PreferenceHandler.getInstance(getActivity()).getUserId();
+            SHOWCASE_ID_ADMIN = "ToolsAdminsn"+ PreferenceHandler.getInstance(getActivity()).getUserId();
 
             mLoginNotification = this.layout.findViewById(R.id.loginNotiLay);
             mTaskNotification = this.layout.findViewById(R.id.taskNotiLay);
@@ -528,7 +515,7 @@ public class EmployerNotificationFragment extends Fragment {
 
                             if (list !=null && list.size()!=0) {
 
-                                Collections.sort(list,LoginDetailsNotificationManagers.compareLoginNM);
+                                Collections.sort(list, LoginDetailsNotificationManagers.compareLoginNM);
                                 Collections.reverse(list);
 
                                 Date date = new Date();
@@ -906,118 +893,130 @@ public class EmployerNotificationFragment extends Fragment {
     private void getExpense(final int employeeId,final String dateValue){
 
 
+    /*    final ProgressDialog progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setTitle("Loading Details");
+        progressDialog.setCancelable(false);
+        progressDialog.show();*/
 
-        ExpensesApi apiService = Util.getClient().create(ExpensesApi.class);
-        Call<ArrayList<Expenses>> call = apiService.getExpenseByManagerIdAndOrganizationId(PreferenceHandler.getInstance(getActivity()).getCompanyId(),employeeId);
 
-        call.enqueue(new Callback<ArrayList<Expenses>>() {
+        new ThreadExecuter().execute(new Runnable() {
             @Override
-            public void onResponse(Call<ArrayList<Expenses>> call, Response<ArrayList<Expenses>> response) {
+            public void run() {
+                ExpensesApi apiService = Util.getClient().create(ExpensesApi.class);
+                Call<ArrayList<Expenses>> call = apiService.getExpenseByManagerIdAndOrganizationId(PreferenceHandler.getInstance(getActivity()).getCompanyId(),employeeId);
+
+                call.enqueue(new Callback<ArrayList<Expenses>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<Expenses>> call, Response<ArrayList<Expenses>> response) {
 
                         /*if (progressDialog!=null)
                             progressDialog.dismiss();
 */
-                int statusCode = response.code();
-                if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
+                        int statusCode = response.code();
+                        if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
 
 
 
-                    ArrayList<Expenses> list = response.body();
-                    todayExpenses = new ArrayList<>();
+                            ArrayList<Expenses> list = response.body();
+                            todayExpenses = new ArrayList<>();
 
-                    Date date = new Date();
-                    Date adate = new Date();
-                    Date edate = new Date();
+                            Date date = new Date();
+                            Date adate = new Date();
+                            Date edate = new Date();
 
-                    try {
-                        date = new SimpleDateFormat("yyyy-MM-dd").parse(dateValue);
-
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    if (list !=null && list.size()!=0) {
+                            try {
+                                date = new SimpleDateFormat("yyyy-MM-dd").parse(dateValue);
 
 
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
 
-                        for (Expenses task:list) {
-
-                            String froms = task.getDate();
-
-
-                            Date afromDate = null;
+                            if (list !=null && list.size()!=0) {
 
 
-                            if(froms!=null&&!froms.isEmpty()){
 
-                                if(froms.contains("T")){
+                                for (Expenses task:list) {
 
-                                    String dojs[] = froms.split("T");
+                                    String froms = task.getDate();
 
-                                    try {
-                                        afromDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
-                                    } catch (ParseException e) {
-                                        e.printStackTrace();
+
+                                    Date afromDate = null;
+
+
+                                    if(froms!=null&&!froms.isEmpty()){
+
+                                        if(froms.contains("T")){
+
+                                            String dojs[] = froms.split("T");
+
+                                            try {
+                                                afromDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+
+
+                                        }
+
                                     }
 
+                                    if(afromDate!=null){
+
+                                        if(date.getTime() == afromDate.getTime() ){
+
+                                            todayExpenses.add(task);
+
+                                        }
+                                    }
 
                                 }
 
-                            }
-
-                            if(afromDate!=null){
-
-                                if(date.getTime() == afromDate.getTime() ){
-
-                                    todayExpenses.add(task);
-
-                                }
-                            }
-
-                        }
-
-                        if(todayExpenses!=null&&todayExpenses.size()!=0){
+                                if(todayExpenses!=null&&todayExpenses.size()!=0){
 
 
-                            mExpenseCount.setText(""+todayExpenses.size());
+                                    mExpenseCount.setText(""+todayExpenses.size());
                                    /* mNoNotification.setVisibility(View.GONE);
                                     mNotificatioinRecyclerView.setVisibility(View.VISIBLE);
                                     mNotificatioinRecyclerView.removeAllViews();
                                     ExpenseReportAdapter adapter = new ExpenseReportAdapter(getActivity(), todayExpenses);
                                     mNotificatioinRecyclerView.setAdapter(adapter);*/
-                        }else{
-                            mExpenseCount.setText("0");
+                                }else{
+                                    mExpenseCount.setText("0");
                                    /* mNoNotification.setVisibility(View.VISIBLE);
                                     mNotificatioinRecyclerView.setVisibility(View.GONE);*/
-                        }
+                                }
 
 
 
-                    }else{
-                        mExpenseCount.setText("0");
+                            }else{
+                                mExpenseCount.setText("0");
                                /* mNoNotification.setVisibility(View.VISIBLE);
                                 mNotificatioinRecyclerView.setVisibility(View.GONE);*/
-                    }
+                            }
 
-                }else {
+                        }else {
 
-                    mExpenseCount.setText("0");
+                            mExpenseCount.setText("0");
 /*                            mNoNotification.setVisibility(View.VISIBLE);
                             mNotificatioinRecyclerView.setVisibility(View.GONE);*/
-                }
-            }
+                        }
+                    }
 
-            @Override
-            public void onFailure(Call<ArrayList<Expenses>> call, Throwable t) {
-                // Log error here since request failed
+                    @Override
+                    public void onFailure(Call<ArrayList<Expenses>> call, Throwable t) {
+                        // Log error here since request failed
                    /*     if (progressDialog!=null)
                             progressDialog.dismiss();*/
-                Log.e("TAG", t.toString());
-                mExpenseCount.setText("0");
+                        Log.e("TAG", t.toString());
+                        mExpenseCount.setText("0");
                       /*  mNoNotification.setVisibility(View.VISIBLE);
                         mNotificatioinRecyclerView.setVisibility(View.GONE);*/
+                    }
+                });
             }
+
+
         });
     }
 

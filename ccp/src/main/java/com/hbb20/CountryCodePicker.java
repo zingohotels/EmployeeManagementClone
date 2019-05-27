@@ -115,7 +115,7 @@ public class CountryCodePicker extends RelativeLayout {
     private int dialogBackgroundColor, dialogTextColor, dialogSearchEditTextTintColor;
     private int fastScrollerBubbleTextAppearance;
     private CCPCountryGroup currentCountryGroup;
-    View.OnClickListener countryCodeHolderClickListener = new View.OnClickListener() {
+    OnClickListener countryCodeHolderClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
             if (isCcpClickable()) {

@@ -1,8 +1,8 @@
 package app.zingo.employeemanagements.UI.Common;
 
 import android.app.ProgressDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
@@ -11,12 +11,10 @@ import java.util.ArrayList;
 
 import app.zingo.employeemanagements.Adapter.EmployeeMeetingAdapter;
 import app.zingo.employeemanagements.Model.Meetings;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
-import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.MeetingsAPI;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

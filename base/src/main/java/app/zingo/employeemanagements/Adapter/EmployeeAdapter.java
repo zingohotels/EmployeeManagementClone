@@ -131,70 +131,46 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             dialogInterface.dismiss();
-
                             try{
-
                                 android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
                                 LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                                 View views = inflater.inflate(R.layout.alert_update_login, null);
-
                                 builder.setView(views);
-
-
                                 final Spinner mTask = views.findViewById(R.id.task_status_update);
                                 final Button mSave = views.findViewById(R.id.save);
-
                                 final android.support.v7.app.AlertDialog dialogs = builder.create();
                                 dialogs.show();
                                 dialogs.setCanceledOnTouchOutside(true);
-
                                 if(holder.mStatus.getText().toString().equalsIgnoreCase("Absent")){
-
                                     mTask.setSelection(0);
                                 }else{
                                     mTask.setSelection(1);
                                 }
-
-
                                 mSave.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-
                                         String status = mTask.getSelectedItem().toString();
                                       if(status!=null&&status.equalsIgnoreCase("Absent")){
-
                                           String value = holder.mLoginId.getText().toString();
-
                                           int valueCheck = Integer.parseInt(value);
-
                                           if(valueCheck==0){
                                               dialogs.dismiss();
-
                                           }else{
                                               getLoginDetailsById(Integer.parseInt(value),status,holder.mStatus);
                                               dialogs.dismiss();
                                           }
-
-
                                       }else{
-
                                           String value = holder.mLoginId.getText().toString();
-
                                           int valueCheck = Integer.parseInt(value);
-
                                           if(valueCheck==0){
-
                                               SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
                                               SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
-
                                               LoginDetails loginDetails = new LoginDetails();
                                               loginDetails.setEmployeeId(dto.getEmployeeId());
                                               loginDetails.setLatitude(""+PreferenceHandler.getInstance(context).getOrganizationLati());
                                               loginDetails.setLongitude(""+PreferenceHandler.getInstance(context).getOrganizationLongi());
-
                                               LatLng master = new LatLng(Double.parseDouble(PreferenceHandler.getInstance(context).getOrganizationLati()),Double.parseDouble(PreferenceHandler.getInstance(context).getOrganizationLongi()));
                                               String address = getAddress(master);
-
                                               loginDetails.setLocation(""+address);
                                               loginDetails.setLoginTime(""+sdt.format(new Date()));
                                               loginDetails.setLoginDate(""+sdf.format(new Date()));
@@ -204,47 +180,32 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
                                               } catch (Exception e) {
                                                   e.printStackTrace();
                                               }
-
                                               dialogs.dismiss();
-
                                           }else{
                                               getLoginDetailsById(Integer.parseInt(value),status,holder.mStatus);
                                               dialogs.dismiss();
                                           }
-
-
                                       }
-
                                     }
                                 });
-
-
-
                             }catch (Exception e){
                                 e.printStackTrace();
                                 dialogInterface.dismiss();
                             }
-
                         }
                     });
                     builder.setNegativeButton("View", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             dialogInterface.dismiss();
-
-
                             Intent intent = new Intent(context, EmployeeDashBoardAdminView.class);
                             Bundle bundle = new Bundle();
                             bundle.putSerializable("Profile",list.get(position));
                             bundle.putInt("ProfileId",list.get(position).getEmployeeId());
                             intent.putExtras(bundle);
                             context.startActivity(intent);
-
-
                         }
                     });
-
-
                     AlertDialog dialog = builder.create();
                     dialog.show();
                 */
@@ -303,14 +264,12 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
                     context.startActivity(intent);
 
                 }/*else  if(type!=null&&type.equalsIgnoreCase("Report")){
-
                     Intent intent = new Intent(context, ReportManagementScreen.class);
                     Bundle bundle = new Bundle();
                     bundle.putInt("EmployeeId",list.get(position).getEmployeeId());
                     bundle.putSerializable("Employee",list.get(position));
                     intent.putExtras(bundle);
                     context.startActivity(intent);
-
                 }*/else{
                     Intent intent = new Intent(context, EmployeeDashBoardAdminView.class);
                     Bundle bundle = new Bundle();
@@ -632,8 +591,8 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
 
                         if(s!=null){
 
-                           status.setText("Present");
-                           loginId.setText(""+s.getLoginDetailsId());
+                            status.setText("Present");
+                            loginId.setText(""+s.getLoginDetailsId());
                             status.setBackgroundColor(Color.parseColor("#00FF00"));
 
 

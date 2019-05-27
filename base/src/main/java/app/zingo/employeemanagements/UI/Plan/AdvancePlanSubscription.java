@@ -4,12 +4,11 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -30,8 +29,6 @@ import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.Model.OrganizationPayments;
 import app.zingo.employeemanagements.Model.PlanIntentData;
-
-import app.zingo.employeemanagements.UI.EmployeeSignUp;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.PlanSubscribtionScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
@@ -110,7 +107,7 @@ public class AdvancePlanSubscription extends AppCompatActivity implements Paymen
                                 bundlePlan.putSerializable("Organization",organization);
 
 
-                                Intent plan  = new Intent(AdvancePlanSubscription.this,PlanSubscribtionScreen.class);
+                                Intent plan  = new Intent(AdvancePlanSubscription.this, PlanSubscribtionScreen.class);
                                 plan.putExtras(bundlePlan);
                                 startActivity(plan);
 
@@ -170,7 +167,7 @@ public class AdvancePlanSubscription extends AppCompatActivity implements Paymen
                                 bundlePlan.putSerializable("Organization",organization);
 
 
-                                Intent plan  = new Intent(AdvancePlanSubscription.this,PlanSubscribtionScreen.class);
+                                Intent plan  = new Intent(AdvancePlanSubscription.this, PlanSubscribtionScreen.class);
                                 plan.putExtras(bundlePlan);
                                 startActivity(plan);
 
@@ -231,7 +228,7 @@ public class AdvancePlanSubscription extends AppCompatActivity implements Paymen
                                 bundlePlan.putSerializable("Organization",organization);
 
 
-                                Intent plan  = new Intent(AdvancePlanSubscription.this,PlanSubscribtionScreen.class);
+                                Intent plan  = new Intent(AdvancePlanSubscription.this, PlanSubscribtionScreen.class);
                                 plan.putExtras(bundlePlan);
                                 startActivity(plan);
 
@@ -318,7 +315,7 @@ public class AdvancePlanSubscription extends AppCompatActivity implements Paymen
         });
     }
 
-    private void getEmployees(final int id,final Organization organization,final int plan){
+    private void getEmployees(final int id, final Organization organization, final int plan){
 
 
         final ProgressDialog progressDialog = new ProgressDialog(AdvancePlanSubscription.this);
@@ -396,7 +393,7 @@ public class AdvancePlanSubscription extends AppCompatActivity implements Paymen
         });
     }
 
-    public void popupOne(final Organization org,final String planName,final double amount){
+    public void popupOne(final Organization org, final String planName, final double amount){
 
         try{
 
@@ -569,7 +566,7 @@ public class AdvancePlanSubscription extends AppCompatActivity implements Paymen
 
     }
 
-    public void addOrgaPay(final Organization organization,final OrganizationPayments organizationPayments) {
+    public void addOrgaPay(final Organization organization, final OrganizationPayments organizationPayments) {
 
 
         final ProgressDialog dialog = new ProgressDialog(this);

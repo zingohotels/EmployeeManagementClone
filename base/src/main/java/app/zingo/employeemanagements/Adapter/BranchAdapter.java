@@ -6,41 +6,28 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 
 import app.zingo.employeemanagements.Custom.MyRegulerText;
 import app.zingo.employeemanagements.Custom.MyTextView;
-import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Employee;
-import app.zingo.employeemanagements.Model.LoginDetails;
 import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminNewMainScreen;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.EmployeeDashBoardAdminView;
-import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.BranchOptionScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -208,7 +195,7 @@ public class BranchAdapter extends RecyclerView.Adapter<BranchAdapter.ViewHolder
                                 ArrayList<Employee> employees = new ArrayList<>();
                                 for(int i=0;i<list.size();i++){
 
-                                    if(list.get(i).getEmployeeId()!=PreferenceHandler.getInstance(context).getUserId()){
+                                    if(list.get(i).getEmployeeId()!= PreferenceHandler.getInstance(context).getUserId()){
 
                                         employees.add(list.get(i));
 
@@ -216,7 +203,7 @@ public class BranchAdapter extends RecyclerView.Adapter<BranchAdapter.ViewHolder
                                 }
 
                                 if(employees!=null&&employees.size()!=0){
-                                    Collections.sort(employees,Employee.compareEmployee);
+                                    Collections.sort(employees, Employee.compareEmployee);
 
                                     EmployeeUpdateAdapter adapter = new EmployeeUpdateAdapter(context, employees,"Update");
                                     mEmpList.setAdapter(adapter);

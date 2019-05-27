@@ -20,13 +20,10 @@ import java.util.Map;
 import java.util.Objects;
 
 import app.zingo.employeemanagements.Model.LeaveNotificationManagers;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Admin.LoginDetailsHost;
-import app.zingo.employeemanagements.UI.Admin.TaskListScreen;
 import app.zingo.employeemanagements.UI.Common.GeneralNotificationScreen;
-import app.zingo.employeemanagements.UI.Employee.EmployeeMeetingHost;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.UpdateLeaveScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
+import app.zingo.employeemanagements.base.R;
 
 public class MyFirebaseServicemessage  extends FirebaseMessagingService {
 

@@ -7,11 +7,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,11 +24,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.PolylineOptions;
-
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -41,42 +35,32 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 
-import app.zingo.employeemanagements.Adapter.ExpenseListAdapter;
-import app.zingo.employeemanagements.Adapter.ReportDetailEmployeeAdapter;
-import app.zingo.employeemanagements.Adapter.TaskListAdapter;
+import app.zingo.employeemanagements.Adapter.LoginDetailsNotificationAdapter;
 import app.zingo.employeemanagements.Custom.MyRegulerText;
-import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.EmailData;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.Expenses;
 import app.zingo.employeemanagements.Model.LiveTracking;
 import app.zingo.employeemanagements.Model.LoginDetails;
-import app.zingo.employeemanagements.Model.MarkerData;
+import app.zingo.employeemanagements.Model.LoginDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.Meetings;
-import app.zingo.employeemanagements.Model.OrgDashBoard;
 import app.zingo.employeemanagements.Model.ReportDataEmployee;
 import app.zingo.employeemanagements.Model.ReportDataModel;
 import app.zingo.employeemanagements.Model.Tasks;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Admin.EmployeeLiveMappingScreen;
-import app.zingo.employeemanagements.UI.ContactUsScreen;
-import app.zingo.employeemanagements.UI.Employee.EmployeeListScreen;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.EmployeeExpenseList;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.ReportExpenseList;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.ReportTaskListScreen;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.ReportVisitsListScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
-import app.zingo.employeemanagements.WebApi.DashBoardAPI;
-import app.zingo.employeemanagements.WebApi.DepartmentApi;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
 import app.zingo.employeemanagements.WebApi.ExpensesApi;
 import app.zingo.employeemanagements.WebApi.LiveTrackingAPI;
 import app.zingo.employeemanagements.WebApi.LoginDetailsAPI;
+import app.zingo.employeemanagements.WebApi.LoginNotificationAPI;
 import app.zingo.employeemanagements.WebApi.MeetingsAPI;
-import app.zingo.employeemanagements.WebApi.SendEmailAPI;
 import app.zingo.employeemanagements.WebApi.TasksAPI;
+import app.zingo.employeemanagements.base.R;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
 import jxl.format.Alignment;
@@ -175,6 +159,7 @@ public class ReportManagementScreen extends AppCompatActivity {
                             TextView login = viewHolder.mLogin;
                             TextView logout = viewHolder.mLogout;
                             TextView hours = viewHolder.mHours;
+                            TextView bhours = viewHolder.breakText;
                             TextView visits = viewHolder.mVisits;
                             TextView tasks = viewHolder.mTasks;
                             TextView expense = viewHolder.mExpenses;
@@ -187,6 +172,7 @@ public class ReportManagementScreen extends AppCompatActivity {
                             rd.setLoginTime(login.getText().toString());
                             rd.setLogoutTime(logout.getText().toString());
                             rd.setHours(hours.getText().toString());
+                            rd.setBreakHours(bhours.getText().toString());
                             rd.setVisits(visits.getText().toString());
                             rd.setTasks(tasks.getText().toString());
                             rd.setExpenses(expense.getText().toString());
@@ -411,7 +397,7 @@ public class ReportManagementScreen extends AppCompatActivity {
                     if(employeeTasks!=null&&employeeTasks.size()!=0){
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("EmployeeTask",employeeTasks);
-                        Intent tsak = new Intent(ReportManagementScreen.this,ReportTaskListScreen.class);
+                        Intent tsak = new Intent(ReportManagementScreen.this, ReportTaskListScreen.class);
                         tsak.putExtras(bundle);
                         startActivity(tsak);
 
@@ -429,7 +415,7 @@ public class ReportManagementScreen extends AppCompatActivity {
                     if(employeeExpense!=null&&employeeExpense.size()!=0){
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("EmployeeExpense",employeeExpense);
-                        Intent tsak = new Intent(ReportManagementScreen.this,ReportExpenseList.class);
+                        Intent tsak = new Intent(ReportManagementScreen.this, ReportExpenseList.class);
                         tsak.putExtras(bundle);
                         startActivity(tsak);
 
@@ -584,7 +570,7 @@ public class ReportManagementScreen extends AppCompatActivity {
         private String dateValue;
 
 
-        public ReportDetailEmployeeAdapter(Context context, ArrayList<Employee> list,String dateValue) {
+        public ReportDetailEmployeeAdapter(Context context, ArrayList<Employee> list, String dateValue) {
 
             this.context = context;
             this.list = list;
@@ -624,6 +610,8 @@ public class ReportManagementScreen extends AppCompatActivity {
                 String logDate = new SimpleDateFormat("MMM dd,yyyy").format(date);
                 getLoginDetails(ld,holder.mLogin,holder.mLogout,holder.mHours,logDate);
 
+                getLoginNotifications(dto.getEmployeeId(),new SimpleDateFormat("MMM dd,yyyy").format(new Date()),holder.breakText,logDate);
+
 
                 LiveTracking lv = new LiveTracking();
                 lv.setEmployeeId(dto.getEmployeeId());
@@ -652,7 +640,7 @@ public class ReportManagementScreen extends AppCompatActivity {
 
         class ViewHolder extends RecyclerView.ViewHolder /*implements View.OnClickListener*/ {
 
-            public TextView mName,mLogin,mLogout,mHours,mVisits,mTasks,mExpenses,mExpAmt,mKm;
+            public TextView mName,mLogin,mLogout,mHours,mVisits,mTasks,mExpenses,mExpAmt,mKm,breakText;
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -662,6 +650,7 @@ public class ReportManagementScreen extends AppCompatActivity {
                 mLogin = itemView.findViewById(R.id.report_login);
                 mLogout = itemView.findViewById(R.id.report_logout);
                 mHours = itemView.findViewById(R.id.report_hours);
+                breakText = itemView.findViewById(R.id.report_hours_break);
                 mVisits = itemView.findViewById(R.id.report_visit);
                 mTasks = itemView.findViewById(R.id.report_task);
                 mExpenses = itemView.findViewById(R.id.report_expense);
@@ -673,7 +662,7 @@ public class ReportManagementScreen extends AppCompatActivity {
             }
         }
 
-        private void getLoginDetails(final LoginDetails loginDetails,final TextView login,final TextView logout,final TextView workingHrs,final String comDate){
+        private void getLoginDetails(final LoginDetails loginDetails, final TextView login, final TextView logout, final TextView workingHrs, final String comDate){
 
 
 
@@ -818,6 +807,192 @@ public class ReportManagementScreen extends AppCompatActivity {
 
             });
         }
+
+        private void getLoginNotifications(final int id,final String dateValue,final  TextView breaktext, final String comDate){
+
+
+            new ThreadExecuter().execute(new Runnable() {
+                @Override
+                public void run() {
+                    LoginNotificationAPI apiService = Util.getClient().create(LoginNotificationAPI.class);
+                    Call<ArrayList<LoginDetailsNotificationManagers>> call = apiService.getNotificationByEmployeeId(id);
+
+                    call.enqueue(new Callback<ArrayList<LoginDetailsNotificationManagers>>() {
+                        @Override
+                        public void onResponse(Call<ArrayList<LoginDetailsNotificationManagers>> call, Response<ArrayList<LoginDetailsNotificationManagers>> response) {
+                            int statusCode = response.code();
+                            if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
+
+
+
+                                ArrayList<LoginDetailsNotificationManagers> list = response.body();
+                                ArrayList<LoginDetailsNotificationManagers> dateLogins = new ArrayList<>();
+
+
+                                if (list !=null && list.size()!=0) {
+
+                                    Collections.sort(list, LoginDetailsNotificationManagers.compareLoginNM);
+                                    Collections.reverse(list);
+
+                                    Date date = new Date();
+                                    Date adate = new Date();
+
+                                    String currentDateStart = dateValue+" 12:00 AM";
+                                    String currentDateEnd = dateValue+" 11:59 PM";
+
+
+
+                                    try {
+                                        date = new SimpleDateFormat("MMM dd,yyyy hh:mm a").parse(currentDateStart);
+                                        adate = new SimpleDateFormat("MMM dd,yyyy hh:mm a").parse(currentDateEnd);
+
+
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    String loginT="";
+                                    String logoutT="";
+                                    long diffHrs = 0;
+
+
+                                    for (LoginDetailsNotificationManagers ln:list) {
+
+                                        String froms = ln.getLoginDate();
+                                        Date loginDate = null;
+                                        try {
+                                            loginDate = new SimpleDateFormat("MMM dd,yyyy hh:mm a").parse(froms);
+                                            String status = ln.getStatus();
+
+                                            if(date!=null&&adate!=null&&(status!=null&&(status.equalsIgnoreCase("Lunch Break")||status.equalsIgnoreCase("Tea Break")))){
+
+                                                if(date.getTime()<=loginDate.getTime()&&adate.getTime()>=loginDate.getTime()){
+
+                                                    dateLogins.add(ln);
+
+                                                    if(ln.getMessage()!=null&&(ln.getMessage().contains("Break taken from "))){
+
+                                                        loginT = ln.getLoginDate();
+                                                    }else if(ln.getMessage()!=null&&(ln.getMessage().contains("Break ended at"))){
+                                                        logoutT = ln.getLoginDate();
+                                                    }
+
+
+                                                        if((loginT==null||loginT.isEmpty())){
+
+                                                        }else{
+
+                                                            if(ln.getMessage()!=null&&(ln.getMessage().contains("Break taken from "))){
+
+                                                                loginT = ln.getLoginDate();
+                                                            }else if(ln.getMessage()!=null&&(ln.getMessage().contains("Break ended at"))){
+                                                                logoutT = ln.getLoginDate();
+                                                            }
+                                                            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+
+
+                                                            Date fd=null,td=null;
+
+
+
+                                                            if(loginT==null||loginT.isEmpty()){
+
+                                                                loginT = comDate +" 00:00 am";
+                                                            }else if(loginT.contains(" a.m.")){
+
+
+                                                                loginT = loginT.replace(" a.m."," AM");
+
+                                                            }else if(logoutT.contains(" p.m.")){
+
+                                                                loginT = loginT.replace(" p.m."," PM");
+                                                            }
+
+                                                            if(logoutT==null||logoutT.isEmpty()){
+
+                                                                logoutT = comDate  +" "+new SimpleDateFormat("hh:mm a").format(new Date()) ;
+                                                            }else if(logoutT.contains(" a.m.")){
+
+
+                                                                logoutT = logoutT.replace(" a.m."," AM");
+
+                                                            }else if(logoutT.contains(" p.m.")){
+
+                                                                logoutT = logoutT.replace(" p.m."," PM");
+                                                            }
+
+
+                                                            try {
+                                                                fd = sdf.parse(""+loginT);
+                                                                td = sdf.parse(""+logoutT);
+
+                                                                long diff = td.getTime() - fd.getTime();
+                                                                diffHrs = diffHrs+diff;
+
+                                                            } catch (ParseException e) {
+                                                                e.printStackTrace();
+
+                                                            }
+                                                        }
+
+                                                    //loop
+
+
+
+                                                }
+                                            }
+                                        } catch (ParseException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+
+                                    long Hours = diffHrs / (60 * 60 * 1000) ;
+                                    long Minutes = diffHrs / (60 * 1000);
+
+                                    int minutes = (int) ((diffHrs / (1000*60)) % 60);
+                                    int hours   = (int) ((diffHrs / (1000*60*60)) % 24);
+                                    int days   = (int) ((diffHrs / (1000*60*60*24)));
+
+
+                                    DecimalFormat df = new DecimalFormat("00");
+
+                                    breaktext.setText(String.format("%02d", days)+":"+String.format("%02d", hours) +":"+String.format("%02d", minutes));
+
+
+
+
+
+
+
+                                }else{
+
+                                    breaktext.setText("0");
+
+
+                                }
+
+                            }else {
+                                breaktext.setText("0");
+
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ArrayList<LoginDetailsNotificationManagers>> call, Throwable t) {
+                            // Log error here since request failed
+
+                            breaktext.setText("0");
+
+                            Log.e("TAG", t.toString());
+                        }
+                    });
+                }
+
+
+            });
+        }
+
         private void getMeetingsDetails(final Meetings loginDetails, final TextView visits){
 
 
@@ -1173,7 +1348,7 @@ public class ReportManagementScreen extends AppCompatActivity {
             });
         }
 
-        private void getLiveLocation(final LiveTracking lv,final TextView km){
+        private void getLiveLocation(final LiveTracking lv, final TextView km){
 
 
             final ProgressDialog progressDialog = new ProgressDialog(ReportManagementScreen.this);
@@ -1208,7 +1383,7 @@ public class ReportManagementScreen extends AppCompatActivity {
 
                                 if (list !=null && list.size()!=0) {
 
-                                    Collections.sort(list,LiveTracking.compareLiveTrack);
+                                    Collections.sort(list, LiveTracking.compareLiveTrack);
 
 
 
@@ -1329,8 +1504,9 @@ public class ReportManagementScreen extends AppCompatActivity {
         WritableWorkbook workbook = null;
 
         try {
+
             File sd = Environment.getExternalStorageDirectory();
-            String csvFile = "TeamActivity"+new SimpleDateFormat("ddMMyy").format(new Date())+".xls";
+            String csvFile = "TeamActivity_"+new SimpleDateFormat("MMMyy").format(new Date())+".xls";
 
             File directory = new File(sd.getAbsolutePath()+"/TeamActivity");
             //create directory if not exist
@@ -1338,7 +1514,7 @@ public class ReportManagementScreen extends AppCompatActivity {
                 directory.mkdirs();
             }
             File file = new File(directory, csvFile);
-            String sheetName = "TeamActivity_"+new SimpleDateFormat("ddMMyy").format(new Date());//name of sheet
+            String sheetName = "TeamActivity_"+new SimpleDateFormat("MMMyy").format(new Date());//name of sheet
 
             WorkbookSettings wbSettings = new WorkbookSettings();
             wbSettings.setLocale(new Locale("en", "EN"));
@@ -1348,7 +1524,7 @@ public class ReportManagementScreen extends AppCompatActivity {
             WritableSheet sheet = workbook.createSheet(sheetName, 0);
 
 
-            sheet.addCell(new Label(5,0,PreferenceHandler.getInstance(ReportManagementScreen.this).getCompanyName()));
+            sheet.addCell(new Label(5,0, PreferenceHandler.getInstance(ReportManagementScreen.this).getCompanyName()));
 
             sheet.mergeCells(5,0,10,0);
 
@@ -1360,7 +1536,7 @@ public class ReportManagementScreen extends AppCompatActivity {
             sheet.addCell(new Label(3,3,"Generated On "+new SimpleDateFormat("dd/MM/yyyy, hh:mm aa").format(new Date())));
             sheet.mergeCells(3,3,6,3);
 
-            sheet.addCell(new Label(7,3,"User : "+PreferenceHandler.getInstance(ReportManagementScreen.this).getUserFullName()));
+            sheet.addCell(new Label(7,3,"User : "+ PreferenceHandler.getInstance(ReportManagementScreen.this).getUserFullName()));
             sheet.mergeCells(7,3,10,3);
 
             sheet.setColumnView(0, 20);
@@ -1375,7 +1551,7 @@ public class ReportManagementScreen extends AppCompatActivity {
             sheet.setColumnView(9, 15);
             sheet.setColumnView(10, 15);
             sheet.setColumnView(11, 8);
-            sheet.setColumnView(12, 15);
+            sheet.setColumnView(12, 18);
             sheet.setColumnView(13, 15);
             sheet.setColumnView(14, 15);
             sheet.setColumnView(15, 15);
@@ -1407,11 +1583,12 @@ public class ReportManagementScreen extends AppCompatActivity {
             sheet.addCell(new Label(1, 12, "Login",cellFormats));
             sheet.addCell(new Label(2, 12, "Logout",cellFormats));
             sheet.addCell(new Label(3, 12, "Hours",cellFormats));
-            sheet.addCell(new Label(4, 12, "Visits",cellFormats));
-            sheet.addCell(new Label(5, 12, "Tasks",cellFormats));
-            sheet.addCell(new Label(6, 12, "Expense",cellFormats));
-            sheet.addCell(new Label(7, 12, "Expense Amount",cellFormats));
-            sheet.addCell(new Label(8, 12, "Kms",cellFormats));
+            sheet.addCell(new Label(4, 12, "Break Hours",cellFormats));
+            sheet.addCell(new Label(5, 12, "Visits",cellFormats));
+            sheet.addCell(new Label(6, 12, "Tasks",cellFormats));
+            sheet.addCell(new Label(7, 12, "Expense",cellFormats));
+            sheet.addCell(new Label(8, 12, "Expense Amount",cellFormats));
+            sheet.addCell(new Label(9, 12, "Kms",cellFormats));
 
 
             if(list != null)
@@ -1435,11 +1612,12 @@ public class ReportManagementScreen extends AppCompatActivity {
                         sheet.addCell(new Label(1, i+13, rd.getLoginTime(),cellFormats));
                         sheet.addCell(new Label(2, i+13, rd.getLogoutTime(),cellFormats));
                         sheet.addCell(new Label(3, i+13, rd.getHours(),cellFormats));
-                        sheet.addCell(new Label(4, i+13, rd.getVisits(),cellFormats));
-                        sheet.addCell(new Label(5, i+13, rd.getTasks(),cellFormats));
-                        sheet.addCell(new Label(6, i+13, rd.getExpenses(),cellFormats));
-                        sheet.addCell(new Label(7, i+13, rd.getExpensesAmt(),cellFormats));
-                        sheet.addCell(new Label(8, i+13, rd.getKms(),cellFormats));
+                        sheet.addCell(new Label(4, i+13, rd.getBreakHours(),cellFormats));
+                        sheet.addCell(new Label(5, i+13, rd.getVisits(),cellFormats));
+                        sheet.addCell(new Label(6, i+13, rd.getTasks(),cellFormats));
+                        sheet.addCell(new Label(7, i+13, rd.getExpenses(),cellFormats));
+                        sheet.addCell(new Label(8, i+13, rd.getExpensesAmt(),cellFormats));
+                        sheet.addCell(new Label(9, i+13, rd.getKms(),cellFormats));
 
 
 
@@ -1492,7 +1670,7 @@ public class ReportManagementScreen extends AppCompatActivity {
 
         }else if (id == R.id.action_calendar_past) {
 
-            Intent custom = new Intent(ReportManagementScreen.this,ReportBulkdataScreen.class);
+            Intent custom = new Intent(ReportManagementScreen.this, ReportBulkdataScreen.class);
             startActivity(custom);
 
         }

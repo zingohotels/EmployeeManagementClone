@@ -17,14 +17,11 @@ import java.util.Collections;
 
 import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Employee;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Admin.DepartmentEmployeeListScreen;
-import app.zingo.employeemanagements.UI.Employee.EmployeeListScreen;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.EmployeeUpdateListScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -140,7 +137,7 @@ public class DepartmentAdapter extends RecyclerView.Adapter<DepartmentAdapter.Vi
                                 ArrayList<Employee> employees = new ArrayList<>();
                                 for(int i=0;i<list.size();i++){
 
-                                    if(list.get(i).getEmployeeId()!=PreferenceHandler.getInstance(context).getUserId()){
+                                    if(list.get(i).getEmployeeId()!= PreferenceHandler.getInstance(context).getUserId()){
 
                                         employees.add(list.get(i));
 
@@ -148,7 +145,7 @@ public class DepartmentAdapter extends RecyclerView.Adapter<DepartmentAdapter.Vi
                                 }
 
                                 if(employees!=null&&employees.size()!=0){
-                                    Collections.sort(employees,Employee.compareEmployee);
+                                    Collections.sort(employees, Employee.compareEmployee);
 
                                     EmployeeUpdateAdapter adapter = new EmployeeUpdateAdapter(context, employees,"Update");
                                     mEmpList.setAdapter(adapter);

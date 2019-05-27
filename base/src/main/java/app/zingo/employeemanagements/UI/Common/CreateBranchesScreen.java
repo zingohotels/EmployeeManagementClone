@@ -1,6 +1,5 @@
 package app.zingo.employeemanagements.UI.Common;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,28 +9,16 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -45,36 +32,24 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
-import com.razorpay.Checkout;
-import com.razorpay.PaymentResultListener;
-
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import app.zingo.employeemanagements.Custom.MyEditText;
 import app.zingo.employeemanagements.Custom.MyTextView;
-import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.Model.OrganizationPayments;
-import app.zingo.employeemanagements.Model.Plans;
-import app.zingo.employeemanagements.Model.ResellerProfiles;
-import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.UI.Landing.PhoneVerificationScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
-import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.TrackGPS;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.OrganizationApi;
 import app.zingo.employeemanagements.WebApi.OrganizationPaymentAPI;
-import app.zingo.employeemanagements.WebApi.PlansAndRatesAPI;
-import app.zingo.employeemanagements.WebApi.ResellerAPI;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -473,7 +448,7 @@ public class CreateBranchesScreen extends AppCompatActivity implements GoogleApi
     }
 
 
-    public void addOrgaPay(final Organization organization,final OrganizationPayments organizationPayments) {
+    public void addOrgaPay(final Organization organization, final OrganizationPayments organizationPayments) {
 
 
         final ProgressDialog dialog = new ProgressDialog(this);
@@ -511,7 +486,7 @@ public class CreateBranchesScreen extends AppCompatActivity implements GoogleApi
 
                             Bundle bundle = new Bundle();
                             bundle.putSerializable("Company",organization);
-                            Intent profile = new Intent(CreateBranchesScreen.this,PhoneVerificationScreen.class);
+                            Intent profile = new Intent(CreateBranchesScreen.this, PhoneVerificationScreen.class);
                             profile.putExtras(bundle);
                             profile.putExtra("Screen","Organization");
                             startActivity(profile);

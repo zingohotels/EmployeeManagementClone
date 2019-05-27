@@ -5,13 +5,11 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,17 +17,16 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Random;
 
 import app.zingo.employeemanagements.Custom.MyRegulerText;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.Leaves;
-import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.UpdateLeaveScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -43,6 +40,7 @@ public class LeaveDashBoardAdapter extends RecyclerView.Adapter<LeaveDashBoardAd
 
         this.context = context;
         this.list = list;
+
     }
 
     @Override
@@ -56,6 +54,7 @@ public class LeaveDashBoardAdapter extends RecyclerView.Adapter<LeaveDashBoardAd
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final Leaves dto = list.get(position);
+
 
         if(dto!=null){
 
@@ -72,14 +71,21 @@ public class LeaveDashBoardAdapter extends RecyclerView.Adapter<LeaveDashBoardAd
                     bundle.putSerializable("Leaves",list.get(position));
                     intent.putExtras(bundle);
                     context.startActivity(intent);
+
+
+
                 }
             });
 
-            if(PreferenceHandler.getInstance(context).getUserRoleUniqueID()==2||PreferenceHandler.getInstance(context).getUserRoleUniqueID()==9){
+            if(PreferenceHandler.getInstance(context).getUserRoleUniqueID()==2|| PreferenceHandler.getInstance(context).getUserRoleUniqueID()==9){
                 holder.mEmpContact.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         getEmployee(dto.getEmployeeId(),holder.mEmpName,"contact");
+
+
+
                     }
                 });
 
@@ -100,9 +106,12 @@ public class LeaveDashBoardAdapter extends RecyclerView.Adapter<LeaveDashBoardAd
                     Date afromDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
                     froms = new SimpleDateFormat("MMM dd,yyyy").format(afromDate);
 
+
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+
+
             }
 
             if(tos.contains("T")){
@@ -116,6 +125,8 @@ public class LeaveDashBoardAdapter extends RecyclerView.Adapter<LeaveDashBoardAd
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+
+
             }
 
 
@@ -206,7 +217,7 @@ public class LeaveDashBoardAdapter extends RecyclerView.Adapter<LeaveDashBoardAd
         }
     }
 
-    private void getEmployee(final int id, final MyRegulerText textView,final String type){
+    private void getEmployee(final int id, final MyRegulerText textView, final String type){
 
 
 
@@ -280,13 +291,13 @@ public class LeaveDashBoardAdapter extends RecyclerView.Adapter<LeaveDashBoardAd
                                                     @Override
                                                     public void onClick(View v) {
 
-                                                        final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+                                                        final Intent emailIntent = new Intent(Intent.ACTION_SEND);
 
                                                         /* Fill it with Data */
                                                         emailIntent.setType("plain/text");
-                                                        emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{""+employees.getPrimaryEmailAddress()});
-                                                        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Leave Acknowldgement/Details");
-                                                        emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "");
+                                                        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{""+employees.getPrimaryEmailAddress()});
+                                                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Leave Acknowldgement/Details");
+                                                        emailIntent.putExtra(Intent.EXTRA_TEXT, "");
 
                                                         /* Send it off to the Activity-Chooser */
                                                         context.startActivity(Intent.createChooser(emailIntent, "Send mail..."));

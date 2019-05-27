@@ -8,9 +8,9 @@ import android.content.Intent;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,13 +21,12 @@ import java.util.ArrayList;
 
 import app.zingo.employeemanagements.Custom.MyRegulerText;
 import app.zingo.employeemanagements.Model.GeneralNotification;
-import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.Service.LocationForegroundService;
-import app.zingo.employeemanagements.UI.Admin.EmployeeLiveMappingScreen;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.GeneralNotificationAPI;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -207,7 +206,7 @@ public class LocationSharingEmplActivity extends AppCompatActivity {
         gm.setSenderId(Constants.SENDER_ID);
         gm.setServerId(Constants.SERVER_ID);
         gm.setTitle("Location Shared");
-        gm.setMessage(PreferenceHandler.getInstance(LocationSharingEmplActivity.this).getUserFullName()+" shared live location with you.%"+PreferenceHandler.getInstance(LocationSharingEmplActivity.this).getUserId());
+        gm.setMessage(PreferenceHandler.getInstance(LocationSharingEmplActivity.this).getUserFullName()+" shared live location with you.%"+ PreferenceHandler.getInstance(LocationSharingEmplActivity.this).getUserId());
         sendNotification(gm);
     }
 

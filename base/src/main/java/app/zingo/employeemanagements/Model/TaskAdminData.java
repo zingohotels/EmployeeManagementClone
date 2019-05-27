@@ -10,7 +10,7 @@ public class TaskAdminData implements Serializable {
     public Employee employee;
 
     @SerializedName("Tasks")
-    Tasks Tasks;
+    app.zingo.employeemanagements.Model.Tasks Tasks;
 
     public Employee getEmployee() {
         return employee;
@@ -20,11 +20,11 @@ public class TaskAdminData implements Serializable {
         this.employee = employee;
     }
 
-    public Tasks getTasks() {
+    public app.zingo.employeemanagements.Model.Tasks getTasks() {
         return Tasks;
     }
 
-    public void setTasks(Tasks tasks) {
+    public void setTasks(app.zingo.employeemanagements.Model.Tasks tasks) {
         Tasks = tasks;
     }
 }

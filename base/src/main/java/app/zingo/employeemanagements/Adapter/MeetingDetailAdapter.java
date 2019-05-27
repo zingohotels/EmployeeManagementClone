@@ -1,16 +1,13 @@
 package app.zingo.employeemanagements.Adapter;
 
-import android.Manifest;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -32,34 +28,23 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import com.google.android.gms.maps.SupportMapFragment;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import app.zingo.employeemanagements.Custom.MyRegulerText;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.Meetings;
-import app.zingo.employeemanagements.Model.Tasks;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Company.OrganizationDetailScree;
-import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
 import app.zingo.employeemanagements.WebApi.MeetingsAPI;
-import app.zingo.employeemanagements.WebApi.TasksAPI;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -171,7 +156,7 @@ public class MeetingDetailAdapter extends RecyclerView.Adapter<MeetingDetailAdap
 
                     try{
 
-                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
                         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                         View views = inflater.inflate(R.layout.alert_meeting_update, null);
 
@@ -186,7 +171,7 @@ public class MeetingDetailAdapter extends RecyclerView.Adapter<MeetingDetailAdap
                         final Button mSave = views.findViewById(R.id.save);
                         final EditText desc = views.findViewById(R.id.task_comments);
 
-                        final android.support.v7.app.AlertDialog dialogs = builder.create();
+                        final AlertDialog dialogs = builder.create();
                         dialogs.show();
                         dialogs.setCanceledOnTouchOutside(true);
 
@@ -339,7 +324,7 @@ public class MeetingDetailAdapter extends RecyclerView.Adapter<MeetingDetailAdap
                                 if(employees!=null){
                                     try{
 
-                                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
                                         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                                         View views = inflater.inflate(R.layout.alert_contact_employee, null);
 
@@ -351,7 +336,7 @@ public class MeetingDetailAdapter extends RecyclerView.Adapter<MeetingDetailAdap
                                         final MyRegulerText mPhone = views.findViewById(R.id.call_employee);
                                         final MyRegulerText mEmail = views.findViewById(R.id.email_employee);
 
-                                        final android.support.v7.app.AlertDialog dialogs = builder.create();
+                                        final AlertDialog dialogs = builder.create();
                                         dialogs.show();
                                         dialogs.setCanceledOnTouchOutside(true);
 
@@ -375,13 +360,13 @@ public class MeetingDetailAdapter extends RecyclerView.Adapter<MeetingDetailAdap
                                             @Override
                                             public void onClick(View v) {
 
-                                                final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+                                                final Intent emailIntent = new Intent(Intent.ACTION_SEND);
 
                                                 /* Fill it with Data */
                                                 emailIntent.setType("plain/text");
-                                                emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{""+employees.getPrimaryEmailAddress()});
-                                                emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, ""+dto.getMeetingDetails());
-                                                emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "");
+                                                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{""+employees.getPrimaryEmailAddress()});
+                                                emailIntent.putExtra(Intent.EXTRA_SUBJECT, ""+dto.getMeetingDetails());
+                                                emailIntent.putExtra(Intent.EXTRA_TEXT, "");
 
                                                 /* Send it off to the Activity-Chooser */
                                                 context.startActivity(Intent.createChooser(emailIntent, "Send mail..."));

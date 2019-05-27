@@ -2,8 +2,8 @@ package app.zingo.employeemanagements.UI.NewAdminDesigns;
 
 import android.graphics.Color;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 
@@ -33,8 +33,8 @@ import java.util.List;
 
 import app.zingo.employeemanagements.Model.LoginDetails;
 import app.zingo.employeemanagements.Model.MarkerData;
-import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.Utils.DataParser;
+import app.zingo.employeemanagements.base.R;
 
 public class CheckInMapScreen extends AppCompatActivity {
 

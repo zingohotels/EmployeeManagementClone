@@ -5,21 +5,18 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TabHost;
 import android.widget.TextView;
 
-//activity_login_details_host
 import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Common.EmployeeMeetingList;
-import app.zingo.employeemanagements.UI.Common.EmployeeMeetingMap;
-import app.zingo.employeemanagements.UI.Employee.EmployeeMeetingHost;
+
+//activity_login_details_host
 
 public class LoginDetailsHost extends TabActivity implements TabHost.OnTabChangeListener {
 

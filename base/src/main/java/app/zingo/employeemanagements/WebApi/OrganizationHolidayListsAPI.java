@@ -3,7 +3,6 @@ package app.zingo.employeemanagements.WebApi;
 import java.util.ArrayList;
 
 import app.zingo.employeemanagements.Model.HolidayList;
-import app.zingo.employeemanagements.Model.Organization;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;

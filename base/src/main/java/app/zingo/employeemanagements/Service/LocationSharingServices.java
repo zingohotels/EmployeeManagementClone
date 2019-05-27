@@ -1,38 +1,23 @@
 package app.zingo.employeemanagements.Service;
 
 import android.app.AlarmManager;
-import android.app.AlertDialog;
 import android.app.PendingIntent;
-import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.os.IBinder;
 import android.os.SystemClock;
-import android.provider.Settings;
 import android.util.Log;
-import android.widget.Toast;
-
-import com.google.android.gms.maps.model.LatLng;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import app.zingo.employeemanagements.Model.LiveTracking;
-import app.zingo.employeemanagements.Model.LoginDetails;
-import app.zingo.employeemanagements.Model.LoginDetailsNotificationManagers;
-import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
-import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.TrackGPS;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.LiveTrackingAPI;
-import app.zingo.employeemanagements.WebApi.LoginDetailsAPI;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -61,7 +46,7 @@ public class LocationSharingServices extends Service {
 
         try {
 
-            if(locationCheck()&&PreferenceHandler.getInstance(getApplicationContext()).getUserId()!=0&&PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()!=2&&PreferenceHandler.getInstance(getApplicationContext()).getLoginStatus().equalsIgnoreCase("Login")){
+            if(locationCheck()&& PreferenceHandler.getInstance(getApplicationContext()).getUserId()!=0&& PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()!=2&& PreferenceHandler.getInstance(getApplicationContext()).getLoginStatus().equalsIgnoreCase("Login")){
 
                 if(gps.canGetLocation())
                 {
@@ -146,7 +131,7 @@ public class LocationSharingServices extends Service {
     public boolean locationCheck(){
 
         final boolean status = false;
-        LocationManager lm = (LocationManager)LocationSharingServices.this.getSystemService(Context.LOCATION_SERVICE);
+        LocationManager lm = (LocationManager) LocationSharingServices.this.getSystemService(Context.LOCATION_SERVICE);
         boolean gps_enabled = false;
         boolean network_enabled = false;
 
@@ -220,7 +205,7 @@ public class LocationSharingServices extends Service {
     @Override
     public void onDestroy() {
 
-        if(PreferenceHandler.getInstance(getApplicationContext()).getUserId()!=0&&PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()!=2&&PreferenceHandler.getInstance(getApplicationContext()).getLoginStatus().equalsIgnoreCase("Login")){
+        if(PreferenceHandler.getInstance(getApplicationContext()).getUserId()!=0&& PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()!=2&& PreferenceHandler.getInstance(getApplicationContext()).getLoginStatus().equalsIgnoreCase("Login")){
 
 
             Intent restartService = new Intent(getApplicationContext(),

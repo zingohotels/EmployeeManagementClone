@@ -2,23 +2,17 @@ package app.zingo.employeemanagements.UI.NewAdminDesigns;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
-import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -28,23 +22,15 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
-import org.json.JSONObject;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URL;
 
 import app.zingo.employeemanagements.Custom.EncryptionHelper;
 import app.zingo.employeemanagements.Custom.QRCodeHelper;
 import app.zingo.employeemanagements.Model.QRCode;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.EmployeeSignUp;
-import app.zingo.employeemanagements.UI.NewEmployeeDesign.EmployeeQrCodeGenerate;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
+import app.zingo.employeemanagements.base.R;
 
 public class QrCodePrintScreen extends AppCompatActivity {
 
@@ -73,18 +59,18 @@ public class QrCodePrintScreen extends AppCompatActivity {
 
             if(PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyName().length()>=4){
                 String upToNCharacters = PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyName().substring(0, Math.min(PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyName().length(), 4));
-                qr_OrgId.setText("Organization Id: "+upToNCharacters+""+PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyId());
+                qr_OrgId.setText("Organization Id: "+upToNCharacters+""+ PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyId());
             }else{
-                qr_OrgId.setText("Organization Id: "+PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyName()+""+PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyId());
+                qr_OrgId.setText("Organization Id: "+ PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyName()+""+ PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyId());
             }
 
 
-            qr_OrganizationName.setText(""+PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyName());
+            qr_OrganizationName.setText(""+ PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyName());
           //  qr_OrgId.setText("Organization Id: "+PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyId());
 
             QRCode qrCode = new QRCode();
             qrCode.setOrganizationId(PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyId());
-            qrCode.setURL("www.zingyapp.com/checkout.php?id="+PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyId());
+            qrCode.setURL("www.zingyapp.com/checkout.php?id="+ PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyId());
 
 
             System.out.println("JSON_Object Data Fire = "+qrCode.toString());
@@ -92,7 +78,7 @@ public class QrCodePrintScreen extends AppCompatActivity {
             Gson gson = new Gson();
 
            // String serializeString = gson.toJson(qrCode);
-            String serializeString = "www.zingyapp.com/checkout.php?id="+PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyId();
+            String serializeString = "www.zingyapp.com/checkout.php?id="+ PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyId();
 
             String encryptedString = EncryptionHelper.getInstance().encryptionString(serializeString).encryptMsg();
             setImageBitmap(serializeString);
@@ -119,14 +105,14 @@ public class QrCodePrintScreen extends AppCompatActivity {
                     // some more settings...
 
                     canvas.drawBitmap(bitmap, 0, 0, paint);
-                    canvas.drawText("Organization Name : "+PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyName(), 60, 20, paint);
+                    canvas.drawText("Organization Name : "+ PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyName(), 60, 20, paint);
 
                     if(PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyName().length()>=4){
                         
                         String upToNCharacters = PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyName().substring(0, Math.min(PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyName().length(), 4));
-                        canvas.drawText("Organization Id: "+upToNCharacters+""+PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyId(), 60, 40, paint);
+                        canvas.drawText("Organization Id: "+upToNCharacters+""+ PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyId(), 60, 40, paint);
                     }else{
-                        canvas.drawText("Organization Id: "+PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyName()+""+PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyId(), 60, 40, paint);
+                        canvas.drawText("Organization Id: "+ PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyName()+""+ PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyId(), 60, 40, paint);
                     }
 
                     canvas.drawText("Powered By Zingy  Visit www.ZingyApp.com", 60, bitmap.getHeight()-20, paint);
@@ -171,7 +157,7 @@ public class QrCodePrintScreen extends AppCompatActivity {
                                bmpUri = Uri.parse("file://"+fileName);
                            }
                            // Uri bmpUri = Uri.parse("file://"+path);
-                           Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
+                           Intent shareIntent = new Intent(Intent.ACTION_SEND);
                            shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                            shareIntent.putExtra(Intent.EXTRA_STREAM, bmpUri);
 

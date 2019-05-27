@@ -1,6 +1,7 @@
 package app.zingo.employeemanagements.Model;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
 public class ReportDataEmployee implements Serializable {
 
@@ -10,11 +11,20 @@ public class ReportDataEmployee implements Serializable {
     String loginTime;
     String logoutTime;
     String hours;
+    String BreakHours;
     String visits;
     String tasks;
     String expenses;
     String expensesAmt;
     String kms;
+
+    public String getBreakHours() {
+        return BreakHours;
+    }
+
+    public void setBreakHours(String breakHours) {
+        BreakHours = breakHours;
+    }
 
     public String getName() {
         return name;
@@ -95,4 +105,15 @@ public class ReportDataEmployee implements Serializable {
     public void setDate(String date) {
         this.date = date;
     }
+
+    public static Comparator compareList = new Comparator() {
+        @Override
+        public int compare(Object o, Object t1) {
+            ReportDataEmployee reportDataEmployee = (ReportDataEmployee) o;
+            ReportDataEmployee reportDataEmployee1 = (ReportDataEmployee) t1;
+
+            return reportDataEmployee.getDate().compareToIgnoreCase(reportDataEmployee1.getDate());
+            //return profile.getHotelId().eq(profile1.getHotelId());
+        }
+    };
 }

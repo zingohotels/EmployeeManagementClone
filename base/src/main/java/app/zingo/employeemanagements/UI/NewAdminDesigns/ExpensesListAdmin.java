@@ -3,9 +3,9 @@ package app.zingo.employeemanagements.UI.NewAdminDesigns;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -18,7 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,23 +26,17 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import app.zingo.employeemanagements.Adapter.ExpenseListAdapter;
 import app.zingo.employeemanagements.Adapter.ExpenseListDataAdapter;
-import app.zingo.employeemanagements.Adapter.TaskAdminListAdapter;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.ExpenseAdminData;
 import app.zingo.employeemanagements.Model.Expenses;
-import app.zingo.employeemanagements.Model.TaskAdminData;
-import app.zingo.employeemanagements.Model.Tasks;
-import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.UI.Employee.EmployeeListScreen;
-import app.zingo.employeemanagements.UI.EmployeeSignUp;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
 import app.zingo.employeemanagements.WebApi.ExpensesApi;
-import app.zingo.employeemanagements.WebApi.TasksAPI;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -319,7 +312,7 @@ public class ExpensesListAdmin extends AppCompatActivity {
 
                                 ArrayList<Employee> employeesList= list;
 
-                                Collections.sort(list,Employee.compareEmployee);
+                                Collections.sort(list, Employee.compareEmployee);
 
                                 employeeTasks = new ArrayList<>();
                                 pendingTasks = new ArrayList<>();
@@ -371,7 +364,7 @@ public class ExpensesListAdmin extends AppCompatActivity {
         });
     }
 
-    private void getExpenses(final Employee employee,final String dateValue){
+    private void getExpenses(final Employee employee, final String dateValue){
 
 
         final int employeeId = employee.getEmployeeId();
@@ -737,25 +730,6 @@ public class ExpensesListAdmin extends AppCompatActivity {
         super.onRestart();
 
         if(emplList!=null&&emplList.size()!=0&&restartdate!=null&&!restartdate.isEmpty()){
-
-            employeeTasks = new ArrayList<>();
-            pendingTasks = new ArrayList<>();
-            completedTasks = new ArrayList<>();
-            closedTasks = new ArrayList<>();
-
-            dayemployeeTasks = new ArrayList<>();
-            daypendingTasks = new ArrayList<>();
-            daycompletedTasks = new ArrayList<>();
-            dayclosedTasks = new ArrayList<>();
-
-            total=0;
-            pending=0;
-            complete=0;
-            closed=0;
-            daytotal=0;
-            daypending=0;
-            daycomplete=0;
-            dayclosed=0;
 
             for (Employee e:emplList) {
                 getExpenses(e, restartdate);

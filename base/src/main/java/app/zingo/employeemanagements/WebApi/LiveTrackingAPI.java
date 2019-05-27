@@ -3,7 +3,6 @@ package app.zingo.employeemanagements.WebApi;
 import java.util.ArrayList;
 
 import app.zingo.employeemanagements.Model.LiveTracking;
-import app.zingo.employeemanagements.Model.LoginDetails;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -33,5 +32,5 @@ public interface LiveTrackingAPI {
     Call<LiveTracking> getLiveTrackingById(@Path("id") int id);
 
     @PUT("LiveTrackingDetails/{id}")
-    Call<LiveTracking> updateLiveTrackingById(@Path("id") int id,@Body LiveTracking details);
+    Call<LiveTracking> updateLiveTrackingById(@Path("id") int id, @Body LiveTracking details);
 }

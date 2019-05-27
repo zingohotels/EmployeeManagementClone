@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -29,8 +29,6 @@ import app.zingo.employeemanagements.Custom.MyRegulerText;
 import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.Model.OrganizationPayments;
 import app.zingo.employeemanagements.Model.PlanIntentData;
-
-import app.zingo.employeemanagements.UI.EmployeeSignUp;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.PlanSubscribtionScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
@@ -111,7 +109,7 @@ public class BasicPlanSubscription extends AppCompatActivity implements PaymentR
                                 bundlePlan.putSerializable("Organization",organization);
 
 
-                                Intent plan  = new Intent(BasicPlanSubscription.this,PlanSubscribtionScreen.class);
+                                Intent plan  = new Intent(BasicPlanSubscription.this, PlanSubscribtionScreen.class);
                                 plan.putExtras(bundlePlan);
                                 startActivity(plan);
 
@@ -167,7 +165,7 @@ public class BasicPlanSubscription extends AppCompatActivity implements PaymentR
                                 bundlePlan.putSerializable("Organization",organization);
 
 
-                                Intent plan  = new Intent(BasicPlanSubscription.this,PlanSubscribtionScreen.class);
+                                Intent plan  = new Intent(BasicPlanSubscription.this, PlanSubscribtionScreen.class);
                                 plan.putExtras(bundlePlan);
                                 startActivity(plan);
 
@@ -227,7 +225,7 @@ public class BasicPlanSubscription extends AppCompatActivity implements PaymentR
                                 bundlePlan.putSerializable("Organization",organization);
 
 
-                                Intent plan  = new Intent(BasicPlanSubscription.this,PlanSubscribtionScreen.class);
+                                Intent plan  = new Intent(BasicPlanSubscription.this, PlanSubscribtionScreen.class);
                                 plan.putExtras(bundlePlan);
                                 startActivity(plan);
 
@@ -313,7 +311,7 @@ public class BasicPlanSubscription extends AppCompatActivity implements PaymentR
         });
     }
 
-    public void popupOne(final Organization org,final String planName,final double amount){
+    public void popupOne(final Organization org, final String planName, final double amount){
 
         try{
 
@@ -486,7 +484,7 @@ public class BasicPlanSubscription extends AppCompatActivity implements PaymentR
 
     }
 
-    public void addOrgaPay(final Organization organization,final OrganizationPayments organizationPayments) {
+    public void addOrgaPay(final Organization organization, final OrganizationPayments organizationPayments) {
 
 
         final ProgressDialog dialog = new ProgressDialog(this);

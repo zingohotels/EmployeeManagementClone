@@ -2,7 +2,6 @@ package app.zingo.employeemanagements.WebApi;
 
 import java.util.ArrayList;
 
-import app.zingo.employeemanagements.Model.LeaveNotificationManagers;
 import app.zingo.employeemanagements.Model.TaskNotificationManagers;
 import retrofit2.Call;
 import retrofit2.http.Body;

@@ -18,7 +18,6 @@ import java.util.ArrayList;
 
 import app.zingo.employeemanagements.Custom.MyRegulerText;
 import app.zingo.employeemanagements.Model.PlanDesign;
-import app.zingo.employeemanagements.UI.Common.ImageFullScreenActivity;
 import app.zingo.employeemanagements.UI.Plan.AdvancePlanSubscription;
 import app.zingo.employeemanagements.UI.Plan.BasicPlanSubscription;
 import app.zingo.employeemanagements.base.R;
@@ -96,7 +95,7 @@ public class PlanDesignAdapter extends PagerAdapter {
 
                     }else if(planNames!=null&&planNames.equalsIgnoreCase("Advance")){
 
-                        Intent basic = new Intent(context,AdvancePlanSubscription.class);
+                        Intent basic = new Intent(context, AdvancePlanSubscription.class);
                         ((Activity)context).startActivity(basic);
 
                     }

@@ -1,11 +1,10 @@
 package app.zingo.employeemanagements.UI.NewEmployeeDesign;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,20 +23,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import app.zingo.employeemanagements.Adapter.BreakAdapter;
 import app.zingo.employeemanagements.Model.LoginDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.OrganizationBreakTimes;
-import app.zingo.employeemanagements.Model.Tasks;
-import app.zingo.employeemanagements.UI.Common.BreakTimeListScreen;
-import app.zingo.employeemanagements.UI.EmployeeSignUp;
-import app.zingo.employeemanagements.Utils.ThreadExecuter;
-import app.zingo.employeemanagements.WebApi.OrganizationBreakTimesAPI;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.Service.DistanceCheck;
-import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
+import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.LoginNotificationAPI;
+import app.zingo.employeemanagements.WebApi.OrganizationBreakTimesAPI;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -84,7 +77,7 @@ public class BreakPurpose extends AppCompatActivity {
                     LoginDetailsNotificationManagers tasks = new LoginDetailsNotificationManagers();
 
                     LoginDetailsNotificationManagers md = new LoginDetailsNotificationManagers();
-                    md.setTitle("Break taken from "+PreferenceHandler.getInstance(BreakPurpose.this).getUserFullName());
+                    md.setTitle("Break taken from "+ PreferenceHandler.getInstance(BreakPurpose.this).getUserFullName());
                     md.setMessage("Break taken at"+""+sdt.format(new Date()));
                     LatLng master = new LatLng(Double.parseDouble(latitude),Double.parseDouble(longitude));
                     String address = getAddress(master);

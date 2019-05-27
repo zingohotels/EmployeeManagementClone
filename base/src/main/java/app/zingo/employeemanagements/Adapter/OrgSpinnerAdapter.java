@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.base.R;
 

@@ -1,20 +1,9 @@
 package app.zingo.employeemanagements.Utils;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.util.Base64;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 
-import java.io.ByteArrayOutputStream;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;

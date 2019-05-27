@@ -1,7 +1,7 @@
 package app.zingo.employeemanagements.UI.NewAdminDesigns;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,8 +18,8 @@ public class BranchOptionScreen extends AppCompatActivity {
     String[] tv1 = {"Branch Info","Departments","Employees","Holidays","Office Timing"};
 
     Integer[] imagehistory = {R.drawable.office_about,
-            R.drawable.branches,R.drawable.branch_employees,R.drawable.holiday_list,R.drawable.office_timings};
-    Integer[] image1 ={R.drawable.ic_chevron_right_black_24dp,R.drawable.ic_chevron_right_black_24dp,R.drawable.ic_chevron_right_black_24dp,R.drawable.ic_chevron_right_black_24dp,
+            R.drawable.branches, R.drawable.branch_employees, R.drawable.holiday_list, R.drawable.office_timings};
+    Integer[] image1 ={R.drawable.ic_chevron_right_black_24dp, R.drawable.ic_chevron_right_black_24dp, R.drawable.ic_chevron_right_black_24dp, R.drawable.ic_chevron_right_black_24dp,
             R.drawable.ic_chevron_right_black_24dp};
 
     private RecyclerView recyclerView;

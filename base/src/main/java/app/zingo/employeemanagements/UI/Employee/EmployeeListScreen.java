@@ -3,9 +3,9 @@ package app.zingo.employeemanagements.UI.Employee;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
@@ -18,13 +18,11 @@ import java.util.Collections;
 
 import app.zingo.employeemanagements.Adapter.EmployeeAdapter;
 import app.zingo.employeemanagements.Model.Employee;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Company.OrganizationDetailScree;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.TeamMembersList;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -71,7 +69,7 @@ public class EmployeeListScreen extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
 
-                    Intent employee =new Intent(EmployeeListScreen.this,CreateEmployeeScreen.class);
+                    Intent employee =new Intent(EmployeeListScreen.this, CreateEmployeeScreen.class);
                     startActivity(employee);
                 }
             });
@@ -86,12 +84,6 @@ public class EmployeeListScreen extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        getProfiles();
     }
 
     private void getProfiles(){
@@ -128,7 +120,7 @@ public class EmployeeListScreen extends AppCompatActivity {
 
                                     if(PreferenceHandler.getInstance(EmployeeListScreen.this).getUserRoleUniqueID()==2){
 
-                                        if(list.get(i).getEmployeeId()!=PreferenceHandler.getInstance(EmployeeListScreen.this).getUserId()){
+                                        if(list.get(i).getEmployeeId()!= PreferenceHandler.getInstance(EmployeeListScreen.this).getUserId()){
 
                                             employees.add(list.get(i));
 
@@ -149,7 +141,7 @@ public class EmployeeListScreen extends AppCompatActivity {
                                 if(employees!=null&&employees.size()!=0){
                                     mNoEmpl.setVisibility(View.GONE);
                                     mProfileList.setVisibility(View.VISIBLE);
-                                    Collections.sort(employees,Employee.compareEmployee);
+                                    Collections.sort(employees, Employee.compareEmployee);
                                     EmployeeAdapter adapter = new EmployeeAdapter(EmployeeListScreen.this, employees,type);
                                     mProfileList.setAdapter(adapter);
 

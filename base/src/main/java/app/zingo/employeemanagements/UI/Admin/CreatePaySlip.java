@@ -1,49 +1,39 @@
 package app.zingo.employeemanagements.UI.Admin;
 
-import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.DatePicker;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfWriter;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import app.zingo.employeemanagements.Adapter.LeaveTakenAdapter;
 import app.zingo.employeemanagements.Custom.MyEditText;
 import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Designations;
@@ -52,13 +42,7 @@ import app.zingo.employeemanagements.Model.EmployeeDocuments;
 import app.zingo.employeemanagements.Model.Leaves;
 import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.Model.PaySlips;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Company.CreateCompany;
-import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
-import app.zingo.employeemanagements.UI.Employee.LeaveTakenDays;
 import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
-import app.zingo.employeemanagements.UI.LandingScreen;
-import app.zingo.employeemanagements.UI.Login.LoginScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
@@ -67,6 +51,7 @@ import app.zingo.employeemanagements.WebApi.DesignationsAPI;
 import app.zingo.employeemanagements.WebApi.LeaveAPI;
 import app.zingo.employeemanagements.WebApi.OrganizationApi;
 import app.zingo.employeemanagements.WebApi.PayslipAPI;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -504,7 +489,7 @@ public class CreatePaySlip extends AppCompatActivity {
                 paySlips.setProfessionalTax(pts);
                 paySlips.setLeaves(leavess);
                 paySlips.setAdvance(advances);
-                paySlips.setCreatedBy(""+PreferenceHandler.getInstance(CreatePaySlip.this).getUserFullName());
+                paySlips.setCreatedBy(""+ PreferenceHandler.getInstance(CreatePaySlip.this).getUserFullName());
                 paySlips.setCreatedDate(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
 
 

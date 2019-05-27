@@ -27,6 +27,7 @@ public interface Constants {
     String MEETING_ID = "meet_id";
     String MAPPING_ID = "map_id";
     String COMPANY_NAME ="company_name";
+    String COMPANY_Address ="company_address";
     String HEAD_NAME ="head_name";
     String APP_TYPE ="app_type";
     String SIGN_TYPE ="sign_type";
@@ -34,6 +35,7 @@ public interface Constants {
     String CHKT ="check_time";
     String LIC_END ="lic_end";
     String PLAN_TYPE ="plan_type";
+    String LOGO ="logo";
     String SIGNUP_DATE ="sing_date";
     String ORG_LONGI ="org_long";
     String ORG_LATI ="org_lat";
@@ -58,6 +60,8 @@ public interface Constants {
 
     //Meeting Login
     String MEET_LOGIN_STATUS = "meeting_login_status";
+    String LUNCH_STATUS = "lunch_status";
+    String TEA_STATUS = "tea_status";
 
     //airpay
     public static final String AIR_UN = "7197486";

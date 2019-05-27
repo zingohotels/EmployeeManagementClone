@@ -3,7 +3,6 @@ package app.zingo.employeemanagements.UI.Admin;
 import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -15,6 +14,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -22,7 +22,6 @@ import android.support.annotation.DrawableRes;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -40,15 +39,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -79,10 +75,7 @@ import java.util.Random;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.EmployeeImages;
 import app.zingo.employeemanagements.Model.GeneralNotification;
-import app.zingo.employeemanagements.Model.LiveTraackingTime;
 import app.zingo.employeemanagements.Model.LiveTracking;
-import app.zingo.employeemanagements.Model.MarkerData;
-import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.DataParser;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
@@ -91,6 +84,7 @@ import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
 import app.zingo.employeemanagements.WebApi.GeneralNotificationAPI;
 import app.zingo.employeemanagements.WebApi.LiveTrackingAPI;
+import app.zingo.employeemanagements.base.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -329,7 +323,7 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
                                 }
 
 
-                                Collections.sort(list,LiveTracking.compareLiveTrack);
+                                Collections.sort(list, LiveTracking.compareLiveTrack);
                                 colorValue = new ArrayList<>();
 
                                 mMap.clear();
@@ -396,7 +390,7 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
                                     try {
                                         createMarkerwithCustom(Double.parseDouble(list.get(0).getLatitude()),
                                                 Double.parseDouble(list.get(0).getLongitude()),employee.getEmployeeName()+"\nLocation 1",""+getAddress(Double.parseDouble(list.get(0).getLongitude()),Double.parseDouble(list.get(0).getLatitude())),
-                                                createCustomMarker(EmployeeLiveMappingScreen.this,null,employee.getEmployeeName(),R.drawable.home_map));
+                                                createCustomMarker(EmployeeLiveMappingScreen.this,null,employee.getEmployeeName(), R.drawable.home_map));
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
@@ -422,7 +416,7 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
                                         markerLast =  createMarkerwithCustom(Double.parseDouble(list.get(2).getLatitude()),
                                                 Double.parseDouble(list.get(2).getLongitude()),
                                                 employee.getEmployeeName()+"\nLocation 3",""+getAddress(Double.parseDouble(list.get(2).getLongitude()),Double.parseDouble(list.get(2).getLatitude())),
-                                                createCustomMarker(EmployeeLiveMappingScreen.this,employeeImage,employee.getEmployeeName(),R.drawable.live_location_black));
+                                                createCustomMarker(EmployeeLiveMappingScreen.this,employeeImage,employee.getEmployeeName(), R.drawable.live_location_black));
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
@@ -442,7 +436,7 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
                                         e.printStackTrace();
                                     }
 
-                                    createMarkerwithCustom(Double.parseDouble(list.get(0).getLatitude()), Double.parseDouble(list.get(0).getLongitude()),employee.getEmployeeName()+"\nLocation "+lt.size(),""+snippets,createCustomMarker(EmployeeLiveMappingScreen.this,null,employee.getEmployeeName(),R.drawable.home_map));
+                                    createMarkerwithCustom(Double.parseDouble(list.get(0).getLatitude()), Double.parseDouble(list.get(0).getLongitude()),employee.getEmployeeName()+"\nLocation "+lt.size(),""+snippets,createCustomMarker(EmployeeLiveMappingScreen.this,null,employee.getEmployeeName(), R.drawable.home_map));
                                     latLngs.add(new LatLng(Double.parseDouble(list.get(0).getLatitude()), Double.parseDouble(list.get(0).getLongitude())));
 
                                     String time = list.get(0).getTrackingTime();
@@ -600,7 +594,7 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
                                         markerLast = createMarkerwithCustom(Double.parseDouble(list.get(list.size()-1).getLatitude()),
                                                 Double.parseDouble(list.get(list.size()-1).getLongitude()),
                                                 employee.getEmployeeName()+"\nLocation "+lt.size(),
-                                                ""+getAddress(Double.parseDouble(list.get(list.size()-1).getLongitude()),Double.parseDouble(list.get(list.size()-1).getLatitude())),createCustomMarker(EmployeeLiveMappingScreen.this,employeeImage,employee.getEmployeeName(),R.drawable.live_location_black));
+                                                ""+getAddress(Double.parseDouble(list.get(list.size()-1).getLongitude()),Double.parseDouble(list.get(list.size()-1).getLatitude())),createCustomMarker(EmployeeLiveMappingScreen.this,employeeImage,employee.getEmployeeName(), R.drawable.live_location_black));
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
@@ -621,7 +615,7 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
                                     try {
                                         createMarkerwithCustom(Double.parseDouble(list.get(0).getLatitude()),
                                                 Double.parseDouble(list.get(0).getLongitude()),employee.getEmployeeName()+"\nLocation 1",""+getAddress(Double.parseDouble(list.get(0).getLongitude()),Double.parseDouble(list.get(0).getLatitude())),
-                                                createCustomMarker(EmployeeLiveMappingScreen.this,null,employee.getEmployeeName(),R.drawable.home_map));
+                                                createCustomMarker(EmployeeLiveMappingScreen.this,null,employee.getEmployeeName(), R.drawable.home_map));
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
@@ -645,7 +639,7 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
                                     try {
                                         markerLast = createMarkerwithCustom(Double.parseDouble(list.get(list.size()-1).getLatitude()),
                                                 Double.parseDouble(list.get(list.size()-1).getLongitude()),
-                                                employee.getEmployeeName()+"\nLocation 3",""+getAddress(Double.parseDouble(list.get(list.size()-1).getLongitude()),Double.parseDouble(list.get(list.size()-1).getLatitude())),createCustomMarker(EmployeeLiveMappingScreen.this,employeeImage,employee.getEmployeeName(),R.drawable.live_location_black));
+                                                employee.getEmployeeName()+"\nLocation 3",""+getAddress(Double.parseDouble(list.get(list.size()-1).getLongitude()),Double.parseDouble(list.get(list.size()-1).getLatitude())),createCustomMarker(EmployeeLiveMappingScreen.this,employeeImage,employee.getEmployeeName(), R.drawable.live_location_black));
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
@@ -1129,7 +1123,7 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
         private static final int VIEW_TYPE_BOTTOM = 2;
 
 
-        public LocationLiveAdapter(Context context, ArrayList<LiveTracking> list,ArrayList<Integer> colorDesign) {
+        public LocationLiveAdapter(Context context, ArrayList<LiveTracking> list, ArrayList<Integer> colorDesign) {
 
             this.context = context;
             this.list = list;
@@ -1222,10 +1216,10 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
 
                 }
             }
-            final int sdk = android.os.Build.VERSION.SDK_INT;
+            final int sdk = Build.VERSION.SDK_INT;
 
             if(position==0){
-                if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                if(sdk < Build.VERSION_CODES.JELLY_BEAN) {
                     holder.mItemLine.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.line_bg_top) );
                 } else {
                     holder.mItemLine.setBackground(ContextCompat.getDrawable(context, R.drawable.line_bg_top));
@@ -1235,7 +1229,7 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
 
 
             }else{
-                if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                if(sdk < Build.VERSION_CODES.JELLY_BEAN) {
                     holder.mItemLine.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.line_bg_middle) );
                 } else {
                     holder.mItemLine.setBackground(ContextCompat.getDrawable(context, R.drawable.line_bg_middle));
@@ -1536,7 +1530,7 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
         gm.setSenderId(Constants.SENDER_ID);
         gm.setServerId(Constants.SERVER_ID);
         gm.setTitle("Location Request");
-        gm.setMessage(PreferenceHandler.getInstance(EmployeeLiveMappingScreen.this).getUserFullName()+" is requesting your live location.%"+PreferenceHandler.getInstance(EmployeeLiveMappingScreen.this).getUserId());
+        gm.setMessage(PreferenceHandler.getInstance(EmployeeLiveMappingScreen.this).getUserFullName()+" is requesting your live location.%"+ PreferenceHandler.getInstance(EmployeeLiveMappingScreen.this).getUserId());
         sendNotification(gm);
     }
 
@@ -1718,7 +1712,7 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
                                     if(sizeCount<lists.size()){
                                         sizeCount = lists.size();
 
-                                        Collections.sort(lists,LiveTracking.compareLiveTrack);
+                                        Collections.sort(lists, LiveTracking.compareLiveTrack);
 
 
 

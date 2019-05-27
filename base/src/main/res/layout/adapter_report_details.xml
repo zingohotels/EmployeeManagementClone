@@ -53,6 +53,15 @@
             android:textColor="@color/text_grey" />
 
         <TextView
+            android:id="@+id/report_hours_break"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:layout_margin="3dp"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="@color/text_grey" />
+
+        <TextView
             android:id="@+id/report_visit"
             android:layout_width="50dp"
             android:layout_height="match_parent"
@@ -87,6 +96,15 @@
             android:layout_margin="3dp"
             android:gravity="center"
             android:text="0"
+            android:textColor="@color/text_grey" />
+
+        <TextView
+            android:id="@+id/travel_km_break"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:layout_margin="3dp"
+            android:gravity="center"
+            android:text="0 km"
             android:textColor="@color/text_grey" />
 
         <TextView

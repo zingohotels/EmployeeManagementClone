@@ -439,7 +439,6 @@ public class AdminDashBoardFragment extends Fragment {
                         int statusCode = response.code();
                         if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
 
-
                            /* if (progressDialog!=null)
                                 progressDialog.dismiss();*/
                             ArrayList<Employee> list = response.body();
@@ -465,8 +464,6 @@ public class AdminDashBoardFragment extends Fragment {
 
                                     if(emp.getUserRoleId()!=2){
 
-
-
                                         allEmployees.add(emp);
                                         employees.add(emp);
 
@@ -485,7 +482,6 @@ public class AdminDashBoardFragment extends Fragment {
                                         lv.setEmployeeId(emp.getEmployeeId());
                                         lv.setTrackingDate(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
                                         getLiveLocation(lv);
-
 
                                         Meetings md  = new Meetings();
                                         md.setEmployeeId(emp.getEmployeeId());

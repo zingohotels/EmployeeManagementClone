@@ -1,11 +1,9 @@
 package app.zingo.employeemanagements.Model;
 
 
-import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 
 public class WorkingDay implements Serializable {

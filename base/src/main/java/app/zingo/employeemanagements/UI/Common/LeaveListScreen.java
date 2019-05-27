@@ -1,18 +1,15 @@
 package app.zingo.employeemanagements.UI.Common;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 
 import java.util.ArrayList;
 
 import app.zingo.employeemanagements.Adapter.LeaveDashBoardAdapter;
-import app.zingo.employeemanagements.Adapter.TaskAdminListAdapter;
 import app.zingo.employeemanagements.Model.Leaves;
-import app.zingo.employeemanagements.Model.TaskAdminData;
 import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.PendingTasks;
 
 public class LeaveListScreen extends AppCompatActivity {
 

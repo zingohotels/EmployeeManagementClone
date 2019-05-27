@@ -2,10 +2,7 @@ package app.zingo.employeemanagements.WebApi;
 
 import java.util.ArrayList;
 
-import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.Expenses;
-import app.zingo.employeemanagements.Model.Leaves;
-import app.zingo.employeemanagements.Model.Tasks;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -19,10 +16,10 @@ public interface ExpensesApi {
     Call<Expenses> addExpenses(@Body Expenses details);
 
     @GET("Expenses/GetExpensesByOrganizationIdAndEmployeeId/{OrganizationId}/{EmployeeId}")
-    Call<ArrayList<Expenses>> getExpenseByEmployeeIdAndOrganizationId(@Path("OrganizationId") int OrganizationId,@Path("EmployeeId") int EmployeeId);
+    Call<ArrayList<Expenses>> getExpenseByEmployeeIdAndOrganizationId(@Path("OrganizationId") int OrganizationId, @Path("EmployeeId") int EmployeeId);
 
     @GET("Expenses/GetExpensesByOrganizationIdAndManagerId/{OrganizationId}/{ManagerId}")
-    Call<ArrayList<Expenses>> getExpenseByManagerIdAndOrganizationId(@Path("OrganizationId") int OrganizationId,@Path("ManagerId") int EmployeeId);
+    Call<ArrayList<Expenses>> getExpenseByManagerIdAndOrganizationId(@Path("OrganizationId") int OrganizationId, @Path("ManagerId") int EmployeeId);
 
     @GET("Expenses/GetExpensesByOrganizationId/{OrganizationId}")
     Call<ArrayList<Expenses>> getExpenseByOrganizationId(@Path("OrganizationId") int OrganizationId);

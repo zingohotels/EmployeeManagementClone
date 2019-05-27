@@ -10,12 +10,10 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
-import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -24,8 +22,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.Interpolator;
 import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -44,7 +40,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -57,8 +52,6 @@ import java.util.Random;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.LiveTracking;
 import app.zingo.employeemanagements.Model.LiveTrackingAdminData;
-import app.zingo.employeemanagements.base.R;
-
 import app.zingo.employeemanagements.UI.Admin.EmployeeLiveMappingScreen;
 import app.zingo.employeemanagements.UI.Employee.EmployeeListScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
@@ -67,8 +60,7 @@ import app.zingo.employeemanagements.Utils.TrackGPS;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
 import app.zingo.employeemanagements.WebApi.LiveTrackingAPI;
-import okhttp3.Headers;
-import okhttp3.ResponseBody;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -359,7 +351,7 @@ public class AllEmployeeLiveLocation extends AppCompatActivity {
         });
     }
 
-    private void getLiveLocation(final LiveTracking lv,final Employee employee){
+    private void getLiveLocation(final LiveTracking lv, final Employee employee){
 
 
         final ProgressDialog progressDialog = new ProgressDialog(AllEmployeeLiveLocation.this);
@@ -471,7 +463,7 @@ public class AllEmployeeLiveLocation extends AppCompatActivity {
         });
     }
 
-    private void getLiveLocations(final LiveTracking lv,final Employee employee,final ArrayList<LiveTrackingAdminData> listdata,final int value){
+    private void getLiveLocations(final LiveTracking lv, final Employee employee, final ArrayList<LiveTrackingAdminData> listdata, final int value){
 
        /* checkvalue = countValue+value;
         countValue = countValue+value;*/
@@ -938,7 +930,7 @@ public class AllEmployeeLiveLocation extends AppCompatActivity {
         private ArrayList<Integer> colorDesign;
 
 
-        public LocationLiveAdapter(Context context, ArrayList<LiveTrackingAdminData> list,ArrayList<Integer> colorDesign) {
+        public LocationLiveAdapter(Context context, ArrayList<LiveTrackingAdminData> list, ArrayList<Integer> colorDesign) {
 
             this.context = context;
             this.list = list;

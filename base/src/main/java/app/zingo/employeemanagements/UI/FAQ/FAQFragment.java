@@ -1,24 +1,17 @@
 package app.zingo.employeemanagements.UI.FAQ;
 
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.MenuItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminDashBoardFragment;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminHomeFragment;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminNewMainScreen;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.EmployerNotificationFragment;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.TaskAdminFragment;
-import app.zingo.employeemanagements.UI.NewEmployeeDesign.EmployeeLoginFragment;
-import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.base.R;
 
 public class FAQFragment extends AppCompatActivity {

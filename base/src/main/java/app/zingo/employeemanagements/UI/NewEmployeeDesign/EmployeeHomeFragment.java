@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,7 +74,7 @@ public class EmployeeHomeFragment extends Fragment {
     View layout;
     LinearLayout attendance,leaveApplications;
     LinearLayout tasks,expenses,meeting,team;
-    LinearLayout logout,deptOrg,chngPwd,salary,client;
+    LinearLayout logout,deptOrg,chngPwd,salary,client,ShareApp;//
 
     Employee employeed;
 
@@ -163,6 +164,46 @@ public class EmployeeHomeFragment extends Fragment {
         team = this.layout.findViewById(R.id.team);
         deptOrg = this.layout.findViewById(R.id.department);
         logout = this.layout.findViewById(R.id.logout);
+        ShareApp = this.layout.findViewById(R.id.share_app);
+
+
+
+
+        ShareApp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String upToNCharacters = PreferenceHandler.getInstance(getActivity()).getCompanyName().substring(0, Math.min(PreferenceHandler.getInstance(getActivity()).getCompanyName().length(), 4));
+
+
+                String body = "<html><head>" +
+                        "</head>" +
+                        "<body>" +
+                        "<h2>Hello,</h2>" +
+                        "<p><br>You are invited to join the Zingy Employee App Platform. </p></br></br>"+
+                        "<br><p>Here is a Procedure to Join the Platform using the Below Procedures. Make sure you store them safely. </p>"+
+                        "</br><p><br>Our Organization Code- "+upToNCharacters+PreferenceHandler.getInstance(getActivity()).getCompanyId()+
+                        "</br></p><br><b>Step 1:  </b>"+"Download the app by clicking here <a href=\"https://play.google.com/store/apps/details?id=app.zingo.employeemanagements\">https://play.google.com/store/apps/details?id=app.zingo.employeemanagements</a>"+
+                        "</br><br><b>Step 2: </b>"+"Click on Get Started and \"Join us as an Employee\""+
+                        "</br><br><b>Step 3: </b>"+"Verify your Mobile number and then Enter the Organization Code - "+upToNCharacters+PreferenceHandler.getInstance(getActivity()).getCompanyId()+
+                        "</br><br><b>Step 4:</b>"+"Enter your basic details and the complete the Sign up process"+
+                        "</br><p>From now on, Please login to your account using your organization email id and your password on a daily basis for attendance system,leave management,Expense management, sales visit etc., via mobile app. </p>"+
+                        "</br><p>If you have any questions then contact the Admin/HR of the company.</p>"+
+                        "</br><p><b>Cheers,</b><br><br>"+PreferenceHandler.getInstance(getActivity()).getUserFullName()+"</p></body></html>";
+
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                emailIntent.setType("text/plain");
+
+
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Employee Management App Invitation");
+
+
+                emailIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(new StringBuilder()
+                        .append(body)
+                        .toString()));
+                //emailIntent.putExtra(Intent.EXTRA_HTML_TEXT, body);
+                startActivity(Intent.createChooser(emailIntent, "Send email.."));
+            }
+        });
 
         //App new version available
         View updatedText = this.layout.findViewById(R.id.updateText);

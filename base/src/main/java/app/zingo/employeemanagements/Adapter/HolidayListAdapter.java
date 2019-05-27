@@ -1,37 +1,21 @@
 package app.zingo.employeemanagements.Adapter;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 
 import app.zingo.employeemanagements.Custom.MyRegulerText;
 import app.zingo.employeemanagements.Custom.MyTextView;
-import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.HolidayList;
-import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.BranchOptionScreen;
-import app.zingo.employeemanagements.Utils.PreferenceHandler;
-import app.zingo.employeemanagements.Utils.ThreadExecuter;
-import app.zingo.employeemanagements.Utils.Util;
-import app.zingo.employeemanagements.WebApi.EmployeeApi;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class HolidayListAdapter extends RecyclerView.Adapter<HolidayListAdapter.ViewHolder> {
 

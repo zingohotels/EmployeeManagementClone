@@ -2,8 +2,6 @@ package app.zingo.employeemanagements.WebApi;
 
 import java.util.ArrayList;
 
-import app.zingo.employeemanagements.Model.Employee;
-import app.zingo.employeemanagements.Model.Leaves;
 import app.zingo.employeemanagements.Model.Tasks;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -26,7 +24,7 @@ public interface TasksAPI {
     Call<ArrayList<Tasks>> getTasks();
 
     @PUT("Tasks/{id}")
-    Call<Tasks> updateTasks(@Path("id") int id,@Body Tasks details);
+    Call<Tasks> updateTasks(@Path("id") int id, @Body Tasks details);
 
     @DELETE("Tasks/{id}")
     Call<Tasks> deleteTasks(@Path("id") int id);
@@ -35,7 +33,7 @@ public interface TasksAPI {
     Call<ArrayList<Tasks>> getTasksByEmployeeId(@Path("EmployeeId") int EmployeeId);
 
     @GET("Tasks/GetTasksByEmployeeIdAndStatus/{EmployeeId}/{Status}")
-    Call<ArrayList<Tasks>> getTasksByEmployeeIdStatus(@Path("EmployeeId") int EmployeeId,@Path("Status") String Status);
+    Call<ArrayList<Tasks>> getTasksByEmployeeIdStatus(@Path("EmployeeId") int EmployeeId, @Path("Status") String Status);
 
 
 

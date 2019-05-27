@@ -3,7 +3,6 @@ package app.zingo.employeemanagements.WebApi;
 import java.util.ArrayList;
 
 import app.zingo.employeemanagements.Model.LoginDetails;
-import app.zingo.employeemanagements.Model.Meetings;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -27,7 +26,7 @@ public interface LoginDetailsAPI {
     Call<LoginDetails> getLoginById(@Path("id") int id);
 
     @PUT("LoginDetails/{id}")
-    Call<LoginDetails> updateLoginById(@Path("id") int id,@Body LoginDetails details);
+    Call<LoginDetails> updateLoginById(@Path("id") int id, @Body LoginDetails details);
 
     @GET("LoginDetails/GetLoginDetailsByEmployeeId/{EmployeeId}")
     Call<ArrayList<LoginDetails>> getLoginByEmployeeId(@Path("EmployeeId") int id);

@@ -1,13 +1,12 @@
 package app.zingo.employeemanagements.UI.Employee;
 
 import android.app.ProgressDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,11 +17,10 @@ import java.util.Set;
 
 import app.zingo.employeemanagements.Adapter.LoginDetailsAdapter;
 import app.zingo.employeemanagements.Model.LoginDetails;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Admin.EmployeesDashBoard;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.LoginDetailsAPI;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -90,7 +88,7 @@ public class WorkedDaysListScreen extends AppCompatActivity {
 
                             if (list !=null && list.size()!=0) {
 
-                                Collections.sort(list,LoginDetails.compareLogin);
+                                Collections.sort(list, LoginDetails.compareLogin);
                                 LoginDetailsAdapter adapter = new LoginDetailsAdapter(WorkedDaysListScreen.this,list);
                                 mWorkedDayList.setAdapter(adapter);
 

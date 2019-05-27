@@ -2,9 +2,9 @@ package app.zingo.employeemanagements.UI.NewAdminDesigns;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
@@ -15,17 +15,14 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import app.zingo.employeemanagements.Adapter.EmployeeAdapter;
 import app.zingo.employeemanagements.Adapter.EmployeeUpdateAdapter;
-import app.zingo.employeemanagements.Model.Designations;
 import app.zingo.employeemanagements.Model.Employee;
-import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.UI.Employee.CreateEmployeeScreen;
-import app.zingo.employeemanagements.UI.Employee.EmployeeListScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -76,25 +73,25 @@ public class EmployeeUpdateListScreen extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
 
-                    if(employeeSize>=PreferenceHandler.getInstance(EmployeeUpdateListScreen.this).getEmployeeLimit()){
+                    if(employeeSize>= PreferenceHandler.getInstance(EmployeeUpdateListScreen.this).getEmployeeLimit()){
 
 
                         if(PreferenceHandler.getInstance(EmployeeUpdateListScreen.this).getAppType().equalsIgnoreCase("Trial")){
 
-                            Intent employee =new Intent(EmployeeUpdateListScreen.this,CreateEmployeeScreen.class);
+                            Intent employee =new Intent(EmployeeUpdateListScreen.this, CreateEmployeeScreen.class);
                             employee.putExtra("BranchId",orgId);
                             startActivity(employee);
 
                         }else{
 
-                            Intent employee =new Intent(EmployeeUpdateListScreen.this,CreateEmployeeScreen.class);
+                            Intent employee =new Intent(EmployeeUpdateListScreen.this, CreateEmployeeScreen.class);
                             employee.putExtra("BranchId",orgId);
                             startActivity(employee);
                         }
 
                     }else{
 
-                        Intent employee =new Intent(EmployeeUpdateListScreen.this,CreateEmployeeScreen.class);
+                        Intent employee =new Intent(EmployeeUpdateListScreen.this, CreateEmployeeScreen.class);
                         employee.putExtra("BranchId",orgId);
                         startActivity(employee);
 
@@ -151,7 +148,7 @@ public class EmployeeUpdateListScreen extends AppCompatActivity {
                                 for(int i=0;i<list.size();i++){
 
                                     if(PreferenceHandler.getInstance(EmployeeUpdateListScreen.this).getUserRoleUniqueID()==2){
-                                        if(list.get(i).getEmployeeId()!=PreferenceHandler.getInstance(EmployeeUpdateListScreen.this).getUserId()){
+                                        if(list.get(i).getEmployeeId()!= PreferenceHandler.getInstance(EmployeeUpdateListScreen.this).getUserId()){
 
                                             employees.add(list.get(i));
 
@@ -171,7 +168,7 @@ public class EmployeeUpdateListScreen extends AppCompatActivity {
                                     
                                     mNoEmpl.setVisibility(View.GONE);
                                     mProfileList.setVisibility(View.VISIBLE);
-                                    Collections.sort(employees,Employee.compareEmployee);
+                                    Collections.sort(employees, Employee.compareEmployee);
                                     EmployeeUpdateAdapter adapter = new EmployeeUpdateAdapter(EmployeeUpdateListScreen.this, employees,type);
                                     mProfileList.setAdapter(adapter);
 

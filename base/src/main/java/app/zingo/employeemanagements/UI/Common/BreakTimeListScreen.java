@@ -3,14 +3,12 @@ package app.zingo.employeemanagements.UI.Common;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -24,23 +22,16 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 import app.zingo.employeemanagements.Adapter.BreakAdapter;
-import app.zingo.employeemanagements.Adapter.HolidayListAdapter;
 import app.zingo.employeemanagements.Custom.MyEditText;
-import app.zingo.employeemanagements.Custom.MyTextView;
-import app.zingo.employeemanagements.Model.HolidayList;
 import app.zingo.employeemanagements.Model.OrganizationBreakTimes;
-import app.zingo.employeemanagements.UI.Company.WorkingDaysScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.OrganizationBreakTimesAPI;
-import app.zingo.employeemanagements.WebApi.OrganizationHolidayListsAPI;
 import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -192,7 +183,7 @@ public class BreakTimeListScreen extends AppCompatActivity {
         final TextInputEditText mName = views.findViewById(R.id.break_name);
 
 
-        final android.support.v7.app.AlertDialog dialog = builder.create();
+        final AlertDialog dialog = builder.create();
         dialog.show();
         dialog.setCanceledOnTouchOutside(false);
 
@@ -239,7 +230,7 @@ public class BreakTimeListScreen extends AppCompatActivity {
                     Toast.makeText(BreakTimeListScreen.this, "Please enter End Time", Toast.LENGTH_SHORT).show();
                 }else{
 
-                    OrganizationBreakTimes  breakTimes = new OrganizationBreakTimes();
+                    OrganizationBreakTimes breakTimes = new OrganizationBreakTimes();
                     breakTimes.setBreakName(name);
                     breakTimes.setBreakStartTime(stratTime);
                     breakTimes.setBreakEndTime(endTime);
@@ -260,7 +251,7 @@ public class BreakTimeListScreen extends AppCompatActivity {
 
     }
 
-    public void addBreaks(final OrganizationBreakTimes breakTimes,final AlertDialog dialogs) {
+    public void addBreaks(final OrganizationBreakTimes breakTimes, final AlertDialog dialogs) {
 
 
         final ProgressDialog dialog = new ProgressDialog(this);
@@ -340,7 +331,7 @@ public class BreakTimeListScreen extends AppCompatActivity {
     }
 
 
-    public void openTimePicker(final MyEditText tv,final String type){
+    public void openTimePicker(final MyEditText tv, final String type){
 
         final Calendar mcurrentTime = Calendar.getInstance();
         int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);

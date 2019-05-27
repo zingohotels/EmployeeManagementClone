@@ -19,7 +19,7 @@ public class Customer implements Serializable {
     public  String CustomerEmail;
 
     @SerializedName("organization")
-    public  Organization organization;
+    public Organization organization;
 
     @SerializedName("OrganizationId")
     public  int OrganizationId;
@@ -38,6 +38,17 @@ public class Customer implements Serializable {
 
     @SerializedName("SecondaryPhoneNumber")
     public  String SecondaryPhoneNumber;
+
+    @SerializedName("CustomerImage")
+    public  String CustomerImage;
+
+    public String getCustomerImage() {
+        return CustomerImage;
+    }
+
+    public void setCustomerImage(String customerImage) {
+        CustomerImage = customerImage;
+    }
 
     public int getCustomerId() {
         return CustomerId;

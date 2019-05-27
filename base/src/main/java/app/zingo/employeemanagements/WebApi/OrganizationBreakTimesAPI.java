@@ -2,7 +2,6 @@ package app.zingo.employeemanagements.WebApi;
 
 import java.util.ArrayList;
 
-import app.zingo.employeemanagements.Model.HolidayList;
 import app.zingo.employeemanagements.Model.OrganizationBreakTimes;
 import retrofit2.Call;
 import retrofit2.http.Body;

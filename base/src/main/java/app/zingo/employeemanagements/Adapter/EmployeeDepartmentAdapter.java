@@ -13,9 +13,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import app.zingo.employeemanagements.Model.Employee;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Admin.DepartmentEmployeeListScreen;
 import app.zingo.employeemanagements.UI.Admin.EmployeesDashBoard;
+import app.zingo.employeemanagements.base.R;
 
 /**
  * Created by ZingoHotels Tech on 29-09-2018.
@@ -30,11 +29,13 @@ public class EmployeeDepartmentAdapter extends RecyclerView.Adapter<EmployeeDepa
 
         this.context = context;
         this.list = list;
+
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_profile_list, parent, false);
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.adapter_profile_list, parent, false);
         ViewHolder viewHolder = new ViewHolder(v);
         return viewHolder;
     }
@@ -57,9 +58,17 @@ public class EmployeeDepartmentAdapter extends RecyclerView.Adapter<EmployeeDepa
                 bundle.putInt("ProfileId",list.get(position).getEmployeeId());
                 intent.putExtras(bundle);
                 context.startActivity(intent);
+
             }
         });
+
+
+
+
+
     }
+
+
 
 
     @Override

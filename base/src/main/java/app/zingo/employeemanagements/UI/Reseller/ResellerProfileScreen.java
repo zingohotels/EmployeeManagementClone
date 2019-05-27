@@ -1,28 +1,16 @@
 package app.zingo.employeemanagements.UI.Reseller;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import app.zingo.employeemanagements.Custom.MyRegulerText;
-import app.zingo.employeemanagements.Custom.RoundImageView;
-import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.ResellerProfiles;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Admin.EmployeesDashBoard;
-import app.zingo.employeemanagements.UI.Admin.TaskManagementHost;
-import app.zingo.employeemanagements.UI.Common.ChangePasswordScreen;
-import app.zingo.employeemanagements.UI.Company.OrganizationDetailScree;
-import app.zingo.employeemanagements.UI.Employee.EmployeeListScreen;
-import app.zingo.employeemanagements.UI.Employee.LeaveManagementHost;
 import app.zingo.employeemanagements.UI.LandingScreen;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.EmployeeUpdateListScreen;
-import app.zingo.employeemanagements.UI.NewEmployeeDesign.ExpenseManageHost;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
+import app.zingo.employeemanagements.base.R;
 
 public class ResellerProfileScreen extends AppCompatActivity {
 
@@ -66,7 +54,7 @@ public class ResellerProfileScreen extends AppCompatActivity {
                             "Step to join the Zingy Reseller Referral Programme-\n" +
                             "1.  Signup using your phone number.\n" +
                             "\n" +
-                            "2.  Open the Zingy Employee Management App and visit the profile Section, and find out your referral code. It’s an alpha-numeric code like: "+upToNCharacters+PreferenceHandler.getInstance(ResellerProfileScreen.this).getResellerUserId()+"\n" +
+                            "2.  Open the Zingy Employee Management App and visit the profile Section, and find out your referral code. It’s an alpha-numeric code like: "+upToNCharacters+ PreferenceHandler.getInstance(ResellerProfileScreen.this).getResellerUserId()+"\n" +
                             "\n" +
                             "3.  Share the App with your Referral Companies using your Referral Code\n" +
                             "\n" +
@@ -74,7 +62,7 @@ public class ResellerProfileScreen extends AppCompatActivity {
                             "\n" +
                             " \n" +
                             "\n" +
-                            "My Zingy Referral Code is "+upToNCharacters+PreferenceHandler.getInstance(ResellerProfileScreen.this).getResellerUserId()+". Don’t Forget to use my Referral Code.\n" +
+                            "My Zingy Referral Code is "+upToNCharacters+ PreferenceHandler.getInstance(ResellerProfileScreen.this).getResellerUserId()+". Don’t Forget to use my Referral Code.\n" +
                             "\n" +
                             "Keep Sharing\n" +
                             "\n" +

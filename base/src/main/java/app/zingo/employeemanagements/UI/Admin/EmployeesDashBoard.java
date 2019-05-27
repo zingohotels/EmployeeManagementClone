@@ -3,12 +3,11 @@ package app.zingo.employeemanagements.UI.Admin;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.location.Location;
+import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -19,10 +18,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.PolylineOptions;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
@@ -34,19 +29,14 @@ import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import app.zingo.employeemanagements.Adapter.LoginDetailsAdapter;
-import app.zingo.employeemanagements.Adapter.TaskAdapter;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.EmployeeImages;
 import app.zingo.employeemanagements.Model.LiveTracking;
 import app.zingo.employeemanagements.Model.LoginDetails;
-import app.zingo.employeemanagements.Model.MarkerData;
 import app.zingo.employeemanagements.Model.Meetings;
 import app.zingo.employeemanagements.Model.Tasks;
-import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.UI.Common.EmployeeMeetingMap;
 import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminNewMainScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
@@ -54,6 +44,7 @@ import app.zingo.employeemanagements.WebApi.LiveTrackingAPI;
 import app.zingo.employeemanagements.WebApi.LoginDetailsAPI;
 import app.zingo.employeemanagements.WebApi.MeetingsAPI;
 import app.zingo.employeemanagements.WebApi.TasksAPI;
+import app.zingo.employeemanagements.base.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -157,7 +148,7 @@ public class EmployeesDashBoard extends AppCompatActivity {
                     //getLiveLocation(profile.getEmployeeId());
                 }catch (Exception e){
                     e.printStackTrace();
-                    Intent error = new Intent(EmployeesDashBoard.this,InternalServerErrorScreen.class);
+                    Intent error = new Intent(EmployeesDashBoard.this, InternalServerErrorScreen.class);
                     startActivity(error);
                 }
 
@@ -204,7 +195,7 @@ public class EmployeesDashBoard extends AppCompatActivity {
 
                             if (list !=null && list.size()!=0) {
 
-                                Collections.sort(list,LoginDetails.compareLogin);
+                                Collections.sort(list, LoginDetails.compareLogin);
                                 LoginDetailsAdapter adapter = new LoginDetailsAdapter(EmployeesDashBoard.this,list);
                                 mLoginDetails.setAdapter(adapter);
 
@@ -347,7 +338,7 @@ public class EmployeesDashBoard extends AppCompatActivity {
 
                             if (list !=null && list.size()!=0) {
 
-                                Collections.sort(list,Meetings.compareMeetings);
+                                Collections.sort(list, Meetings.compareMeetings);
                                 mTotalMeeting.setText(""+list.size());
 
                                 for(int i=0;i<list.size();i++){

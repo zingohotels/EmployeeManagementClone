@@ -7,14 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import app.zingo.employeemanagements.Custom.MyRegulerText;
 import app.zingo.employeemanagements.Custom.MyTextView;
-import app.zingo.employeemanagements.Model.HolidayList;
 import app.zingo.employeemanagements.Model.OrganizationBreakTimes;
 import app.zingo.employeemanagements.base.R;
 

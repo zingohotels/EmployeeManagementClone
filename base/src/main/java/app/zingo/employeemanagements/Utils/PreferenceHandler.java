@@ -200,6 +200,15 @@ public class PreferenceHandler {
         return sh.getString(Constants.COMPANY_NAME,"");
     }
 
+    public void setCompanyAddress(String hotelName) {
+        sh.edit().putString(Constants.COMPANY_Address,hotelName).apply();
+    }
+
+    public String getCompanyAddress()
+    {
+        return sh.getString(Constants.COMPANY_Address,"");
+    }
+
     public void setHeadName(String hotelName) {
         sh.edit().putString(Constants.HEAD_NAME,hotelName).apply();
     }
@@ -271,6 +280,15 @@ public class PreferenceHandler {
     public String getPlanType()
     {
         return sh.getString(Constants.PLAN_TYPE,"");
+    }
+
+    public void setLogo(String appType) {
+        sh.edit().putString(Constants.LOGO,appType).apply();
+    }
+
+    public String getLogo()
+    {
+        return sh.getString(Constants.LOGO,"");
     }
 
     public void setSignupDate(String signupDate) {
@@ -384,6 +402,26 @@ public class PreferenceHandler {
     public String getMeetingLoginStatus()
     {
         return sh.getString(Constants.MEET_LOGIN_STATUS,"Logout");
+    }
+
+    public void setLunchBreakStatus(String loginStatus)
+    {
+        sh.edit().putString(Constants.LUNCH_STATUS,loginStatus).apply();
+    }
+
+    public String getLunchBreakStatus()
+    {
+        return sh.getString(Constants.LUNCH_STATUS,"false");
+    }
+
+    public void setTeaBreakStatus(String loginStatus)
+    {
+        sh.edit().putString(Constants.TEA_STATUS,loginStatus).apply();
+    }
+
+    public String getTeaBreakStatus()
+    {
+        return sh.getString(Constants.TEA_STATUS,"false");
     }
 
     public void setLoginId(int id)

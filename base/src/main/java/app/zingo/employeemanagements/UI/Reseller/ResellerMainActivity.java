@@ -17,45 +17,43 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Timer;
 
 import app.zingo.employeemanagements.Custom.RoundImageView;
-import app.zingo.employeemanagements.Model.Employee;
-import app.zingo.employeemanagements.Model.EmployeeImages;
+import app.zingo.employeemanagements.Model.LoginDetails;
 import app.zingo.employeemanagements.Model.ResellerProfiles;
-import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.UI.LandingScreen;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminNewMainScreen;
+import app.zingo.employeemanagements.UI.NewAdminDesigns.EmployeeDashBoardAdminView;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
-import app.zingo.employeemanagements.WebApi.EmployeeApi;
-import app.zingo.employeemanagements.WebApi.EmployeeImageAPI;
 import app.zingo.employeemanagements.WebApi.ResellerAPI;
 import app.zingo.employeemanagements.WebApi.UploadApi;
-import de.hdodenhof.circleimageview.CircleImageView;
+import app.zingo.employeemanagements.base.R;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -264,41 +262,113 @@ public class ResellerMainActivity extends TabActivity implements TabHost.OnTabCh
             mShareLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String upToNCharacters = PreferenceHandler.getInstance(ResellerMainActivity.this).getResellerName().substring(0, Math.min(PreferenceHandler.getInstance(ResellerMainActivity.this).getResellerName().length(), 4));
 
 
-                    String text = "Hello this is Zingy Reseller Employee Management App built for resellers to earn more money. You can resell the app and make more money for every new referral and earn commission for lifetime.\n\n"+
-                                        "Step to join the Zingy Reseller Referral Programme-\n" +
-                            "1.  Signup using your phone number.\n" +
-                            "\n" +
-                            "2.  Open the Zingy Employee Management App and visit the profile Section, and find out your referral code. It’s an alpha-numeric code like: "+upToNCharacters+PreferenceHandler.getInstance(ResellerMainActivity.this).getResellerUserId()+"\n" +
-                            "\n" +
-                            "3.  Share the App with your Referral Companies using your Referral Code\n" +
-                            "\n" +
-                            "4.  When  your referred company signs up. You can make money for every new signup and earn commission for lifetime.\n" +
-                            "\n" +
-                            " \n" +
-                            "\n" +
-                            "My Zingy Referral Code is "+upToNCharacters+PreferenceHandler.getInstance(ResellerMainActivity.this).getResellerUserId()+". Don’t Forget to use my Referral Code.\n" +
-                            "\n" +
-                            "Keep Sharing\n" +
-                            "\n" +
-                            " \n" +
-                            "\n" +
-                            "To Download the app click here:\n"+
-                            "https://play.google.com/store/apps/details?id=app.zingo.employeemanagements";
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ResellerMainActivity.this);
+                    builder.setTitle("Do you want to share app ?");
+                    builder.setCancelable(true);
+                    builder.setPositiveButton("Reseller", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                            String upToNCharacters = PreferenceHandler.getInstance(ResellerMainActivity.this).getResellerName().substring(0, Math.min(PreferenceHandler.getInstance(ResellerMainActivity.this).getResellerName().length(), 4));
 
 
-                    Intent emailIntent = new Intent(Intent.ACTION_SEND);
-                    emailIntent.setType("text/plain");
+                            String text = "Hello this is Zingy Reseller Employee Management App built for resellers to earn more money. You can resell the app and make more money for every new referral and earn commission for lifetime.\n\n"+
+                                    "Step to join the Zingy Reseller Referral Programme-\n" +
+                                    "1.  Signup using your phone number.\n" +
+                                    "\n" +
+                                    "2.  Open the Zingy Employee Management App and visit the profile Section, and find out your referral code. It’s an alpha-numeric code like: "+upToNCharacters+ PreferenceHandler.getInstance(ResellerMainActivity.this).getResellerUserId()+"\n" +
+                                    "\n" +
+                                    "3.  Share the App with your Referral Companies using your Referral Code\n" +
+                                    "\n" +
+                                    "4.  When  your referred company signs up. You can make money for every new signup and earn commission for lifetime.\n" +
+                                    "\n" +
+                                    " \n" +
+                                    "\n" +
+                                    "My Zingy Referral Code is "+upToNCharacters+ PreferenceHandler.getInstance(ResellerMainActivity.this).getResellerUserId()+". Don’t Forget to use my Referral Code.\n" +
+                                    "\n" +
+                                    "Keep Sharing\n" +
+                                    "\n" +
+                                    " \n" +
+                                    "\n" +
+                                    "To Download the app click here:\n"+
+                                    "https://play.google.com/store/apps/details?id=app.zingo.employeemanagements";
 
 
-                    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Employee Management App Invitation");
+                            Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                            emailIntent.setType("text/plain");
 
 
-                    emailIntent.putExtra(Intent.EXTRA_TEXT, text);
-                    //emailIntent.putExtra(Intent.EXTRA_HTML_TEXT, body);
-                    startActivity(Intent.createChooser(emailIntent, "Send"));
+                            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Employee Management App Invitation");
+
+
+                            emailIntent.putExtra(Intent.EXTRA_TEXT, text);
+                            //emailIntent.putExtra(Intent.EXTRA_HTML_TEXT, body);
+                            startActivity(Intent.createChooser(emailIntent, "Send"));
+
+                        }
+                    });
+                    builder.setNegativeButton("Company", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+
+
+                            String upToNCharacters = PreferenceHandler.getInstance(ResellerMainActivity.this).getResellerName().substring(0, Math.min(PreferenceHandler.getInstance(ResellerMainActivity.this).getResellerName().length(), 4));
+
+
+                            String text = "Hello this is Zingy Employee Management App built for Companies to manage " +
+                                    "their Employees Especially Sales Employees. We have launched our Employee " +
+                                    "Tracking product calling “Zingy” which is designed and built to Keep track of " +
+                                    "each employee’s schedule, hours, wage and more.\n\n"+"With our “Zingy” app, managers can quickly see who’s working, who’s late, who’s " +
+                                    "scheduled and who’s available, on field sales employee GPS location tracking, " +
+                                    "attendance system, sales visit tracking, sales order and payment collection " +
+                                    "data logging via mobile app. They can clock employees in or out, edit timesheets " +
+                                    "and approve employee requests directly from their phone.\n\n Free Trial\nWe are offering you a free trial of 30 Days."+
+                                    "Steps to follow:" +
+                                    "1.  Download the app by clicking here https://play.google.com/store/apps/details?id=app.zingo.employeemanagements\n.\n" +
+                                    "\n" +
+                                    "2. Click on Get Started and \"Join us as a Company\" and use My Zingy Referral Code "+upToNCharacters+ PreferenceHandler.getInstance(ResellerMainActivity.this).getResellerUserId()+". Don’t Forget to use my Referral Code"+"\n" +
+                                    "\n" +
+                                    "3.  Enter the Organization Details and Verify your phone number" +
+                                    "\n" +
+                                    "4.  Enter your basic details and the complete the Sign up process\n" +
+                                    "5.  Create at least One Department and Create at least one Employee to start using the app.\n" +
+                                    "6.  Share the app with your employees and start monitoring them\n" +
+                                    "\n" +
+                                    " \n" +
+                                    "\n" +
+                                    "My Zingy Referral Code is "+upToNCharacters+ PreferenceHandler.getInstance(ResellerMainActivity.this).getResellerUserId()+". Don’t Forget to use my Referral Code.\n" +
+                                    "\n" +
+                                    "Keep Sharing\n" +
+                                    "\n" +
+                                    " \n" +
+                                    "\n" +
+                                    "To Download the app click here:\n"+
+                                    "https://play.google.com/store/apps/details?id=app.zingo.employeemanagements";
+
+
+                            Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                            emailIntent.setType("text/plain");
+
+
+                            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Employee Management App Invitation");
+
+
+                            emailIntent.putExtra(Intent.EXTRA_TEXT, text);
+                            //emailIntent.putExtra(Intent.EXTRA_HTML_TEXT, body);
+                            startActivity(Intent.createChooser(emailIntent, "Send"));
+
+
+                        }
+                    });
+
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+
+
                 }
             });
 
@@ -415,7 +485,7 @@ public class ResellerMainActivity extends TabActivity implements TabHost.OnTabCh
                 if(imgFile.exists()) {
                     Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                     //addView(null,Util.getResizedBitmap(myBitmap,400));
-                    addImage(null,Util.getResizedBitmap(myBitmap,700));
+                    addImage(null, Util.getResizedBitmap(myBitmap,700));
                 }
             }
         }catch (Exception e){
@@ -565,7 +635,7 @@ public class ResellerMainActivity extends TabActivity implements TabHost.OnTabCh
         }
     }
 
-    public String compressImage(String filePath,final  ResellerProfiles Employee) {
+    public String compressImage(String filePath,final ResellerProfiles Employee) {
 
         //String filePath = getRealPathFromURI(imageUri);
         Bitmap scaledBitmap = null;

@@ -6,15 +6,12 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import app.zingo.employeemanagements.Model.NotificationSettingsData;
 import app.zingo.employeemanagements.Model.WorkingDay;
-
-import static com.itextpdf.text.pdf.PdfName.ORDER;
 
 public class DBHelper extends SQLiteOpenHelper {
 

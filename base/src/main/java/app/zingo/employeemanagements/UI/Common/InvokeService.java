@@ -1,17 +1,14 @@
 package app.zingo.employeemanagements.UI.Common;
 
-import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
-import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.TextInputEditText;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -38,7 +34,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 
-import app.zingo.employeemanagements.Adapter.DepartmentSpinnerAdapter;
 import app.zingo.employeemanagements.Adapter.OrgSpinnerAdapter;
 import app.zingo.employeemanagements.Custom.MyRegulerText;
 import app.zingo.employeemanagements.Model.EmailData;
@@ -51,9 +46,6 @@ import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.Model.ReportDataEmployee;
 import app.zingo.employeemanagements.Model.ReportDataModel;
 import app.zingo.employeemanagements.Model.Tasks;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.Service.SendEmailToAll;
-import app.zingo.employeemanagements.UI.Employee.CreateEmployeeScreen;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.ReportExpenseList;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.ReportTaskListScreen;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.ReportVisitsListScreen;
@@ -68,6 +60,7 @@ import app.zingo.employeemanagements.WebApi.MeetingsAPI;
 import app.zingo.employeemanagements.WebApi.OrganizationApi;
 import app.zingo.employeemanagements.WebApi.SendEmailAPI;
 import app.zingo.employeemanagements.WebApi.TasksAPI;
+import app.zingo.employeemanagements.base.R;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
 import jxl.format.Alignment;
@@ -460,7 +453,7 @@ public class InvokeService extends AppCompatActivity {
                     if(employeeTasks!=null&&employeeTasks.size()!=0){
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("EmployeeTask",employeeTasks);
-                        Intent tsak = new Intent(InvokeService.this,ReportTaskListScreen.class);
+                        Intent tsak = new Intent(InvokeService.this, ReportTaskListScreen.class);
                         tsak.putExtras(bundle);
                         startActivity(tsak);
 
@@ -478,7 +471,7 @@ public class InvokeService extends AppCompatActivity {
                     if(employeeExpense!=null&&employeeExpense.size()!=0){
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("EmployeeExpense",employeeExpense);
-                        Intent tsak = new Intent(InvokeService.this,ReportExpenseList.class);
+                        Intent tsak = new Intent(InvokeService.this, ReportExpenseList.class);
                         tsak.putExtras(bundle);
                         startActivity(tsak);
 
@@ -630,7 +623,7 @@ public class InvokeService extends AppCompatActivity {
         private String dateValue;
 
 
-        public ReportDetailEmployeeAdapter(Context context, ArrayList<Employee> list,String dateValue) {
+        public ReportDetailEmployeeAdapter(Context context, ArrayList<Employee> list, String dateValue) {
 
             this.context = context;
             this.list = list;
@@ -719,7 +712,7 @@ public class InvokeService extends AppCompatActivity {
             }
         }
 
-        private void getLoginDetails(final LoginDetails loginDetails,final TextView login,final TextView logout,final TextView workingHrs,final String comDate){
+        private void getLoginDetails(final LoginDetails loginDetails, final TextView login, final TextView logout, final TextView workingHrs, final String comDate){
 
 
 
@@ -1205,7 +1198,7 @@ public class InvokeService extends AppCompatActivity {
             });
         }
 
-        private void getLiveLocation(final LiveTracking lv,final TextView km){
+        private void getLiveLocation(final LiveTracking lv, final TextView km){
 
 
             final ProgressDialog progressDialog = new ProgressDialog(InvokeService.this);
@@ -1236,7 +1229,7 @@ public class InvokeService extends AppCompatActivity {
 
                                 if (list !=null && list.size()!=0) {
 
-                                    Collections.sort(list,LiveTracking.compareLiveTrack);
+                                    Collections.sort(list, LiveTracking.compareLiveTrack);
 
 
                                     double lati = 0,lngi=0;
@@ -1366,7 +1359,7 @@ public class InvokeService extends AppCompatActivity {
             WritableSheet sheet = workbook.createSheet(sheetName, 0);
 
 
-            sheet.addCell(new Label(5,0,PreferenceHandler.getInstance(InvokeService.this).getCompanyName()));
+            sheet.addCell(new Label(5,0, PreferenceHandler.getInstance(InvokeService.this).getCompanyName()));
 
             sheet.mergeCells(5,0,10,0);
 
@@ -1378,7 +1371,7 @@ public class InvokeService extends AppCompatActivity {
             sheet.addCell(new Label(3,3,"Generated On "+new SimpleDateFormat("dd/MM/yyyy, hh:mm aa").format(new Date())));
             sheet.mergeCells(3,3,6,3);
 
-            sheet.addCell(new Label(7,3,"User : "+PreferenceHandler.getInstance(InvokeService.this).getUserFullName()));
+            sheet.addCell(new Label(7,3,"User : "+ PreferenceHandler.getInstance(InvokeService.this).getUserFullName()));
             sheet.mergeCells(7,3,10,3);
 
             sheet.setColumnView(0, 20);

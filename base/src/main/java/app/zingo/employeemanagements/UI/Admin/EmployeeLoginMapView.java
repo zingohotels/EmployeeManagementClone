@@ -4,17 +4,14 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.Location;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -42,14 +39,11 @@ import java.util.List;
 
 import app.zingo.employeemanagements.Model.LoginDetails;
 import app.zingo.employeemanagements.Model.MarkerData;
-import app.zingo.employeemanagements.Model.Meetings;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Common.EmployeeMeetingMap;
 import app.zingo.employeemanagements.Utils.DataParser;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.LoginDetailsAPI;
-import app.zingo.employeemanagements.WebApi.MeetingsAPI;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -160,7 +154,7 @@ public class EmployeeLoginMapView extends AppCompatActivity {
 
                             if (list !=null && list.size()!=0) {
 
-                                Collections.sort(list,LoginDetails.compareLogin);
+                                Collections.sort(list, LoginDetails.compareLogin);
 
                                 mMap.clear();
                                 for(int i=0;i<list.size();i++){

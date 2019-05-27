@@ -2,12 +2,10 @@ package app.zingo.employeemanagements.WebApi;
 
 import java.util.ArrayList;
 
-import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Organization;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -22,7 +20,7 @@ public interface OrganizationApi {
     Call<Organization> addOrganization(@Body Organization details);
 
     @PUT("Organizations/{id}")
-    Call<Organization> updateOrganization(@Path("id") int id,@Body Organization details);
+    Call<Organization> updateOrganization(@Path("id") int id, @Body Organization details);
 
     @GET("Organizations/{id}")
     Call<ArrayList<Organization>> getOrganizationById(@Path("id") int id);

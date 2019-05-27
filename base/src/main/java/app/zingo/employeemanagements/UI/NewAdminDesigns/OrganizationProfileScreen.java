@@ -1,8 +1,7 @@
 package app.zingo.employeemanagements.UI.NewAdminDesigns;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,23 +10,18 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 
 import app.zingo.employeemanagements.Adapter.NavigationAdapter;
-import app.zingo.employeemanagements.Adapter.NavigationListAdapter;
-import app.zingo.employeemanagements.Model.NavBarItems;
 import app.zingo.employeemanagements.Model.Navigation_Model;
-import app.zingo.employeemanagements.Model.Organization;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Common.AllEmployeeLiveLocation;
-import app.zingo.employeemanagements.UI.Employee.EmployeeListScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
+import app.zingo.employeemanagements.base.R;
 
 public class OrganizationProfileScreen extends AppCompatActivity {
 
     String[] tv1 = {"About Organization","Branches","Holidays","Office Timing","Break Timing"};//
 
-    Integer[] imagehistory = {R.drawable.office_about,R.drawable.branches,
-            R.drawable.holiday_list,R.drawable.office_timings,R.drawable.coffee_break};//
-    Integer[] image1 ={R.drawable.ic_chevron_right_black_24dp,R.drawable.ic_chevron_right_black_24dp,R.drawable.ic_chevron_right_black_24dp,
-            R.drawable.ic_chevron_right_black_24dp,R.drawable.ic_chevron_right_black_24dp};//
+    Integer[] imagehistory = {R.drawable.office_about, R.drawable.branches,
+            R.drawable.holiday_list, R.drawable.office_timings, R.drawable.coffee_break};//
+    Integer[] image1 ={R.drawable.ic_chevron_right_black_24dp, R.drawable.ic_chevron_right_black_24dp, R.drawable.ic_chevron_right_black_24dp,
+            R.drawable.ic_chevron_right_black_24dp, R.drawable.ic_chevron_right_black_24dp};//
 
     private RecyclerView recyclerView;
     private NavigationAdapter navigation_adapter;

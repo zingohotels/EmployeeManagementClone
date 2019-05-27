@@ -22,7 +22,6 @@ import java.util.Date;
 import java.util.Map;
 
 import app.zingo.employeemanagements.Model.LeaveNotificationManagers;
-import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.UI.Admin.LoginDetailsHost;
 import app.zingo.employeemanagements.UI.Admin.TaskListScreen;
 import app.zingo.employeemanagements.UI.Common.GeneralNotificationScreen;
@@ -30,6 +29,7 @@ import app.zingo.employeemanagements.UI.Common.InvokeService;
 import app.zingo.employeemanagements.UI.Employee.EmployeeMeetingHost;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.UpdateLeaveScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
+import app.zingo.employeemanagements.base.R;
 
 public class PreviousFirebase extends FirebaseMessagingService {
 
@@ -212,7 +212,7 @@ public class PreviousFirebase extends FirebaseMessagingService {
             intent.putExtras(bundle);
 
 
-        }else if(title.contains("Task Allocated")&&PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()!=2){
+        }else if(title.contains("Task Allocated")&& PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()!=2){
 
             intent = new Intent(this, TaskListScreen.class);
             int employeeId = Integer.parseInt(map.get("EmployeeId"));
@@ -350,7 +350,7 @@ public class PreviousFirebase extends FirebaseMessagingService {
             intent.putExtras(bundle);
 
 
-        }else if(title.contains("Task Allocated")&&PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()!=2){
+        }else if(title.contains("Task Allocated")&& PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()!=2){
 
             intent = new Intent(this, TaskListScreen.class);
             int employeeId = Integer.parseInt(map.get("EmployeeId"));

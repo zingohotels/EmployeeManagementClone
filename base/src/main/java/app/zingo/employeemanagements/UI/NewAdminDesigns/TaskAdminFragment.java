@@ -2,7 +2,6 @@ package app.zingo.employeemanagements.UI.NewAdminDesigns;
 
 
 import android.app.DatePickerDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -10,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -30,22 +28,18 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import app.zingo.employeemanagements.Adapter.TaskEmployeeListAdapter;
 import app.zingo.employeemanagements.Adapter.TaskAdminListAdapter;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.TaskAdminData;
 import app.zingo.employeemanagements.Model.Tasks;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Admin.CreateTaskScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
 import app.zingo.employeemanagements.WebApi.TasksAPI;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -122,7 +116,7 @@ public class TaskAdminFragment extends Fragment {
             this.layout = layoutInflater.inflate(R.layout.fragment_task_admin, viewGroup, false);
 
             this.presentDate = this.layout.findViewById(R.id.presentDate);
-            SHOWCASE_ID_ADMIN = "ToolsAdminst"+PreferenceHandler.getInstance(getActivity()).getUserId();
+            SHOWCASE_ID_ADMIN = "ToolsAdminst"+ PreferenceHandler.getInstance(getActivity()).getUserId();
             // this.presentDate.setText(DateUtil.getReadableDate(this.mCalendarDay));
             mTaskList = this.layout.findViewById(R.id.targetList);
             mTaskList.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -160,7 +154,7 @@ public class TaskAdminFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
 
-                    Intent viewEmpl  = new Intent(getActivity(),TaskAdminViewActivity.class);
+                    Intent viewEmpl  = new Intent(getActivity(), TaskAdminViewActivity.class);
                     startActivity(viewEmpl);
                 }
             });
@@ -408,7 +402,7 @@ public class TaskAdminFragment extends Fragment {
 
                                 ArrayList<Employee> employeesList= list;
 
-                                Collections.sort(list,Employee.compareEmployee);
+                                Collections.sort(list, Employee.compareEmployee);
 
                                 employeeTasks = new ArrayList<>();
                                 pendingTasks = new ArrayList<>();
@@ -457,7 +451,7 @@ public class TaskAdminFragment extends Fragment {
         });
     }
 
-    private void getTasks(final Employee employee,final String dateValue){
+    private void getTasks(final Employee employee, final String dateValue){
 
 
         final int employeeId = employee.getEmployeeId();

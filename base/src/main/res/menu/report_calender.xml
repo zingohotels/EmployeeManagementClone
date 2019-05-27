@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:icon="@drawable/calendar_menu"
+        android:id="@+id/report_calendar_picker"
+        android:orderInCategory="100"
+        android:title="Calendar"
+        app:showAsAction="ifRoom"/>
+</menu>

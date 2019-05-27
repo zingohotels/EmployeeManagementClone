@@ -1,10 +1,10 @@
 package app.zingo.employeemanagements.UI;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -17,7 +17,7 @@ import app.zingo.employeemanagements.base.R;
 
 public class SupportScreen extends AppCompatActivity {
     ViewPager slidePager;
-    int[] layouts = {R.layout.slide_one_screen,R.layout.slide_two_screen};
+    int[] layouts = {R.layout.slide_one_screen, R.layout.slide_two_screen};
     LinearLayout dots;
     ImageView[] dot;
     int currentPage = 0,start = 0,end = 0;
@@ -107,9 +107,9 @@ public class SupportScreen extends AppCompatActivity {
         for (int i =0;i<layouts.length;i++){
             dot[i] = new ImageView(this);
             if(i==current){
-                dot[i].setImageDrawable(ContextCompat.getDrawable(this,R.drawable.active_dots));
+                dot[i].setImageDrawable(ContextCompat.getDrawable(this, R.drawable.active_dots));
             }else {
-                dot[i].setImageDrawable(ContextCompat.getDrawable(this,R.drawable.inactive_dots));
+                dot[i].setImageDrawable(ContextCompat.getDrawable(this, R.drawable.inactive_dots));
             }
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             params.setMargins(4,0,4,0);

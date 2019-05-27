@@ -1,6 +1,5 @@
 package app.zingo.employeemanagements.WebApi;
 
-import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.OrgDashBoard;
 import retrofit2.Call;
 import retrofit2.http.GET;

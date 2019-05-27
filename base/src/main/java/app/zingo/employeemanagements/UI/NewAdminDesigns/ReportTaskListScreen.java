@@ -1,9 +1,7 @@
 package app.zingo.employeemanagements.UI.NewAdminDesigns;
 
-import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -13,14 +11,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import java.util.ArrayList;
 
 import app.zingo.employeemanagements.Adapter.TaskListAdapter;
 import app.zingo.employeemanagements.Model.Tasks;
 import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Admin.CreateTaskScreen;
-import app.zingo.employeemanagements.UI.Admin.EmployeeTaskMapScreen;
 
 public class ReportTaskListScreen extends AppCompatActivity {
 

@@ -3,7 +3,6 @@ package app.zingo.employeemanagements.Custom;
 import android.content.Context;
 import android.support.v7.widget.AppCompatSpinner;
 import android.util.AttributeSet;
-import android.widget.Spinner;
 
 public class CustomSpinner extends AppCompatSpinner {
     private static final String TAG = "CustomSpinner";

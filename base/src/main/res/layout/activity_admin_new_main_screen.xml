@@ -103,11 +103,6 @@
                         android:orientation="horizontal"
                         app:layout_behavior="app.zingo.employeemanagements.Custom.ScrollingToolbarBehavior">
 
-
-
-
-
-
                         <app.zingo.employeemanagements.Custom.MyRegulerText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

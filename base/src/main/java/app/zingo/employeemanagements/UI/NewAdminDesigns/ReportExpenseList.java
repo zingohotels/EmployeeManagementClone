@@ -1,25 +1,19 @@
 package app.zingo.employeemanagements.UI.NewAdminDesigns;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
-
 
 import java.util.ArrayList;
 
 import app.zingo.employeemanagements.Adapter.ExpenseReportAdapter;
-import app.zingo.employeemanagements.Adapter.TaskListAdapter;
 import app.zingo.employeemanagements.Model.Expenses;
-import app.zingo.employeemanagements.Model.Tasks;
 import app.zingo.employeemanagements.base.R;
-import jxl.common.Assert;
 
 public class ReportExpenseList extends AppCompatActivity {
 

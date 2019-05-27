@@ -5,7 +5,6 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -19,25 +18,20 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.util.Log;
-import android.widget.Button;
-
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 
 import app.zingo.employeemanagements.Model.GeneralNotification;
-import app.zingo.employeemanagements.base.R;
-
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.GeneralNotificationAPI;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-
 
 
 public class CheckDataAndLocation extends Service {
@@ -64,7 +58,7 @@ public class CheckDataAndLocation extends Service {
 
         try{
 
-            if(PreferenceHandler.getInstance(CheckDataAndLocation.this).getUserId()!=0&&PreferenceHandler.getInstance(CheckDataAndLocation.this).getUserRoleUniqueID()==1){
+            if(PreferenceHandler.getInstance(CheckDataAndLocation.this).getUserId()!=0&& PreferenceHandler.getInstance(CheckDataAndLocation.this).getUserRoleUniqueID()==1){
 
 
 
@@ -368,7 +362,7 @@ public class CheckDataAndLocation extends Service {
     public boolean locationCheck(){
 
         final boolean status = false;
-        LocationManager lm = (LocationManager)CheckDataAndLocation.this.getSystemService(Context.LOCATION_SERVICE);
+        LocationManager lm = (LocationManager) CheckDataAndLocation.this.getSystemService(Context.LOCATION_SERVICE);
         boolean gps_enabled = false;
         boolean network_enabled = false;
 

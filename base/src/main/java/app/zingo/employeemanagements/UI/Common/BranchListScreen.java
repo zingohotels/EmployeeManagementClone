@@ -1,10 +1,9 @@
 package app.zingo.employeemanagements.UI.Common;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,14 +18,11 @@ import java.util.ArrayList;
 
 import app.zingo.employeemanagements.Adapter.BranchAdapter;
 import app.zingo.employeemanagements.Model.Organization;
-import app.zingo.employeemanagements.Model.WorkingDay;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Company.WorkingDaysScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.OrganizationApi;
-import app.zingo.employeemanagements.WebApi.OrganizationTimingsAPI;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -67,7 +63,7 @@ public class BranchListScreen extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
 
-                    Intent branch = new Intent(BranchListScreen.this,CreateBranchesScreen.class);
+                    Intent branch = new Intent(BranchListScreen.this, CreateBranchesScreen.class);
                     startActivity(branch);
                 }
             });

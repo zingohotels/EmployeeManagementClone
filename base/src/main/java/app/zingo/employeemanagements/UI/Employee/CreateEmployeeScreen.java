@@ -2,17 +2,15 @@ package app.zingo.employeemanagements.UI.Employee;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
-import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
@@ -22,8 +20,6 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,24 +27,18 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 
-
 import app.zingo.employeemanagements.Adapter.DepartmentSpinnerAdapter;
-import app.zingo.employeemanagements.Adapter.EmployeeAdapter;
 import app.zingo.employeemanagements.Adapter.ManagerSpinnerAdapter;
 import app.zingo.employeemanagements.Custom.MyEditText;
 import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Designations;
 import app.zingo.employeemanagements.Model.Employee;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Company.CreateFounderScreen;
-import app.zingo.employeemanagements.UI.Login.LoginScreen;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.EmployeeUpdateListScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.DepartmentApi;
-import app.zingo.employeemanagements.WebApi.DesignationsAPI;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -599,7 +589,7 @@ public class CreateEmployeeScreen extends AppCompatActivity {
 
     }
 
-    private void checkUserByEmailId(final Employee userProfile,final Designations designations){
+    private void checkUserByEmailId(final Employee userProfile, final Designations designations){
 
 
         userProfile.setEmail(userProfile.getPrimaryEmailAddress());
@@ -673,7 +663,7 @@ public class CreateEmployeeScreen extends AppCompatActivity {
         });
     }
 
-    private void checkUserByPhone(final Employee userProfile,final Designations designations){
+    private void checkUserByPhone(final Employee userProfile, final Designations designations){
 
         new ThreadExecuter().execute(new Runnable() {
             @Override
@@ -857,7 +847,7 @@ public class CreateEmployeeScreen extends AppCompatActivity {
                                 }*/
 
                                 if(employees!=null&&employees.size()!=0){
-                                    Collections.sort(employees,Employee.compareEmployee);
+                                    Collections.sort(employees, Employee.compareEmployee);
                                     ManagerSpinnerAdapter arrayAdapter = new ManagerSpinnerAdapter(CreateEmployeeScreen.this, employees);
                                     mtoReport.setAdapter(arrayAdapter);
 

@@ -5,11 +5,11 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -42,15 +42,13 @@ import java.util.ArrayList;
 import app.zingo.employeemanagements.Adapter.DepartmentAdapter;
 import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Organization;
-import app.zingo.employeemanagements.base.R;
-
-import app.zingo.employeemanagements.UI.Company.OrganizationEditScreen;
 import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.DepartmentApi;
 import app.zingo.employeemanagements.WebApi.OrganizationApi;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -137,7 +135,7 @@ public class BranchInfoScreen extends AppCompatActivity {
                         if(PreferenceHandler.getInstance(BranchInfoScreen.this).getBranchId()!=0){
                             getCompany(PreferenceHandler.getInstance(BranchInfoScreen.this).getBranchId());
                         }else{
-                            Intent intent = new Intent(BranchInfoScreen.this,InternalServerErrorScreen.class);
+                            Intent intent = new Intent(BranchInfoScreen.this, InternalServerErrorScreen.class);
                             startActivity(intent);
                         }
 
@@ -396,7 +394,7 @@ public class BranchInfoScreen extends AppCompatActivity {
         final TextInputEditText mName = views.findViewById(R.id.department_name);
 
 
-        final android.support.v7.app.AlertDialog dialog = builder.create();
+        final AlertDialog dialog = builder.create();
         dialog.show();
         dialog.setCanceledOnTouchOutside(false);
 
@@ -436,7 +434,7 @@ public class BranchInfoScreen extends AppCompatActivity {
     }
 
 
-    public void addDepartments(final Departments departments,final AlertDialog dialogs) {
+    public void addDepartments(final Departments departments, final AlertDialog dialogs) {
 
 
         final ProgressDialog dialog = new ProgressDialog(this);

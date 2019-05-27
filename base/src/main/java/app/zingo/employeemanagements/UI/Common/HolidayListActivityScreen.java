@@ -2,11 +2,11 @@ package app.zingo.employeemanagements.UI.Common;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -30,15 +29,12 @@ import java.util.Date;
 
 import app.zingo.employeemanagements.Adapter.HolidayListAdapter;
 import app.zingo.employeemanagements.Custom.MyEditText;
-import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.HolidayList;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.DepartmentLilstScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
-import app.zingo.employeemanagements.WebApi.DepartmentApi;
 import app.zingo.employeemanagements.WebApi.OrganizationHolidayListsAPI;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -188,7 +184,7 @@ public class HolidayListActivityScreen extends AppCompatActivity {
         final TextInputEditText mName = views.findViewById(R.id.holiday_name);
 
 
-        final android.support.v7.app.AlertDialog dialog = builder.create();
+        final AlertDialog dialog = builder.create();
         dialog.show();
         dialog.setCanceledOnTouchOutside(false);
 
@@ -306,7 +302,7 @@ public class HolidayListActivityScreen extends AppCompatActivity {
 
     }
 
-    public void addHolidays(final HolidayList departments,final AlertDialog dialogs) {
+    public void addHolidays(final HolidayList departments, final AlertDialog dialogs) {
 
 
         final ProgressDialog dialog = new ProgressDialog(this);

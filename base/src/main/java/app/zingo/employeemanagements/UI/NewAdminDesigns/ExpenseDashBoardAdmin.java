@@ -2,9 +2,9 @@ package app.zingo.employeemanagements.UI.NewAdminDesigns;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -26,7 +26,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import app.zingo.employeemanagements.Adapter.ExpenseListDataAdapter;
-import app.zingo.employeemanagements.Adapter.LeaveDashBoardAdapter;
 import app.zingo.employeemanagements.Custom.CustomCalendar.CustomMonthPicker;
 import app.zingo.employeemanagements.Custom.CustomCalendar.DateMonthDialogListener;
 import app.zingo.employeemanagements.Custom.CustomCalendar.OnCancelMonthDialogListener;
@@ -34,15 +33,12 @@ import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.EmployeeImages;
 import app.zingo.employeemanagements.Model.ExpenseAdminData;
 import app.zingo.employeemanagements.Model.Expenses;
-import app.zingo.employeemanagements.Model.Leaves;
-import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.UI.Common.ExpensesListAdmin;
-import app.zingo.employeemanagements.UI.GetStartedScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.ExpensesApi;
-import app.zingo.employeemanagements.WebApi.LeaveAPI;
+import app.zingo.employeemanagements.base.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -255,7 +251,7 @@ public class ExpenseDashBoardAdmin extends AppCompatActivity {
                 public void onClick(View view) {
 
                     if(monthpendingExpenses!=null&&monthpendingExpenses.size()!=0){
-                        Intent pending = new Intent(ExpenseDashBoardAdmin.this,ExpensesListAdmin.class);
+                        Intent pending = new Intent(ExpenseDashBoardAdmin.this, ExpensesListAdmin.class);
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("Expenses",monthpendingExpenses);
                         bundle.putString("Title","Pending Expenses");
@@ -270,7 +266,7 @@ public class ExpenseDashBoardAdmin extends AppCompatActivity {
                 public void onClick(View view) {
 
                     if(monthapprovedExpenses!=null&&monthapprovedExpenses.size()!=0){
-                        Intent pending = new Intent(ExpenseDashBoardAdmin.this,ExpensesListAdmin.class);
+                        Intent pending = new Intent(ExpenseDashBoardAdmin.this, ExpensesListAdmin.class);
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("Expenses",monthapprovedExpenses);
                         bundle.putString("Title","Approved Expenses");
@@ -287,7 +283,7 @@ public class ExpenseDashBoardAdmin extends AppCompatActivity {
 
                     if(monthrejectedExpenses!=null&&monthrejectedExpenses.size()!=0){
 
-                        Intent pending = new Intent(ExpenseDashBoardAdmin.this,ExpensesListAdmin.class);
+                        Intent pending = new Intent(ExpenseDashBoardAdmin.this, ExpensesListAdmin.class);
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("Expenses",monthrejectedExpenses);
                         bundle.putString("Title","Rejected Expenses");
@@ -303,7 +299,7 @@ public class ExpenseDashBoardAdmin extends AppCompatActivity {
                 public void onClick(View view) {
 
                     if(monthtotalExpenses!=null&&monthtotalExpenses.size()!=0){
-                        Intent pending = new Intent(ExpenseDashBoardAdmin.this,ExpensesListAdmin.class);
+                        Intent pending = new Intent(ExpenseDashBoardAdmin.this, ExpensesListAdmin.class);
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("Expenses",monthtotalExpenses);
                         bundle.putString("Title","Total Expenses");
@@ -318,7 +314,7 @@ public class ExpenseDashBoardAdmin extends AppCompatActivity {
                 public void onClick(View view) {
 
                     if(monthclamiedExpenses!=null&&monthclamiedExpenses.size()!=0){
-                        Intent pending = new Intent(ExpenseDashBoardAdmin.this,ExpensesListAdmin.class);
+                        Intent pending = new Intent(ExpenseDashBoardAdmin.this, ExpensesListAdmin.class);
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("Expenses",monthclamiedExpenses);
                         bundle.putString("Title","Claimed Expenses");
@@ -472,7 +468,7 @@ public class ExpenseDashBoardAdmin extends AppCompatActivity {
     }
 
 
-    public void getMonthlyExpenses(ArrayList<Expenses> list,final int month,final int year) throws Exception{
+    public void getMonthlyExpenses(ArrayList<Expenses> list, final int month, final int year) throws Exception{
 
         monthtotalExpenses = new ArrayList<>();
         monthapprovedExpenses = new ArrayList<>();

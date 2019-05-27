@@ -6,10 +6,10 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.telephony.TelephonyManager;
 import android.view.MenuItem;
@@ -22,8 +22,6 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
-import org.w3c.dom.Text;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -33,11 +31,9 @@ import java.util.Date;
 import app.zingo.employeemanagements.Custom.EncryptionHelper;
 import app.zingo.employeemanagements.Custom.QRCodeHelper;
 import app.zingo.employeemanagements.Model.EmployeeQrCode;
-import app.zingo.employeemanagements.Model.QRCode;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.QrCodePrintScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.TrackGPS;
+import app.zingo.employeemanagements.base.R;
 
 public class EmployeeQrCodeGenerate extends AppCompatActivity {
 
@@ -74,9 +70,9 @@ public class EmployeeQrCodeGenerate extends AppCompatActivity {
 
             gps = new TrackGPS(EmployeeQrCodeGenerate.this);
 
-            qr_OrganizationName.setText(""+PreferenceHandler.getInstance(EmployeeQrCodeGenerate.this).getCompanyName());
-            qr_OrgId.setText("Organization Id: "+PreferenceHandler.getInstance(EmployeeQrCodeGenerate.this).getCompanyId());
-            qr_Emp_Id.setText("Employee Id: "+PreferenceHandler.getInstance(EmployeeQrCodeGenerate.this).getUserId());
+            qr_OrganizationName.setText(""+ PreferenceHandler.getInstance(EmployeeQrCodeGenerate.this).getCompanyName());
+            qr_OrgId.setText("Organization Id: "+ PreferenceHandler.getInstance(EmployeeQrCodeGenerate.this).getCompanyId());
+            qr_Emp_Id.setText("Employee Id: "+ PreferenceHandler.getInstance(EmployeeQrCodeGenerate.this).getUserId());
 
 
             EmployeeQrCode qrCode = new EmployeeQrCode();

@@ -3,9 +3,9 @@ package app.zingo.employeemanagements.UI.NewAdminDesigns;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.MenuItem;
@@ -17,21 +17,15 @@ import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
-import app.zingo.employeemanagements.Adapter.LeaveTakenEmployeeAdapter;
-import app.zingo.employeemanagements.Model.LeaveNotificationManagers;
 import app.zingo.employeemanagements.Model.Leaves;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Employee.ApplyLeaveScreen;
 import app.zingo.employeemanagements.UI.Landing.SplashScreen;
-import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.LeaveAPI;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -416,6 +410,10 @@ public class UpdateLeaveScreen extends AppCompatActivity {
                                 Toast.makeText(UpdateLeaveScreen.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                             }
 
+
+
+
+
                         }else {
 
                             if (progressDialog!=null)
@@ -451,7 +449,7 @@ public class UpdateLeaveScreen extends AppCompatActivity {
 
                 if(leaveId!=0){
 
-                    Intent splash = new Intent(UpdateLeaveScreen.this,AdminHomeFragment.class);
+                    Intent splash = new Intent(UpdateLeaveScreen.this, SplashScreen.class);
                     startActivity(splash);
                     UpdateLeaveScreen.this.finish();
 

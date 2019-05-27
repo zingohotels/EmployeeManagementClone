@@ -2,8 +2,8 @@ package app.zingo.employeemanagements.UI.Reseller;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,15 +14,13 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import app.zingo.employeemanagements.Adapter.PaymentListAdapter;
-import app.zingo.employeemanagements.Adapter.ResellerOrganizationListAdapter;
-import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.Model.OrganizationPayments;
-import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.ResellerAPI;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -115,7 +113,7 @@ public class ResellerPaymentListScreen extends AppCompatActivity {
                                 progressDialog.dismiss();
 
                             if(statusCode==500){
-                                Intent error = new Intent(ResellerPaymentListScreen.this,InternalServerErrorScreen.class);
+                                Intent error = new Intent(ResellerPaymentListScreen.this, InternalServerErrorScreen.class);
                                 startActivity(error);
                             }else{
                                 mNoRecord.setVisibility(View.VISIBLE);
