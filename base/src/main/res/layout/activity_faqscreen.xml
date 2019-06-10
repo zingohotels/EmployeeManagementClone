@@ -37,7 +37,7 @@
                 android:layout_margin="5dp"
 
                 android:gravity="center"
-                android:text="Join Zingy as a Company and a Founder"
+                android:text="Join Krony as a Company and a Founder"
                 android:textColor="#000"/>
             <ImageView
                 android:layout_width="match_parent"
@@ -53,7 +53,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:text="Join Zingy as a Company and a Founder with following steps"/>
+                android:text="Join Krony as a Company and a Founder with following steps"/>
 
             <LinearLayout
                 android:layout_width="match_parent"

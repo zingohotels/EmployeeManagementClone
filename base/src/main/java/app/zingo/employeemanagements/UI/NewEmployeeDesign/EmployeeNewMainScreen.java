@@ -193,7 +193,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
                 @Override
                 public void onClick(View view) {
 
-                    String message = "Hi I'm "+ PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getUserFullName()+",\n My Organization Name is "+ PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getCompanyName()+".I am writing about the feedback of Zingy app Ver: "+ BuildConfig.VERSION_NAME+".";
+                    String message = "Hi I'm "+ PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getUserFullName()+",\n My Organization Name is "+ PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getCompanyName()+".I am writing about the feedback of Krony app Ver: "+ BuildConfig.VERSION_NAME+".";
 
                     PackageManager packageManager = getPackageManager();
                     Intent i = new Intent(Intent.ACTION_VIEW);
@@ -691,22 +691,17 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
 
                 try{
 
-                  /*  Bitmap bitmap = Bitmap.createBitmap(mCardView.getDrawingCache());
-                    //Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-                    mCardView.setDrawingCacheEnabled(false);
-                    String mPath = Environment.getExternalStorageDirectory().toString() + "/" + PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getUserFullName()+"_Card" + ".jpg";
-                    File imageFile = new File(mPath);
-                    FileOutputStream outputStream = new FileOutputStream(imageFile);
-                    int quality = 100;
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
-                    outputStream.flush();
-                    outputStream.close();
-
-                    saveBitMap(EmployeeNewMainScreen.this,mCardView);*/
 
                   String imageUrl  = PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getLogo();
 
-                  if(imageUrl!=null&&!imageUrl.isEmpty()){
+                  String message = "My Contact Details \n Name : "+mCardName.getText().toString()+",\n Designation: "+mCardDesign.getText().toString()+"\n Email: "+mCardEmail.getText().toString()+",\n Mobile: "+mCardMobile.getText().toString()+",\n Address: "+mCardAddress.getText().toString();
+
+                    Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                    sendIntent.setType("text/plain");
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, message);
+                    startActivity(sendIntent);
+
+                  /*if(imageUrl!=null&&!imageUrl.isEmpty()){
 
                       try {
                           URL url = new URL(imageUrl);
@@ -740,8 +735,8 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
 
 
                   }
-
-                    openScreenshot(saveBitMap(EmployeeNewMainScreen.this,mCardView));
+*/
+                  //  openScreenshot(saveBitMap(EmployeeNewMainScreen.this,mCardView));
 
                 }catch (Exception e){
                     e.printStackTrace();
@@ -749,36 +744,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
 
 
 
-                /*String upToNCharacters = PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getCompanyName().substring(0, Math.min(PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getCompanyName().length(), 4));
 
-
-                String body = "<html><head>" +
-                        "</head>" +
-                        "<body>" +
-                        "<h2>Hello,</h2>" +
-                        "<p><br>You are invited to join the Zingy Employee App Platform. </p></br></br>"+
-                        "<br><p>Here is a Procedure to Join the Platform using the Below Procedures. Make sure you store them safely. </p>"+
-                        "</br><p><br>Our Organization Code- "+upToNCharacters+PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getCompanyId()+
-                        "</br></p><br><b>Step 1:  </b>"+"Download the app by clicking here <a href=\"https://play.google.com/store/apps/details?id=app.zingo.employeemanagements\">https://play.google.com/store/apps/details?id=app.zingo.employeemanagements</a>"+
-                        "</br><br><b>Step 2: </b>"+"Click on Get Started and \"Join us as an Employee\""+
-                        "</br><br><b>Step 3: </b>"+"Verify your Mobile number and then Enter the Organization Code - "+upToNCharacters+PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getCompanyId()+
-                        "</br><br><b>Step 4:</b>"+"Enter your basic details and the complete the Sign up process"+
-                        "</br><p>From now on, Please login to your account using your organization email id and your password on a daily basis for attendance system,leave management,Expense management, sales visit etc., via mobile app. </p>"+
-                        "</br><p>If you have any questions then contact the Admin/HR of the company.</p>"+
-                        "</br><p><b>Cheers,</b><br><br>"+PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getUserFullName()+"</p></body></html>";
-
-                Intent emailIntent = new Intent(Intent.ACTION_SEND);
-                emailIntent.setType("text/plain");
-
-
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Employee Management App Invitation");
-
-
-                emailIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(new StringBuilder()
-                        .append(body)
-                        .toString()));
-                //emailIntent.putExtra(Intent.EXTRA_HTML_TEXT, body);
-                startActivity(Intent.createChooser(emailIntent, "Send email.."));*/
 
 
             }

@@ -936,7 +936,7 @@ public class SendEmailToAll extends Service {
                 "\t<div class=\"bg-frm\">\n" +
                 "\t\t<div class=\"row\">\n" +
                 "\t\t\t<div class=\"col-lg-5 col-md-5 col-sm-5 col-xs-12\">\t\t\t\n" +
-                "\t\t\t\t  <h2 style=\"color: white\">Zingy App</h2>\t \t\t\t\n" +
+                "\t\t\t\t  <h2 style=\"color: white\">Krony App</h2>\t \t\t\t\n" +
                 "\t\t\t</div>\t\n" +
                 "\t\t\t<div class=\"col-lg-7 col-md-7 col-sm-7 col-xs-12\">\n" +
                 "\t\t\t\t<h4 style=\"color: white; text-align:right\">Team Activity Report</h4>\n" +

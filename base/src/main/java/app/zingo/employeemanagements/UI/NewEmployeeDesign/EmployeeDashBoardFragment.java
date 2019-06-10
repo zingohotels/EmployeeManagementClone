@@ -128,7 +128,7 @@ public class EmployeeDashBoardFragment extends Fragment {
                     if(pendingTasks!=null&&pendingTasks.size()!=0){
                         Intent pending = new Intent(getActivity(), PendingTasks.class);
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("PendingTasks",pendingTasks);
+                        bundle.putSerializable("PendingTasksNormal",pendingTasks);
                         pending.putExtras(bundle);
                         startActivity(pending);
                     }

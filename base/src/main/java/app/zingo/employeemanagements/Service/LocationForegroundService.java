@@ -177,7 +177,7 @@ public class LocationForegroundService extends Service {
             Notification.Builder builder = null;
 
             builder = new Notification.Builder(this)
-                    .setContentTitle("Zingy Location Service")
+                    .setContentTitle("Krony Location Service")
                     .setPriority(Notification.PRIORITY_MAX)
                     .setWhen(System.currentTimeMillis())
                     .setFullScreenIntent(pendingIntent,false)

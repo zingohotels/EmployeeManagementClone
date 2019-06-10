@@ -43,11 +43,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -76,6 +78,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import app.zingo.employeemanagements.Adapter.CustomerSpinnerAdapter;
+import app.zingo.employeemanagements.Model.Customer;
 import app.zingo.employeemanagements.Model.LoginDetails;
 import app.zingo.employeemanagements.Model.LoginDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.MeetingDetailsNotificationManagers;
@@ -88,6 +92,7 @@ import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.TrackGPS;
 import app.zingo.employeemanagements.Utils.Util;
+import app.zingo.employeemanagements.WebApi.CustomerAPI;
 import app.zingo.employeemanagements.WebApi.LoginDetailsAPI;
 import app.zingo.employeemanagements.WebApi.LoginNotificationAPI;
 import app.zingo.employeemanagements.WebApi.MeetingNotificationAPI;
@@ -143,7 +148,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
     Bitmap bitmap;
 
     // Creating Separate Directory for saving Generated Images
-    String DIRECTORY = Environment.getExternalStorageDirectory().getPath() + "/Zingy Apps/";
+    String DIRECTORY = Environment.getExternalStorageDirectory().getPath() + "/Krony Apps/";
     String pic_name = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
     String StoredPath = DIRECTORY + pic_name + ".png";
     String StoredPathSelfie = DIRECTORY + pic_name+"selfie" + ".png";
@@ -183,6 +188,11 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
     boolean firstTime = true;
     boolean firstChck = true;
+
+    ArrayList<Customer> customerArrayList;
+    Spinner customerSpinner;
+    LinearLayout ClientNameLayout;
+    int clientId = 0;
 
     public void centreMapOnLocationWithLatLng(LatLng location, String title) {
 
@@ -529,7 +539,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
 
 
-                    if (currentLocation != null&&value!=null&&!value.equalsIgnoreCase("true") ) {
+                    if (currentLocation != null&&value!=null&&value.equalsIgnoreCase("true") ) {
 
                         latitude = currentLocation.getLatitude();
                         longitude = currentLocation.getLongitude();
@@ -551,7 +561,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                         md.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
                         md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
                         try {
-                            PreferenceHandler.getInstance(getActivity()).setLunchBreakStatus("false");
+                            PreferenceHandler.getInstance(getActivity()).setTeaBreakStatus("false");
                             teaText.setText(new SimpleDateFormat("hh:mm a").format(new Date()));
                             saveLoginNotification(md);
                         } catch (Exception e) {
@@ -580,7 +590,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                         md.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
                         md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
                         try {
-                            PreferenceHandler.getInstance(getActivity()).setLunchBreakStatus("true");
+                            PreferenceHandler.getInstance(getActivity()).setTeaBreakStatus("true");
                             teaText.setText(new SimpleDateFormat("hh:mm a").format(new Date()));
                             saveLoginNotification(md);
                         } catch (Exception e) {
@@ -608,7 +618,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
 
 
-                    if (currentLocation != null&&value!=null&&!value.equalsIgnoreCase("true") ) {
+                    if (currentLocation != null&&value!=null&&value.equalsIgnoreCase("true") ) {
 
                         latitude = currentLocation.getLatitude();
                         longitude = currentLocation.getLongitude();
@@ -2136,11 +2146,16 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                 final TextInputEditText mClientMobile = views.findViewById(R.id.client_contact_number);
                 final TextInputEditText  mClientMail = views.findViewById(R.id.client_contact_email);
                 final TextInputEditText mPurpose = views.findViewById(R.id.purpose_meeting);
+
                 final CheckBox mGetSign = views.findViewById(R.id.get_sign_check);
                 final CheckBox mTakeImage = views.findViewById(R.id.get_image_check);
                 final LinearLayout mTakeImageLay = views.findViewById(R.id.selfie_lay);
                 final LinearLayout mGetSignLay = views.findViewById(R.id.sign_lay);
                 mImageView = views.findViewById(R.id.selfie_pic);
+                customerSpinner = views.findViewById(R.id.customer_spinner_adpter);
+                ClientNameLayout =  views.findViewById(R.id.client_name_layout);
+
+                getCustomers(PreferenceHandler.getInstance(getActivity()).getCompanyId());
 
                 mGetSignLay.setVisibility(View.GONE);
                 mTakeImageLay.setVisibility(View.GONE);
@@ -2149,6 +2164,38 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                 final AlertDialog dialog = builder.create();
                 dialog.show();
                 dialog.setCanceledOnTouchOutside(false);
+
+                customerSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                        if(customerArrayList!=null && customerArrayList.size()!=0){
+
+
+                            if(customerArrayList.get(position).getCustomerName()!=null && customerArrayList.get(position).getCustomerName().equalsIgnoreCase("Others"))
+                            {
+                                mClientMobile.setText("");
+                                mClientName.setText("");
+                                mClientMail.setText("");
+                                ClientNameLayout.setVisibility(View.VISIBLE);
+
+                            }
+                            else {
+                                mClientMobile.setText(""+customerArrayList.get(position).getCustomerMobile());
+                                mClientName.setText(""+customerArrayList.get(position).getCustomerName());
+                                mClientMail.setText(""+customerArrayList.get(position).getCustomerEmail());
+                                clientId = customerArrayList.get(position).getCustomerId();
+                                ClientNameLayout.setVisibility(View.GONE);
+
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
 
                 mSave.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -2159,6 +2206,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                         String detail = mDetails.getText().toString();
                         String mobile = mClientMobile.getText().toString();
                         String email = mClientMail.getText().toString();
+                        String customer = customerSpinner.getSelectedItem().toString();
 
                         if(client==null||client.isEmpty()){
 
@@ -2219,6 +2267,14 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                     loginDetails.setMeetingAgenda(purpose);
                                     loginDetails.setMeetingDetails(detail);
                                     loginDetails.setStatus("In Meeting");
+
+                                    if(customer!=null&&!customer.equalsIgnoreCase("Others")){
+
+                                        if(customerArrayList!=null&&customerArrayList.size()!=0)
+                                        loginDetails.setCustomerId(clientId);
+
+                                    }
+
                                     methodAdd = false;
 
                                     String contact = "";
@@ -2589,6 +2645,14 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                         final CheckBox mGetSign = views.findViewById(R.id.get_sign_check);
                                         final CheckBox mTakeImage = views.findViewById(R.id.get_image_check);
                                         final ImageView mImageView = views.findViewById(R.id.selfie_pic);
+                                        customerSpinner = views.findViewById(R.id.customer_spinner_adpter);
+                                        ClientNameLayout =  views.findViewById(R.id.client_name_layout);
+
+                                        if(dto.getCustomerId()!=0){
+
+                                            getCustomersWithId(PreferenceHandler.getInstance(getActivity()).getCompanyId(),dto.getCustomerId());
+                                        }
+
 
                                         mDetails.setText(""+dto.getMeetingDetails());
                                         methodAdd = true;
@@ -2621,6 +2685,38 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                         dialog.show();
                                         dialog.setCanceledOnTouchOutside(true);
 
+                                        customerSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                            @Override
+                                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                                                if(customerArrayList!=null && customerArrayList.size()!=0){
+
+
+                                                    if(customerArrayList.get(position).getCustomerName()!=null && customerArrayList.get(position).getCustomerName().equalsIgnoreCase("Others"))
+                                                    {
+                                                        mClientMobile.setText("");
+                                                        mClientName.setText("");
+                                                        mClientMail.setText("");
+                                                        ClientNameLayout.setVisibility(View.VISIBLE);
+
+                                                    }
+                                                    else {
+                                                        mClientMobile.setText(""+customerArrayList.get(position).getCustomerMobile());
+                                                        mClientName.setText(""+customerArrayList.get(position).getCustomerName());
+                                                        mClientMail.setText(""+customerArrayList.get(position).getCustomerEmail());
+                                                        clientId = customerArrayList.get(position).getCustomerId();
+                                                        ClientNameLayout.setVisibility(View.GONE);
+
+                                                    }
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onNothingSelected(AdapterView<?> parent) {
+
+                                            }
+                                        });
+
                                         mSave.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View view) {
@@ -2630,6 +2726,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                                 String detail = mDetails.getText().toString();
                                                 String mobile = mClientMobile.getText().toString();
                                                 String email = mClientMail.getText().toString();
+                                                String customer = customerSpinner.getSelectedItem().toString();
 
                                                 if(client==null||client.isEmpty()){
 
@@ -2691,6 +2788,13 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                                             loginDetails.setMeetingAgenda(purpose);
                                                             loginDetails.setMeetingDetails(detail);
                                                             loginDetails.setStatus("Completed");
+
+                                                            if(customer!=null&&!customer.equalsIgnoreCase("Others")){
+
+                                                                if(customerArrayList!=null&&customerArrayList.size()!=0)
+                                                                    loginDetails.setCustomerId(clientId);
+
+                                                            }
 
                                                             String contact = "";
 
@@ -3799,6 +3903,103 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
             Log.v("log_tag", e.toString());
         }
 
+    }
+
+    public void getCustomers(final int id) {
+
+
+        final CustomerAPI orgApi = Util.getClient().create(CustomerAPI.class);
+        Call<ArrayList<Customer>> getProf = orgApi.getCustomerByOrganizationId(id);
+        getProf.enqueue(new Callback<ArrayList<Customer>>() {
+
+            @Override
+            public void onResponse(Call<ArrayList<Customer>> call, Response<ArrayList<Customer>> response) {
+
+                if (response.code() == 200||response.code() == 201||response.code() == 204)
+                {
+
+                    customerArrayList = response.body();
+
+                    if(customerArrayList!=null&&customerArrayList.size()!=0){
+
+                        Customer customer = new Customer();
+                        customer.setCustomerName("Others");
+                        customerArrayList.add(customer);
+
+                        CustomerSpinnerAdapter adapter = new CustomerSpinnerAdapter(getActivity(),customerArrayList);
+                        customerSpinner.setAdapter(adapter);
+                    }
+                    else {
+                        ClientNameLayout.setVisibility(View.VISIBLE);
+                        customerSpinner.setVisibility(View.GONE);
+                    }
+
+                }else{
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Customer>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void getCustomersWithId(final int id,final int customerId) {
+
+        customerArrayList = new ArrayList<>();
+
+
+        final CustomerAPI orgApi = Util.getClient().create(CustomerAPI.class);
+        Call<ArrayList<Customer>> getProf = orgApi.getCustomerByOrganizationId(id);
+        getProf.enqueue(new Callback<ArrayList<Customer>>() {
+
+            @Override
+            public void onResponse(Call<ArrayList<Customer>> call, Response<ArrayList<Customer>> response) {
+
+                if (response.code() == 200||response.code() == 201||response.code() == 204)
+                {
+
+                    customerArrayList = response.body();
+
+                    if(customerArrayList!=null&&customerArrayList.size()!=0){
+
+                        Customer customer = new Customer();
+                        customer.setCustomerName("Others");
+                        customerArrayList.add(customer);
+
+                        CustomerSpinnerAdapter adapter = new CustomerSpinnerAdapter(getActivity(),customerArrayList);
+                        customerSpinner.setAdapter(adapter);
+
+                        for (int i=0;i<customerArrayList.size();i++) {
+
+
+                            if(customerArrayList.get(i).getCustomerId()==customerId){
+
+                                customerSpinner.setSelection(i);
+                                break;
+                            }
+
+                        }
+                    }
+                    else {
+                        ClientNameLayout.setVisibility(View.VISIBLE);
+                        customerSpinner.setVisibility(View.GONE);
+                    }
+
+                }else{
+                    ClientNameLayout.setVisibility(View.VISIBLE);
+                    customerSpinner.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Customer>> call, Throwable t) {
+                ClientNameLayout.setVisibility(View.VISIBLE);
+                customerSpinner.setVisibility(View.GONE);
+            }
+        });
     }
 
 

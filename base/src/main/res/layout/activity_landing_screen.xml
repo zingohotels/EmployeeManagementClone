@@ -29,12 +29,11 @@
                 android:background="#80000000">
 
 
-
                 <ImageView
                     android:id="@+id/landing_top_image"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
-                    android:background="@drawable/banner"
+                    android:background="@drawable/happy_employee"
                     android:contentDescription="TODO" />
 
 
@@ -83,6 +82,7 @@
                     android:layout_height="100dp"
                     android:background="@drawable/ems_ems"
                     android:layout_gravity="center|top"
+                    android:visibility="gone"
                     android:layout_marginTop="60dp"
                     android:contentDescription="TODO" />
 

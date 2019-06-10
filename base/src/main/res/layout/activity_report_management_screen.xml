@@ -314,7 +314,7 @@
                                         android:layout_height="match_parent"
                                         android:layout_margin="3dp"
                                         android:gravity="center"
-                                        android:text="Hours"
+                                        android:text="Break Hours"
                                         android:textColor="@color/colorPrimaryDark" />
 
                                     <TextView

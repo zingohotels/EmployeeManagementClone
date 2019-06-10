@@ -119,19 +119,7 @@ public class EmployeeHomeFragment extends Fragment {
 
                 }
             });
-            /*if (layoutInflater != null) {
 
-                *//*long daysDiff = DateUtil.daysDiff(new Date(), new Date(layoutInflater.getSubscriptionEndDate()));
-                if (!StringUtils.equals(layoutInflater.getSubscriptionStatus(), "Active") || StringUtils.equalsIgnoreCase(AppConstants.PAY_MODE_PG, layoutInflater.getSubscriptionMode()) != null) {
-                    viewGroup.setVisibility(8);
-                } else if (daysDiff < 0 || daysDiff >= 4) {
-                    viewGroup.setVisibility(8);
-                } else {
-                    viewGroup.setVisibility(0);
-                }*//*
-            } else {
-                viewGroup.setVisibility(8);
-            }*/
             return this.layout;
         }catch (Exception e){
             e.printStackTrace();
@@ -179,7 +167,7 @@ public class EmployeeHomeFragment extends Fragment {
                         "</head>" +
                         "<body>" +
                         "<h2>Hello,</h2>" +
-                        "<p><br>You are invited to join the Zingy Employee App Platform. </p></br></br>"+
+                        "<p><br>You are invited to join the Krony Employee App Platform. </p></br></br>"+
                         "<br><p>Here is a Procedure to Join the Platform using the Below Procedures. Make sure you store them safely. </p>"+
                         "</br><p><br>Our Organization Code- "+upToNCharacters+PreferenceHandler.getInstance(getActivity()).getCompanyId()+
                         "</br></p><br><b>Step 1:  </b>"+"Download the app by clicking here <a href=\"https://play.google.com/store/apps/details?id=app.zingo.employeemanagements\">https://play.google.com/store/apps/details?id=app.zingo.employeemanagements</a>"+

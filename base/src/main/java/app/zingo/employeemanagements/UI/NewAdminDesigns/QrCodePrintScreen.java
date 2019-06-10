@@ -70,7 +70,7 @@ public class QrCodePrintScreen extends AppCompatActivity {
 
             QRCode qrCode = new QRCode();
             qrCode.setOrganizationId(PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyId());
-            qrCode.setURL("www.zingyapp.com/checkout.php?id="+ PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyId());
+            qrCode.setURL("www.krony app.com/checkout.php?id="+ PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyId());
 
 
             System.out.println("JSON_Object Data Fire = "+qrCode.toString());
@@ -78,7 +78,7 @@ public class QrCodePrintScreen extends AppCompatActivity {
             Gson gson = new Gson();
 
            // String serializeString = gson.toJson(qrCode);
-            String serializeString = "www.zingyapp.com/checkout.php?id="+ PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyId();
+            String serializeString = "www.krony app.com/checkout.php?id="+ PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyId();
 
             String encryptedString = EncryptionHelper.getInstance().encryptionString(serializeString).encryptMsg();
             setImageBitmap(serializeString);
@@ -115,7 +115,7 @@ public class QrCodePrintScreen extends AppCompatActivity {
                         canvas.drawText("Organization Id: "+ PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyName()+""+ PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyId(), 60, 40, paint);
                     }
 
-                    canvas.drawText("Powered By Zingy  Visit www.ZingyApp.com", 60, bitmap.getHeight()-20, paint);
+                    canvas.drawText("Powered By Krony  Visit www.KronyApp.com", 60, bitmap.getHeight()-20, paint);
                     // NEWLY ADDED CODE ENDS HERE ]
 
                   //  Bitmap bitmaps =  bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
@@ -128,7 +128,7 @@ public class QrCodePrintScreen extends AppCompatActivity {
                        File sdImageMainDirectory = null;
                        try {
                            File root = new File(Environment.getExternalStorageDirectory()
-                                   + File.separator + "Zingy QR" + File.separator);
+                                   + File.separator + "Krony QR" + File.separator);
                            root.mkdirs();
                            sdImageMainDirectory = new File(root, PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyName()+"_QR.jpg");
                            outputFileUri = Uri.fromFile(sdImageMainDirectory);

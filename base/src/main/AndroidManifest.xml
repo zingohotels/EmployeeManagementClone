@@ -228,7 +228,7 @@
 
             <meta-data
                 android:name="default-url"
-                android:value="https://zingyapp.com/checkout.php" />
+                android:value="https://krony app.com/checkout.php" />
         </activity>
         <activity
             android:name="app.zingo.employeemanagements.UI.ContactUsScreen"

@@ -68,6 +68,12 @@ public class Meetings implements Serializable {
     @SerializedName("EmployeeId")
     private int EmployeeId;
 
+    @SerializedName("CustomerId")
+    private int CustomerId;
+
+    @SerializedName("IsPicture")
+    private boolean IsPicture;
+
     public int getMeetingsId() {
         return MeetingsId;
     }
@@ -218,6 +224,22 @@ public class Meetings implements Serializable {
 
     public void setEmployeeId(int employeeId) {
         EmployeeId = employeeId;
+    }
+
+    public int getCustomerId() {
+        return CustomerId;
+    }
+
+    public void setCustomerId(int customerId) {
+        CustomerId = customerId;
+    }
+
+    public boolean isPicture() {
+        return IsPicture;
+    }
+
+    public void setPicture(boolean picture) {
+        IsPicture = picture;
     }
 
     public static Comparator compareMeetings = new Comparator() {

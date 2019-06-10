@@ -12,6 +12,7 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 public abstract class RapidFloatingActionContent extends FrameLayout {
+
     public RapidFloatingActionContent(Context context) {
         super(context);
         initInConstructor();

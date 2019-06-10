@@ -274,11 +274,11 @@ public class ResellerMainActivity extends TabActivity implements TabHost.OnTabCh
                             String upToNCharacters = PreferenceHandler.getInstance(ResellerMainActivity.this).getResellerName().substring(0, Math.min(PreferenceHandler.getInstance(ResellerMainActivity.this).getResellerName().length(), 4));
 
 
-                            String text = "Hello this is Zingy Reseller Employee Management App built for resellers to earn more money. You can resell the app and make more money for every new referral and earn commission for lifetime.\n\n"+
-                                    "Step to join the Zingy Reseller Referral Programme-\n" +
+                            String text = "Hello this is Krony Reseller Employee Management App built for resellers to earn more money. You can resell the app and make more money for every new referral and earn commission for lifetime.\n\n"+
+                                    "Step to join the Krony Reseller Referral Programme-\n" +
                                     "1.  Signup using your phone number.\n" +
                                     "\n" +
-                                    "2.  Open the Zingy Employee Management App and visit the profile Section, and find out your referral code. It’s an alpha-numeric code like: "+upToNCharacters+ PreferenceHandler.getInstance(ResellerMainActivity.this).getResellerUserId()+"\n" +
+                                    "2.  Open the Krony Employee Management App and visit the profile Section, and find out your referral code. It’s an alpha-numeric code like: "+upToNCharacters+ PreferenceHandler.getInstance(ResellerMainActivity.this).getResellerUserId()+"\n" +
                                     "\n" +
                                     "3.  Share the App with your Referral Companies using your Referral Code\n" +
                                     "\n" +
@@ -286,7 +286,7 @@ public class ResellerMainActivity extends TabActivity implements TabHost.OnTabCh
                                     "\n" +
                                     " \n" +
                                     "\n" +
-                                    "My Zingy Referral Code is "+upToNCharacters+ PreferenceHandler.getInstance(ResellerMainActivity.this).getResellerUserId()+". Don’t Forget to use my Referral Code.\n" +
+                                    "My Krony Referral Code is "+upToNCharacters+ PreferenceHandler.getInstance(ResellerMainActivity.this).getResellerUserId()+". Don’t Forget to use my Referral Code.\n" +
                                     "\n" +
                                     "Keep Sharing\n" +
                                     "\n" +
@@ -318,10 +318,10 @@ public class ResellerMainActivity extends TabActivity implements TabHost.OnTabCh
                             String upToNCharacters = PreferenceHandler.getInstance(ResellerMainActivity.this).getResellerName().substring(0, Math.min(PreferenceHandler.getInstance(ResellerMainActivity.this).getResellerName().length(), 4));
 
 
-                            String text = "Hello this is Zingy Employee Management App built for Companies to manage " +
+                            String text = "Hello this is Krony Employee Management App built for Companies to manage " +
                                     "their Employees Especially Sales Employees. We have launched our Employee " +
-                                    "Tracking product calling “Zingy” which is designed and built to Keep track of " +
-                                    "each employee’s schedule, hours, wage and more.\n\n"+"With our “Zingy” app, managers can quickly see who’s working, who’s late, who’s " +
+                                    "Tracking product calling “Krony ” which is designed and built to Keep track of " +
+                                    "each employee’s schedule, hours, wage and more.\n\n"+"With our “Krony ” app, managers can quickly see who’s working, who’s late, who’s " +
                                     "scheduled and who’s available, on field sales employee GPS location tracking, " +
                                     "attendance system, sales visit tracking, sales order and payment collection " +
                                     "data logging via mobile app. They can clock employees in or out, edit timesheets " +
@@ -329,7 +329,7 @@ public class ResellerMainActivity extends TabActivity implements TabHost.OnTabCh
                                     "Steps to follow:" +
                                     "1.  Download the app by clicking here https://play.google.com/store/apps/details?id=app.zingo.employeemanagements\n.\n" +
                                     "\n" +
-                                    "2. Click on Get Started and \"Join us as a Company\" and use My Zingy Referral Code "+upToNCharacters+ PreferenceHandler.getInstance(ResellerMainActivity.this).getResellerUserId()+". Don’t Forget to use my Referral Code"+"\n" +
+                                    "2. Click on Get Started and \"Join us as a Company\" and use My Krony Referral Code "+upToNCharacters+ PreferenceHandler.getInstance(ResellerMainActivity.this).getResellerUserId()+". Don’t Forget to use my Referral Code"+"\n" +
                                     "\n" +
                                     "3.  Enter the Organization Details and Verify your phone number" +
                                     "\n" +
@@ -339,7 +339,7 @@ public class ResellerMainActivity extends TabActivity implements TabHost.OnTabCh
                                     "\n" +
                                     " \n" +
                                     "\n" +
-                                    "My Zingy Referral Code is "+upToNCharacters+ PreferenceHandler.getInstance(ResellerMainActivity.this).getResellerUserId()+". Don’t Forget to use my Referral Code.\n" +
+                                    "My Krony Referral Code is "+upToNCharacters+ PreferenceHandler.getInstance(ResellerMainActivity.this).getResellerUserId()+". Don’t Forget to use my Referral Code.\n" +
                                     "\n" +
                                     "Keep Sharing\n" +
                                     "\n" +

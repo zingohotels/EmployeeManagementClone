@@ -78,7 +78,7 @@ public class LocaitionPassWithConditionServices extends Service {
 
         // Make notification show big text.
         NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
-        bigTextStyle.setBigContentTitle("Zingy app");
+        bigTextStyle.setBigContentTitle("Krony app");
         // Set big text style.
         builder.setStyle(bigTextStyle);
 

@@ -232,7 +232,7 @@ public class EmployeeTaskFragment extends Fragment {
             @Override
             public void run() {
                 TasksAPI apiService = Util.getClient().create(TasksAPI.class);
-                Call<ArrayList<Tasks>> call = apiService.getTasks();
+                Call<ArrayList<Tasks>> call = apiService.getTasksByEmployeeId(employeeId);
 
                 call.enqueue(new Callback<ArrayList<Tasks>>() {
                     @Override
@@ -256,8 +256,6 @@ public class EmployeeTaskFragment extends Fragment {
 
                                 for (Tasks task:list) {
 
-                                    if(task.getEmployeeId()==employeeId){
-
                                         employeeTasks.add(task);
                                         total = total+1;
 
@@ -272,11 +270,10 @@ public class EmployeeTaskFragment extends Fragment {
                                             closed = closed+1;
                                         }
 
-                                    }
-
                                 }
 
                                 if(employeeTasks!=null&&employeeTasks.size()!=0){
+
                                     mAdapter = new TaskListAdapter(getContext(),employeeTasks);
                                     mTaskList.setAdapter(mAdapter);
 

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Zingy Employee Management</string>
+    <string name="app_name">Krony Employee Management</string>
 
     <!--Custom Font Type imported,refer main->assets->font folder-->
     <string name="ColonnaMT">ColonnaMT</string>

@@ -8,7 +8,9 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 
 import app.zingo.employeemanagements.Adapter.TaskAdminListAdapter;
+import app.zingo.employeemanagements.Adapter.TaskListAdapter;
 import app.zingo.employeemanagements.Model.TaskAdminData;
+import app.zingo.employeemanagements.Model.Tasks;
 import app.zingo.employeemanagements.base.R;
 
 public class PendingTasks extends AppCompatActivity {
@@ -16,6 +18,7 @@ public class PendingTasks extends AppCompatActivity {
     RecyclerView mTaskList;
 
     ArrayList<TaskAdminData> pendingTasks;
+    ArrayList<Tasks> pendingTasksNormal;
     String title;
 
     @Override
@@ -39,6 +42,7 @@ public class PendingTasks extends AppCompatActivity {
             if(bundle!=null){
 
                 pendingTasks = (ArrayList<TaskAdminData>)bundle.getSerializable("PendingTasks");
+                pendingTasksNormal = (ArrayList<Tasks>)bundle.getSerializable("PendingTasksPendingTasksNormal");
                 title =bundle.getString("Title");
             }
             if(title!=null&&!title.isEmpty()){
@@ -49,6 +53,12 @@ public class PendingTasks extends AppCompatActivity {
             if(pendingTasks!=null&&pendingTasks.size()!=0){
 
                 TaskAdminListAdapter mAdapter = new TaskAdminListAdapter(PendingTasks.this,pendingTasks);
+                mTaskList.setAdapter(mAdapter);
+
+
+            }else if(pendingTasksNormal!=null&&pendingTasksNormal.size()!=0){
+
+                TaskListAdapter mAdapter = new TaskListAdapter(PendingTasks.this,pendingTasksNormal);
                 mTaskList.setAdapter(mAdapter);
 
 

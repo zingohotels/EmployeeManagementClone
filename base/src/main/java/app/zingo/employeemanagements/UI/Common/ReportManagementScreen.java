@@ -318,7 +318,7 @@ public class ReportManagementScreen extends AppCompatActivity {
                                 "\t<div class=\"bg-frm\">\n" +
                                 "\t\t<div class=\"row\">\n" +
                                 "\t\t\t<div class=\"col-lg-5 col-md-5 col-sm-5 col-xs-12\">\t\t\t\n" +
-                                "\t\t\t\t  <h2 style=\"color: white\">Zingy App</h2>\t \t\t\t\n" +
+                                "\t\t\t\t  <h2 style=\"color: white\">Krony App</h2>\t \t\t\t\n" +
                                 "\t\t\t</div>\t\n" +
                                 "\t\t\t<div class=\"col-lg-7 col-md-7 col-sm-7 col-xs-12\">\n" +
                                 "\t\t\t\t<h4 style=\"color: white; text-align:right\">Team Activity Report</h4>\n" +
@@ -870,7 +870,7 @@ public class ReportManagementScreen extends AppCompatActivity {
 
                                                     dateLogins.add(ln);
 
-                                                    if(ln.getMessage()!=null&&(ln.getMessage().contains("Break taken from "))){
+                                                    if(ln.getMessage()!=null&&(ln.getMessage().contains("Break taken at"))){
 
                                                         loginT = ln.getLoginDate();
                                                     }else if(ln.getMessage()!=null&&(ln.getMessage().contains("Break ended at"))){
@@ -882,7 +882,7 @@ public class ReportManagementScreen extends AppCompatActivity {
 
                                                         }else{
 
-                                                            if(ln.getMessage()!=null&&(ln.getMessage().contains("Break taken from "))){
+                                                            if(ln.getMessage()!=null&&(ln.getMessage().contains("Break taken at "))){
 
                                                                 loginT = ln.getLoginDate();
                                                             }else if(ln.getMessage()!=null&&(ln.getMessage().contains("Break ended at"))){

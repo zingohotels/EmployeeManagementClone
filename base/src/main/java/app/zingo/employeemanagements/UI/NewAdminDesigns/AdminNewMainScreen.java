@@ -219,7 +219,7 @@ public class AdminNewMainScreen extends AppCompatActivity  implements RapidFloat
                 @Override
                 public void onClick(View view) {
 
-                    String message = "Hi I'm "+PreferenceHandler.getInstance(AdminNewMainScreen.this).getUserFullName()+",\n My Organization Name is "+PreferenceHandler.getInstance(AdminNewMainScreen.this).getCompanyName()+".I am writing about the feedback of Zingy app Ver: "+BuildConfig.VERSION_NAME+".";
+                    String message = "Hi I'm "+PreferenceHandler.getInstance(AdminNewMainScreen.this).getUserFullName()+",\n My Organization Name is "+PreferenceHandler.getInstance(AdminNewMainScreen.this).getCompanyName()+".I am writing about the feedback of Krony app Ver: "+BuildConfig.VERSION_NAME+".";
 
                     PackageManager packageManager = getPackageManager();
                     Intent i = new Intent(Intent.ACTION_VIEW);
@@ -601,7 +601,7 @@ public class AdminNewMainScreen extends AppCompatActivity  implements RapidFloat
                         "</head>" +
                         "<body>" +
                         "<h2>Hello,</h2>" +
-                        "<p><br>I'm "+PreferenceHandler.getInstance(AdminNewMainScreen.this).getUserFullName()+" your manager. You are invited to join the Zingy Employee App Platform. </p></br></br>"+
+                        "<p><br>I'm "+PreferenceHandler.getInstance(AdminNewMainScreen.this).getUserFullName()+" your manager. You are invited to join the Krony Employee App Platform. </p></br></br>"+
                         "<br><p>Here is a Procedure to Join the Platform using the Below Procedures. Make sure you store them safely. </p>"+
                         "</br><p><br>Our Organization Code- "+upToNCharacters+PreferenceHandler.getInstance(AdminNewMainScreen.this).getCompanyId()+
                         "</br></p><br><b>Step 1:  </b>"+"Download the app by clicking here <a href=\"https://play.google.com/store/apps/details?id=app.zingo.employeemanagements\">https://play.google.com/store/apps/details?id=app.zingo.employeemanagements</a>"+

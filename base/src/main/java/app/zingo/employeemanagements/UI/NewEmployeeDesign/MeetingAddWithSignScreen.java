@@ -102,7 +102,7 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
     double latitude,longitude;
 
     // Creating Separate Directory for saving Generated Images
-    String DIRECTORY = Environment.getExternalStorageDirectory().getPath() + "/Zingy Apps/";
+    String DIRECTORY = Environment.getExternalStorageDirectory().getPath() + "/Krony Apps/";
     String pic_name = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
     String StoredPath = DIRECTORY + pic_name + ".png";
     String StoredPathSelfie = DIRECTORY + pic_name+"selfie" + ".png";
@@ -120,6 +120,7 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
     MeetingDetailsNotificationManagers md;
 
     ArrayList<Customer> customerArrayList;
+    int clientId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,6 +171,7 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
                             mClientMobile.setText(""+customerArrayList.get(position).getCustomerMobile());
                             mClientName.setText(""+customerArrayList.get(position).getCustomerName());
                             mClientMail.setText(""+customerArrayList.get(position).getCustomerEmail());
+                            clientId = customerArrayList.get(position).getCustomerId();
                             ClientNameLayout.setVisibility(View.GONE);
 
                         }
@@ -240,6 +242,7 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
         String detail = mDetails.getText().toString();
         String mobile = mClientMobile.getText().toString();
         String email = mClientMail.getText().toString();
+        String customer = customerSpinner.getSelectedItem().toString();
 
         if(client==null||client.isEmpty()){
 
@@ -283,6 +286,13 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
                 loginDetails.setMeetingAgenda(purpose);
                 loginDetails.setMeetingDetails(detail);
                 loginDetails.setStatus("Completed");
+
+                if(customer!=null&&!customer.equalsIgnoreCase("Others")){
+
+                    if(customerArrayList!=null&&customerArrayList.size()!=0)
+                        loginDetails.setCustomerId(clientId);
+
+                }
 
                 String contact = "";
 

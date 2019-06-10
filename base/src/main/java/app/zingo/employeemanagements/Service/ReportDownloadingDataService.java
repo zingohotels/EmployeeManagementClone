@@ -971,7 +971,7 @@ public class ReportDownloadingDataService extends Service {
                             File sd = Environment.getExternalStorageDirectory();
                             String csvFile = "TeamActivity_"+startDateValue+"_"+endDateValue+".xls";
 
-                            File directory = new File(sd.getAbsolutePath()+"/Zingy App/Team Activity");
+                            File directory = new File(sd.getAbsolutePath()+"/Krony App/Team Activity");
                             //create directory if not exist
 
                             File file = new File(directory, csvFile);
@@ -1082,7 +1082,7 @@ public class ReportDownloadingDataService extends Service {
             File sd = Environment.getExternalStorageDirectory();
             csvFile = "TeamActivity_"+startDateValue+"_"+endDateValue+".xls";
 
-            File directory = new File(sd.getAbsolutePath()+"/Zingy App/Team Activity");
+            File directory = new File(sd.getAbsolutePath()+"/Krony App/Team Activity");
             //create directory if not exist
             if (!directory.exists() && !directory.isDirectory()) {
                 directory.mkdirs();

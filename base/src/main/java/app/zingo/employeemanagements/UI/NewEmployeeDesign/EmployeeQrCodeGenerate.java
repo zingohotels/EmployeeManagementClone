@@ -177,7 +177,7 @@ public class EmployeeQrCodeGenerate extends AppCompatActivity {
                         String fileName = "";
                         try {
                             File root = new File(Environment.getExternalStorageDirectory()
-                                    + File.separator + "Zingy QR" + File.separator);
+                                    + File.separator + "Krony QR" + File.separator);
                             root.mkdirs();
                             File sdImageMainDirectory = new File(root, PreferenceHandler.getInstance(EmployeeQrCodeGenerate.this).getCompanyName()+"_QR.jpg");
                             outputFileUri = Uri.fromFile(sdImageMainDirectory);

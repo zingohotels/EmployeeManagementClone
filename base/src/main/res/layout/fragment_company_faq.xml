@@ -74,7 +74,7 @@
                             android:layout_marginRight="10dp"
                             android:layout_marginTop="10dp"
                             android:gravity="center"
-                            android:text="Join Zingy as a Company and a Founder with following steps"/>
+                            android:text="Join Krony as a Company and a Founder with following steps"/>
 
 
                         <LinearLayout
