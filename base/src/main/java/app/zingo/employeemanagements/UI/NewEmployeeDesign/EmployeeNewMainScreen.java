@@ -65,6 +65,7 @@ import app.zingo.employeemanagements.Custom.Floating.RapidFloatingActionButton;
 import app.zingo.employeemanagements.Custom.Floating.RapidFloatingActionContentLabelList;
 import app.zingo.employeemanagements.Custom.Floating.RapidFloatingActionHelper;
 import app.zingo.employeemanagements.Custom.Floating.RapidFloatingActionLayout;
+import app.zingo.employeemanagements.Custom.MyRegulerText;
 import app.zingo.employeemanagements.Custom.RoundImageView;
 import app.zingo.employeemanagements.FireBase.SharedPrefManager;
 import app.zingo.employeemanagements.Model.Employee;
@@ -103,8 +104,10 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
     static final String TAG = "FounderMainScreen";
     RoundImageView mProfileImage;
     TextView mCardName,mCardMobile,mCardEmail,mCardDesign,mCardAddress;
+    LinearLayout mCardLinear;
     ImageView mCardLogo;
     CardView  mCardView;
+    MyRegulerText share_card;
     //TextView mTrialMsgInfo;
     LinearLayout mTrialInfoLay,mShareLayout,mQrLayout;
 
@@ -177,6 +180,8 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
             mCardEmail = findViewById(R.id.email_text);
             mCardAddress = findViewById(R.id.address_text);
             mCardView = findViewById(R.id.card);
+            mCardLinear = findViewById(R.id.business_linear);
+            share_card = findViewById(R.id.share_card);
 
             mCardView.setDrawingCacheEnabled(true);
 
@@ -491,6 +496,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
         } else {
             this.doubleBackToExitPressedOnce = true;
             Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_LONG).show();
+            mCardLinear.setVisibility(View.GONE);
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -500,37 +506,13 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
         }
     }
 
-   /* public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_employer, menu);
-        return true;
-    }
 
-    public boolean onOptionsItemSelected(MenuItem menuItem) {
-        if (menuItem.getItemId() != R.id.action_setting) {
-            return super.onOptionsItemSelected(menuItem);
-        }
-        startActivity(new Intent(this, SettingsActivity.class));
-        return true;
-    }*/
 
     protected void onStart() {
         super.onStart();
     }
 
-   /* public void setupNotification() {
-        String token = FirebaseInstanceId.getInstance().getToken();
-        Map hashMap = new HashMap();
-        hashMap.put(VariableConstants.FCM_ID_TOKEN, token);
-        FirebaseDatabase instance = FirebaseDatabase.getInstance();
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("AppUser/");
-        stringBuilder.append(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        instance.getReference(stringBuilder.toString()).updateChildren(hashMap);
-    }*/
 
-   /* public void managePermissions() {
-        ((Builder) ((Builder) ((Builder) ((Builder) ((Builder) ((Builder) ((Builder) TedPermission.with(this).setPermissionListener(new C19413())).setRationaleTitle((int) C1404R.string.rationale_title)).setRationaleMessage((int) C1404R.string.rationale_message)).setDeniedTitle((CharSequence) "Permission denied")).setDeniedMessage((CharSequence) "If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")).setGotoSettingButtonText((CharSequence) "Go To Settings")).setPermissions("android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION", "android.permission.CAMERA", "android.permission.WRITE_EXTERNAL_STORAGE", "android.permission.READ_EXTERNAL_STORAGE", "android.permission.READ_PHONE_STATE")).check();
-    }*/
 
     public void setupData() {
         // View findViewById = findViewById(R.id.subscriptionIcon);
@@ -691,60 +673,31 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
 
                 try{
 
+                    mCardLinear.setVisibility(View.VISIBLE);
 
-                  String imageUrl  = PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getLogo();
+                    String imageUrl  = PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getLogo();
 
-                  String message = "My Contact Details \n Name : "+mCardName.getText().toString()+",\n Designation: "+mCardDesign.getText().toString()+"\n Email: "+mCardEmail.getText().toString()+",\n Mobile: "+mCardMobile.getText().toString()+",\n Address: "+mCardAddress.getText().toString();
+               /*   String message = "My Contact Details \n Name : "+mCardName.getText().toString()+",\n Designation: "+mCardDesign.getText().toString()+"\n Email: "+mCardEmail.getText().toString()+",\n Mobile: "+mCardMobile.getText().toString()+",\n Address: "+mCardAddress.getText().toString();
 
                     Intent sendIntent = new Intent(Intent.ACTION_SEND);
                     sendIntent.setType("text/plain");
                     sendIntent.putExtra(Intent.EXTRA_TEXT, message);
-                    startActivity(sendIntent);
-
-                  /*if(imageUrl!=null&&!imageUrl.isEmpty()){
-
-                      try {
-                          URL url = new URL(imageUrl);
-                          Bitmap src = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    startActivity(sendIntent);*/
 
 
-                          Bitmap dest = Bitmap.createBitmap(src.getWidth(), src.getHeight(), Bitmap.Config.ARGB_8888);
+                    openScreenshot(saveBitMap(EmployeeNewMainScreen.this,mCardView));
 
-                          String yourText = "My custom Text adding to Image";
-
-                          Canvas cs = new Canvas(dest);
-                          Paint tPaint = new Paint();
-                          tPaint.setTextSize(35);
-                          tPaint.setColor(Color.BLUE);
-                          tPaint.setStyle(Paint.Style.FILL);
-                          cs.drawBitmap(src, 0f, 0f, null);
-                          float height = tPaint.measureText("yY");
-                          float width = tPaint.measureText(yourText);
-                          float x_coord = (src.getWidth() - width)/2;
-                          cs.drawText(yourText, x_coord, height+15f, tPaint); // 15f is to put space between top edge and the text, if you want to change it, you can
-                          try {
-                              dest.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(new File("/sdcard/ImageAfterAddingText.jpg")));
-                              // dest is Bitmap, if you want to preview the final image, you can display it on screen also before saving
-                          } catch (FileNotFoundException e) {
-                              // TODO Auto-generated catch block
-                              e.printStackTrace();
-                          }
-                      } catch(IOException e) {
-                          System.out.println(e);
-                      }
-
-
-                  }
-*/
-                  //  openScreenshot(saveBitMap(EmployeeNewMainScreen.this,mCardView));
 
                 }catch (Exception e){
                     e.printStackTrace();
                 }
 
+            }
+        });
 
-
-
+        share_card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
 
             }
@@ -760,6 +713,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
     public void getProfile(final int id,final ImageView mProfileImage ){
 
         new ThreadExecuter().execute(new Runnable() {
+
             @Override
             public void run() {
 
@@ -1417,7 +1371,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
                                         long days = dateCal(licenseEndDate);
 
 
-                                        mTrialInfoLay.setVisibility(View.VISIBLE);
+
                                         if((smdf.parse(licenseEndDate).getTime()<smdf.parse(smdf.format(new Date())).getTime())){
 
                                             Toast.makeText(EmployeeNewMainScreen.this, "Your Trial Period is Expired", Toast.LENGTH_SHORT).show();
@@ -1735,42 +1689,56 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
     }
 
     private void openScreenshot(File imageFile) {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
+
+        String message = "My Contact Details \n Name : "+mCardName.getText().toString()+",\n Designation: "+mCardDesign.getText().toString()+"\n Email: "+mCardEmail.getText().toString()+",\n Mobile: "+mCardMobile.getText().toString()+",\n Address: "+mCardAddress.getText().toString();
 
         Uri uri = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+
             uri = FileProvider.getUriForFile(EmployeeNewMainScreen.this, "app.zingo.employeemanagements.fileprovider", imageFile);
         }else{
             uri = Uri.fromFile(imageFile);
         }
 
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, message);
+        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+        shareIntent.setType("image/jpeg");
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivity(Intent.createChooser(shareIntent, "send"));
+
+       /* Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+
+
+
         intent.setDataAndType(uri, "image/*");
-        startActivity(intent);
+        startActivity(intent);*/
     }
 
     private File saveBitMap(Context context, View drawView){
-        File pictureFileDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"Handcare");
+        File pictureFileDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"Krony");
         if (!pictureFileDir.exists()) {
             boolean isDirectoryCreated = pictureFileDir.mkdirs();
             if(!isDirectoryCreated)
                 Log.i("ATG", "Can't create directory to save the image");
             return null;
         }
-        String filename = pictureFileDir.getPath() +File.separator+ System.currentTimeMillis()+".jpg";
+        String filename = pictureFileDir.getPath() +File.separator+ System.currentTimeMillis()+".jpeg";
         File pictureFile = new File(filename);
         Bitmap bitmap =getBitmapFromView(drawView);
         try {
             pictureFile.createNewFile();
             FileOutputStream oStream = new FileOutputStream(pictureFile);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, oStream);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, oStream);
             oStream.flush();
             oStream.close();
         } catch (IOException e) {
             e.printStackTrace();
             Log.i("TAG", "There was an issue saving the image.");
         }
-        scanGallery( context,pictureFile.getAbsolutePath());
+        //scanGallery( context,pictureFile.getAbsolutePath());
         return pictureFile;
     }
     //create bitmap from view and returns it
@@ -1793,18 +1761,5 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
         //return the bitmap
         return returnedBitmap;
     }
-    // used for scanning gallery
-    private void scanGallery(Context cntx, String path) {
-        try {
-            MediaScannerConnection.scanFile(cntx, new String[] { path },null, new MediaScannerConnection.OnScanCompletedListener() {
-                public void onScanCompleted(String path, Uri uri) {
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
 
 }
