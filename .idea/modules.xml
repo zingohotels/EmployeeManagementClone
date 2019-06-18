@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/EmployeeManagement.iml" filepath="$PROJECT_DIR$/EmployeeManagement.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EmployeeManagementClone.iml" filepath="$PROJECT_DIR$/EmployeeManagementClone.iml" />
       <module fileurl="file://$PROJECT_DIR$/base/base.iml" filepath="$PROJECT_DIR$/base/base.iml" />
       <module fileurl="file://$PROJECT_DIR$/ccp/ccp.iml" filepath="$PROJECT_DIR$/ccp/ccp.iml" />
       <module fileurl="file://$PROJECT_DIR$/installed/installed.iml" filepath="$PROJECT_DIR$/installed/installed.iml" />

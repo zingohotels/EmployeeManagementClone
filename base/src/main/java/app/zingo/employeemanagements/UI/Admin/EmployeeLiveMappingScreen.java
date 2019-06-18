@@ -25,6 +25,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -58,6 +59,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -86,6 +88,7 @@ import app.zingo.employeemanagements.WebApi.GeneralNotificationAPI;
 import app.zingo.employeemanagements.WebApi.LiveTrackingAPI;
 import app.zingo.employeemanagements.base.R;
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -128,6 +131,7 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
     CountDownTimer timerValue ;
 
     Marker markerLast;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -310,6 +314,7 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
                                 progressDialog.dismiss();
 
                             list = response.body();
+
 
 
                             if (list !=null && list.size()!=0) {
@@ -1898,6 +1903,5 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
 
 
     }
-
 
 }

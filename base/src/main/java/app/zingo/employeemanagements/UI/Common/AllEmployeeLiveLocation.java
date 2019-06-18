@@ -29,6 +29,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.network.connectionclass.ConnectionClassManager;
+import com.facebook.network.connectionclass.ConnectionQuality;
+import com.facebook.network.connectionclass.DeviceBandwidthSampler;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -61,6 +64,7 @@ import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
 import app.zingo.employeemanagements.WebApi.LiveTrackingAPI;
 import app.zingo.employeemanagements.base.R;
+import okhttp3.Headers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -92,6 +96,10 @@ public class AllEmployeeLiveLocation extends AppCompatActivity {
 
     //int checkvalue = 0;
 
+    //network speed
+
+
+
     public static void restartActivity(Activity activity){
         if (Build.VERSION.SDK_INT >= 11) {
             activity.recreate();
@@ -112,6 +120,8 @@ public class AllEmployeeLiveLocation extends AppCompatActivity {
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             setTitle("Location History");
+
+
 
             mapView = findViewById(R.id.employee_live_list_map);
             mlocation = findViewById(R.id.location_list);
@@ -354,6 +364,7 @@ public class AllEmployeeLiveLocation extends AppCompatActivity {
     private void getLiveLocation(final LiveTracking lv, final Employee employee){
 
 
+
         final ProgressDialog progressDialog = new ProgressDialog(AllEmployeeLiveLocation.this);
         progressDialog.setTitle("Loading Details..");
         progressDialog.setCancelable(false);
@@ -366,6 +377,7 @@ public class AllEmployeeLiveLocation extends AppCompatActivity {
                 LiveTrackingAPI apiService = Util.getClient().create(LiveTrackingAPI.class);
                 Call<ArrayList<LiveTracking>> call = apiService.getLiveTrackingByEmployeeIdAndDate(lv);
 
+
                 call.enqueue(new Callback<ArrayList<LiveTracking>>() {
                     @Override
                     public void onResponse(Call<ArrayList<LiveTracking>> call, Response<ArrayList<LiveTracking>> response) {
@@ -373,6 +385,8 @@ public class AllEmployeeLiveLocation extends AppCompatActivity {
 
 
                         if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
+
+                            Headers responseHeaders = response.headers();
 
 
                             if (progressDialog!=null&&progressDialog.isShowing())
@@ -441,6 +455,7 @@ public class AllEmployeeLiveLocation extends AppCompatActivity {
                                 }
                             }
 
+
                         }else {
 
                             if (progressDialog!=null&&progressDialog.isShowing())
@@ -455,6 +470,8 @@ public class AllEmployeeLiveLocation extends AppCompatActivity {
                         if (progressDialog!=null&&progressDialog.isShowing())
                             progressDialog.dismiss();
                         Log.e("TAG", t.toString());
+
+
                     }
                 });
             }
@@ -918,6 +935,8 @@ public class AllEmployeeLiveLocation extends AppCompatActivity {
         if(countTimer!=null){
             countTimer.cancel();
         }
+
+
     }
 
     public class LocationLiveAdapter extends RecyclerView.Adapter<LocationLiveAdapter.ViewHolder>{
@@ -998,9 +1017,6 @@ public class AllEmployeeLiveLocation extends AppCompatActivity {
                             bundle.putSerializable("Employee",list.get(position).getEmpName());
                             intent.putExtras(bundle);
                             context.startActivity(intent);
-
-
-
 
                     }
                 });
@@ -1095,4 +1111,8 @@ public class AllEmployeeLiveLocation extends AppCompatActivity {
             }
         }
     }
+
+    //network speed listner
+    // Listener to update the UI upon connectionclass change.
+
 }

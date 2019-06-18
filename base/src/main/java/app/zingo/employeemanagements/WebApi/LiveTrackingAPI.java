@@ -9,6 +9,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Streaming;
 
 /**
  * Created by ZingoHotels Tech on 02-01-2019.
@@ -19,6 +20,7 @@ public interface LiveTrackingAPI {
     @GET("LiveTrackingDetails/GetliveTrackingDetailsByEmployeeId/{EmployeeId}")
     Call<ArrayList<LiveTracking>> getLiveTrackingByEmployeeId(@Path("EmployeeId") int id);
 
+    @Streaming
     @POST("LiveTrackingDetailsAsync/GetliveTrackingDetailsByEmployeeIdAndDate")
     Call<ArrayList<LiveTracking>> getLiveTrackingByEmployeeIdAndDate(@Body LiveTracking details);
 
