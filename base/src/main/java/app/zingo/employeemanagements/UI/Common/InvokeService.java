@@ -362,7 +362,7 @@ public class InvokeService extends AppCompatActivity {
                                     "\t\t</div>\t\t\n" +
                                     "\t</div>\n" +
                                     "</div>\n" +
-                                    "</div>\n</br><p><h3>You can also view and download this report by login to our website <a href=\"www.krony app.com/Signin.php\" target = \"_blank\">Click here to login.</a> To View this report in our Krony App <a href=\"https://play.google.com/store/apps/details?id=app.zingo.employeemanagements\" target = \"_blank\">Click here</a>.</h3></p><br><br>" +
+                                    "</div>\n</br><p><h3>You can also view and download this report by login to our website <a href=\"www.kronyapp.com/Signin.php\" target = \"_blank\">Click here to login.</a> To View this report in our Krony App <a href=\"https://play.google.com/store/apps/details?id=app.zingo.employeemanagements\" target = \"_blank\">Click here</a>.</h3></p><br><br>" +
                                     "<div class=\"col-md-4\">\n" +
                                     "      <h3>Download Now</h3>\n" +
                                     "      <div class=\"contact-item\">\n" +

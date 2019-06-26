@@ -243,7 +243,9 @@ public class AdminNewMainScreen extends AppCompatActivity  implements RapidFloat
 
             try{
 
-                presentShowcaseSequence();
+                if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.LOLLIPOP) {
+                    presentShowcaseSequence();
+                }
 
             }catch (Exception e){
                 e.printStackTrace();
@@ -450,7 +452,9 @@ public class AdminNewMainScreen extends AppCompatActivity  implements RapidFloat
                 try{
 
                     MaterialShowcaseView.resetAll(AdminNewMainScreen.this);
-                    presentShowcaseSequence();
+                    if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.LOLLIPOP) {
+                        presentShowcaseSequence();
+                    }
 
                 }catch (Exception e){
                     e.printStackTrace();

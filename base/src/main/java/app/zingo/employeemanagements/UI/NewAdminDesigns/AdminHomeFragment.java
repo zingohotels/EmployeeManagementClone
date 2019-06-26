@@ -888,8 +888,6 @@ public class AdminHomeFragment extends Fragment {
         });
     }
 
-    void presentShowcaseView() {
 
-      }
 
 }

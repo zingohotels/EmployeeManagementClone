@@ -105,6 +105,8 @@ public class MeetingDetailAdapter extends RecyclerView.Adapter<MeetingDetailAdap
 
             String lngi = dto.getEndLongitude();
             String lati = dto.getEndLatitude();
+            String lngis = dto.getEndLongitude();
+            String latis = dto.getEndLatitude();
 
             if(lngi!=null&&lati!=null&&!lngi.isEmpty()&&!lati.isEmpty()){
 
@@ -112,6 +114,23 @@ public class MeetingDetailAdapter extends RecyclerView.Adapter<MeetingDetailAdap
 
                     double lngiValue  = Double.parseDouble(lngi);
                     double latiValue  = Double.parseDouble(lati);
+
+                    if(lngiValue!=0&&latiValue!=0){
+                        getAddress(lngiValue,latiValue,holder.mLocation);
+                    }
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                    holder.mLocation.setText("Not Available");
+                }
+
+
+            }else if(lngis!=null&&latis!=null&&!lngis.isEmpty()&&!latis.isEmpty()){
+
+                try{
+
+                    double lngiValue  = Double.parseDouble(lngis);
+                    double latiValue  = Double.parseDouble(latis);
 
                     if(lngiValue!=0&&latiValue!=0){
                         getAddress(lngiValue,latiValue,holder.mLocation);
@@ -147,6 +166,7 @@ public class MeetingDetailAdapter extends RecyclerView.Adapter<MeetingDetailAdap
 
             }else{
                 holder.mContact.setVisibility(View.GONE);
+                holder.mEdit.setVisibility(View.GONE);
             }
 
             holder.mEdit.setOnClickListener(new View.OnClickListener() {

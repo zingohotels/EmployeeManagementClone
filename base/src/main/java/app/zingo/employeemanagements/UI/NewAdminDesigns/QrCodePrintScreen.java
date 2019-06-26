@@ -70,7 +70,7 @@ public class QrCodePrintScreen extends AppCompatActivity {
 
             QRCode qrCode = new QRCode();
             qrCode.setOrganizationId(PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyId());
-            qrCode.setURL("www.krony app.com/checkout.php?id="+ PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyId());
+            qrCode.setURL("www.kronyapp.com/checkout.php?id="+ PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyId());
 
 
             System.out.println("JSON_Object Data Fire = "+qrCode.toString());
@@ -78,7 +78,7 @@ public class QrCodePrintScreen extends AppCompatActivity {
             Gson gson = new Gson();
 
            // String serializeString = gson.toJson(qrCode);
-            String serializeString = "www.krony app.com/checkout.php?id="+ PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyId();
+            String serializeString = "www.kronyapp.com/checkout.php?id="+ PreferenceHandler.getInstance(QrCodePrintScreen.this).getCompanyId();
 
             String encryptedString = EncryptionHelper.getInstance().encryptionString(serializeString).encryptMsg();
             setImageBitmap(serializeString);

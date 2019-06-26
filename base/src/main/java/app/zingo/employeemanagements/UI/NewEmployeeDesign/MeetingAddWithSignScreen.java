@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -43,6 +44,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.model.LatLng;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -90,7 +92,7 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
     ImageView mImageView;
     Button mSave;
     Spinner customerSpinner;
-    LinearLayout ClientNameLayout;
+    LinearLayout ClientNameLayout,mSpinnerLay;
     Toolbar toolbar;
     Button  mClear, mGetSigns, mCancel;
 
@@ -121,6 +123,7 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
 
     ArrayList<Customer> customerArrayList;
     int clientId = 0;
+    private boolean methodAdd = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,8 +146,10 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
             mImageView = findViewById(R.id.selfie_pic);
             customerSpinner = findViewById(R.id.customer_spinner_adpter);
             ClientNameLayout = findViewById(R.id.client_name_layout);
+            ClientNameLayout = findViewById(R.id.spinner_lay);
 
             getCustomers(PreferenceHandler.getInstance(MeetingAddWithSignScreen.this).getCompanyId());
+
 
             mSave.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -285,7 +290,7 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
                 loginDetails.setMeetingDate(""+sdf.format(new Date()));
                 loginDetails.setMeetingAgenda(purpose);
                 loginDetails.setMeetingDetails(detail);
-                loginDetails.setStatus("Completed");
+                loginDetails.setStatus("In Meeting");
 
                 if(customer!=null&&!customer.equalsIgnoreCase("Others")){
 
@@ -435,6 +440,8 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
                         Meetings s = response.body();
                         if(s!=null){
                             md.setMeetingsId(s.getMeetingsId());
+                            PreferenceHandler.getInstance(MeetingAddWithSignScreen.this).setMeetingId(s.getMeetingsId());
+                            PreferenceHandler.getInstance(MeetingAddWithSignScreen.this).setMeetingLoginStatus("Login");
                             Toast.makeText(MeetingAddWithSignScreen.this, "Meeting Saved", Toast.LENGTH_SHORT).show();
                             saveMeetingNotification(md);
                         }
@@ -1118,5 +1125,102 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
             Log.v("log_tag", e.toString());
         }
 
+    }
+
+    public void getMeetings(final int id){
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+
+                final MeetingsAPI subCategoryAPI = Util.getClient().create(MeetingsAPI.class);
+                Call<Meetings> getProf = subCategoryAPI.getMeetingById(id);
+                //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
+
+                getProf.enqueue(new Callback<Meetings>() {
+
+                    @Override
+                    public void onResponse(Call<Meetings> call, Response<Meetings> response) {
+
+                        if (response.code() == 200||response.code() == 201||response.code() == 204)
+                        {
+                            System.out.println("Inside api");
+
+                            final Meetings dto = response.body();
+
+                            if(dto!=null){
+
+                                try{
+
+
+
+                                        String option = "Meeting-Out";
+
+                                        mSpinnerLay.setVisibility(View.GONE);
+
+
+
+
+                                        mDetails.setText(""+dto.getMeetingDetails());
+                                        methodAdd = true;
+                                        if(dto.getMeetingPersonDetails().contains("%")){
+
+                                            String person[] = dto.getMeetingPersonDetails().split("%");
+
+                                            if(person.length==1){
+                                                mClientName.setText(""+dto.getMeetingPersonDetails());
+                                            }else if(person.length==2){
+                                                mClientName.setText(""+person[0]);
+                                                mClientMail.setText(""+person[1]);
+                                            }else if(person.length==3){
+                                                mClientName.setText(""+person[0]);
+                                                mClientMail.setText(""+person[1]);
+                                                mClientMobile.setText(""+person[2]);
+                                            }
+
+                                        }else{
+                                            mClientName.setText(""+dto.getMeetingPersonDetails());
+                                        }
+
+                                        mPurpose.setText(""+dto.getMeetingAgenda());
+
+                                        if(dto.getEndPlaceID()!=null&&!dto.getEndPlaceID().isEmpty()){
+                                            Picasso.with(MeetingAddWithSignScreen.this).load(dto.getEndPlaceID()).placeholder(R.drawable.profile_image).error(R.drawable.no_image).into(mImageView);
+                                        }
+
+
+
+
+
+
+
+
+
+
+                                }catch (Exception e){
+                                    e.printStackTrace();
+                                }
+
+                            }
+
+
+
+
+                        }else{
+
+
+                            //meet
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Meetings> call, Throwable t) {
+
+                    }
+                });
+
+            }
+
+        });
     }
 }

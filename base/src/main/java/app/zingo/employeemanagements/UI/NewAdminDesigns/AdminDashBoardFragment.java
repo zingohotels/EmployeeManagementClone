@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -325,7 +326,10 @@ public class AdminDashBoardFragment extends Fragment {
                 public void onClick(View v) {
 
                     //presentShowcaseView();
-                    presentShowcaseSequence();
+                    if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.LOLLIPOP) {
+                        presentShowcaseSequence();
+                    }
+
 
 
                 }

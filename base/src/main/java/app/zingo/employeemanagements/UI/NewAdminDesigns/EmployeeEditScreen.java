@@ -20,6 +20,8 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -759,6 +761,7 @@ public class EmployeeEditScreen extends AppCompatActivity {
                         if(s!=null){
 
                             employee.setDesignationId(s.getDesignationId());
+                            employee.setDesignation(s);
 
                             checkUserByEmailId(employee);
 
@@ -808,6 +811,10 @@ public class EmployeeEditScreen extends AppCompatActivity {
         dialog.setCancelable(false);
         dialog.setTitle("Updaitng...");
         dialog.show();
+
+        Gson gson = new Gson();
+        String json = gson.toJson(employee);
+        System.out.println("Employee "+json);
 
         new ThreadExecuter().execute(new Runnable() {
             @Override

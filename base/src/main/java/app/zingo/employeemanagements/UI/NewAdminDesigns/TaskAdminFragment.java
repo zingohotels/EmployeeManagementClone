@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -163,7 +164,11 @@ public class TaskAdminFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
 
-                    presentShowcaseView();
+                    if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.LOLLIPOP) {
+                        presentShowcaseView();
+                    }
+
+                    //presentShowcaseView();
 
                     mTaskList.removeAllViews();
 
@@ -186,7 +191,9 @@ public class TaskAdminFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
 
-                    presentShowcaseView();
+                    if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.LOLLIPOP) {
+                        presentShowcaseView();
+                    }
 
                     mTaskList.removeAllViews();
 
@@ -208,7 +215,9 @@ public class TaskAdminFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
 
-                    presentShowcaseView();
+                    if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.LOLLIPOP) {
+                        presentShowcaseView();
+                    }
 
                     mTaskList.removeAllViews();
 
@@ -230,7 +239,9 @@ public class TaskAdminFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
 
-                    presentShowcaseView();
+                    if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.LOLLIPOP) {
+                        presentShowcaseView();
+                    }
 
                     mTaskList.removeAllViews();
 
@@ -296,7 +307,9 @@ public class TaskAdminFragment extends Fragment {
             mDate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    presentShowcaseView();
+                    if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.LOLLIPOP) {
+                        presentShowcaseView();
+                    }
                     openDatePicker(mDate);
                 }
             });

@@ -4,6 +4,7 @@ package app.zingo.employeemanagements.UI.NewAdminDesigns;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -297,7 +298,10 @@ public class EmployerNotificationFragment extends Fragment {
 
                         //getLoginNotifications(new SimpleDateFormat("MMM dd,yyyy").format(date));
 
-                        presentShowcaseView();
+                        if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.LOLLIPOP) {
+                            presentShowcaseView();
+                        }
+
                         showLogin();
 
 
@@ -315,7 +319,9 @@ public class EmployerNotificationFragment extends Fragment {
                     try{
                         final Date date = dateFormat.parse(mDate.getText().toString());
                         layputType = "task";
-                        presentShowcaseView();
+                        if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.LOLLIPOP) {
+                            presentShowcaseView();
+                        }
                         showTask();
 
                       //  getTasks(PreferenceHandler.getInstance(getActivity()).getUserId(),new SimpleDateFormat("yyyy-MM-dd").format(date));
@@ -336,7 +342,9 @@ public class EmployerNotificationFragment extends Fragment {
                     try{
                         final Date date = dateFormat.parse(mDate.getText().toString());
                         layputType = "meeting";
-                        presentShowcaseView();
+                        if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.LOLLIPOP) {
+                            presentShowcaseView();
+                        }
                         showMeeting();
 
                        // getMeetingNotifications(new SimpleDateFormat("MMM dd,yyyy").format(date));
@@ -356,7 +364,9 @@ public class EmployerNotificationFragment extends Fragment {
                     try{
                         final Date date = dateFormat.parse(mDate.getText().toString());
                         layputType = "expenses";
-                        presentShowcaseView();
+                        if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.LOLLIPOP) {
+                            presentShowcaseView();
+                        }
                         showExpense();
 
                       //  getExpense(PreferenceHandler.getInstance(getActivity()).getUserId(),new SimpleDateFormat("yyyy-MM-dd").format(date));
