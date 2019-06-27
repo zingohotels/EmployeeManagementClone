@@ -919,8 +919,8 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                     String option = "Check-In";
 
 
-                                    message = "Do you want to Log-Out?";
-                                    option = "Log-Out";
+                                    message = "Do you want to Check-Out?";
+                                    option = "Check-Out";
 
 
                                     final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -1908,22 +1908,12 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                 centreMapOnLocationWithLatLng(master,""+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
                 firstTime =false;
             }
-
-
         }
-
-
-
     }
-
-
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
     }
-
-
 
     public void onResume() {
 
@@ -1939,7 +1929,6 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
         Intent myService = new Intent(getActivity(), LocationSharingServices.class);
         getActivity().stopService(myService);
-
     }
 
     public void setUserVisibleHint(boolean z) {
@@ -1950,7 +1939,6 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
         super.onAttach(context);
         this.mContext = context;
     }
-
 
     public boolean locationCheck(){
 
@@ -1985,8 +1973,6 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                 @Override
                 public void onClick(DialogInterface paramDialogInterface, int paramInt) {
                     // TODO Auto-generated method stub
-
-
                 }
             });
             dialog.show();
@@ -2017,13 +2003,9 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
             Log.e("MapLocation", "Unable connect to Geocoder", e);
             return result;
         }
-
     }
 
     private void getMeetingDetails(){
-
-
-
 
         new ThreadExecuter().execute(new Runnable() {
             @Override
@@ -2036,60 +2018,35 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                     public void onResponse(Call<ArrayList<Meetings>> call, Response<ArrayList<Meetings>> response) {
                         int statusCode = response.code();
                         if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
-
-
-
                             ArrayList<Meetings> list = response.body();
-
-
                             if (list !=null && list.size()!=0) {
 
-
-
-
                                 Meetings loginDetails = list.get(list.size()-1);
-
                                 if(loginDetails!=null){
                                     PreferenceHandler.getInstance(getActivity()).setMeetingId(loginDetails.getMeetingsId());
 
                                     String logout = loginDetails.getEndTime();
                                     String login = loginDetails.getStartTime();
-
-
                                     if(logout!=null&&!logout.isEmpty()&&(login!=null&&!login.isEmpty())){
-
-
-
                                         punchInTextMeeting.setText("Meeting-in");
-
                                         punchOutMeeting.setEnabled(false);
                                         punchInMeeting.setEnabled(true);
                                         PreferenceHandler.getInstance(getActivity()).setMeetingLoginStatus("Logout");
 
                                     }else if(login!=null&&!login.isEmpty()&&(logout==null||logout.isEmpty())){
-
-
                                         punchOutTextMeeting.setText("Meeting-out");
                                         punchInTextMeeting.setText(""+login);
                                         punchOutMeeting.setEnabled(true);
                                         punchInMeeting.setEnabled(false);
                                         PreferenceHandler.getInstance(getActivity()).setMeetingLoginStatus("Login");
                                     }
-
                                 }
-
-
-
-
-                                //}
 
                             }else{
 
                             }
 
                         }else {
-
-
                             Toast.makeText(getActivity(), "Failed due to : "+response.message(), Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -2102,8 +2059,6 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                     }
                 });
             }
-
-
         });
     }
 

@@ -55,6 +55,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.itextpdf.text.pdf.qrcode.ByteArray;
 import com.squareup.picasso.Picasso;
 
 import org.jsoup.Connection;
@@ -62,10 +63,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -172,7 +175,7 @@ public class AdminNewMainScreen extends AppCompatActivity  implements RapidFloat
     boolean don  = false;
 
     private  String SHOWCASE_ID_ADMIN ;
-
+    private RoundImageView roundImageView;
 
     private RapidFloatingActionLayout rfaLayout;
     private RapidFloatingActionButton rfaButton;
@@ -188,7 +191,7 @@ public class AdminNewMainScreen extends AppCompatActivity  implements RapidFloat
             mWhatsapp = findViewById(R.id.whatsapp_open);
             rfaLayout = (RapidFloatingActionLayout) findViewById(R.id.rfab_group_sample_fragment_a_rfal);
             rfaButton = (RapidFloatingActionButton) findViewById(R.id.label_list_sample_rfab);
-
+            roundImageView = findViewById(R.id.profilePicture);
             SHOWCASE_ID_ADMIN = "ToolsAdmin"+PreferenceHandler.getInstance(AdminNewMainScreen.this).getUserId();
 
           /*  mLoader = findViewById(R.id.spin_loader);
@@ -206,13 +209,6 @@ public class AdminNewMainScreen extends AppCompatActivity  implements RapidFloat
 
             setupData();
 
-
-
-
-
-          //  getCurrentVersion();
-
-
             setupViewPager((ViewPager) findViewById(R.id.viewPager));
 
             mWhatsapp.setOnClickListener(new View.OnClickListener() {
@@ -220,7 +216,6 @@ public class AdminNewMainScreen extends AppCompatActivity  implements RapidFloat
                 public void onClick(View view) {
 
                     String message = "Hi I'm "+PreferenceHandler.getInstance(AdminNewMainScreen.this).getUserFullName()+",\n My Organization Name is "+PreferenceHandler.getInstance(AdminNewMainScreen.this).getCompanyName()+".I am writing about the feedback of Krony app Ver: "+BuildConfig.VERSION_NAME+".";
-
                     PackageManager packageManager = getPackageManager();
                     Intent i = new Intent(Intent.ACTION_VIEW);
 
@@ -235,9 +230,6 @@ public class AdminNewMainScreen extends AppCompatActivity  implements RapidFloat
                         e.printStackTrace();
                         Toast.makeText(AdminNewMainScreen.this, "WhatsApp not installed.", Toast.LENGTH_SHORT).show();
                     }
-
-
-
                 }
             });
 
@@ -865,7 +857,6 @@ public class AdminNewMainScreen extends AppCompatActivity  implements RapidFloat
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == SELECT_FILE)
                 onSelectFromGalleryResult(data);
-
         }
     }
 
@@ -873,10 +864,16 @@ public class AdminNewMainScreen extends AppCompatActivity  implements RapidFloat
 
         try{
 
-
             Uri selectedImageUri = data.getData( );
-            String picturePath = getPath( AdminNewMainScreen.this, selectedImageUri );
+            InputStream imageStream = getContentResolver().openInputStream(selectedImageUri);
+            final Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
+            mProfileImage.setImageBitmap(bitmap);
+
+            Uri temUri = getImageUri( getApplicationContext(), bitmap );
+            String picturePath = getPath( getApplicationContext(), temUri );
+
             Log.d("Picture Path", picturePath);
+            //roundImageView.setImageBitmap(bitmap);
             String[] all_path = {picturePath};
             selectedImage = all_path[0];
             System.out.println("allpath === "+data.getPackage());
@@ -893,13 +890,18 @@ public class AdminNewMainScreen extends AppCompatActivity  implements RapidFloat
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
 
-
+    private Uri getImageUri(Context applicationContext, Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
+        String path = MediaStore.Images.Media.insertImage(applicationContext.getContentResolver(),bitmap,"Title",null);
+        return Uri.parse(path);
     }
 
     public static String getPath(Context context, Uri uri ) {
         String result = null;
-        String[] proj = { MediaStore.Images.Media.DATA };
+        /*String[] proj = { MediaStore.Images.Media.DATA };
         Cursor cursor = context.getContentResolver( ).query( uri, proj, null, null, null );
         if(cursor != null){
             if ( cursor.moveToFirst( ) ) {
@@ -910,43 +912,35 @@ public class AdminNewMainScreen extends AppCompatActivity  implements RapidFloat
         }
         if(result == null) {
             result = "Not found";
-        }
-        return result;
+        }*/
+        Cursor cursor = context.getContentResolver().query(uri,null,null,null,null);
+        cursor.moveToFirst();
+        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+        return cursor.getString(idx);
+      //  return result;
     }
 
     public void addImage(String uri,Bitmap bitmap)
     {
         try{
-
-
             if(uri != null)
             {
-
             }
             else if(bitmap != null)
             {
                 mProfileImage.setImageBitmap(bitmap);
-
                 if(selectedImage != null && !selectedImage.isEmpty())
                 {
                     File file = new File(selectedImage);
-
                     if(file.length() <= 1*1024*1024)
                     {
                         FileOutputStream out = null;
                         String[] filearray = selectedImage.split("/");
                         final String filename = getFilename(filearray[filearray.length-1]);
-
                         out = new FileOutputStream(filename);
                         Bitmap myBitmap = BitmapFactory.decodeFile(selectedImage);
-
-//          write the compressed bitmap at the field_icon specified by filename.
                         myBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-
                         uploadImage(filename,profile);
-
-
-
                     }
                     else
                     {
@@ -957,16 +951,12 @@ public class AdminNewMainScreen extends AppCompatActivity  implements RapidFloat
         }catch (Exception e){
             e.printStackTrace();
         }
-
     }
 
     private void uploadImage(final String filePath,final Employee employee)
     {
-        //String filePath = getRealPathFromURIPath(uri, ImageUploadActivity.this);
-
         final File file = new File(filePath);
         int size = 1*1024*1024;
-
         if(file != null)
         {
             if(file.length() > size)
@@ -986,7 +976,6 @@ public class AdminNewMainScreen extends AppCompatActivity  implements RapidFloat
                 MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", file.getName(), mFile);
                 RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), file.getName());
                 UploadApi uploadImage = Util.getClient().create(UploadApi.class);
-
                 Call<String> fileUpload = uploadImage.uploadProfileImages(fileToUpload, filename);
                 fileUpload.enqueue(new Callback<String>() {
                     @Override
@@ -995,21 +984,14 @@ public class AdminNewMainScreen extends AppCompatActivity  implements RapidFloat
                         {
                             dialog.dismiss();
                         }
-
-
                         if(employeeImages==null){
                             EmployeeImages employeeImages = new EmployeeImages();
-
                             if(Util.IMAGE_URL==null){
                                 employeeImages.setImage(Constants.IMAGE_URL+ response.body());
                             }else{
                                 employeeImages.setImage(Util.IMAGE_URL+ response.body());
                             }
-
-
                             employeeImages.setEmployeeId(employee.getEmployeeId());
-
-
                             addProfileImage(employeeImages);
                         }else{
 
@@ -1025,10 +1007,6 @@ public class AdminNewMainScreen extends AppCompatActivity  implements RapidFloat
 
                             updateProfileImage(employeeImages);
                         }
-
-
-
-
                         if(filePath.contains("MyFolder/Images"))
                         {
                             file.delete();
@@ -1044,28 +1022,24 @@ public class AdminNewMainScreen extends AppCompatActivity  implements RapidFloat
     }
 
     public String compressImage(String filePath,final  Employee Employee) {
-
         //String filePath = getRealPathFromURI(imageUri);
         Bitmap scaledBitmap = null;
-
         BitmapFactory.Options options = new BitmapFactory.Options();
-
-//      by setting this field as true, the actual bitmap pixels are not loaded in the memory. Just the bounds are loaded. If
-//      you try the use the bitmap here, you will get null.
+        // by setting this field as true, the actual bitmap pixels are not loaded in the memory. Just the bounds are loaded. If
+        //you try the use the bitmap here, you will get null.
         options.inJustDecodeBounds = true;
         Bitmap bmp = BitmapFactory.decodeFile(filePath, options);
 
         int actualHeight = options.outHeight;
         int actualWidth = options.outWidth;
 
-//      max Height and width values of the compressed image is taken as 816x612
-
+        // max Height and width values of the compressed image is taken as 816x612
         float maxHeight = actualHeight/2;//2033.0f;
         float maxWidth = actualWidth/2;//1011.0f;
         float imgRatio = actualWidth / actualHeight;
         float maxRatio = maxWidth / maxHeight;
 
-//      width and height values are set maintaining the aspect ratio of the image
+        // width and height values are set maintaining the aspect ratio of the image
 
         if (actualHeight > maxHeight || actualWidth > maxWidth) {
             if (imgRatio < maxRatio) {
@@ -1084,30 +1058,22 @@ public class AdminNewMainScreen extends AppCompatActivity  implements RapidFloat
         }
 
 //      setting inSampleSize value allows to load a scaled down version of the original image
-
         options.inSampleSize = calculateInSampleSize(options, actualWidth, actualHeight);
-
-//      inJustDecodeBounds set to false to load the actual bitmap
         options.inJustDecodeBounds = false;
-
-//      this options allow android to claim the bitmap memory if it runs low on memory
         options.inPurgeable = true;
         options.inInputShareable = true;
         options.inTempStorage = new byte[16 * 1024];
-
         try {
 //          load the bitmap from its path
             bmp = BitmapFactory.decodeFile(filePath, options);
         } catch (OutOfMemoryError exception) {
             exception.printStackTrace();
-
         }
         try {
             scaledBitmap = Bitmap.createBitmap(actualWidth, actualHeight, Bitmap.Config.ARGB_8888);
         } catch (OutOfMemoryError exception) {
             exception.printStackTrace();
         }
-
         float ratioX = actualWidth / (float) options.outWidth;
         float ratioY = actualHeight / (float) options.outHeight;
         float middleX = actualWidth / 2.0f;

@@ -3,14 +3,17 @@ package app.zingo.employeemanagements.UI.NewEmployeeDesign;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ShareCompat;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,8 +27,10 @@ import android.widget.Toast;
 import com.google.android.gms.maps.model.LatLng;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import app.zingo.employeemanagements.base.BuildConfig;
@@ -160,8 +165,8 @@ public class EmployeeHomeFragment extends Fragment {
         ShareApp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String upToNCharacters = PreferenceHandler.getInstance(getActivity()).getCompanyName().substring(0, Math.min(PreferenceHandler.getInstance(getActivity()).getCompanyName().length(), 4));
 
+                String upToNCharacters = PreferenceHandler.getInstance(getActivity()).getCompanyName().substring(0, Math.min(PreferenceHandler.getInstance(getActivity()).getCompanyName().length(), 4));
 
                 String body = "<html><head>" +
                         "</head>" +
@@ -178,18 +183,16 @@ public class EmployeeHomeFragment extends Fragment {
                         "</br><p>If you have any questions then contact the Admin/HR of the company.</p>"+
                         "</br><p><b>Cheers,</b><br><br>"+PreferenceHandler.getInstance(getActivity()).getUserFullName()+"</p></body></html>";
 
+
                 Intent emailIntent = new Intent(Intent.ACTION_SEND);
-                emailIntent.setType("text/plain");
-
-
+                emailIntent.setType("text/html");
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Employee Management App Invitation");
-
-
                 emailIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(new StringBuilder()
                         .append(body)
                         .toString()));
                 //emailIntent.putExtra(Intent.EXTRA_HTML_TEXT, body);
                 startActivity(Intent.createChooser(emailIntent, "Send email.."));
+
             }
         });
 
@@ -203,9 +206,6 @@ public class EmployeeHomeFragment extends Fragment {
         findViewById.setOnClickListener(this);*/
 
         try{
-
-
-
         attendance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -426,13 +426,6 @@ public class EmployeeHomeFragment extends Fragment {
             bun.putString("Type","Employee");
             employees.putExtras(bun);
             getContext().startActivity(employees);
-
-
-
-
-
-
-
 
         }
     }

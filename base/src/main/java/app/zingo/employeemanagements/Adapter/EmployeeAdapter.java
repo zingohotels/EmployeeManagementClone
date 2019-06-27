@@ -36,6 +36,8 @@ import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.LoginDetails;
 import app.zingo.employeemanagements.Model.LoginDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.Tasks;
+import app.zingo.employeemanagements.UI.Employee.ApplyLeaveScreen;
+import app.zingo.employeemanagements.UI.NewEmployeeDesign.CreateExpensesScreen;
 import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.Service.LocationSharingServices;
 import app.zingo.employeemanagements.UI.Admin.CreatePaySlip;
@@ -69,6 +71,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
 
     private Context context;
     private ArrayList<Employee> list;
+    private AlertDialog.Builder builder;
     String type;
 
     public EmployeeAdapter(Context context, ArrayList<Employee> list,String type) {
@@ -212,12 +215,47 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
 
                 }else if(type!=null&&type.equalsIgnoreCase("Expense")){
 
-                    Intent intent = new Intent(context, ExpenseDashBoardAdmin.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("Profile",list.get(position));
-                    bundle.putInt("EmployeeId",list.get(position).getEmployeeId());
-                    intent.putExtras(bundle);
-                    context.startActivity(intent);
+                    builder = new AlertDialog.Builder(context);
+                    builder.setTitle("Expense");
+                    //builder.setIcon(R.drawable.ic_attachment);
+                    builder.setMessage("What do you want to do ?");
+                    builder.setPositiveButton("Create Expense",
+                            new DialogInterface.OnClickListener()
+                            {
+                                public void onClick(DialogInterface dialog, int id)
+                                {
+                                    dialog.cancel();
+                                    Intent dash = new Intent(context, CreateExpensesScreen.class);
+                                    dash.putExtra("EmployeeId", list.get(position).getEmployeeId());
+                                    dash.putExtra("ManagerId", list.get(position).getManagerId());
+                                    context.startActivity(dash);
+                                }
+                            });
+
+                    builder.setNeutralButton("Cancel",
+                            new DialogInterface.OnClickListener()
+                            {
+                                public void onClick(DialogInterface dialog, int id)
+                                {
+                                    dialog.cancel();
+                                }
+                            });
+
+                    builder.setNegativeButton("View",
+                            new DialogInterface.OnClickListener()
+                            {
+                                public void onClick(DialogInterface dialog, int id)
+                                {
+                                    dialog.cancel();
+                                    Intent intent = new Intent(context, ExpenseDashBoardAdmin.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putSerializable("Profile",list.get(position));
+                                    bundle.putInt("EmployeeId",list.get(position).getEmployeeId());
+                                    intent.putExtras(bundle);
+                                    context.startActivity(intent);
+                                }
+                            });
+                    builder.create().show();
 
                 }else  if(type!=null&&type.equalsIgnoreCase("Salary")){
 
@@ -256,12 +294,45 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
 
                 }else  if(type!=null&&type.equalsIgnoreCase("Leave")){
 
-                    Intent intent = new Intent(context, LeaveDashBoardAdminScreen.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("EmployeeId",list.get(position).getEmployeeId());
-                    bundle.putSerializable("Employee",list.get(position));
-                    intent.putExtras(bundle);
-                    context.startActivity(intent);
+                    builder = new AlertDialog.Builder(context);
+                    builder.setTitle("Leave");
+                    //builder.setIcon(R.drawable.ic_attachment);
+                    builder.setMessage("What do you want to do ?");
+                    builder.setPositiveButton("Create Leave",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id)
+                                {
+                                    dialog.cancel();
+                                    Intent dash = new Intent(context, ApplyLeaveScreen.class);
+                                    dash.putExtra("EmployeeId", list.get(position).getEmployeeId());
+                                    dash.putExtra("ManagerId", list.get(position).getManagerId());
+                                    context.startActivity(dash);
+                                }
+                            });
+
+                    builder.setNeutralButton("Cancel",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id)
+                                {
+                                    dialog.cancel();
+                                }
+                            });
+
+                    builder.setNegativeButton("View",
+                            new DialogInterface.OnClickListener()
+                            {
+                                public void onClick(DialogInterface dialog, int id)
+                                {
+                                    dialog.cancel();
+                                    Intent intent = new Intent(context, EmployeeLiveMappingScreen.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putInt("EmployeeId",list.get(position).getEmployeeId());
+                                    bundle.putSerializable("Employee",list.get(position));
+                                    intent.putExtras(bundle);
+                                    context.startActivity(intent);
+                                }
+                            });
+                    builder.create().show();
 
                 }/*else  if(type!=null&&type.equalsIgnoreCase("Report")){
                     Intent intent = new Intent(context, ReportManagementScreen.class);
@@ -278,18 +349,9 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
                     intent.putExtras(bundle);
                     context.startActivity(intent);
                 }
-
-
-
             }
         });
-
-
-
-
-
     }
-
 
     private String getAddress(LatLng latLng) {
         Geocoder geocoder = new Geocoder(context, Locale.getDefault());
@@ -305,7 +367,6 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
                 }
 
                 result = address.getAddressLine(0);
-
                 return result;
             }
             return result;
@@ -313,7 +374,6 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
             Log.e("MapLocation", "Unable connect to Geocoder", e);
             return result;
         }
-
     }
 
     @Override
@@ -325,7 +385,6 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
     public int getItemViewType(int position) {
         return position;
     }
-
 
     class ViewHolder extends RecyclerView.ViewHolder /*implements View.OnClickListener*/ {
 
@@ -342,10 +401,6 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
             mProfileEmail = itemView.findViewById(R.id.profile_email_adapter);
             mLoginId = itemView.findViewById(R.id.hidden_login_id);
             mProfileMain = itemView.findViewById(R.id.profileLayout);
-
-
-
-
         }
     }
 
@@ -363,12 +418,9 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
                         int statusCode = response.code();
                         if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
 
-
-
                             ArrayList<LoginDetails> list = response.body();
 
                             if (list !=null && list.size()!=0) {
-
 
                                 if(list.get(0).getTotalMeeting()!=null&&!list.get(0).getTotalMeeting().isEmpty()){
 
@@ -394,12 +446,9 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
                                 hidden.setText(0+"");
 
                                 // Toast.makeText(DailyTargetsForEmployeeActivity.this, "No Tasks given for this employee ", Toast.LENGTH_SHORT).show();
-
                             }
 
                         }else {
-
-
 
                             //Toast.makeText(DailyTargetsForEmployeeActivity.this, "Failed due to : "+response.message(), Toast.LENGTH_SHORT).show();
                         }
@@ -414,8 +463,6 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
                     }
                 });
             }
-
-
         });
     }
 
@@ -425,8 +472,6 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
         dialog.setMessage("Saving Details..");
         dialog.setCancelable(false);
         dialog.show();
-
-
         new ThreadExecuter().execute(new Runnable() {
             @Override
             public void run() {

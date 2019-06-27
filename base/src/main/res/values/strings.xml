@@ -41,7 +41,7 @@
 
     <string name="hint_contact_add_email">Email Id</string>
     <string name="hint_contact_add_mobile">Mobile Number</string>
-
+    <string name="rupess">\u20A8</string>
     <string name="uploadImages">Set your image</string>
 
     <string-array name="leave_type">
@@ -246,6 +246,7 @@
 </string>
 
     <string name="rfab_rfal__float_convert_color_alpha">0.7</string>
+    <string name="share_using">Krony App</string>
 
 
 </resources>

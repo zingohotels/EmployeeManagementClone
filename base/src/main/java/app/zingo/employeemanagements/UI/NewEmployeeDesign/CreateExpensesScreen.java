@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,10 +31,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -126,10 +129,20 @@ public class CreateExpensesScreen extends AppCompatActivity {
 
     private void galleryIntent()
     {
-        Intent intent = new Intent();
+      /*  Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);//
-        startActivityForResult(Intent.createChooser(intent, "Select File"),SELECT_FILE);
+        startActivityForResult(Intent.createChooser(intent, "Select File"),SELECT_FILE);*/
+
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        try {
+            intent.putExtra("return-data", true);
+            startActivityForResult(Intent.createChooser(intent,"Select File"), SELECT_FILE);
+        } catch (ActivityNotFoundException e) {
+            // Do nothing for now
+        }
     }
 
     @Override
@@ -145,8 +158,13 @@ public class CreateExpensesScreen extends AppCompatActivity {
     private void onSelectFromGalleryResult(Intent data) {
 
         try{
-            Uri selectedImageUri = data.getData( );
-            String picturePath = getPath( CreateExpensesScreen.this, selectedImageUri );
+            final Uri selectedImageUri = data.getData( );
+            InputStream imageStream = getContentResolver().openInputStream(selectedImageUri);
+            final Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
+           // mProfileImage.setImageBitmap(bitmap);
+
+            Uri temUri = getImageUri( getApplicationContext(), bitmap );
+            String picturePath = getPath( CreateExpensesScreen.this, temUri );
             Log.d("Picture Path", picturePath);
             String[] all_path = {picturePath};
             selectedImage = all_path[0];
@@ -168,6 +186,12 @@ public class CreateExpensesScreen extends AppCompatActivity {
 
     }
 
+    private Uri getImageUri(Context applicationContext, Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
+        String path = MediaStore.Images.Media.insertImage(applicationContext.getContentResolver(),bitmap,"Title",null);
+        return Uri.parse(path);
+    }
     private String getPath(CreateExpensesScreen createExpensesScreen, Uri selectedImageUri) {
         String result = null;
         String[] proj = { MediaStore.Images.Media.DATA };
@@ -189,19 +213,43 @@ public class CreateExpensesScreen extends AppCompatActivity {
     {
         try{
 
-
             if(uri != null)
             {
 
             }
             else if(bitmap != null)
             {
+               mExpenseImages.removeAllViews();
 
                 final LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 try{
                     View v = vi.inflate(R.layout.gallery_layout, null);
                     ImageView blogs = v.findViewById(R.id.blog_images);
 
+                    blogs.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CreateExpensesScreen.this);
+                            alertDialogBuilder.setTitle("Create Expense");
+                            alertDialogBuilder
+                                    .setMessage("What do you want to do?")
+                                    .setCancelable(false)
+                                    .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            dialog.cancel();
+                                            mExpenseImages.removeAllViews();
+                                            selectedImage = "";
+                                        }
+                                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+                            AlertDialog alertDialog = alertDialogBuilder.create();
+                            alertDialog.show();
+
+                        }
+                    });
 
 
                     if(uri != null)
