@@ -43,6 +43,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import app.zingo.employeemanagements.Model.Expenses;
+import app.zingo.employeemanagements.UI.Employee.ApplyLeaveScreen;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
@@ -71,6 +72,8 @@ public class CreateExpensesScreen extends AppCompatActivity {
 
     private int REQUEST_CAMERA = 0, SELECT_FILE = 1;
 
+    int employeeId = 0,managerId = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +88,15 @@ public class CreateExpensesScreen extends AppCompatActivity {
             mApply = findViewById(R.id.apply_expense);
             mExpenseImages = findViewById(R.id.expense_image);
             mUploadImages = findViewById(R.id.image_layout);
+
+            Bundle bundle = getIntent().getExtras();
+
+            if(bundle!=null){
+
+                employeeId = bundle.getInt("EmployeeId");
+                managerId = bundle.getInt("ManagerId");
+            }
+
 
             mTo.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -602,8 +614,27 @@ public class CreateExpensesScreen extends AppCompatActivity {
                 expenses.setAmount(Double.parseDouble(from));
                 expenses.setDate(new SimpleDateFormat("MM/dd/yyyy").format(new SimpleDateFormat("MMM dd,yyyy").parse(to)));
                 expenses.setDescription(leaveComment);
-                expenses.setEmployeeId(PreferenceHandler.getInstance(CreateExpensesScreen.this).getUserId());
-                expenses.setManagerId(PreferenceHandler.getInstance(CreateExpensesScreen.this).getManagerId());
+
+                if(employeeId!=0){
+
+                    expenses.setEmployeeId(employeeId);
+
+                }else{
+
+                    expenses.setEmployeeId(PreferenceHandler.getInstance(CreateExpensesScreen.this).getUserId());
+                }
+
+
+                if(managerId!=0){
+
+                    expenses.setManagerId(managerId);
+
+                }else{
+                    expenses.setManagerId(PreferenceHandler.getInstance(CreateExpensesScreen.this).getManagerId());
+                }
+
+
+
                 expenses.setOrganizationId(PreferenceHandler.getInstance(CreateExpensesScreen.this).getCompanyId());
                 expenses.setStatus("Pending");
                 try {

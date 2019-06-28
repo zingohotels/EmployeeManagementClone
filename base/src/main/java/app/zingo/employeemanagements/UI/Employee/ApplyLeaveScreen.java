@@ -35,6 +35,7 @@ public class ApplyLeaveScreen extends AppCompatActivity {
     TextInputEditText mLeaveType,mFrom,mTo;
     EditText mLeaveComment;
     AppCompatButton mApply;
+    int employeeId = 0,managerId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +51,14 @@ public class ApplyLeaveScreen extends AppCompatActivity {
             mTo = findViewById(R.id.to_date);
             mLeaveComment = findViewById(R.id.leave_comment);
             mApply = findViewById(R.id.apply_leave);
+
+            Bundle bundle = getIntent().getExtras();
+
+            if(bundle!=null){
+
+                employeeId = bundle.getInt("EmployeeId");
+                managerId = bundle.getInt("ManagerId");
+            }
 
 
             mFrom.setOnClickListener(new View.OnClickListener() {
@@ -180,7 +189,15 @@ public class ApplyLeaveScreen extends AppCompatActivity {
                 int diffs = (int)dateCal(from,to);
                 leaves.setNoOfDays(diffs);
                 leaves.setApprovedDate(dfs.format(fromDate));
-                leaves.setEmployeeId(PreferenceHandler.getInstance(ApplyLeaveScreen.this).getUserId());
+                if(employeeId!=0){
+
+                    leaves.setEmployeeId(employeeId);
+
+                }else{
+
+                    leaves.setEmployeeId(PreferenceHandler.getInstance(ApplyLeaveScreen.this).getUserId());
+                }
+
                 try {
                     addLeave(leaves);
                 } catch (Exception e) {
@@ -267,7 +284,12 @@ public class ApplyLeaveScreen extends AppCompatActivity {
                             lm.setMessage(PreferenceHandler.getInstance(ApplyLeaveScreen.this).getUserFullName()+" is applying leave from "+mFrom.getText().toString()+" to "+mTo.getText().toString());
                             lm.setReason(s.getLeaveComment());
                             //lm.setEmployeeId(s.getEmployeeId());
-                            lm.setEmployeeId(PreferenceHandler.getInstance(ApplyLeaveScreen.this).getManagerId());
+
+                            if(managerId!=0){
+                                lm.setEmployeeId(managerId);
+                            }else{
+                                lm.setEmployeeId(PreferenceHandler.getInstance(ApplyLeaveScreen.this).getManagerId());
+                            }
                             lm.setManagerId(s.getEmployeeId());
                             lm.setEmployeeName(PreferenceHandler.getInstance(ApplyLeaveScreen.this).getUserFullName());
                             lm.setFromDate(leaves.getFromDate());

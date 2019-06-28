@@ -134,6 +134,8 @@ public class BreakPurpose extends AppCompatActivity {
 
                         LoginDetailsNotificationManagers s = response.body();
 
+                        PreferenceHandler.getInstance(BreakPurpose.this).setFar(true);
+
                         /*if(s!=null){
 
                             Intent lintent = new Intent(BreakPurpose.this, DistanceCheck.class);

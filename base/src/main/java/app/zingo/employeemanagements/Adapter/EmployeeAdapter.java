@@ -440,21 +440,32 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
 
                             if (list !=null && list.size()!=0) {
 
-                                if(list.get(0).getTotalMeeting()!=null&&!list.get(0).getTotalMeeting().isEmpty()){
+                                if(list.get(list.size()-1).getLogOutTime()==null||list.get(list.size()-1).getLogOutTime().isEmpty()){
 
-                                    if(list.get(0).getTotalMeeting().equalsIgnoreCase("Absent")){
-                                        employees.setText("Absent");
-                                        employees.setBackgroundColor(Color.parseColor("#FF0000"));
-                                        employees.setVisibility(View.VISIBLE);
+                                    if(list.get(0).getTotalMeeting()!=null&&!list.get(0).getTotalMeeting().isEmpty()){
+
+                                        if(list.get(0).getTotalMeeting().equalsIgnoreCase("Absent")){
+                                            employees.setText("Absent");
+                                            employees.setBackgroundColor(Color.parseColor("#FF0000"));
+                                            employees.setVisibility(View.VISIBLE);
+                                        }else{
+                                            employees.setText("Present");
+                                            employees.setVisibility(View.VISIBLE);
+                                        }
                                     }else{
                                         employees.setText("Present");
                                         employees.setVisibility(View.VISIBLE);
                                     }
+                                    hidden.setText(list.get(0).getLoginDetailsId()+"");
+
                                 }else{
-                                    employees.setText("Present");
+                                    employees.setText("Absent");
+                                    employees.setBackgroundColor(Color.parseColor("#FF0000"));
                                     employees.setVisibility(View.VISIBLE);
+                                    hidden.setText(0+"");
                                 }
-                                hidden.setText(list.get(0).getLoginDetailsId()+"");
+
+
 
                             }else{
 

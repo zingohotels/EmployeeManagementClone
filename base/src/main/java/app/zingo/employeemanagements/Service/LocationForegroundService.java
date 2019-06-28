@@ -243,8 +243,15 @@ public class LocationForegroundService extends Service {
 
                     if(latitude!=0&&longitude!=0){
 
-                        if(!check){
+                        if(PreferenceHandler.getInstance(LocationForegroundService.this).isFar()){
+
+                            NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                            notificationManager.cancel(12);
+
+                        }else{
+
                             distance(latitude,longitude);
+
                         }
                         LiveTracking liveTracking = new LiveTracking();
                         liveTracking.setEmployeeId(PreferenceHandler.getInstance(LocationForegroundService.this).getUserId());
@@ -425,7 +432,7 @@ public class LocationForegroundService extends Service {
             intents.putExtra("Lati",""+lati);
 
             //  Uri sound = Uri.parse("android.resource://" + this.getPackageName() + "/raw/good_morning");
-            int m = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
+            int m =12;
 
             intents.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP );
 

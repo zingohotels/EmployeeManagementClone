@@ -109,6 +109,7 @@ import app.zingo.employeemanagements.Model.MeetingDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.Meetings;
 import app.zingo.employeemanagements.Model.Organization;
 import app.zingo.employeemanagements.Service.CheckDataAndLocation;
+import app.zingo.employeemanagements.Service.LocationAndDataServiceWithTimer;
 import app.zingo.employeemanagements.UI.Admin.CreateTaskScreen;
 import app.zingo.employeemanagements.UI.Common.CustomerCreation;
 import app.zingo.employeemanagements.UI.Common.PlanExpireScreen;
@@ -287,7 +288,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
             medit = mPref.edit();
 
             // getCurrentVersion();
-            Intent serviceIntent = new Intent(EmployeeNewMainScreen.this, CheckDataAndLocation.class);
+            Intent serviceIntent = new Intent(EmployeeNewMainScreen.this, LocationAndDataServiceWithTimer.class);
             startService(serviceIntent);
 
             mWhatsapp.setOnClickListener(new View.OnClickListener() {
@@ -403,7 +404,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
             try{
 
                 if (Build.VERSION.SDK_INT >Build.VERSION_CODES.LOLLIPOP) {
-                    presentShowcaseView(); // one second delay
+                 //   presentShowcaseView(); // one second delay
                 }
 
 
@@ -753,13 +754,18 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
             public void onClick(View view) {
                 try{
                     mCardLinear.setVisibility(View.VISIBLE);
+                    mCardView.setVisibility(View.VISIBLE);
                     String imageUrl  = PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getLogo();
-               /*   String message = "My Contact Details \n Name : "+mCardName.getText().toString()+",\n Designation: "+mCardDesign.getText().toString()+"\n Email: "+mCardEmail.getText().toString()+",\n Mobile: "+mCardMobile.getText().toString()+",\n Address: "+mCardAddress.getText().toString();
-                    Intent sendIntent = new Intent(Intent.ACTION_SEND);
-                    sendIntent.setType("text/plain");
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, message);
-                    startActivity(sendIntent);*/
-                    openScreenshot(saveBitMap(EmployeeNewMainScreen.this,mCardView));
+
+                    mCardView.post(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            openScreenshot(saveBitMap(EmployeeNewMainScreen.this,mCardView));
+                        }
+                    });
+
+
 
                 }catch (Exception e){
                     e.printStackTrace();
@@ -1693,6 +1699,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
             uri = Uri.fromFile(imageFile);
         }
 
+        mCardLinear.setVisibility(View.GONE);
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.putExtra(Intent.EXTRA_TEXT, message);
@@ -1737,6 +1744,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
     //create bitmap from view and returns it
     private Bitmap getBitmapFromView(View view) {
         //Define a bitmap with the same size as the view
+        System.out.println("Height "+view.getHeight()+" Width "+view.getWidth());
         Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(),Bitmap.Config.ARGB_8888);
         //Bind a canvas to it
         Canvas canvas = new Canvas(returnedBitmap);

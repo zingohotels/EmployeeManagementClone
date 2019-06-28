@@ -268,14 +268,14 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
         ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMapAsync(this);
 
 
-        dinnerLay.setOnClickListener(new View.OnClickListener() {
+        /*dinnerLay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Toast.makeText(getActivity(), "Coming soon..", Toast.LENGTH_SHORT).show();
 
             }
-        });
+        });*/
 
 
 
@@ -541,61 +541,109 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
                     if (currentLocation != null&&value!=null&&value.equalsIgnoreCase("true") ) {
 
-                        latitude = currentLocation.getLatitude();
-                        longitude = currentLocation.getLongitude();
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setTitle("Do you want  to do?");
 
 
-                        SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+                        builder.setPositiveButton("End Break", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                        dialogInterface.dismiss();
+
+                                        latitude = currentLocation.getLatitude();
+                                        longitude = currentLocation.getLongitude();
 
 
-                        LoginDetailsNotificationManagers md = new LoginDetailsNotificationManagers();
-                        md.setTitle("Break taken from "+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
-                        md.setMessage("Break ended at "+""+sdt.format(new Date()));
-                        LatLng master = new LatLng(latitude,longitude);
-                        String address = getAddress(master);
-                        md.setLocation(address);
-                        md.setLongitude(""+longitude);
-                        md.setLatitude(""+latitude);
-                        md.setLoginDate(""+sdt.format(new Date()));
-                        md.setStatus("Tea Break");
-                        md.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
-                        md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
-                        try {
-                            PreferenceHandler.getInstance(getActivity()).setTeaBreakStatus("false");
-                            teaText.setText(new SimpleDateFormat("hh:mm a").format(new Date()));
-                            saveLoginNotification(md);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                                        SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+
+
+                                        LoginDetailsNotificationManagers md = new LoginDetailsNotificationManagers();
+                                        md.setTitle("Break taken from "+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
+                                        md.setMessage("Break ended at "+""+sdt.format(new Date()));
+                                        LatLng master = new LatLng(latitude,longitude);
+                                        String address = getAddress(master);
+                                        md.setLocation(address);
+                                        md.setLongitude(""+longitude);
+                                        md.setLatitude(""+latitude);
+                                        md.setLoginDate(""+sdt.format(new Date()));
+                                        md.setStatus("Tea Break");
+                                        md.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
+                                        md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
+                                        try {
+                                            PreferenceHandler.getInstance(getActivity()).setTeaBreakStatus("false");
+                                            teaText.setText(new SimpleDateFormat("hh:mm a").format(new Date()));
+                                            saveLoginNotification(md);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+                                });
+
+                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        });
+
+                        final AlertDialog dialog = builder.create();
+                        dialog.show();
+
+
 
                     }else if (currentLocation != null ) {
 
                         latitude = currentLocation.getLatitude();
                         longitude = currentLocation.getLongitude();
 
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setTitle("Do you want  to do?");
 
-                        SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+
+                        builder.setPositiveButton("Start Break", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
 
 
-                        LoginDetailsNotificationManagers md = new LoginDetailsNotificationManagers();
-                        md.setTitle("Break taken from "+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
-                        md.setMessage("Break taken at "+""+sdt.format(new Date()));
-                        LatLng master = new LatLng(latitude,longitude);
-                        String address = getAddress(master);
-                        md.setLocation(address);
-                        md.setLongitude(""+longitude);
-                        md.setLatitude(""+latitude);
-                        md.setLoginDate(""+sdt.format(new Date()));
-                        md.setStatus("Tea Break");
-                        md.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
-                        md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
-                        try {
-                            PreferenceHandler.getInstance(getActivity()).setTeaBreakStatus("true");
-                            teaText.setText(new SimpleDateFormat("hh:mm a").format(new Date()));
-                            saveLoginNotification(md);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                                LoginDetailsNotificationManagers md = new LoginDetailsNotificationManagers();
+                                md.setTitle("Break taken from "+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
+                                md.setMessage("Break taken at "+""+sdt.format(new Date()));
+                                LatLng master = new LatLng(latitude,longitude);
+                                String address = getAddress(master);
+                                md.setLocation(address);
+                                md.setLongitude(""+longitude);
+                                md.setLatitude(""+latitude);
+                                md.setLoginDate(""+sdt.format(new Date()));
+                                md.setStatus("Tea Break");
+                                md.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
+                                md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
+                                try {
+                                    PreferenceHandler.getInstance(getActivity()).setTeaBreakStatus("true");
+                                    teaText.setText(new SimpleDateFormat("hh:mm a").format(new Date()));
+                                    saveLoginNotification(md);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        });
+
+                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        });
+
+                        final AlertDialog dialog = builder.create();
+                        dialog.show();
+
+
+
 
                     }
 
@@ -623,29 +671,53 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                         latitude = currentLocation.getLatitude();
                         longitude = currentLocation.getLongitude();
 
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setTitle("Do you want  to do?");
 
-                        SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+
+                        builder.setPositiveButton("End Lunch", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                        dialogInterface.dismiss();
+
+                                        SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
 
 
-                        LoginDetailsNotificationManagers md = new LoginDetailsNotificationManagers();
-                        md.setTitle("Break taken from "+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
-                        md.setMessage("Break ended at "+""+sdt.format(new Date()));
-                        LatLng master = new LatLng(latitude,longitude);
-                        String address = getAddress(master);
-                        md.setLocation(address);
-                        md.setLongitude(""+longitude);
-                        md.setLatitude(""+latitude);
-                        md.setLoginDate(""+sdt.format(new Date()));
-                        md.setStatus("Lunch Break");
-                        md.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
-                        md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
-                        try {
-                            PreferenceHandler.getInstance(getActivity()).setLunchBreakStatus("false");
-                            dinnerText.setText(new SimpleDateFormat("hh:mm a").format(new Date()));
-                            saveLoginNotification(md);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                                        LoginDetailsNotificationManagers md = new LoginDetailsNotificationManagers();
+                                        md.setTitle("Break taken from "+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
+                                        md.setMessage("Break ended at "+""+sdt.format(new Date()));
+                                        LatLng master = new LatLng(latitude,longitude);
+                                        String address = getAddress(master);
+                                        md.setLocation(address);
+                                        md.setLongitude(""+longitude);
+                                        md.setLatitude(""+latitude);
+                                        md.setLoginDate(""+sdt.format(new Date()));
+                                        md.setStatus("Lunch Break");
+                                        md.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
+                                        md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
+                                        try {
+                                            PreferenceHandler.getInstance(getActivity()).setLunchBreakStatus("false");
+                                            dinnerText.setText(new SimpleDateFormat("hh:mm a").format(new Date()));
+                                            saveLoginNotification(md);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+                                });
+                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        });
+
+                        final AlertDialog dialog = builder.create();
+                        dialog.show();
+
+
+
 
                     }else if (currentLocation != null ) {
 
@@ -653,30 +725,53 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                         longitude = currentLocation.getLongitude();
 
 
-                        SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setTitle("Do you want  to do?");
 
 
-                        LoginDetailsNotificationManagers md = new LoginDetailsNotificationManagers();
-                        md.setTitle("Break taken from "+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
-                        md.setMessage("Break taken at "+""+sdt.format(new Date()));
-                        LatLng master = new LatLng(latitude,longitude);
-                        String address = getAddress(master);
-                        md.setLocation(address);
-                        md.setLongitude(""+longitude);
-                        md.setLatitude(""+latitude);
-                        md.setLoginDate(""+sdt.format(new Date()));
-                        md.setStatus("Lunch Break");
-                        md.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
-                        md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
-                        try {
+                        builder.setPositiveButton("Start Lunch", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
 
-                            PreferenceHandler.getInstance(getActivity()).setLunchBreakStatus("true");
+                                SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
 
-                            dinnerText.setText(new SimpleDateFormat("hh:mm a").format(new Date()));
-                            saveLoginNotification(md);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+
+                                LoginDetailsNotificationManagers md = new LoginDetailsNotificationManagers();
+                                md.setTitle("Break taken from "+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
+                                md.setMessage("Break taken at "+""+sdt.format(new Date()));
+                                LatLng master = new LatLng(latitude,longitude);
+                                String address = getAddress(master);
+                                md.setLocation(address);
+                                md.setLongitude(""+longitude);
+                                md.setLatitude(""+latitude);
+                                md.setLoginDate(""+sdt.format(new Date()));
+                                md.setStatus("Lunch Break");
+                                md.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
+                                md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
+                                try {
+
+                                    PreferenceHandler.getInstance(getActivity()).setLunchBreakStatus("true");
+
+                                    dinnerText.setText(new SimpleDateFormat("hh:mm a").format(new Date()));
+                                    saveLoginNotification(md);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        });
+                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        });
+
+                        final AlertDialog dialog = builder.create();
+                        dialog.show();
+
+
+
 
                     }
 
@@ -1197,6 +1292,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                         Toast.makeText(getActivity(), "You logged out", Toast.LENGTH_SHORT).show();
 
                         PreferenceHandler.getInstance(getActivity()).setLoginId(0);
+                        PreferenceHandler.getInstance(getActivity()).setFar(false);
 
 
                         punchInText.setText("Check in");

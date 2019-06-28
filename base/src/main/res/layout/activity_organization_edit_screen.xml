@@ -14,7 +14,6 @@
         android:background="#FFFFFFFF"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@id/appBar"
         android:layout_alignParentBottom="true">
 
         <LinearLayout
@@ -23,6 +22,32 @@
             android:focusableInTouchMode="true"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+
+                android:id="@+id/org_logo"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/org_logo_holder"
+                app:civ_border_color="@color/colorAppBackground"
+                app:civ_border_width="0dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:text="Please click image to upload Company Logo."
+                android:textSize="12sp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="1dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_height="wrap_content"
+                />
 
 
             <android.support.design.widget.TextInputLayout

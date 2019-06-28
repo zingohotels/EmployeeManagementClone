@@ -512,7 +512,7 @@ public class EmployeeLiveMappingScreen extends AppCompatActivity {
 
                                                 distance = locationA.distanceTo(locationB);
 
-                                                if(distance>=50){
+                                                if(distance>=100){
 
                                                     addValue = false;
                                                     time = list.get(indexValue).getTrackingTime();

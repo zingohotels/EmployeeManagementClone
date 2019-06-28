@@ -305,15 +305,14 @@ public class CheckDataAndLocation extends Service {
             Intent restartService = new Intent(getApplicationContext(),
                     this.getClass());
             restartService.setPackage(getPackageName());
-            PendingIntent restartServicePI = PendingIntent.getService(
-                    getApplicationContext(), 1, restartService,
+            PendingIntent restartServicePI = PendingIntent.getService(getApplicationContext(), 1, restartService,
                     PendingIntent.FLAG_ONE_SHOT);
 
             //Restart the service once it has been killed android
 
 
             AlarmManager alarmService = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-            alarmService.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 6000, restartServicePI);
+            alarmService.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 60000, restartServicePI);
 
         }catch (Exception e){
             e.printStackTrace();

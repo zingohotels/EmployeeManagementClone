@@ -75,6 +75,7 @@ public class LeaveDashBoardAdminScreen extends AppCompatActivity {
 
     int monthValue = 0;
     int yearValue = 0;
+    boolean employeeScreen = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,15 +84,22 @@ public class LeaveDashBoardAdminScreen extends AppCompatActivity {
         try{
 
             setContentView(R.layout.activity_leave_dash_board_admin_screen);
-            getSupportActionBar().setHomeButtonEnabled(true);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            setTitle("Leave Dashboard");
+
 
             Bundle bundle = getIntent().getExtras();
 
             if(bundle!=null){
 
                 employee = (Employee)bundle.getSerializable("Employee");
+                employeeScreen = bundle.getBoolean("EmployeeScreen");
+            }
+
+            if(employeeScreen){
+
+            }else{
+                getSupportActionBar().setHomeButtonEnabled(true);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                setTitle("Leave Dashboard");
             }
 
             totalLeaves = new ArrayList<>();

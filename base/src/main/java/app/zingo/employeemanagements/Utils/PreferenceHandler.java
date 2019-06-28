@@ -68,6 +68,16 @@ public class PreferenceHandler {
         sh.edit().putBoolean(Constants.DATA_ON,id).apply();
     }
 
+    public boolean isFar()
+    {
+        return sh.getBoolean(Constants.FAR,false);
+    }
+
+    public void setFar(boolean id)
+    {
+        sh.edit().putBoolean(Constants.FAR,id).apply();
+    }
+
     public boolean isLocationOn()
     {
         return sh.getBoolean(Constants.LOCATION_ON,false);

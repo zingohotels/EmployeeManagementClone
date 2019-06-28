@@ -77,6 +77,7 @@ public class LeaveManagementHost extends TabActivity implements TabHost.OnTabCha
             tabMaps.setIndicator(tabRequest);
             Intent maps = new Intent(this, LeaveDashBoardAdminScreen.class);
             Bundle bundles = new Bundle();
+            bundles.putBoolean("EmployeeScreen",true);
             bundles.putInt("EmployeeId",employeeId);
             bundles.putSerializable("Employee",employee);
             maps.putExtras(bundles);

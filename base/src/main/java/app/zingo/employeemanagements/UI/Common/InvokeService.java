@@ -376,10 +376,10 @@ public class InvokeService extends AppCompatActivity {
                             //emailData.setEmailAddress("nishar@zingohotels.com");
                             emailData.setBody(body);
                             emailData.setSubject("Team Report for "+new SimpleDateFormat("dd MMM,yyyy").format(calendar.getTime()));
-                            emailData.setUserName("zingyapp.com@gmail.com");
-                            emailData.setPassword("zingy@123");
+                            emailData.setUserName("kronyapp@gmail.com");
+                            emailData.setPassword("krony@admin@123");
                             emailData.setFromName("Krony App");
-                            emailData.setFromEmail("zingyapp.com@gmail.com");
+                            emailData.setFromEmail("kronyapp@gmail.com");
 
 
 
