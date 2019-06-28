@@ -64,7 +64,7 @@ import retrofit2.Response;
 
 import static android.text.TextUtils.isEmpty;
 
-public class EmployeeTaskMapScreen extends AppCompatActivity {
+public class EmployeeOrderMapScreen extends AppCompatActivity {
 
     //maps related
     private GoogleMap mMap;
@@ -87,7 +87,7 @@ public class EmployeeTaskMapScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         try{
-            setContentView(R.layout.activity_employee_task_map_screen);
+            setContentView(R.layout.activity_employee_order_map_screen);
 
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -112,7 +112,7 @@ public class EmployeeTaskMapScreen extends AppCompatActivity {
             }
 
             try {
-                MapsInitializer.initialize(EmployeeTaskMapScreen.this);
+                MapsInitializer.initialize(EmployeeOrderMapScreen.this);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -123,7 +123,7 @@ public class EmployeeTaskMapScreen extends AppCompatActivity {
                     mMap = googleMap;
 
 
-                    if (ActivityCompat.checkSelfPermission(EmployeeTaskMapScreen.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(EmployeeTaskMapScreen.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(EmployeeOrderMapScreen.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(EmployeeOrderMapScreen.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
                         return;
                     }
@@ -312,7 +312,7 @@ public class EmployeeTaskMapScreen extends AppCompatActivity {
 
                                             }else{
                                                 lastKnownLatLng = new LatLng(Double.parseDouble(todayTasks.get(i).getLatitude()), Double.parseDouble(todayTasks.get(i).getLongitude()));
-                                            //    updateTrack();
+                                                //    updateTrack();
                                                 String snippetL = getAddress(Double.parseDouble(todayTasks.get(i).getLongitude()),Double.parseDouble(todayTasks.get(i).getLatitude()));
 
                                                 createMarker(Double.parseDouble(todayTasks.get(i).getLatitude()), Double.parseDouble(todayTasks.get(i).getLongitude()),"Location "+(i+1),""+snippetL);
@@ -431,7 +431,7 @@ public class EmployeeTaskMapScreen extends AppCompatActivity {
 
                                 }else{
 
-                                    Toast.makeText(EmployeeTaskMapScreen.this, "No tasks based on location", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(EmployeeOrderMapScreen.this, "No tasks based on location", Toast.LENGTH_SHORT).show();
 
                                 }
 
@@ -502,7 +502,7 @@ public class EmployeeTaskMapScreen extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
-            EmployeeTaskMapScreen.ParserTask parserTask = new EmployeeTaskMapScreen.ParserTask();
+            EmployeeOrderMapScreen.ParserTask parserTask = new EmployeeOrderMapScreen.ParserTask();
 
             // Invokes the thread for parsing the JSON data
             parserTask.execute(result);
@@ -674,7 +674,7 @@ public class EmployeeTaskMapScreen extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
-            EmployeeTaskMapScreen.this.finish();
+            EmployeeOrderMapScreen.this.finish();
 
 
 
@@ -739,7 +739,7 @@ public class EmployeeTaskMapScreen extends AppCompatActivity {
         datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
 
         if(datePickerDialog!=null)
-        datePickerDialog.show();
+            datePickerDialog.show();
 
     }
 
@@ -754,7 +754,7 @@ public class EmployeeTaskMapScreen extends AppCompatActivity {
         list.removeAllViews();
 
         if(liveTrackingArrayList!=null&&liveTrackingArrayList.size()!=0){
-           /* LocationLiveAdapter adapter = new LocationLiveAdapter(EmployeeTaskMapScreen.this,liveTrackingArrayList);
+           /* LocationLiveAdapter adapter = new LocationLiveAdapter(EmployeeOrderMapScreen.this,liveTrackingArrayList);
             list.setAdapter(adapter);*/
         }
 
@@ -775,7 +775,7 @@ public class EmployeeTaskMapScreen extends AppCompatActivity {
         }
         else
         {
-            Toast.makeText(EmployeeTaskMapScreen.this,"Atleast one email extension needed",Toast.LENGTH_SHORT).show();
+            Toast.makeText(EmployeeOrderMapScreen.this,"Atleast one email extension needed",Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -788,7 +788,7 @@ public class EmployeeTaskMapScreen extends AppCompatActivity {
         {
             Geocoder geocoder;
             List<Address> addresses;
-            geocoder = new Geocoder(EmployeeTaskMapScreen.this, Locale.ENGLISH);
+            geocoder = new Geocoder(EmployeeOrderMapScreen.this, Locale.ENGLISH);
 
 
             addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5

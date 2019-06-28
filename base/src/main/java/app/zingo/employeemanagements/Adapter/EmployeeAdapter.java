@@ -37,6 +37,7 @@ import app.zingo.employeemanagements.Model.LoginDetails;
 import app.zingo.employeemanagements.Model.LoginDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.Tasks;
 import app.zingo.employeemanagements.UI.Employee.ApplyLeaveScreen;
+import app.zingo.employeemanagements.UI.NewAdminDesigns.DailyOrdersForEmployeeActivity;
 import app.zingo.employeemanagements.UI.NewEmployeeDesign.CreateExpensesScreen;
 import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.Service.LocationSharingServices;
@@ -292,6 +293,23 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
                     intent.putExtras(bundle);
                     context.startActivity(intent);
 
+                }else  if(type!=null&&type.equalsIgnoreCase("Orders")){
+
+                   /* Intent intent = new Intent(context, TaskManagementHost.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("EmployeeId",list.get(position).getEmployeeId());
+                    bundle.putInt("DepartmentId",list.get(position).getDepartmentId());
+                    bundle.putSerializable("Employee",list.get(position));
+                    intent.putExtras(bundle);
+                    context.startActivity(intent);*/
+
+                    Intent intent = new Intent(context, DailyOrdersForEmployeeActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("Profile",list.get(position));
+                    bundle.putInt("ProfileId",list.get(position).getEmployeeId());
+                    intent.putExtras(bundle);
+                    context.startActivity(intent);
+
                 }else  if(type!=null&&type.equalsIgnoreCase("Leave")){
 
                     builder = new AlertDialog.Builder(context);
@@ -324,7 +342,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
                                 public void onClick(DialogInterface dialog, int id)
                                 {
                                     dialog.cancel();
-                                    Intent intent = new Intent(context, EmployeeLiveMappingScreen.class);
+                                    Intent intent = new Intent(context, LeaveDashBoardAdminScreen.class);
                                     Bundle bundle = new Bundle();
                                     bundle.putInt("EmployeeId",list.get(position).getEmployeeId());
                                     bundle.putSerializable("Employee",list.get(position));

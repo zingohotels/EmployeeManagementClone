@@ -66,7 +66,7 @@ public class AdminHomeFragment extends Fragment {
     LinearLayout attendance,leaveApplications,employees;
     TextView qr_OrgId;
     LinearLayout departments,liveTracking,tasks,expenses,team,client;
-    LinearLayout salary,logout,deptOrg,chngPwd,plans,reports,holiday,settings,faq,calender;
+    LinearLayout salary,logout,deptOrg,chngPwd,plans,reports,holiday,settings,faq,calender,orders;
 
     Employee employee;
 
@@ -165,6 +165,7 @@ public class AdminHomeFragment extends Fragment {
         chngPwd = this.layout.findViewById(R.id.change_password);
         reports = this.layout.findViewById(R.id.report_mgmt);
         calender = this.layout.findViewById(R.id.admin_calender);
+        orders = this.layout.findViewById(R.id.orders);
 
         if(PreferenceHandler.getInstance(getActivity()).getResellerUserId()!=0){
             plans.setVisibility(View.GONE);
@@ -257,6 +258,14 @@ public class AdminHomeFragment extends Fragment {
                 openMenuViews(tasks);
             }
         });
+
+        orders.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMenuViews(orders);
+            }
+        });
+
         deptOrg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -345,9 +354,6 @@ public class AdminHomeFragment extends Fragment {
         sequence.addSequenceItem(attendance, "Click here to view attendance report of your employees", "GOT IT");
 
 
-
-
-
         ShowcaseTooltip toolTip2 = ShowcaseTooltip.build(getActivity())
                 .corner(30)
                 .textColor(Color.parseColor("#007686"))
@@ -377,6 +383,22 @@ public class AdminHomeFragment extends Fragment {
                         .withRectangleShape(true)
                         .build()
         );
+
+        ShowcaseTooltip toolTip16 = ShowcaseTooltip.build(getActivity())
+                .corner(30)
+                .textColor(Color.parseColor("#007686"))
+                .text("Click here to view all orders of your employees based on date and status.<br><br>Tap anywhere to continue");
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(getActivity())
+                        .setTarget(orders)
+                        .setToolTip(toolTip16)
+                        .setSkipText("SKIP")
+                        .setDismissText("GOT IT")
+                        .withRectangleShape(true)
+                        .build()
+        );
+
 
         ShowcaseTooltip toolTip4 = ShowcaseTooltip.build(getActivity())
                 .corner(30)
@@ -632,6 +654,12 @@ public class AdminHomeFragment extends Fragment {
                 Intent task = new Intent(getActivity(), EmployeeListScreen.class);
                 task.putExtra("Type","Task");
                 getContext().startActivity(task);
+
+            }else if (view.getId() == R.id.orders) {
+                Intent orders = new Intent(getActivity(), EmployeeListScreen.class);
+                orders.putExtra("Type","Orders");
+                getContext().startActivity(orders);
+
             }else if (view.getId() == R.id.salary) {
                 Intent salary = new Intent(getActivity(), EmployeeListScreen.class);
                 salary.putExtra("Type","Salary");

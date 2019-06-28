@@ -14,7 +14,9 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ShareCompat;
+import android.support.v4.text.HtmlCompat;
 import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -33,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import app.zingo.employeemanagements.UI.NewAdminDesigns.DailyOrdersForEmployeeActivity;
 import app.zingo.employeemanagements.base.BuildConfig;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.EmployeeImages;
@@ -75,14 +79,11 @@ import retrofit2.Response;
  */
 public class EmployeeHomeFragment extends Fragment {
 
-    final String TAG = "Employer Dashboard";
+    private final String TAG = "Employer Dashboard";
     View layout;
-    LinearLayout attendance,leaveApplications;
-    LinearLayout tasks,expenses,meeting,team;
-    LinearLayout logout,deptOrg,chngPwd,salary,client,ShareApp;//
-
-    Employee employeed;
-
+    private LinearLayout attendance,leaveApplications,tasks,expenses,meeting,team,
+            logout,deptOrg,chngPwd,salary,client,ShareApp,orders;
+    private Employee employeed;
 
     public EmployeeHomeFragment() {
         // Required empty public constructor
@@ -158,8 +159,7 @@ public class EmployeeHomeFragment extends Fragment {
         deptOrg = this.layout.findViewById(R.id.department);
         logout = this.layout.findViewById(R.id.logout);
         ShareApp = this.layout.findViewById(R.id.share_app);
-
-
+        orders = this.layout.findViewById(R.id.orders);
 
 
         ShareApp.setOnClickListener(new View.OnClickListener() {
@@ -183,16 +183,17 @@ public class EmployeeHomeFragment extends Fragment {
                         "</br><p>If you have any questions then contact the Admin/HR of the company.</p>"+
                         "</br><p><b>Cheers,</b><br><br>"+PreferenceHandler.getInstance(getActivity()).getUserFullName()+"</p></body></html>";
 
+                String htmlString = "<h1>Hello World!</h1>";
+                Spanned spanned = HtmlCompat.fromHtml(htmlString, HtmlCompat.FROM_HTML_MODE_COMPACT);
 
                 Intent emailIntent = new Intent(Intent.ACTION_SEND);
                 emailIntent.setType("text/html");
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Employee Management App Invitation");
                 emailIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(new StringBuilder()
-                        .append(body)
+                        .append(spanned)
                         .toString()));
                 //emailIntent.putExtra(Intent.EXTRA_HTML_TEXT, body);
                 startActivity(Intent.createChooser(emailIntent, "Send email.."));
-
             }
         });
 
@@ -268,6 +269,18 @@ public class EmployeeHomeFragment extends Fragment {
             public void onClick(View view) {
                 try {
                     openMenuViews(tasks);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+         orders.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    openMenuViews(orders);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -378,8 +391,6 @@ public class EmployeeHomeFragment extends Fragment {
             bundle.putSerializable("Employee",employeed);
             leave.putExtras(bundle);
             getActivity().startActivity(leave);
-
-
         }else if (view.getId() == R.id.department) {
             Intent organization = new Intent(getActivity(), OrganizationDetailScree.class);
             getContext().startActivity(organization);
@@ -390,18 +401,23 @@ public class EmployeeHomeFragment extends Fragment {
             Intent live = new Intent(getActivity(), EmployeeListScreen.class);
             live.putExtra("Type","Live");
             getContext().startActivity(live);
-
         }else if (view.getId() == R.id.change_password) {
             Intent chnage = new Intent(getActivity(), ChangePasswordScreen.class);
             startActivity(chnage);
         }else if (view.getId() == R.id.task_layout) {
-
             Intent task = new Intent(getActivity(), DailyTargetsForEmployeeActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable("Profile",employeed);
             bundle.putInt("ProfileId",employeed.getEmployeeId());
             task.putExtras(bundle);
             startActivity(task);
+        }else if (view.getId() == R.id.orders) {
+            Intent orders = new Intent(getActivity(), DailyOrdersForEmployeeActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("Profile",employeed);
+            bundle.putInt("ProfileId",employeed.getEmployeeId());
+            orders.putExtras(bundle);
+            startActivity(orders);
 
            /* Intent task = new Intent(getActivity(), TaskManagementHost.class);
             Bundle bundle = new Bundle();
@@ -447,26 +463,16 @@ public class EmployeeHomeFragment extends Fragment {
                         int statusCode = response.code();
                         if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
 
-
                            /* if (progressDialog != null&&progressDialog.isShowing())
                                 progressDialog.dismiss();*/
                             ArrayList<Employee> list = response.body();
-
-
                             if (list !=null && list.size()!=0) {
-
                                 employeed = list.get(0);
 
-
-                                //}
-
                             }else{
-
                             }
 
                         }else {
-
-
                             Toast.makeText(getActivity(), "Failed due to : "+response.message(), Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -476,13 +482,10 @@ public class EmployeeHomeFragment extends Fragment {
                         // Log error here since request failed
                       /*  if (progressDialog != null&&progressDialog.isShowing())
                             progressDialog.dismiss();*/
-
                         Log.e("TAG", t.toString());
                     }
                 });
             }
-
-
         });
     }
 
@@ -510,19 +513,15 @@ public class EmployeeHomeFragment extends Fragment {
                         {
                             dialog.dismiss();
                         }
-
                         if (response.code() == 200)
                         {
                             System.out.println("Inside api");
-
                             Employee profile = response.body().get(0);
-
                             profile.setAppOpen(false);
                             String app_version = PreferenceHandler.getInstance(getActivity()).getAppVersion();
                             profile.setLastUpdated(""+ BuildConfig.VERSION_NAME);
                             profile.setLastseen(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
                             updateProfile(profile);
-
                         }
                     }
 
@@ -533,12 +532,9 @@ public class EmployeeHomeFragment extends Fragment {
                         {
                             dialog.dismiss();
                         }
-
                     }
                 });
-
             }
-
         });
     }
 
@@ -556,9 +552,7 @@ public class EmployeeHomeFragment extends Fragment {
                 final EmployeeApi subCategoryAPI = Util.getClient().create(EmployeeApi.class);
                 Call<Employee> getProf = subCategoryAPI.updateEmployee(employee.getEmployeeId(),employee);
                 //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
-
                 getProf.enqueue(new Callback<Employee>() {
-
                     @Override
                     public void onResponse(Call<Employee> call, Response<Employee> response) {
 
@@ -566,7 +560,6 @@ public class EmployeeHomeFragment extends Fragment {
                         {
                             dialog.dismiss();
                         }
-
                         Intent intent = new Intent(getActivity(), LocationForegroundService.class);
                         intent.setAction(LocationForegroundService.ACTION_STOP_FOREGROUND_SERVICE);
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -574,14 +567,9 @@ public class EmployeeHomeFragment extends Fragment {
                         } else {
                             getActivity().startService(intent);
                         }
-
                         if (response.code() == 200||response.code()==201||response.code()==204)
                         {
-
-
                             PreferenceHandler.getInstance(getActivity()).clear();
-
-
                             Intent log = new Intent(getActivity(), LandingScreen.class);
                             log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);

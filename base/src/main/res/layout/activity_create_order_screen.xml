@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/activity_create_task"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="10"
+    tools:ignore="NamespaceTypo">
+
+    <ScrollView
+        android:id="@+id/scrollbar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="9.5"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_margin="5dp"
+                android:id="@+id/task_InputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/task_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:hint="Order Name" />
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_margin="5dp"
+                    android:id="@+id/from_date_TextInputEditText"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/from_date"
+                        android:layout_width="match_parent"
+                        android:textSize="12sp"
+                        android:layout_height="wrap_content"
+                        android:hint="Start Date"
+                        android:focusableInTouchMode="false"
+                        android:drawableRight="@drawable/ic_date"
+                        android:inputType="date" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_margin="5dp"
+                    android:id="@+id/to_date_TextInputEditText"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/to_date"
+                        android:layout_width="match_parent"
+                        android:textSize="12sp"
+                        android:layout_height="wrap_content"
+                        android:hint="End Date"
+                        android:focusableInTouchMode="false"
+                        android:drawableRight="@drawable/ic_date"
+                        android:inputType="date" />
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_margin="5dp"
+                    android:id="@+id/from_time_TextInputEditText"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/from_time"
+                        android:layout_width="match_parent"
+                        android:textSize="12sp"
+                        android:layout_height="wrap_content"
+                        android:hint="Start Time"
+                        android:focusableInTouchMode="false"
+                        android:drawableRight="@drawable/ic_time"
+                        android:inputType="date" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_margin="5dp"
+                    android:id="@+id/to_time_TextInputEditText"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/to_time"
+                        android:layout_width="match_parent"
+                        android:textSize="12sp"
+                        android:layout_height="wrap_content"
+                        android:hint="End Time"
+                        android:focusableInTouchMode="false"
+                        android:drawableRight="@drawable/ic_time"
+                        android:inputType="date" />
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <!--<LinearLayout
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:orientation="vertical">
+
+               &lt;!&ndash; <android.support.v7.widget.AppCompatTextView
+                    android:layout_margin="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Task Description"/>
+
+                <EditText
+                    android:layout_margin="5dp"
+                    android:id="@+id/task_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="start"
+                    android:gravity="start"
+                    android:scrollbarAlwaysDrawVerticalTrack="true"
+                    android:overScrollMode="always"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="vertical"
+                    android:keepScreenOn="true"
+                    android:lines="5"
+                    android:background="@drawable/spinner_background" />
+&ndash;&gt;
+
+
+
+            </LinearLayout>-->
+            <LinearLayout
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/task_desc_TextInputEditText"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_height="150dp">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/task_desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="140dp"
+                        android:textSize="12sp"
+                        android:gravity="left"
+                        android:lines="5"
+                        android:hint="Description"
+                        android:inputType="text" />
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+            <Switch
+                android:layout_margin="5dp"
+                android:id="@+id/show_map"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="Mark on map"
+                android:layout_marginTop="20dp"
+                android:textOff="No"
+                android:textOn="Yes"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/map_layout"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/location_et"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:hint="Location"
+                    android:textSize="16sp"
+                    android:padding="5dp"
+                    android:textColor="#000"
+                    android:layout_height="wrap_content"
+                    android:background="#ffffff"/>
+
+                <LinearLayout
+                    android:id="@+id/lan_lat"
+                    android:layout_below="@+id/location_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="2"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp">
+                    <EditText
+                        android:id="@+id/lat_et"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:hint="Latitude"
+                        android:textSize="16sp"
+                        android:textColor="#000"
+                        android:paddingLeft="10dp"
+                        android:layout_marginRight="5dp"
+                        android:background="#ffffff"/>
+                    <EditText
+                        android:id="@+id/lng_et"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:hint="Longitude"
+                        android:textSize="16sp"
+                        android:textColor="#000"
+                        android:paddingLeft="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:background="#ffffff"/>
+
+                </LinearLayout>
+
+
+                <app.zingo.employeemanagements.Custom.MapViewScroll
+                    android:id="@+id/task_location_map"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:layout_below="@+id/lan_lat"
+                    android:layout_margin="10dp" />
+
+
+            </RelativeLayout>
+
+            <android.support.v7.widget.AppCompatButton
+                android:textSize="@dimen/regularFont"
+                android:textColor="@color/white"
+                android:id="@+id/create_order"
+                android:background="@drawable/selector_button_app"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_large_margin"
+                android:layout_marginTop="20.0dip"
+                android:layout_marginBottom="20.0dip"
+                android:layout_marginRight="@dimen/activity_large_margin"
+                android:text="Create Order"
+                android:textAllCaps="false" />
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

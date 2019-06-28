@@ -45,6 +45,14 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute"
         tools:replace="android:allowBackup">
+        <activity android:name="app.zingo.employeemanagements.UI.Admin.EmployeeOrderMapScreen"></activity>
+        <activity
+            android:name="app.zingo.employeemanagements.UI.Admin.CreateOrderScreen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.DailyOrdersForEmployeeActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="app.zingo.employeemanagements.UI.Employee.OrdersListScreen" />
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -289,6 +297,7 @@
         <activity android:name="app.zingo.employeemanagements.UI.NewEmployeeDesign.ExpenseManageHost" />
         <activity
             android:name="app.zingo.employeemanagements.UI.NewEmployeeDesign.CreateExpensesScreen"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name="app.zingo.employeemanagements.UI.Common.PlanExpireScreen"
@@ -419,8 +428,8 @@
         <activity android:name="app.zingo.employeemanagements.UI.Common.ReportBulkdataScreen" />
         <activity android:name="app.zingo.employeemanagements.UI.Common.ReportBulkDataDisplayScreen" />
         <activity android:name="app.zingo.employeemanagements.UI.Common.VisitingCard" />
-        <activity android:name="app.zingo.employeemanagements.UI.Common.CustomerMapViewScreen"></activity>
-        <activity android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.CalenderDashBoardActivity"/>
+        <activity android:name="app.zingo.employeemanagements.UI.Common.CustomerMapViewScreen" />
+        <activity android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.CalenderDashBoardActivity" />
     </application>
 
 </manifest>

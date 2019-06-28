@@ -29,7 +29,9 @@ import java.util.List;
 import app.zingo.employeemanagements.Adapter.TaskListAdapter;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.Tasks;
+import app.zingo.employeemanagements.UI.Admin.CreateOrderScreen;
 import app.zingo.employeemanagements.UI.Admin.CreateTaskScreen;
+import app.zingo.employeemanagements.UI.Admin.EmployeeOrderMapScreen;
 import app.zingo.employeemanagements.UI.Admin.EmployeeTaskMapScreen;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
@@ -39,7 +41,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DailyTargetsForEmployeeActivity extends AppCompatActivity {
+public class DailyOrdersForEmployeeActivity extends AppCompatActivity {
 
 
     FloatingActionButton floatingActionButton,refresh;
@@ -87,7 +89,7 @@ public class DailyTargetsForEmployeeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         try{
 
-            setContentView(R.layout.activity_daily_targets_for_employee);
+            setContentView(R.layout.activity_daily_orders_for_employee);
             setupToolbar();
             Bundle bundle = getIntent().getExtras();
             if (bundle!=null) {
@@ -96,12 +98,12 @@ public class DailyTargetsForEmployeeActivity extends AppCompatActivity {
 
 //            this.mCalendarDay = CalendarDay.from(new Date());
             this.presentDate = findViewById(R.id.presentDate);
-           // this.presentDate.setText(DateUtil.getReadableDate(this.mCalendarDay));
+            // this.presentDate.setText(DateUtil.getReadableDate(this.mCalendarDay));
             mTaskList = findViewById(R.id.targetList);
             mTaskList.setLayoutManager(new LinearLayoutManager(this));
 
-           // this.prevDay = (ImageView) findViewById(R.id.previousDay);
-           // this.nextDay = (ImageView) findViewById(R.id.nextDay);
+            // this.prevDay = (ImageView) findViewById(R.id.previousDay);
+            // this.nextDay = (ImageView) findViewById(R.id.nextDay);
             this.floatingActionButton = findViewById(R.id.addTargetOption);
             this.refresh = findViewById(R.id.refresh);
             totalTargets = findViewById(R.id.totalTargets);
@@ -134,7 +136,7 @@ public class DailyTargetsForEmployeeActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
 
-                    Intent createTask = new Intent(DailyTargetsForEmployeeActivity.this, CreateTaskScreen.class);
+                    Intent createTask = new Intent(DailyOrdersForEmployeeActivity.this, CreateOrderScreen.class);
                     createTask.putExtra("EmployeeId", mEmployeeId);
                     startActivity(createTask);
 
@@ -145,10 +147,10 @@ public class DailyTargetsForEmployeeActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
 
-                    Intent createTask = new Intent(DailyTargetsForEmployeeActivity.this, DailyTargetsForEmployeeActivity.class);
+                    Intent createTask = new Intent(DailyOrdersForEmployeeActivity.this, DailyOrdersForEmployeeActivity.class);
                     createTask.putExtra("ProfileId", mEmployeeId);
                     startActivity(createTask);
-                    DailyTargetsForEmployeeActivity.this.finish();
+                    DailyOrdersForEmployeeActivity.this.finish();
 
                 }
             });
@@ -160,13 +162,13 @@ public class DailyTargetsForEmployeeActivity extends AppCompatActivity {
                     mTaskList.removeAllViews();
 
                     if(daypendingTasks!=null&&daypendingTasks.size()!=0){
-                        mAdapter = new TaskListAdapter(DailyTargetsForEmployeeActivity.this,daypendingTasks);
+                        mAdapter = new TaskListAdapter(DailyOrdersForEmployeeActivity.this,daypendingTasks);
                         mTaskList.setAdapter(mAdapter);
                         mAdapter.notifyDataSetChanged();
                     }else{
-                        mAdapter = new TaskListAdapter(DailyTargetsForEmployeeActivity.this,new ArrayList<Tasks>());
+                        mAdapter = new TaskListAdapter(DailyOrdersForEmployeeActivity.this,new ArrayList<Tasks>());
                         mTaskList.setAdapter(mAdapter);
-                        Toast.makeText(DailyTargetsForEmployeeActivity.this, "No Pending Tasks given for this employee", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DailyOrdersForEmployeeActivity.this, "No Pending Orders given for this employee", Toast.LENGTH_SHORT).show();
                     }
 
 
@@ -180,13 +182,13 @@ public class DailyTargetsForEmployeeActivity extends AppCompatActivity {
                     mTaskList.removeAllViews();
 
                     if(daycompletedTasks!=null&&daycompletedTasks.size()!=0){
-                        mAdapter = new TaskListAdapter(DailyTargetsForEmployeeActivity.this,daycompletedTasks);
+                        mAdapter = new TaskListAdapter(DailyOrdersForEmployeeActivity.this,daycompletedTasks);
                         mTaskList.setAdapter(mAdapter);
                         mAdapter.notifyDataSetChanged();
                     }else{
-                        mAdapter = new TaskListAdapter(DailyTargetsForEmployeeActivity.this,new ArrayList<Tasks>());
+                        mAdapter = new TaskListAdapter(DailyOrdersForEmployeeActivity.this,new ArrayList<Tasks>());
                         mTaskList.setAdapter(mAdapter);
-                        Toast.makeText(DailyTargetsForEmployeeActivity.this, "No Completed Tasks given for this employee", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DailyOrdersForEmployeeActivity.this, "No Completed Orders given for this employee", Toast.LENGTH_SHORT).show();
                     }
 
 
@@ -200,13 +202,13 @@ public class DailyTargetsForEmployeeActivity extends AppCompatActivity {
                     mTaskList.removeAllViews();
 
                     if(dayclosedTasks!=null&&dayclosedTasks.size()!=0){
-                        mAdapter = new TaskListAdapter(DailyTargetsForEmployeeActivity.this,dayclosedTasks);
+                        mAdapter = new TaskListAdapter(DailyOrdersForEmployeeActivity.this,dayclosedTasks);
                         mTaskList.setAdapter(mAdapter);
                         mAdapter.notifyDataSetChanged();
                     }else{
-                        mAdapter = new TaskListAdapter(DailyTargetsForEmployeeActivity.this,new ArrayList<Tasks>());
+                        mAdapter = new TaskListAdapter(DailyOrdersForEmployeeActivity.this,new ArrayList<Tasks>());
                         mTaskList.setAdapter(mAdapter);
-                        Toast.makeText(DailyTargetsForEmployeeActivity.this, "No Closed Tasks given for this employee", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DailyOrdersForEmployeeActivity.this, "No Closed Orders given for this employee", Toast.LENGTH_SHORT).show();
                     }
 
 
@@ -220,13 +222,13 @@ public class DailyTargetsForEmployeeActivity extends AppCompatActivity {
                     mTaskList.removeAllViews();
 
                     if(dayemployeeTasks!=null&&dayemployeeTasks.size()!=0){
-                        mAdapter = new TaskListAdapter(DailyTargetsForEmployeeActivity.this,dayemployeeTasks);
+                        mAdapter = new TaskListAdapter(DailyOrdersForEmployeeActivity.this,dayemployeeTasks);
                         mTaskList.setAdapter(mAdapter);
                         mAdapter.notifyDataSetChanged();
                     }else{
-                        mAdapter = new TaskListAdapter(DailyTargetsForEmployeeActivity.this,new ArrayList<Tasks>());
+                        mAdapter = new TaskListAdapter(DailyOrdersForEmployeeActivity.this,new ArrayList<Tasks>());
                         mTaskList.setAdapter(mAdapter);
-                        Toast.makeText(DailyTargetsForEmployeeActivity.this, "No Tasks given for this employee", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DailyOrdersForEmployeeActivity.this, "No Orders given for this employee", Toast.LENGTH_SHORT).show();
                     }
 
 
@@ -306,7 +308,7 @@ public class DailyTargetsForEmployeeActivity extends AppCompatActivity {
         int mMonth = c.get(Calendar.MONTH);
         int mDay   = c.get(Calendar.DAY_OF_MONTH);
         //launch datepicker modal
-        DatePickerDialog datePickerDialog = new DatePickerDialog(DailyTargetsForEmployeeActivity.this,
+        DatePickerDialog datePickerDialog = new DatePickerDialog(DailyOrdersForEmployeeActivity.this,
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -361,7 +363,7 @@ public class DailyTargetsForEmployeeActivity extends AppCompatActivity {
         this.mToolbar = findViewById(R.id.app_bar);
         setSupportActionBar(this.mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Tasks");
+        getSupportActionBar().setTitle("Orders");
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -375,10 +377,10 @@ public class DailyTargetsForEmployeeActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
-            DailyTargetsForEmployeeActivity.this.finish();
+            DailyOrdersForEmployeeActivity.this.finish();
 
         } else if (id == R.id.action_map) {
-            Intent map = new Intent(DailyTargetsForEmployeeActivity.this, EmployeeTaskMapScreen.class);
+            Intent map = new Intent(DailyOrdersForEmployeeActivity.this, EmployeeOrderMapScreen.class);
             map.putExtra("EmployeeId", mEmployeeId);
             map.putExtra("Date", passDate);
             startActivity(map);
@@ -450,8 +452,7 @@ public class DailyTargetsForEmployeeActivity extends AppCompatActivity {
 
                                 for (Tasks task:list) {
 
-
-                                    if(task.getCategory()==null){
+                                    if(task.getCategory()!=null&&task.getCategory().equalsIgnoreCase("Order")){
 
 
 
@@ -545,7 +546,7 @@ public class DailyTargetsForEmployeeActivity extends AppCompatActivity {
 
                                     mNoRecord.setVisibility(View.GONE);
                                     mTaskList.setVisibility(View.VISIBLE);
-                                    mAdapter = new TaskListAdapter(DailyTargetsForEmployeeActivity.this,dayemployeeTasks);
+                                    mAdapter = new TaskListAdapter(DailyOrdersForEmployeeActivity.this,dayemployeeTasks);
                                     mTaskList.setAdapter(mAdapter);
 
                                     totalTargets.setText(""+daytotal);
@@ -565,7 +566,7 @@ public class DailyTargetsForEmployeeActivity extends AppCompatActivity {
                                 mNoRecord.setVisibility(View.VISIBLE);
                                 mTaskList.setVisibility(View.GONE);
 
-                                Toast.makeText(DailyTargetsForEmployeeActivity.this, "No Tasks given for this employee ", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(DailyOrdersForEmployeeActivity.this, "No Orders given for this employee ", Toast.LENGTH_SHORT).show();
 
                             }
 
@@ -574,7 +575,7 @@ public class DailyTargetsForEmployeeActivity extends AppCompatActivity {
                             if (progressDialog != null&&progressDialog.isShowing())
                                 progressDialog.dismiss();
 
-                            Toast.makeText(DailyTargetsForEmployeeActivity.this, "Failed due to : "+response.message(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DailyOrdersForEmployeeActivity.this, "Failed due to : "+response.message(), Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -709,7 +710,7 @@ public class DailyTargetsForEmployeeActivity extends AppCompatActivity {
                     mNoRecord.setVisibility(View.GONE);
                     mTaskList.setVisibility(View.VISIBLE);
 
-                    mAdapter = new TaskListAdapter(DailyTargetsForEmployeeActivity.this,dayemployeeTasks);
+                    mAdapter = new TaskListAdapter(DailyOrdersForEmployeeActivity.this,dayemployeeTasks);
                     mTaskList.setAdapter(mAdapter);
 
                     totalTargets.setText(""+daytotal);
@@ -718,21 +719,13 @@ public class DailyTargetsForEmployeeActivity extends AppCompatActivity {
                     movedTargets.setText(""+dayclosed);
                 }else{
 
-
                 }
-
-
-
             }else{
-
-                //Toast.makeText(DailyTargetsForEmployeeActivity.this, "No Tasks given for this employee ", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(DailyOrdersForEmployeeActivity.this, "No Tasks given for this employee ", Toast.LENGTH_SHORT).show();
                 mNoRecord.setVisibility(View.VISIBLE);
                 mTaskList.setVisibility(View.GONE);
                 mTaskList.removeAllViews();
-
             }
-
-
 
         }else{
             mNoRecord.setVisibility(View.VISIBLE);
@@ -740,5 +733,6 @@ public class DailyTargetsForEmployeeActivity extends AppCompatActivity {
             mTaskList.removeAllViews();
         }
     }
-
 }
+
+
