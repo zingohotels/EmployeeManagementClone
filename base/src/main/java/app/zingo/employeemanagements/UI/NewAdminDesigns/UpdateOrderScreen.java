@@ -1,24 +1,28 @@
-package app.zingo.employeemanagements.UI.Admin;
+package app.zingo.employeemanagements.UI.NewAdminDesigns;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
-import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -43,29 +47,26 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import app.zingo.employeemanagements.Custom.MapViewScroll;
-import app.zingo.employeemanagements.Model.TaskNotificationManagers;
 import app.zingo.employeemanagements.Model.Tasks;
-import app.zingo.employeemanagements.Utils.Constants;
-import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.TrackGPS;
 import app.zingo.employeemanagements.Utils.Util;
-import app.zingo.employeemanagements.WebApi.TaskNotificationAPI;
 import app.zingo.employeemanagements.WebApi.TasksAPI;
 import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CreateOrderScreen extends AppCompatActivity {
+public class UpdateOrderScreen extends AppCompatActivity {
 
-    TextInputEditText mTaskName, mFrom, mTo, mFromTime, mToTime,mdesc,mOrderAmount;//mDead
+    TextInputEditText mTaskName, mFrom, mTo, mFromTime, mToTime,mOrderAmount;//mDead
+    EditText mdesc,mComments;
+    Spinner mStatus;
     AppCompatButton mCreate;
     RelativeLayout mMapLay;
     Switch mShow;
@@ -76,10 +77,10 @@ public class CreateOrderScreen extends AppCompatActivity {
     private GoogleMap mMap;
     MapViewScroll mapView;
     Marker marker;
+    static int  ADAPTER_POSITION = -1;
 
-    int employeeId, deptId;
     double lati, lngi;
-    String type;
+    Tasks updateTask;
 
     DecimalFormat df2 = new DecimalFormat(".##########");
     public static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
@@ -88,33 +89,153 @@ public class CreateOrderScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         try {
-            setContentView(R.layout.activity_create_order_screen);
+            setContentView(R.layout.activity_update_order_screen);
+
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            setTitle("Update Order");
 
             mTaskName = findViewById(R.id.task_name);
             mFrom = findViewById(R.id.from_date);
             mTo = findViewById(R.id.to_date);
             mFromTime = findViewById(R.id.from_time);
             mToTime = findViewById(R.id.to_time);
-            // mDead = (TextInputEditText) findViewById(R.id.dead_line);
-            mdesc = findViewById(R.id.task_desc);
             mOrderAmount = findViewById(R.id.amount_order);
-            mCreate = findViewById(R.id.create_order);
+            // mDead = (TextInputEditText) findViewById(R.id.dead_line);
+            mdesc = findViewById(R.id.task_description);
+            mComments = findViewById(R.id.task_comments);
+            mCreate = findViewById(R.id.apply_leave);
             mapView = findViewById(R.id.task_location_map);
             mShow = findViewById(R.id.show_map);
             mMapLay = findViewById(R.id.map_layout);
+            mStatus = findViewById(R.id.task_status_update);
             location = findViewById(R.id.location_et);
             lat = findViewById(R.id.lat_et);
             lng = findViewById(R.id.lng_et);
 
             Bundle bundle = getIntent().getExtras();
-
             if (bundle != null) {
+                updateTask = (Tasks)bundle.getSerializable("Task");
+                ADAPTER_POSITION = bundle.getInt("Position");
+            }
 
-                employeeId = bundle.getInt("EmployeeId");
-                deptId = bundle.getInt("DepartmentId");
-                type = bundle.getString("Type");
+            if(updateTask!=null){
+
+                mTaskName.setText(""+updateTask.getTaskName());
+
+                String froms = updateTask.getStartDate();
+                String tos = updateTask.getEndDate();
+                String fromTime = "";
+                String toTime = "";
+
+                Date afromDate = null;
+                Date atoDate = null;
+
+                if(froms!=null&&!froms.isEmpty()){
+
+                    if(froms.contains("T")){
+
+                        String dojs[] = froms.split("T");
+
+                        if(dojs[1].equalsIgnoreCase("00:00:00")){
+                            try {
+                                afromDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
+                                froms = new SimpleDateFormat("MMM dd,yyyy").format(afromDate);
+                                fromTime = "00:00";
+
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }else{
+                            try {
+                                // afromDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dojs[0]+" "+dojs[1]);
+                                afromDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
+                                Date time = new SimpleDateFormat("HH:mm:ss").parse(dojs[1]);
+                                //froms = new SimpleDateFormat("MMM dd,yyyy HH:mm").format(afromDate);
+                                froms = new SimpleDateFormat("MMM dd,yyyy").format(afromDate);
+                                fromTime = new SimpleDateFormat("HH:mm").format(time);
+
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                }
+
+                if(tos!=null&&!tos.isEmpty()){
+
+                    if(tos.contains("T")){
+
+                        String dojs[] = tos.split("T");
+
+                        if(dojs[1].equalsIgnoreCase("00:00:00")){
+                            try {
+                                atoDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
+                                tos = new SimpleDateFormat("MMM dd,yyyy").format(atoDate);
+                                toTime = "00:00";
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }else{
+                            try {
+                               /* atoDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]+" "+dojs[1]);
+                                tos = new SimpleDateFormat("MMM dd,yyyy").format(atoDate);*/
+
+                                atoDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
+                                Date time = new SimpleDateFormat("HH:mm:ss").parse(dojs[1]);
+                                //tos = new SimpleDateFormat("MMM dd,yyyy HH:mm").format(afromDate);
+                                tos = new SimpleDateFormat("MMM dd,yyyy").format(atoDate);
+                                toTime = new SimpleDateFormat("HH:mm").format(time);
+
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+
+                                              /*  String parse = new SimpleDateFormat("MMM yyyy").format(atoDate);
+                                                toDate = new SimpleDateFormat("MMM yyyy").parse(parse);*/
+
+                    }
+
+                }
+
+                mFrom.setText(""+froms);
+                mTo.setText(""+tos);
+                mFromTime.setText(""+fromTime);
+                mToTime.setText(""+toTime);
+                mComments.setText(""+updateTask.getComments());
+                mdesc.setText(""+updateTask.getTaskDescription());
+
+                if(updateTask.getPriority()!=null){
+
+                    mOrderAmount.setText(""+updateTask.getPriority());
+
+                }else{
+                    mOrderAmount.setText("0");
+                }
+
+
+                String status = updateTask.getStatus();
+
+                if(status.equalsIgnoreCase("Pending")){
+
+                    mStatus.setSelection(0);
+                }else if(status.equalsIgnoreCase("On-Going")){
+                    mStatus.setSelection(1);
+
+                }else if(status.equalsIgnoreCase("Completed")){
+                    mStatus.setSelection(2);
+
+                }else if(status.equalsIgnoreCase("Closed")){
+                    mStatus.setSelection(3);
+
+                }
+
+            }else {
+                Toast.makeText(UpdateOrderScreen.this, "Something went wrong", Toast.LENGTH_SHORT).show();
             }
 
 
@@ -143,7 +264,7 @@ public class CreateOrderScreen extends AppCompatActivity {
                     int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
                     int minute = mcurrentTime.get(Calendar.MINUTE);
                     TimePickerDialog mTimePicker;
-                    mTimePicker = new TimePickerDialog(CreateOrderScreen.this, new TimePickerDialog.OnTimeSetListener() {
+                    mTimePicker = new TimePickerDialog(UpdateOrderScreen.this, new TimePickerDialog.OnTimeSetListener() {
                         @Override
                         public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
 
@@ -173,7 +294,7 @@ public class CreateOrderScreen extends AppCompatActivity {
                     int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
                     int minute = mcurrentTime.get(Calendar.MINUTE);
                     TimePickerDialog mTimePicker;
-                    mTimePicker = new TimePickerDialog(CreateOrderScreen.this, new TimePickerDialog.OnTimeSetListener() {
+                    mTimePicker = new TimePickerDialog(UpdateOrderScreen.this, new TimePickerDialog.OnTimeSetListener() {
                         @Override
                         public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
@@ -191,7 +312,6 @@ public class CreateOrderScreen extends AppCompatActivity {
                     mTimePicker.show();
                 }
             });
-
            /* mDead.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -224,7 +344,7 @@ public class CreateOrderScreen extends AppCompatActivity {
             mapView.onResume();
 
             try {
-                MapsInitializer.initialize(CreateOrderScreen.this);
+                MapsInitializer.initialize(UpdateOrderScreen.this);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -235,7 +355,7 @@ public class CreateOrderScreen extends AppCompatActivity {
                     try {
                         Intent intent =
                                 new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY/*MODE_FULLSCREEN*/)
-                                        .build(CreateOrderScreen.this);
+                                        .build(UpdateOrderScreen.this);
                         startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
                     } catch (GooglePlayServicesRepairableException e) {
                         e.printStackTrace();
@@ -253,7 +373,7 @@ public class CreateOrderScreen extends AppCompatActivity {
                     mMap = googleMap;
 
 
-                    if (ActivityCompat.checkSelfPermission(CreateOrderScreen.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(CreateOrderScreen.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(UpdateOrderScreen.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(UpdateOrderScreen.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                         // TODO: Consider calling
                         //    ActivityCompat#requestPermissions
                         // here to request the missing permissions, and then overriding
@@ -269,27 +389,46 @@ public class CreateOrderScreen extends AppCompatActivity {
                     mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                     mMap.getProjection().getVisibleRegion().latLngBounds.getCenter();
 
-                    TrackGPS trackGPS = new TrackGPS(CreateOrderScreen.this);
+                    TrackGPS trackGPS = new TrackGPS(UpdateOrderScreen.this);
 
-                    if(trackGPS.canGetLocation())
-                    {
-                        lati = trackGPS.getLatitude();
-                        lngi = trackGPS.getLongitude();
+
+                    if(updateTask!=null){
+
+                        lat.setText(updateTask.getLatitude()+"");
+                        lng.setText(updateTask.getLongitude()+"");
+
+                        if(updateTask.getLongitude()!=null&&updateTask.getLatitude()!=null){
+
+                            lati = Double.parseDouble(updateTask.getLatitude());
+                            lngi = Double.parseDouble(updateTask.getLongitude());
+
+                            LatLng latLng = new LatLng(lati,lngi);
+
+                            String add = getAddress(latLng);
+                            location.setText(add);
+                            mMap.clear();
+                            marker = mMap.addMarker(new MarkerOptions()
+                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                                    .position(latLng));
+                            CameraPosition cameraPosition1 = new CameraPosition.Builder().target(latLng).zoom(80).build();
+                            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition1));
+
+                        }else{
+                            if(trackGPS.canGetLocation())
+                            {
+                                lati = trackGPS.getLatitude();
+                                lngi = trackGPS.getLongitude();
+                            }
+                        }
                     }
-
-
 
                     mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                         @Override
                         public void onMapClick(LatLng latLng) {
                             DecimalFormat df2 = new DecimalFormat(".##########");
 
-
                             lati = latLng.latitude;
                             lngi = latLng.longitude;
-
-
-
 
                             lat.setText(df2.format(latLng.latitude)+"");
                             lng.setText(df2.format(latLng.longitude)+"");
@@ -310,24 +449,15 @@ public class CreateOrderScreen extends AppCompatActivity {
         }catch (Exception e){
             e.printStackTrace();
         }
-
     }
-
-    private void openTimePicker() {
-
-
-    }
-
     public void openDatePicker(final TextInputEditText tv) {
         // Get Current Date
-
         final Calendar c = Calendar.getInstance();
         int mYear  = c.get(Calendar.YEAR);
         int mMonth = c.get(Calendar.MONTH);
         int mDay   = c.get(Calendar.DAY_OF_MONTH);
 
         final Calendar newDate = Calendar.getInstance();
-
         //launch datepicker modal
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 new DatePickerDialog.OnDateSetListener() {
@@ -355,35 +485,6 @@ public class CreateOrderScreen extends AppCompatActivity {
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
-
-                           /* new TimePickerDialog(CreateOrderScreen.this, new TimePickerDialog.OnTimeSetListener() {
-                                @Override
-                                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                    newDate.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                                    newDate.set(Calendar.MINUTE, minute);
-
-                                    String date1 = (monthOfYear + 1)  + "/" + (dayOfMonth) + "/" + year +" "+hourOfDay+":"+minute;
-
-                                    SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm");
-
-
-
-                                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm");
-                                    try {
-                                        Date fdate = simpleDateFormat.parse(date1);
-
-                                        String from1 = sdf.format(fdate);
-
-
-                                        tv.setText(from1);
-
-
-                                    } catch (ParseException e) {
-                                        e.printStackTrace();
-                                    }
-
-                                }
-                            }, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), false).show();*/
                         }
                         catch (Exception ex)
                         {
@@ -392,14 +493,10 @@ public class CreateOrderScreen extends AppCompatActivity {
                     }
                 }, mYear, mMonth, mDay);
 
-
         datePickerDialog.show();
-
     }
 
     public void validate(){
-
-
         String from = mFrom.getText().toString();
         String to = mTo.getText().toString();
         String fromTime = mFromTime.getText().toString();
@@ -407,320 +504,55 @@ public class CreateOrderScreen extends AppCompatActivity {
         //   String dead = mDead.getText().toString();
         String taskName = mTaskName.getText().toString();
         String desc = mdesc.getText().toString();
-        String orderAmount = mOrderAmount.getText().toString();
+        String amount = mOrderAmount.getText().toString();
 
         if(taskName.isEmpty()){
-            Toast.makeText(this, "Order Name is required", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Task Name is required", Toast.LENGTH_SHORT).show();
         }else if(from.isEmpty()){
             Toast.makeText(this, "Order date is required", Toast.LENGTH_SHORT).show();
         }else if(to.isEmpty()){
             Toast.makeText(this, "Payment date is required", Toast.LENGTH_SHORT).show();
         }else if(fromTime.isEmpty()){
-            Toast.makeText(this, "Please Select Order time", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please Select Order Time", Toast.LENGTH_SHORT).show();
         }else if(toTime.isEmpty()){
             Toast.makeText(this, "Please Select Payment Time", Toast.LENGTH_SHORT).show();
         }else if(desc.isEmpty()){
             Toast.makeText(this, "Comment is required", Toast.LENGTH_SHORT).show();
-        }else if(orderAmount.isEmpty()){
-            Toast.makeText(this, "Order Amount is required", Toast.LENGTH_SHORT).show();
+        }else if(amount.isEmpty()){
+            Toast.makeText(this, "Amount is required", Toast.LENGTH_SHORT).show();
         }else{
-
             try{
-
                 SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm");
-                Tasks tasks = new Tasks();
+                Tasks tasks = updateTask;
                 tasks.setTaskName(taskName);
                 tasks.setTaskDescription(desc);
                 tasks.setDeadLine(to);
                 tasks.setStartDate(new SimpleDateFormat("MM/dd/yyyy HH:mm").format(sdf.parse(from+" "+fromTime)));
                 tasks.setReminderDate(new SimpleDateFormat("MM/dd/yyyy HH:mm").format(sdf.parse(from+" "+fromTime)));
                 tasks.setEndDate(new SimpleDateFormat("MM/dd/yyyy HH:mm").format(sdf.parse(to+" "+toTime)));
-                tasks.setStatus("Pending");
-                tasks.setPriority(orderAmount);
-                tasks.setCategory("Order");
-                tasks.setComments("");
+                tasks.setStatus(""+mStatus.getSelectedItem().toString());
+                tasks.setComments(""+mComments.getText().toString());
                 tasks.setRemarks("");
+                tasks.setPriority(""+amount);
 
                 if(mShow.isChecked()){
                     tasks.setLatitude(lati+"");
                     tasks.setLongitude(lngi+"");
                 }
-                if(type!=null&&type.equalsIgnoreCase("Employee")){
-                    tasks.setToReportEmployeeId(PreferenceHandler.getInstance(CreateOrderScreen.this).getManagerId());
-                    tasks.setEmployeeId(employeeId);
-
-                }else{
-                    tasks.setToReportEmployeeId(PreferenceHandler.getInstance(CreateOrderScreen.this).getUserId());
-                    tasks.setEmployeeId(employeeId);
-
-                }
-
                 tasks.setDepartmentId(0);
-
-
                 try {
-                    addTask(tasks);
+                    updateTasks(tasks);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }catch (Exception e){
                 e.printStackTrace();
             }
-
-
         }
-    }
-
-    public long dateCal(String start,String end){
-
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy");
-        System.out.println("Loigin "+start);
-        System.out.println("Logout "+end);
-
-
-        Date fd=null,td=null;
-
-
-
-        try {
-            fd = sdf.parse(""+start);
-            td = sdf.parse(""+end);
-
-            long diff = td.getTime() - fd.getTime();
-            long Hours = diff / (60 * 60 * 1000) % 24;
-            long Minutes = diff / (60 * 1000) % 60;
-            long diffDays = diff / (24 * 60 * 60 * 1000);
-            System.out.println("Diff "+diff);
-            System.out.println("Hours "+Hours);
-            System.out.println("Minutes "+Minutes);
-
-
-            return  diffDays;
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return 0;
-        }
-    }
-
-    public void addTask(final Tasks tasks) {
-
-        final ProgressDialog dialog = new ProgressDialog(this);
-        dialog.setMessage("Saving Details..");
-        dialog.setCancelable(false);
-        dialog.show();
-
-        TasksAPI apiService = Util.getClient().create(TasksAPI.class);
-
-        Call<Tasks> call = apiService.addTasks(tasks);
-
-        call.enqueue(new Callback<Tasks>() {
-            @Override
-            public void onResponse(Call<Tasks> call, Response<Tasks> response) {
-//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
-                try
-                {
-                    if(dialog != null && dialog.isShowing())
-                    {
-                        dialog.dismiss();
-                    }
-
-                    int statusCode = response.code();
-                    if (statusCode == 200 || statusCode == 201) {
-
-                        Tasks s = response.body();
-
-                        if(s!=null){
-
-
-                            Toast.makeText(CreateOrderScreen.this, "Order Created Successfully", Toast.LENGTH_SHORT).show();
-                            //  CreateOrderScreen.this.finish();
-                            TaskNotificationManagers tn = new TaskNotificationManagers();
-                            tn.setEmployeeId(""+s.getEmployeeId());
-                            tn.setTaskName(s.getTaskName());
-                            tn.setTaskDescription(s.getTaskDescription());
-                            tn.setDeadLine(s.getDeadLine());
-                            tn.setComments(s.getComments());
-                            tn.setRemarks(s.getRemarks());
-                            tn.setToReportEmployeeId(s.getToReportEmployeeId());
-                            tn.setTitle("Task Allocated");
-                            tn.setMessage(""+s.getTaskName());
-                            tn.setTaskId(s.getTaskId());
-                            tn.setDepartmentId(1);
-                            savetask(tn);
-                        }
-
-                    }else {
-                        Toast.makeText(CreateOrderScreen.this, "Failed Due to "+response.message(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-                catch (Exception ex)
-                {
-
-                    if(dialog != null && dialog.isShowing())
-                    {
-                        dialog.dismiss();
-                    }
-                    ex.printStackTrace();
-                }
-//                callGetStartEnd();
-            }
-
-            @Override
-            public void onFailure(Call<Tasks> call, Throwable t) {
-
-                if(dialog != null && dialog.isShowing())
-                {
-                    dialog.dismiss();
-                }
-                Toast.makeText(CreateOrderScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.e("TAG", t.toString());
-            }
-        });
-
-
-
-    }
-
-    public void savetask(final TaskNotificationManagers task) {
-
-
-
-        final ProgressDialog dialog = new ProgressDialog(this);
-        dialog.setMessage("Saving Details..");
-        dialog.setCancelable(false);
-        dialog.show();
-
-        TaskNotificationAPI apiService = Util.getClient().create(TaskNotificationAPI.class);
-
-        Call<TaskNotificationManagers> call = apiService.saveTask(task);
-
-        call.enqueue(new Callback<TaskNotificationManagers>() {
-            @Override
-            public void onResponse(Call<TaskNotificationManagers> call, Response<TaskNotificationManagers> response) {
-//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
-                try
-                {
-                    if(dialog != null && dialog.isShowing())
-                    {
-                        dialog.dismiss();
-                    }
-
-                    int statusCode = response.code();
-                    if (statusCode == 200 || statusCode == 201) {
-
-                        TaskNotificationManagers s = response.body();
-
-                        if(s!=null){
-
-                            task.setSenderId(Constants.SENDER_ID);
-                            task.setServerId(Constants.SERVER_ID);
-
-                            sendTask(task);
-                            //ApplyLeaveScreen.this.finish();
-
-
-                        }
-
-
-
-
-                    }else {
-                        Toast.makeText(CreateOrderScreen.this, "Failed Due to "+response.message(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-                catch (Exception ex)
-                {
-
-                    if(dialog != null && dialog.isShowing())
-                    {
-                        dialog.dismiss();
-                    }
-                    ex.printStackTrace();
-                }
-//                callGetStartEnd();
-            }
-
-            @Override
-            public void onFailure(Call<TaskNotificationManagers> call, Throwable t) {
-
-                if(dialog != null && dialog.isShowing())
-                {
-                    dialog.dismiss();
-                }
-                Toast.makeText(CreateOrderScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.e("TAG", t.toString());
-            }
-        });
-
-
-
-    }
-
-    public void sendTask(final TaskNotificationManagers lm) {
-
-
-
-        final ProgressDialog dialog = new ProgressDialog(this);
-        dialog.setMessage("Sending Details..");
-        dialog.setCancelable(false);
-        dialog.show();
-
-        TaskNotificationAPI apiService = Util.getClient().create(TaskNotificationAPI.class);
-
-        Call<ArrayList<String>> call = apiService.sendTask(lm);
-
-        call.enqueue(new Callback<ArrayList<String>>() {
-            @Override
-            public void onResponse(Call<ArrayList<String>> call, Response<ArrayList<String>> response) {
-//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
-                try
-                {
-                    if(dialog != null && dialog.isShowing())
-                    {
-                        dialog.dismiss();
-                    }
-
-                    int statusCode = response.code();
-                    if (statusCode == 200 || statusCode == 201) {
-
-
-                        CreateOrderScreen.this.finish();
-
-
-                    }else {
-                        Toast.makeText(CreateOrderScreen.this, "Failed Due to "+response.message(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-                catch (Exception ex)
-                {
-
-                    if(dialog != null && dialog.isShowing())
-                    {
-                        dialog.dismiss();
-                    }
-                    ex.printStackTrace();
-                }
-//                callGetStartEnd();
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<String>> call, Throwable t) {
-
-                if(dialog != null && dialog.isShowing())
-                {
-                    dialog.dismiss();
-                }
-                Toast.makeText(CreateOrderScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.e("TAG", t.toString());
-            }
-        });
-
-
-
     }
 
     private String getAddress(LatLng latLng) {
-        Geocoder geocoder = new Geocoder(CreateOrderScreen.this, Locale.getDefault());
+        Geocoder geocoder = new Geocoder(UpdateOrderScreen.this, Locale.getDefault());
         String result = null;
         try {
             List<Address> addressList = geocoder.getFromLocation(
@@ -731,10 +563,7 @@ public class CreateOrderScreen extends AppCompatActivity {
                 for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
                     sb.append(address.getAddressLine(i)).append(",");
                 }
-
                 result = address.getAddressLine(0);
-
-
 
                 return result;
             }
@@ -743,7 +572,6 @@ public class CreateOrderScreen extends AppCompatActivity {
             Log.e("MapLocation", "Unable connect to Geocoder", e);
             return result;
         }
-
     }
 
     @Override
@@ -787,7 +615,224 @@ public class CreateOrderScreen extends AppCompatActivity {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
 
+    public void updateTasks(final Tasks tasks) {
+
+        final ProgressDialog dialog = new ProgressDialog(UpdateOrderScreen.this);
+        dialog.setMessage("Saving Details..");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        TasksAPI apiService = Util.getClient().create(TasksAPI.class);
+
+        Call<Tasks> call = apiService.updateTasks(tasks.getTaskId(),tasks);
+
+        call.enqueue(new Callback<Tasks>() {
+            @Override
+            public void onResponse(Call<Tasks> call, Response<Tasks> response) {
+//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
+                try
+                {
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+
+                    int statusCode = response.code();
+                    if (statusCode == 200 || statusCode == 201|| statusCode == 204) {
+
+
+                        Toast.makeText(UpdateOrderScreen.this, "Update Task succesfully", Toast.LENGTH_SHORT).show();
+
+                        //  AdminDashBoardFragment.mTaskList.getAdapter().notifyDataSetChanged();
+
+                    }else {
+                        Toast.makeText(UpdateOrderScreen.this, "Failed Due to "+response.message(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+                    ex.printStackTrace();
+                }
+//                callGetStartEnd();
+            }
+
+            @Override
+            public void onFailure(Call<Tasks> call, Throwable t) {
+
+                if(dialog != null && dialog.isShowing())
+                {
+                    dialog.dismiss();
+                }
+                Toast.makeText(UpdateOrderScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("TAG", t.toString());
+            }
+        });
+
+
+
+    }
+
+
+    public void deleteTasks(final Tasks tasks) {
+
+
+
+        final ProgressDialog dialog = new ProgressDialog(UpdateOrderScreen.this);
+        dialog.setMessage("Deleting Details..");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        TasksAPI apiService = Util.getClient().create(TasksAPI.class);
+
+        Call<Tasks> call = apiService.deleteTasks(tasks.getTaskId());
+
+        call.enqueue(new Callback<Tasks>() {
+            @Override
+            public void onResponse(Call<Tasks> call, Response<Tasks> response) {
+//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
+                try
+                {
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+
+                    int statusCode = response.code();
+                    if (statusCode == 200 || statusCode == 201|| statusCode == 204) {
+
+
+                        Toast.makeText(UpdateOrderScreen.this, "Deleted Task succesfully", Toast.LENGTH_SHORT).show();
+                        UpdateOrderScreen.this.finish();
+
+
+
+                    }else {
+                        Toast.makeText(UpdateOrderScreen.this, "Failed Due to "+response.message(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    if(dialog != null && dialog.isShowing())
+                    {
+                        dialog.dismiss();
+                    }
+                    ex.printStackTrace();
+                }
+//                callGetStartEnd();
+            }
+
+            @Override
+            public void onFailure(Call<Tasks> call, Throwable t) {
+
+                if(dialog != null && dialog.isShowing())
+                {
+                    dialog.dismiss();
+                }
+                Toast.makeText(UpdateOrderScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("TAG", t.toString());
+            }
+        });
+
+
+
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_delete, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            UpdateOrderScreen.this.finish();
+
+        } else if (id == R.id.action_delete) {
+            showalertbox();
+
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void showalertbox(){
+
+
+
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(UpdateOrderScreen.this);
+        builder.setTitle("Do you want to Delete ?");
+        builder.setCancelable(true);
+        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                dialogInterface.dismiss();
+
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(UpdateOrderScreen.this);
+                builder.setTitle("Do you want to delete?");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        try {
+
+                            if(updateTask!=null){
+                                deleteTasks(updateTask);
+                                dialogInterface.dismiss();
+                            }else{
+                                Toast.makeText(UpdateOrderScreen.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                                dialogInterface.dismiss();
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+
+                    }
+                });
+                builder.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+
+
+                    }
+                });
+
+                android.app.AlertDialog dialog = builder.create();
+                dialog.show();
+
+
+
+
+
+
+            }
+        });
+        builder.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                dialogInterface.dismiss();
+
+            }
+        });
+
+        android.app.AlertDialog dialog = builder.create();
+        dialog.show();
 
     }
 }

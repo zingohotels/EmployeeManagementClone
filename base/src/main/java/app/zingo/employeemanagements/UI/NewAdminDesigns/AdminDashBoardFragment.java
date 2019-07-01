@@ -791,9 +791,15 @@ public class AdminDashBoardFragment extends Fragment {
                                 for (Tasks task:list) {
 
 
-                                    TaskAdminData taskAdminData = new TaskAdminData();
-                                    taskAdminData.setEmployee(employee);
-                                    taskAdminData.setTasks(task);
+                                    if(task.getCategory()==null){
+
+
+
+
+
+                                        TaskAdminData taskAdminData = new TaskAdminData();
+                                        taskAdminData.setEmployee(employee);
+                                        taskAdminData.setTasks(task);
 
 
                                         String froms = task.getStartDate();
@@ -853,11 +859,11 @@ public class AdminDashBoardFragment extends Fragment {
                                             }
                                         }
 
-                                    TaskAdminData taskAdminDatas = new TaskAdminData();
-                                    taskAdminDatas.setEmployee(employee);
-                                    taskAdminDatas.setTasks(task);
-                                    employeeTasks.add(taskAdminDatas);
-                                       // total = total+1;
+                                        TaskAdminData taskAdminDatas = new TaskAdminData();
+                                        taskAdminDatas.setEmployee(employee);
+                                        taskAdminDatas.setTasks(task);
+                                        employeeTasks.add(taskAdminDatas);
+                                        // total = total+1;
 
                                         if(task.getStatus().equalsIgnoreCase("Completed")){
                                             completedTasks.add(taskAdminDatas);
@@ -867,12 +873,13 @@ public class AdminDashBoardFragment extends Fragment {
                                             pendingTask = pendingTask+1;
                                         }else if(task.getStatus().equalsIgnoreCase("Closed")){
                                             closedTasks.add(taskAdminDatas);
-                                           // closed = closed+1;
+                                            // closed = closed+1;
                                         }else if(task.getStatus().equalsIgnoreCase("On-Going")){
                                             onTask.add(taskAdminDatas);
                                             onTasks = onTasks+1;
                                         }
 
+                                    }
 
 
                                 }

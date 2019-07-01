@@ -200,7 +200,7 @@ public class EmployeeOrderMapScreen extends AppCompatActivity {
 
                                 for (Tasks task:list) {
 
-                                    if(task.getCategory()==null){
+                                    if(task.getCategory()!=null&&task.getCategory().equalsIgnoreCase("Order")){
 
 
                                         String froms = task.getStartDate();
@@ -431,7 +431,7 @@ public class EmployeeOrderMapScreen extends AppCompatActivity {
 
                                 }else{
 
-                                    Toast.makeText(EmployeeOrderMapScreen.this, "No tasks based on location", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(EmployeeOrderMapScreen.this, "No Order based on location", Toast.LENGTH_SHORT).show();
 
                                 }
 

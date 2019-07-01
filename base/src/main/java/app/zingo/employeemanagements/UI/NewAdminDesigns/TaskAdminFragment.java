@@ -507,90 +507,95 @@ public class TaskAdminFragment extends Fragment {
                                 for (Tasks task:list) {
 
 
-                                    TaskAdminData taskAdminData = new TaskAdminData();
-                                    taskAdminData.setEmployee(employee);
-                                    taskAdminData.setTasks(task);
-
-                                    employeeTasks.add(taskAdminData);
-                                    total = total+1;
-
-                                    if(task.getStatus().equalsIgnoreCase("Completed")){
-                                        completedTasks.add(taskAdminData);
-                                        complete = complete+1;
-                                    }else if(task.getStatus().equalsIgnoreCase("Pending")){
-                                        pendingTasks.add(taskAdminData);
-                                        pending = pending+1;
-                                    }else if(task.getStatus().equalsIgnoreCase("Closed")){
-                                        closedTasks.add(taskAdminData);
-                                        closed = closed+1;
-                                    }
+                                    if(task.getCategory()==null){
 
 
 
+                                        TaskAdminData taskAdminData = new TaskAdminData();
+                                        taskAdminData.setEmployee(employee);
+                                        taskAdminData.setTasks(task);
 
-                                    String froms = task.getStartDate();
-                                    String tos = task.getEndDate();
+                                        employeeTasks.add(taskAdminData);
+                                        total = total+1;
 
-                                    Date afromDate = null;
-                                    Date atoDate = null;
-
-                                    if(froms!=null&&!froms.isEmpty()){
-
-                                        if(froms.contains("T")){
-
-                                            String dojs[] = froms.split("T");
-
-                                            try {
-                                                afromDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
-                                            } catch (ParseException e) {
-                                                e.printStackTrace();
-                                            }
-
-
+                                        if(task.getStatus().equalsIgnoreCase("Completed")){
+                                            completedTasks.add(taskAdminData);
+                                            complete = complete+1;
+                                        }else if(task.getStatus().equalsIgnoreCase("Pending")){
+                                            pendingTasks.add(taskAdminData);
+                                            pending = pending+1;
+                                        }else if(task.getStatus().equalsIgnoreCase("Closed")){
+                                            closedTasks.add(taskAdminData);
+                                            closed = closed+1;
                                         }
 
-                                    }
 
-                                    if(tos!=null&&!tos.isEmpty()){
 
-                                        if(tos.contains("T")){
 
-                                            String dojs[] = tos.split("T");
+                                        String froms = task.getStartDate();
+                                        String tos = task.getEndDate();
 
-                                            try {
-                                                atoDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
-                                            } catch (ParseException e) {
-                                                e.printStackTrace();
+                                        Date afromDate = null;
+                                        Date atoDate = null;
+
+                                        if(froms!=null&&!froms.isEmpty()){
+
+                                            if(froms.contains("T")){
+
+                                                String dojs[] = froms.split("T");
+
+                                                try {
+                                                    afromDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
+                                                } catch (ParseException e) {
+                                                    e.printStackTrace();
+                                                }
+
+
                                             }
 
                                         }
 
-                                    }
+                                        if(tos!=null&&!tos.isEmpty()){
 
-                                    if(afromDate!=null&&atoDate!=null){
+                                            if(tos.contains("T")){
 
-                                        if(date.getTime() >= afromDate.getTime() && date.getTime() <= atoDate.getTime()){
-                                            TaskAdminData taskAdminDatas = new TaskAdminData();
-                                            taskAdminDatas.setEmployee(employee);
-                                            taskAdminDatas.setTasks(task);
+                                                String dojs[] = tos.split("T");
 
-                                            dayemployeeTasks.add(taskAdminDatas);
-                                            daytotal = daytotal+1;
+                                                try {
+                                                    atoDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
+                                                } catch (ParseException e) {
+                                                    e.printStackTrace();
+                                                }
 
-                                            if(task.getStatus().equalsIgnoreCase("Completed")){
-                                                daycompletedTasks.add(taskAdminData);
-                                                daycomplete = daycomplete+1;
-                                            }else if(task.getStatus().equalsIgnoreCase("Pending")){
-                                                daypendingTasks.add(taskAdminData);
-                                                daypending = daypending+1;
-                                            }else if(task.getStatus().equalsIgnoreCase("Closed")){
-                                                dayclosedTasks.add(taskAdminData);
-                                                dayclosed = dayclosed+1;
                                             }
 
                                         }
-                                    }
 
+                                        if(afromDate!=null&&atoDate!=null){
+
+                                            if(date.getTime() >= afromDate.getTime() && date.getTime() <= atoDate.getTime()){
+                                                TaskAdminData taskAdminDatas = new TaskAdminData();
+                                                taskAdminDatas.setEmployee(employee);
+                                                taskAdminDatas.setTasks(task);
+
+                                                dayemployeeTasks.add(taskAdminDatas);
+                                                daytotal = daytotal+1;
+
+                                                if(task.getStatus().equalsIgnoreCase("Completed")){
+                                                    daycompletedTasks.add(taskAdminData);
+                                                    daycomplete = daycomplete+1;
+                                                }else if(task.getStatus().equalsIgnoreCase("Pending")){
+                                                    daypendingTasks.add(taskAdminData);
+                                                    daypending = daypending+1;
+                                                }else if(task.getStatus().equalsIgnoreCase("Closed")){
+                                                    dayclosedTasks.add(taskAdminData);
+                                                    dayclosed = dayclosed+1;
+                                                }
+
+                                            }
+                                        }
+
+                                    }
 
 
                                 }

@@ -26,6 +26,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import app.zingo.employeemanagements.Adapter.OrderListAdapter;
 import app.zingo.employeemanagements.Adapter.TaskListAdapter;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.Tasks;
@@ -48,7 +49,7 @@ public class DailyOrdersForEmployeeActivity extends AppCompatActivity {
     TextView mDate;
     ImageView mPrevious,mNext;
     //View layout;
-    private TaskListAdapter mAdapter;
+    private OrderListAdapter mAdapter;
     RecyclerView mTaskList;
 
     //CalendarDay mCalendarDay;
@@ -162,11 +163,11 @@ public class DailyOrdersForEmployeeActivity extends AppCompatActivity {
                     mTaskList.removeAllViews();
 
                     if(daypendingTasks!=null&&daypendingTasks.size()!=0){
-                        mAdapter = new TaskListAdapter(DailyOrdersForEmployeeActivity.this,daypendingTasks);
+                        mAdapter = new OrderListAdapter(DailyOrdersForEmployeeActivity.this,daypendingTasks);
                         mTaskList.setAdapter(mAdapter);
                         mAdapter.notifyDataSetChanged();
                     }else{
-                        mAdapter = new TaskListAdapter(DailyOrdersForEmployeeActivity.this,new ArrayList<Tasks>());
+                        mAdapter = new OrderListAdapter(DailyOrdersForEmployeeActivity.this,new ArrayList<Tasks>());
                         mTaskList.setAdapter(mAdapter);
                         Toast.makeText(DailyOrdersForEmployeeActivity.this, "No Pending Orders given for this employee", Toast.LENGTH_SHORT).show();
                     }
@@ -182,13 +183,13 @@ public class DailyOrdersForEmployeeActivity extends AppCompatActivity {
                     mTaskList.removeAllViews();
 
                     if(daycompletedTasks!=null&&daycompletedTasks.size()!=0){
-                        mAdapter = new TaskListAdapter(DailyOrdersForEmployeeActivity.this,daycompletedTasks);
+                        mAdapter = new OrderListAdapter(DailyOrdersForEmployeeActivity.this,daycompletedTasks);
                         mTaskList.setAdapter(mAdapter);
                         mAdapter.notifyDataSetChanged();
                     }else{
-                        mAdapter = new TaskListAdapter(DailyOrdersForEmployeeActivity.this,new ArrayList<Tasks>());
+                        mAdapter = new OrderListAdapter(DailyOrdersForEmployeeActivity.this,new ArrayList<Tasks>());
                         mTaskList.setAdapter(mAdapter);
-                        Toast.makeText(DailyOrdersForEmployeeActivity.this, "No Completed Orders given for this employee", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DailyOrdersForEmployeeActivity.this, "No Delivered Orders given for this employee", Toast.LENGTH_SHORT).show();
                     }
 
 
@@ -202,13 +203,13 @@ public class DailyOrdersForEmployeeActivity extends AppCompatActivity {
                     mTaskList.removeAllViews();
 
                     if(dayclosedTasks!=null&&dayclosedTasks.size()!=0){
-                        mAdapter = new TaskListAdapter(DailyOrdersForEmployeeActivity.this,dayclosedTasks);
+                        mAdapter = new OrderListAdapter(DailyOrdersForEmployeeActivity.this,dayclosedTasks);
                         mTaskList.setAdapter(mAdapter);
                         mAdapter.notifyDataSetChanged();
                     }else{
-                        mAdapter = new TaskListAdapter(DailyOrdersForEmployeeActivity.this,new ArrayList<Tasks>());
+                        mAdapter = new OrderListAdapter(DailyOrdersForEmployeeActivity.this,new ArrayList<Tasks>());
                         mTaskList.setAdapter(mAdapter);
-                        Toast.makeText(DailyOrdersForEmployeeActivity.this, "No Closed Orders given for this employee", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DailyOrdersForEmployeeActivity.this, "No Order Taken Orders given for this employee", Toast.LENGTH_SHORT).show();
                     }
 
 
@@ -222,11 +223,11 @@ public class DailyOrdersForEmployeeActivity extends AppCompatActivity {
                     mTaskList.removeAllViews();
 
                     if(dayemployeeTasks!=null&&dayemployeeTasks.size()!=0){
-                        mAdapter = new TaskListAdapter(DailyOrdersForEmployeeActivity.this,dayemployeeTasks);
+                        mAdapter = new OrderListAdapter(DailyOrdersForEmployeeActivity.this,dayemployeeTasks);
                         mTaskList.setAdapter(mAdapter);
                         mAdapter.notifyDataSetChanged();
                     }else{
-                        mAdapter = new TaskListAdapter(DailyOrdersForEmployeeActivity.this,new ArrayList<Tasks>());
+                        mAdapter = new OrderListAdapter(DailyOrdersForEmployeeActivity.this,new ArrayList<Tasks>());
                         mTaskList.setAdapter(mAdapter);
                         Toast.makeText(DailyOrdersForEmployeeActivity.this, "No Orders given for this employee", Toast.LENGTH_SHORT).show();
                     }
@@ -462,13 +463,13 @@ public class DailyOrdersForEmployeeActivity extends AppCompatActivity {
                                         employeeTasks.add(task);
                                         total = total+1;
 
-                                        if(task.getStatus().equalsIgnoreCase("Completed")){
+                                        if(task.getStatus().equalsIgnoreCase("Delivered")){
                                             completedTasks.add(task);
                                             complete = complete+1;
                                         }else if(task.getStatus().equalsIgnoreCase("Pending")){
                                             pendingTasks.add(task);
                                             pending = pending+1;
-                                        }else if(task.getStatus().equalsIgnoreCase("Closed")){
+                                        }else if(task.getStatus().equalsIgnoreCase("Order Taken")){
                                             closedTasks.add(task);
                                             closed = closed+1;
                                         }
@@ -523,13 +524,13 @@ public class DailyOrdersForEmployeeActivity extends AppCompatActivity {
                                                 dayemployeeTasks.add(task);
                                                 daytotal = daytotal+1;
 
-                                                if(task.getStatus().equalsIgnoreCase("Completed")){
+                                                if(task.getStatus().equalsIgnoreCase("Delivered")){
                                                     daycompletedTasks.add(task);
                                                     daycomplete = daycomplete+1;
                                                 }else if(task.getStatus().equalsIgnoreCase("Pending")){
                                                     daypendingTasks.add(task);
                                                     daypending = daypending+1;
-                                                }else if(task.getStatus().equalsIgnoreCase("Closed")){
+                                                }else if(task.getStatus().equalsIgnoreCase("Order Taken")){
                                                     dayclosedTasks.add(task);
                                                     dayclosed = dayclosed+1;
                                                 }
@@ -546,7 +547,7 @@ public class DailyOrdersForEmployeeActivity extends AppCompatActivity {
 
                                     mNoRecord.setVisibility(View.GONE);
                                     mTaskList.setVisibility(View.VISIBLE);
-                                    mAdapter = new TaskListAdapter(DailyOrdersForEmployeeActivity.this,dayemployeeTasks);
+                                    mAdapter = new OrderListAdapter(DailyOrdersForEmployeeActivity.this,dayemployeeTasks);
                                     mTaskList.setAdapter(mAdapter);
 
                                     totalTargets.setText(""+daytotal);
@@ -687,13 +688,13 @@ public class DailyOrdersForEmployeeActivity extends AppCompatActivity {
                             dayemployeeTasks.add(task);
                             daytotal = daytotal+1;
 
-                            if(task.getStatus().equalsIgnoreCase("Completed")){
+                            if(task.getStatus().equalsIgnoreCase("Delivered")){
                                 daycompletedTasks.add(task);
                                 daycomplete = daycomplete+1;
                             }else if(task.getStatus().equalsIgnoreCase("Pending")){
                                 daypendingTasks.add(task);
                                 daypending = daypending+1;
-                            }else if(task.getStatus().equalsIgnoreCase("Closed")){
+                            }else if(task.getStatus().equalsIgnoreCase("Order Taken")){
                                 dayclosedTasks.add(task);
                                 dayclosed = dayclosed+1;
                             }
@@ -710,7 +711,7 @@ public class DailyOrdersForEmployeeActivity extends AppCompatActivity {
                     mNoRecord.setVisibility(View.GONE);
                     mTaskList.setVisibility(View.VISIBLE);
 
-                    mAdapter = new TaskListAdapter(DailyOrdersForEmployeeActivity.this,dayemployeeTasks);
+                    mAdapter = new OrderListAdapter(DailyOrdersForEmployeeActivity.this,dayemployeeTasks);
                     mTaskList.setAdapter(mAdapter);
 
                     totalTargets.setText(""+daytotal);

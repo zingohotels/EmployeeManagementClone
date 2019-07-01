@@ -572,7 +572,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                         md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
                                         try {
                                             PreferenceHandler.getInstance(getActivity()).setTeaBreakStatus("false");
-                                            teaText.setText(new SimpleDateFormat("hh:mm a").format(new Date()));
+                                            teaText.setText("Tea Break");
                                             saveLoginNotification(md);
                                         } catch (Exception e) {
                                             e.printStackTrace();
@@ -698,7 +698,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                         md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
                                         try {
                                             PreferenceHandler.getInstance(getActivity()).setLunchBreakStatus("false");
-                                            dinnerText.setText(new SimpleDateFormat("hh:mm a").format(new Date()));
+                                            dinnerText.setText("Lunch Break");
                                             saveLoginNotification(md);
                                         } catch (Exception e) {
                                             e.printStackTrace();
@@ -752,7 +752,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
                                     PreferenceHandler.getInstance(getActivity()).setLunchBreakStatus("true");
 
-                                    dinnerText.setText(new SimpleDateFormat("hh:mm a").format(new Date()));
+                                    dinnerText.setText(""+new SimpleDateFormat("hh:mm a").format(new Date()));
                                     saveLoginNotification(md);
                                 } catch (Exception e) {
                                     e.printStackTrace();

@@ -135,12 +135,7 @@ public class InvokeService extends AppCompatActivity {
 
             preEmpId = new ArrayList<>();
 
-            /*getDashBoard();
-            getExpenses(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));*/
-
             getCompany();
-           // getEmployees(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-
 
             mOrg.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -178,7 +173,7 @@ public class InvokeService extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
 
-                    if(reportDataModel!=null){
+                    if(reportDataModel!=null) {
 
                         reportDataModel.setPreEmply(mPresentEmployee.getText().toString());
                         reportDataModel.setTotalEmp(mTotalEmployee.getText().toString());
@@ -186,7 +181,6 @@ public class InvokeService extends AppCompatActivity {
                         reportDataModel.setTotalTas(mTotalTask.getText().toString());
                         reportDataModel.setVisit(mMeetings.getText().toString());
                         reportDataModel.setExpenses(mExpenses.getText().toString());
-
 
 
                         reportDataEmployees = new ArrayList<>();
@@ -222,7 +216,7 @@ public class InvokeService extends AppCompatActivity {
                         }
 
                         reportDataModel.setReportDataEmployees(reportDataEmployees);
-                        if(reportDataModel!=null){
+                        if (reportDataModel != null) {
 
                             EmailData emailData = new EmailData();
                             final Calendar calendar = Calendar.getInstance();
@@ -230,19 +224,19 @@ public class InvokeService extends AppCompatActivity {
                             calendar.add(Calendar.DAY_OF_YEAR, -1);
 
                             String data = "";
-                            for(int j=0;j<reportDataModel.getReportDataEmployees().size();j++){
+                            for (int j = 0; j < reportDataModel.getReportDataEmployees().size(); j++) {
 
 
-                                data = data+"<tr><td style=\"text-align:center; border: 2px solid green;\">"+reportDataModel.getReportDataEmployees().get(j).getName()+"</td>"
-                                        +"<td style=\"text-align:center; border: 2px solid green;\">"+reportDataModel.getReportDataEmployees().get(j).getLoginTime()+"</td>"
-                                        +"<td style=\"text-align:center; border: 2px solid green;\">"+reportDataModel.getReportDataEmployees().get(j).getLogoutTime()+"</td>"
-                                        +"<td style=\"text-align:center; border: 2px solid green;\">"+reportDataModel.getReportDataEmployees().get(j).getHours()+"</td>"
-                                        +"<td style=\"text-align:center; border: 2px solid green;\">"+reportDataModel.getReportDataEmployees().get(j).getVisits()+"</td>"
-                                        +"<td style=\"text-align:center; border: 2px solid green;\">"+reportDataModel.getReportDataEmployees().get(j).getTasks()+"</td>"
-                                        +"<td style=\"text-align:center; border: 2px solid green;\">"+reportDataModel.getReportDataEmployees().get(j).getExpenses()+"</td>"
-                                        +"<td style=\"text-align:center; border: 2px solid green;\">"+reportDataModel.getReportDataEmployees().get(j).getExpensesAmt()+"</td>"
-                                        +"<td style=\"text-align:center; border: 2px solid green;\">"+reportDataModel.getReportDataEmployees().get(j).getKms()
-                                        +"</td></tr>";
+                                data = data + "<tr><td style=\"text-align:center; border: 2px solid green;\">" + reportDataModel.getReportDataEmployees().get(j).getName() + "</td>"
+                                        + "<td style=\"text-align:center; border: 2px solid green;\">" + reportDataModel.getReportDataEmployees().get(j).getLoginTime() + "</td>"
+                                        + "<td style=\"text-align:center; border: 2px solid green;\">" + reportDataModel.getReportDataEmployees().get(j).getLogoutTime() + "</td>"
+                                        + "<td style=\"text-align:center; border: 2px solid green;\">" + reportDataModel.getReportDataEmployees().get(j).getHours() + "</td>"
+                                        + "<td style=\"text-align:center; border: 2px solid green;\">" + reportDataModel.getReportDataEmployees().get(j).getVisits() + "</td>"
+                                        + "<td style=\"text-align:center; border: 2px solid green;\">" + reportDataModel.getReportDataEmployees().get(j).getTasks() + "</td>"
+                                        + "<td style=\"text-align:center; border: 2px solid green;\">" + reportDataModel.getReportDataEmployees().get(j).getExpenses() + "</td>"
+                                        + "<td style=\"text-align:center; border: 2px solid green;\">" + reportDataModel.getReportDataEmployees().get(j).getExpensesAmt() + "</td>"
+                                        + "<td style=\"text-align:center; border: 2px solid green;\">" + reportDataModel.getReportDataEmployees().get(j).getKms()
+                                        + "</td></tr>";
                             }
 
                             String body = "<!DOCTYPE html> \n" +
@@ -266,12 +260,12 @@ public class InvokeService extends AppCompatActivity {
                                     "\n" +
                                     "#form-check{\n" +
                                     "\ttext-align:center;\n" +
-                                   // "\tpadding:100px 410px 0px 410px;\n" +
+                                    // "\tpadding:100px 410px 0px 410px;\n" +
                                     "}\n" +
                                     "\n" +
                                     ".bg-frm{\n" +
                                     "\tbackground-color: #EE596C;\n" +
-                                   // "\tpadding:10px 10px 10px 10px;\n" +
+                                    // "\tpadding:10px 10px 10px 10px;\n" +
                                     "\twidth:100%;\n" +
                                     "}\n" +
                                     "\n" +
@@ -279,18 +273,18 @@ public class InvokeService extends AppCompatActivity {
                                     "#form-check h5{\n" +
                                     "\tcolor:#fff;\n" +
                                     "\ttext-align:left;\n" +
-                                   // "\tpadding:0px 13px;\n" +
+                                    // "\tpadding:0px 13px;\n" +
                                     "\tfont-size:15px;\n" +
                                     "}\n" +
                                     "\n" +
                                     "#form-check-one{\n" +
-                                   // "\tpadding:0px 410px 0px 410px;\n" +
+                                    // "\tpadding:0px 410px 0px 410px;\n" +
                                     "}\n" +
                                     "\n" +
                                     ".box-check-one{\n" +
                                     "\twidth:100%;\n" +
                                     "\tborder:1px solid gray;\n" +
-                                  //  "\tpadding:10px 10px;\n" +
+                                    //  "\tpadding:10px 10px;\n" +
                                     "}\n" +
                                     "\n" +
                                     "#form-check-one form{\n" +
@@ -315,11 +309,11 @@ public class InvokeService extends AppCompatActivity {
                                     "\t<div class=\"bg-frm\">\n" +
                                     "\t\t<div class=\"row\">\n" +
                                     "\t\t\t<div class=\"col-lg-5 col-md-5 col-sm-5 col-xs-12\">\t\t\t\n" +
-                                    "\t\t\t\t  <h2 style=\"color: white\">"+orgName+"</h2>\t \t\t\t\n" +
+                                    "\t\t\t\t  <h2 style=\"color: white\">" + orgName + "</h2>\t \t\t\t\n" +
                                     "\t\t\t</div>\t\n" +
                                     "\t\t\t<div class=\"col-lg-7 col-md-7 col-sm-7 col-xs-12\">\n" +
                                     "\t\t\t\t<h4 style=\"color: white; text-align:left\">Team Activity Report</h4>\n" +
-                                    "\t\t\t\t<h4 style=\"color: white; text-align:left\">"+new SimpleDateFormat("dd MMM,yyyy").format(calendar.getTime())+"</h4>\n" +
+                                    "\t\t\t\t<h4 style=\"color: white; text-align:left\">" + new SimpleDateFormat("dd MMM,yyyy").format(calendar.getTime()) + "</h4>\n" +
                                     "\t\t\t</div>\t\t\n" +
                                     "\t\t</div>\n" +
                                     "\t\t<hr>\n" +
@@ -333,10 +327,10 @@ public class InvokeService extends AppCompatActivity {
                                     "\t\t\t\t\t\t<th style=\"border: 2px solid green;\">EXPENSES</th>\n" +
                                     "\t\t\t\t\t</tr>\n" +
                                     "\t\t\t\t\t<tr>\n" +
-                                    "\t\t\t\t\t\t<td style=\"border: 2px solid green;\">"+reportDataModel.getPreEmply()+""+reportDataModel.getTotalEmp()+"</td>\n" +
-                                    "\t\t\t\t\t\t<td style=\"border: 2px solid green;\">"+reportDataModel.getComplTask()+""+reportDataModel.getTotalTas()+"</td>\n" +
-                                    "\t\t\t\t\t\t<td style=\"border: 2px solid green;\">"+reportDataModel.getVisit()+"</td>\n" +
-                                    "\t\t\t\t\t\t<td style=\"border: 2px solid green;\">"+reportDataModel.getExpenses()+"</td>\n" +
+                                    "\t\t\t\t\t\t<td style=\"border: 2px solid green;\">" + reportDataModel.getPreEmply() + "" + reportDataModel.getTotalEmp() + "</td>\n" +
+                                    "\t\t\t\t\t\t<td style=\"border: 2px solid green;\">" + reportDataModel.getComplTask() + "" + reportDataModel.getTotalTas() + "</td>\n" +
+                                    "\t\t\t\t\t\t<td style=\"border: 2px solid green;\">" + reportDataModel.getVisit() + "</td>\n" +
+                                    "\t\t\t\t\t\t<td style=\"border: 2px solid green;\">" + reportDataModel.getExpenses() + "</td>\n" +
                                     "\t\t\t\t\t</tr>\n" +
                                     "\t\t\t\t</table>\n" +
                                     "\t\t\t</div>\n" +
@@ -356,7 +350,7 @@ public class InvokeService extends AppCompatActivity {
                                     "\t\t\t\t\t\t<th style=\"border: 2px solid green;\">Km</th>\n" +
                                     "\t\t\t\t\t</tr>\n" +
                                     "\t\t\t\t\t<tr>\n" +
-                                    "\t\t\t\t\t\t"+data+"\n" +
+                                    "\t\t\t\t\t\t" + data + "\n" +
                                     "\t\t\t\t</table>\n" +
                                     "\t\t\t</div>\n" +
                                     "\t\t</div>\t\t\n" +
@@ -368,76 +362,31 @@ public class InvokeService extends AppCompatActivity {
                                     "      <div class=\"contact-item\">\n" +
                                     "        <a href=\"https://play.google.com/store/apps/details?id=app.zingo.employeemanagements\" target = \"_blank\"><img src=\"http://zingoapi.azurewebsites.net/HotelImage/g1.jpg\" alt=\"\" style=\"width:205px; height:125px;\"/></a>\n" +
                                     "      </div>\n" +
-                                    "    </div>"+
+                                    "    </div>" +
                                     "</body>\n" +
                                     "</html>\n" +
                                     "\n";
-                           emailData.setEmailAddress(mEmail.getText().toString());
-                            //emailData.setEmailAddress("nishar@zingohotels.com");
+                            // emailData.setEmailAddress(mEmail.getText().toString()+",nishar@zingohotels.com");
+                            emailData.setEmailAddress("abhinav@kronyapp.com");
                             emailData.setBody(body);
-                            emailData.setSubject("Team Report for "+new SimpleDateFormat("dd MMM,yyyy").format(calendar.getTime()));
+                            emailData.setSubject("Team Report for " + new SimpleDateFormat("dd MMM,yyyy").format(calendar.getTime()));
                             emailData.setUserName("kronyapp@gmail.com");
                             emailData.setPassword("krony@admin@123");
                             emailData.setFromName("Krony App");
                             emailData.setFromEmail("kronyapp@gmail.com");
 
 
+                            if (Util.isNetworkAvailable(InvokeService.this)) {
 
-                            if(Util.isNetworkAvailable(InvokeService.this)){
                                 sendEmailAutomatic(emailData);
-                            }else{
+
+                            } else {
+
                                 Toast.makeText(InvokeService.this, "Please check your Internet Connection", Toast.LENGTH_LONG).show();
+
                             }
 
-                            /*boolean isfilecreated = generateReport(reportDataModel);
-                            //saveExcelFile();
-                            if(isfilecreated)
-                            {
-
-                                try{
-
-                                    Intent emailIntent = new Intent(Intent.ACTION_SEND);
-                                    emailIntent.setType("text/plain");
-                                    //emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"email@example.com"});
-                                    //emailIntent.putExtra(Intent.EXTRA_SUBJECT, "subject here");
-                                    //emailIntent.putExtra(Intent.EXTRA_TEXT, "body text");
-                                    File root = Environment.getExternalStorageDirectory();
-                                    String pathToMyAttachedFile = "/TeamActivity/"+"TeamActivity"+new SimpleDateFormat("ddMMyy").format(new Date())+".xls";
-                                    File file = new File(root, pathToMyAttachedFile);
-                                    if (!file.exists() || !file.canRead()) {
-                                        return;
-                                    }
-                                    Uri uri = null;
-                                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                                        uri = FileProvider.getUriForFile(InvokeService.this, "app.zingo.employeemanagements.fileprovider", file);
-                                    }else{
-                                        uri = Uri.fromFile(file);
-                                    }
-
-                                    //Uri uri = Uri.fromFile(file);
-                                    if(uri!=null){
-                                        emailIntent.putExtra(Intent.EXTRA_STREAM, uri);
-                                    }else{
-                                        Toast.makeText(InvokeService.this, "File cannot access", Toast.LENGTH_SHORT).show();
-                                    }
-           *//* Uri uri = Uri.fromFile(file);
-            emailIntent.putExtra(Intent.EXTRA_STREAM, uri);*//*
-                                    startActivity(Intent.createChooser(emailIntent, "Pick an Email provider"));
-                                }catch (Exception e){
-                                    e.printStackTrace();
-                                }
-                            }*/
-
                         }
-
-
-
-                        // generateReport(reportDataModel);
-
-
-
-
-
                     }
 
 
@@ -1641,6 +1590,7 @@ public class InvokeService extends AppCompatActivity {
 
 
                                     if(response.body().equalsIgnoreCase("Email Sent Successfully")){
+
                                         Toast.makeText(InvokeService.this, "Email Sent Successfully", Toast.LENGTH_SHORT).show();
                                     }else{
 
@@ -1667,9 +1617,5 @@ public class InvokeService extends AppCompatActivity {
         });
     }
 
-
-    public  void companyEmployee(int value){
-
-    }
 
 }

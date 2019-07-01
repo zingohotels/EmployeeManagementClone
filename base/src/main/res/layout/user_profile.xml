@@ -57,6 +57,22 @@
         <LinearLayout
             android:gravity="center"
             android:orientation="vertical"
+            android:id="@+id/refresh_layout"
+            android:focusable="true"
+            android:clickable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp">
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/quantum_ic_refresh_white_24"
+                style="@style/OvalBack"
+                android:contentDescription="TODO" />
+        </LinearLayout>
+        <LinearLayout
+            android:gravity="center"
+            android:orientation="vertical"
             android:id="@+id/share_layout"
             android:focusable="true"
             android:clickable="true"

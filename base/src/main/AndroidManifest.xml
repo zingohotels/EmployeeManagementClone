@@ -46,7 +46,8 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute"
         tools:replace="android:allowBackup">
-        <activity android:name="app.zingo.employeemanagements.UI.Admin.EmployeeOrderMapScreen"></activity>
+        <activity android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.UpdateOrderScreen"></activity>
+        <activity android:name="app.zingo.employeemanagements.UI.Admin.EmployeeOrderMapScreen" />
         <activity
             android:name="app.zingo.employeemanagements.UI.Admin.CreateOrderScreen"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
@@ -130,7 +131,6 @@
         <service
             android:name="app.zingo.employeemanagements.Service.CheckDataAndLocation"
             android:enabled="true" />
-
         <service
             android:name="app.zingo.employeemanagements.Service.LocationAndDataServiceWithTimer"
             android:enabled="true" />

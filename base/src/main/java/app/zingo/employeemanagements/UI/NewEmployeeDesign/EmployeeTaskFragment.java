@@ -256,6 +256,8 @@ public class EmployeeTaskFragment extends Fragment {
 
                                 for (Tasks task:list) {
 
+                                    if(task.getCategory()==null){
+
                                         employeeTasks.add(task);
                                         total = total+1;
 
@@ -269,6 +271,10 @@ public class EmployeeTaskFragment extends Fragment {
                                             closedTasks.add(task);
                                             closed = closed+1;
                                         }
+
+                                    }
+
+
 
                                 }
 

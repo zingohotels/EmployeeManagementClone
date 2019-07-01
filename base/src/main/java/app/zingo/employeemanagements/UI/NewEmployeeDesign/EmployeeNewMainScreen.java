@@ -152,7 +152,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
     ImageView mCardLogo;
     CardView  mCardView;
     MyRegulerText share_card;
-    LinearLayout mTrialInfoLay,mShareLayout,mQrLayout;
+    LinearLayout mTrialInfoLay,mShareLayout,mQrLayout,mRefreshLayout;
 
     boolean doubleBackToExitPressedOnce = false;
 
@@ -647,6 +647,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
         mTrialInfoLay = findViewById(R.id.trial_version_info_layout);
         mShareLayout = findViewById(R.id.share_layout);
         mQrLayout = findViewById(R.id.qr_layout);
+        mRefreshLayout = findViewById(R.id.refresh_layout);
         organizationName.setText(PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getCompanyName());
         userName.setText(PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getUserFullName());
         Bundle bundle = getIntent().getExtras();
@@ -767,6 +768,18 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
 
 
 
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        mRefreshLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try{
+
+                    recreate();
                 }catch (Exception e){
                     e.printStackTrace();
                 }

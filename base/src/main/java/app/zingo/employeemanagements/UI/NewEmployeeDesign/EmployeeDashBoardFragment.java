@@ -417,82 +417,88 @@ public class EmployeeDashBoardFragment extends Fragment implements GoogleApiClie
 
                                 for (Tasks task:list) {
 
-                                    if(task.getEmployeeId()==employeeId){
 
-                                        String froms = task.getStartDate();
-                                        String tos = task.getEndDate();
+                                    if(task.getCategory()==null){
 
-                                        Date afromDate = null;
-                                        Date atoDate = null;
 
-                                        if(froms!=null&&!froms.isEmpty()){
 
-                                            if(froms.contains("T")){
+                                        if(task.getEmployeeId()==employeeId){
 
-                                                String dojs[] = froms.split("T");
+                                            String froms = task.getStartDate();
+                                            String tos = task.getEndDate();
 
-                                                try {
-                                                    afromDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
-                                                } catch (ParseException e) {
-                                                    e.printStackTrace();
-                                                }
+                                            Date afromDate = null;
+                                            Date atoDate = null;
+
+                                            if(froms!=null&&!froms.isEmpty()){
+
+                                                if(froms.contains("T")){
+
+                                                    String dojs[] = froms.split("T");
+
+                                                    try {
+                                                        afromDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
+                                                    } catch (ParseException e) {
+                                                        e.printStackTrace();
+                                                    }
                                              /*   String parse = new SimpleDateFormat("MMM yyyy").format(afromDate);
                                                 fromDate = new SimpleDateFormat("MMM yyyy").parse(parse);*/
 
+                                                }
+
                                             }
 
-                                        }
+                                            if(tos!=null&&!tos.isEmpty()){
 
-                                        if(tos!=null&&!tos.isEmpty()){
+                                                if(tos.contains("T")){
 
-                                            if(tos.contains("T")){
+                                                    String dojs[] = tos.split("T");
 
-                                                String dojs[] = tos.split("T");
-
-                                                try {
-                                                    atoDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
-                                                } catch (ParseException e) {
-                                                    e.printStackTrace();
-                                                }
+                                                    try {
+                                                        atoDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
+                                                    } catch (ParseException e) {
+                                                        e.printStackTrace();
+                                                    }
                                               /*  String parse = new SimpleDateFormat("MMM yyyy").format(atoDate);
                                                 toDate = new SimpleDateFormat("MMM yyyy").parse(parse);*/
 
-                                            }
-
-                                        }
-
-                                        if(afromDate!=null&&atoDate!=null){
-
-
-
-                                            if(date.getTime() >= afromDate.getTime() && date.getTime() <= atoDate.getTime()){
-
-                                                todayTasks.add(task);
-
-                                                if(task.getStatus().equalsIgnoreCase("Completed")){
-                                                    completedTasks.add(task);
-                                                    //complete = complete+1;
-                                                }else if(task.getStatus().equalsIgnoreCase("Closed")){
-                                                    closedTasks.add(task);
-                                                    // closed = closed+1;
-                                                }else if(task.getStatus().equalsIgnoreCase("On-Going")){
-                                                    onTask.add(task);
-                                                    onTasks = onTasks+1;
                                                 }
 
-                                            }else if(task.getStatus().equalsIgnoreCase("Pending")){
-                                                todayTasks.add(task);
-
-                                                pendingTasks.add(task);
-                                                pendingTask = pendingTask+1;
                                             }
+
+                                            if(afromDate!=null&&atoDate!=null){
+
+
+
+                                                if(date.getTime() >= afromDate.getTime() && date.getTime() <= atoDate.getTime()){
+
+                                                    todayTasks.add(task);
+
+                                                    if(task.getStatus().equalsIgnoreCase("Completed")){
+                                                        completedTasks.add(task);
+                                                        //complete = complete+1;
+                                                    }else if(task.getStatus().equalsIgnoreCase("Closed")){
+                                                        closedTasks.add(task);
+                                                        // closed = closed+1;
+                                                    }else if(task.getStatus().equalsIgnoreCase("On-Going")){
+                                                        onTask.add(task);
+                                                        onTasks = onTasks+1;
+                                                    }
+
+                                                }else if(task.getStatus().equalsIgnoreCase("Pending")){
+                                                    todayTasks.add(task);
+
+                                                    pendingTasks.add(task);
+                                                    pendingTask = pendingTask+1;
+                                                }
+                                            }
+
+                                            employeeTasks.add(task);
+                                            // total = total+1;
+
+
+
                                         }
-
-                                        employeeTasks.add(task);
-                                        // total = total+1;
-
-
-
                                     }
 
                                 }

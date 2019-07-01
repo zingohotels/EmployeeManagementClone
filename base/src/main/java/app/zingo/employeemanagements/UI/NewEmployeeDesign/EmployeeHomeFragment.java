@@ -183,7 +183,7 @@ public class EmployeeHomeFragment extends Fragment {
                         "</br><p>If you have any questions then contact the Admin/HR of the company.</p>"+
                         "</br><p><b>Cheers,</b><br><br>"+PreferenceHandler.getInstance(getActivity()).getUserFullName()+"</p></body></html>";
 
-                String htmlString = "<h1>Hello World!</h1>";
+               /* String htmlString = "<h1>Hello World!</h1>";
                 Spanned spanned = HtmlCompat.fromHtml(htmlString, HtmlCompat.FROM_HTML_MODE_COMPACT);
 
                 Intent emailIntent = new Intent(Intent.ACTION_SEND);
@@ -191,6 +191,20 @@ public class EmployeeHomeFragment extends Fragment {
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Employee Management App Invitation");
                 emailIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(new StringBuilder()
                         .append(spanned)
+                        .toString()));
+                //emailIntent.putExtra(Intent.EXTRA_HTML_TEXT, body);
+                startActivity(Intent.createChooser(emailIntent, "Send email.."));*/
+
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+                emailIntent.setType("text/plain");
+                emailIntent.setData(Uri.parse("mailto:" ));
+
+
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Employee Management App Invitation");
+
+
+                emailIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(new StringBuilder()
+                        .append(body)
                         .toString()));
                 //emailIntent.putExtra(Intent.EXTRA_HTML_TEXT, body);
                 startActivity(Intent.createChooser(emailIntent, "Send email.."));

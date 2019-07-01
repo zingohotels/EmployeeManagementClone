@@ -66,6 +66,15 @@
 
     </string-array>
 
+    <string-array name="order_status">
+        <item>Pending</item>
+        <item>Order Taken</item>
+        <item>Dispatched</item>
+        <item>Delivered</item>
+        <item>Closed</item>
+
+    </string-array>
+
     <string-array name="break_status">
         <item>Tea Break</item>
         <item>Lunch Break</item>

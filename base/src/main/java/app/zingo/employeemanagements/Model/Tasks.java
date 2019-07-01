@@ -55,6 +55,9 @@ public class Tasks implements Serializable {
     @SerializedName("Category")
     public String Category;
 
+    @SerializedName("Priority")
+    public String Priority;
+
     @SerializedName("ReminderDate")
     public String ReminderDate;
 
@@ -195,5 +198,13 @@ public class Tasks implements Serializable {
 
     public void setCategory(String category) {
         Category = category;
+    }
+
+    public String getPriority() {
+        return Priority;
+    }
+
+    public void setPriority(String priority) {
+        Priority = priority;
     }
 }
