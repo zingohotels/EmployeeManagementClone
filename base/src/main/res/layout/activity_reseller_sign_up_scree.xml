@@ -4,18 +4,13 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:fitsSystemWindows="true"
-
-    >
+    android:fitsSystemWindows="true">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fillViewport="true"
-        android:scrollbars="none"
-
-
-        >
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -184,22 +179,17 @@
                 android:layout_height="wrap_content"
                 android:hint="Email Id *"
                 android:id="@+id/reseller_email"
-                android:inputType="text"
+                android:inputType="textEmailAddress"
                 android:textColorHint="@color/grey_charcoal"
                 android:layout_marginTop="20dp"
                 android:textSize="18dp"
-                android:background="#00000000"
-
-                />
+                android:background="#00000000" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:background="#a9b0c3"
-                android:layout_marginTop="10dp"
-                />
-
-
+                android:layout_marginTop="10dp" />
 
             <app.zingo.employeemanagements.Custom.MyEditText
                 android:layout_width="match_parent"

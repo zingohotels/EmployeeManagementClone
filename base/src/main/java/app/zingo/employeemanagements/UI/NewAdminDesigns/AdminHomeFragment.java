@@ -66,7 +66,7 @@ public class AdminHomeFragment extends Fragment {
     LinearLayout attendance,leaveApplications,employees;
     TextView qr_OrgId;
     LinearLayout departments,liveTracking,tasks,expenses,team,client;
-    LinearLayout salary,logout,deptOrg,chngPwd,plans,reports,holiday,settings,faq,calender,orders;
+    LinearLayout salary,logout,deptOrg,chngPwd,plans,reports,holiday,settings,faq,calender,orders,weekOff;
 
     Employee employee;
 
@@ -157,7 +157,7 @@ public class AdminHomeFragment extends Fragment {
         expenses = this.layout.findViewById(R.id.expenses_mgmt);
         team = this.layout.findViewById(R.id.team);
         plans = this.layout.findViewById(R.id.plan_detail);
-
+        weekOff = this.layout.findViewById (R.id.week_off_home);
 
         salary = this.layout.findViewById(R.id.salary);
         deptOrg = this.layout.findViewById(R.id.department_org);
@@ -307,6 +307,13 @@ public class AdminHomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 openMenuViews(holiday);
+            }
+        });
+
+        weekOff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMenuViews(weekOff);
             }
         });
         client.setOnClickListener(new View.OnClickListener() {
@@ -607,7 +614,14 @@ public class AdminHomeFragment extends Fragment {
                 Intent employee = new Intent(getContext(), PlanDesignActivity.class);
                 getContext().startActivity(employee);
 
-            } else if (view.getId() == R.id.team) {
+            } else if (view.getId() == R.id.week_off_home) {
+                System.out.println("Suree Week Off");
+                intent = new Intent(getContext(), EmployeeListScreen.class);
+                intent.putExtra("Type","WeekOff");
+                intent.putExtra("viewId", view.getId());
+                getContext().startActivity(intent);
+
+            }else if (view.getId() == R.id.team) {
                 Intent employee = new Intent(getContext(), TeamMembersList.class);
                 getContext().startActivity(employee);
 

@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -28,7 +27,6 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.media.ExifInterface;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -81,7 +79,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -89,7 +86,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Timer;
 
 import app.zingo.employeemanagements.Adapter.CustomerSpinnerAdapter;
 import app.zingo.employeemanagements.Custom.Floating.RFABTextUtil;
@@ -108,13 +104,11 @@ import app.zingo.employeemanagements.Model.EmployeeImages;
 import app.zingo.employeemanagements.Model.MeetingDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.Meetings;
 import app.zingo.employeemanagements.Model.Organization;
-import app.zingo.employeemanagements.Service.CheckDataAndLocation;
 import app.zingo.employeemanagements.Service.LocationAndDataServiceWithTimer;
 import app.zingo.employeemanagements.UI.Admin.CreateTaskScreen;
 import app.zingo.employeemanagements.UI.Common.CustomerCreation;
 import app.zingo.employeemanagements.UI.Common.PlanExpireScreen;
 import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminNewMainScreen;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
@@ -212,6 +206,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
     Meetings loginDetails;
     MeetingDetailsNotificationManagers md;
     boolean methodAdd = false;
+    private boolean passedIntent = false;
 
     ArrayList<Customer> customerArrayList;
     Spinner customerSpinner;
@@ -243,16 +238,21 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
         try{
 
             setContentView(R.layout.activity_employee_new_main_screen);
-
             rfaLayout = (RapidFloatingActionLayout) findViewById(R.id.rfab_group_sample_fragment_a_rfal);
             rfaButton = (RapidFloatingActionButton) findViewById(R.id.label_list_sample_rfab);
-
 
             Bundle extras = getIntent().getExtras();
             if(extras != null) {
                 pos = extras.getInt("viewpager_position");
                 con = extras.getBoolean("Condition");
+                passedIntent = extras.getBoolean("AlarmDialog",false);
             }
+
+
+              if(passedIntent)
+              {
+                  alertDialog();
+              }
 
             gps = new TrackGPS(EmployeeNewMainScreen.this);
 
@@ -631,9 +631,9 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
 
 
     protected void onStart() {
-        super.onStart();
+        super.onStart ();
         if (mLocationClient != null) {
-            mLocationClient.connect();
+            mLocationClient.connect ();
         }
     }
 
@@ -3462,5 +3462,28 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+    public void alertDialog(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Check Out Alert");
+        builder.setMessage("You didn`t put Check Out still now. " +"\r\n"+ " do you want to do ?");
+        builder.setCancelable(false);
+        builder.setPositiveButton ("Check Out", new DialogInterface.OnClickListener () {
+            public void onClick (DialogInterface dialog, int id) {
+                Intent intent = new Intent (EmployeeNewMainScreen.this, EmployeeNewMainScreen.class);
+                intent.putExtra ("viewpager_position", 2);
+                startActivity (intent);
+                dialog.cancel ();
+            }
+        }).setNegativeButton ("Cancel", new DialogInterface.OnClickListener () {
+            public void onClick (DialogInterface dialog, int id) {
+                dialog.cancel ();
+                EmployeeNewMainScreen.this.finish ();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 }

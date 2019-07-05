@@ -107,6 +107,17 @@
         <activity android:name="app.zingo.employeemanagements.UI.Employee.EmployeeListScreen" />
         <activity android:name="app.zingo.employeemanagements.UI.Employee.CreateEmployeeScreen" />
 
+
+        <receiver android:name="app.zingo.employeemanagements.AlarmManager.CheckOutAlarm"/>
+
+        <receiver android:name="app.zingo.employeemanagements.AlarmManager.LunchBreakAlarm"/>
+
+        <receiver android:name="app.zingo.employeemanagements.AlarmManager.TeaBreakAlarm"/>
+
+        <service android:name="app.zingo.employeemanagements.AlarmManager.AlarmNotificationService"/>
+
+        <service android:name="app.zingo.employeemanagements.AlarmManager.AlarmSoundService"/>
+
         <service android:name="app.zingo.employeemanagements.FireBase.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
@@ -163,7 +174,15 @@
             android:name="app.zingo.employeemanagements.Service.AlarmReceive"
             android:enabled="true"
             android:exported="true"
-            android:label="RestartServiceWhenStopped" />
+            android:directBootAware="true"
+            android:label="RestartServiceWhenStopped">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <activity android:name="app.zingo.employeemanagements.AlarmManager.AlertDialogActivity"/>
 
         <activity
             android:name="app.zingo.employeemanagements.UI.Landing.SlideScreen"

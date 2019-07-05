@@ -503,12 +503,23 @@ public class LeaveDashBoardAdminScreen extends AppCompatActivity {
 
                             try{
 
-                                totalLeaves = response.body();
+                                totalLeaves = new ArrayList<> ();
                                 approvedLeaves = new ArrayList<>();
                                 rejectedLeaves = new ArrayList<>();
                                 paidLeaves = new ArrayList<>();
                                 unpaidLeaves = new ArrayList<>();
                                 pendingLeaves = new ArrayList<>();
+
+                                if(response.body ()!=null&&response.body ().size ()!=0){
+
+                                    for (Leaves leave:response.body ()) {
+
+                                        if(leave.getApproverComment ()==null){
+                                            totalLeaves.add(leave);
+                                        }
+
+                                    }
+                                }
 
 
 

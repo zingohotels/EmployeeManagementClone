@@ -18,10 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/linear_top"
-            android:orientation="vertical"
-            >
-
-
+            android:orientation="vertical">
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -71,8 +68,6 @@
                         android:textColor="#fff"
                         android:textSize="20dp"
                         android:padding="16dp"/>
-
-
                 </LinearLayout>
 
 
@@ -85,12 +80,7 @@
                     android:visibility="gone"
                     android:layout_marginTop="60dp"
                     android:contentDescription="TODO" />
-
-
-
             </FrameLayout>
-
-
 
 
             <app.zingo.employeemanagements.Custom.MyEditText
@@ -98,7 +88,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="E-mail/User name"
-                android:inputType="text"
+                android:inputType="textEmailAddress"
                 android:textColor="#000"
                 android:background="#f0f0f4"
                 android:padding="12dp"
@@ -107,12 +97,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:drawableLeft="@drawable/email"
-                android:drawablePadding="16dp"
-
-                />
-
-
-
+                android:drawablePadding="16dp" />
 
             <app.zingo.employeemanagements.Custom.MyEditText
                 android:id="@+id/landing_password"

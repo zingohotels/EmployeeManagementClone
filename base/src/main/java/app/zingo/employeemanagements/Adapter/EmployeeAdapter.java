@@ -352,6 +352,48 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
                             });
                     builder.create().show();
 
+                }else  if(type!=null&&type.equalsIgnoreCase("WeekOff")){
+
+                    builder = new AlertDialog.Builder(context);
+                    builder.setTitle("WeekOff");
+                    //builder.setIcon(R.drawable.ic_attachment);
+                    builder.setMessage("What do you want to do ?");
+                    builder.setPositiveButton("Create WeekOff",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id)
+                                {
+                                    dialog.cancel();
+                                    Intent dash = new Intent(context, ApplyLeaveScreen.class);
+                                    dash.putExtra("EmployeeId", list.get(position).getEmployeeId());
+                                    dash.putExtra("ManagerId", list.get(position).getManagerId());
+                                    context.startActivity(dash);
+                                }
+                            });
+
+                    builder.setNeutralButton("Cancel",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id)
+                                {
+                                    dialog.cancel();
+                                }
+                            });
+
+                    builder.setNegativeButton("View",
+                            new DialogInterface.OnClickListener()
+                            {
+                                public void onClick(DialogInterface dialog, int id)
+                                {
+                                    dialog.cancel();
+                                    Intent intent = new Intent(context, LeaveDashBoardAdminScreen.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putInt("EmployeeId",list.get(position).getEmployeeId());
+                                    bundle.putSerializable("Employee",list.get(position));
+                                    intent.putExtras(bundle);
+                                    context.startActivity(intent);
+                                }
+                            });
+                    builder.create().show();
+
                 }/*else  if(type!=null&&type.equalsIgnoreCase("Report")){
                     Intent intent = new Intent(context, ReportManagementScreen.class);
                     Bundle bundle = new Bundle();
@@ -558,9 +600,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
                         }
                     }
                 });
-
             }
-
         });
     }
 
@@ -702,9 +742,5 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
                 Log.e("TAG", t.toString());
             }
         });
-
-
-
     }
-
 }
