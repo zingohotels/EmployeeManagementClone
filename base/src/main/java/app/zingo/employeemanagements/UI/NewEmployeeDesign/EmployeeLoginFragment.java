@@ -71,6 +71,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -85,14 +86,18 @@ import app.zingo.employeemanagements.AlarmManager.AlarmNotificationService;
 import app.zingo.employeemanagements.AlarmManager.AlarmSoundService;
 import app.zingo.employeemanagements.AlarmManager.LunchBreakAlarm;
 import app.zingo.employeemanagements.AlarmManager.TeaBreakAlarm;
+import app.zingo.employeemanagements.Adapter.ShiftSpinnerAdapter;
 import app.zingo.employeemanagements.Model.Customer;
 import app.zingo.employeemanagements.Model.LoginDetails;
 import app.zingo.employeemanagements.Model.LoginDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.MeetingDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.Meetings;
+import app.zingo.employeemanagements.Model.WorkingDay;
 import app.zingo.employeemanagements.Service.AlarmReceive;
 import app.zingo.employeemanagements.Service.LocationForegroundService;
 import app.zingo.employeemanagements.Service.LocationSharingServices;
+import app.zingo.employeemanagements.UI.Custom.CustomDesignAlertDialog;
+import app.zingo.employeemanagements.UI.NewAdminDesigns.EmployeeEditScreen;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
@@ -103,6 +108,7 @@ import app.zingo.employeemanagements.WebApi.LoginDetailsAPI;
 import app.zingo.employeemanagements.WebApi.LoginNotificationAPI;
 import app.zingo.employeemanagements.WebApi.MeetingNotificationAPI;
 import app.zingo.employeemanagements.WebApi.MeetingsAPI;
+import app.zingo.employeemanagements.WebApi.OrganizationTimingsAPI;
 import app.zingo.employeemanagements.WebApi.UploadApi;
 import app.zingo.employeemanagements.base.R;
 import okhttp3.MediaType;
@@ -202,6 +208,8 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
     private static final int ALARM_REQUEST_CODE = 133;
     private AlarmManager alarmManager;
     private PendingIntent pendingIntent;
+    int timingId = 0;
+    String checkInTime = "";
 
     public void centreMapOnLocationWithLatLng(LatLng location, String title) {
 
@@ -265,6 +273,16 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
         planType = PreferenceHandler.getInstance(getActivity()).getPlanType();
         getLoginDetails();
         getMeetingDetails();
+
+        String shift = PreferenceHandler.getInstance(getActivity()).getShiftName();
+
+        if(shift!=null&&android.text.TextUtils.isDigitsOnly(shift)){
+
+
+            timingId = Integer.parseInt(shift);
+            getShiftTimingById(timingId);
+
+        }
         String loginStatus = PreferenceHandler.getInstance(getActivity()).getLoginStatus();
 
 
@@ -276,19 +294,6 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
         this.latLong = this.layout.findViewById(R.id.latLong);
         ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMapAsync(this);
-
-
-        /*dinnerLay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Toast.makeText(getActivity(), "Coming soon..", Toast.LENGTH_SHORT).show();
-
-            }
-        });*/
-
-
-
 
 
         if (mLocationClient == null) {
@@ -375,18 +380,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
                 } else {
                     masterloginalert("Logout","gps");
-                   /* if (planType.contains("Advance") || appType.equalsIgnoreCase("Trial")) {
 
-                     //   startAlert();
-                        // mSensorService = new LocationListenerService(getActivity());
-                            mServiceIntent = new Intent(getActivity(), LocationSharingServices.class);
-                            if (!isMyServiceRunning(LocationSharingServices.class)) {
-                                getActivity().startService(mServiceIntent);
-                            }//01/03/2019 Service Location shar
-
-
-
-                    }*/
                 }
 
 
@@ -549,117 +543,172 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                     String lunchvalue = PreferenceHandler.getInstance(getActivity()).getLunchBreakStatus();
 
 
+                    if (currentLocation != null && value != null && value.equalsIgnoreCase("true") && !lunchvalue.equalsIgnoreCase("true")) {
 
-                    if (currentLocation != null&&value!=null&&value.equalsIgnoreCase("true")&&!lunchvalue.equalsIgnoreCase("true") ) {
-
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        builder.setTitle("Do you want  to do?");
+                        ArrayList<String> appNames = new ArrayList<>();
 
 
-                        builder.setPositiveButton("End Break", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION).equals("0")) {
 
-                                        dialogInterface.dismiss();
+                            //Toast.makeText(mContext, "Mock Location Enabled" , Toast.LENGTH_SHORT).show();
 
-                                        latitude = currentLocation.getLatitude();
-                                        longitude = currentLocation.getLongitude();
+                            if (gps.isMockLocationOn(currentLocation, getActivity())) {
 
-
-                                        SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+                                appNames.addAll(gps.listofApps(getActivity()));
 
 
-                                        LoginDetailsNotificationManagers md = new LoginDetailsNotificationManagers();
-                                        md.setTitle("Break taken from "+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
-                                        md.setMessage("Break ended at "+""+sdt.format(new Date()));
-                                        LatLng master = new LatLng(latitude,longitude);
-                                        String address = getAddress(master);
-                                        md.setLocation(address);
-                                        md.setLongitude(""+longitude);
-                                        md.setLatitude(""+latitude);
-                                        md.setLoginDate(""+sdt.format(new Date()));
-                                        md.setStatus("Tea Break");
-                                        md.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
-                                        md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
-                                        try {
-                                            PreferenceHandler.getInstance(getActivity()).setTeaBreakStatus("false");
-                                            teaText.setText("Tea Break");
-                                            stopAlarmManager();
-                                            System.out.println ("Suree triggerAlarmManager stop" + i);
-                                            saveLoginNotification(md);
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
+                            }
 
+
+                        }
+
+                        if (appNames != null && appNames.size() != 0) {
+
+                            new CustomDesignAlertDialog(getActivity(), CustomDesignAlertDialog.ERROR_TYPE, "Fake")
+                                    .setTitleText("Fake Activity")
+                                    .setContentText(appNames.get(0) + " is sending fake location.")
+                                    .show();
+
+                        } else {
+
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                            builder.setTitle("Do you want  to do?");
+
+
+                            builder.setPositiveButton("End Break", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    dialogInterface.dismiss();
+
+                                    latitude = currentLocation.getLatitude();
+                                    longitude = currentLocation.getLongitude();
+
+
+                                    SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+
+
+                                    LoginDetailsNotificationManagers md = new LoginDetailsNotificationManagers();
+                                    md.setTitle("Break taken from " + PreferenceHandler.getInstance(getActivity()).getUserFullName());
+                                    md.setMessage("Break ended at " + "" + sdt.format(new Date()));
+                                    LatLng master = new LatLng(latitude, longitude);
+                                    String address = getAddress(master);
+                                    md.setLocation(address);
+                                    md.setLongitude("" + longitude);
+                                    md.setLatitude("" + latitude);
+                                    md.setLoginDate("" + sdt.format(new Date()));
+                                    md.setStatus("Tea Break");
+                                    md.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
+                                    md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
+                                    try {
+                                        PreferenceHandler.getInstance(getActivity()).setTeaBreakStatus("false");
+                                        teaText.setText("Tea Break");
+                                        stopAlarmManager();
+                                        System.out.println("Suree triggerAlarmManager stop" + i);
+                                        saveLoginNotification(md);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
                                     }
-                                });
 
-                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.dismiss();
-                            }
-                        });
-
-                        final AlertDialog dialog = builder.create();
-                        dialog.show();
-
-
-
-                    }else if (currentLocation != null&&!lunchvalue.equalsIgnoreCase("true") ) {
-
-                        latitude = currentLocation.getLatitude();
-                        longitude = currentLocation.getLongitude();
-
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        builder.setTitle("Do you want  to do?");
-
-
-                        builder.setPositiveButton("Start Break", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                                SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
-
-                                LoginDetailsNotificationManagers md = new LoginDetailsNotificationManagers();
-                                md.setTitle("Break taken from "+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
-                                md.setMessage("Break taken at "+""+sdt.format(new Date()));
-                                LatLng master = new LatLng(latitude,longitude);
-                                String address = getAddress(master);
-                                md.setLocation(address);
-                                md.setLongitude(""+longitude);
-                                md.setLatitude(""+latitude);
-                                md.setLoginDate(""+sdt.format(new Date()));
-                                md.setStatus("Tea Break");
-                                md.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
-                                md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
-                                try {
-                                    PreferenceHandler.getInstance(getActivity()).setTeaBreakStatus("true");
-                                    teaText.setText(new SimpleDateFormat("hh:mm a").format(new Date()));
-                                    Calendar calendar = Calendar.getInstance ();
-                                    calendar.setTime(new Date());
-                                    calendar.add(Calendar.SECOND, 20);
-
-                                    triggerAlarmManager(calendar,"Tea");
-
-
-                                    saveLoginNotification(md);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
                                 }
+                            });
+
+                            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            });
+
+                            final AlertDialog dialog = builder.create();
+                            dialog.show();
+
+
+                        }
+
+
+                    } else if (currentLocation != null && !lunchvalue.equalsIgnoreCase("true")) {
+
+                        ArrayList<String> appNames = new ArrayList<>();
+
+
+                        if (Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION).equals("0")) {
+
+                            //Toast.makeText(mContext, "Mock Location Enabled" , Toast.LENGTH_SHORT).show();
+
+                            if (gps.isMockLocationOn(currentLocation, getActivity())) {
+
+                                appNames.addAll(gps.listofApps(getActivity()));
+
 
                             }
-                        });
 
-                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.dismiss();
-                            }
-                        });
 
-                        final AlertDialog dialog = builder.create();
-                        dialog.show();
+                        }
+
+                        if (appNames != null && appNames.size() != 0) {
+
+                            new CustomDesignAlertDialog(getActivity(), CustomDesignAlertDialog.ERROR_TYPE, "Fake")
+                                    .setTitleText("Fake Activity")
+                                    .setContentText(appNames.get(0) + " is sending fake location.")
+                                    .show();
+
+                        } else {
+                            latitude = currentLocation.getLatitude();
+                            longitude = currentLocation.getLongitude();
+
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                            builder.setTitle("Do you want  to do?");
+
+
+                            builder.setPositiveButton("Start Break", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+
+                                    LoginDetailsNotificationManagers md = new LoginDetailsNotificationManagers();
+                                    md.setTitle("Break taken from " + PreferenceHandler.getInstance(getActivity()).getUserFullName());
+                                    md.setMessage("Break taken at " + "" + sdt.format(new Date()));
+                                    LatLng master = new LatLng(latitude, longitude);
+                                    String address = getAddress(master);
+                                    md.setLocation(address);
+                                    md.setLongitude("" + longitude);
+                                    md.setLatitude("" + latitude);
+                                    md.setLoginDate("" + sdt.format(new Date()));
+                                    md.setStatus("Tea Break");
+                                    md.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
+                                    md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
+                                    try {
+                                        PreferenceHandler.getInstance(getActivity()).setTeaBreakStatus("true");
+                                        teaText.setText(new SimpleDateFormat("hh:mm a").format(new Date()));
+                                        Calendar calendar = Calendar.getInstance();
+                                        calendar.setTime(new Date());
+                                        calendar.add(Calendar.SECOND, 20);
+
+                                        triggerAlarmManager(calendar, "Tea");
+
+
+                                        saveLoginNotification(md);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
+                                }
+                            });
+
+                            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            });
+
+                            final AlertDialog dialog = builder.create();
+                            dialog.show();
+
+
+                        }
                     }
                 }
             }
@@ -678,20 +727,46 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
                     if (currentLocation != null&&value!=null&&value.equalsIgnoreCase("true") ) {
 
-                        latitude = currentLocation.getLatitude();
-                        longitude = currentLocation.getLongitude();
-
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        builder.setTitle("Do you want  to do?");
+                        ArrayList<String> appNames = new ArrayList<>();
 
 
-                        builder.setPositiveButton("End Lunch", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if(Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION).equals("0")){
 
-                                        dialogInterface.dismiss();
+                            //Toast.makeText(mContext, "Mock Location Enabled" , Toast.LENGTH_SHORT).show();
 
-                                        SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+                            if(gps.isMockLocationOn(currentLocation,getActivity())){
+
+                                appNames.addAll(gps.listofApps(getActivity()));
+
+
+                            }
+
+
+
+                        }
+
+                        if(appNames!=null&&appNames.size()!=0){
+
+                            new CustomDesignAlertDialog(getActivity(), CustomDesignAlertDialog.ERROR_TYPE,"Fake")
+                                    .setTitleText("Fake Activity")
+                                    .setContentText(appNames.get(0)+" is sending fake location.")
+                                    .show();
+
+                        }else{
+                            latitude = currentLocation.getLatitude();
+                            longitude = currentLocation.getLongitude();
+
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                            builder.setTitle("Do you want  to do?");
+
+
+                            builder.setPositiveButton("End Lunch", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    dialogInterface.dismiss();
+
+                                    SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
 
 
                                         LoginDetailsNotificationManagers md = new LoginDetailsNotificationManagers();
@@ -724,39 +799,74 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                             }
                         });
 
-                        final AlertDialog dialog = builder.create();
-                        dialog.show();
+                            final AlertDialog dialog = builder.create();
+                            dialog.show();
+
+
+
+                        }
+
+
 
                     }else if (currentLocation != null ) {
 
-                        latitude = currentLocation.getLatitude();
-                        longitude = currentLocation.getLongitude();
+                        ArrayList<String> appNames = new ArrayList<>();
+
+
+                        if(Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION).equals("0")){
+
+                            //Toast.makeText(mContext, "Mock Location Enabled" , Toast.LENGTH_SHORT).show();
+
+                            if(gps.isMockLocationOn(currentLocation,getActivity())){
+
+                                appNames.addAll(gps.listofApps(getActivity()));
+
+
+                            }
+
+
+
+                        }
+
+                        if(appNames!=null&&appNames.size()!=0){
+
+                            new CustomDesignAlertDialog(getActivity(), CustomDesignAlertDialog.ERROR_TYPE,"Fake")
+                                    .setTitleText("Fake Activity")
+                                    .setContentText(appNames.get(0)+" is sending fake location.")
+                                    .show();
+
+                        }else{
+
+                            latitude = currentLocation.getLatitude();
+                            longitude = currentLocation.getLongitude();
+
 
                         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                         builder.setTitle("Do you want  to do?");
+
 
                         builder.setPositiveButton("Start Lunch", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
 
-                                SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+                                    SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
 
 
-                                LoginDetailsNotificationManagers md = new LoginDetailsNotificationManagers();
-                                md.setTitle("Break taken from "+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
-                                md.setMessage("Break taken at "+""+sdt.format(new Date()));
-                                LatLng master = new LatLng(latitude,longitude);
-                                String address = getAddress(master);
-                                md.setLocation(address);
-                                md.setLongitude(""+longitude);
-                                md.setLatitude(""+latitude);
-                                md.setLoginDate(""+sdt.format(new Date()));
-                                md.setStatus("Lunch Break");
-                                md.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
-                                md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
-                                try {
+                                    LoginDetailsNotificationManagers md = new LoginDetailsNotificationManagers();
+                                    md.setTitle("Break taken from "+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
+                                    md.setMessage("Break taken at "+""+sdt.format(new Date()));
+                                    LatLng master = new LatLng(latitude,longitude);
+                                    String address = getAddress(master);
+                                    md.setLocation(address);
+                                    md.setLongitude(""+longitude);
+                                    md.setLatitude(""+latitude);
+                                    md.setLoginDate(""+sdt.format(new Date()));
+                                    md.setStatus("Lunch Break");
+                                    md.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
+                                    md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
+                                    try {
 
-                                    PreferenceHandler.getInstance(getActivity()).setLunchBreakStatus("true");
+                                        PreferenceHandler.getInstance(getActivity()).setLunchBreakStatus("true");
 
                                     dinnerText.setText(""+new SimpleDateFormat("hh:mm a").format(new Date()));
                                     Calendar calendar = Calendar.getInstance ();
@@ -768,21 +878,33 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                     e.printStackTrace();
                                 }
 
-                            }
-                        });
-                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.dismiss();
-                            }
-                        });
+                                }
+                            });
+                            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            });
 
-                        final AlertDialog dialog = builder.create();
-                        dialog.show();
+                            final AlertDialog dialog = builder.create();
+                            dialog.show();
+
+                        }
+
+
+
                     }
+
                 }
+
+
+
+
             }
         });
+
+        //setupLocalBucket();
 
         return this.layout;
     }
@@ -1085,18 +1207,44 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
                                             if (locationCheck()) {
 
+                                                ArrayList<String> appNames = new ArrayList<>();
+
                                                 if(currentLocation!=null) {
 
-                                                    latitude = currentLocation.getLatitude();
-                                                    longitude = currentLocation.getLongitude();
+                                                    if(Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION).equals("0")){
 
-                                                    LatLng masters = new LatLng(latitude, longitude);
-                                                    String addresss = null;
-                                                    try {
-                                                        addresss = getAddress(masters);
-                                                    } catch (Exception e) {
-                                                        e.printStackTrace();
+                                                        //Toast.makeText(mContext, "Mock Location Enabled" , Toast.LENGTH_SHORT).show();
+
+                                                        if(gps.isMockLocationOn(currentLocation,getActivity())){
+
+                                                            appNames.addAll(gps.listofApps(getActivity()));
+
+
+                                                        }
+
+
+
                                                     }
+
+                                                    if(appNames!=null&&appNames.size()!=0){
+
+                                                        new CustomDesignAlertDialog(getActivity(), CustomDesignAlertDialog.ERROR_TYPE,"Fake")
+                                                                .setTitleText("Fake Activity")
+                                                                .setContentText(appNames.get(0)+" is sending fake location.")
+                                                                .show();
+
+                                                    }else{
+
+                                                        latitude = currentLocation.getLatitude();
+                                                        longitude = currentLocation.getLongitude();
+
+                                                        LatLng masters = new LatLng(latitude, longitude);
+                                                        String addresss = null;
+                                                        try {
+                                                            addresss = getAddress(masters);
+                                                        } catch (Exception e) {
+                                                            e.printStackTrace();
+                                                        }
 
                                                   /*  latLong.setText(addresss);
                                                     centreMapOnLocationWithLatLng(masters, "" + PreferenceHandler.getInstance(getActivity()).getUserFullName());
@@ -1105,69 +1253,68 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                                  //   getActivity().stopService(mServiceIntent);
 
 
-                                                    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-                                                    SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+                                                        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+                                                        SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
 
-                                                    LatLng master = new LatLng(latitude, longitude);
-                                                    String address = null;
-                                                    try {
-                                                        address = getAddress(master);
-                                                    } catch (Exception e) {
-                                                        e.printStackTrace();
-                                                    }
-
-                                                    LoginDetails loginDetails = dto;
-                                                    loginDetails.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
-                                                    loginDetails.setLatitude("" + latitude);
-                                                    loginDetails.setLongitude("" + longitude);
-                                                    loginDetails.setLocation("" + address);
-                                                    loginDetails.setLogOutTime("" + sdt.format(new Date()));
-                                                    // loginDetails.setLoginDate(""+sdf.format(new Date()));
-
-
-
-                                                    try {
-                                                        LoginDetailsNotificationManagers md = new LoginDetailsNotificationManagers();
-                                                        md.setTitle("Login Details from " + PreferenceHandler.getInstance(getActivity()).getUserFullName());
-                                                        md.setMessage("Log out at  " + "" + sdt.format(new Date()));
-                                                        md.setLocation(address);
-                                                        md.setLongitude("" + longitude);
-                                                        md.setLatitude("" + latitude);
-                                                        md.setLoginDate("" + sdt.format(new Date()));
-                                                        md.setStatus("Log out");
-                                                        md.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
-                                                        md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
-                                                        md.setLoginDetailsId(dto.getLoginDetailsId());
-
-                                                        if(type!=null&&type.equalsIgnoreCase("gps")){
-
-                                                            updateLogin(loginDetails, builder.create(), md);
-
-                                                       /* Intent myService = new Intent(getActivity(), LocationSharingServices.class);
-                                                        getActivity().stopService(myService);*/
-
-
-                                                            Intent intent = new Intent(getActivity(), LocationForegroundService.class);
-                                                            intent.setAction(LocationForegroundService.ACTION_STOP_FOREGROUND_SERVICE);
-                                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                                                getActivity().startForegroundService(intent);
-                                                            } else {
-                                                                getActivity().startService(intent);
-                                                            }
-
-                                                        }else if(type!=null&&type.equalsIgnoreCase("Qr")){
-
-                                                            builder.create().dismiss();
-
-                                                            Intent qr = new Intent(getActivity(), ScannedQrScreen.class);
-                                                            Bundle bundle = new Bundle();
-                                                            bundle.putSerializable("LoginDetails",loginDetails);
-                                                            bundle.putSerializable("LoginNotification",md);
-                                                            bundle.putString("Type","Check-out");
-                                                            qr.putExtras(bundle);
-                                                            startActivity(qr);
-
+                                                        LatLng master = new LatLng(latitude, longitude);
+                                                        String address = null;
+                                                        try {
+                                                            address = getAddress(master);
+                                                        } catch (Exception e) {
+                                                            e.printStackTrace();
                                                         }
+
+                                                        LoginDetails loginDetails = dto;
+                                                        loginDetails.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
+                                                        loginDetails.setLatitude("" + latitude);
+                                                        loginDetails.setLongitude("" + longitude);
+                                                        loginDetails.setLocation("" + address);
+                                                        loginDetails.setLogOutTime("" + sdt.format(new Date()));
+                                                        // loginDetails.setLoginDate(""+sdf.format(new Date()));
+
+
+
+                                                        try {
+                                                            LoginDetailsNotificationManagers md = new LoginDetailsNotificationManagers();
+                                                            md.setTitle("Login Details from " + PreferenceHandler.getInstance(getActivity()).getUserFullName());
+                                                            md.setMessage("Log out at  " + "" + sdt.format(new Date()));
+                                                            md.setLocation(address);
+                                                            md.setLongitude("" + longitude);
+                                                            md.setLatitude("" + latitude);
+                                                            md.setLoginDate("" + sdt.format(new Date()));
+                                                            md.setStatus("Log out");
+                                                            md.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
+                                                            md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
+                                                            md.setLoginDetailsId(dto.getLoginDetailsId());
+
+                                                            if(type!=null&&type.equalsIgnoreCase("gps")){
+
+                                                                updateLogin(loginDetails, builder.create(), md);
+
+
+
+
+                                                                Intent intent = new Intent(getActivity(), LocationForegroundService.class);
+                                                                intent.setAction(LocationForegroundService.ACTION_STOP_FOREGROUND_SERVICE);
+                                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                                                    getActivity().startForegroundService(intent);
+                                                                } else {
+                                                                    getActivity().startService(intent);
+                                                                }
+
+                                                            }else if(type!=null&&type.equalsIgnoreCase("Qr")){
+
+                                                                builder.create().dismiss();
+
+                                                                Intent qr = new Intent(getActivity(), ScannedQrScreen.class);
+                                                                Bundle bundle = new Bundle();
+                                                                bundle.putSerializable("LoginDetails",loginDetails);
+                                                                bundle.putSerializable("LoginNotification",md);
+                                                                bundle.putString("Type","Check-out");
+                                                                qr.putExtras(bundle);
+                                                                startActivity(qr);
+
+                                                            }
 
 
 
@@ -1175,9 +1322,13 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                                         intent.setAction(LocationForegroundService.ACTION_STOP_FOREGROUND_SERVICE);
                                                         getActivity().startService(intent);*/
 
-                                                    } catch (Exception e) {
-                                                        e.printStackTrace();
+                                                        } catch (Exception e) {
+                                                            e.printStackTrace();
+                                                        }
+
                                                     }
+
+
 
                                                 }else if(latitude!=0&&longitude!=0){
 
@@ -1191,12 +1342,6 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                                     } catch (Exception e) {
                                                         e.printStackTrace();
                                                     }
-
-                                                  /*  latLong.setText(addresss);
-                                                    centreMapOnLocationWithLatLng(masters, "" + PreferenceHandler.getInstance(getActivity()).getUserFullName());
-*/
-
-                                                    //   getActivity().stopService(mServiceIntent);
 
 
                                                     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
@@ -1422,143 +1567,180 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                     if (locationCheck()) {
                         //gps = new TrackGPS(getActivity());
 
+                        ArrayList<String> appNames = new ArrayList<>();
                         if(currentLocation!=null){
 
-                            latitude = currentLocation.getLatitude();
-                            longitude = currentLocation.getLongitude();
+                            if(Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION).equals("0")){
 
-                            LatLng masters = new LatLng(latitude,longitude);
-                            String addresss = null;
-                            try {
-                                addresss = getAddress(masters);
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                                //Toast.makeText(mContext, "Mock Location Enabled" , Toast.LENGTH_SHORT).show();
+
+                                if(gps.isMockLocationOn(currentLocation,getActivity())){
+
+                                    appNames.addAll(gps.listofApps(getActivity()));
+
+
+                                }
+
+
+
                             }
 
-                       /*     latLong.setText(addresss);
-                            centreMapOnLocationWithLatLng(masters,""+PreferenceHandler.getInstance(getActivity()).getUserFullName());
-*/
-                            Location locationA = new Location("point A");
+                            if(appNames!=null&&appNames.size()!=0){
 
-                            locationA.setLatitude(Double.parseDouble(PreferenceHandler.getInstance(getActivity()).getOrganizationLati()));
-                            locationA.setLongitude(Double.parseDouble(PreferenceHandler.getInstance(getActivity()).getOrganizationLongi()));
+                                new CustomDesignAlertDialog(getActivity(), CustomDesignAlertDialog.ERROR_TYPE,"Fake")
+                                        .setTitleText("Fake Activity")
+                                        .setContentText(appNames.get(0)+" is sending fake location.")
+                                        .show();
 
-                            Location locationB = new Location("point B");
+                            }else{
 
-                            locationB.setLatitude(latitude);
-                            locationB.setLongitude(longitude);
+                                latitude = currentLocation.getLatitude();
+                                longitude = currentLocation.getLongitude();
 
-                            float distance = locationA.distanceTo(locationB);
+                                LatLng masters = new LatLng(latitude,longitude);
+                                String addresss = null;
+                                try {
+                                    addresss = getAddress(masters);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
 
-                            if (PreferenceHandler.getInstance(getActivity()).isLocationOn()) {
-                                distance = 0;
-                            }
+                                String title = "Login Details from " + PreferenceHandler.getInstance(getActivity()).getUserFullName();
+
+                                Location locationA = new Location("point A");
+
+                                locationA.setLatitude(Double.parseDouble(PreferenceHandler.getInstance(getActivity()).getOrganizationLati()));
+                                locationA.setLongitude(Double.parseDouble(PreferenceHandler.getInstance(getActivity()).getOrganizationLongi()));
+
+                                Location locationB = new Location("point B");
+
+                                locationB.setLatitude(latitude);
+                                locationB.setLongitude(longitude);
+
+                                float distance = locationA.distanceTo(locationB);
+
+                                if (PreferenceHandler.getInstance(getActivity()).isLocationOn()) {
+                                    distance = 0;
+                                }
 
 
 
-                            // Toast.makeText(getActivity(), "distance "+distance, Toast.LENGTH_SHORT).show();
-                            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-                            SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
-                            SimpleDateFormat sdtT = new SimpleDateFormat("hh:mm a");
+                                // Toast.makeText(getActivity(), "distance "+distance, Toast.LENGTH_SHORT).show();
+                                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+                                SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+                                SimpleDateFormat sdtT = new SimpleDateFormat("hh:mm a");
 
-                            LatLng master = new LatLng(latitude, longitude);
-                            String address = null;
-                            try {
-                                address = getAddress(master);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                                LatLng master = new LatLng(latitude, longitude);
+                                String address = null;
+                                try {
+                                    address = getAddress(master);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
 
-                            String currentTime = sdtT.format(new Date());
+                                String currentTime = sdtT.format(new Date());
 
-                            LoginDetails loginDetails = new LoginDetails();
+                                LoginDetails loginDetails = new LoginDetails();
 
-                            if (PreferenceHandler.getInstance(getActivity()).isDataOn()) {
-
-                                loginDetails.setIdleTime("0");
-
-                            } else {
-                                if (currentTime.equalsIgnoreCase(PreferenceHandler.getInstance(getActivity()).getCheckInTime())) {
+                                if (PreferenceHandler.getInstance(getActivity()).isDataOn()) {
 
                                     loginDetails.setIdleTime("0");
+
                                 } else {
 
-                                    try {
-                                        Date curT = sdtT.parse(currentTime);
-                                        Date offT = sdtT.parse(PreferenceHandler.getInstance(getActivity()).getCheckInTime());
+                                        if(timingId!=0&&checkInTime!=null&&!checkInTime.isEmpty()){
 
-                                        long diff = curT.getTime() - offT.getTime();
+                                            try {
+                                                Date curT = sdtT.parse(currentTime);
+                                                Date offT = sdtT.parse(checkInTime);
 
-                                        if (diff > 0) {
+                                                long diff = curT.getTime() - offT.getTime();
+
+                                                if (diff > 0) {
 
 
-                                            long diffMinutes = diff / (60 * 1000) % 60;
-                                            long diffHours = diff / (60 * 60 * 1000) % 24;
+                                                    long diffMinutes = diff / (60 * 1000) % 60;
+                                                    long diffHours = diff / (60 * 60 * 1000) % 24;
 
-                                            loginDetails.setIdleTime("100");
+                                                    loginDetails.setIdleTime("100");
+                                                    title = "Late Login Details from " + PreferenceHandler.getInstance(getActivity()).getUserFullName();
 
-                                            Toast.makeText(mContext, "You are late " + (int) diffHours + " Hours " + (int) diffMinutes + " mins ", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            loginDetails.setIdleTime("0");
+                                                    Toast.makeText(mContext, "You are late " + (int) diffHours + " Hours " + (int) diffMinutes + " mins ", Toast.LENGTH_SHORT).show();
+                                                } else {
+                                                    loginDetails.setIdleTime("0");
+                                                }
+
+
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+
+
+
                                         }
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            }
 
-                            loginDetails.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
-                            loginDetails.setLatitude("" + latitude);
-                            loginDetails.setLongitude("" + longitude);
-                            loginDetails.setLocation("" + address);
-                            loginDetails.setLoginTime("" + sdt.format(new Date()));
-                            loginDetails.setLoginDate("" + sdf.format(new Date()));
-                            loginDetails.setLogOutTime("");
 
-                            LoginDetailsNotificationManagers md = new LoginDetailsNotificationManagers();
-                            try {
-
-                                md.setTitle("Login Details from " + PreferenceHandler.getInstance(getActivity()).getUserFullName());
-                                md.setMessage("Log in at  " + "" + sdt.format(new Date()));
-                                md.setLocation(address);
-                                md.setLongitude("" + longitude);
-                                md.setLatitude("" + latitude);
-                                md.setLoginDate("" + sdt.format(new Date()));
-                                md.setStatus("In meeting");
-                                md.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
-                                md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                            if(type!=null&&type.equalsIgnoreCase("gps")){
-
-                                if (distance >= 0 && distance <= 100) {
-
-                                    try {
-                                        addLogin(loginDetails, builder.create(), md);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-
-                                } else {
-
-                                    Toast.makeText(getActivity(), "You are far away " + distance + " meter from your office", Toast.LENGTH_SHORT).show();
                                 }
 
 
-                            }else if(type!=null&&type.equalsIgnoreCase("Qr")){
+                                loginDetails.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
+                                loginDetails.setLatitude("" + latitude);
+                                loginDetails.setLongitude("" + longitude);
+                                loginDetails.setLocation("" + address);
+                                loginDetails.setLoginTime("" + sdt.format(new Date()));
+                                loginDetails.setLoginDate("" + sdf.format(new Date()));
+                                loginDetails.setLogOutTime("");
 
-                               dialogInterface.dismiss();
+                                LoginDetailsNotificationManagers md = new LoginDetailsNotificationManagers();
+                                try {
 
-                                Intent qr = new Intent(getActivity(), ScannedQrScreen.class);
-                                Bundle bundle = new Bundle();
-                                bundle.putSerializable("LoginDetails",loginDetails);
-                                bundle.putSerializable("LoginNotification",md);
-                                bundle.putString("Type","Check-in");
-                                qr.putExtras(bundle);
-                                startActivity(qr);
+                                    md.setTitle(title);
+                                    md.setMessage("Log in at  " + "" + sdt.format(new Date()));
+                                    md.setLocation(address);
+                                    md.setLongitude("" + longitude);
+                                    md.setLatitude("" + latitude);
+                                    md.setLoginDate("" + sdt.format(new Date()));
+                                    md.setStatus("In meeting");
+                                    md.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
+                                    md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
+
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                                if(type!=null&&type.equalsIgnoreCase("gps")){
+
+                                    if (distance >= 0 && distance <= 100) {
+
+                                        try {
+                                            addLogin(loginDetails, builder.create(), md);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+
+                                    } else {
+
+                                        Toast.makeText(getActivity(), "You are far away " + distance + " meter from your office", Toast.LENGTH_SHORT).show();
+
+                                    }
+
+
+                                }else if(type!=null&&type.equalsIgnoreCase("Qr")){
+
+                                    dialogInterface.dismiss();
+
+                                    Intent qr = new Intent(getActivity(), ScannedQrScreen.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putSerializable("LoginDetails",loginDetails);
+                                    bundle.putSerializable("LoginNotification",md);
+                                    bundle.putString("Type","Check-in");
+                                    qr.putExtras(bundle);
+                                    startActivity(qr);
+
+                                }
+
+
 
                             }
 
@@ -1577,9 +1759,6 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                 e.printStackTrace();
                             }
 
-                       /*     latLong.setText(addresss);
-                            centreMapOnLocationWithLatLng(masters,""+PreferenceHandler.getInstance(getActivity()).getUserFullName());
-*/
                             Location locationA = new Location("point A");
 
                             locationA.setLatitude(Double.parseDouble(PreferenceHandler.getInstance(getActivity()).getOrganizationLati()));
@@ -1981,7 +2160,6 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
 
         if (currentLocation != null) {
-          //  latLong.setText("Latitude : " + currentLocation.getLatitude() + " , Longitude : " + currentLocation.getLongitude());
 
             latitude = currentLocation.getLatitude();
             longitude = currentLocation.getLongitude();
@@ -2034,25 +2212,61 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
     @Override
     public void onLocationChanged(Location location) {
 
+        ArrayList<String> appNames = new ArrayList<>();
 
         if(location!=null){
 
-            latitude = location.getLatitude();
-            longitude = location.getLongitude();
+            if(getActivity().getContentResolver()!=null){
+                if(Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION).equals("0")){
 
-            LatLng master = new LatLng(latitude,longitude);
-            String address = null;
-            try {
-                address = getAddress(master);
-            } catch (Exception e) {
-                e.printStackTrace();
+                    //Toast.makeText(mContext, "Mock Location Enabled" , Toast.LENGTH_SHORT).show();
+
+                    if(gps.isMockLocationOn(location,getActivity())){
+
+                        appNames.addAll(gps.listofApps(getActivity()));
+
+
+                    }
+
+
+
+                }
+
             }
 
-            if(firstTime){
-                latLong.setText(address);
-                centreMapOnLocationWithLatLng(master,""+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
-                firstTime =false;
+            if(appNames!=null&&appNames.size()!=0){
+
+                latitude = 0;
+                longitude = 0;
+
+
+                new CustomDesignAlertDialog(getActivity(), CustomDesignAlertDialog.ERROR_TYPE,"Fake")
+                        .setTitleText("Fake Activity")
+                        .setContentText(appNames.get(0)+" is sending fake location.")
+                        .show();
+
+            }else{
+
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+
+                LatLng master = new LatLng(latitude,longitude);
+                String address = null;
+                try {
+                    address = getAddress(master);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                if(firstTime){
+                    latLong.setText(address);
+                    centreMapOnLocationWithLatLng(master,""+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
+                    firstTime =false;
+                }
+
             }
+
+
         }
     }
 
@@ -2232,12 +2446,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                 View views = inflater.inflate(R.layout.activity_meeting_add_with_sign_screen, null);
 
                 builder.setView(views);
-                //final Button mSave = (Button) views.findViewById(R.id.save);
 
-               /* final EditText mRemarks = (EditText) views.findViewById(R.id.meeting_remarks);
-                final TextInputEditText mClient = (TextInputEditText) views.findViewById(R.id.client_name);
-                final TextInputEditText mContact = (TextInputEditText) views.findViewById(R.id.client_contact);
-                final TextInputEditText mPurpose = (TextInputEditText) views.findViewById(R.id.purpose_meeting);*/
 
                 final Button  mSave = views.findViewById(R.id.save);
                 mSave.setText(option);
@@ -2326,140 +2535,160 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
                             if(locationCheck()){
 
+                                ArrayList<String> appNames = new ArrayList<>();
+
                                 if(currentLocation!=null) {
 
-                                    latitude = currentLocation.getLatitude();
-                                    longitude = currentLocation.getLongitude();
+                                    if(Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION).equals("0")){
 
-                                    LatLng masters = new LatLng(latitude, longitude);
-                                    String addresss = null;
-                                    try {
-                                        addresss = getAddress(masters);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
+                                        //Toast.makeText(mContext, "Mock Location Enabled" , Toast.LENGTH_SHORT).show();
 
-                                   /* latLong.setText(addresss);
-                                    centreMapOnLocationWithLatLng(masters, "" + PreferenceHandler.getInstance(getActivity()).getUserFullName());
-*/
-                                    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-                                    SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+                                        if(gps.isMockLocationOn(currentLocation,getActivity())){
 
-                                    LatLng master = new LatLng(latitude,longitude);
-                                    String address = null;
-                                    try {
-                                        address = getAddress(master);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
+                                            appNames.addAll(gps.listofApps(getActivity()));
 
-                                    loginDetails = new Meetings();
-                                    loginDetails.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
-                                    loginDetails.setStartLatitude(""+latitude);
-                                    loginDetails.setStartLongitude(""+longitude);
-                                    loginDetails.setStartLocation(""+address);
-                                    loginDetails.setStartTime(""+sdt.format(new Date()));
-                                   /* loginDetails.setEndLatitude(""+latitude);
-                                    loginDetails.setEndLongitude(""+longitude);
-                                    loginDetails.setEndLocation(""+address);
-                                    loginDetails.setEndTime(""+sdt.format(new Date()));*/
-                                    loginDetails.setMeetingDate(""+sdf.format(new Date()));
-                                    loginDetails.setMeetingAgenda(purpose);
-                                    loginDetails.setMeetingDetails(detail);
-                                    loginDetails.setStatus("In Meeting");
 
-                                    if(customer!=null&&!customer.equalsIgnoreCase("Others")){
-
-                                        if(customerArrayList!=null&&customerArrayList.size()!=0)
-                                        loginDetails.setCustomerId(clientId);
-
-                                    }
-
-                                    methodAdd = false;
-
-                                    String contact = "";
-
-                                    if(email!=null&&!email.isEmpty()){
-                                        contact = contact+"%"+email;
-                                    }
-
-                                    if(mobile!=null&&!mobile.isEmpty()){
-                                        contact = contact+"%"+mobile;
-                                    }
-
-                                    if(contact!=null&&!contact.isEmpty()){
-                                        loginDetails.setMeetingPersonDetails(client+""+contact);
-                                    }else{
-                                        loginDetails.setMeetingPersonDetails(client);
-                                    }
-
-                                    try {
-
-                                        md = new MeetingDetailsNotificationManagers();
-                                        md.setTitle("Meeting Details from "+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
-                                        md.setMessage("Meeting with "+client+" for "+purpose);
-                                        md.setLocation(address);
-                                        md.setLongitude(""+longitude);
-                                        md.setLatitude(""+latitude);
-                                        md.setMeetingDate(""+sdt.format(new Date()));
-                                        md.setStatus("In meeting");
-                                        md.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
-                                        md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
-                                        md.setMeetingPerson(client);
-                                        md.setMeetingsDetails(purpose);
-                                        md.setMeetingComments(detail);
-
-                                        if (mGetSign.isChecked()&&!mTakeImage.isChecked()){
-                                            // Method to create Directory, if the Directory doesn't exists
-                                            file = new File(DIRECTORY);
-                                            if (!file.exists()) {
-                                                file.mkdir();
-                                            }
-
-                                            // Dialog Function
-                                            dialogs = new Dialog(getActivity());
-                                            // Removing the features of Normal Dialogs
-                                            dialogs.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                            dialogs.setContentView(R.layout.dialog_signature);
-                                            dialogs.setCancelable(true);
-
-                                            dialog_action(loginDetails,md,"null",dialog);
-
-                                        }else if (mGetSign.isChecked()&&mTakeImage.isChecked()){
-
-                                            file = new File(DIRECTORY);
-                                            if (!file.exists()) {
-                                                file.mkdir();
-                                            }
-
-                                            // Dialog Function
-                                            dialogs = new Dialog(getActivity());
-                                            // Removing the features of Normal Dialogs
-                                            dialogs.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                            dialogs.setContentView(R.layout.dialog_signature);
-                                            dialogs.setCancelable(true);
-
-                                            dialog_action(loginDetails,md,"Selfie",dialog);
-
-                                        }else{
-                                            addMeeting(loginDetails,md);
                                         }
 
-                                        dialog.dismiss();
 
 
-                                     //   addMeeting(loginDetails,dialog,md);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                        dialog.dismiss();
                                     }
+
+                                    if(appNames!=null&&appNames.size()!=0){
+
+                                        new CustomDesignAlertDialog(getActivity(), CustomDesignAlertDialog.ERROR_TYPE,"Fake")
+                                                .setTitleText("Fake Activity")
+                                                .setContentText(appNames.get(0)+" is sending fake location.")
+                                                .show();
+
+                                    }else{
+                                        latitude = currentLocation.getLatitude();
+                                        longitude = currentLocation.getLongitude();
+
+                                        LatLng masters = new LatLng(latitude, longitude);
+                                        String addresss = null;
+                                        try {
+                                            addresss = getAddress(masters);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+
+
+                                        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+                                        SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+
+                                        LatLng master = new LatLng(latitude,longitude);
+                                        String address = null;
+                                        try {
+                                            address = getAddress(master);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+
+                                        loginDetails = new Meetings();
+                                        loginDetails.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
+                                        loginDetails.setStartLatitude(""+latitude);
+                                        loginDetails.setStartLongitude(""+longitude);
+                                        loginDetails.setStartLocation(""+address);
+                                        loginDetails.setStartTime(""+sdt.format(new Date()));
+
+                                        loginDetails.setMeetingDate(""+sdf.format(new Date()));
+                                        loginDetails.setMeetingAgenda(purpose);
+                                        loginDetails.setMeetingDetails(detail);
+                                        loginDetails.setStatus("In Meeting");
+
+                                        if(customer!=null&&!customer.equalsIgnoreCase("Others")){
+
+                                            if(customerArrayList!=null&&customerArrayList.size()!=0)
+                                                loginDetails.setCustomerId(clientId);
+
+                                        }
+
+                                        methodAdd = false;
+
+                                        String contact = "";
+
+                                        if(email!=null&&!email.isEmpty()){
+                                            contact = contact+"%"+email;
+                                        }
+
+                                        if(mobile!=null&&!mobile.isEmpty()){
+                                            contact = contact+"%"+mobile;
+                                        }
+
+                                        if(contact!=null&&!contact.isEmpty()){
+                                            loginDetails.setMeetingPersonDetails(client+""+contact);
+                                        }else{
+                                            loginDetails.setMeetingPersonDetails(client);
+                                        }
+
+                                        try {
+
+                                            md = new MeetingDetailsNotificationManagers();
+                                            md.setTitle("Meeting Details from "+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
+                                            md.setMessage("Meeting with "+client+" for "+purpose);
+                                            md.setLocation(address);
+                                            md.setLongitude(""+longitude);
+                                            md.setLatitude(""+latitude);
+                                            md.setMeetingDate(""+sdt.format(new Date()));
+                                            md.setStatus("In meeting");
+                                            md.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
+                                            md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
+                                            md.setMeetingPerson(client);
+                                            md.setMeetingsDetails(purpose);
+                                            md.setMeetingComments(detail);
+
+                                            if (mGetSign.isChecked()&&!mTakeImage.isChecked()){
+                                                // Method to create Directory, if the Directory doesn't exists
+                                                file = new File(DIRECTORY);
+                                                if (!file.exists()) {
+                                                    file.mkdir();
+                                                }
+
+                                                // Dialog Function
+                                                dialogs = new Dialog(getActivity());
+                                                // Removing the features of Normal Dialogs
+                                                dialogs.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                                dialogs.setContentView(R.layout.dialog_signature);
+                                                dialogs.setCancelable(true);
+
+                                                dialog_action(loginDetails,md,"null",dialog);
+
+                                            }else if (mGetSign.isChecked()&&mTakeImage.isChecked()){
+
+                                                file = new File(DIRECTORY);
+                                                if (!file.exists()) {
+                                                    file.mkdir();
+                                                }
+
+                                                // Dialog Function
+                                                dialogs = new Dialog(getActivity());
+                                                // Removing the features of Normal Dialogs
+                                                dialogs.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                                dialogs.setContentView(R.layout.dialog_signature);
+                                                dialogs.setCancelable(true);
+
+                                                dialog_action(loginDetails,md,"Selfie",dialog);
+
+                                            }else{
+                                                addMeeting(loginDetails,md);
+                                            }
+
+                                            dialog.dismiss();
+
+
+                                            //   addMeeting(loginDetails,dialog,md);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                            dialog.dismiss();
+                                        }
+                                    }
+
+
 
                                 }else if(latitude!=0&&longitude!=0){
 
 
-                               /*     latitude = currentLocation.getLatitude();
-                                    longitude = currentLocation.getLongitude();*/
-
                                     LatLng masters = new LatLng(latitude, longitude);
                                     String addresss = null;
                                     try {
@@ -2468,9 +2697,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                         e.printStackTrace();
                                     }
 
-                                   /* latLong.setText(addresss);
-                                    centreMapOnLocationWithLatLng(masters, "" + PreferenceHandler.getInstance(getActivity()).getUserFullName());
-*/
+
                                     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
                                     SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
 
@@ -2488,10 +2715,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                     loginDetails.setStartLongitude(""+longitude);
                                     loginDetails.setStartLocation(""+address);
                                     loginDetails.setStartTime(""+sdt.format(new Date()));
-                                   /* loginDetails.setEndLatitude(""+latitude);
-                                    loginDetails.setEndLongitude(""+longitude);
-                                    loginDetails.setEndLocation(""+address);
-                                    loginDetails.setEndTime(""+sdt.format(new Date()));*/
+
                                     loginDetails.setMeetingDate(""+sdf.format(new Date()));
                                     loginDetails.setMeetingAgenda(purpose);
                                     loginDetails.setMeetingDetails(detail);
@@ -2728,12 +2952,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                         View views = inflater.inflate(R.layout.activity_meeting_add_with_sign_screen, null);
 
                                         builder.setView(views);
-                                     /*   final Button mSave = (Button) views.findViewById(R.id.save);
-                                        mSave.setText(option);
-                                        final EditText mRemarks = (EditText) views.findViewById(R.id.meeting_remarks);
-                                        final TextInputEditText mClient = (TextInputEditText) views.findViewById(R.id.client_name);
-                                        final TextInputEditText mContact = (TextInputEditText) views.findViewById(R.id.client_contact);
-                                        final TextInputEditText mPurpose = (TextInputEditText) views.findViewById(R.id.purpose_meeting);*/
+
 
                                         final Button  mSave = views.findViewById(R.id.save);
                                         mSave.setText(option);
@@ -2816,12 +3035,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                             }
                                         });
 
-                                        /*if(dto.getCustomerId()!=0){
 
-                                            getCustomersWithId(PreferenceHandler.getInstance(getActivity()).getCompanyId(),dto.getCustomerId());
-                                        }else{
-                                            getCustomersWithId(PreferenceHandler.getInstance(getActivity()).getCompanyId(),0);
-                                        }*/
 
                                         mSave.setOnClickListener(new View.OnClickListener() {
                                             @Override
@@ -2852,48 +3066,74 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
                                                     if(locationCheck()){
 
+                                                        ArrayList<String> appNames = new ArrayList<>();
+
                                                         if(currentLocation!=null) {
 
-                                                            latitude = currentLocation.getLatitude();
-                                                            longitude = currentLocation.getLongitude();
 
-                                                            LatLng masters = new LatLng(latitude, longitude);
-                                                            String addresss = null;
-                                                            try {
-                                                                addresss = getAddress(masters);
-                                                            } catch (Exception e) {
-                                                                e.printStackTrace();
+                                                            //  latLong.setText("Latitude : " + currentLocation.getLatitude() + " , Longitude : " + currentLocation.getLongitude());
+
+                                                            if(Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION).equals("0")){
+
+                                                                //Toast.makeText(mContext, "Mock Location Enabled" , Toast.LENGTH_SHORT).show();
+
+                                                                if(gps.isMockLocationOn(currentLocation,getActivity())){
+
+                                                                    appNames.addAll(gps.listofApps(getActivity()));
+
+
+                                                                }
+
+
+
                                                             }
+
+                                                            if(appNames!=null&&appNames.size()!=0){
+
+                                                                new CustomDesignAlertDialog(getActivity(), CustomDesignAlertDialog.ERROR_TYPE,"Fake")
+                                                                        .setTitleText("Fake Activity")
+                                                                        .setContentText(appNames.get(0)+" is sending fake location.")
+                                                                        .show();
+
+                                                            }else{
+
+                                                                latitude = currentLocation.getLatitude();
+                                                                longitude = currentLocation.getLongitude();
+
+                                                                LatLng masters = new LatLng(latitude, longitude);
+                                                                String addresss = null;
+                                                                try {
+                                                                    addresss = getAddress(masters);
+                                                                } catch (Exception e) {
+                                                                    e.printStackTrace();
+                                                                }
 
                                                            /* latLong.setText(addresss);
                                                             centreMapOnLocationWithLatLng(masters, "" + PreferenceHandler.getInstance(getActivity()).getUserFullName());
 */
 
-                                                            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-                                                            SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+                                                                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+                                                                SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
 
-                                                            LatLng master = new LatLng(latitude,longitude);
-                                                            String address = null;
-                                                            try {
-                                                                address = getAddress(master);
-                                                            } catch (Exception e) {
-                                                                e.printStackTrace();
-                                                            }
+                                                                LatLng master = new LatLng(latitude,longitude);
+                                                                String address = null;
+                                                                try {
+                                                                    address = getAddress(master);
+                                                                } catch (Exception e) {
+                                                                    e.printStackTrace();
+                                                                }
 
-                                                            loginDetails = dto;
-                                                            loginDetails.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
-                                                          /*  loginDetails.setStartLatitude(""+latitude);
-                                                            loginDetails.setStartLongitude(""+longitude);
-                                                            loginDetails.setStartLocation(""+address);
-                                                            loginDetails.setStartTime(""+sdt.format(new Date()));*/
-                                                            loginDetails.setEndLatitude(""+latitude);
-                                                            loginDetails.setEndLongitude(""+longitude);
-                                                            loginDetails.setEndLocation(""+address);
-                                                            loginDetails.setEndTime(""+sdt.format(new Date()));
-                                                            loginDetails.setMeetingDate(""+sdf.format(new Date()));
-                                                            loginDetails.setMeetingAgenda(purpose);
-                                                            loginDetails.setMeetingDetails(detail);
-                                                            loginDetails.setStatus("Completed");
+                                                                loginDetails = dto;
+                                                                loginDetails.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
+
+                                                                loginDetails.setEndLatitude(""+latitude);
+                                                                loginDetails.setEndLongitude(""+longitude);
+                                                                loginDetails.setEndLocation(""+address);
+                                                                loginDetails.setEndTime(""+sdt.format(new Date()));
+                                                                loginDetails.setMeetingDate(""+sdf.format(new Date()));
+                                                                loginDetails.setMeetingAgenda(purpose);
+                                                                loginDetails.setMeetingDetails(detail);
+                                                                loginDetails.setStatus("Completed");
 
                                                             /*if(customer!=null&&!customer.equalsIgnoreCase("Others")){
 
@@ -2902,61 +3142,61 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
                                                             }*/
 
-                                                            String contact = "";
+                                                                String contact = "";
 
-                                                            if(email!=null&&!email.isEmpty()){
-                                                                contact = contact+"%"+email;
-                                                            }
+                                                                if(email!=null&&!email.isEmpty()){
+                                                                    contact = contact+"%"+email;
+                                                                }
 
-                                                            if(mobile!=null&&!mobile.isEmpty()){
-                                                                contact = contact+"%"+mobile;
-                                                            }
+                                                                if(mobile!=null&&!mobile.isEmpty()){
+                                                                    contact = contact+"%"+mobile;
+                                                                }
 
-                                                            if(contact!=null&&!contact.isEmpty()){
-                                                                loginDetails.setMeetingPersonDetails(client+""+contact);
-                                                            }else{
-                                                                loginDetails.setMeetingPersonDetails(client);
-                                                            }
+                                                                if(contact!=null&&!contact.isEmpty()){
+                                                                    loginDetails.setMeetingPersonDetails(client+""+contact);
+                                                                }else{
+                                                                    loginDetails.setMeetingPersonDetails(client);
+                                                                }
 
-                                                            try {
+                                                                try {
 
-                                                                md = new MeetingDetailsNotificationManagers();
-                                                                md.setTitle("Meeting Details from "+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
-                                                                md.setMessage("Meeting with "+client+" for "+purpose);
-                                                                md.setLocation(address);
-                                                                md.setLongitude(""+longitude);
-                                                                md.setLatitude(""+latitude);
-                                                                md.setMeetingDate(""+sdt.format(new Date()));
-                                                                md.setStatus("Completed");
-                                                                md.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
-                                                                md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
-                                                                md.setMeetingPerson(client);
-                                                                md.setMeetingsId(loginDetails.getMeetingsId());
-                                                                md.setMeetingsDetails(purpose);
-                                                                md.setMeetingComments(detail);
+                                                                    md = new MeetingDetailsNotificationManagers();
+                                                                    md.setTitle("Meeting Details from "+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
+                                                                    md.setMessage("Meeting with "+client+" for "+purpose);
+                                                                    md.setLocation(address);
+                                                                    md.setLongitude(""+longitude);
+                                                                    md.setLatitude(""+latitude);
+                                                                    md.setMeetingDate(""+sdt.format(new Date()));
+                                                                    md.setStatus("Completed");
+                                                                    md.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
+                                                                    md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
+                                                                    md.setMeetingPerson(client);
+                                                                    md.setMeetingsId(loginDetails.getMeetingsId());
+                                                                    md.setMeetingsDetails(purpose);
+                                                                    md.setMeetingComments(detail);
 
-                                                                if (mGetSign.isChecked()&&!mTakeImage.isChecked()){
-                                                                    // Method to create Directory, if the Directory doesn't exists
-                                                                    file = new File(DIRECTORY);
-                                                                    if (!file.exists()) {
-                                                                        file.mkdir();
-                                                                    }
+                                                                    if (mGetSign.isChecked()&&!mTakeImage.isChecked()){
+                                                                        // Method to create Directory, if the Directory doesn't exists
+                                                                        file = new File(DIRECTORY);
+                                                                        if (!file.exists()) {
+                                                                            file.mkdir();
+                                                                        }
 
-                                                                    // Dialog Function
-                                                                    dialogs = new Dialog(getActivity());
-                                                                    // Removing the features of Normal Dialogs
-                                                                    dialogs.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                                                    dialogs.setContentView(R.layout.dialog_signature);
-                                                                    dialogs.setCancelable(true);
+                                                                        // Dialog Function
+                                                                        dialogs = new Dialog(getActivity());
+                                                                        // Removing the features of Normal Dialogs
+                                                                        dialogs.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                                                        dialogs.setContentView(R.layout.dialog_signature);
+                                                                        dialogs.setCancelable(true);
 
-                                                                    dialog_action(loginDetails,md,"null",dialog);
+                                                                        dialog_action(loginDetails,md,"null",dialog);
 
-                                                                }else if (!mGetSign.isChecked()&&mTakeImage.isChecked()){
+                                                                    }else if (!mGetSign.isChecked()&&mTakeImage.isChecked()){
 
-                                                                    file = new File(DIRECTORY);
-                                                                    if (!file.exists()) {
-                                                                        file.mkdir();
-                                                                    }
+                                                                        file = new File(DIRECTORY);
+                                                                        if (!file.exists()) {
+                                                                            file.mkdir();
+                                                                        }
 
                                                                        /* // Dialog Function
                                                                         dialog = new Dialog(MeetingAddWithSignScreen.this);
@@ -2965,37 +3205,41 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                                                         dialog.setContentView(R.layout.dialog_signature);
                                                                         dialog.setCancelable(true);*/
 
-                                                                    dispatchTakePictureIntent();
-                                                                    dialog.dismiss();
+                                                                        dispatchTakePictureIntent();
+                                                                        dialog.dismiss();
 
-                                                                    //dialog_action(loginDetails,md,"Selfie");
+                                                                        //dialog_action(loginDetails,md,"Selfie");
 
-                                                                }else if (mGetSign.isChecked()&&mTakeImage.isChecked()){
+                                                                    }else if (mGetSign.isChecked()&&mTakeImage.isChecked()){
 
-                                                                    file = new File(DIRECTORY);
-                                                                    if (!file.exists()) {
-                                                                        file.mkdir();
+                                                                        file = new File(DIRECTORY);
+                                                                        if (!file.exists()) {
+                                                                            file.mkdir();
+                                                                        }
+
+                                                                        // Dialog Function
+                                                                        dialogs = new Dialog(getActivity());
+                                                                        // Removing the features of Normal Dialogs
+                                                                        dialogs.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                                                        dialogs.setContentView(R.layout.dialog_signature);
+                                                                        dialogs.setCancelable(true);
+
+                                                                        dialog_action(loginDetails,md,"Selfie",dialog);
+
+                                                                    }else{
+                                                                        updateMeeting(loginDetails,md);
                                                                     }
 
-                                                                    // Dialog Function
-                                                                    dialogs = new Dialog(getActivity());
-                                                                    // Removing the features of Normal Dialogs
-                                                                    dialogs.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                                                    dialogs.setContentView(R.layout.dialog_signature);
-                                                                    dialogs.setCancelable(true);
+                                                                    dialog.dismiss();
 
-                                                                    dialog_action(loginDetails,md,"Selfie",dialog);
 
-                                                                }else{
-                                                                    updateMeeting(loginDetails,md);
+                                                                } catch (Exception e) {
+                                                                    e.printStackTrace();
                                                                 }
 
-                                                                dialog.dismiss();
-
-
-                                                            } catch (Exception e) {
-                                                                e.printStackTrace();
                                                             }
+
+
                                                         }else if(latitude!=0&&longitude!=0){
 
 
@@ -4117,6 +4361,145 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                 ClientNameLayout.setVisibility(View.VISIBLE);
                 customerSpinner.setVisibility(View.GONE);
             }
+        });
+    }
+
+    public void getShiftTimingById(final int id) {
+
+
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+
+                final OrganizationTimingsAPI orgApi = Util.getClient().create(OrganizationTimingsAPI.class);
+                Call<WorkingDay> getProf = orgApi.getOrganizationTimings(id);
+                //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
+
+                getProf.enqueue(new Callback<WorkingDay>() {
+
+                    @Override
+                    public void onResponse(Call<WorkingDay> call, Response<WorkingDay> response) {
+
+
+
+                        if (response.code() == 200||response.code() == 201||response.code() == 204)
+                        {
+
+                            WorkingDay workingDay = response.body();
+
+                            if(workingDay!=null){
+
+                                Calendar calendar = Calendar.getInstance();
+
+                                int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+                                System.out.println("Daay of "+dayOfWeek);
+                                String weekday = new DateFormatSymbols().getShortWeekdays()[dayOfWeek];
+                                System.out.println("Daay of dd "+weekday);
+
+                               /* switch (dayOfWeek) {
+                                    case Calendar.MONDAY:
+                                        System.out.println(Calendar.MONDAY);
+                                        break;
+                                    case Calendar.TUESDAY:
+                                        System.out.println(Calendar.TUESDAY);
+                                        break;
+                                    case Calendar.WEDNESDAY:
+                                        System.out.println(Calendar.TUESDAY);
+                                        break;
+                                    case Calendar.THURSDAY:
+                                        System.out.println(Calendar.TUESDAY);
+                                        break;
+                                    case Calendar.FRIDAY:
+                                        System.out.println(Calendar.TUESDAY);
+                                        break;
+                                    case Calendar.SATURDAY:
+                                        System.out.println(Calendar.TUESDAY);
+                                        break;
+                                    case Calendar.SUNDAY:
+                                        System.out.println(Calendar.TUESDAY);
+                                        break;
+                                    default:
+                                        System.out.println("others");
+                                }*/
+
+                                if(dayOfWeek==1){
+
+                                    if(workingDay.isSuday()){
+
+                                        checkInTime = workingDay.getSundayCheckInTime();
+                                    }
+
+                                }else if(dayOfWeek==2){
+
+                                    if(workingDay.isMonday()){
+
+                                        checkInTime = workingDay.getMondayCheckInTime();
+                                    }
+
+                                }else if(dayOfWeek==3){
+
+                                    if(workingDay.isiSTuesday()){
+
+                                        checkInTime = workingDay.getTuesdayCheckInTime();
+                                    }
+
+                                }else if(dayOfWeek==4){
+
+                                    if(workingDay.isWednesday()){
+
+                                        checkInTime = workingDay.getWednesdayCheckInTime();
+                                    }
+
+                                }else if(dayOfWeek==5){
+
+                                    if(workingDay.isThursday()){
+
+                                        checkInTime = workingDay.getThursdayCheckInTime();
+                                    }
+
+                                }else if(dayOfWeek==6){
+
+                                    if(workingDay.isFriday()){
+
+                                        checkInTime = workingDay.getFridayCheckInTime();
+                                    }
+
+                                }else if(dayOfWeek==7){
+
+                                    if(workingDay.isSaturday()){
+
+                                        checkInTime = workingDay.getSaturdayCheckInTime();
+                                    }
+
+                                }
+
+                            }
+
+
+
+                        }else{
+
+
+
+
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<WorkingDay> call, Throwable t) {
+
+
+
+
+
+
+                    }
+                });
+
+            }
+
         });
     }
 

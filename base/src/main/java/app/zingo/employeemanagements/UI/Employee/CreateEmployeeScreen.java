@@ -29,15 +29,20 @@ import java.util.Date;
 
 import app.zingo.employeemanagements.Adapter.DepartmentSpinnerAdapter;
 import app.zingo.employeemanagements.Adapter.ManagerSpinnerAdapter;
+import app.zingo.employeemanagements.Adapter.ShiftAdapter;
+import app.zingo.employeemanagements.Adapter.ShiftSpinnerAdapter;
 import app.zingo.employeemanagements.Custom.MyEditText;
 import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Designations;
 import app.zingo.employeemanagements.Model.Employee;
+import app.zingo.employeemanagements.Model.WorkingDay;
+import app.zingo.employeemanagements.UI.NewAdminDesigns.ShiftScreenList;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.DepartmentApi;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
+import app.zingo.employeemanagements.WebApi.OrganizationTimingsAPI;
 import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,7 +54,7 @@ public class CreateEmployeeScreen extends AppCompatActivity {
             mMobile,mPassword,mConfirm,mDesignation,mSalary;
     EditText mAddress;
     MyEditText mDob,mDoj;
-    Spinner mDepartment,mtoReport;
+    Spinner mDepartment,mtoReport,mShift;
     RadioButton mMale,mFemale,mOthers;
     CheckBox mLocationCondition,mCheckTime;
     AppCompatButton mCreate;
@@ -57,6 +62,7 @@ public class CreateEmployeeScreen extends AppCompatActivity {
 
     ArrayList<Departments> departmentData;
     ArrayList<Employee> employees;
+    ArrayList<WorkingDay> workingDays;
 
     private String current = "";
     private String ddmmyyyy = "DDMMYYYY";
@@ -98,6 +104,7 @@ public class CreateEmployeeScreen extends AppCompatActivity {
             mConfirm = findViewById(R.id.confirmpwd);
             mDepartment = findViewById(R.id.android_material_design_spinner);
             mtoReport = findViewById(R.id.managers_list);
+            mShift = findViewById(R.id.shift_list);
 
             mAddress = findViewById(R.id.address);
             mLocationCondition = findViewById(R.id.location_condition);
@@ -302,9 +309,11 @@ public class CreateEmployeeScreen extends AppCompatActivity {
 
                 getDepartment(orgId);
                 getmanagerProfile(orgId);
+                getShiftTimings(orgId);
             }else{
                 getDepartment(PreferenceHandler.getInstance(CreateEmployeeScreen.this).getCompanyId());
                 getmanagerProfile(PreferenceHandler.getInstance(CreateEmployeeScreen.this).getCompanyId());
+                getShiftTimings(PreferenceHandler.getInstance(CreateEmployeeScreen.this).getCompanyId());
             }
 
 
@@ -491,6 +500,12 @@ public class CreateEmployeeScreen extends AppCompatActivity {
                 employee.setManagerId(employees.get(mtoReport.getSelectedItemPosition()).getEmployeeId());
             }else{
                 employee.setManagerId(0);
+            }
+
+            if(workingDays!=null&&workingDays.size()!=0){
+                employee.setDeviceModel(""+workingDays.get(mShift.getSelectedItemPosition()).getOrganizationTimingId());
+            }else{
+                employee.setDeviceModel(""+0);
             }
 
 
@@ -882,6 +897,63 @@ public class CreateEmployeeScreen extends AppCompatActivity {
                 });
             }
 
+
+        });
+    }
+
+    public void getShiftTimings(final int id) {
+
+
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+
+                final OrganizationTimingsAPI orgApi = Util.getClient().create(OrganizationTimingsAPI.class);
+                Call<ArrayList<WorkingDay>> getProf = orgApi.getOrganizationTimingByOrgId(id);
+                //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
+
+                getProf.enqueue(new Callback<ArrayList<WorkingDay>>() {
+
+                    @Override
+                    public void onResponse(Call<ArrayList<WorkingDay>> call, Response<ArrayList<WorkingDay>> response) {
+
+
+
+                        if (response.code() == 200||response.code() == 201||response.code() == 204)
+                        {
+
+                            workingDays = response.body();
+
+                            if(workingDays!=null&&workingDays.size()!=0){
+
+                                ShiftSpinnerAdapter arrayAdapter = new ShiftSpinnerAdapter(CreateEmployeeScreen.this, workingDays);
+                                mShift.setAdapter(arrayAdapter);
+
+                            }
+
+
+                        }else{
+
+
+
+                            Toast.makeText(CreateEmployeeScreen.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<WorkingDay>> call, Throwable t) {
+
+
+
+
+                        Toast.makeText(CreateEmployeeScreen.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+            }
 
         });
     }

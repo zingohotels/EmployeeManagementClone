@@ -626,7 +626,7 @@ public class AdminHomeFragment extends Fragment {
                 getContext().startActivity(employee);
 
             } else if (view.getId() == R.id.holiday) {
-                Intent employee = new Intent(getContext(), WorkingDaysScreen.class);
+                Intent employee = new Intent(getContext(), ShiftScreenList.class);
                 getContext().startActivity(employee);
 
             } else if (view.getId() == R.id.faq_home) {

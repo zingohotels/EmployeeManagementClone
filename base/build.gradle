@@ -104,6 +104,8 @@ dependencies {
 
     //floating
     api 'com.github.wangjiegulu:ShadowViewHelper:1.0.0'
+    api 'com.pnikosis:materialish-progress:1.0'
+
 
     //calendar
     implementation 'com.google.apis:google-api-services-calendar:v3-rev260-1.23.0' exclude module: 'httpclient'

@@ -9,6 +9,12 @@ public interface Constants {
     String BASE_URL = "https://zingolocals.azurewebsites.net/api/";
     String IMAGE_URL = "https://zingolocals.azurewebsites.net/";
 
+    public static final String BROADCAST_DETECTED_ACTIVITY = "activity_intent";
+
+    static final long DETECTION_INTERVAL_IN_MILLISECONDS = 30 * 1000;
+
+    public static final int CONFIDENCE = 70;
+
     String USER_PHONENUMBER ="user_phoneno";
     String weather_api = "a78b3dd6ac89129adf2a6600d8eafa7a";
     String USER_ID = "user_id";
@@ -45,6 +51,7 @@ public interface Constants {
     String USER_NAME ="user_name";
     String REUSER_NAME ="reuser_name";
     String APP_Version ="app_version";
+    String Shift_name ="shift_name";
     String HOTEL_PLACE ="user_phoneno";
     String USER_FULLNAME ="user_fullname";
     String USER_EMAIL ="user_email";

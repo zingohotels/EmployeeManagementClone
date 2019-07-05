@@ -47,7 +47,7 @@ public class LeaveListScreen extends AppCompatActivity {
             }
             if(mLeaves!=null&&mLeaves.size()!=0){
 
-                LeaveDashBoardAdapter mAdapter = new LeaveDashBoardAdapter(LeaveListScreen.this,mLeaves);
+                LeaveDashBoardAdapter mAdapter = new LeaveDashBoardAdapter(LeaveListScreen.this,mLeaves,null);
                 mLeaveList.setAdapter(mAdapter);
 
 

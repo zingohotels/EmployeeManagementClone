@@ -60,148 +60,154 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
 
             RemoteMessage.Notification notification = remoteMessage.getNotification();
             Map<String, String> map = remoteMessage.getData();
-            if(notification.getTitle().equalsIgnoreCase("App Info Notification")){
 
-                try {
-                    sendPopNotificationGeneral(notification.getTitle(), notification.getBody(), map);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            if(PreferenceHandler.getInstance(getApplicationContext()).getUserId()!=0){
 
-            }else if(notification.getTitle().equalsIgnoreCase("Test")){
-
-                if(PreferenceHandler.getInstance(getApplicationContext()).getUserId()==Integer.parseInt(map.get("EmployeeId"))){
+                if(notification.getTitle().equalsIgnoreCase("App Info Notification")){
 
                     try {
                         sendPopNotificationGeneral(notification.getTitle(), notification.getBody(), map);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }
+
+                }else if(notification.getTitle().equalsIgnoreCase("Test")){
+
+                    if(PreferenceHandler.getInstance(getApplicationContext()).getUserId()==Integer.parseInt(map.get("EmployeeId"))){
+
+                        try {
+                            sendPopNotificationGeneral(notification.getTitle(), notification.getBody(), map);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
 
 
 
-            }else  if(notification.getTitle().equalsIgnoreCase("Invoke Service")){
+                }else  if(notification.getTitle().equalsIgnoreCase("Invoke Service")){
 
-                if(PreferenceHandler.getInstance(getApplicationContext()).getUserId()==20){
+                    if(PreferenceHandler.getInstance(getApplicationContext()).getUserId()==20){
 
-                    Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+                        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
 
-                    URL url = null;
-                    Bitmap bigPicture  = null;
+                        URL url = null;
+                        Bitmap bigPicture  = null;
+                        try {
+                            url = new URL(map.get("PictureUrl"));
+                            bigPicture = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        String message="";
+
+
+
+                        Intent intent = new Intent(this, InvokeService.class);
+
+                        intent.putExtra("Title",notification.getTitle());
+                        intent.putExtra("Message",notification.getBody());
+
+                        //  Uri sound = Uri.parse("android.resource://" + this.getPackageName() + "/raw/good_morning");
+                        int m = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
+
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP );
+
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        PendingIntent pendingIntent = PendingIntent.getActivity(this, m, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                        int notifyID = 1;
+                        String CHANNEL_ID = ""+ 1;// The id of the channel.
+                        CharSequence name = "Zingo" ;// The user-visible name of the channel.
+                        int importance = NotificationManager.IMPORTANCE_LOW;
+                        NotificationChannel mChannel=null;
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                            mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+                        }
+
+                        Notification.Builder notificationBuilder = null;
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                            notificationBuilder = new Notification.Builder(this)
+                                    .setTicker(notification.getTitle()).setWhen(0)
+                                    .setContentTitle(notification.getTitle())
+                                    .setContentText(message)
+                                    .setAutoCancel(true)
+                                    //.setFullScreenIntent(pendingIntent,false)
+                                    //.setNumber()
+                                    .setContentIntent(pendingIntent)
+                                    .setContentInfo(notification.getTitle())
+                                    .setLargeIcon(icon)
+                                    .setChannelId("1")
+
+                                    .setPriority(Notification.PRIORITY_MAX)
+
+                                    // .setPriority(NotificationManager.IMPORTANCE_HIGH)
+                                    .setSmallIcon(R.mipmap.ic_launcher);
+                        }else{
+                            notificationBuilder = new Notification.Builder(this)
+                                    .setTicker(notification.getTitle()).setWhen(0)
+                                    .setContentTitle(notification.getTitle())
+                                    .setContentText(message)
+                                    .setAutoCancel(true)
+                                    //.setFullScreenIntent(pendingIntent,false)
+                                    .setContentIntent(pendingIntent)
+                                    .setContentInfo(notification.getTitle())
+                                    .setLargeIcon(icon)
+
+                                    .setPriority(Notification.PRIORITY_MAX)
+
+                                    .setNumber(count)
+                                    // .setPriority(NotificationManager.IMPORTANCE_HIGH)
+                                    .setSmallIcon(R.mipmap.ic_launcher);
+                        }
+
+
+
+                        notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
+                        notificationBuilder.setLights(Color.YELLOW, 1000, 300);
+
+
+
+                        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                            notificationManager.createNotificationChannel(mChannel);
+                        }
+
+                        notificationManager.notify(m, notificationBuilder.build());
+
+
+
+                    }
+
+
+                } else if(PreferenceHandler.getInstance(getApplicationContext()).getUserId()==Integer.parseInt(map.get("EmployeeId"))&&notification.getTitle().contains("Apply For Leave")) {
                     try {
-                        url = new URL(map.get("PictureUrl"));
-                        bigPicture = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                        sendPopNotification(notification.getTitle(), notification.getBody(), map);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
-                    String message="";
-
-
-
-                    Intent intent = new Intent(this, InvokeService.class);
-
-                    intent.putExtra("Title",notification.getTitle());
-                    intent.putExtra("Message",notification.getBody());
-
-                    //  Uri sound = Uri.parse("android.resource://" + this.getPackageName() + "/raw/good_morning");
-                    int m = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
-
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP );
-
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    PendingIntent pendingIntent = PendingIntent.getActivity(this, m, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-                    int notifyID = 1;
-                    String CHANNEL_ID = ""+ 1;// The id of the channel.
-                    CharSequence name = "Zingo" ;// The user-visible name of the channel.
-                    int importance = NotificationManager.IMPORTANCE_LOW;
-                    NotificationChannel mChannel=null;
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                        mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+                }else if(PreferenceHandler.getInstance(getApplicationContext()).getUserId()==Integer.parseInt(map.get("EmployeeId"))&&(PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()==2|| PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()==9)&&notification.getTitle().equalsIgnoreCase("Location Shared")){
+                    try {
+                        sendPopNotification(notification.getTitle(), notification.getBody(), map);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-
-                    Notification.Builder notificationBuilder = null;
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                        notificationBuilder = new Notification.Builder(this)
-                                .setTicker(notification.getTitle()).setWhen(0)
-                                .setContentTitle(notification.getTitle())
-                                .setContentText(message)
-                                .setAutoCancel(true)
-                                //.setFullScreenIntent(pendingIntent,false)
-                                //.setNumber()
-                                .setContentIntent(pendingIntent)
-                                .setContentInfo(notification.getTitle())
-                                .setLargeIcon(icon)
-                                .setChannelId("1")
-
-                                .setPriority(Notification.PRIORITY_MAX)
-
-                                // .setPriority(NotificationManager.IMPORTANCE_HIGH)
-                                .setSmallIcon(R.mipmap.ic_launcher);
-                    }else{
-                        notificationBuilder = new Notification.Builder(this)
-                                .setTicker(notification.getTitle()).setWhen(0)
-                                .setContentTitle(notification.getTitle())
-                                .setContentText(message)
-                                .setAutoCancel(true)
-                                //.setFullScreenIntent(pendingIntent,false)
-                                .setContentIntent(pendingIntent)
-                                .setContentInfo(notification.getTitle())
-                                .setLargeIcon(icon)
-
-                                .setPriority(Notification.PRIORITY_MAX)
-
-                                .setNumber(count)
-                                // .setPriority(NotificationManager.IMPORTANCE_HIGH)
-                                .setSmallIcon(R.mipmap.ic_launcher);
+                } else if((PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()==2||PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()==9)&&PreferenceHandler.getInstance(getApplicationContext()).getUserId()==Integer.parseInt(map.get("EmployeeId"))&&!notification.getTitle().equalsIgnoreCase("Task Allocated")){
+                    try {
+                        sendPopNotification(notification.getTitle(), notification.getBody(), map);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-
-
-
-                    notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
-                    notificationBuilder.setLights(Color.YELLOW, 1000, 300);
-
-
-
-                    NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                        notificationManager.createNotificationChannel(mChannel);
+                }else if(PreferenceHandler.getInstance(getApplicationContext()).getUserId()==Integer.parseInt(map.get("EmployeeId"))&& PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()!=2&&(notification.getTitle().equalsIgnoreCase("Task Allocated")||notification.getTitle().equalsIgnoreCase("Location Request"))){
+                    try {
+                        sendPopNotifications(notification.getTitle(), notification.getBody(), map);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-
-                    notificationManager.notify(m, notificationBuilder.build());
-
-
-
                 }
 
-
-            } else if(PreferenceHandler.getInstance(getApplicationContext()).getUserId()==Integer.parseInt(map.get("EmployeeId"))&&notification.getTitle().contains("Apply For Leave")) {
-                try {
-                    sendPopNotification(notification.getTitle(), notification.getBody(), map);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }else if(PreferenceHandler.getInstance(getApplicationContext()).getUserId()==Integer.parseInt(map.get("EmployeeId"))&&(PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()==2|| PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()==9)&&notification.getTitle().equalsIgnoreCase("Location Shared")){
-                try {
-                    sendPopNotification(notification.getTitle(), notification.getBody(), map);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } else if(PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()==2&&!notification.getTitle().equalsIgnoreCase("Task Allocated")){
-                try {
-                    sendPopNotification(notification.getTitle(), notification.getBody(), map);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }else if(PreferenceHandler.getInstance(getApplicationContext()).getUserId()==Integer.parseInt(map.get("EmployeeId"))&& PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()!=2&&(notification.getTitle().equalsIgnoreCase("Task Allocated")||notification.getTitle().equalsIgnoreCase("Location Request"))){
-                try {
-                    sendPopNotifications(notification.getTitle(), notification.getBody(), map);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
             }
+
 
         }catch (Exception e){
             e.printStackTrace();
@@ -217,14 +223,7 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
     private void sendPopNotification(String title, String body, Map<String, String> map) {
         Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
 
-        //  URL url = null;
-        //  Bitmap bigPicture  = null;
-       /* try {
-            url = new URL(map.get("PictureUrl"));
-            bigPicture = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
+
 
         String message="";
         String messageText="";
@@ -256,7 +255,9 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
             intent.putExtra("Title",title);
             intent.putExtra("Message",body);
             intent.putExtras(bundle);
+
         }else if(title.contains("Apply For Leave")){
+
             intent = new Intent(this, UpdateLeaveScreen.class);
             int employeeId = Integer.parseInt(map.get("ManagerId"));
             String employeeName = map.get("EmployeeName");

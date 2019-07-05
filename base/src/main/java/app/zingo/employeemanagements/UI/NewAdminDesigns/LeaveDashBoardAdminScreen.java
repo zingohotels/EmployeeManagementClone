@@ -723,7 +723,7 @@ public class LeaveDashBoardAdminScreen extends AppCompatActivity {
             mNoLeavesLay.setVisibility(View.GONE);
             mLeaveList.setVisibility(View.VISIBLE);
 
-            adapter = new LeaveDashBoardAdapter(LeaveDashBoardAdminScreen.this,monthtotalLeaves);
+            adapter = new LeaveDashBoardAdapter(LeaveDashBoardAdminScreen.this,monthtotalLeaves,null);
             mLeaveList.setAdapter(adapter);
 
             try{

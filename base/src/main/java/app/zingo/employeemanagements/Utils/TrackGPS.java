@@ -1,17 +1,26 @@
 package app.zingo.employeemanagements.Utils;
 
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * Created by ZingoHotels Tech on 28-09-2018.
@@ -50,7 +59,7 @@ public class TrackGPS extends Service implements LocationListener {
 
     }
 
-    private Location getLocation() {
+    public Location getLocation() {
 
         try {
             locationManager = (LocationManager) mContext
@@ -211,5 +220,148 @@ public class TrackGPS extends Service implements LocationListener {
     @Override
     public void onProviderDisabled(String s) {
 
+    }
+
+    public static boolean isMockLocationOn(Location location, Context context) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            return location.isFromMockProvider();
+        } else {
+            String mockLocation = "0";
+            try {
+                //Settings.Secure.getString(EmployeeNewMainScreen.this.getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION).equals("0")
+                mockLocation = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return !mockLocation.equals("0");
+        }
+    }
+
+    public static List<String> getListOfFakeLocationApps(Context context) {
+        listofApps(context);
+        List<String> runningApps = getRunningApps(context, false);
+        for (int i = runningApps.size() - 1; i >= 0; i--) {
+            String app = runningApps.get(i);
+            if(!hasAppPermission(context, app, "android.permission.ACCESS_MOCK_LOCATION")){
+                runningApps.remove(i);
+            }
+        }
+        return runningApps;
+    }
+
+    public static List<String> getRunningApps(Context context, boolean includeSystem) {
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+
+        List<String> runningApps = new ArrayList<>();
+
+        List<ActivityManager.RunningAppProcessInfo> runAppsList = activityManager.getRunningAppProcesses();
+        for (ActivityManager.RunningAppProcessInfo processInfo : runAppsList) {
+            for (String pkg : processInfo.pkgList) {
+                runningApps.add(pkg);
+            }
+        }
+
+        try {
+            //can throw securityException at api<18 (maybe need "android.permission.GET_TASKS")
+            List<ActivityManager.RunningTaskInfo> runningTasks = activityManager.getRunningTasks(1000);
+            for (ActivityManager.RunningTaskInfo taskInfo : runningTasks) {
+                runningApps.add(taskInfo.topActivity.getPackageName());
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        List<ActivityManager.RunningServiceInfo> runningServices = activityManager.getRunningServices(1000);
+        for (ActivityManager.RunningServiceInfo serviceInfo : runningServices) {
+            runningApps.add(serviceInfo.service.getPackageName());
+        }
+
+        runningApps = new ArrayList<>(new HashSet<>(runningApps));
+
+        if(!includeSystem){
+            for (int i = runningApps.size() - 1; i >= 0; i--) {
+                String app = runningApps.get(i);
+                if(isSystemPackage(context, app)){
+                    runningApps.remove(i);
+                }
+            }
+        }
+        return runningApps;
+    }
+
+    public static boolean isSystemPackage(Context context, String app){
+        PackageManager packageManager = context.getPackageManager();
+        try {
+            PackageInfo pkgInfo = packageManager.getPackageInfo(app, 0);
+            return (pkgInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean hasAppPermission(Context context, String app, String permission){
+        PackageManager packageManager = context.getPackageManager();
+        PackageInfo packageInfo;
+        try {
+            packageInfo = packageManager.getPackageInfo(app, PackageManager.GET_PERMISSIONS);
+            if(packageInfo.requestedPermissions!= null){
+                for (String requestedPermission : packageInfo.requestedPermissions) {
+                    if (requestedPermission.equals(permission)) {
+                        return true;
+                    }
+                }
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static ArrayList<String> listofApps(Context context){
+
+
+
+        ArrayList<String> appInfoList = new ArrayList<>();
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> tasks = activityManager.getRunningTasks(Integer.MAX_VALUE);
+
+        for (int i = 0; i < tasks.size(); i++) {
+            Log.d("Running task", "Running task: " + tasks.get(i).baseActivity.toShortString() + "\t\t ID: " + tasks.get(i).id);
+        }
+        PackageManager pm = context.getPackageManager();
+        List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+
+        for (ApplicationInfo applicationInfo : packages) {
+            try {
+
+
+                PackageInfo packageInfo = pm.getPackageInfo(applicationInfo.packageName,
+                        PackageManager.GET_PERMISSIONS);
+
+                // Get Permissions
+                String[] requestedPermissions = packageInfo.requestedPermissions;
+
+                if (requestedPermissions != null) {
+                    for (int i = 0; i < requestedPermissions.length; i++) {
+                        if (requestedPermissions[i].equals("android.permission.ACCESS_MOCK_LOCATION")
+                                && !applicationInfo.packageName.equals(context.getPackageName())) {
+                            //we get Package name here
+
+
+                            final String packageName = packageInfo.packageName;
+                            PackageManager packageManager= context.getPackageManager();
+                            String appName = (String) packageManager.getApplicationLabel(packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA));
+                            appInfoList.add(appName);
+                            System.out.println("List Apps "+appName);
+                        }
+                    }
+                }
+            } catch (PackageManager.NameNotFoundException e) {
+
+            }
+        }
+
+        return appInfoList;
     }
 }

@@ -14,7 +14,7 @@
         android:background="#FFFFFFFF"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@id/appBar"
+
         android:layout_alignParentBottom="true">
 
         <LinearLayout
@@ -30,6 +30,18 @@
                 android:layout_height="wrap_content"
                 android:checked="false"
                 android:text="Attendance Notification"
+                android:layout_marginLeft="@dimen/activity_large_margin"
+                android:layout_marginTop="20.0dip"
+                android:layout_marginRight="@dimen/activity_large_margin"
+                android:textOff="No"
+                android:textOn="Yes"/>
+
+            <Switch
+                android:id="@+id/late_attendance_noti"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="Late Attendance Notification"
                 android:layout_marginLeft="@dimen/activity_large_margin"
                 android:layout_marginTop="20.0dip"
                 android:layout_marginRight="@dimen/activity_large_margin"

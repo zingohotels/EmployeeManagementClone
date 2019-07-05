@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:id="@+id/rootView"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+
+
+    <android.support.v4.widget.NestedScrollView
+        android:background="#FFFFFFFF"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+
+        android:layout_alignParentBottom="true">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="@dimen/activity_large_margin"
+                android:layout_marginTop="20.0dip"
+                android:layout_marginRight="@dimen/activity_large_margin"
+                >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="2"
+                    android:text="Week-Off Type"
+                    android:textColor="#000000" />
+                <Spinner
+                    android:id="@+id/leave_type_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:entries="@array/leave_type"
+                    android:layout_weight="1"
+                    android:background="@drawable/spinner_background"/>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="@dimen/activity_large_margin"
+                android:layout_marginTop="20.0dip"
+                android:layout_marginRight="@dimen/activity_large_margin"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Week-Off Status"
+                    android:layout_weight="2"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="#000000"/>
+                <Spinner
+                    android:id="@+id/leave_status_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:entries="@array/leave_status"
+                    android:layout_weight="1"
+                    android:background="@drawable/spinner_background"/>
+
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/fromInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_large_margin"
+                    android:layout_marginTop="20.0dip"
+                    android:layout_marginRight="@dimen/activity_large_margin"
+                    android:hint="From"
+                    >
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/from_date"
+                        android:maxLength="50"
+                        android:focusableInTouchMode="false"
+                        android:inputType="text"
+                        style="@style/fp_editText" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/toInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_large_margin"
+                    android:layout_marginTop="20.0dip"
+                    android:layout_marginRight="@dimen/activity_large_margin"
+                    android:hint="To"
+
+                    >
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/to_date"
+                        android:maxLength="50"
+                        android:focusableInTouchMode="false"
+                        android:inputType="text"
+                        style="@style/fp_editText" />
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_large_margin"
+                    android:layout_marginTop="20.0dip"
+                    android:layout_marginRight="@dimen/activity_large_margin"
+                    android:text="Week-Off Comment"/>
+
+                <EditText
+                    android:id="@+id/leave_comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="start"
+                    android:gravity="start"
+                    android:scrollbarAlwaysDrawVerticalTrack="true"
+                    android:overScrollMode="always"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="vertical"
+                    android:keepScreenOn="true"
+                    android:layout_marginLeft="@dimen/activity_large_margin"
+                    android:layout_marginRight="@dimen/activity_large_margin"
+                    android:lines="5"
+                    android:background="@drawable/spinner_background"
+                    />
+
+
+            </LinearLayout>
+
+
+            <android.support.v7.widget.AppCompatButton
+                android:textSize="@dimen/regularFont"
+                android:textColor="@color/white"
+                android:id="@+id/apply_leave"
+                android:background="@drawable/selector_button_app"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_large_margin"
+                android:layout_marginTop="20.0dip"
+                android:layout_marginBottom="20.0dip"
+                android:layout_marginRight="@dimen/activity_large_margin"
+                android:text="Update Week-Off"
+                android:textAllCaps="false"
+
+                />
+
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+</RelativeLayout>

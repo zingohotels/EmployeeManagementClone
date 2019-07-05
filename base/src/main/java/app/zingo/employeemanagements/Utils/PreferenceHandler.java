@@ -140,6 +140,15 @@ public class PreferenceHandler {
         return sh.getString(Constants.APP_Version,"");
     }
 
+    public void setShftName(String shiftName) {
+        sh.edit().putString(Constants.Shift_name,shiftName).apply();
+    }
+
+    public String getShiftName()
+    {
+        return sh.getString(Constants.Shift_name,"");
+    }
+
     public void setPhoneNumber(String mobilenumber)
     {
         sh.edit().putString(Constants.USER_PHONENUMBER,mobilenumber).apply();

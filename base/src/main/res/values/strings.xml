@@ -37,6 +37,7 @@
 
     <string name="leaveNew">Apply Leave</string>
     <string name="leaveRequest">Leaves</string>
+
     <string name="share_app_text">Share App</string>
 
     <string name="hint_contact_add_email">Email Id</string>
@@ -66,6 +67,15 @@
 
     </string-array>
 
+    <string name="activity_in_vehicle">In Vehicle</string>
+    <string name="activity_on_bicycle">On Bicycle</string>
+    <string name="activity_on_foot">On Foot</string>
+    <string name="activity_running">Running</string>
+    <string name="activity_still">Still</string>
+    <string name="activity_tilting">Tilting</string>
+    <string name="activity_walking">walking</string>
+    <string name="activity_unknown">Unknown</string>
+
     <string-array name="order_status">
         <item>Pending</item>
         <item>Order Taken</item>
@@ -79,6 +89,25 @@
         <item>Tea Break</item>
         <item>Lunch Break</item>
         <item>Others</item>
+    </string-array>
+
+    <string-array name="week_off_day">
+        <item>Sun</item>
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wed</item>
+        <item>Thu</item>
+        <item>Fri</item>
+        <item>Sat</item>
+
+    </string-array>
+
+    <string-array name="week_off_week">
+        <item>Week 1</item>
+        <item>Week 2</item>
+        <item>Week 3</item>
+        <item>Week 4</item>
+        <item>Week 5</item>
     </string-array>
 
     <string-array name="log_status">
@@ -256,6 +285,11 @@
 
     <string name="rfab_rfal__float_convert_color_alpha">0.7</string>
     <string name="share_using">Krony App</string>
+
+    <string name="dialog_default_title">Here\'s a message!</string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="LOADING">Loading...</string>
 
 
 </resources>

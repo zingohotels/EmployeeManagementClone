@@ -22,6 +22,7 @@ import app.zingo.employeemanagements.UI.Company.WorkingDaysScreen;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.BranchInfoScreen;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.DepartmentLilstScreen;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.EmployeeUpdateListScreen;
+import app.zingo.employeemanagements.UI.NewAdminDesigns.ShiftScreenList;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.base.R;
 
@@ -82,7 +83,7 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.Vi
                             break;
 
                         case "Office Timing":
-                            Intent office = new Intent(context, WorkingDaysScreen.class);
+                            Intent office = new Intent(context, ShiftScreenList.class);
                             office.putExtra("OrganizationId", PreferenceHandler.getInstance(context).getBranchId());
                             ((Activity)context).startActivity(office);
                             break;

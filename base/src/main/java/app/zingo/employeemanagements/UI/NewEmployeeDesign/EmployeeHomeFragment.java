@@ -82,7 +82,7 @@ public class EmployeeHomeFragment extends Fragment {
     private final String TAG = "Employer Dashboard";
     View layout;
     private LinearLayout attendance,leaveApplications,tasks,expenses,meeting,team,
-            logout,deptOrg,chngPwd,salary,client,ShareApp,orders;
+            logout,deptOrg,chngPwd,salary,client,ShareApp,orders,weekOff;
     private Employee employeed;
 
     public EmployeeHomeFragment() {
@@ -153,6 +153,7 @@ public class EmployeeHomeFragment extends Fragment {
 
         tasks = this.layout.findViewById(R.id.task_layout);
         expenses = this.layout.findViewById(R.id.expenses_mgmt);
+        weekOff = this.layout.findViewById(R.id.week_off_mgmt);
         meeting = this.layout.findViewById(R.id.meeting);
 
         team = this.layout.findViewById(R.id.team);
@@ -254,6 +255,17 @@ public class EmployeeHomeFragment extends Fragment {
                 }
             }
         });
+
+            weekOff.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        openMenuViews(weekOff);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         team.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -393,6 +405,13 @@ public class EmployeeHomeFragment extends Fragment {
             getActivity().startActivity(attnd);
         } else if (view.getId() == R.id.leaveApplications) {
             Intent leave = new Intent(getActivity(), LeaveManagementHost.class);
+            Bundle bundle = new Bundle();
+            bundle.putInt("EmployeeId",employeed.getEmployeeId());
+            bundle.putSerializable("Employee",employeed);
+            leave.putExtras(bundle);
+            getActivity().startActivity(leave);
+        }else if (view.getId() == R.id.week_off_mgmt) {
+            Intent leave = new Intent(getActivity(), WeekOffApply.class);
             Bundle bundle = new Bundle();
             bundle.putInt("EmployeeId",employeed.getEmployeeId());
             bundle.putSerializable("Employee",employeed);

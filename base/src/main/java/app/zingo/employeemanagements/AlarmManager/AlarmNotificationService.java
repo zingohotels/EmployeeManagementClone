@@ -71,7 +71,7 @@ public class AlarmNotificationService extends IntentService {
 
         int notifyID = 1;
         String CHANNEL_ID = ""+ 115;// The id of the channel.
-        CharSequence name = "Zingo" ;// The user-visible name of the channel.
+        CharSequence name = "EMSBreak" ;// The user-visible name of the channel.
         int importance = NotificationManager.IMPORTANCE_LOW;
         NotificationChannel mChannel=null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -90,13 +90,13 @@ public class AlarmNotificationService extends IntentService {
         Notification.Builder notificationBuilder = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             notificationBuilder = new Notification.Builder(this)
-                    .setTicker("Check-Out Alert").setWhen(0)
-                    .setContentTitle("Check-Out Alert")
+                    .setTicker("Alert").setWhen(0)
+                    .setContentTitle("Alert")
                     .setContentText(message)
                     .setAutoCancel(true)
                     .setSound(sound)
                     .setContentIntent(pendingIntent)
-                    .setContentInfo("Check-Out Alert")
+                    .setContentInfo("message")
                     .setLargeIcon(icon)
                     .setStyle(new Notification.BigTextStyle().bigText (message))
                     .setChannelId("115")

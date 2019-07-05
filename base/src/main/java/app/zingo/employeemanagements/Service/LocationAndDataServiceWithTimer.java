@@ -17,13 +17,7 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
-import android.widget.Toast;
 
-import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
-
-import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -31,9 +25,7 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
+import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.base.R;
 
 public class LocationAndDataServiceWithTimer extends Service implements TextToSpeech.OnInitListener
@@ -43,7 +35,7 @@ public class LocationAndDataServiceWithTimer extends Service implements TextToSp
 
     public int timeGPS = 0,timeNetwork = 0;
 
-    public static final long NOTIFY_INTERVAL = 180 * 1000;
+    public static final long NOTIFY_INTERVAL = 3* 60 * 1000;
 
     // run on another Thread to avoid crash
     private Handler gpsHandler = new Handler(), NetworkHandler = new Handler();
@@ -214,13 +206,6 @@ public class LocationAndDataServiceWithTimer extends Service implements TextToSp
 
 
                         }
-
-
-
-
-
-
-
 
                         t.cancel();
                         t.purge();
@@ -451,22 +436,34 @@ public class LocationAndDataServiceWithTimer extends Service implements TextToSp
 
     public boolean locationCheck(){
 
-        final boolean status = false;
-        LocationManager lm = (LocationManager) LocationAndDataServiceWithTimer.this.getSystemService(Context.LOCATION_SERVICE);
-        boolean gps_enabled = false;
-        boolean network_enabled = false;
+        if(PreferenceHandler.getInstance(LocationAndDataServiceWithTimer.this).getUserId()!=0){
 
-        try {
+            final boolean status = false;
+            LocationManager lm = (LocationManager) LocationAndDataServiceWithTimer.this.getSystemService(Context.LOCATION_SERVICE);
+            boolean gps_enabled = false;
+            boolean network_enabled = false;
 
-            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            try {
 
-        } catch(Exception ex) {}
+                gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
-        try {
-            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        } catch(Exception ex) {}
+            } catch(Exception ex) {}
 
-        return gps_enabled && network_enabled;
+            try {
+                network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            } catch(Exception ex) {}
+
+            return gps_enabled && network_enabled;
+
+        }else{
+
+            stopSelf();
+
+            return true;
+
+        }
+
+
     }
 
     public boolean isNetworkAvailable() {
@@ -476,20 +473,31 @@ public class LocationAndDataServiceWithTimer extends Service implements TextToSp
     }
 
     public boolean checkActiveInternetConnection() {
-        if (isNetworkAvailable()) {
 
-            try {
-                InetAddress ipAddr = InetAddress.getByName("google.com");
-                //You can replace it with your name
-                return !ipAddr.equals("");
+        if(PreferenceHandler.getInstance(LocationAndDataServiceWithTimer.this).getUserId()!=0){
 
-            } catch (Exception e) {
-                return false;
+            if (isNetworkAvailable()) {
+
+                try {
+                    InetAddress ipAddr = InetAddress.getByName("google.com");
+                    //You can replace it with your name
+                    return !ipAddr.equals("");
+
+                } catch (Exception e) {
+                    return false;
+                }
+
+            } else {
+
             }
-        } else {
+            return false;
+
+        }else{
+            stopSelf();
+            return true;
 
         }
-        return false;
+
     }
 
 

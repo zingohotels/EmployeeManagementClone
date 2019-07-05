@@ -62,6 +62,7 @@ public class WorkingDaysScreen extends AppCompatActivity {
             if(bun!=null){
 
                 orgId = bun.getInt("OrganizationId",0);
+                updateWorkingDay = (WorkingDay)bun.getSerializable("Timing");
             }
 
             mSun = findViewById(R.id.sunday);
@@ -327,14 +328,19 @@ public class WorkingDaysScreen extends AppCompatActivity {
                 }
             });
 
-            if(orgId!=0){
+           /* if(orgId!=0){
 
                 getOrganizationTimings(orgId);
             }else{
                 getOrganizationTimings(PreferenceHandler.getInstance(WorkingDaysScreen.this).getCompanyId());
-            }
+            }*/
 
 
+           if(updateWorkingDay!=null){
+
+               setData(updateWorkingDay);
+
+           }
 
 
             mSave.setOnClickListener(new View.OnClickListener() {

@@ -2,6 +2,7 @@ package app.zingo.employeemanagements.UI.NewAdminDesigns;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
@@ -9,12 +10,16 @@ import android.support.v7.widget.AppCompatButton;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -30,16 +35,20 @@ import java.util.Date;
 
 import app.zingo.employeemanagements.Adapter.DepartmentSpinnerAdapter;
 import app.zingo.employeemanagements.Adapter.ManagerSpinnerAdapter;
+import app.zingo.employeemanagements.Adapter.ShiftSpinnerAdapter;
 import app.zingo.employeemanagements.Custom.MyEditText;
 import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Designations;
 import app.zingo.employeemanagements.Model.Employee;
+import app.zingo.employeemanagements.Model.WorkingDay;
+import app.zingo.employeemanagements.UI.Employee.CreateEmployeeScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.DepartmentApi;
 import app.zingo.employeemanagements.WebApi.DesignationsAPI;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
+import app.zingo.employeemanagements.WebApi.OrganizationTimingsAPI;
 import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -48,17 +57,19 @@ import retrofit2.Response;
 public class EmployeeEditScreen extends AppCompatActivity {
 
     TextInputEditText mName,mPrimaryEmail,mSecondaryEmail,
-            mMobile,mDesignation,mSalary,mPassword,mConfirm;
+            mMobile,mDesignation,mSalary,mPassword,mConfirm,mNoWeekOff;
+    LinearLayout mWeekLay,mWeekContainer;
     EditText mAddress;
     MyEditText mDob,mDoj;
-    CheckBox mLocationCondition,mCheckTime;
-    Spinner mDepartment,mtoReport;
+    CheckBox mLocationCondition,mCheckTime,mWeekOffCheck;
+    Spinner mDepartment,mtoReport,mShift;
     Switch mAdmin,mActive;
     RadioButton mMale,mFemale,mOthers;
     AppCompatButton mCreate;
 
     ArrayList<Departments> departmentData;
     ArrayList<Employee> employeeList;
+    ArrayList<WorkingDay> workingDays;
 
     Employee employees;
 
@@ -103,6 +114,8 @@ public class EmployeeEditScreen extends AppCompatActivity {
 
             mDepartment = findViewById(R.id.android_material_design_spinner);
             mtoReport = findViewById(R.id.managers_list);
+            mShift = findViewById(R.id.shift_list);
+
 
             mAddress = findViewById(R.id.address);
 
@@ -111,6 +124,11 @@ public class EmployeeEditScreen extends AppCompatActivity {
             mOthers = findViewById(R.id.founder_other);
 
             mCreate = findViewById(R.id.createFounder);
+
+            mWeekOffCheck = findViewById(R.id.week_condition);
+            mNoWeekOff = findViewById(R.id.week_off);
+            mWeekLay = findViewById(R.id.week_lay);
+            mWeekContainer = findViewById(R.id.container_week_off);
 
 
 
@@ -180,7 +198,6 @@ public class EmployeeEditScreen extends AppCompatActivity {
 
                 }
             });
-
 
             mDoj.addTextChangedListener(new TextWatcher() {
 
@@ -275,6 +292,14 @@ public class EmployeeEditScreen extends AppCompatActivity {
                 mCheckTime.setText("Check-in Time");
             }
 
+            if(mWeekOffCheck.isChecked()){
+                mWeekOffCheck.setText("Custom Week-Off (If Checked Employee has to take week-off on particular day only.)");
+                mWeekLay.setVisibility(View.VISIBLE);
+            }else{
+                mWeekOffCheck.setText("Custom Week-Off");
+                mWeekLay.setVisibility(View.GONE);
+            }
+
             mLocationCondition.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -299,6 +324,21 @@ public class EmployeeEditScreen extends AppCompatActivity {
                 }
             });
 
+            mWeekOffCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                    if(mWeekOffCheck.isChecked()){
+                        mWeekOffCheck.setText("Custom Week-Off (If Checked Employee has to take week-off on particular day only.)");
+                        mWeekLay.setVisibility(View.VISIBLE);
+                    }else{
+                        mWeekOffCheck.setText("Custom Week-Off");
+                        mWeekLay.setVisibility(View.GONE);
+                    }
+
+                }
+            });
+
             Bundle bundle = getIntent().getExtras();
 
             if(bundle!=null){
@@ -309,10 +349,75 @@ public class EmployeeEditScreen extends AppCompatActivity {
                 }
             }
 
+            mNoWeekOff.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    String text = mNoWeekOff.getText().toString();
+
+                    if(text!=null&&!text.isEmpty()){
+
+                        try{
+
+                            int value = Integer.parseInt(text);
+
+                            addView(value);
+
+
+
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+
+                    }else{
+
+                        addView(0);
+
+                    }
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+
 
         }catch (Exception e){
             e.printStackTrace();
         }
+
+    }
+
+    public void addView(final int value){
+
+        if(value==0){
+
+            mWeekContainer.removeAllViews();
+
+        }else{
+
+            for(int i =0;i<value;i++){
+
+                LayoutInflater layoutInflater = (LayoutInflater) getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                final View addView = layoutInflater.inflate(R.layout.container_week_off, null);
+                final Spinner week = (Spinner)addView.findViewById(R.id.week);
+                final Spinner weekday = (Spinner)addView.findViewById(R.id.week_day);
+
+                mWeekContainer.addView(addView);
+
+
+            }
+
+        }
+
+
 
     }
 
@@ -324,6 +429,7 @@ public class EmployeeEditScreen extends AppCompatActivity {
         String doj = employee.getDateOfJoining();
 
         String gender = employee.getGender();
+        String weekList = employee.getDeviceAndroidVersion();
         if(employee.getUserRoleId()==9){
 
             mAdmin.setChecked(true);
@@ -354,6 +460,97 @@ public class EmployeeEditScreen extends AppCompatActivity {
             }else {
 
                 mOthers.setChecked(true);
+            }
+        }
+
+        if(weekList!=null&&!weekList.isEmpty()){
+
+            if(weekList.contains(",")){
+
+                String[] weekSep = weekList.split(",");
+                if(weekSep.length!=0){
+
+                    mWeekOffCheck.setChecked(true);
+                    mWeekOffCheck.setText("Custom Week-Off (If Checked Employee has to take week-off on particular day only.)");
+                    mWeekLay.setVisibility(View.VISIBLE);
+                   
+
+                    for (int j=0;j<weekSep.length;j++){
+
+                        String inWeek = weekSep[j];
+                        if(inWeek.contains("-")){
+                            String[] inWeekSep = inWeek.split("-");
+                            if(inWeekSep.length==2){
+
+                                LayoutInflater layoutInflater = (LayoutInflater) getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                final View addView = layoutInflater.inflate(R.layout.container_week_off, null);
+                                final Spinner week = (Spinner)addView.findViewById(R.id.week);
+                                final Spinner weekday = (Spinner)addView.findViewById(R.id.week_day);
+
+                                String weekText = inWeekSep[0];
+                                String weekdayText = inWeekSep[1];
+
+                                if(weekText!=null&&!weekText.isEmpty()){
+
+                                    if(weekText.equalsIgnoreCase("Week 1")){
+
+                                        week.setSelection(0);
+
+                                    }else if(weekText.equalsIgnoreCase("Week 2")){
+                                        week.setSelection(1);
+
+                                    }else if(weekText.equalsIgnoreCase("Week 3")){
+
+                                        week.setSelection(2);
+
+                                    }else if(weekText.equalsIgnoreCase("Week 4")){
+
+                                        week.setSelection(3);
+
+                                    }else if(weekText.equalsIgnoreCase("Week 5")){
+
+                                        week.setSelection(4);
+
+                                    }
+                                }
+
+                                if(weekdayText!=null&&!weekdayText.isEmpty()){
+
+                                    if(weekdayText.equalsIgnoreCase("Sun")){
+
+                                        weekday.setSelection(0);
+
+                                    }else if(weekdayText.equalsIgnoreCase("Mon")){
+                                        weekday.setSelection(1);
+
+                                    }else if(weekdayText.equalsIgnoreCase("Tue")){
+
+                                        weekday.setSelection(2);
+
+                                    }else if(weekdayText.equalsIgnoreCase("Wed")){
+
+                                        weekday.setSelection(3);
+
+                                    }else if(weekdayText.equalsIgnoreCase("Thu")){
+
+                                        weekday.setSelection(4);
+
+                                    }else if(weekdayText.equalsIgnoreCase("Fri")){
+
+                                        weekday.setSelection(5);
+
+                                    }else if(weekdayText.equalsIgnoreCase("Sat")){
+
+                                        weekday.setSelection(6);
+
+                                    }
+                                }
+
+                                mWeekContainer.addView(addView);
+                            }
+                        }
+                    }
+                }
             }
         }
         getDesignation(employee.getDesignationId());
@@ -430,9 +627,11 @@ public class EmployeeEditScreen extends AppCompatActivity {
 
             getDepartment(orgId,employee.getDepartmentId());
             getmanagerProfile(orgId,employee.getManagerId());
+            getShiftTimings(orgId,employee.getDeviceModel());
         }else{
             getDepartment(PreferenceHandler.getInstance(EmployeeEditScreen.this).getCompanyId(),employee.getDepartmentId());
             getmanagerProfile(PreferenceHandler.getInstance(EmployeeEditScreen.this).getCompanyId(),employee.getManagerId());
+            getShiftTimings(PreferenceHandler.getInstance(EmployeeEditScreen.this).getCompanyId(),employee.getDeviceModel());
         }
 
 
@@ -505,6 +704,7 @@ public class EmployeeEditScreen extends AppCompatActivity {
         String password = mPassword.getText().toString();
         String confirm = mConfirm.getText().toString();
         String address = mAddress.getText().toString();
+        String noWeek = mNoWeekOff.getText().toString();
 
         if(name.isEmpty()){
 
@@ -558,6 +758,10 @@ public class EmployeeEditScreen extends AppCompatActivity {
 
             Toast.makeText(this, "Please Select Gender", Toast.LENGTH_SHORT).show();
 
+        }else if(mWeekOffCheck.isChecked()&&(noWeek==null||noWeek.isEmpty())){
+
+            Toast.makeText(this, "Please Enter no of Week-off", Toast.LENGTH_SHORT).show();
+
         }else{
 
 
@@ -610,7 +814,24 @@ public class EmployeeEditScreen extends AppCompatActivity {
             if(employeeList!=null&&employeeList.size()!=0){
                 employee.setManagerId(employeeList.get(mtoReport.getSelectedItemPosition()).getEmployeeId());
             }
+            if(workingDays!=null&&workingDays.size()!=0){
+                employee.setDeviceModel(""+workingDays.get(mShift.getSelectedItemPosition()).getOrganizationTimingId());
+            }
 
+            int childCounts = mWeekContainer.getChildCount();
+            String weeklist = "";
+            for(int i=0; i<childCounts; i++){
+                View thisChild = mWeekContainer.getChildAt(i);
+                final Spinner week = (Spinner)thisChild.findViewById(R.id.week);
+                final Spinner weekday = (Spinner)thisChild.findViewById(R.id.week_day);
+                String weekText = week.getSelectedItem().toString();
+                String weekdayText = weekday.getSelectedItem().toString();
+
+                if(weekText!=null&&!weekText.isEmpty()&&weekdayText!=null&&!weekdayText.isEmpty()){
+
+                    weeklist = weekText+"-"+weekdayText+","+weeklist;
+                }
+            }
 
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
@@ -632,6 +853,7 @@ public class EmployeeEditScreen extends AppCompatActivity {
             }
 
             employee.setPrimaryEmailAddress(primary);
+            employee.setDeviceAndroidVersion(weeklist);
             employee.setSalary(Double.parseDouble(salary));
             if(secondary!=null&&!secondary.isEmpty()){
                 employee.setAlternateEmailAddress(secondary);
@@ -1168,6 +1390,92 @@ public class EmployeeEditScreen extends AppCompatActivity {
                     }
                 });
             }
+        });
+    }
+
+    public void getShiftTimings(final int id,final String shift) {
+
+
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+
+                final OrganizationTimingsAPI orgApi = Util.getClient().create(OrganizationTimingsAPI.class);
+                Call<ArrayList<WorkingDay>> getProf = orgApi.getOrganizationTimingByOrgId(id);
+                //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
+
+                getProf.enqueue(new Callback<ArrayList<WorkingDay>>() {
+
+                    @Override
+                    public void onResponse(Call<ArrayList<WorkingDay>> call, Response<ArrayList<WorkingDay>> response) {
+
+
+
+                        if (response.code() == 200||response.code() == 201||response.code() == 204)
+                        {
+
+                            workingDays = response.body();
+                            //workingDays = new ArrayList<>();
+
+                            int value = 0;
+                            int timingId = 0;
+
+                            if(shift!=null&&android.text.TextUtils.isDigitsOnly(shift)){
+
+                                timingId = Integer.parseInt(shift);
+
+                            }
+
+                            if(timingId!=0){
+
+                                for(int i =0 ;i <workingDays.size();i++){
+
+                                    if(workingDays.get(i).getOrganizationTimingId()==timingId){
+
+                                        value = i;
+                                        break;
+                                    }
+
+
+                                }
+                            }
+
+
+
+
+
+                            if(workingDays!=null&&workingDays.size()!=0){
+
+                                ShiftSpinnerAdapter arrayAdapter = new ShiftSpinnerAdapter(EmployeeEditScreen.this, workingDays);
+                                mShift.setAdapter(arrayAdapter);
+                                mShift.setSelection(value);
+
+                            }
+
+
+                        }else{
+
+
+
+                            Toast.makeText(EmployeeEditScreen.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<WorkingDay>> call, Throwable t) {
+
+
+
+
+                        Toast.makeText(EmployeeEditScreen.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+            }
+
         });
     }
 }

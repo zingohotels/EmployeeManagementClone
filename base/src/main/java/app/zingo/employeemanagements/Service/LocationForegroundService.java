@@ -7,8 +7,10 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,9 +23,12 @@ import android.os.IBinder;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.google.android.gms.location.DetectedActivity;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -37,6 +42,7 @@ import app.zingo.employeemanagements.AlarmManager.AlarmSoundService;
 import app.zingo.employeemanagements.AlarmManager.CheckOutAlarm;
 import app.zingo.employeemanagements.Model.LiveTracking;
 import app.zingo.employeemanagements.UI.NewEmployeeDesign.BreakPurpose;
+import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.TrackGPS;
 import app.zingo.employeemanagements.Utils.Util;
@@ -225,10 +231,10 @@ public class LocationForegroundService extends Service {
         Calendar firingCal = Calendar.getInstance();
         Calendar currentCal = Calendar.getInstance();
 
-        firingCal.set(Calendar.HOUR, 11); // At the hour you wanna fire
-        firingCal.set(Calendar.MINUTE,17); // Particular minute
+        firingCal.set(Calendar.HOUR, 13); // At the hour you wanna fire
+        firingCal.set(Calendar.MINUTE,10); // Particular minute
         firingCal.set(Calendar.SECOND, 10); // particular second
-        firingCal.set(Calendar.AM_PM, Calendar.AM); // particular AM/PM (While using 24 Time Zone It`s Not Required)
+         // particular AM/PM (While using 24 Time Zone It`s Not Required)
 
         long intendedTime = firingCal.getTimeInMillis();
         long currentTime = currentCal.getTimeInMillis();

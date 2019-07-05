@@ -18,6 +18,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.hardware.camera.autofocus" />
+    <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
 
     <uses-feature android:name="android.hardware.location.gps" />
     <uses-feature
@@ -45,8 +46,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute"
-        tools:replace="android:allowBackup">
-        <activity android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.UpdateOrderScreen"></activity>
+        tools:replace="android:allowBackup,android:icon">
+        <activity android:name="app.zingo.employeemanagements.UI.NewEmployeeDesign.UpdateWeekOff"></activity>
+        <activity android:name="app.zingo.employeemanagements.UI.NewEmployeeDesign.WeekOffDashBoard" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.NewEmployeeDesign.ApplyWeekOff"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name="app.zingo.employeemanagements.UI.NewEmployeeDesign.WeekOffApply"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.ShiftScreenList" />
+        <activity android:name="app.zingo.employeemanagements.UI.NewAdminDesigns.UpdateOrderScreen" />
         <activity android:name="app.zingo.employeemanagements.UI.Admin.EmployeeOrderMapScreen" />
         <activity
             android:name="app.zingo.employeemanagements.UI.Admin.CreateOrderScreen"
@@ -136,6 +146,10 @@
             android:name="app.zingo.employeemanagements.Service.ReportDownloadingDataService"
             android:enabled="true"
             android:exported="true" />
+        <service
+            android:name="app.zingo.employeemanagements.Service.DetectedActivitiesIntentService"
+            android:exported="false" />
+        <service android:name="app.zingo.employeemanagements.Service.BackgroundDetectedActivitiesService" />
         <service
             android:name="app.zingo.employeemanagements.Utils.TrackGPS"
             android:enabled="true" />

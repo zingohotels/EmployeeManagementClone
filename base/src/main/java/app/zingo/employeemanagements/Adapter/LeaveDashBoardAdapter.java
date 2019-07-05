@@ -22,6 +22,7 @@ import app.zingo.employeemanagements.Custom.MyRegulerText;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.Leaves;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.UpdateLeaveScreen;
+import app.zingo.employeemanagements.UI.NewEmployeeDesign.UpdateWeekOff;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
@@ -35,11 +36,13 @@ public class LeaveDashBoardAdapter extends RecyclerView.Adapter<LeaveDashBoardAd
 
     private Context context;
     private ArrayList<Leaves> list;
+    private String type;
 
-    public LeaveDashBoardAdapter(Context context, ArrayList<Leaves> list) {
+    public LeaveDashBoardAdapter(Context context, ArrayList<Leaves> list,String type) {
 
         this.context = context;
         this.list = list;
+        this.type = type;
 
     }
 
@@ -65,12 +68,29 @@ public class LeaveDashBoardAdapter extends RecyclerView.Adapter<LeaveDashBoardAd
                 public void onClick(View view) {
 
 
-                    Intent intent = new Intent(context, UpdateLeaveScreen.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("LeaveId",list.get(position).getLeaveId());
-                    bundle.putSerializable("Leaves",list.get(position));
-                    intent.putExtras(bundle);
-                    context.startActivity(intent);
+                    if(type==null){
+
+
+                        Intent intent = new Intent(context, UpdateLeaveScreen.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("LeaveId",list.get(position).getLeaveId());
+                        bundle.putSerializable("Leaves",list.get(position));
+                        intent.putExtras(bundle);
+                        context.startActivity(intent);
+
+
+                    }else if(type!=null&&type.equalsIgnoreCase("WeekOff")){
+
+
+                        Intent intent = new Intent(context, UpdateWeekOff.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("LeaveId",list.get(position).getLeaveId());
+                        bundle.putSerializable("Leaves",list.get(position));
+                        intent.putExtras(bundle);
+                        context.startActivity(intent);
+
+
+                    }
 
 
 
@@ -166,18 +186,18 @@ public class LeaveDashBoardAdapter extends RecyclerView.Adapter<LeaveDashBoardAd
 
                 if(dto.getLeaveType().equalsIgnoreCase("Paid")){
 
-                    holder.mLeaveType.setText("Leave Type: "+dto.getLeaveType());
+                    holder.mLeaveType.setText("Type: "+dto.getLeaveType());
 
                 }else if(dto.getLeaveType().equalsIgnoreCase("Un Paid")){
 
-                    holder.mLeaveType.setText("Leave Type: "+dto.getLeaveType());
+                    holder.mLeaveType.setText("Type: "+dto.getLeaveType());
 
                 }else{
-                    holder.mLeaveType.setText("Leave Type: Pending");
+                    holder.mLeaveType.setText(" Type: Pending");
                 }
             }else{
 
-                holder.mLeaveType.setText("Leave Type: Pending");
+                holder.mLeaveType.setText("Type: Pending");
             }
 
         }

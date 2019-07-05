@@ -45,6 +45,9 @@ public class LiveTracking implements Serializable {
     @SerializedName("BatteryPercentage")
     public String BatteryPercentage;
 
+    @SerializedName("GPSStatus")
+    public String GPSStatus;
+
     String previousTime;
     String km;
     String duration;
@@ -168,6 +171,14 @@ public class LiveTracking implements Serializable {
 
     public void setDuration(String duration) {
         this.duration = duration;
+    }
+
+    public String getGPSStatus() {
+        return GPSStatus;
+    }
+
+    public void setGPSStatus(String GPSStatus) {
+        this.GPSStatus = GPSStatus;
     }
 
     public static Comparator compareLiveTrack = new Comparator() {

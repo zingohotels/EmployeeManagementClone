@@ -20,6 +20,7 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
@@ -64,6 +65,7 @@ import app.zingo.employeemanagements.Model.EmployeeImages;
 import app.zingo.employeemanagements.Model.MeetingDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.Meetings;
 import app.zingo.employeemanagements.UI.Common.CustomerList;
+import app.zingo.employeemanagements.UI.Custom.CustomDesignAlertDialog;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.WebApi.CustomerAPI;
 import app.zingo.employeemanagements.base.R;
@@ -146,7 +148,7 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
             mImageView = findViewById(R.id.selfie_pic);
             customerSpinner = findViewById(R.id.customer_spinner_adpter);
             ClientNameLayout = findViewById(R.id.client_name_layout);
-            ClientNameLayout = findViewById(R.id.spinner_lay);
+            mSpinnerLay = findViewById(R.id.spinner_lay);
 
             getCustomers(PreferenceHandler.getInstance(MeetingAddWithSignScreen.this).getCompanyId());
 
@@ -195,6 +197,7 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
     }
 
     public void getCustomers(final int id) {
+
         final ProgressDialog dialog = new ProgressDialog(MeetingAddWithSignScreen.this);
         dialog.setMessage("Loading Details..");
         dialog.setCancelable(false);
@@ -223,7 +226,7 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
                     }
                     else {
                         ClientNameLayout.setVisibility(View.VISIBLE);
-                        customerSpinner.setVisibility(View.GONE);
+                        //customerSpinner.setVisibility(View.GONE);
                     }
 
                 }else{
@@ -268,104 +271,136 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
             gps = new TrackGPS(MeetingAddWithSignScreen.this);
             if(gps.canGetLocation())
             {
-                System.out.println("Long and lat Rev"+gps.getLatitude()+" = "+gps.getLongitude());
-                latitude = gps.getLatitude();
-                longitude = gps.getLongitude();
 
-                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-                SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
-                LatLng master = new LatLng(latitude,longitude);
-                String address = getAddress(master);
+                Location location = gps.getLocation();
 
-                loginDetails = new Meetings();
-                loginDetails.setEmployeeId(PreferenceHandler.getInstance(MeetingAddWithSignScreen.this).getUserId());
-                loginDetails.setStartLatitude(""+latitude);
-                loginDetails.setStartLongitude(""+longitude);
-                loginDetails.setStartLocation(""+address);
-                loginDetails.setStartTime(""+sdt.format(new Date()));
-                loginDetails.setEndLatitude(""+latitude);
-                loginDetails.setEndLongitude(""+longitude);
-                loginDetails.setEndLocation(""+address);
-                loginDetails.setEndTime(""+sdt.format(new Date()));
-                loginDetails.setMeetingDate(""+sdf.format(new Date()));
-                loginDetails.setMeetingAgenda(purpose);
-                loginDetails.setMeetingDetails(detail);
-                loginDetails.setStatus("In Meeting");
+                if(location!=null){
 
-                if(customer!=null&&!customer.equalsIgnoreCase("Others")){
+                    ArrayList<String> appNames = new ArrayList<>();
 
-                    if(customerArrayList!=null&&customerArrayList.size()!=0)
-                        loginDetails.setCustomerId(clientId);
 
-                }
+                    if(Settings.Secure.getString(MeetingAddWithSignScreen.this.getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION).equals("0")){
 
-                String contact = "";
+                        //Toast.makeText(mContext, "Mock Location Enabled" , Toast.LENGTH_SHORT).show();
 
-                if(email!=null&&!email.isEmpty()){
-                    contact = contact+"%"+email;
-                }
+                        if(gps.isMockLocationOn(location,MeetingAddWithSignScreen.this)){
 
-                if(mobile!=null&&!mobile.isEmpty()){
-                    contact = contact+"%"+mobile;
-                }
+                            appNames.addAll(gps.listofApps(MeetingAddWithSignScreen.this));
 
-                if(contact!=null&&!contact.isEmpty()){
-                    loginDetails.setMeetingPersonDetails(client+""+contact);
-                }else{
-                    loginDetails.setMeetingPersonDetails(client);
-                }
-                try {
 
-                    md = new MeetingDetailsNotificationManagers();
-                    md.setTitle("Meeting Details from "+PreferenceHandler.getInstance(MeetingAddWithSignScreen.this).getUserFullName());
-                    md.setMessage("Meeting with "+client+" for "+purpose);
-                    md.setLocation(address);
-                    md.setLongitude(""+longitude);
-                    md.setLatitude(""+latitude);
-                    md.setMeetingDate(""+sdt.format(new Date()));
-                    md.setStatus("Completed");
-                    md.setEmployeeId(PreferenceHandler.getInstance(MeetingAddWithSignScreen.this).getUserId());
-                    md.setManagerId(PreferenceHandler.getInstance(MeetingAddWithSignScreen.this).getManagerId());
-                    md.setMeetingPerson(client);
-                    md.setMeetingsDetails(purpose);
-                    md.setMeetingComments(detail);
-
-                    if (mGetSign.isChecked()&&!mTakeImage.isChecked()){
-                        // Method to create Directory, if the Directory doesn't exists
-                        file = new File(DIRECTORY);
-                        if (!file.exists()) {
-                            file.mkdir();
                         }
-                        // Dialog Function
-                        dialog = new Dialog(MeetingAddWithSignScreen.this);
-                        // Removing the features of Normal Dialogs
-                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        dialog.setContentView(R.layout.dialog_signature);
-                        dialog.setCancelable(true);
 
-                        dialog_action(loginDetails,md,"null");
 
-                    }else if (mGetSign.isChecked()&&mTakeImage.isChecked()){
 
-                        file = new File(DIRECTORY);
-                        if (!file.exists()) {
-                            file.mkdir();
+                    }
+
+                    if(appNames!=null&&appNames.size()!=0){
+
+                        new CustomDesignAlertDialog(MeetingAddWithSignScreen.this, CustomDesignAlertDialog.ERROR_TYPE,"Fake")
+                                .setTitleText("Fake Activity")
+                                .setContentText(appNames.get(0)+" is sending fake location.")
+                                .show();
+
+                    }else{
+
+                        System.out.println("Long and lat Rev"+gps.getLatitude()+" = "+gps.getLongitude());
+                        latitude = gps.getLatitude();
+                        longitude = gps.getLongitude();
+
+                        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+                        SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+                        LatLng master = new LatLng(latitude,longitude);
+                        String address = getAddress(master);
+
+                        loginDetails = new Meetings();
+                        loginDetails.setEmployeeId(PreferenceHandler.getInstance(MeetingAddWithSignScreen.this).getUserId());
+                        loginDetails.setStartLatitude(""+latitude);
+                        loginDetails.setStartLongitude(""+longitude);
+                        loginDetails.setStartLocation(""+address);
+                        loginDetails.setStartTime(""+sdt.format(new Date()));
+                        loginDetails.setEndLatitude(""+latitude);
+                        loginDetails.setEndLongitude(""+longitude);
+                        loginDetails.setEndLocation(""+address);
+                        loginDetails.setEndTime(""+sdt.format(new Date()));
+                        loginDetails.setMeetingDate(""+sdf.format(new Date()));
+                        loginDetails.setMeetingAgenda(purpose);
+                        loginDetails.setMeetingDetails(detail);
+                        loginDetails.setStatus("In Meeting");
+
+                        if(customer!=null&&!customer.equalsIgnoreCase("Others")){
+
+                            if(customerArrayList!=null&&customerArrayList.size()!=0)
+                                loginDetails.setCustomerId(clientId);
+
                         }
-                        // Dialog Function
-                        dialog = new Dialog(MeetingAddWithSignScreen.this);
-                        // Removing the features of Normal Dialogs
-                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        dialog.setContentView(R.layout.dialog_signature);
-                        dialog.setCancelable(true);
 
-                        dialog_action(loginDetails,md,"Selfie");
+                        String contact = "";
 
-                    }else if (!mGetSign.isChecked()&&mTakeImage.isChecked()){
-
-                        file = new File(DIRECTORY);
-                        if (!file.exists()) {
-                            file.mkdir();
+                        if(email!=null&&!email.isEmpty()){
+                            contact = contact+"%"+email;
                         }
+
+                        if(mobile!=null&&!mobile.isEmpty()){
+                            contact = contact+"%"+mobile;
+                        }
+
+                        if(contact!=null&&!contact.isEmpty()){
+                            loginDetails.setMeetingPersonDetails(client+""+contact);
+                        }else{
+                            loginDetails.setMeetingPersonDetails(client);
+                        }
+                        try {
+
+                            md = new MeetingDetailsNotificationManagers();
+                            md.setTitle("Meeting Details from "+PreferenceHandler.getInstance(MeetingAddWithSignScreen.this).getUserFullName());
+                            md.setMessage("Meeting with "+client+" for "+purpose);
+                            md.setLocation(address);
+                            md.setLongitude(""+longitude);
+                            md.setLatitude(""+latitude);
+                            md.setMeetingDate(""+sdt.format(new Date()));
+                            md.setStatus("Completed");
+                            md.setEmployeeId(PreferenceHandler.getInstance(MeetingAddWithSignScreen.this).getUserId());
+                            md.setManagerId(PreferenceHandler.getInstance(MeetingAddWithSignScreen.this).getManagerId());
+                            md.setMeetingPerson(client);
+                            md.setMeetingsDetails(purpose);
+                            md.setMeetingComments(detail);
+
+                            if (mGetSign.isChecked()&&!mTakeImage.isChecked()){
+                                // Method to create Directory, if the Directory doesn't exists
+                                file = new File(DIRECTORY);
+                                if (!file.exists()) {
+                                    file.mkdir();
+                                }
+                                // Dialog Function
+                                dialog = new Dialog(MeetingAddWithSignScreen.this);
+                                // Removing the features of Normal Dialogs
+                                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                dialog.setContentView(R.layout.dialog_signature);
+                                dialog.setCancelable(true);
+
+                                dialog_action(loginDetails,md,"null");
+
+                            }else if (mGetSign.isChecked()&&mTakeImage.isChecked()){
+
+                                file = new File(DIRECTORY);
+                                if (!file.exists()) {
+                                    file.mkdir();
+                                }
+                                // Dialog Function
+                                dialog = new Dialog(MeetingAddWithSignScreen.this);
+                                // Removing the features of Normal Dialogs
+                                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                dialog.setContentView(R.layout.dialog_signature);
+                                dialog.setCancelable(true);
+
+                                dialog_action(loginDetails,md,"Selfie");
+
+                            }else if (!mGetSign.isChecked()&&mTakeImage.isChecked()){
+
+                                file = new File(DIRECTORY);
+                                if (!file.exists()) {
+                                    file.mkdir();
+                                }
                        /* // Dialog Function
                         dialog = new Dialog(MeetingAddWithSignScreen.this);
                         // Removing the features of Normal Dialogs
@@ -373,21 +408,34 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
                         dialog.setContentView(R.layout.dialog_signature);
                         dialog.setCancelable(true);*/
 
-                        dispatchTakePictureIntent();
+                                dispatchTakePictureIntent();
 
-                        //dialog_action(loginDetails,md,"Selfie");
+                                //dialog_action(loginDetails,md,"Selfie");
 
-                    }else{
-                        addMeeting(loginDetails,md);
+                            }else{
+                                addMeeting(loginDetails,md);
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
                     }
+                }else{
 
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    new CustomDesignAlertDialog(MeetingAddWithSignScreen.this, CustomDesignAlertDialog.WARNING_TYPE,"")
+                            .setTitleText("Warning")
+                            .setContentText("Something went wrong.Please try again some time.")
+                            .show();
                 }
+
             }
             else
             {
-
+                new CustomDesignAlertDialog(MeetingAddWithSignScreen.this, CustomDesignAlertDialog.WARNING_TYPE,"")
+                        .setTitleText("Warning")
+                        .setContentText("Not abe to find location.Please try again some time.")
+                        .show();
             }
         }
     }
@@ -1157,6 +1205,7 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
                                         String option = "Meeting-Out";
 
                                         mSpinnerLay.setVisibility(View.GONE);
+                                        ClientNameLayout.setVisibility(View.VISIBLE);
 
 
 

@@ -473,6 +473,7 @@ public class LandingScreen extends AppCompatActivity {
                                         PreferenceHandler.getInstance(LandingScreen.this).setUserFullName(dto.getEmployeeName());
                                         PreferenceHandler.getInstance(LandingScreen.this).setPhoneNumber(dto.getPhoneNumber());
                                         PreferenceHandler.getInstance(LandingScreen.this).setUserEmail(dto.getPrimaryEmailAddress());
+                                        PreferenceHandler.getInstance(LandingScreen.this).setShftName(""+dto.getDeviceModel());
                                         spe.putString("FullName", dto.getEmployeeName());
                                         spe.putString("Password", dto.getPassword());
                                         spe.putString("Email", dto.getPrimaryEmailAddress());

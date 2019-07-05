@@ -105,6 +105,9 @@ public class Employee implements Serializable {
     @SerializedName("DeviceModel")
     private String DeviceModel;
 
+    @SerializedName("AllowanceType")
+    private String AllowanceType;
+
     @SerializedName("DeviceAndroidVersion")
     private String DeviceAndroidVersion;
 
@@ -398,6 +401,13 @@ public class Employee implements Serializable {
         IsAppOpen = appOpen;
     }
 
+    public String getAllowanceType() {
+        return AllowanceType;
+    }
+
+    public void setAllowanceType(String allowanceType) {
+        AllowanceType = allowanceType;
+    }
 
     public static Comparator compareEmployee = new Comparator() {
         @Override

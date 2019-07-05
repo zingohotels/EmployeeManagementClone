@@ -1,9 +1,12 @@
 package app.zingo.employeemanagements.UI.Common;
 
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.service.notification.StatusBarNotification;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
@@ -36,7 +39,7 @@ import retrofit2.Response;
 
 public class NotificationShowActivity extends AppCompatActivity {
 
-    Switch mAttendance,mTask,mLeave,mMeetings,mExpenses;
+    Switch mAttendance,mAttendanceLate,mTask,mLeave,mMeetings,mExpenses;
     AppCompatButton mSave;
     LinearLayout logout;
 
@@ -46,6 +49,7 @@ public class NotificationShowActivity extends AppCompatActivity {
 
     Employee employee;
     String type;
+    String notificationData = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +73,7 @@ public class NotificationShowActivity extends AppCompatActivity {
 
 
             mAttendance = findViewById(R.id.attendance_noti);
+            mAttendanceLate = findViewById(R.id.late_attendance_noti);
             mTask = findViewById(R.id.task_noti);
             mLeave = findViewById(R.id.leave_noti);
             mMeetings = findViewById(R.id.meeting_noti);
@@ -78,56 +83,61 @@ public class NotificationShowActivity extends AppCompatActivity {
 
             mydb = new DBHelper(this);
 
-            if(mydb!=null){
 
 
+            if(employee==null){
+                getProfileById(PreferenceHandler.getInstance(NotificationShowActivity.this).getUserId());
+            }else{
 
-                notificationSettingsDatas = mydb.getAllNotifications();
+                String notificationValues = employee.getAllowanceType();
 
-                if(notificationSettingsDatas!=null&&notificationSettingsDatas.size()!=0){
+                if(notificationValues!=null&&!notificationValues.isEmpty()){
 
-                    for (NotificationSettingsData ndfs:notificationSettingsDatas) {
+                    if(notificationValues.contains("Attendance")){
 
-                        if(ndfs.getName()!=null&&ndfs.getName().equalsIgnoreCase("Attendance")){
-                            mAttendance.setChecked(true);
-                        }else{
-                            mAttendance.setChecked(false);
-                        }
+                        mAttendance.setChecked(true);
 
-                        if(ndfs.getName()!=null&&ndfs.getName().equalsIgnoreCase("Task")){
-                            mTask.setChecked(true);
-                        }else{
-                            mTask.setChecked(false);
-                        }
+                    }
 
-                        if(ndfs.getName()!=null&&ndfs.getName().equalsIgnoreCase("Leave")){
-                            mLeave.setChecked(true);
-                        }else{
-                            mLeave.setChecked(false);
-                        }
+                    if(notificationValues.contains("Late")){
+                        mAttendanceLate.setChecked(true);
 
-                        if(ndfs.getName()!=null&&ndfs.getName().equalsIgnoreCase("Meetings")){
-                            mMeetings.setChecked(true);
-                        }else{
-                            mMeetings.setChecked(false);
-                        }
+                    }
 
-                        if(ndfs.getName()!=null&&ndfs.getName().equalsIgnoreCase("Expesnses")){
-                            mExpenses.setChecked(true);
-                        }else{
-                            mExpenses.setChecked(false);
-                        }
+                    if(notificationValues.contains("Expenses")){
+                        mExpenses.setChecked(true);
+
+                    }
+
+                    if(notificationValues.contains("Meetings")){
+                        mMeetings.setChecked(true);
+
+                    }
+
+                    if(notificationValues.contains("Leave")){
+
+                        mLeave.setChecked(true);
+                    }
+
+                    if(notificationValues.contains("Task")){
+                        mTask.setChecked(true);
 
                     }
                 }
-
-
             }
-
 
             logout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
+                    NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    StatusBarNotification[] barNotifications = new StatusBarNotification[0];
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                        barNotifications = notificationManager.getActiveNotifications();
+                        for(StatusBarNotification notification: barNotifications) {
+                            System.out.println("Notification Id "+notification.getId());
+                        }
+                    }
 
 
                     if(type!=null&&type.equalsIgnoreCase("Employee")){
@@ -224,184 +234,45 @@ public class NotificationShowActivity extends AppCompatActivity {
                 public void onClick(View v) {
 
 
-                    if(notificationSettingsDatas==null&&notificationSettingsDatas.size()==0){
-
-                        ArrayList<NotificationSettingsData> notificationSettingsData = new ArrayList<>();
 
                         if(mAttendance.isChecked()){
 
-                            NotificationSettingsData ndf = new NotificationSettingsData();
-                            ndf.setName("Attendance");
-                            ndf.setStatus(1);
-                            notificationSettingsData.add(ndf);
+                           notificationData = notificationData+",Attendance";
 
 
-                        }else{
-                            NotificationSettingsData ndf = new NotificationSettingsData();
-                            ndf.setName("Attendance");
-                            ndf.setStatus(0);
-                            notificationSettingsData.add(ndf);
                         }
 
                         if(mTask.isChecked()){
 
-                            NotificationSettingsData ndf = new NotificationSettingsData();
-                            ndf.setName("Task");
-                            ndf.setStatus(1);
-                            notificationSettingsData.add(ndf);
-                        }else{
-                            NotificationSettingsData ndf = new NotificationSettingsData();
-                            ndf.setName("Task");
-                            ndf.setStatus(0);
-                            notificationSettingsData.add(ndf);
+                            notificationData = notificationData+",Task";
                         }
 
                         if(mLeave.isChecked()){
 
-                            NotificationSettingsData ndf = new NotificationSettingsData();
-                            ndf.setName("Leave");
-                            ndf.setStatus(1);
-                            notificationSettingsData.add(ndf);
-                        }else{
-                            NotificationSettingsData ndf = new NotificationSettingsData();
-                            ndf.setName("Leave");
-                            ndf.setStatus(0);
-                            notificationSettingsData.add(ndf);
+                            notificationData = notificationData+",Leave";
                         }
 
                         if(mMeetings.isChecked()){
 
-                            NotificationSettingsData ndf = new NotificationSettingsData();
-                            ndf.setName("Meetings");
-                            ndf.setStatus(1);
-                            notificationSettingsData.add(ndf);
-                        }else{
-                            NotificationSettingsData ndf = new NotificationSettingsData();
-                            ndf.setName("Meetings");
-                            ndf.setStatus(0);
-                            notificationSettingsData.add(ndf);
+                            notificationData = notificationData+",Meetings";
                         }
 
                         if(mExpenses.isChecked()){
 
-                            NotificationSettingsData ndf = new NotificationSettingsData();
-                            ndf.setName("Expesnses");
-                            ndf.setStatus(1);
-                            notificationSettingsData.add(ndf);
-                        }else{
-                            NotificationSettingsData ndf = new NotificationSettingsData();
-                            ndf.setName("Expesnses");
-                            ndf.setStatus(0);
-                            notificationSettingsData.add(ndf);
+                            notificationData = notificationData+",Expenses";
                         }
 
-                        if(notificationSettingsData!=null&&notificationSettingsData.size()!=0){
+                        if(mAttendanceLate.isChecked()){
 
-                            for (NotificationSettingsData ndfs :notificationSettingsData) {
-
-                                if(mydb!=null&&ndfs!=null){
-
-                                    mydb.addNotification(ndfs);
-
-                                }
-
-                            }
-
-                        }else{
-                            Toast.makeText(NotificationShowActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                            notificationData = notificationData+",Late";
                         }
 
 
-                    }else{
+                    if(employee!=null){
 
-
-
-
-                        ArrayList<NotificationSettingsData> notificationSettingsData = new ArrayList<>();
-
-                        if(mAttendance.isChecked()){
-
-                            NotificationSettingsData ndf = new NotificationSettingsData();
-                            ndf.setName("Attendance");
-                            ndf.setStatus(1);
-                            notificationSettingsData.add(ndf);
-
-
-                        }else{
-                            NotificationSettingsData ndf = new NotificationSettingsData();
-                            ndf.setName("Attendance");
-                            ndf.setStatus(0);
-                            notificationSettingsData.add(ndf);
-                        }
-
-                        if(mTask.isChecked()){
-
-                            NotificationSettingsData ndf = new NotificationSettingsData();
-                            ndf.setName("Task");
-                            ndf.setStatus(1);
-                            notificationSettingsData.add(ndf);
-                        }else{
-                            NotificationSettingsData ndf = new NotificationSettingsData();
-                            ndf.setName("Task");
-                            ndf.setStatus(0);
-                            notificationSettingsData.add(ndf);
-                        }
-
-                        if(mLeave.isChecked()){
-
-                            NotificationSettingsData ndf = new NotificationSettingsData();
-                            ndf.setName("Leave");
-                            ndf.setStatus(1);
-                            notificationSettingsData.add(ndf);
-                        }else{
-                            NotificationSettingsData ndf = new NotificationSettingsData();
-                            ndf.setName("Leave");
-                            ndf.setStatus(0);
-                            notificationSettingsData.add(ndf);
-                        }
-
-                        if(mMeetings.isChecked()){
-
-                            NotificationSettingsData ndf = new NotificationSettingsData();
-                            ndf.setName("Meetings");
-                            ndf.setStatus(1);
-                            notificationSettingsData.add(ndf);
-                        }else{
-                            NotificationSettingsData ndf = new NotificationSettingsData();
-                            ndf.setName("Meetings");
-                            ndf.setStatus(0);
-                            notificationSettingsData.add(ndf);
-                        }
-
-                        if(mExpenses.isChecked()){
-
-                            NotificationSettingsData ndf = new NotificationSettingsData();
-                            ndf.setName("Expesnses");
-                            ndf.setStatus(1);
-                            notificationSettingsData.add(ndf);
-                        }else{
-                            NotificationSettingsData ndf = new NotificationSettingsData();
-                            ndf.setName("Expesnses");
-                            ndf.setStatus(0);
-                            notificationSettingsData.add(ndf);
-                        }
-
-                        if(notificationSettingsData!=null&&notificationSettingsData.size()!=0){
-
-                            for (NotificationSettingsData ndfs :notificationSettingsData) {
-
-                                if(mydb!=null&&ndfs!=null){
-
-                                    mydb.updateNotification(ndfs);
-
-                                }
-
-                            }
-
-                        }else{
-                            Toast.makeText(NotificationShowActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
-                        }
-
+                        Employee profile = employee;
+                        profile.setAllowanceType(notificationData);
+                        updateProfileNotification(profile);
 
                     }
 
@@ -485,6 +356,97 @@ public class NotificationShowActivity extends AppCompatActivity {
 
         });
     }
+
+    public void getProfileById(final int id ){
+
+        final ProgressDialog dialog = new ProgressDialog(NotificationShowActivity.this);
+        dialog.setCancelable(false);
+        dialog.setTitle("Loading Details...");
+        dialog.show();
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+
+                final EmployeeApi subCategoryAPI = Util.getClient().create(EmployeeApi.class);
+                Call<ArrayList<Employee>> getProf = subCategoryAPI.getProfileById(id);
+                //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
+
+                getProf.enqueue(new Callback<ArrayList<Employee>>() {
+
+                    @Override
+                    public void onResponse(Call<ArrayList<Employee>> call, Response<ArrayList<Employee>> response) {
+
+                        if(dialog != null && dialog.isShowing())
+                        {
+                            dialog.dismiss();
+                        }
+
+                        if (response.code() == 200)
+                        {
+                            System.out.println("Inside api");
+
+                            employee = response.body().get(0);
+
+                            if(employee!=null){
+                                String notificationValues = employee.getAllowanceType();
+
+                                if(notificationValues!=null&&!notificationValues.isEmpty()){
+
+                                    if(notificationValues.contains("Attendance")){
+
+                                        mAttendance.setChecked(true);
+
+                                    }
+
+                                    if(notificationValues.contains("Late")){
+                                        mAttendanceLate.setChecked(true);
+
+                                    }
+
+                                    if(notificationValues.contains("Expenses")){
+                                        mExpenses.setChecked(true);
+
+                                    }
+
+                                    if(notificationValues.contains("Meetings")){
+                                        mMeetings.setChecked(true);
+
+                                    }
+
+                                    if(notificationValues.contains("Leave")){
+
+                                        mLeave.setChecked(true);
+                                    }
+
+                                    if(notificationValues.contains("Task")){
+                                        mTask.setChecked(true);
+
+                                    }
+                                }
+                            }
+
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<Employee>> call, Throwable t) {
+
+                        if(dialog != null && dialog.isShowing())
+                        {
+                            dialog.dismiss();
+                        }
+
+                    }
+                });
+
+            }
+
+        });
+    }
+
+
 
     public void updateProfile(final Employee employee){
 
@@ -578,6 +540,49 @@ public class NotificationShowActivity extends AppCompatActivity {
                         startActivity(log);
                         NotificationShowActivity.this.finish();
                         //  Toast.makeText(ChangePasswordScreen.this, "Something went wrong due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+            }
+
+        });
+    }
+
+    public void updateProfileNotification(final Employee employee){
+
+        final ProgressDialog dialog = new ProgressDialog(NotificationShowActivity.this);
+        dialog.setCancelable(false);
+        dialog.setTitle("Saving Details...");
+        dialog.show();
+
+        new ThreadExecuter().execute(new Runnable() {
+            @Override
+            public void run() {
+
+                final EmployeeApi subCategoryAPI = Util.getClient().create(EmployeeApi.class);
+                Call<Employee> getProf = subCategoryAPI.updateEmployee(employee.getEmployeeId(),employee);
+                //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
+
+                getProf.enqueue(new Callback<Employee>() {
+
+                    @Override
+                    public void onResponse(Call<Employee> call, Response<Employee> response) {
+
+                        if(dialog != null && dialog.isShowing())
+                        {
+                            dialog.dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Employee> call, Throwable t) {
+
+                        if(dialog != null && dialog.isShowing())
+                        {
+                            dialog.dismiss();
+                        }
+
 
                     }
                 });

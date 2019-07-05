@@ -22,6 +22,10 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -68,6 +72,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.DetectedActivity;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
@@ -108,6 +113,7 @@ import app.zingo.employeemanagements.Service.LocationAndDataServiceWithTimer;
 import app.zingo.employeemanagements.UI.Admin.CreateTaskScreen;
 import app.zingo.employeemanagements.UI.Common.CustomerCreation;
 import app.zingo.employeemanagements.UI.Common.PlanExpireScreen;
+import app.zingo.employeemanagements.UI.Custom.CustomDesignAlertDialog;
 import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
@@ -131,11 +137,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
-import uk.co.deanwild.materialshowcaseview.ShowcaseTooltip;
+import uk.co.deanwild.materialshowcaseview.ShowcaseTooltip;//SensorEventListener
 
 public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFloatingActionContentLabelList.OnRapidFloatingActionContentLabelListListener,GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        com.google.android.gms.location.LocationListener{
+        com.google.android.gms.location.LocationListener  {
 
     static final String TAG = "FounderMainScreen";
 
@@ -230,6 +236,12 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
     private long UPDATE_INTERVAL = 60000;  /* 60 secs */
     private long FASTEST_INTERVAL = 30000; /* 30 secs */
 
+    /*private  SensorManager mSensorManager;
+    private  Sensor mAccelerometer;*/
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -240,6 +252,11 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
             setContentView(R.layout.activity_employee_new_main_screen);
             rfaLayout = (RapidFloatingActionLayout) findViewById(R.id.rfab_group_sample_fragment_a_rfal);
             rfaButton = (RapidFloatingActionButton) findViewById(R.id.label_list_sample_rfab);
+
+            /*mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+            mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+*/
 
             Bundle extras = getIntent().getExtras();
             if(extras != null) {
@@ -288,6 +305,9 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
             medit = mPref.edit();
 
             // getCurrentVersion();
+
+
+
             Intent serviceIntent = new Intent(EmployeeNewMainScreen.this, LocationAndDataServiceWithTimer.class);
             startService(serviceIntent);
 
@@ -418,6 +438,8 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
         }
 
     }
+
+
 
     private void fn_permission() {
 
@@ -820,6 +842,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
                             profile = response.body().get(0);
                             profile.setAppOpen(true);
                             String app_version = PreferenceHandler.getInstance(EmployeeNewMainScreen.this).getAppVersion();
+                            PreferenceHandler.getInstance(EmployeeNewMainScreen.this).setShftName(""+profile.getDeviceModel());
                             profile.setLastUpdated(""+ BuildConfig.VERSION_NAME);
                             profile.setLastseen(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
                             updateProfile(profile);
@@ -2378,6 +2401,12 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
 
                                                         if(currentLocation!=null) {
 
+                                                            if(gps.isMockLocationOn(currentLocation,EmployeeNewMainScreen.this)){
+
+                                                                System.out.println("Mock App "+gps.getListOfFakeLocationApps(EmployeeNewMainScreen.this).toString());
+
+                                                            }
+
                                                             latitude = currentLocation.getLatitude();
                                                             longitude = currentLocation.getLongitude();
 
@@ -3408,21 +3437,54 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
         currentLocation = LocationServices.FusedLocationApi.getLastLocation(mLocationClient);
 
 
+
+        ArrayList<String> appNames = new ArrayList<>();
+
+
         if (currentLocation != null) {
+
+
             //  latLong.setText("Latitude : " + currentLocation.getLatitude() + " , Longitude : " + currentLocation.getLongitude());
 
-            latitude = currentLocation.getLatitude();
-            longitude = currentLocation.getLongitude();
+            if(Settings.Secure.getString(EmployeeNewMainScreen.this.getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION).equals("0")){
 
-            LatLng master = new LatLng(latitude,longitude);
-            String address = null;
-            try {
-                address = getAddress(master);
-            } catch (Exception e) {
-                e.printStackTrace();
+                //Toast.makeText(mContext, "Mock Location Enabled" , Toast.LENGTH_SHORT).show();
+
+                if(gps.isMockLocationOn(currentLocation,EmployeeNewMainScreen.this)){
+
+                    appNames.addAll(gps.listofApps(EmployeeNewMainScreen.this));
+
+
+                }
+
+
+
             }
+
+            if(appNames!=null&&appNames.size()!=0){
+
+                new CustomDesignAlertDialog(this, CustomDesignAlertDialog.ERROR_TYPE,"Fake")
+                        .setTitleText("Fake Activity")
+                        .setContentText(appNames.get(0)+" is sending fake location.")
+                        .show();
+
+            }else{
+                latitude = currentLocation.getLatitude();
+                longitude = currentLocation.getLongitude();
+
+                LatLng master = new LatLng(latitude,longitude);
+                String address = null;
+                try {
+                    address = getAddress(master);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                startLocationUpdates();
+
+            }
+
         }
-        startLocationUpdates();
+
     }
 
     @Override
@@ -3486,4 +3548,26 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
         AlertDialog alert = builder.create();
         alert.show();
     }
+
+    /*@Override
+    protected void onResume() {
+        super.onResume();
+        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    protected void onPause() {
+        super.onPause();
+        mSensorManager.unregisterListener(this);
+    }
+
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+        System.out.println("Sensor "+sensor.getName());
+    }
+
+    public void onSensorChanged(SensorEvent event) {
+
+        System.out.println("Sensor "+event.sensor.getType());
+    }*/
+
 }

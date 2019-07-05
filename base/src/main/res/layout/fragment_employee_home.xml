@@ -162,6 +162,34 @@
             android:layout_marginTop="8dp"
             android:weightSum="3">
 
+            <LinearLayout
+                android:gravity="center"
+                android:orientation="vertical"
+                android:id="@+id/week_off_mgmt"
+                android:padding="8dp"
+                android:clickable="true"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:minWidth="70dp"
+                android:layout_weight="1"
+                android:focusable="true">
+                <ImageView
+                    android:background="@drawable/rounded_menu_background"
+                    android:padding="8dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/leave_menu"
+                    android:contentDescription="TODO" />
+                <TextView
+                    android:textSize="12sp"
+                    android:textColor="@color/grey_charcoal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Week Off"/>
+            </LinearLayout>
+
 
              <LinearLayout
                  android:gravity="center"
@@ -220,33 +248,7 @@
                     android:text="Task"/>
             </LinearLayout>
 
-            <LinearLayout
-                android:gravity="center"
-                android:orientation="vertical"
-                android:id="@+id/orders"
-                android:padding="8dp"
-                android:clickable="true"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:minWidth="70dp"
-                android:layout_weight="1"
-                android:focusable="true">
-                <ImageView
-                    android:background="@drawable/rounded_menu_background"
-                    android:padding="8dp"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/order"
-                    android:contentDescription="TODO" />
-                <TextView
-                    android:textSize="12sp"
-                    android:textColor="@color/grey_charcoal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Orders"/>
-            </LinearLayout>
+
 
         </LinearLayout>
 
@@ -289,6 +291,34 @@
                 <LinearLayout
                     android:gravity="center"
                     android:orientation="vertical"
+                    android:id="@+id/orders"
+                    android:padding="8dp"
+                    android:clickable="true"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:minWidth="70dp"
+                    android:layout_weight="1"
+                    android:focusable="true">
+                    <ImageView
+                        android:background="@drawable/rounded_menu_background"
+                        android:padding="8dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/order"
+                        android:contentDescription="TODO" />
+                    <TextView
+                        android:textSize="12sp"
+                        android:textColor="@color/grey_charcoal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Orders"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:gravity="center"
+                    android:orientation="vertical"
                     android:id="@+id/team"
                     android:padding="8dp"
                     android:clickable="true"
@@ -313,6 +343,17 @@
                         android:layout_height="wrap_content"
                         android:text="My Team"/>
                 </LinearLayout>
+
+
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:weightSum="3">
 
                 <LinearLayout
                     android:gravity="center"
@@ -341,15 +382,6 @@
                         android:layout_height="wrap_content"
                         android:text="Salary"/>
                 </LinearLayout>
-
-
-            </LinearLayout>
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:weightSum="3">
 
                 <LinearLayout
                     android:gravity="center"
@@ -407,6 +439,19 @@
                         android:layout_height="wrap_content"
                         android:text="Customer/Client"/>
                 </LinearLayout>
+
+
+
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:weightSum="3">
+
 
                 <LinearLayout
                     android:gravity="center"

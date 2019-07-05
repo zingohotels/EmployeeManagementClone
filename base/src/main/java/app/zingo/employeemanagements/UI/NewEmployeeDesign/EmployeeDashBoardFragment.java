@@ -90,6 +90,7 @@ import app.zingo.employeemanagements.Model.LoginDetails;
 import app.zingo.employeemanagements.Model.MeetingDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.Meetings;
 import app.zingo.employeemanagements.Model.Tasks;
+import app.zingo.employeemanagements.UI.Custom.CustomDesignAlertDialog;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.PendingTasks;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
@@ -1621,6 +1622,9 @@ public class EmployeeDashBoardFragment extends Fragment implements GoogleApiClie
                                 try{
 
                                     if(locationCheck()){
+
+
+
                                         String message = "Login";
 
 
@@ -1636,12 +1640,7 @@ public class EmployeeDashBoardFragment extends Fragment implements GoogleApiClie
                                         View views = inflater.inflate(R.layout.activity_meeting_add_with_sign_screen, null);
 
                                         builder.setView(views);
-                                     /*   final Button mSave = (Button) views.findViewById(R.id.save);
-                                        mSave.setText(option);
-                                        final EditText mRemarks = (EditText) views.findViewById(R.id.meeting_remarks);
-                                        final TextInputEditText mClient = (TextInputEditText) views.findViewById(R.id.client_name);
-                                        final TextInputEditText mContact = (TextInputEditText) views.findViewById(R.id.client_contact);
-                                        final TextInputEditText mPurpose = (TextInputEditText) views.findViewById(R.id.purpose_meeting);*/
+
 
                                         final Button  mSave = views.findViewById(R.id.save);
                                         mSave.setText(option);
@@ -1692,44 +1691,7 @@ public class EmployeeDashBoardFragment extends Fragment implements GoogleApiClie
                                         dialog.show();
                                         dialog.setCanceledOnTouchOutside(true);
 
-                                        /*customerSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                            @Override
-                                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                                                if(customerArrayList!=null && customerArrayList.size()!=0){
-
-
-                                                    if(customerArrayList.get(position).getCustomerName()!=null && customerArrayList.get(position).getCustomerName().equalsIgnoreCase("Others"))
-                                                    {
-                                                        mClientMobile.setText("");
-                                                        mClientName.setText("");
-                                                        mClientMail.setText("");
-                                                        ClientNameLayout.setVisibility(View.VISIBLE);
-
-                                                    }
-                                                    else {
-                                                        mClientMobile.setText(""+customerArrayList.get(position).getCustomerMobile());
-                                                        mClientName.setText(""+customerArrayList.get(position).getCustomerName());
-                                                        mClientMail.setText(""+customerArrayList.get(position).getCustomerEmail());
-                                                        clientId = customerArrayList.get(position).getCustomerId();
-                                                        ClientNameLayout.setVisibility(View.GONE);
-
-                                                    }
-                                                }
-                                            }
-
-                                            @Override
-                                            public void onNothingSelected(AdapterView<?> parent) {
-
-                                            }
-                                        });
-*/
-                                        /*if(dto.getCustomerId()!=0){
-
-                                            getCustomersWithId(PreferenceHandler.getInstance(getActivity()).getCompanyId(),dto.getCustomerId());
-                                        }else{
-                                            getCustomersWithId(PreferenceHandler.getInstance(getActivity()).getCompanyId(),0);
-                                        }*/
 
                                         mSave.setOnClickListener(new View.OnClickListener() {
                                             @Override
@@ -1760,156 +1722,169 @@ public class EmployeeDashBoardFragment extends Fragment implements GoogleApiClie
 
                                                     if(locationCheck()){
 
+                                                        ArrayList<String> appNames = new ArrayList<>();
+
                                                         if(currentLocation!=null) {
 
-                                                            latitude = currentLocation.getLatitude();
-                                                            longitude = currentLocation.getLongitude();
 
-                                                            LatLng masters = new LatLng(latitude, longitude);
-                                                            String addresss = null;
-                                                            try {
-                                                                addresss = getAddress(masters);
-                                                            } catch (Exception e) {
-                                                                e.printStackTrace();
-                                                            }
+                                                            //  latLong.setText("Latitude : " + currentLocation.getLatitude() + " , Longitude : " + currentLocation.getLongitude());
 
-                                                           /* latLong.setText(addresss);
-                                                            centreMapOnLocationWithLatLng(masters, "" + PreferenceHandler.getInstance(getActivity()).getUserFullName());
-*/
+                                                            if(Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION).equals("0")){
 
-                                                            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-                                                            SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+                                                                //Toast.makeText(mContext, "Mock Location Enabled" , Toast.LENGTH_SHORT).show();
 
-                                                            LatLng master = new LatLng(latitude,longitude);
-                                                            String address = null;
-                                                            try {
-                                                                address = getAddress(master);
-                                                            } catch (Exception e) {
-                                                                e.printStackTrace();
-                                                            }
+                                                                if(gps.isMockLocationOn(currentLocation,getActivity())){
 
-                                                            loginDetails = dto;
-                                                            loginDetails.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
-                                                          /*  loginDetails.setStartLatitude(""+latitude);
-                                                            loginDetails.setStartLongitude(""+longitude);
-                                                            loginDetails.setStartLocation(""+address);
-                                                            loginDetails.setStartTime(""+sdt.format(new Date()));*/
-                                                            loginDetails.setEndLatitude(""+latitude);
-                                                            loginDetails.setEndLongitude(""+longitude);
-                                                            loginDetails.setEndLocation(""+address);
-                                                            loginDetails.setEndTime(""+sdt.format(new Date()));
-                                                            loginDetails.setMeetingDate(""+sdf.format(new Date()));
-                                                            loginDetails.setMeetingAgenda(purpose);
-                                                            loginDetails.setMeetingDetails(detail);
-                                                            loginDetails.setStatus("Completed");
+                                                                    appNames.addAll(gps.listofApps(getActivity()));
 
-                                                            /*if(customer!=null&&!customer.equalsIgnoreCase("Others")){
 
-                                                                if(customerArrayList!=null&&customerArrayList.size()!=0)
-                                                                    loginDetails.setCustomerId(clientId);
-
-                                                            }*/
-
-                                                            String contact = "";
-
-                                                            if(email!=null&&!email.isEmpty()){
-                                                                contact = contact+"%"+email;
-                                                            }
-
-                                                            if(mobile!=null&&!mobile.isEmpty()){
-                                                                contact = contact+"%"+mobile;
-                                                            }
-
-                                                            if(contact!=null&&!contact.isEmpty()){
-                                                                loginDetails.setMeetingPersonDetails(client+""+contact);
-                                                            }else{
-                                                                loginDetails.setMeetingPersonDetails(client);
-                                                            }
-
-                                                            try {
-
-                                                                md = new MeetingDetailsNotificationManagers();
-                                                                md.setTitle("Meeting Details from "+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
-                                                                md.setMessage("Meeting with "+client+" for "+purpose);
-                                                                md.setLocation(address);
-                                                                md.setLongitude(""+longitude);
-                                                                md.setLatitude(""+latitude);
-                                                                md.setMeetingDate(""+sdt.format(new Date()));
-                                                                md.setStatus("Completed");
-                                                                md.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
-                                                                md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
-                                                                md.setMeetingPerson(client);
-                                                                md.setMeetingsId(loginDetails.getMeetingsId());
-                                                                md.setMeetingsDetails(purpose);
-                                                                md.setMeetingComments(detail);
-
-                                                                if (mGetSign.isChecked()&&!mTakeImage.isChecked()){
-                                                                    // Method to create Directory, if the Directory doesn't exists
-                                                                    file = new File(DIRECTORY);
-                                                                    if (!file.exists()) {
-                                                                        file.mkdir();
-                                                                    }
-
-                                                                    // Dialog Function
-                                                                    dialogs = new Dialog(getActivity());
-                                                                    // Removing the features of Normal Dialogs
-                                                                    dialogs.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                                                    dialogs.setContentView(R.layout.dialog_signature);
-                                                                    dialogs.setCancelable(true);
-
-                                                                    dialog_action(loginDetails,md,"null",dialog);
-
-                                                                }else if (!mGetSign.isChecked()&&mTakeImage.isChecked()){
-
-                                                                    file = new File(DIRECTORY);
-                                                                    if (!file.exists()) {
-                                                                        file.mkdir();
-                                                                    }
-
-                                                                       /* // Dialog Function
-                                                                        dialog = new Dialog(MeetingAddWithSignScreen.this);
-                                                                        // Removing the features of Normal Dialogs
-                                                                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                                                        dialog.setContentView(R.layout.dialog_signature);
-                                                                        dialog.setCancelable(true);*/
-
-                                                                    dispatchTakePictureIntent();
-                                                                    dialog.dismiss();
-
-                                                                    //dialog_action(loginDetails,md,"Selfie");
-
-                                                                }else if (mGetSign.isChecked()&&mTakeImage.isChecked()){
-
-                                                                    file = new File(DIRECTORY);
-                                                                    if (!file.exists()) {
-                                                                        file.mkdir();
-                                                                    }
-
-                                                                    // Dialog Function
-                                                                    dialogs = new Dialog(getActivity());
-                                                                    // Removing the features of Normal Dialogs
-                                                                    dialogs.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                                                    dialogs.setContentView(R.layout.dialog_signature);
-                                                                    dialogs.setCancelable(true);
-
-                                                                    dialog_action(loginDetails,md,"Selfie",dialog);
-
-                                                                }else{
-                                                                    updateMeeting(loginDetails,md);
                                                                 }
 
-                                                                dialog.dismiss();
 
 
-                                                            } catch (Exception e) {
-                                                                e.printStackTrace();
                                                             }
+
+                                                            if(appNames!=null&&appNames.size()!=0){
+
+                                                                new CustomDesignAlertDialog(getActivity(), CustomDesignAlertDialog.ERROR_TYPE,"Fake")
+                                                                        .setTitleText("Fake Activity")
+                                                                        .setContentText(appNames.get(0)+" is sending fake location.")
+                                                                        .show();
+
+                                                            }else{
+
+                                                                latitude = currentLocation.getLatitude();
+                                                                longitude = currentLocation.getLongitude();
+
+                                                                LatLng masters = new LatLng(latitude, longitude);
+                                                                String addresss = null;
+                                                                try {
+                                                                    addresss = getAddress(masters);
+                                                                } catch (Exception e) {
+                                                                    e.printStackTrace();
+                                                                }
+
+
+                                                                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+                                                                SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+
+                                                                LatLng master = new LatLng(latitude,longitude);
+                                                                String address = null;
+                                                                try {
+                                                                    address = getAddress(master);
+                                                                } catch (Exception e) {
+                                                                    e.printStackTrace();
+                                                                }
+
+                                                                loginDetails = dto;
+                                                                loginDetails.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
+
+                                                                loginDetails.setEndLatitude(""+latitude);
+                                                                loginDetails.setEndLongitude(""+longitude);
+                                                                loginDetails.setEndLocation(""+address);
+                                                                loginDetails.setEndTime(""+sdt.format(new Date()));
+                                                                loginDetails.setMeetingDate(""+sdf.format(new Date()));
+                                                                loginDetails.setMeetingAgenda(purpose);
+                                                                loginDetails.setMeetingDetails(detail);
+                                                                loginDetails.setStatus("Completed");
+
+
+
+                                                                String contact = "";
+
+                                                                if(email!=null&&!email.isEmpty()){
+                                                                    contact = contact+"%"+email;
+                                                                }
+
+                                                                if(mobile!=null&&!mobile.isEmpty()){
+                                                                    contact = contact+"%"+mobile;
+                                                                }
+
+                                                                if(contact!=null&&!contact.isEmpty()){
+                                                                    loginDetails.setMeetingPersonDetails(client+""+contact);
+                                                                }else{
+                                                                    loginDetails.setMeetingPersonDetails(client);
+                                                                }
+
+                                                                try {
+
+                                                                    md = new MeetingDetailsNotificationManagers();
+                                                                    md.setTitle("Meeting Details from "+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
+                                                                    md.setMessage("Meeting with "+client+" for "+purpose);
+                                                                    md.setLocation(address);
+                                                                    md.setLongitude(""+longitude);
+                                                                    md.setLatitude(""+latitude);
+                                                                    md.setMeetingDate(""+sdt.format(new Date()));
+                                                                    md.setStatus("Completed");
+                                                                    md.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
+                                                                    md.setManagerId(PreferenceHandler.getInstance(getActivity()).getManagerId());
+                                                                    md.setMeetingPerson(client);
+                                                                    md.setMeetingsId(loginDetails.getMeetingsId());
+                                                                    md.setMeetingsDetails(purpose);
+                                                                    md.setMeetingComments(detail);
+
+                                                                    if (mGetSign.isChecked()&&!mTakeImage.isChecked()){
+                                                                        // Method to create Directory, if the Directory doesn't exists
+                                                                        file = new File(DIRECTORY);
+                                                                        if (!file.exists()) {
+                                                                            file.mkdir();
+                                                                        }
+
+                                                                        // Dialog Function
+                                                                        dialogs = new Dialog(getActivity());
+                                                                        // Removing the features of Normal Dialogs
+                                                                        dialogs.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                                                        dialogs.setContentView(R.layout.dialog_signature);
+                                                                        dialogs.setCancelable(true);
+
+                                                                        dialog_action(loginDetails,md,"null",dialog);
+
+                                                                    }else if (!mGetSign.isChecked()&&mTakeImage.isChecked()){
+
+                                                                        file = new File(DIRECTORY);
+                                                                        if (!file.exists()) {
+                                                                            file.mkdir();
+                                                                        }
+
+
+
+                                                                        dispatchTakePictureIntent();
+                                                                        dialog.dismiss();
+
+                                                                        //dialog_action(loginDetails,md,"Selfie");
+
+                                                                    }else if (mGetSign.isChecked()&&mTakeImage.isChecked()){
+
+                                                                        file = new File(DIRECTORY);
+                                                                        if (!file.exists()) {
+                                                                            file.mkdir();
+                                                                        }
+
+                                                                        // Dialog Function
+                                                                        dialogs = new Dialog(getActivity());
+                                                                        // Removing the features of Normal Dialogs
+                                                                        dialogs.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                                                        dialogs.setContentView(R.layout.dialog_signature);
+                                                                        dialogs.setCancelable(true);
+
+                                                                        dialog_action(loginDetails,md,"Selfie",dialog);
+
+                                                                    }else{
+                                                                        updateMeeting(loginDetails,md);
+                                                                    }
+
+                                                                    dialog.dismiss();
+
+
+                                                                } catch (Exception e) {
+                                                                    e.printStackTrace();
+                                                                }
+
+                                                            }
+
+
+
                                                         }else if(latitude!=0&&longitude!=0){
-
-
-
-                                                          /*  latitude = currentLocation.getLatitude();
-                                                            longitude = currentLocation.getLongitude();*/
 
                                                             LatLng masters = new LatLng(latitude, longitude);
                                                             String addresss = null;
@@ -1918,10 +1893,6 @@ public class EmployeeDashBoardFragment extends Fragment implements GoogleApiClie
                                                             } catch (Exception e) {
                                                                 e.printStackTrace();
                                                             }
-
-                                                           /* latLong.setText(addresss);
-                                                            centreMapOnLocationWithLatLng(masters, "" + PreferenceHandler.getInstance(getActivity()).getUserFullName());
-*/
 
                                                             SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
                                                             SimpleDateFormat sdt = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
@@ -1936,10 +1907,7 @@ public class EmployeeDashBoardFragment extends Fragment implements GoogleApiClie
 
                                                             loginDetails = dto;
                                                             loginDetails.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getUserId());
-                                                          /*  loginDetails.setStartLatitude(""+latitude);
-                                                            loginDetails.setStartLongitude(""+longitude);
-                                                            loginDetails.setStartLocation(""+address);
-                                                            loginDetails.setStartTime(""+sdt.format(new Date()));*/
+
                                                             loginDetails.setEndLatitude(""+latitude);
                                                             loginDetails.setEndLongitude(""+longitude);
                                                             loginDetails.setEndLocation(""+address);
@@ -2021,12 +1989,7 @@ public class EmployeeDashBoardFragment extends Fragment implements GoogleApiClie
                                                                         file.mkdir();
                                                                     }
 
-                                                                       /* // Dialog Function
-                                                                        dialog = new Dialog(MeetingAddWithSignScreen.this);
-                                                                        // Removing the features of Normal Dialogs
-                                                                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                                                        dialog.setContentView(R.layout.dialog_signature);
-                                                                        dialog.setCancelable(true);*/
+
 
                                                                     dispatchTakePictureIntent();
                                                                     dialog.dismiss();
@@ -2045,20 +2008,7 @@ public class EmployeeDashBoardFragment extends Fragment implements GoogleApiClie
                                                             }
                                                         }
                                                     }
-                                                   /* if(gps!=null&&gps.canGetLocation())
-                                                    {
-                                                        System.out.println("Long and lat Rev"+gps.getLatitude()+" = "+gps.getLongitude());
-                                                        latitude = gps.getLatitude();
-                                                        longitude = gps.getLongitude();
 
-
-
-
-                                                    }
-                                                    else
-                                                    {
-
-                                                    }*/
 
                                                 }
                                             }
@@ -2349,6 +2299,8 @@ public class EmployeeDashBoardFragment extends Fragment implements GoogleApiClie
         }
         currentLocation = LocationServices.FusedLocationApi.getLastLocation(mLocationClient);
 
+        ArrayList<String> appNames = new ArrayList<>();
+
 
         if (currentLocation != null) {
             //  latLong.setText("Latitude : " + currentLocation.getLatitude() + " , Longitude : " + currentLocation.getLongitude());
@@ -2400,19 +2352,52 @@ public class EmployeeDashBoardFragment extends Fragment implements GoogleApiClie
     @Override
     public void onLocationChanged(Location location) {
 
+        ArrayList<String> appNames = new ArrayList<>();
 
         if(location!=null){
 
-            latitude = location.getLatitude();
-            longitude = location.getLongitude();
+            if(Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION).equals("0")){
 
-            LatLng master = new LatLng(latitude,longitude);
-            String address = null;
-            try {
-                address = getAddress(master);
-            } catch (Exception e) {
-                e.printStackTrace();
+                //Toast.makeText(mContext, "Mock Location Enabled" , Toast.LENGTH_SHORT).show();
+
+                if(gps.isMockLocationOn(location,getActivity())){
+
+                    appNames.addAll(gps.listofApps(getActivity()));
+
+
+                }
+
+
+
             }
+
+            if(appNames!=null&&appNames.size()!=0){
+
+                latitude = 0;
+                longitude = 0;
+
+
+                new CustomDesignAlertDialog(getActivity(), CustomDesignAlertDialog.ERROR_TYPE,"Fake")
+                        .setTitleText("Fake Activity")
+                        .setContentText(appNames.get(0)+" is sending fake location.")
+                        .show();
+
+            }else{
+
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+
+                LatLng master = new LatLng(latitude,longitude);
+                String address = null;
+                try {
+                    address = getAddress(master);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+
 
 
 
