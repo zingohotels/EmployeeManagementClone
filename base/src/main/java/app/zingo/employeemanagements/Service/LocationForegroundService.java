@@ -1,6 +1,7 @@
 package app.zingo.employeemanagements.Service;
 
 import android.Manifest;
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -22,13 +23,18 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import app.zingo.employeemanagements.AlarmManager.AlarmNotificationService;
+import app.zingo.employeemanagements.AlarmManager.AlarmSoundService;
+import app.zingo.employeemanagements.AlarmManager.CheckOutAlarm;
 import app.zingo.employeemanagements.Model.LiveTracking;
 import app.zingo.employeemanagements.UI.NewEmployeeDesign.BreakPurpose;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
@@ -44,17 +50,14 @@ import retrofit2.Response;
 public class LocationForegroundService extends Service {
 
     private static final String TAG_FOREGROUND_SERVICE = "FOREGROUND_SERVICE";
-
     public static final String ACTION_START_FOREGROUND_SERVICE = "ACTION_START_FOREGROUND_SERVICE";
-
     public static final String ACTION_STOP_FOREGROUND_SERVICE = "ACTION_STOP_FOREGROUND_SERVICE";
-
     boolean check = false;
-
     TrackGPS gps;
-
     TelephonyManager telephonyManager;
-
+    private AlarmManager alarmManager;
+    private PendingIntent pendingIntent;
+    private static final int ALARM_REQUEST_CODE = 133;
 
     public LocationForegroundService() {
     }
@@ -78,7 +81,7 @@ public class LocationForegroundService extends Service {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void startMyOwnForeground(){
+    private void startMyOwnForeground() {
         String NOTIFICATION_CHANNEL_ID = "app.zingo.employeemanagements";
         String channelName = "Location Background Service";
         NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_NONE);
@@ -100,14 +103,12 @@ public class LocationForegroundService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if(intent != null)
-        {
+        if (intent != null) {
             String action = intent.getAction();
 
             gps = new TrackGPS(LocationForegroundService.this);
 
-            switch (action)
-            {
+            switch (action) {
                 case ACTION_START_FOREGROUND_SERVICE:
                     startForegroundService();
                     //Toast.makeText(getApplicationContext(), "Foreground service is started.", Toast.LENGTH_LONG).show();
@@ -124,14 +125,11 @@ public class LocationForegroundService extends Service {
     }
 
     /* Used to build and start foreground service. */
-    private void startForegroundService()
-    {
+    private void startForegroundService() {
         Log.d(TAG_FOREGROUND_SERVICE, "Start foreground service.");
 
-
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-
+            //triggerAlarmManager();
             String NOTIFICATION_CHANNEL_ID = "app.zingo.employeemanagements";
             String channelName = "Location Background Service";
             NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_NONE);
@@ -157,18 +155,22 @@ public class LocationForegroundService extends Service {
                 }
             }, 10000, 15000);
 
+            //Alarm
+            if(PreferenceHandler.getInstance(getApplicationContext()).getUserId()!=0&& PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()!=2&& PreferenceHandler.getInstance(getApplicationContext()).getLoginStatus().equalsIgnoreCase("Login")){
+                triggerAlarmManager();
+            }
 
-        }else{
+        } else {
 
             // Create notification default intent.
             Intent intent = new Intent();
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
             //Above Android 8 create channel Id for notification
-            String CHANNEL_ID = ""+ 1;// The id of the channel.
-            CharSequence name = "Zingo" ;// The user-visible name of the channel.
+            String CHANNEL_ID = "" + 1;// The id of the channel.
+            CharSequence name = "Zingo";// The user-visible name of the channel.
             int importance = NotificationManager.IMPORTANCE_LOW;
-            NotificationChannel mChannel=null;
+            NotificationChannel mChannel = null;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
             }
@@ -180,7 +182,7 @@ public class LocationForegroundService extends Service {
                     .setContentTitle("Krony Location Service")
                     .setPriority(Notification.PRIORITY_MAX)
                     .setWhen(System.currentTimeMillis())
-                    .setFullScreenIntent(pendingIntent,false)
+                    .setFullScreenIntent(pendingIntent, false)
                     .setSmallIcon(R.mipmap.ic_launcher);
 
             builder.setDefaults(Notification.DEFAULT_VIBRATE);
@@ -207,11 +209,48 @@ public class LocationForegroundService extends Service {
 
             startForeground(1, notification);
         }
-
-
-
-
+        //Alarm
+        if(PreferenceHandler.getInstance(getApplicationContext()).getUserId()!=0&& PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()!=2&& PreferenceHandler.getInstance(getApplicationContext()).getLoginStatus().equalsIgnoreCase("Login")){
+            triggerAlarmManager();
+        }
     }
+
+    public void triggerAlarmManager () {
+
+        Intent myIntent = new Intent(LocationForegroundService.this, CheckOutAlarm.class);
+        myIntent.putExtra("type","checkout");
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(LocationForegroundService.this, 0, myIntent, 0);
+        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        Calendar firingCal = Calendar.getInstance();
+        Calendar currentCal = Calendar.getInstance();
+
+        firingCal.set(Calendar.HOUR, 11); // At the hour you wanna fire
+        firingCal.set(Calendar.MINUTE,17); // Particular minute
+        firingCal.set(Calendar.SECOND, 10); // particular second
+        firingCal.set(Calendar.AM_PM, Calendar.AM); // particular AM/PM (While using 24 Time Zone It`s Not Required)
+
+        long intendedTime = firingCal.getTimeInMillis();
+        long currentTime = currentCal.getTimeInMillis();
+
+        if(intendedTime >= currentTime){
+            alarmManager.setRepeating(AlarmManager.RTC, intendedTime, AlarmManager.INTERVAL_DAY, pendingIntent);
+        } else{
+            firingCal.add(Calendar.DAY_OF_MONTH, 1);
+            intendedTime = firingCal.getTimeInMillis();
+            alarmManager.setRepeating(AlarmManager.RTC, intendedTime, AlarmManager.INTERVAL_DAY, pendingIntent);
+        }
+    }
+
+    public void stopAlarmManager () {
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        manager.cancel(pendingIntent);
+        stopService(new Intent(LocationForegroundService.this, AlarmSoundService.class));
+        NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(AlarmNotificationService.NOTIFICATION_ID);
+        Toast.makeText(this, "Alarm Canceled/Stop by User.", Toast.LENGTH_SHORT).show();
+    }
+
 
     private void stopForegroundService()
     {
@@ -223,7 +262,6 @@ public class LocationForegroundService extends Service {
         // Stop the foreground service.
         stopSelf();
     }
-
 
     private void locationPassing(){
 
@@ -314,17 +352,12 @@ public class LocationForegroundService extends Service {
                         //liveTracking.setTrackingDate("01/02/2019");
                         addLiveTracking(liveTracking);
                     }
-
-
-
                 }
                 else
                 {
 
                 }
             }
-
-
         }
         catch (Exception ex)
         {
@@ -375,9 +408,6 @@ public class LocationForegroundService extends Service {
                             Log.e("TAG", "Success");
                         }
 
-
-
-
                     }else {
 
                     }
@@ -398,30 +428,21 @@ public class LocationForegroundService extends Service {
                 Log.e("TAG", t.toString());
             }
         });
-
-
-
     }
 
 
     private void distance(final double lati,final double longi){
 
-
         Location locationA = new Location("point A");
-
         locationA.setLatitude(Double.parseDouble(PreferenceHandler.getInstance(LocationForegroundService.this).getOrganizationLati()));
         locationA.setLongitude(Double.parseDouble(PreferenceHandler.getInstance(LocationForegroundService.this).getOrganizationLongi()));
-
         Location locationB = new Location("point B");
-
         locationB.setLatitude(lati);
         locationB.setLongitude(longi);
 
         float distance = locationA.distanceTo(locationB);
 
         if(distance>200){
-
-
 
             Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
 
@@ -487,26 +508,17 @@ public class LocationForegroundService extends Service {
                         .setSmallIcon(R.mipmap.ic_launcher);
             }
 
-
-
             notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
             notificationBuilder.setLights(Color.YELLOW, 1000, 300);
-
-
 
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 notificationManager.createNotificationChannel(mChannel);
             }
 
-
             notificationManager.notify(m, notificationBuilder.build());
 
             check = true;
         }
-
-
-
-
     }
 }
