@@ -232,7 +232,7 @@ public class LocationForegroundService extends Service {
         Calendar currentCal = Calendar.getInstance();
 
         firingCal.set(Calendar.HOUR, 13); // At the hour you wanna fire
-        firingCal.set(Calendar.MINUTE,10); // Particular minute
+        firingCal.set(Calendar.MINUTE,27); // Particular minute
         firingCal.set(Calendar.SECOND, 10); // particular second
          // particular AM/PM (While using 24 Time Zone It`s Not Required)
 

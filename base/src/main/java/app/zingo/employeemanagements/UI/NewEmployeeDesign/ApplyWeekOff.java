@@ -282,7 +282,7 @@ public class ApplyWeekOff extends AppCompatActivity {
 
                             //ApplyLeaveScreen.this.finish();
                             LeaveNotificationManagers lm = new LeaveNotificationManagers();
-                            lm.setTitle("Apply For Week-Off");
+                            lm.setTitle("Apply For WeekOff");
                             lm.setMessage(PreferenceHandler.getInstance(ApplyWeekOff.this).getUserFullName()+" is applying week-off from "+mFrom.getText().toString()+" to "+mTo.getText().toString());
                             lm.setReason(s.getLeaveComment());
                             //lm.setEmployeeId(s.getEmployeeId());

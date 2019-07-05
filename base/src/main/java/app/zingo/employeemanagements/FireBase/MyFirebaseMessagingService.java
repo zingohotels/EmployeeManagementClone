@@ -34,6 +34,7 @@ import app.zingo.employeemanagements.UI.Employee.EmployeeMeetingHost;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.LoginMapScreenAdmin;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.MeetingMapScreen;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.UpdateLeaveScreen;
+import app.zingo.employeemanagements.UI.NewEmployeeDesign.UpdateWeekOff;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.base.R;
 
@@ -180,7 +181,7 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
                     }
 
 
-                } else if(PreferenceHandler.getInstance(getApplicationContext()).getUserId()==Integer.parseInt(map.get("EmployeeId"))&&notification.getTitle().contains("Apply For Leave")) {
+                } else if(PreferenceHandler.getInstance(getApplicationContext()).getUserId()==Integer.parseInt(map.get("EmployeeId"))&&(notification.getTitle().contains("Apply For Leave")||notification.getTitle().contains("Apply For WeekOff"))) {
                     try {
                         sendPopNotification(notification.getTitle(), notification.getBody(), map);
                     } catch (Exception e) {
@@ -259,6 +260,29 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
         }else if(title.contains("Apply For Leave")){
 
             intent = new Intent(this, UpdateLeaveScreen.class);
+            int employeeId = Integer.parseInt(map.get("ManagerId"));
+            String employeeName = map.get("EmployeeName");
+            String from = map.get("FromDate");
+            String to = map.get("ToDate");
+            String reason = map.get("Reason");
+            messageText = "From "+employeeName;
+            String LeaveId = map.get("LeaveId");
+            LeaveNotificationManagers lm = new LeaveNotificationManagers();
+            lm.setEmployeeName(employeeName);
+            lm.setFromDate(from);
+            lm.setToDate(to);
+            lm.setReason(reason);
+            lm.setEmployeeId(employeeId);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("LeaveNotification",lm);
+            bundle.putInt("EmployeeId",employeeId);
+            bundle.putInt("LeaveId", Integer.parseInt(LeaveId));
+            intent.putExtras(bundle);
+
+
+        }else if(title.contains("Apply For WeekOff")){
+
+            intent = new Intent(this, UpdateWeekOff.class);
             int employeeId = Integer.parseInt(map.get("ManagerId"));
             String employeeName = map.get("EmployeeName");
             String from = map.get("FromDate");
