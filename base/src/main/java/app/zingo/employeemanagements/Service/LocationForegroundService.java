@@ -228,12 +228,16 @@ public class LocationForegroundService extends Service {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(LocationForegroundService.this, 0, myIntent, 0);
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
+       /* Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.MINUTE, 15);*/
+
         Calendar firingCal = Calendar.getInstance();
         Calendar currentCal = Calendar.getInstance();
 
-        firingCal.set(Calendar.HOUR, 13); // At the hour you wanna fire
-        firingCal.set(Calendar.MINUTE,27); // Particular minute
-        firingCal.set(Calendar.SECOND, 10); // particular second
+        firingCal.set(Calendar.HOUR_OF_DAY, 22); // At the hour you wanna fire
+        firingCal.set(Calendar.MINUTE,00); // Particular minute
+        firingCal.set(Calendar.SECOND, 00); // particular second
          // particular AM/PM (While using 24 Time Zone It`s Not Required)
 
         long intendedTime = firingCal.getTimeInMillis();
@@ -254,7 +258,7 @@ public class LocationForegroundService extends Service {
         stopService(new Intent(LocationForegroundService.this, AlarmSoundService.class));
         NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(AlarmNotificationService.NOTIFICATION_ID);
-        Toast.makeText(this, "Alarm Canceled/Stop by User.", Toast.LENGTH_SHORT).show();
+       // Toast.makeText(this, "Alarm Cancelled/Stop by User.", Toast.LENGTH_SHORT).show();
     }
 
 

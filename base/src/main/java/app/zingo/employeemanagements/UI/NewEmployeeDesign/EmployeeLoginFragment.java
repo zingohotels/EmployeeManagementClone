@@ -265,13 +265,13 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
         dinnerLay = layout.findViewById(R.id.lunch_break);
         dinnerText = layout.findViewById(R.id.lunch_break_text);
 
-        /* Retrieve a PendingIntent that will perform a broadcast */
+       /* *//* Retrieve a PendingIntent that will perform a broadcast *//*
         Intent alarmIntent = new Intent(getActivity (), LunchBreakAlarm.class);
-        pendingIntent = PendingIntent.getBroadcast(getActivity (), ALARM_REQUEST_CODE, alarmIntent, 0);
+        pendingIntent = PendingIntent.getBroadcast(getActivity (), ALARM_REQUEST_CODE, alarmIntent, 0);*/
 
 
         planType = PreferenceHandler.getInstance(getActivity()).getPlanType();
-        getLoginDetails();
+
         getMeetingDetails();
 
         String shift = PreferenceHandler.getInstance(getActivity()).getShiftName();
@@ -684,7 +684,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                         teaText.setText(new SimpleDateFormat("hh:mm a").format(new Date()));
                                         Calendar calendar = Calendar.getInstance();
                                         calendar.setTime(new Date());
-                                        calendar.add(Calendar.SECOND, 20);
+                                        calendar.add(Calendar.MINUTE, 15);
 
                                         triggerAlarmManager(calendar, "Tea");
 
@@ -871,7 +871,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                     dinnerText.setText(""+new SimpleDateFormat("hh:mm a").format(new Date()));
                                     Calendar calendar = Calendar.getInstance ();
                                     calendar.setTime(new Date());
-                                    calendar.add(Calendar.SECOND, 20);
+                                    calendar.add(Calendar.HOUR, 1);
                                     triggerAlarmManager(calendar,"Lunch");
                                     saveLoginNotification(md);
                                 } catch (Exception e) {
@@ -927,7 +927,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
            if (intendedTime >= currentTime) {
                alarmManager.setRepeating (AlarmManager.RTC, intendedTime, AlarmManager.INTERVAL_DAY, pendingIntent);
            } else {
-               firingCal.add (Calendar.DAY_OF_MONTH, 1);
+               firingCal.add (Calendar.HOUR, 1);
                intendedTime = firingCal.getTimeInMillis ();
                alarmManager.setRepeating (AlarmManager.RTC, intendedTime, AlarmManager.INTERVAL_DAY, pendingIntent);
            }
@@ -2159,7 +2159,36 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
         currentLocation = LocationServices.FusedLocationApi.getLastLocation(mLocationClient);
 
 
+
+        ArrayList<String> appNames = new ArrayList<>();
         if (currentLocation != null) {
+            if(getActivity().getContentResolver()!=null){
+                if(Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION).equals("0")){
+
+                    //Toast.makeText(mContext, "Mock Location Enabled" , Toast.LENGTH_SHORT).show();
+
+                    if(gps.isMockLocationOn(currentLocation,getActivity())){
+
+                        appNames.addAll(gps.listofApps(getActivity()));
+
+
+                    }
+
+
+
+                }
+
+            }
+
+            if(appNames!=null&&appNames.size()!=0){
+
+                latitude = 0;
+                longitude = 0;
+
+
+                getLoginDetails();
+
+            }
 
             latitude = currentLocation.getLatitude();
             longitude = currentLocation.getLongitude();

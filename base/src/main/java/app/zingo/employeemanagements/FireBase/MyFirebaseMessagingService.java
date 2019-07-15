@@ -27,6 +27,7 @@ import app.zingo.employeemanagements.Model.MeetingDetailsNotificationManagers;
 import app.zingo.employeemanagements.UI.Admin.EmployeeLiveMappingScreen;
 import app.zingo.employeemanagements.UI.Admin.LoginDetailsHost;
 import app.zingo.employeemanagements.UI.Admin.TaskListScreen;
+import app.zingo.employeemanagements.UI.Common.FakeActivityScreen;
 import app.zingo.employeemanagements.UI.Common.GeneralNotificationScreen;
 import app.zingo.employeemanagements.UI.Common.InvokeService;
 import app.zingo.employeemanagements.UI.Common.LocationSharingEmplActivity;
@@ -187,7 +188,7 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }else if(PreferenceHandler.getInstance(getApplicationContext()).getUserId()==Integer.parseInt(map.get("EmployeeId"))&&(PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()==2|| PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()==9)&&notification.getTitle().equalsIgnoreCase("Location Shared")){
+                }else if(PreferenceHandler.getInstance(getApplicationContext()).getUserId()==Integer.parseInt(map.get("EmployeeId"))&&(PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()==2|| PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()==9)&&(notification.getTitle().equalsIgnoreCase("Location Shared")||notification.getTitle().equalsIgnoreCase("Fake Activity"))){
                     try {
                         sendPopNotification(notification.getTitle(), notification.getBody(), map);
                     } catch (Exception e) {
@@ -221,7 +222,7 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
 
 
 
-    private void sendPopNotification(String title, String body, Map<String, String> map) {
+    private void    sendPopNotification(String title, String body, Map<String, String> map) {
         Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
 
 
@@ -256,6 +257,17 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
             intent.putExtra("Title",title);
             intent.putExtra("Message",body);
             intent.putExtras(bundle);
+
+        }else if(title.contains("Fake Activity")&& PreferenceHandler.getInstance(getApplicationContext()).getUserId()==Integer.parseInt(map.get("EmployeeId"))){
+
+            intent = new Intent(this, FakeActivityScreen.class);
+            int employeeId = Integer.parseInt(map.get("EmployeeId"));
+            Bundle bundle = new Bundle();
+            bundle.putInt("EmployeeId",employeeId);
+            bundle.putString("Title",title);
+            bundle.putString("Message",body);
+            intent.putExtras(bundle);
+
 
         }else if(title.contains("Apply For Leave")){
 

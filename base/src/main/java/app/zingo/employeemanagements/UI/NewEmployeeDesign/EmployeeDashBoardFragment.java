@@ -85,11 +85,13 @@ import app.zingo.employeemanagements.Adapter.TaskListAdapter;
 import app.zingo.employeemanagements.Custom.MyRegulerText;
 import app.zingo.employeemanagements.Model.Customer;
 import app.zingo.employeemanagements.Model.Employee;
+import app.zingo.employeemanagements.Model.GeneralNotification;
 import app.zingo.employeemanagements.Model.Leaves;
 import app.zingo.employeemanagements.Model.LoginDetails;
 import app.zingo.employeemanagements.Model.MeetingDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.Meetings;
 import app.zingo.employeemanagements.Model.Tasks;
+import app.zingo.employeemanagements.UI.Admin.EmployeeLiveMappingScreen;
 import app.zingo.employeemanagements.UI.Custom.CustomDesignAlertDialog;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.PendingTasks;
 import app.zingo.employeemanagements.Utils.Constants;
@@ -98,6 +100,7 @@ import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.TrackGPS;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
+import app.zingo.employeemanagements.WebApi.GeneralNotificationAPI;
 import app.zingo.employeemanagements.WebApi.LeaveAPI;
 import app.zingo.employeemanagements.WebApi.LoginDetailsAPI;
 import app.zingo.employeemanagements.WebApi.MeetingNotificationAPI;
@@ -2305,6 +2308,40 @@ public class EmployeeDashBoardFragment extends Fragment implements GoogleApiClie
         if (currentLocation != null) {
             //  latLong.setText("Latitude : " + currentLocation.getLatitude() + " , Longitude : " + currentLocation.getLongitude());
 
+            if(getActivity().getContentResolver()!=null){
+
+                if(Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION).equals("0")){
+
+                    //Toast.makeText(mContext, "Mock Location Enabled" , Toast.LENGTH_SHORT).show();
+
+                    if(gps.isMockLocationOn(currentLocation,getActivity())){
+
+                        appNames.addAll(gps.listofApps(getActivity()));
+
+
+                    }
+
+
+
+                }
+
+            }
+
+
+
+            if(appNames!=null&&appNames.size()!=0){
+
+                latitude = 0;
+                longitude = 0;
+
+
+                requestLocation(appNames.get(0));
+
+
+
+
+            }
+
             latitude = currentLocation.getLatitude();
             longitude = currentLocation.getLongitude();
 
@@ -2356,20 +2393,26 @@ public class EmployeeDashBoardFragment extends Fragment implements GoogleApiClie
 
         if(location!=null){
 
-            if(Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION).equals("0")){
+            if(getActivity().getContentResolver()!=null){
 
-                //Toast.makeText(mContext, "Mock Location Enabled" , Toast.LENGTH_SHORT).show();
+                if(Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION).equals("0")){
 
-                if(gps.isMockLocationOn(location,getActivity())){
+                    //Toast.makeText(mContext, "Mock Location Enabled" , Toast.LENGTH_SHORT).show();
 
-                    appNames.addAll(gps.listofApps(getActivity()));
+                    if(gps.isMockLocationOn(location,getActivity())){
+
+                        appNames.addAll(gps.listofApps(getActivity()));
+
+
+                    }
+
 
 
                 }
 
-
-
             }
+
+
 
             if(appNames!=null&&appNames.size()!=0){
 
@@ -2381,6 +2424,9 @@ public class EmployeeDashBoardFragment extends Fragment implements GoogleApiClie
                         .setTitleText("Fake Activity")
                         .setContentText(appNames.get(0)+" is sending fake location.")
                         .show();
+
+
+
 
             }else{
 
@@ -3030,6 +3076,68 @@ public class EmployeeDashBoardFragment extends Fragment implements GoogleApiClie
         if (mLocationClient != null) {
             mLocationClient.connect();
         }
+    }
+
+    public void requestLocation(final String app){
+
+        GeneralNotification gm = new GeneralNotification();
+        gm.setEmployeeId(PreferenceHandler.getInstance(getActivity()).getManagerId());
+        gm.setSenderId(Constants.SENDER_ID);
+        gm.setServerId(Constants.SERVER_ID);
+        gm.setTitle("Fake Activity");
+        gm.setMessage(PreferenceHandler.getInstance(getActivity()).getUserFullName()+" is using "+app+" for doing fake activity.");
+        sendNotification(gm);
+    }
+
+    public void sendNotification(final GeneralNotification md){
+
+
+
+        GeneralNotificationAPI apiService = Util.getClient().create(GeneralNotificationAPI.class);
+
+        Call<ArrayList<String>> call = apiService.sendGeneralNotification(md);
+
+        call.enqueue(new Callback<ArrayList<String>>() {
+            @Override
+            public void onResponse(Call<ArrayList<String>> call, Response<ArrayList<String>> response) {
+//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
+
+
+                try
+                {
+
+
+                    int statusCode = response.code();
+                    if (statusCode == 200 || statusCode == 201) {
+
+
+
+
+
+
+                    }else {
+                    }
+                }
+                catch (Exception ex)
+                {
+
+
+                    ex.printStackTrace();
+                }
+//                callGetStartEnd();
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<String>> call, Throwable t) {
+
+
+
+                Log.e("TAG", t.toString());
+            }
+        });
+
+
+
     }
 
 }

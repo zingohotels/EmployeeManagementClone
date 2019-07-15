@@ -47,7 +47,10 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute"
         tools:replace="android:allowBackup,android:icon">
-        <activity android:name="app.zingo.employeemanagements.UI.NewEmployeeDesign.UpdateWeekOff"></activity>
+        <activity android:name="app.zingo.employeemanagements.UI.Common.FakeActivityScreen">
+
+        </activity>
+        <activity android:name="app.zingo.employeemanagements.UI.NewEmployeeDesign.UpdateWeekOff" />
         <activity android:name="app.zingo.employeemanagements.UI.NewEmployeeDesign.WeekOffDashBoard" />
         <activity
             android:name="app.zingo.employeemanagements.UI.NewEmployeeDesign.ApplyWeekOff"
@@ -117,17 +120,12 @@
         <activity android:name="app.zingo.employeemanagements.UI.Employee.EmployeeListScreen" />
         <activity android:name="app.zingo.employeemanagements.UI.Employee.CreateEmployeeScreen" />
 
+        <receiver android:name="app.zingo.employeemanagements.AlarmManager.CheckOutAlarm" />
+        <receiver android:name="app.zingo.employeemanagements.AlarmManager.LunchBreakAlarm" />
+        <receiver android:name="app.zingo.employeemanagements.AlarmManager.TeaBreakAlarm" />
 
-        <receiver android:name="app.zingo.employeemanagements.AlarmManager.CheckOutAlarm"/>
-
-        <receiver android:name="app.zingo.employeemanagements.AlarmManager.LunchBreakAlarm"/>
-
-        <receiver android:name="app.zingo.employeemanagements.AlarmManager.TeaBreakAlarm"/>
-
-        <service android:name="app.zingo.employeemanagements.AlarmManager.AlarmNotificationService"/>
-
-        <service android:name="app.zingo.employeemanagements.AlarmManager.AlarmSoundService"/>
-
+        <service android:name="app.zingo.employeemanagements.AlarmManager.AlarmNotificationService" />
+        <service android:name="app.zingo.employeemanagements.AlarmManager.AlarmSoundService" />
         <service android:name="app.zingo.employeemanagements.FireBase.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
@@ -186,9 +184,9 @@
 
         <receiver
             android:name="app.zingo.employeemanagements.Service.AlarmReceive"
+            android:directBootAware="true"
             android:enabled="true"
             android:exported="true"
-            android:directBootAware="true"
             android:label="RestartServiceWhenStopped">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -196,8 +194,7 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name="app.zingo.employeemanagements.AlarmManager.AlertDialogActivity"/>
-
+        <activity android:name="app.zingo.employeemanagements.AlarmManager.AlertDialogActivity" />
         <activity
             android:name="app.zingo.employeemanagements.UI.Landing.SlideScreen"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -256,25 +253,56 @@
             android:name="app.zingo.employeemanagements.UI.LandingScreen"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoAction">
-            <intent-filter android:autoVerify="true">
+
+            <meta-data
+                android:name="default-url"
+                android:value="https://kronyapp.com/checkout.php" />
+
+            <intent-filter>
+
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
+                    android:scheme="http"
                     android:host="kronyapp.com"
-                    android:pathPattern="/checkout.php"
-                    android:scheme="http" />
-                <data
-                    android:host="kronyapp.com"
-                    android:pathPattern="/checkout.php"
-                    android:scheme="https" />
+                    android:pathPattern="/checkout.php" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
-            <meta-data
-                android:name="default-url"
-                android:value="https://kronyapp.com/checkout.php" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="http"
+                    android:host="kronyapp.com"
+                    android:pathPattern="/checkout.php" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="https"
+                    android:host="kronyapp.com"
+                    android:pathPattern="/checkout.php" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="https"
+                    android:host="kronyapp.com"
+                    android:pathPattern="/checkout.php" />
+            </intent-filter>
         </activity>
         <activity
             android:name="app.zingo.employeemanagements.UI.ContactUsScreen"

@@ -422,123 +422,7 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
             });
 
 
-           /* mDay.setAdapter(adapter);
-            mDay.setSpinnerEventsListener(new CustomSpinner.OnSpinnerEventsListener() {
-                public void onSpinnerOpened() {
-                    mDay.setSelected(true);
-                }
-                public void onSpinnerClosed() {
-                    mDay.setSelected(true);
-                }
-            });
-*/
 
-           /* mDay.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if(employee!=null){
-                        if(position==0){
-                        }else if(position==1){
-                            String dateValue = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-                            try{
-                                Date date=null;
-                                try {
-                                    date = new SimpleDateFormat("yyyy-MM-dd").parse(dateValue);
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                }
-                                final Calendar calendar = Calendar.getInstance();
-                                Date date2 = calendar.getTime();
-                                getTasks(employee.getEmployeeId(),new SimpleDateFormat("yyyy-MM-dd").format(date2));
-                                getExpense(employee.getEmployeeId(),new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-                                //Today Summary
-                                LoginDetails ld  = new LoginDetails();
-                                ld.setEmployeeId(employee.getEmployeeId());
-                                ld.setLoginDate(new SimpleDateFormat("MM/dd/yyyy").format(date));
-                                String logDate = new SimpleDateFormat("MMM dd,yyyy").format(date);
-                                getLoginDetailsDate(ld,logDate);
-                                Meetings md  = new Meetings();
-                                md.setEmployeeId(employee.getEmployeeId());
-                                md.setMeetingDate(new SimpleDateFormat("MM/dd/yyyy").format(date));
-                                String mdDate = new SimpleDateFormat("MMM dd,yyyy").format(date);
-                                getMeetingsDetails(md,mdDate);
-                                //getLiveLocation(profile.getEmployeeId());
-                            }catch (Exception e){
-                                e.printStackTrace();
-                                Intent error = new Intent(EmployeeDashBoardAdminView.this,InternalServerErrorScreen.class);
-                                startActivity(error);
-                            }
-                        }else if(position==2){
-                            final Calendar cal = Calendar.getInstance();
-                            cal.add(Calendar.DATE, -1);
-                            String dateValue = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
-                            mTitle.setText("Yesterday Summary");
-                            try{
-                                Date date=null;
-                                try {
-                                    date = new SimpleDateFormat("yyyy-MM-dd").parse(dateValue);
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                }
-                                getTasks(employee.getEmployeeId(),new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()));
-                                getExpense(employee.getEmployeeId(),new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()));
-                                //Today Summary
-                                LoginDetails ld  = new LoginDetails();
-                                ld.setEmployeeId(employee.getEmployeeId());
-                                ld.setLoginDate(new SimpleDateFormat("MM/dd/yyyy").format(date));
-                                String logDate = new SimpleDateFormat("MMM dd,yyyy").format(date);
-                                getLoginDetailsDate(ld,logDate);
-                                Meetings md  = new Meetings();
-                                md.setEmployeeId(employee.getEmployeeId());
-                                md.setMeetingDate(new SimpleDateFormat("MM/dd/yyyy").format(date));
-                                String mdDate = new SimpleDateFormat("MMM dd,yyyy").format(date);
-                                getMeetingsDetails(md,mdDate);
-                                //getLiveLocation(profile.getEmployeeId());
-                            }catch (Exception e){
-                                e.printStackTrace();
-                                Intent error = new Intent(EmployeeDashBoardAdminView.this,InternalServerErrorScreen.class);
-                                startActivity(error);
-                            }
-                        }else if(position==3){
-                            openDatePicker();
-                            mDay.setSelection(0);
-                        }*//*else if(position==4){
-                            AlertDialog.Builder builder = new AlertDialog.Builder(EmployeeDashBoardAdminView.this);
-                            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                            View views = inflater.inflate(R.layout.custom_date_picker, null);
-                            builder.setView(views);
-                            final Button all_search_bookings = (Button) views.findViewById(R.id.all_search_bookings);
-                            final TextView all_book_from_date = (TextView) views.findViewById(R.id.all_book_from_date);
-                            final TextView all_book_to_date = (TextView) views.findViewById(R.id.all_book_to_date);
-                            final android.support.v7.app.AlertDialog dialog = builder.create();
-                            dialog.show();
-                            dialog.setCanceledOnTouchOutside(true);
-                            all_search_bookings.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                }
-                            });
-                            all_book_from_date.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    openDatePickers(all_book_from_date,"allFromDate");
-                                }
-                            });
-                            all_book_to_date.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    openDatePickers(all_book_to_date,"allToDate");
-                                }
-                            });
-                        }*//*
-                    }else{
-                        Toast.makeText(EmployeeDashBoardAdminView.this, "Data Unavailable", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-                }
-            });*/
 
             if(employee!=null){
 
@@ -1131,7 +1015,7 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                             if (progressDialog!=null)
                                 progressDialog.dismiss();
                             ArrayList<LiveTracking> list = response.body();
-                            float distance = 0;
+                            double distance = 0;
 
 
                             if (list !=null && list.size()!=0) {
@@ -1142,8 +1026,22 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                                 double lati = 0,lngi=0;
                                 double latis = 0,lngis=0;
 
+                                String logoutT = "",loginT="";
+
+                                String time = list.get(0).getTrackingTime();
+
                                 Location locationA = new Location("point A");
                                 Location locationB = new Location("point B");
+
+                                int minutes =0;
+                                boolean addValue = false;
+                                Date fd=null,td=null;
+                                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+                                long diff=0;
+                                int indexValue = 0;
+
+                                lati = Double.parseDouble(list.get(0).getLatitude());
+                                lngi = Double.parseDouble(list.get(0).getLongitude());
 
                                 for(int i=1;i<list.size();i++){
 
@@ -1162,11 +1060,6 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
 
                                             }else{
 
-
-                                                lati = Double.parseDouble(list.get(i-1).getLatitude());
-                                                lngi = Double.parseDouble(list.get(i-1).getLongitude());
-
-
                                                 if(lati==0&&lngi==0){
 
                                                     lati = Double.parseDouble(list.get(i-1).getLatitude());
@@ -1178,6 +1071,9 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                                                     latis = lati;
                                                     lngis = lngi;
 
+                                                    double orgLati = Double.parseDouble(PreferenceHandler.getInstance(EmployeeDashBoardAdminView.this).getOrganizationLati());
+                                                    double orgLngi = Double.parseDouble(PreferenceHandler.getInstance(EmployeeDashBoardAdminView.this).getOrganizationLongi());
+
                                                     locationA.setLatitude(latis);
                                                     locationA.setLongitude(lngis);
 
@@ -1185,9 +1081,20 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                                                     locationB.setLatitude(Double.parseDouble(list.get(i).getLatitude()));
                                                     locationB.setLongitude(Double.parseDouble(list.get(i).getLongitude()));
 
-                                                    distance = distance+locationA.distanceTo(locationB);
-                                                    double kms = distance/1000.0;
-                                                    double miles = distance*0.000621371192;
+
+                                                    if(distance(orgLati,orgLngi,Double.parseDouble(list.get(i).getLatitude()),Double.parseDouble(list.get(i).getLongitude()))>0.500&&distance(latis,lngis,Double.parseDouble(list.get(i).getLatitude()),Double.parseDouble(list.get(i).getLongitude()))>0.500){
+
+                                                        distance = distance+ distance(latis,lngis,Double.parseDouble(list.get(i).getLatitude()),Double.parseDouble(list.get(i).getLongitude()));
+
+                                                        lati = Double.parseDouble(list.get(i).getLatitude());
+                                                        lngi = Double.parseDouble(list.get(i).getLongitude());
+
+
+                                                    }
+
+
+                                                    double kms = distance;
+                                                    double miles = distance*0.621371;
 
                                                     String kmValue = new DecimalFormat("#.##").format(kms);
                                                     String mileValue = new DecimalFormat("#.##").format(miles);
@@ -2321,5 +2228,26 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                 Log.e("TAG", t.toString());
             }
         });
+    }
+
+    private double distance(double lat1, double lon1, double lat2, double lon2) {
+        double theta = lon1 - lon2;
+        double dist = Math.sin(deg2rad(lat1))
+                * Math.sin(deg2rad(lat2))
+                + Math.cos(deg2rad(lat1))
+                * Math.cos(deg2rad(lat2))
+                * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+        return (dist);
+    }
+
+    private double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+
+    private double rad2deg(double rad) {
+        return (rad * 180.0 / Math.PI);
     }
 }

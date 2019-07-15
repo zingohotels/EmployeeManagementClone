@@ -49,7 +49,7 @@ public class AlarmNotificationService extends IntentService {
         }
         else {
             System.out.println ("Suree Notification "+intent.getStringExtra ("type"));
-            sendNotification ("Wake Up! Wake Up! Alarm started!!");
+            sendNotification ("You did not put check-out still now.Please put check-out if you checked-out already.");
         }
     }
 
