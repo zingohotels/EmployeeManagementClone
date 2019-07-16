@@ -66,9 +66,7 @@ import java.util.Locale;
 import java.util.logging.Logger;
 
 import app.zingo.employeemanagements.Custom.MapViewScroll;
-import app.zingo.employeemanagements.Model.Customer;
 import app.zingo.employeemanagements.Model.Organization;
-import app.zingo.employeemanagements.UI.Common.CustomerCreation;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.TrackGPS;
 import app.zingo.employeemanagements.Utils.Util;
@@ -85,7 +83,7 @@ import retrofit2.Response;
 
 public class OrganizationEditScreen extends AppCompatActivity {
 
-    TextInputEditText mOrgName,mBuildYear,mWebsite;
+    TextInputEditText mOrgName, mBuildYear, mWebsite, mLimit;
     CircleImageView mOrgLogo;
     EditText mAbout;
     AppCompatButton mUpdate;
@@ -148,6 +146,7 @@ public class OrganizationEditScreen extends AppCompatActivity {
             mOrgName = findViewById(R.id.name);
             mBuildYear = findViewById(R.id.build);
             mWebsite = findViewById(R.id.website);
+            mLimit = findViewById(R.id.location_limit);
             //mCheckIn = findViewById(R.id.check_time);
             mAbout = findViewById(R.id.about);
             mUpdate = findViewById(R.id.updateCompany);
@@ -373,6 +372,7 @@ public class OrganizationEditScreen extends AppCompatActivity {
         }
 
         mWebsite.setText(org.getWebsite());
+        mLimit.setText(org.getLocationLimit() + "");
         mAbout.setText(org.getAboutUs());
 
         String cheIT = org.getPlaceId();
@@ -420,6 +420,7 @@ public class OrganizationEditScreen extends AppCompatActivity {
         String address = location.getText().toString();
         String lati = lat.getText().toString();
         String longi = lng.getText().toString();
+        String limit = mLimit.getText().toString();
        // String cheIT = mCheckIn.getText().toString();
 
 
@@ -443,6 +444,9 @@ public class OrganizationEditScreen extends AppCompatActivity {
         }else if(longi.isEmpty()){
             Toast.makeText(OrganizationEditScreen.this, "Field should not be empty", Toast.LENGTH_SHORT).show();
 
+        } else if (limit.isEmpty()) {
+            Toast.makeText(OrganizationEditScreen.this, "Field should not be empty", Toast.LENGTH_SHORT).show();
+
         }else{
 
             Organization orgs = organization;
@@ -453,6 +457,7 @@ public class OrganizationEditScreen extends AppCompatActivity {
             orgs.setAddress(address);
             orgs.setLongitude(longi);
             orgs.setLatitude(lati);
+            orgs.setLocationLimit(Double.parseDouble(limit));
             orgs.setState(state);
 
             /*if(cheIT!=null&&!cheIT.isEmpty()){
@@ -464,8 +469,7 @@ public class OrganizationEditScreen extends AppCompatActivity {
 
                     File file = new File(postPath);
 
-                    if(file.length() <= 1*1024*1024)
-                    {
+                    if(file.length() <= 1*1024*1024) {
                         FileOutputStream out = null;
                         String[] filearray = postPath.split("/");
                         final String filename = getFilename(filearray[filearray.length-1]);
@@ -480,9 +484,7 @@ public class OrganizationEditScreen extends AppCompatActivity {
                         myBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
 
                         uploadImage(filename,orgs);
-                    }
-                    else
-                    {
+                    } else {
                         compressImage(postPath,orgs);
                     }
 

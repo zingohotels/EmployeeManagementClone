@@ -505,5 +505,8 @@ public class LocationAndDataServiceWithTimer extends Service implements TextToSp
     public void onDestroy() {
 
         super.onDestroy();
+        t.cancel();
+        tNetwork.cancel();
+
     }
 }

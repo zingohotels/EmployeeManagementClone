@@ -22,10 +22,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -72,7 +68,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.DetectedActivity;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
@@ -109,7 +104,6 @@ import app.zingo.employeemanagements.Model.EmployeeImages;
 import app.zingo.employeemanagements.Model.MeetingDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.Meetings;
 import app.zingo.employeemanagements.Model.Organization;
-import app.zingo.employeemanagements.Service.LocationAndDataServiceWithTimer;
 import app.zingo.employeemanagements.UI.Admin.CreateTaskScreen;
 import app.zingo.employeemanagements.UI.Common.CustomerCreation;
 import app.zingo.employeemanagements.UI.Common.PlanExpireScreen;
@@ -137,7 +131,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
-import uk.co.deanwild.materialshowcaseview.ShowcaseTooltip;//SensorEventListener
+import uk.co.deanwild.materialshowcaseview.ShowcaseTooltip;
 
 public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFloatingActionContentLabelList.OnRapidFloatingActionContentLabelListListener,GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
@@ -307,9 +301,9 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
             // getCurrentVersion();
 
 
-
+/*
             Intent serviceIntent = new Intent(EmployeeNewMainScreen.this, LocationAndDataServiceWithTimer.class);
-            startService(serviceIntent);
+            startService(serviceIntent);*/
 
             mWhatsapp.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -321,7 +315,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
                     Intent i = new Intent(Intent.ACTION_VIEW);
 
                     try {
-                        String url = "https://api.whatsapp.com/send?phone=+918987250539" +"&text=" + URLEncoder.encode(message, "UTF-8");
+                        String url = "https://api.whatsapp.com/send?phone=+919986128021" + "&text=" + URLEncoder.encode(message, "UTF-8");
                         i.setPackage("com.whatsapp");
                         i.setData(Uri.parse(url));
                         if (i.resolveActivity(packageManager) != null) {

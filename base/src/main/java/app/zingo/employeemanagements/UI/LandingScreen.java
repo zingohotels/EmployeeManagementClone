@@ -17,8 +17,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -56,6 +60,7 @@ public class LandingScreen extends AppCompatActivity {
 
     TextView mSupport,mForgot;
     MyEditText mEmail,mPassword;
+    ImageView landing_top_image;
     MyRegulerText mSignInButton,mGetStarted,mContactUs;
     CheckBox mShowPwd,mResellerSign;
 
@@ -72,6 +77,7 @@ public class LandingScreen extends AppCompatActivity {
 
 
             mSupport = findViewById(R.id.landing_support);
+            landing_top_image = findViewById(R.id.landing_top_image);
             mEmail = findViewById(R.id.landing_email);
             mPassword = findViewById(R.id.landing_password);
             mSignInButton = findViewById(R.id.buttonsignin);
@@ -103,6 +109,11 @@ public class LandingScreen extends AppCompatActivity {
 
                 }
             });
+
+            Glide.with(this)
+                    .load(R.drawable.working_employee)
+                    .into(new GlideDrawableImageViewTarget(landing_top_image));
+
             mForgot.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -443,9 +454,10 @@ public class LandingScreen extends AppCompatActivity {
                                         PreferenceHandler.getInstance(LandingScreen.this).setCompanyAddress(organization.getAddress());
                                         PreferenceHandler.getInstance(LandingScreen.this).setHeadName(organization.getOrganizationName());
                                         PreferenceHandler.getInstance(LandingScreen.this).setAppType(organization.getAppType());
-                                        PreferenceHandler.getInstance(LandingScreen.this).setAppType(organization.getAppType());
+                                        PreferenceHandler.getInstance(LandingScreen.this).setLocationLimit((float) organization.getLocationLimit());
 
-                                        PreferenceHandler.getInstance(LandingScreen.this).setAppType(organization.getAppType());
+
+
                                         PreferenceHandler.getInstance(LandingScreen.this).setLicenseStartDate(organization.getLicenseStartDate());
                                         PreferenceHandler.getInstance(LandingScreen.this).setCheckInTime(organization.getPlaceId());
                                         PreferenceHandler.getInstance(LandingScreen.this).setLicenseEndDate(organization.getLicenseEndDate());

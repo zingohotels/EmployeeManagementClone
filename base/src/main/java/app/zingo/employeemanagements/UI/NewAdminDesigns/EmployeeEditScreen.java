@@ -13,8 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
@@ -41,7 +39,6 @@ import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Designations;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.WorkingDay;
-import app.zingo.employeemanagements.UI.Employee.CreateEmployeeScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
@@ -78,6 +75,7 @@ public class EmployeeEditScreen extends AppCompatActivity {
     private Calendar cal = Calendar.getInstance();
 
     int orgId;
+    boolean weekCondi = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -358,25 +356,32 @@ public class EmployeeEditScreen extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                    String text = mNoWeekOff.getText().toString();
+                    if (weekCondi) {
 
-                    if(text!=null&&!text.isEmpty()){
+                        String text = mNoWeekOff.getText().toString();
 
-                        try{
+                        if (text != null && !text.isEmpty()) {
 
-                            int value = Integer.parseInt(text);
+                            try {
 
-                            addView(value);
+                                int value = Integer.parseInt(text);
+
+                                int child = mWeekContainer.getChildCount();
+
+                                addView(value - child);
+                                // addView(value);
 
 
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
 
-                        }catch (Exception e){
-                            e.printStackTrace();
+                        } else {
+
+                            addView(0);
+
                         }
 
-                    }else{
-
-                        addView(0);
 
                     }
 
@@ -384,6 +389,8 @@ public class EmployeeEditScreen extends AppCompatActivity {
 
                 @Override
                 public void afterTextChanged(Editable s) {
+
+                    weekCondi = true;
 
                 }
             });
@@ -401,9 +408,13 @@ public class EmployeeEditScreen extends AppCompatActivity {
 
             mWeekContainer.removeAllViews();
 
+        } else if (value < 0) {
+
+            mWeekContainer.removeViews((mWeekContainer.getChildCount() + value), (mWeekContainer.getChildCount() - 1));
+
         }else{
 
-            for(int i =0;i<value;i++){
+            for(int i = 0; i<value; i++){
 
                 LayoutInflater layoutInflater = (LayoutInflater) getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 final View addView = layoutInflater.inflate(R.layout.container_week_off, null);
@@ -468,12 +479,14 @@ public class EmployeeEditScreen extends AppCompatActivity {
             if(weekList.contains(",")){
 
                 String[] weekSep = weekList.split(",");
+
                 if(weekSep.length!=0){
 
                     mWeekOffCheck.setChecked(true);
                     mWeekOffCheck.setText("Custom Week-Off (If Checked Employee has to take week-off on particular day only.)");
                     mWeekLay.setVisibility(View.VISIBLE);
-                   
+                    weekCondi = false;
+                    mNoWeekOff.setText("" + weekSep.length);
 
                     for (int j=0;j<weekSep.length;j++){
 

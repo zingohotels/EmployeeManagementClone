@@ -31,7 +31,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -41,7 +40,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -80,7 +78,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import app.zingo.employeemanagements.Adapter.MeetingDetailAdapter;
 import app.zingo.employeemanagements.Adapter.TaskListAdapter;
 import app.zingo.employeemanagements.Custom.MyRegulerText;
 import app.zingo.employeemanagements.Model.Customer;
@@ -91,7 +88,6 @@ import app.zingo.employeemanagements.Model.LoginDetails;
 import app.zingo.employeemanagements.Model.MeetingDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.Meetings;
 import app.zingo.employeemanagements.Model.Tasks;
-import app.zingo.employeemanagements.UI.Admin.EmployeeLiveMappingScreen;
 import app.zingo.employeemanagements.UI.Custom.CustomDesignAlertDialog;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.PendingTasks;
 import app.zingo.employeemanagements.Utils.Constants;
@@ -694,11 +690,12 @@ public class EmployeeDashBoardFragment extends Fragment implements GoogleApiClie
 
                                     mWorkedDays.setText(""+s.size());
                                 }
-
+                                PreferenceHandler.getInstance(getActivity()).setLoginPut(true);
 
 
                             }else{
 
+                                PreferenceHandler.getInstance(getActivity()).setLoginPut(false);
                                 mLoggedTime.setText("You have not Check-In today.Please put your check-in in Attendance Screen");
 
                                /* final android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(getActivity());

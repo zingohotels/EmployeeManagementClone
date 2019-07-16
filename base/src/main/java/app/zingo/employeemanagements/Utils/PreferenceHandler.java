@@ -78,6 +78,14 @@ public class PreferenceHandler {
         sh.edit().putBoolean(Constants.FAR,id).apply();
     }
 
+    public boolean isLoginPut() {
+        return sh.getBoolean(Constants.LoginPut, false);
+    }
+
+    public void setLoginPut(boolean id) {
+        sh.edit().putBoolean(Constants.LoginPut, id).apply();
+    }
+
     public boolean isLocationOn()
     {
         return sh.getBoolean(Constants.LOCATION_ON,false);
@@ -248,6 +256,14 @@ public class PreferenceHandler {
 
     public void setAppType(String appType) {
         sh.edit().putString(Constants.APP_TYPE,appType).apply();
+    }
+
+    public float getLocationLimit() {
+        return sh.getFloat(Constants.LOCATION_LIMIT, 0);
+    }
+
+    public void setLocationLimit(float locationLimit) {
+        sh.edit().putFloat(Constants.LOCATION_LIMIT, locationLimit).apply();
     }
 
     public String getAppType()

@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:id="@+id/rootView"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
+    android:layout_height="fill_parent">
 
 
     <android.support.v4.widget.NestedScrollView
@@ -161,6 +158,23 @@
                 </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/location_limit_lay"
+                android:layout_width="200dp"
+                android:layout_height="0dp"
+
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20.0dip"
+                android:layout_marginRight="@dimen/activity_large_margin"
+                android:layout_weight="2"
+                android:hint="Location Access Limit">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/location_limit"
+                    style="@style/fp_editText"
+                    android:inputType="number" />
+            </android.support.design.widget.TextInputLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"

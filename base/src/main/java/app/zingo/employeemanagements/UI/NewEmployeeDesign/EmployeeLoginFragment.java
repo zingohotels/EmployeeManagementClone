@@ -2,6 +2,7 @@ package app.zingo.employeemanagements.UI.NewEmployeeDesign;
 
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -86,7 +87,6 @@ import app.zingo.employeemanagements.AlarmManager.AlarmNotificationService;
 import app.zingo.employeemanagements.AlarmManager.AlarmSoundService;
 import app.zingo.employeemanagements.AlarmManager.LunchBreakAlarm;
 import app.zingo.employeemanagements.AlarmManager.TeaBreakAlarm;
-import app.zingo.employeemanagements.Adapter.ShiftSpinnerAdapter;
 import app.zingo.employeemanagements.Model.Customer;
 import app.zingo.employeemanagements.Model.LoginDetails;
 import app.zingo.employeemanagements.Model.LoginDetailsNotificationManagers;
@@ -94,10 +94,11 @@ import app.zingo.employeemanagements.Model.MeetingDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.Meetings;
 import app.zingo.employeemanagements.Model.WorkingDay;
 import app.zingo.employeemanagements.Service.AlarmReceive;
+import app.zingo.employeemanagements.Service.CheckInAlarmReceiverService;
+import app.zingo.employeemanagements.Service.LocationAndDataServiceWithTimer;
 import app.zingo.employeemanagements.Service.LocationForegroundService;
 import app.zingo.employeemanagements.Service.LocationSharingServices;
 import app.zingo.employeemanagements.UI.Custom.CustomDesignAlertDialog;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.EmployeeEditScreen;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
@@ -209,7 +210,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
     private AlarmManager alarmManager;
     private PendingIntent pendingIntent;
     int timingId = 0;
-    String checkInTime = "";
+    String checkInTime = "", nextCheckInTime = "";
 
     public void centreMapOnLocationWithLatLng(LatLng location, String title) {
 
@@ -1088,6 +1089,9 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                         } else {
                                             getActivity().startService(intent);
                                         }
+
+                                        Intent startNeGp = new Intent(getActivity(), LocationAndDataServiceWithTimer.class);
+                                        getActivity().startService(startNeGp);
                                     }
 
 
@@ -1103,6 +1107,10 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                         } else {
                                             getActivity().startService(intent);
                                         }
+
+                                        Intent stopNeGp = new Intent(getActivity(), LocationAndDataServiceWithTimer.class);
+                                        getActivity().stopService(stopNeGp);
+
 
                                     }else{
 
@@ -1301,6 +1309,9 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                                                 } else {
                                                                     getActivity().startService(intent);
                                                                 }
+                                                                Intent stopNeGp = new Intent(getActivity(), LocationAndDataServiceWithTimer.class);
+                                                                getActivity().stopService(stopNeGp);
+
 
                                                             }else if(type!=null&&type.equalsIgnoreCase("Qr")){
 
@@ -1389,6 +1400,9 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                                             } else {
                                                                 getActivity().startService(intent);
                                                             }
+                                                            Intent stopNeGp = new Intent(getActivity(), LocationAndDataServiceWithTimer.class);
+                                                            getActivity().stopService(stopNeGp);
+
 
                                                         }else if(type!=null&&type.equalsIgnoreCase("Qr")){
 
@@ -1497,6 +1511,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
 
                         punchInText.setText("Check in");
+                        PreferenceHandler.getInstance(getActivity()).setLoginTime("");
                         PreferenceHandler.getInstance(getActivity()).setLoginStatus("Logout");
 
                         punchIn.setEnabled(true);
@@ -1711,7 +1726,9 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
                                 if(type!=null&&type.equalsIgnoreCase("gps")){
 
-                                    if (distance >= 0 && distance <= 100) {
+                                    float limit = PreferenceHandler.getInstance(getActivity()).getLocationLimit();
+
+                                    if (distance >= 0 && distance <= limit) {
 
                                         try {
                                             addLogin(loginDetails, builder.create(), md);
@@ -1985,6 +2002,9 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                             } else {
                                 getActivity().startService(intent);
                             }
+
+                            Intent startNeGp = new Intent(getActivity(), LocationAndDataServiceWithTimer.class);
+                            getActivity().startService(startNeGp);
 
 
                         }
@@ -4422,41 +4442,21 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                 Calendar calendar = Calendar.getInstance();
 
                                 int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-                                System.out.println("Daay of "+dayOfWeek);
-                                String weekday = new DateFormatSymbols().getShortWeekdays()[dayOfWeek];
-                                System.out.println("Daay of dd "+weekday);
 
-                               /* switch (dayOfWeek) {
-                                    case Calendar.MONDAY:
-                                        System.out.println(Calendar.MONDAY);
-                                        break;
-                                    case Calendar.TUESDAY:
-                                        System.out.println(Calendar.TUESDAY);
-                                        break;
-                                    case Calendar.WEDNESDAY:
-                                        System.out.println(Calendar.TUESDAY);
-                                        break;
-                                    case Calendar.THURSDAY:
-                                        System.out.println(Calendar.TUESDAY);
-                                        break;
-                                    case Calendar.FRIDAY:
-                                        System.out.println(Calendar.TUESDAY);
-                                        break;
-                                    case Calendar.SATURDAY:
-                                        System.out.println(Calendar.TUESDAY);
-                                        break;
-                                    case Calendar.SUNDAY:
-                                        System.out.println(Calendar.TUESDAY);
-                                        break;
-                                    default:
-                                        System.out.println("others");
-                                }*/
+                                String weekday = new DateFormatSymbols().getShortWeekdays()[dayOfWeek];
+
+
 
                                 if(dayOfWeek==1){
 
                                     if(workingDay.isSuday()){
 
                                         checkInTime = workingDay.getSundayCheckInTime();
+                                    }
+
+                                    if (workingDay.isMonday()) {
+
+                                        nextCheckInTime = workingDay.getMondayCheckInTime();
                                     }
 
                                 }else if(dayOfWeek==2){
@@ -4466,11 +4466,21 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                         checkInTime = workingDay.getMondayCheckInTime();
                                     }
 
+                                    if (workingDay.isiSTuesday()) {
+
+                                        nextCheckInTime = workingDay.getTuesdayCheckInTime();
+                                    }
+
                                 }else if(dayOfWeek==3){
 
                                     if(workingDay.isiSTuesday()){
 
                                         checkInTime = workingDay.getTuesdayCheckInTime();
+                                    }
+
+                                    if (workingDay.isWednesday()) {
+
+                                        nextCheckInTime = workingDay.getWednesdayCheckInTime();
                                     }
 
                                 }else if(dayOfWeek==4){
@@ -4487,11 +4497,21 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                         checkInTime = workingDay.getThursdayCheckInTime();
                                     }
 
+                                    if (workingDay.isFriday()) {
+
+                                        nextCheckInTime = workingDay.getFridayCheckInTime();
+                                    }
+
                                 }else if(dayOfWeek==6){
 
                                     if(workingDay.isFriday()){
 
                                         checkInTime = workingDay.getFridayCheckInTime();
+                                    }
+
+                                    if (workingDay.isSaturday()) {
+
+                                        nextCheckInTime = workingDay.getSaturdayCheckInTime();
                                     }
 
                                 }else if(dayOfWeek==7){
@@ -4501,7 +4521,70 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                         checkInTime = workingDay.getSaturdayCheckInTime();
                                     }
 
+                                    if (workingDay.isSuday()) {
+
+                                        nextCheckInTime = workingDay.getSundayCheckInTime();
+                                    }
+
                                 }
+
+                                try {
+
+                                    if (checkInTime != null && !checkInTime.isEmpty() && nextCheckInTime != null && !nextCheckInTime.isEmpty()) {
+
+                                        Date cit = new SimpleDateFormat("hh:mm a").parse(checkInTime);
+                                        Date ncit = new SimpleDateFormat("hh:mm a").parse(nextCheckInTime);
+                                        Date currentTime = new SimpleDateFormat("hh:mm a").parse(new SimpleDateFormat("hh:mm a").format(new Date()));
+
+                                        boolean loginPut = PreferenceHandler.getInstance(getActivity()).isLoginPut();
+
+                                        if (cit.getTime() > currentTime.getTime() && !loginPut) {
+
+                                            Calendar alaramTime = Calendar.getInstance();
+                                            alaramTime.setTime(cit);
+                                            alaramTime.add(Calendar.MINUTE, -10);
+
+                                            Date minus10 = alaramTime.getTime();
+
+                                            SimpleDateFormat dateFormatter2 = new SimpleDateFormat("MMM dd, yyyy, hh:mm a");
+
+                                            //Create a new PendingIntent and add it to the AlarmManager
+                                            Intent intent = new Intent(getActivity(), CheckInAlarmReceiverService.class);
+                                            intent.putExtra("Time", checkInTime);
+                                            intent.putExtra("NextTime", nextCheckInTime);
+                                            PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 12345, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+                                            AlarmManager am = (AlarmManager) getActivity().getSystemService(Activity.ALARM_SERVICE);
+                                            am.set(AlarmManager.RTC_WAKEUP, alaramTime.getTimeInMillis(),
+                                                    pendingIntent);
+
+
+                                        } else {
+
+                                            Calendar alaramTime = Calendar.getInstance();
+                                            alaramTime.setTime(ncit);
+                                            alaramTime.add(Calendar.DAY_OF_YEAR, 1);
+                                            alaramTime.add(Calendar.MINUTE, -10);
+
+                                            //Create a new PendingIntent and add it to the AlarmManager
+                                            Intent intent = new Intent(getActivity(), CheckInAlarmReceiverService.class);
+                                            intent.putExtra("Time", checkInTime);
+                                            intent.putExtra("NextTime", nextCheckInTime);
+                                            PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 12345, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+                                            AlarmManager am = (AlarmManager) getActivity().getSystemService(Activity.ALARM_SERVICE);
+                                            am.set(AlarmManager.RTC_WAKEUP, alaramTime.getTimeInMillis(),
+                                                    pendingIntent);
+
+
+                                        }
+
+                                    }
+
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+
 
                             }
 

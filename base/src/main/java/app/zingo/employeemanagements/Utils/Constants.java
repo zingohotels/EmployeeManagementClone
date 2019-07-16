@@ -22,6 +22,7 @@ public interface Constants {
     String LOCATION_ON = "location_on";
     String DATA_ON = "data_on";
     String FAR = "far";
+    String LoginPut = "LoginPut";
     String FIRST_CHECK = "first_check";
     String MAIN_CHECK = "main_check";
     String MANAGER_ID = "manager_id";
@@ -37,6 +38,7 @@ public interface Constants {
     String COMPANY_Address ="company_address";
     String HEAD_NAME ="head_name";
     String APP_TYPE ="app_type";
+    String LOCATION_LIMIT = "location_limit";
     String SIGN_TYPE ="sign_type";
     String LIC_START ="lic_start";
     String CHKT ="check_time";
