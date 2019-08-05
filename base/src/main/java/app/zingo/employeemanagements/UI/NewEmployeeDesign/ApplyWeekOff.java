@@ -2,9 +2,9 @@ package app.zingo.employeemanagements.UI.NewEmployeeDesign;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.View;
@@ -20,7 +20,6 @@ import java.util.Date;
 
 import app.zingo.employeemanagements.Model.LeaveNotificationManagers;
 import app.zingo.employeemanagements.Model.Leaves;
-import app.zingo.employeemanagements.UI.Employee.ApplyLeaveScreen;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.Util;
@@ -323,7 +322,7 @@ public class ApplyWeekOff extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(ApplyWeekOff.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( ApplyWeekOff.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });
@@ -398,7 +397,7 @@ public class ApplyWeekOff extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(ApplyWeekOff.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( ApplyWeekOff.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });
@@ -461,7 +460,7 @@ public class ApplyWeekOff extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(ApplyWeekOff.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( ApplyWeekOff.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });

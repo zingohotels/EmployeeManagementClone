@@ -2,9 +2,7 @@ package app.zingo.employeemanagements.UI;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -26,7 +24,6 @@ import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
 
-import app.zingo.employeemanagements.Service.AlarmReceive;
 import app.zingo.employeemanagements.base.R;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
@@ -61,13 +58,13 @@ public class GooglePlaceMapActivity extends AppCompatActivity implements GoogleA
 
             setContentView(R.layout.activity_google_place_map);
 
-            if (alarmManager == null) {
+           /* if (alarmManager == null) {
                 alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                 Intent intent = new Intent(this, AlarmReceive.class);
                 pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 30000,
                         pendingIntent);
-            }
+            }*/
 
             latLng = findViewById(R.id.latLng);
 

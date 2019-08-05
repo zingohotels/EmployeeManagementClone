@@ -333,7 +333,7 @@ public class UpdateLeaveScreen extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(UpdateLeaveScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( UpdateLeaveScreen.this , "Failed Due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });

@@ -50,13 +50,11 @@ import app.zingo.employeemanagements.Model.ReportDataEmployee;
 import app.zingo.employeemanagements.Model.ReportDataModel;
 import app.zingo.employeemanagements.Model.TaskAdminData;
 import app.zingo.employeemanagements.Model.Tasks;
-import app.zingo.employeemanagements.UI.Admin.EmployeeLiveMappingScreen;
 import app.zingo.employeemanagements.UI.Common.ReportManagementScreen;
 import app.zingo.employeemanagements.UI.Employee.CreateEmployeeScreen;
 import app.zingo.employeemanagements.UI.Employee.EmployeeListScreen;
 import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
-import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.DepartmentApi;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
@@ -666,7 +664,7 @@ public class CalenderDashBoardActivity extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(getApplication(), "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( getApplication( ) , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });

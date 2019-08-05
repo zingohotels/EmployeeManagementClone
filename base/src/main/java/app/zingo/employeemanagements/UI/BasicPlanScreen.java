@@ -550,7 +550,7 @@ public class BasicPlanScreen extends AppCompatActivity implements PaymentResultL
             public void onFailure(Call<Organization> call, Throwable t) {
 
 
-                Toast.makeText(BasicPlanScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( BasicPlanScreen.this , "Failed Due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });
@@ -619,7 +619,7 @@ public class BasicPlanScreen extends AppCompatActivity implements PaymentResultL
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(BasicPlanScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( BasicPlanScreen.this , "Failed Due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });

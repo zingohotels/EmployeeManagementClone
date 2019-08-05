@@ -321,7 +321,7 @@ public class BreakTimeListScreen extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(BreakTimeListScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( BreakTimeListScreen.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });

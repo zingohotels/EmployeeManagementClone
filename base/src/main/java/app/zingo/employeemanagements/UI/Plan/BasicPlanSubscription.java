@@ -475,7 +475,7 @@ public class BasicPlanSubscription extends AppCompatActivity implements PaymentR
             public void onFailure(Call<Organization> call, Throwable t) {
 
 
-                Toast.makeText(BasicPlanSubscription.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(BasicPlanSubscription.this, "Failed due to Bad Internet Connection", Toast.LENGTH_SHORT).show();
                 Log.e("TAG", t.toString());
             }
         });
@@ -544,7 +544,7 @@ public class BasicPlanSubscription extends AppCompatActivity implements PaymentR
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(BasicPlanSubscription.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(BasicPlanSubscription.this, "Failed due to Bad Internet Connection", Toast.LENGTH_SHORT).show();
                 Log.e("TAG", t.toString());
             }
         });

@@ -125,7 +125,7 @@ public class ChangePasswordScreen extends AppCompatActivity {
                         {
                             dialog.dismiss();
                         }
-                        Toast.makeText(ChangePasswordScreen.this, "Something went wrong due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText( ChangePasswordScreen.this , "Something went wrong due to " + "Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
 
                     }
                 });
@@ -224,7 +224,7 @@ public class ChangePasswordScreen extends AppCompatActivity {
                         {
                             dialog.dismiss();
                         }
-                        Toast.makeText(ChangePasswordScreen.this, "Something went wrong due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText( ChangePasswordScreen.this , "Something went wrong due to " + "Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
 
                     }
                 });

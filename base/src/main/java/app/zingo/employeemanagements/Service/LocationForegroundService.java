@@ -7,10 +7,8 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,12 +21,8 @@ import android.os.IBinder;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.widget.Toast;
-
-import com.google.android.gms.location.DetectedActivity;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -42,7 +36,6 @@ import app.zingo.employeemanagements.AlarmManager.AlarmSoundService;
 import app.zingo.employeemanagements.AlarmManager.CheckOutAlarm;
 import app.zingo.employeemanagements.Model.LiveTracking;
 import app.zingo.employeemanagements.UI.NewEmployeeDesign.BreakPurpose;
-import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.TrackGPS;
 import app.zingo.employeemanagements.Utils.Util;
@@ -451,6 +444,10 @@ public class LocationForegroundService extends Service {
         locationB.setLongitude(longi);
 
         float distance = locationA.distanceTo(locationB);
+
+        if ( PreferenceHandler.getInstance( LocationForegroundService.this ).isLocationOn( ) ) {
+            distance = 0;
+        }
 
         if(distance>200){
 

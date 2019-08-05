@@ -572,7 +572,7 @@ public class CreateOrderScreen extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(CreateOrderScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( CreateOrderScreen.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });
@@ -647,7 +647,7 @@ public class CreateOrderScreen extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(CreateOrderScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( CreateOrderScreen.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });
@@ -710,7 +710,7 @@ public class CreateOrderScreen extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(CreateOrderScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( CreateOrderScreen.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });

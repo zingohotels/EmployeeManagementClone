@@ -656,7 +656,7 @@ public class UpdateTaskScreen extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(UpdateTaskScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( UpdateTaskScreen.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });
@@ -722,7 +722,7 @@ public class UpdateTaskScreen extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(UpdateTaskScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( UpdateTaskScreen.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });

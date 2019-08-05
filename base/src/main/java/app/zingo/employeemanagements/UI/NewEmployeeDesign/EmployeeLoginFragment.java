@@ -26,7 +26,6 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
-import android.media.ExifInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -55,6 +54,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.exifinterface.media.ExifInterface;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -81,6 +82,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import app.zingo.employeemanagements.Adapter.CustomerSpinnerAdapter;
 import app.zingo.employeemanagements.AlarmManager.AlarmNotificationService;
@@ -93,11 +95,9 @@ import app.zingo.employeemanagements.Model.LoginDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.MeetingDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.Meetings;
 import app.zingo.employeemanagements.Model.WorkingDay;
-import app.zingo.employeemanagements.Service.AlarmReceive;
 import app.zingo.employeemanagements.Service.CheckInAlarmReceiverService;
 import app.zingo.employeemanagements.Service.LocationAndDataServiceWithTimer;
 import app.zingo.employeemanagements.Service.LocationForegroundService;
-import app.zingo.employeemanagements.Service.LocationSharingServices;
 import app.zingo.employeemanagements.UI.Custom.CustomDesignAlertDialog;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
@@ -277,11 +277,23 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
         String shift = PreferenceHandler.getInstance(getActivity()).getShiftName();
 
-        if(shift!=null&&android.text.TextUtils.isDigitsOnly(shift)){
+        if ( shift != null && !shift.isEmpty( ) ) {
+
+            if ( android.text.TextUtils.isDigitsOnly( shift ) ) {
+
+                try {
+                    timingId = Integer.parseInt( shift );
+                    getShiftTimingById( timingId );
+
+                } catch ( Exception e ) {
+
+                    e.printStackTrace( );
+                }
 
 
-            timingId = Integer.parseInt(shift);
-            getShiftTimingById(timingId);
+            }
+
+
 
         }
         String loginStatus = PreferenceHandler.getInstance(getActivity()).getLoginStatus();
@@ -914,7 +926,6 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
        if(string!=null&&string.equalsIgnoreCase ("Lunch"))
        {
-           System.out.println ("Suree triggerAlarmManager " + string);
            Intent myIntent = new Intent (getActivity (), LunchBreakAlarm.class);
            myIntent.putExtra ("type", string);
            PendingIntent pendingIntent = PendingIntent.getBroadcast (getActivity (), 0, myIntent, 0);
@@ -935,7 +946,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
        }
        else if(string!=null&&string.equalsIgnoreCase ("Tea"))
        {
-           System.out.println ("Suree triggerAlarmManager " + string);
+
            Intent myIntent = new Intent (getActivity (), TeaBreakAlarm.class);
            myIntent.putExtra ("type", string);
            PendingIntent pendingIntent = PendingIntent.getBroadcast (getActivity (), 0, myIntent, 0);
@@ -947,9 +958,9 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
            long currentTime = currentCal.getTimeInMillis ();
 
            if (intendedTime >= currentTime) {
-               alarmManager.setRepeating (AlarmManager.RTC, intendedTime, AlarmManager.INTERVAL_DAY, pendingIntent);
+               alarmManager.setRepeating( AlarmManager.RTC , intendedTime , AlarmManager.INTERVAL_FIFTEEN_MINUTES , pendingIntent );
            } else {
-               firingCal.add (Calendar.DAY_OF_MONTH, 1);
+               firingCal.add( Calendar.MINUTE , 5 );
                intendedTime = firingCal.getTimeInMillis ();
                alarmManager.setRepeating (AlarmManager.RTC, intendedTime, AlarmManager.INTERVAL_DAY, pendingIntent);
            }
@@ -1082,16 +1093,22 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                     if(isMyServiceRunning(LocationForegroundService.class)){
 
                                     }else{
-                                        Intent intent = new Intent(getActivity(), LocationForegroundService.class);
-                                        intent.setAction(LocationForegroundService.ACTION_START_FOREGROUND_SERVICE);
-                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                            getActivity().startForegroundService(intent);
-                                        } else {
-                                            getActivity().startService(intent);
+
+                                        if ( mContext != null ) {
+
+                                            Intent intent = new Intent( getActivity( ) , LocationForegroundService.class );
+                                            intent.setAction( LocationForegroundService.ACTION_START_FOREGROUND_SERVICE );
+                                            if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ) {
+                                                getActivity( ).startForegroundService( intent );
+                                            } else {
+                                                getActivity( ).startService( intent );
+                                            }
+
+                                            Intent startNeGp = new Intent( getActivity( ) , LocationAndDataServiceWithTimer.class );
+                                            getActivity( ).startService( startNeGp );
+
                                         }
 
-                                        Intent startNeGp = new Intent(getActivity(), LocationAndDataServiceWithTimer.class);
-                                        getActivity().startService(startNeGp);
                                     }
 
 
@@ -1554,7 +1571,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                 if (dialog != null && dialog.isShowing()) {
                     dialog.dismiss();
                 }
-                Toast.makeText(getActivity(), "Failed Due to " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(getActivity(), "Failed due to Bad Internet Connection", Toast.LENGTH_SHORT).show();
                 Log.e("TAG", t.toString());
             }
         });
@@ -2029,7 +2046,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                 if (dialog != null && dialog.isShowing()) {
                     dialog.dismiss();
                 }
-                Toast.makeText(getActivity(), "Failed Due to " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getActivity(), "Failed due to Bad Internet Connection", Toast.LENGTH_SHORT).show();
                 Log.e("TAG", t.toString());
             }
         });
@@ -2095,7 +2112,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                 if (dialog != null && dialog.isShowing()) {
                     dialog.dismiss();
                 }
-                Toast.makeText(getActivity(), "Failed Due to " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getActivity(), "Failed due to Bad Internet Connection", Toast.LENGTH_SHORT).show();
                 Log.e("TAG", t.toString());
             }
         });
@@ -2147,7 +2164,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                 if (dialog != null && dialog.isShowing()) {
                     dialog.dismiss();
                 }
-                Toast.makeText(getActivity(), "Failed Due to " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getActivity(), "Failed due to Bad Internet Connection", Toast.LENGTH_SHORT).show();
                 Log.e("TAG", t.toString());
             }
         });
@@ -2164,16 +2181,9 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        Log.i("salam", " Connected");
 
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+        if ( ActivityCompat.checkSelfPermission( Objects.requireNonNull( getActivity( ) ) , Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission( getActivity( ) , Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+
             return;
         }
         currentLocation = LocationServices.FusedLocationApi.getLastLocation(mLocationClient);
@@ -2187,51 +2197,55 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
                     //Toast.makeText(mContext, "Mock Location Enabled" , Toast.LENGTH_SHORT).show();
 
-                    if(gps.isMockLocationOn(currentLocation,getActivity())){
+                    if ( TrackGPS.isMockLocationOn( currentLocation , getActivity( ) ) ) {
 
-                        appNames.addAll(gps.listofApps(getActivity()));
+                        appNames.addAll( TrackGPS.listofApps( getActivity( ) ) );
 
 
                     }
-
 
 
                 }
 
             }
 
-            if(appNames!=null&&appNames.size()!=0){
+            if ( appNames.size( ) != 0 ) {
 
                 latitude = 0;
                 longitude = 0;
 
 
+                latLong.setText( "Fake Location found!" );
+
+            } else {
                 getLoginDetails();
 
+                latitude = currentLocation.getLatitude( );
+                longitude = currentLocation.getLongitude( );
+
+
+                if ( firstTime ) {
+                    LatLng master = new LatLng( latitude , longitude );
+                    String address = null;
+                    try {
+                        address = getAddress( master );
+                    } catch ( Exception e ) {
+                        e.printStackTrace( );
+                    }
+
+                    latLong.setText( address );
+                    centreMapOnLocationWithLatLng( master , "" + PreferenceHandler.getInstance( getActivity( ) ).getUserFullName( ) );
+                    firstTime = false;
+                }
+
+                startLocationUpdates( );
+
             }
 
-            latitude = currentLocation.getLatitude();
-            longitude = currentLocation.getLongitude();
-
-            LatLng master = new LatLng(latitude,longitude);
-            String address = null;
-            try {
-                address = getAddress(master);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-
-
-            if(firstTime){
-                latLong.setText(address);
-                centreMapOnLocationWithLatLng(master,""+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
-                firstTime = false;
-            }
 
         }
 
-        startLocationUpdates();
+
 
 
     }
@@ -2263,16 +2277,16 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
         ArrayList<String> appNames = new ArrayList<>();
 
-        if(location!=null){
+        if ( location != null && mContext != null ) {
 
-            if(getActivity().getContentResolver()!=null){
+            if ( Objects.requireNonNull( getActivity( ) ).getContentResolver( ) != null ) {
                 if(Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION).equals("0")){
 
                     //Toast.makeText(mContext, "Mock Location Enabled" , Toast.LENGTH_SHORT).show();
 
-                    if(gps.isMockLocationOn(location,getActivity())){
+                    if ( TrackGPS.isMockLocationOn( location , getActivity( ) ) ) {
 
-                        appNames.addAll(gps.listofApps(getActivity()));
+                        appNames.addAll( TrackGPS.listofApps( getActivity( ) ) );
 
 
                     }
@@ -2283,7 +2297,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
             }
 
-            if(appNames!=null&&appNames.size()!=0){
+            if ( appNames.size( ) != 0 ) {
 
                 latitude = 0;
                 longitude = 0;
@@ -2299,15 +2313,17 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
 
-                LatLng master = new LatLng(latitude,longitude);
-                String address = null;
-                try {
-                    address = getAddress(master);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
 
-                if(firstTime){
+                if ( firstTime ) {
+
+                    LatLng master = new LatLng( latitude , longitude );
+                    String address = null;
+                    try {
+                        address = getAddress( master );
+                    } catch ( Exception e ) {
+                        e.printStackTrace( );
+                    }
+
                     latLong.setText(address);
                     centreMapOnLocationWithLatLng(master,""+ PreferenceHandler.getInstance(getActivity()).getUserFullName());
                     firstTime =false;
@@ -2335,8 +2351,8 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
     public void onDetach() {
         super.onDetach();
 
-        Intent myService = new Intent(getActivity(), LocationSharingServices.class);
-        getActivity().stopService(myService);
+        mContext = null;
+        
     }
 
     public void setUserVisibleHint(boolean z) {
@@ -2950,7 +2966,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(getActivity(), "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getActivity(), "Failed due to Bad Internet Connection", Toast.LENGTH_SHORT).show();
                 Log.e("TAG", t.toString());
             }
         });
@@ -3555,7 +3571,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(getActivity(), "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(getActivity(), "Failed due to Bad Internet Connection", Toast.LENGTH_SHORT).show();
                 Log.e("TAG", t.toString());
             }
         });
@@ -3642,7 +3658,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(getActivity(), "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getActivity(), "Failed due to Bad Internet Connection", Toast.LENGTH_SHORT).show();
                 Log.e("TAG", t.toString());
             }
         });
@@ -3705,7 +3721,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(getActivity(), "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(getActivity(), "Failed due to Bad Internet Connection", Toast.LENGTH_SHORT).show();
                 Log.e("TAG", t.toString());
             }
         });
@@ -3752,27 +3768,23 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
 
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                Log.i ("isMyServiceRunning?", true+"");
-                return true;
+        if ( mContext != null ) {
+
+            ActivityManager manager = ( ActivityManager ) mContext.getSystemService( Context.ACTIVITY_SERVICE );
+            for ( ActivityManager.RunningServiceInfo service : manager.getRunningServices( Integer.MAX_VALUE ) ) {
+                if ( serviceClass.getName( ).equals( service.service.getClassName( ) ) ) {
+                    Log.i( "isMyServiceRunning?" , true + "" );
+                    return true;
+                }
             }
+            Log.i( "isMyServiceRunning?" , false + "" );
+            return false;
+        } else {
+            return false;
         }
-        Log.i ("isMyServiceRunning?", false+"");
-        return false;
+
     }
 
-    public void startAlert() {
-        int i = 5;
-        Intent intent = new Intent(getActivity(), AlarmReceive.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                this.getActivity(), 234324243, intent, 0);
-        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.RTC, System.currentTimeMillis(),
-                1000 * 30, pendingIntent);
-       // Toast.makeText(this, "Alarm set in " + i + " seconds",Toast.LENGTH_LONG).show();
-    }
 
     // Function for Digital Signature
     public void dialog_action(final Meetings loginDetails, final MeetingDetailsNotificationManagers md, final String type, final AlertDialog alertDialog) {
@@ -4092,7 +4104,7 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                     }
                     @Override
                     public void onFailure(Call<String> call, Throwable t) {
-                        Log.d("UpdateCate", "Error " + t.getMessage());
+                        // Log.d("UpdateCate", "Error " + "Bad Internet Connection");
                     }
                 });
             }
@@ -4541,12 +4553,19 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                         if (cit.getTime() > currentTime.getTime() && !loginPut) {
 
                                             Calendar alaramTime = Calendar.getInstance();
+                                            int year = alaramTime.get( Calendar.YEAR );
+                                            int month = alaramTime.get( Calendar.MONTH );
+                                            int date = alaramTime.get( Calendar.DATE );
                                             alaramTime.setTime(cit);
+                                            alaramTime.set( Calendar.YEAR , year );
+                                            alaramTime.set( Calendar.MONTH , month );
+                                            alaramTime.set( Calendar.DATE , date );
                                             alaramTime.add(Calendar.MINUTE, -10);
 
                                             Date minus10 = alaramTime.getTime();
 
                                             SimpleDateFormat dateFormatter2 = new SimpleDateFormat("MMM dd, yyyy, hh:mm a");
+                                            System.out.println( "Date checj " + dateFormatter2.format( minus10 ) );
 
                                             //Create a new PendingIntent and add it to the AlarmManager
                                             Intent intent = new Intent(getActivity(), CheckInAlarmReceiverService.class);
@@ -4561,7 +4580,14 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                                         } else {
 
                                             Calendar alaramTime = Calendar.getInstance();
+
+                                            int year = alaramTime.get( Calendar.YEAR );
+                                            int month = alaramTime.get( Calendar.MONTH );
+                                            int date = alaramTime.get( Calendar.DATE );
                                             alaramTime.setTime(ncit);
+                                            alaramTime.set( Calendar.YEAR , year );
+                                            alaramTime.set( Calendar.MONTH , month );
+                                            alaramTime.set( Calendar.DATE , date );
                                             alaramTime.add(Calendar.DAY_OF_YEAR, 1);
                                             alaramTime.add(Calendar.MINUTE, -10);
 

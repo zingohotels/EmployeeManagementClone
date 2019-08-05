@@ -8,8 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,36 +16,27 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.itextpdf.text.pdf.StringUtils;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import app.zingo.employeemanagements.UI.Common.ReportBulkdataScreen;
-import app.zingo.employeemanagements.UI.FAQ.FAQFragment;
-import app.zingo.employeemanagements.UI.Plan.PlanDesignActivity;
-import app.zingo.employeemanagements.base.BuildConfig;
 import app.zingo.employeemanagements.Model.Employee;
-import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.Service.LocationForegroundService;
-import app.zingo.employeemanagements.UI.Admin.DashBoardAdmin;
 import app.zingo.employeemanagements.UI.Common.AllEmployeeLiveLocation;
 import app.zingo.employeemanagements.UI.Common.ChangePasswordScreen;
-import app.zingo.employeemanagements.UI.Common.CustomerCreation;
 import app.zingo.employeemanagements.UI.Common.CustomerList;
 import app.zingo.employeemanagements.UI.Common.NotificationShowActivity;
 import app.zingo.employeemanagements.UI.Common.ReportManagementScreen;
-import app.zingo.employeemanagements.UI.Company.OrganizationDetailScree;
-import app.zingo.employeemanagements.UI.Company.WorkingDaysScreen;
 import app.zingo.employeemanagements.UI.Employee.EmployeeListScreen;
+import app.zingo.employeemanagements.UI.FAQ.FAQFragment;
 import app.zingo.employeemanagements.UI.LandingScreen;
-import app.zingo.employeemanagements.UI.NewEmployeeDesign.ExpenseManageHost;
-import app.zingo.employeemanagements.UI.PlanMainHostScreen;
+import app.zingo.employeemanagements.UI.Plan.PlanDesignActivity;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
+import app.zingo.employeemanagements.base.BuildConfig;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -920,7 +909,7 @@ public class AdminHomeFragment extends Fragment {
                         Toast.makeText(getActivity(),"Logout",Toast.LENGTH_SHORT).show();
                         startActivity(log);
                         getActivity().finish();
-                        //  Toast.makeText(ChangePasswordScreen.this, "Something went wrong due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                        //  Toast.makeText(ChangePasswordScreen.this, "Something went wrong due to "+"Failed due to Bad Internet Connection", Toast.LENGTH_SHORT).show();
 
                     }
                 });

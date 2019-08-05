@@ -29,14 +29,12 @@ import java.util.Date;
 
 import app.zingo.employeemanagements.Adapter.DepartmentSpinnerAdapter;
 import app.zingo.employeemanagements.Adapter.ManagerSpinnerAdapter;
-import app.zingo.employeemanagements.Adapter.ShiftAdapter;
 import app.zingo.employeemanagements.Adapter.ShiftSpinnerAdapter;
 import app.zingo.employeemanagements.Custom.MyEditText;
 import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Designations;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.WorkingDay;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.ShiftScreenList;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
@@ -595,7 +593,7 @@ public class CreateEmployeeScreen extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(CreateEmployeeScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( CreateEmployeeScreen.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });

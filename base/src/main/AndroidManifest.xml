@@ -186,18 +186,6 @@
             android:name="app.zingo.employeemanagements.Service.LocaitionPassWithConditionServices"
             android:enabled="true" />
 
-        <receiver
-            android:name="app.zingo.employeemanagements.Service.AlarmReceive"
-            android:directBootAware="true"
-            android:enabled="true"
-            android:exported="true"
-            android:label="RestartServiceWhenStopped">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-
         <activity android:name="app.zingo.employeemanagements.AlarmManager.AlertDialogActivity" />
         <activity
             android:name="app.zingo.employeemanagements.UI.Landing.SlideScreen"

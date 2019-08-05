@@ -723,7 +723,7 @@ public class DashBoardEmployee extends AppCompatActivity {
                     }
                     @Override
                     public void onFailure(Call<String> call, Throwable t) {
-                        Log.d("UpdateCate", "Error " + t.getMessage());
+                        Log.d( "UpdateCate" , "Error " + "Bad Internet Connection" );
                     }
                 });
             }
@@ -930,7 +930,7 @@ public class DashBoardEmployee extends AppCompatActivity {
                         {
                             dialog.dismiss();
                         }
-                        Toast.makeText(DashBoardEmployee.this,t.getMessage(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText( DashBoardEmployee.this , "Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
 
                     }
                 });
@@ -976,7 +976,7 @@ public class DashBoardEmployee extends AppCompatActivity {
                         {
                             dialog.dismiss();
                         }
-                        Toast.makeText(DashBoardEmployee.this,t.getMessage(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText( DashBoardEmployee.this , "Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
 
                     }
                 });
@@ -1683,7 +1683,7 @@ public class DashBoardEmployee extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(DashBoardEmployee.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( DashBoardEmployee.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });
@@ -1765,7 +1765,7 @@ public class DashBoardEmployee extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(DashBoardEmployee.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( DashBoardEmployee.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });
@@ -1839,7 +1839,7 @@ public class DashBoardEmployee extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(DashBoardEmployee.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( DashBoardEmployee.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });
@@ -1913,7 +1913,7 @@ public class DashBoardEmployee extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(DashBoardEmployee.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( DashBoardEmployee.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });
@@ -2325,7 +2325,7 @@ public class DashBoardEmployee extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(DashBoardEmployee.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( DashBoardEmployee.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });
@@ -2388,7 +2388,7 @@ public class DashBoardEmployee extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(DashBoardEmployee.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( DashBoardEmployee.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });
@@ -2465,7 +2465,7 @@ public class DashBoardEmployee extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(DashBoardEmployee.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( DashBoardEmployee.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });
@@ -2528,7 +2528,7 @@ public class DashBoardEmployee extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(DashBoardEmployee.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( DashBoardEmployee.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });

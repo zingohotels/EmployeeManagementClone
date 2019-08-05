@@ -507,7 +507,7 @@ public class OrganizationDetailScree extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(OrganizationDetailScree.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( OrganizationDetailScree.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });
@@ -615,7 +615,7 @@ public class OrganizationDetailScree extends AppCompatActivity {
             public void onFailure(Call<Organization> call, Throwable t) {
 
 
-                Toast.makeText(OrganizationDetailScree.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( OrganizationDetailScree.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });

@@ -3,9 +3,9 @@ package app.zingo.employeemanagements.UI.NewEmployeeDesign;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.MenuItem;
@@ -333,7 +333,7 @@ public class UpdateWeekOff extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(UpdateWeekOff.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( UpdateWeekOff.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });

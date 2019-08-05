@@ -1285,7 +1285,7 @@ public class CreatePaySlip extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(CreatePaySlip.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(CreatePaySlip.this, "Failed due to Bad Internet Connection", Toast.LENGTH_SHORT).show();
                 Log.e("TAG", t.toString());
             }
         });

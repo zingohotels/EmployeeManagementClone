@@ -438,7 +438,7 @@ public class CreateBranchesScreen extends AppCompatActivity implements GoogleApi
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(CreateBranchesScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( CreateBranchesScreen.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });
@@ -523,7 +523,7 @@ public class CreateBranchesScreen extends AppCompatActivity implements GoogleApi
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(CreateBranchesScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( CreateBranchesScreen.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });

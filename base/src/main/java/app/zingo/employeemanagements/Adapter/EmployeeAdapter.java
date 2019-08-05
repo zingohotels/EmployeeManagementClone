@@ -1,6 +1,5 @@
 package app.zingo.employeemanagements.Adapter;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -15,10 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,32 +30,20 @@ import java.util.Locale;
 import app.zingo.employeemanagements.Custom.ICheckChangeListener;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.LoginDetails;
-import app.zingo.employeemanagements.Model.LoginDetailsNotificationManagers;
-import app.zingo.employeemanagements.Model.Tasks;
-import app.zingo.employeemanagements.UI.Employee.ApplyLeaveScreen;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.DailyOrdersForEmployeeActivity;
-import app.zingo.employeemanagements.UI.NewEmployeeDesign.CreateExpensesScreen;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.Service.LocationSharingServices;
 import app.zingo.employeemanagements.UI.Admin.CreatePaySlip;
 import app.zingo.employeemanagements.UI.Admin.EmployeeLiveMappingScreen;
-import app.zingo.employeemanagements.UI.Admin.EmployeesDashBoard;
-import app.zingo.employeemanagements.UI.Admin.TaskManagementHost;
-import app.zingo.employeemanagements.UI.Common.ReportManagementScreen;
-import app.zingo.employeemanagements.UI.Employee.DashBoardEmployee;
+import app.zingo.employeemanagements.UI.Employee.ApplyLeaveScreen;
 import app.zingo.employeemanagements.UI.Employee.EmployeeMeetingHost;
-import app.zingo.employeemanagements.UI.Employee.LeaveManagementHost;
+import app.zingo.employeemanagements.UI.NewAdminDesigns.DailyOrdersForEmployeeActivity;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.DailyTargetsForEmployeeActivity;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.EmployeeDashBoardAdminView;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.EmployeeEditScreen;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.EmployeeExpenseList;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.ExpenseDashBoardAdmin;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.LeaveDashBoardAdminScreen;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.LeaveEmployeeListScreen;
-import app.zingo.employeemanagements.Utils.PreferenceHandler;
+import app.zingo.employeemanagements.UI.NewEmployeeDesign.CreateExpensesScreen;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.LoginDetailsAPI;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -667,7 +651,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
                     dialog.dismiss();
                 }
 
-                Toast.makeText(context, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( context , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });
@@ -738,7 +722,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(context, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( context , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });

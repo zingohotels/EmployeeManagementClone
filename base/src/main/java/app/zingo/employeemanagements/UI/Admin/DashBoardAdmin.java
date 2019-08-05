@@ -567,7 +567,7 @@ public class DashBoardAdmin extends AppCompatActivity {
                     }
                     @Override
                     public void onFailure(Call<String> call, Throwable t) {
-                        Log.d("UpdateCate", "Error " + t.getMessage());
+                        Log.d( "UpdateCate" , "Error " + "Bad Internet Connection" );
                     }
                 });
             }
@@ -774,7 +774,7 @@ public class DashBoardAdmin extends AppCompatActivity {
                         {
                             dialog.dismiss();
                         }
-                        Toast.makeText(DashBoardAdmin.this,t.getMessage(),Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(DashBoardAdmin.this,"Bad Internet Connection",Toast.LENGTH_SHORT).show();
 
                     }
                 });
@@ -820,7 +820,7 @@ public class DashBoardAdmin extends AppCompatActivity {
                         {
                             dialog.dismiss();
                         }
-                        Toast.makeText(DashBoardAdmin.this,t.getMessage(),Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(DashBoardAdmin.this,"Bad Internet Connection",Toast.LENGTH_SHORT).show();
 
                     }
                 });

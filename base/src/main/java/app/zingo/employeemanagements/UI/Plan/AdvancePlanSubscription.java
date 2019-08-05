@@ -558,7 +558,7 @@ public class AdvancePlanSubscription extends AppCompatActivity implements Paymen
             public void onFailure(Call<Organization> call, Throwable t) {
 
 
-                Toast.makeText(AdvancePlanSubscription.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(AdvancePlanSubscription.this, "Failed due to Bad Internet Connection", Toast.LENGTH_SHORT).show();
                 Log.e("TAG", t.toString());
             }
         });
@@ -627,7 +627,7 @@ public class AdvancePlanSubscription extends AppCompatActivity implements Paymen
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(AdvancePlanSubscription.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(AdvancePlanSubscription.this, "Failed due to Bad Internet Connection", Toast.LENGTH_SHORT).show();
                 Log.e("TAG", t.toString());
             }
         });

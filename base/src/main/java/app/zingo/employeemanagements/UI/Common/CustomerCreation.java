@@ -775,7 +775,7 @@ public class CustomerCreation extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(CustomerCreation.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(CustomerCreation.this, "Failed due to Bad Internet Connection", Toast.LENGTH_SHORT).show();
                 Log.e("TAG", t.toString());
             }
         });
@@ -842,7 +842,7 @@ public class CustomerCreation extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(CustomerCreation.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                //     Toast.makeText(CustomerCreation.this, "Failed due to Bad Internet Connection", Toast.LENGTH_SHORT).show();
                 Log.e("TAG", t.toString());
             }
         });
@@ -1218,7 +1218,7 @@ public class CustomerCreation extends AppCompatActivity {
                     }
                     @Override
                     public void onFailure(Call<String> call, Throwable t) {
-                        Log.d("UpdateCate", "Error " + t.getMessage());
+                        Log.d( "UpdateCate" , "Error " + "Bad Internet Connection" );
                     }
                 });
             }

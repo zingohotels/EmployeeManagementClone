@@ -1,75 +1,46 @@
 package app.zingo.employeemanagements.UI.NewEmployeeDesign;
 
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.ComponentName;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ShareCompat;
-import android.support.v4.text.HtmlCompat;
 import android.text.Html;
-import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
-import com.squareup.picasso.Picasso;
-
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
-import app.zingo.employeemanagements.UI.NewAdminDesigns.DailyOrdersForEmployeeActivity;
-import app.zingo.employeemanagements.base.BuildConfig;
 import app.zingo.employeemanagements.Model.Employee;
-import app.zingo.employeemanagements.Model.EmployeeImages;
-import app.zingo.employeemanagements.Model.LoginDetails;
-import app.zingo.employeemanagements.Model.LoginDetailsNotificationManagers;
-import app.zingo.employeemanagements.base.R;
 import app.zingo.employeemanagements.Service.LocationForegroundService;
-import app.zingo.employeemanagements.UI.Admin.EmployeesDashBoard;
-import app.zingo.employeemanagements.UI.Admin.TaskManagementHost;
 import app.zingo.employeemanagements.UI.Common.ChangePasswordScreen;
-import app.zingo.employeemanagements.UI.Common.CustomerCreation;
 import app.zingo.employeemanagements.UI.Common.CustomerList;
 import app.zingo.employeemanagements.UI.Common.InvokeService;
 import app.zingo.employeemanagements.UI.Common.NotificationShowActivity;
 import app.zingo.employeemanagements.UI.Company.OrganizationDetailScree;
 import app.zingo.employeemanagements.UI.Employee.EmployeeListScreen;
 import app.zingo.employeemanagements.UI.Employee.LeaveManagementHost;
-import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
 import app.zingo.employeemanagements.UI.LandingScreen;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminNewMainScreen;
+import app.zingo.employeemanagements.UI.NewAdminDesigns.DailyOrdersForEmployeeActivity;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.DailyTargetsForEmployeeActivity;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.DepartmentLilstScreen;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.EmployeeDashBoardAdminView;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.EmployeeUpdateListScreen;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.ExpenseDashBoardAdmin;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.LeaveEmployeeListScreen;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.TeamMembersList;
-import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
-import app.zingo.employeemanagements.WebApi.LoginDetailsAPI;
+import app.zingo.employeemanagements.base.BuildConfig;
+import app.zingo.employeemanagements.base.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -647,7 +618,7 @@ public class EmployeeHomeFragment extends Fragment {
                         Toast.makeText(getActivity(),"Logout",Toast.LENGTH_SHORT).show();
                         startActivity(log);
                         getActivity().finish();
-                        //  Toast.makeText(ChangePasswordScreen.this, "Something went wrong due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                        //  Toast.makeText(ChangePasswordScreen.this, "Something went wrong due to "+"Bad Internet Connection", Toast.LENGTH_SHORT).show();
 
                     }
                 });

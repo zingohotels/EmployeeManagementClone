@@ -1079,7 +1079,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
                     }
                     @Override
                     public void onFailure(Call<String> call, Throwable t) {
-                        Log.d("UpdateCate", "Error " + t.getMessage());
+                        //Log.d("UpdateCate", "Error " + "Bad Internet Connection");
                     }
                 });
             }
@@ -1252,7 +1252,6 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
                         {
                             dialog.dismiss();
                         }
-                        Toast.makeText(EmployeeNewMainScreen.this,t.getMessage(),Toast.LENGTH_SHORT).show();
 
                     }
                 });
@@ -1298,7 +1297,6 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
                         {
                             dialog.dismiss();
                         }
-                        Toast.makeText(EmployeeNewMainScreen.this,t.getMessage(),Toast.LENGTH_SHORT).show();
 
                     }
                 });
@@ -1553,7 +1551,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
                     public void onFailure(Call<Employee> call, Throwable t) {
 
 
-                        //  Toast.makeText(ChangePasswordScreen.this, "Something went wrong due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                        //  Toast.makeText(ChangePasswordScreen.this, "Something went wrong due to "+"Bad Internet Connection", Toast.LENGTH_SHORT).show();
 
                     }
                 });
@@ -2237,7 +2235,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(EmployeeNewMainScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                // Toast.makeText(EmployeeNewMainScreen.this, "Failed due to Bad Internet Connection", Toast.LENGTH_SHORT).show();
                 Log.e("TAG", t.toString());
             }
         });
@@ -2769,7 +2767,8 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(EmployeeNewMainScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+
+                // Toast.makeText(EmployeeNewMainScreen.this, "Failed due to Bad Internet Connection", Toast.LENGTH_SHORT).show();
                 Log.e("TAG", t.toString());
             }
         });
@@ -2835,7 +2834,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(EmployeeNewMainScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                // Toast.makeText(EmployeeNewMainScreen.this, "Failed due to Bad Internet Connection", Toast.LENGTH_SHORT).show();
                 Log.e("TAG", t.toString());
             }
         });
@@ -2883,7 +2882,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(EmployeeNewMainScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(EmployeeNewMainScreen.this, "Failed due to Bad Internet Connection", Toast.LENGTH_SHORT).show();
                 Log.e("TAG", t.toString());
             }
         });
@@ -3262,8 +3261,8 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
                     }
                     @Override
                     public void onFailure(Call<String> call, Throwable t) {
-                        Log.d("UpdateCate", "Error " + t.getMessage());
-                        Toast.makeText(EmployeeNewMainScreen.this,"Please Check your Internet permissions "+t.getMessage(),Toast.LENGTH_LONG).show();
+                        // Log.d("UpdateCate", "Error " + "Bad Internet Connection");
+                        //  Toast.makeText(EmployeeNewMainScreen.this,"Please Check your Internet permissions "+"Bad Internet Connection",Toast.LENGTH_LONG).show();
                     }
 
                 });
@@ -3505,13 +3504,7 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
 
             latitude = location.getLatitude();
             longitude = location.getLongitude();
-            LatLng master = new LatLng(latitude,longitude);
-            String address = null;
-            try {
-                address = getAddress(master);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+
         }
     }
 

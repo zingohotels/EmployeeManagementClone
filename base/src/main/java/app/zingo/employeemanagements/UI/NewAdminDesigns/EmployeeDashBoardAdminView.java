@@ -1,41 +1,33 @@
 package app.zingo.employeemanagements.UI.NewAdminDesigns;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.os.Handler;
-import android.support.design.widget.TextInputEditText;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.google.android.gms.maps.model.LatLng;
 import com.squareup.picasso.Picasso;
@@ -55,9 +47,7 @@ import java.util.Set;
 
 import app.zingo.employeemanagements.Adapter.MeetingDetailAdapter;
 import app.zingo.employeemanagements.Adapter.TaskListAdapter;
-import app.zingo.employeemanagements.Custom.CustomSpinner;
 import app.zingo.employeemanagements.Custom.MyRegulerText;
-import app.zingo.employeemanagements.Model.Departments;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.EmployeeImages;
 import app.zingo.employeemanagements.Model.Expenses;
@@ -65,11 +55,6 @@ import app.zingo.employeemanagements.Model.LiveTracking;
 import app.zingo.employeemanagements.Model.LoginDetails;
 import app.zingo.employeemanagements.Model.Meetings;
 import app.zingo.employeemanagements.Model.Tasks;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Admin.CreateTaskScreen;
-import app.zingo.employeemanagements.UI.Admin.EmployeesDashBoard;
-import app.zingo.employeemanagements.UI.Common.ReportManagementScreen;
-import app.zingo.employeemanagements.UI.EmployeeSignUp;
 import app.zingo.employeemanagements.UI.Landing.InternalServerErrorScreen;
 import app.zingo.employeemanagements.UI.NewEmployeeDesign.MeetingDetailList;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
@@ -80,6 +65,7 @@ import app.zingo.employeemanagements.WebApi.LiveTrackingAPI;
 import app.zingo.employeemanagements.WebApi.LoginDetailsAPI;
 import app.zingo.employeemanagements.WebApi.MeetingsAPI;
 import app.zingo.employeemanagements.WebApi.TasksAPI;
+import app.zingo.employeemanagements.base.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -2164,7 +2150,7 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                     dialog.dismiss();
                 }
 
-                Toast.makeText(getApplicationContext(), "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( getApplicationContext( ) , "Failed Due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });
@@ -2224,7 +2210,7 @@ public class EmployeeDashBoardAdminView extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(getApplicationContext(), "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( getApplicationContext( ) , "Failed Due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });

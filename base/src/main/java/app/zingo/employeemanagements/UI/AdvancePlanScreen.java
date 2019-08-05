@@ -555,7 +555,7 @@ public class AdvancePlanScreen extends AppCompatActivity implements PaymentResul
             public void onFailure(Call<Organization> call, Throwable t) {
 
 
-                Toast.makeText(AdvancePlanScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(AdvancePlanScreen.this, "Failed due to Bad Internet Connection", Toast.LENGTH_SHORT).show();
                 Log.e("TAG", t.toString());
             }
         });
@@ -624,7 +624,7 @@ public class AdvancePlanScreen extends AppCompatActivity implements PaymentResul
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(AdvancePlanScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(AdvancePlanScreen.this, "Failed due to Bad Internet Connection", Toast.LENGTH_SHORT).show();
                 Log.e("TAG", t.toString());
             }
         });

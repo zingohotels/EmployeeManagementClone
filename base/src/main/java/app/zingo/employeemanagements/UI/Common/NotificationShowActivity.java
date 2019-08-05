@@ -539,7 +539,7 @@ public class NotificationShowActivity extends AppCompatActivity {
                         Toast.makeText(NotificationShowActivity.this,"Logout",Toast.LENGTH_SHORT).show();
                         startActivity(log);
                         NotificationShowActivity.this.finish();
-                        //  Toast.makeText(ChangePasswordScreen.this, "Something went wrong due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                        //  Toast.makeText(ChangePasswordScreen.this, "Something went wrong due to "+"Bad Internet Connection", Toast.LENGTH_SHORT).show();
 
                     }
                 });

@@ -1,6 +1,5 @@
 package app.zingo.employeemanagements.UI.NewEmployeeDesign;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -17,18 +16,15 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.media.ExifInterface;
-import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.design.widget.TextInputEditText;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -57,28 +53,21 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import app.zingo.employeemanagements.Adapter.CustomerAdapter;
 import app.zingo.employeemanagements.Adapter.CustomerSpinnerAdapter;
 import app.zingo.employeemanagements.Model.Customer;
-import app.zingo.employeemanagements.Model.Employee;
-import app.zingo.employeemanagements.Model.EmployeeImages;
 import app.zingo.employeemanagements.Model.MeetingDetailsNotificationManagers;
 import app.zingo.employeemanagements.Model.Meetings;
-import app.zingo.employeemanagements.UI.Common.CustomerList;
 import app.zingo.employeemanagements.UI.Custom.CustomDesignAlertDialog;
-import app.zingo.employeemanagements.Utils.ThreadExecuter;
-import app.zingo.employeemanagements.WebApi.CustomerAPI;
-import app.zingo.employeemanagements.base.R;
-import app.zingo.employeemanagements.UI.Common.DigitalSignature;
-import app.zingo.employeemanagements.UI.EmployeeSignUp;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.AdminNewMainScreen;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
+import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.TrackGPS;
 import app.zingo.employeemanagements.Utils.Util;
+import app.zingo.employeemanagements.WebApi.CustomerAPI;
 import app.zingo.employeemanagements.WebApi.MeetingNotificationAPI;
 import app.zingo.employeemanagements.WebApi.MeetingsAPI;
 import app.zingo.employeemanagements.WebApi.UploadApi;
+import app.zingo.employeemanagements.base.R;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -515,7 +504,7 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(MeetingAddWithSignScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( MeetingAddWithSignScreen.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });
@@ -585,7 +574,7 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(MeetingAddWithSignScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( MeetingAddWithSignScreen.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });
@@ -637,7 +626,7 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(MeetingAddWithSignScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( MeetingAddWithSignScreen.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });
@@ -945,7 +934,7 @@ public class MeetingAddWithSignScreen extends AppCompatActivity {
                     }
                     @Override
                     public void onFailure(Call<String> call, Throwable t) {
-                        Log.d("UpdateCate", "Error " + t.getMessage());
+                        Log.d( "UpdateCate" , "Error " + "Bad Internet Connection" );
                     }
                 });
             }

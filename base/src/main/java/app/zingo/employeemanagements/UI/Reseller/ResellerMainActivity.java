@@ -23,30 +23,23 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Timer;
 
 import app.zingo.employeemanagements.Custom.RoundImageView;
-import app.zingo.employeemanagements.Model.LoginDetails;
 import app.zingo.employeemanagements.Model.ResellerProfiles;
 import app.zingo.employeemanagements.UI.LandingScreen;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.EmployeeDashBoardAdminView;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
@@ -628,7 +621,7 @@ public class ResellerMainActivity extends TabActivity implements TabHost.OnTabCh
                     }
                     @Override
                     public void onFailure(Call<String> call, Throwable t) {
-                        Log.d("UpdateCate", "Error " + t.getMessage());
+                        Log.d( "UpdateCate" , "Error " + "Bad Internet Connection" );
                     }
                 });
             }
@@ -835,7 +828,7 @@ public class ResellerMainActivity extends TabActivity implements TabHost.OnTabCh
                         {
                             dialog.dismiss();
                         }
-                        Toast.makeText(ResellerMainActivity.this,t.getMessage(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText( ResellerMainActivity.this , "Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
 
                     }
                 });

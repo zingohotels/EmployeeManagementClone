@@ -43,7 +43,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import app.zingo.employeemanagements.Model.Expenses;
-import app.zingo.employeemanagements.UI.Employee.ApplyLeaveScreen;
 import app.zingo.employeemanagements.Utils.Constants;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
@@ -344,7 +343,7 @@ public class CreateExpensesScreen extends AppCompatActivity {
                     }
                     @Override
                     public void onFailure(Call<String> call, Throwable t) {
-                        Log.d("UpdateCate", "Error " + t.getMessage());
+                        Log.d( "UpdateCate" , "Error " + "Bad Internet Connection" );
                     }
                 });
             }
@@ -547,7 +546,7 @@ public class CreateExpensesScreen extends AppCompatActivity {
                         {
                             dialog.dismiss();
                         }
-                        Toast.makeText(CreateExpensesScreen.this,t.getMessage(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText( CreateExpensesScreen.this , "Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                     }
                 });
             }

@@ -357,7 +357,7 @@ public class ScannedQrScreen extends AppCompatActivity implements ZXingScannerVi
                 if (dialog != null && dialog.isShowing()) {
                     dialog.dismiss();
                 }
-                Toast.makeText(ScannedQrScreen.this, "Failed Due to " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( ScannedQrScreen.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });
@@ -423,7 +423,7 @@ public class ScannedQrScreen extends AppCompatActivity implements ZXingScannerVi
                 if (dialog != null && dialog.isShowing()) {
                     dialog.dismiss();
                 }
-                Toast.makeText(ScannedQrScreen.this, "Failed Due to " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( ScannedQrScreen.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });
@@ -488,7 +488,7 @@ public class ScannedQrScreen extends AppCompatActivity implements ZXingScannerVi
                 if (dialog != null && dialog.isShowing()) {
                     dialog.dismiss();
                 }
-                Toast.makeText(ScannedQrScreen.this, "Failed Due to " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( ScannedQrScreen.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });
@@ -574,7 +574,7 @@ public class ScannedQrScreen extends AppCompatActivity implements ZXingScannerVi
                 if (dialog != null && dialog.isShowing()) {
                     dialog.dismiss();
                 }
-                Toast.makeText(ScannedQrScreen.this, "Failed Due to " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( ScannedQrScreen.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });

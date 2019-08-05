@@ -499,7 +499,7 @@ public class BranchInfoScreen extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(BranchInfoScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(BranchInfoScreen.this, "Failed due to Bad Internet Connection", Toast.LENGTH_SHORT).show();
                 Log.e("TAG", t.toString());
             }
         });
@@ -607,7 +607,7 @@ public class BranchInfoScreen extends AppCompatActivity {
             public void onFailure(Call<Organization> call, Throwable t) {
 
 
-                Toast.makeText(BranchInfoScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(BranchInfoScreen.this, "Failed due to Bad Internet Connection", Toast.LENGTH_SHORT).show();
                 Log.e("TAG", t.toString());
             }
         });

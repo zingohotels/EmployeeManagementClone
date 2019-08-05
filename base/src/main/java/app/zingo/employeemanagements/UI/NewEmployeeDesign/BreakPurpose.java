@@ -136,14 +136,6 @@ public class BreakPurpose extends AppCompatActivity {
 
                         PreferenceHandler.getInstance(BreakPurpose.this).setFar(true);
 
-                        /*if(s!=null){
-
-                            Intent lintent = new Intent(BreakPurpose.this, DistanceCheck.class);
-                            stopService(lintent);
-                            BreakPurpose.this.finish();
-
-                        }*/
-
 
 
 
@@ -170,7 +162,7 @@ public class BreakPurpose extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(BreakPurpose.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( BreakPurpose.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });

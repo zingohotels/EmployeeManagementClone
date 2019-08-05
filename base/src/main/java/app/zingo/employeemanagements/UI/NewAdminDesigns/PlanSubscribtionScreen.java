@@ -361,7 +361,7 @@ public class PlanSubscribtionScreen extends AppCompatActivity implements Payment
                     dialog.dismiss();
                 }
 
-                Toast.makeText(PlanSubscribtionScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( PlanSubscribtionScreen.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });
@@ -434,7 +434,7 @@ public class PlanSubscribtionScreen extends AppCompatActivity implements Payment
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(PlanSubscribtionScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( PlanSubscribtionScreen.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });

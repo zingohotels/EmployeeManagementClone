@@ -122,7 +122,7 @@ public class ForgotPasswordScreen extends AppCompatActivity {
                         {
                             dialog.dismiss();
                         }
-                        Toast.makeText(ForgotPasswordScreen.this, "Something went wrong due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText( ForgotPasswordScreen.this , "Something went wrong due to " + "Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
 
                     }
                 });
@@ -206,7 +206,7 @@ public class ForgotPasswordScreen extends AppCompatActivity {
                         {
                             dialog.dismiss();
                         }
-                        Toast.makeText(ForgotPasswordScreen.this, "Something went wrong due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText( ForgotPasswordScreen.this , "Something went wrong due to " + "Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
 
                     }
                 });

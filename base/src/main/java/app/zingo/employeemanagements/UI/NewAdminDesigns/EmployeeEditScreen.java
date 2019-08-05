@@ -1031,7 +1031,7 @@ public class EmployeeEditScreen extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(EmployeeEditScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( EmployeeEditScreen.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });
@@ -1085,7 +1085,7 @@ public class EmployeeEditScreen extends AppCompatActivity {
                         {
                             dialog.dismiss();
                         }
-                        Toast.makeText(EmployeeEditScreen.this, "Something went wrong due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText( EmployeeEditScreen.this , "Something went wrong due to " + "Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
 
                     }
                 });

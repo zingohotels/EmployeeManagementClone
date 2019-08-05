@@ -992,7 +992,7 @@ public class AdminNewMainScreen extends AppCompatActivity  implements RapidFloat
                     }
                     @Override
                     public void onFailure(Call<String> call, Throwable t) {
-                        Log.d("UpdateCate", "Error " + t.getMessage());
+                        Log.d( "UpdateCate" , "Error " + "Bad Internet Connection" );
                     }
                 });
             }
@@ -1187,7 +1187,7 @@ public class AdminNewMainScreen extends AppCompatActivity  implements RapidFloat
                         {
                             dialog.dismiss();
                         }
-                        Toast.makeText(AdminNewMainScreen.this,t.getMessage(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText( AdminNewMainScreen.this , "Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
 
                     }
                 });
@@ -1233,7 +1233,7 @@ public class AdminNewMainScreen extends AppCompatActivity  implements RapidFloat
                         {
                             dialog.dismiss();
                         }
-                        Toast.makeText(AdminNewMainScreen.this,t.getMessage(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText( AdminNewMainScreen.this , "Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
 
                     }
                 });
@@ -1744,7 +1744,7 @@ public class AdminNewMainScreen extends AppCompatActivity  implements RapidFloat
                     public void onFailure(Call<Employee> call, Throwable t) {
 
 
-                      //  Toast.makeText(ChangePasswordScreen.this, "Something went wrong due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                        //  Toast.makeText(ChangePasswordScreen.this, "Something went wrong due to "+"Bad Internet Connection", Toast.LENGTH_SHORT).show();
 
                     }
                 });
@@ -2159,7 +2159,7 @@ public class AdminNewMainScreen extends AppCompatActivity  implements RapidFloat
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(AdminNewMainScreen.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( AdminNewMainScreen.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });

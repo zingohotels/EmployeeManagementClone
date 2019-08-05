@@ -72,7 +72,13 @@ public class CheckInAlarmReceiverService extends IntentService {
                     Date currentTime = new SimpleDateFormat("hh:mm a").parse(new SimpleDateFormat("hh:mm a").format(new Date()));
 
                     Calendar checkTime = Calendar.getInstance();
+                    int year = checkTime.get( Calendar.YEAR );
+                    int month = checkTime.get( Calendar.MONTH );
+                    int date = checkTime.get( Calendar.DATE );
                     checkTime.setTime(cit);
+                    checkTime.set( Calendar.YEAR , year );
+                    checkTime.set( Calendar.MONTH , month );
+                    checkTime.set( Calendar.DATE , date );
                     checkTime.add(Calendar.MINUTE, 10);
 
                     Date checkDate = checkTime.getTime();
@@ -109,9 +115,18 @@ public class CheckInAlarmReceiverService extends IntentService {
                     } else if (!loginPut) {
 
                         Calendar alaramTime = Calendar.getInstance();
+
+
+                        int years = alaramTime.get( Calendar.YEAR );
+                        int months = alaramTime.get( Calendar.MONTH );
+                        int dates = alaramTime.get( Calendar.DATE );
                         alaramTime.setTime(ncit);
+                        alaramTime.set( Calendar.YEAR , years );
+                        alaramTime.set( Calendar.MONTH , months );
+                        alaramTime.set( Calendar.DATE , dates );
                         alaramTime.add(Calendar.DAY_OF_YEAR, 1);
                         alaramTime.add(Calendar.MINUTE, -10);
+
 
                         //Create a new PendingIntent and add it to the AlarmManager
                         Intent intent = new Intent(getApplicationContext(), CheckInAlarmReceiverService.class);

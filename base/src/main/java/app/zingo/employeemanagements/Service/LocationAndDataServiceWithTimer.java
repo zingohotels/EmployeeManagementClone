@@ -99,10 +99,13 @@ public class LocationAndDataServiceWithTimer extends Service implements TextToSp
 
         if(t!=null){
 
-            t.scheduleAtFixedRate(new TimerTask() {
 
+
+           /* new  Handler().postDelayed(new Runnable() {
                 @Override
-                public void run()    {
+                public void run() {
+
+
 
                     timeGPS += 1;
                     String todis = String.valueOf(timeGPS);
@@ -212,6 +215,125 @@ public class LocationAndDataServiceWithTimer extends Service implements TextToSp
 
 
                     }
+
+                }
+            },0);*/
+            t.scheduleAtFixedRate(new TimerTask() {
+
+                @Override
+                public void run ( ) {
+
+
+
+                    timeGPS += 1;
+                    String todis = String.valueOf(timeGPS);
+
+                    if(todis.contains("60"))
+                    {
+
+                        System.out.println("time "+timeGPS+" Actual "+new SimpleDateFormat("HH:mm:ss").format(new Date()));
+                        //talker.speak("You have a new Booking", TextToSpeech.QUEUE_ADD,null);
+                        timeGPS = 0;
+
+
+                        if(locationCheck()){
+
+                            NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                            notificationManager.cancel(1);
+
+                        }else{
+
+                            Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+
+                            URL url = null;
+
+
+                            Intent intents = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+
+
+                            //  Uri sound = Uri.parse("android.resource://" + this.getPackageName() + "/raw/good_morning");
+                            int m = 1;
+
+                            intents.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP );
+
+                            intents.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            PendingIntent pendingIntent = PendingIntent.getActivity(LocationAndDataServiceWithTimer.this, m, intents, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                            int notifyID = 1;
+                            String CHANNEL_ID = ""+ 1;// The id of the channel.
+                            CharSequence name = "Zingo" ;// The user-visible name of the channel.
+                            int importance = NotificationManager.IMPORTANCE_LOW;
+                            NotificationChannel mChannel=null;
+                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+                            }
+
+                            Notification.Builder notificationBuilder = null;
+                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                notificationBuilder = new Notification.Builder(LocationAndDataServiceWithTimer.this)
+                                        .setTicker("Your GPS is off").setWhen(0)
+                                        .setContentTitle("Your GPS is off")
+                                        .setContentText("Your GPS is off.Please on and get better service from us")
+                                        .setAutoCancel(true)
+                                        .setOngoing(true)
+                                        //.setFullScreenIntent(pendingIntent,false)
+                                        //.setNumber()
+                                        .setContentIntent(pendingIntent)
+                                        .setContentInfo("Your GPS is off.Please on and get better service from us")
+                                        .setLargeIcon(icon)
+                                        .setChannelId("1")
+
+                                        .setPriority(Notification.PRIORITY_MAX)
+
+                                        // .setPriority(NotificationManager.IMPORTANCE_HIGH)
+                                        .setSmallIcon(R.mipmap.ic_launcher);
+                            }else{
+                                notificationBuilder = new Notification.Builder(LocationAndDataServiceWithTimer.this)
+                                        .setTicker("Your GPS is off").setWhen(0)
+                                        .setContentTitle("Your GPS is off")
+                                        .setContentText("Your GPS is off.Please on and get better service from us")
+                                        .setAutoCancel(true)
+                                        .setOngoing(true)
+                                        //.setFullScreenIntent(pendingIntent,false)
+                                        .setContentIntent(pendingIntent)
+                                        .setContentInfo("Your GPS is off.Please on and get better service from us")
+                                        .setLargeIcon(icon)
+
+                                        .setPriority(Notification.PRIORITY_MAX)
+
+                                        .setNumber(1)
+                                        // .setPriority(NotificationManager.IMPORTANCE_HIGH)
+                                        .setSmallIcon(R.mipmap.ic_launcher);
+                            }
+
+
+
+                            notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
+                            notificationBuilder.setLights(Color.YELLOW, 1000, 300);
+
+
+
+                            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                notificationManager.createNotificationChannel(mChannel);
+                            }
+
+
+                            notificationManager.notify(m, notificationBuilder.build());
+
+
+
+
+
+
+                        }
+
+                        t.cancel();
+                        t.purge();
+
+
+                    }
+
                 }
 
             }, 0, 2000);
@@ -228,10 +350,11 @@ public class LocationAndDataServiceWithTimer extends Service implements TextToSp
 
         if(tNetwork!=null){
 
-            tNetwork.scheduleAtFixedRate(new TimerTask() {
-
+          /*  new Handler().postDelayed(new Runnable() {
                 @Override
-                public void run()    {
+                public void run() {
+
+
 
                     timeNetwork += 1;
                     String todis = String.valueOf(timeNetwork);
@@ -334,11 +457,124 @@ public class LocationAndDataServiceWithTimer extends Service implements TextToSp
 
 
 
-                        t.cancel();
-                        t.purge();
+                        tNetwork.cancel();
+                        tNetwork.purge();
 
 
                     }
+
+                }
+            },2000);*/
+            tNetwork.scheduleAtFixedRate(new TimerTask() {
+
+                @Override
+                public void run ( ) {
+
+                    timeNetwork += 1;
+                    String todis = String.valueOf(timeNetwork);
+
+                    if(todis.contains("60"))
+                    {
+
+                        System.out.println("time "+timeNetwork+" Actual "+new SimpleDateFormat("HH:mm:ss").format(new Date()));
+                        //talker.speak("You have a new Booking", TextToSpeech.QUEUE_ADD,null);
+                        timeNetwork = 0;
+
+
+                        if(checkActiveInternetConnection()){
+
+                            NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                            notificationManager.cancel(11);
+
+                        }else{
+
+                            Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+
+                            URL url = null;
+
+                            Intent intents = new Intent(Settings.ACTION_DATA_ROAMING_SETTINGS);
+
+                            //  Uri sound = Uri.parse("android.resource://" + this.getPackageName() + "/raw/good_morning");
+                            int m = 11;
+
+                            intents.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP );
+
+                            intents.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            PendingIntent pendingIntent = PendingIntent.getActivity(LocationAndDataServiceWithTimer.this, m, intents, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                            int notifyID = 1;
+                            String CHANNEL_ID = ""+ 1;// The id of the channel.
+                            CharSequence name = "Zingo" ;// The user-visible name of the channel.
+                            int importance = NotificationManager.IMPORTANCE_LOW;
+                            NotificationChannel mChannel=null;
+                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+                            }
+
+                            Notification.Builder notificationBuilder = null;
+                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                notificationBuilder = new Notification.Builder(LocationAndDataServiceWithTimer.this)
+                                        .setTicker("Your Internet is off").setWhen(0)
+                                        .setContentTitle("Your Internet is off")
+                                        .setContentText("Your Internet is off.Please on and get better service from us")
+                                        .setAutoCancel(true)
+                                        //.setFullScreenIntent(pendingIntent,false)
+                                        //.setNumber()
+                                        .setContentIntent(pendingIntent)
+                                        .setContentInfo("Your Internet is off.Please on and get better service from us")
+                                        .setLargeIcon(icon).setOngoing(true)
+                                        .setChannelId("1")
+
+                                        .setPriority(Notification.PRIORITY_MAX)
+
+                                        // .setPriority(NotificationManager.IMPORTANCE_HIGH)
+                                        .setSmallIcon(R.mipmap.ic_launcher);
+                            }else{
+                                notificationBuilder = new Notification.Builder(LocationAndDataServiceWithTimer.this)
+                                        .setTicker("Your Internet is off").setWhen(0)
+                                        .setContentTitle("Your Internet is off")
+                                        .setContentText("Your Internet is off.Please on and get better service from us")
+                                        .setAutoCancel(true)
+                                        //.setFullScreenIntent(pendingIntent,false)
+                                        .setContentIntent(pendingIntent)
+                                        .setOngoing(true)
+                                        .setContentInfo("Your Internet is off.Please on and get better service from us")
+                                        .setLargeIcon(icon)
+
+                                        .setPriority(Notification.PRIORITY_MAX)
+
+                                        .setNumber(1)
+                                        // .setPriority(NotificationManager.IMPORTANCE_HIGH)
+                                        .setSmallIcon(R.mipmap.ic_launcher);
+                            }
+
+
+
+                            notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
+                            notificationBuilder.setLights(Color.YELLOW, 1000, 300);
+
+
+
+                            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                notificationManager.createNotificationChannel(mChannel);
+                            }
+
+
+                            notificationManager.notify(m, notificationBuilder.build());
+
+
+
+
+                        }
+
+
+                        tNetwork.cancel( );
+                        tNetwork.purge( );
+
+
+                    }
+
                 }
 
             }, 0, 2000);
@@ -453,7 +689,12 @@ public class LocationAndDataServiceWithTimer extends Service implements TextToSp
                 network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
             } catch(Exception ex) {}
 
-            return gps_enabled && network_enabled;
+            if ( !gps_enabled && !network_enabled ) {
+                return false;
+            } else {
+                return true;
+            }
+            // return gps_enabled && network_enabled;
 
         }else{
 

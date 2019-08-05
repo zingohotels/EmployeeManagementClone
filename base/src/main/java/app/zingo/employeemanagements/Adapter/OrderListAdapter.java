@@ -29,7 +29,6 @@ import app.zingo.employeemanagements.Custom.MyRegulerText;
 import app.zingo.employeemanagements.Model.Employee;
 import app.zingo.employeemanagements.Model.Tasks;
 import app.zingo.employeemanagements.UI.NewAdminDesigns.UpdateOrderScreen;
-import app.zingo.employeemanagements.UI.NewAdminDesigns.UpdateTaskScreen;
 import app.zingo.employeemanagements.Utils.PreferenceHandler;
 import app.zingo.employeemanagements.Utils.ThreadExecuter;
 import app.zingo.employeemanagements.Utils.Util;
@@ -516,7 +515,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.View
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(context, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( context , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });

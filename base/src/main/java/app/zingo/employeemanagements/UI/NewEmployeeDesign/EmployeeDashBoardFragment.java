@@ -76,6 +76,7 @@ import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
 
 import app.zingo.employeemanagements.Adapter.TaskListAdapter;
@@ -291,6 +292,24 @@ public class EmployeeDashBoardFragment extends Fragment implements GoogleApiClie
     public void onResume() {
         super.onResume();
     }
+
+    public void onDetach ( ) {
+        super.onDetach( );
+
+        mContext = null;
+
+//        if(locationManager !=null)
+//            locationManager.removeUpdates(this);
+
+
+    }
+
+    public void onAttach ( Context context ) {
+        super.onAttach( context );
+        this.mContext = context;
+    }
+
+
 
     public void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
@@ -631,6 +650,8 @@ public class EmployeeDashBoardFragment extends Fragment implements GoogleApiClie
 
 
                                         PreferenceHandler.getInstance(getActivity()).setLoginStatus("Logout");
+                                        PreferenceHandler.getInstance( getActivity( ) ).setLoginPut( true );
+
 
                                     }else if(login!=null&&!login.isEmpty()&&(logout==null||logout.isEmpty())){
 
@@ -644,6 +665,7 @@ public class EmployeeDashBoardFragment extends Fragment implements GoogleApiClie
                                         }
 
                                         PreferenceHandler.getInstance(getActivity()).setLoginStatus("Login");
+                                        PreferenceHandler.getInstance( getActivity( ) ).setLoginPut( true );
                                         PreferenceHandler.getInstance(getActivity()).setLoginId(loginDetails.getLoginDetailsId());
                                     }
 
@@ -690,7 +712,7 @@ public class EmployeeDashBoardFragment extends Fragment implements GoogleApiClie
 
                                     mWorkedDays.setText(""+s.size());
                                 }
-                                PreferenceHandler.getInstance(getActivity()).setLoginPut(true);
+
 
 
                             }else{
@@ -2116,7 +2138,7 @@ public class EmployeeDashBoardFragment extends Fragment implements GoogleApiClie
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(getActivity(), "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( getActivity( ) , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });
@@ -2203,7 +2225,7 @@ public class EmployeeDashBoardFragment extends Fragment implements GoogleApiClie
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(getActivity(), "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( getActivity( ) , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });
@@ -2267,7 +2289,7 @@ public class EmployeeDashBoardFragment extends Fragment implements GoogleApiClie
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(getActivity(), "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( getActivity( ) , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });
@@ -2388,17 +2410,17 @@ public class EmployeeDashBoardFragment extends Fragment implements GoogleApiClie
 
         ArrayList<String> appNames = new ArrayList<>();
 
-        if(location!=null){
+        if ( location != null && mContext != null ) {
 
-            if(getActivity().getContentResolver()!=null){
+            if ( Objects.requireNonNull( getActivity( ) ).getContentResolver( ) != null ) {
 
                 if(Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION).equals("0")){
 
                     //Toast.makeText(mContext, "Mock Location Enabled" , Toast.LENGTH_SHORT).show();
 
-                    if(gps.isMockLocationOn(location,getActivity())){
+                    if ( TrackGPS.isMockLocationOn( location , getActivity( ) ) ) {
 
-                        appNames.addAll(gps.listofApps(getActivity()));
+                        appNames.addAll( TrackGPS.listofApps( getActivity( ) ) );
 
 
                     }
@@ -2430,13 +2452,13 @@ public class EmployeeDashBoardFragment extends Fragment implements GoogleApiClie
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
 
-                LatLng master = new LatLng(latitude,longitude);
-                String address = null;
+                //  LatLng master = new LatLng(latitude,longitude);
+             /*   String address = null;
                 try {
                     address = getAddress(master);
                 } catch (Exception e) {
                     e.printStackTrace();
-                }
+                }*/
 
             }
 
@@ -2842,7 +2864,7 @@ public class EmployeeDashBoardFragment extends Fragment implements GoogleApiClie
                     }
                     @Override
                     public void onFailure(Call<String> call, Throwable t) {
-                        Log.d("UpdateCate", "Error " + t.getMessage());
+                        Log.d( "UpdateCate" , "Error " + "Bad Internet Connection" );
                     }
                 });
             }

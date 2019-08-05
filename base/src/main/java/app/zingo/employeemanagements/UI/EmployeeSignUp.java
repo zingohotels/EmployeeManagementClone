@@ -590,7 +590,7 @@ public class EmployeeSignUp extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(EmployeeSignUp.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( EmployeeSignUp.this , "Failed Due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });
@@ -793,7 +793,7 @@ public class EmployeeSignUp extends AppCompatActivity {
                 {
                     dialog.dismiss();
                 }
-                Toast.makeText(EmployeeSignUp.this, "Failed Due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( EmployeeSignUp.this , "Failed Due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });

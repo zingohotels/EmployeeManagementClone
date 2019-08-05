@@ -370,7 +370,7 @@ public class AdminScanEmployee extends AppCompatActivity implements ZXingScanner
                 if (dialog != null && dialog.isShowing()) {
                     dialog.dismiss();
                 }
-                Toast.makeText(AdminScanEmployee.this, "Failed Due to " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(AdminScanEmployee.this, "Failed due to Bad Internet Connection", Toast.LENGTH_SHORT).show();
                 Log.e("TAG", t.toString());
             }
         });
@@ -436,7 +436,7 @@ public class AdminScanEmployee extends AppCompatActivity implements ZXingScanner
                 if (dialog != null && dialog.isShowing()) {
                     dialog.dismiss();
                 }
-                Toast.makeText(AdminScanEmployee.this, "Failed Due to " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( AdminScanEmployee.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });
@@ -491,7 +491,7 @@ public class AdminScanEmployee extends AppCompatActivity implements ZXingScanner
                 if (dialog != null && dialog.isShowing()) {
                     dialog.dismiss();
                 }
-                Toast.makeText(AdminScanEmployee.this, "Failed Due to " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( AdminScanEmployee.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });
@@ -577,7 +577,7 @@ public class AdminScanEmployee extends AppCompatActivity implements ZXingScanner
                 if (dialog != null && dialog.isShowing()) {
                     dialog.dismiss();
                 }
-                Toast.makeText(AdminScanEmployee.this, "Failed Due to " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText( AdminScanEmployee.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });

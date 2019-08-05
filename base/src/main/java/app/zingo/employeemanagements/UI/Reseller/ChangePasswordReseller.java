@@ -120,7 +120,7 @@ public class ChangePasswordReseller extends AppCompatActivity {
                         {
                             dialog.dismiss();
                         }
-                        Toast.makeText(ChangePasswordReseller.this, "Something went wrong due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText( ChangePasswordReseller.this , "Something went wrong due to " + "Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
 
                     }
                 });
@@ -215,7 +215,7 @@ public class ChangePasswordReseller extends AppCompatActivity {
                         {
                             dialog.dismiss();
                         }
-                        Toast.makeText(ChangePasswordReseller.this, "Something went wrong due to "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText( ChangePasswordReseller.this , "Something went wrong due to " + "Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
 
                     }
                 });
