@@ -34,16 +34,16 @@
             android:text="No Employees added."/>
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/profile_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:layout_marginTop="15dp"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:focusable="true" />
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_profile"
         android:layout_width="50dp"
         android:layout_height="50dp"

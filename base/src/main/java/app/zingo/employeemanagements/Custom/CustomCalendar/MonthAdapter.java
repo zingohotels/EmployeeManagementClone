@@ -5,8 +5,8 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.StateListDrawable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +20,7 @@ import java.util.Locale;
 
 import app.zingo.employeemanagements.base.R;
 
-public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.MonthHolder> {
+public class MonthAdapter extends RecyclerView.Adapter< MonthAdapter.MonthHolder> {
 
     private String[] months = new String[0];
     private OnSelectedListener listener;
@@ -145,7 +145,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.MonthHolder>
         private void setMonthBackgroundSelected(int color) {
             LayerDrawable layerDrawable = (LayerDrawable) ContextCompat.getDrawable(context, R.drawable.month_selected);
             GradientDrawable gradientDrawable = (GradientDrawable) layerDrawable.getDrawable(1);
-            gradientDrawable.setColor(ContextCompat.getColor(context, color));
+            gradientDrawable.setColor( ContextCompat.getColor(context, color));
             layerDrawable.setDrawableByLayerId(1, gradientDrawable);
 
             StateListDrawable states = new StateListDrawable();
@@ -156,6 +156,6 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.MonthHolder>
     }
 
     interface OnSelectedListener {
-        void onContentSelected();
+        void onContentSelected ( );
     }
 }

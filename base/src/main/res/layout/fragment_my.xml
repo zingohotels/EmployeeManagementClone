@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="app.zingo.employeemanagements.UI.NewAdminDesigns.MyFragment">
+    tools:context="app.zingo.employeemanagements.ui.NewAdminDesigns.MyFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView

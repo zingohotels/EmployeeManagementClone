@@ -1,6 +1,6 @@
 package app.zingo.employeemanagements.WebApi;
 
-import app.zingo.employeemanagements.Model.EmployeeImages;
+import app.zingo.employeemanagements.model.EmployeeImages;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
@@ -14,8 +14,8 @@ import retrofit2.http.Path;
 public interface EmployeeImageAPI {
 
     @PUT("EmployeeImages/{id}")
-    Call<EmployeeImages> updateEmployeeImage(@Path("id") int id, @Body EmployeeImages body);
+    Call<EmployeeImages> updateEmployeeImage ( @Path ("id") int id , @Body EmployeeImages body );
 
     @POST("EmployeeImages")
-    Call<EmployeeImages> addEmployeeImage(@Body EmployeeImages details);
+    Call<EmployeeImages> addEmployeeImage ( @Body EmployeeImages details );
 }

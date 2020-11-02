@@ -2,7 +2,7 @@ package app.zingo.employeemanagements.Service;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.android.gms.location.ActivityRecognitionResult;
@@ -10,7 +10,7 @@ import com.google.android.gms.location.DetectedActivity;
 
 import java.util.ArrayList;
 
-import app.zingo.employeemanagements.Utils.Constants;
+import app.zingo.employeemanagements.utils.Constants;
 
 public class DetectedActivitiesIntentService extends IntentService {
 
@@ -43,7 +43,7 @@ public class DetectedActivitiesIntentService extends IntentService {
     }
 
     private void broadcastActivity(DetectedActivity activity) {
-        Intent intent = new Intent(Constants.BROADCAST_DETECTED_ACTIVITY);
+        Intent intent = new Intent( Constants.BROADCAST_DETECTED_ACTIVITY);
         intent.putExtra("type", activity.getType());
         intent.putExtra("confidence", activity.getConfidence());
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);

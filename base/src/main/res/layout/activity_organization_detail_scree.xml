@@ -9,7 +9,7 @@
     android:layout_height="match_parent"
     >
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:background="#FFFFFFFF"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -132,7 +132,7 @@
                 android:id="@+id/department_layout_main"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.CardView
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:id="@+id/department_layout"
@@ -176,7 +176,7 @@
 
                     </LinearLayout>
 
-                </android.support.v7.widget.CardView>
+                </androidx.cardview.widget.CardView>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -185,13 +185,13 @@
                     android:visibility="gone"
                     android:orientation="vertical">
 
-                    <android.support.v7.widget.RecyclerView
+                    <androidx.recyclerview.widget.RecyclerView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/department_list"
-                        app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
-                    <android.support.v7.widget.AppCompatButton
+                    <androidx.appcompat.widget.AppCompatButton
                         android:textSize="@dimen/regularFont"
                         android:textColor="@color/white"
                         android:id="@+id/add_department"
@@ -219,6 +219,6 @@
 
 
         </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </RelativeLayout>

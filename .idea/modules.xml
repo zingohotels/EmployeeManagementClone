@@ -2,13 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/EmployeeManagement.iml" filepath="$PROJECT_DIR$/EmployeeManagement.iml" />
       <module fileurl="file://$PROJECT_DIR$/EmployeeManagementClone.iml" filepath="$PROJECT_DIR$/EmployeeManagementClone.iml" />
-      <module fileurl="file://$PROJECT_DIR$/base/base.iml" filepath="$PROJECT_DIR$/base/base.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ccp/ccp.iml" filepath="$PROJECT_DIR$/ccp/ccp.iml" />
-      <module fileurl="file://$PROJECT_DIR$/installed/installed.iml" filepath="$PROJECT_DIR$/installed/installed.iml" />
-      <module fileurl="file://$PROJECT_DIR$/instant/instant.iml" filepath="$PROJECT_DIR$/instant/instant.iml" />
-      <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/base/EmployeeManagementClone.base.iml" filepath="$PROJECT_DIR$/.idea/modules/base/EmployeeManagementClone.base.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ccp/EmployeeManagementClone.ccp.iml" filepath="$PROJECT_DIR$/.idea/modules/ccp/EmployeeManagementClone.ccp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/installed/EmployeeManagementClone.installed.iml" filepath="$PROJECT_DIR$/.idea/modules/installed/EmployeeManagementClone.installed.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/instant/EmployeeManagementClone.instant.iml" filepath="$PROJECT_DIR$/.idea/modules/instant/EmployeeManagementClone.instant.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/library/EmployeeManagementClone.library.iml" filepath="$PROJECT_DIR$/.idea/modules/library/EmployeeManagementClone.library.iml" />
     </modules>
   </component>
 </project>

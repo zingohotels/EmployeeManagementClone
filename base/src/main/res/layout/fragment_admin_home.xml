@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout android:orientation="vertical"
@@ -17,10 +18,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_margin="5dp"
-                android:text="Organization Code : "
+                android:text="@string/organization_code"
                 android:id="@+id/organization_id"
                 android:gravity="center"
-                android:textSize="20dp"
+                android:textSize="20sp"
 
                 android:textColor="@color/text_black"/>
         </LinearLayout>
@@ -48,7 +49,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:weightSum="3">
+            android:weightSum="3"
+            android:baselineAligned="false">
 
             <LinearLayout
                 android:gravity="center"
@@ -62,20 +64,21 @@
                 android:layout_marginRight="4dp"
                 android:minWidth="70dp"
                 android:layout_weight="1"
-                android:focusable="true">
+                android:focusable="true"
+                tools:ignore="UseCompoundDrawables">
                 <ImageView
                     android:background="@drawable/rounded_menu_background"
                     android:padding="8dp"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/attendance_menu"
-                    android:contentDescription="TODO" />
+                    android:contentDescription="@string/todo" />
                 <TextView
                     android:textSize="12sp"
                     android:textColor="@color/grey_charcoal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Attendance"/>
+                    android:text="@string/attendance"/>
             </LinearLayout>
 
             <LinearLayout
@@ -90,20 +93,21 @@
                 android:layout_marginRight="4dp"
                 android:minWidth="70dp"
                 android:layout_weight="1"
-                android:focusable="true">
+                android:focusable="true"
+                tools:ignore="UseCompoundDrawables">
                 <ImageView
                     android:background="@drawable/rounded_menu_background"
                     android:padding="8dp"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/track"
-                    android:contentDescription="TODO" />
+                    android:contentDescription="@string/todo" />
                 <TextView
                     android:textSize="12sp"
                     android:textColor="@color/grey_charcoal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Live Tracking"/>
+                    android:text="@string/live_tracking"/>
             </LinearLayout>
 
             <LinearLayout
@@ -118,36 +122,32 @@
                 android:layout_marginRight="4dp"
                 android:minWidth="70dp"
                 android:layout_weight="1"
-                android:focusable="true">
+                android:focusable="true"
+                tools:ignore="UseCompoundDrawables">
                 <ImageView
                     android:background="@drawable/rounded_menu_background"
                     android:padding="8dp"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/organize"
-                    android:contentDescription="TODO" />
+                    android:contentDescription="@string/todo" />
                 <TextView
                     android:textSize="12sp"
                     android:textColor="@color/grey_charcoal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Task"/>
+                    android:text="@string/task"/>
             </LinearLayout>
 
-
-
-
-
-
-
-
         </LinearLayout>
+
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:weightSum="3">
+            android:weightSum="3"
+            android:baselineAligned="false">
 
             <LinearLayout
                 android:gravity="center"
@@ -161,20 +161,21 @@
                 android:layout_marginRight="4dp"
                 android:minWidth="70dp"
                 android:layout_weight="1"
-                android:focusable="true">
+                android:focusable="true"
+                tools:ignore="UseCompoundDrawables">
                 <ImageView
                     android:background="@drawable/rounded_menu_background"
                     android:padding="8dp"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/expenses"
-                    android:contentDescription="TODO" />
+                    android:contentDescription="@string/todo" />
                 <TextView
                     android:textSize="12sp"
                     android:textColor="@color/grey_charcoal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Expenses"/>
+                    android:text="@string/expenses"/>
             </LinearLayout>
 
             <LinearLayout
@@ -189,27 +190,29 @@
                 android:layout_marginRight="4dp"
                 android:minWidth="70dp"
                 android:layout_weight="1"
-                android:focusable="true">
+                android:focusable="true"
+                tools:ignore="UseCompoundDrawables">
                 <ImageView
                     android:background="@drawable/rounded_menu_background"
                     android:padding="8dp"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/leave_menu"
-                    android:contentDescription="TODO" />
+                    android:contentDescription="@string/todo" />
                 <TextView
                     android:textSize="12sp"
                     android:textColor="@color/grey_charcoal"
                     android:id="@+id/leaveBadge"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Leaves"/>
+                    android:text="@string/leaves"/>
             </LinearLayout>
+
 
             <LinearLayout
                 android:gravity="center"
                 android:orientation="vertical"
-                android:id="@+id/salary"
+                android:id="@+id/meetings"
                 android:padding="8dp"
                 android:clickable="true"
                 android:layout_width="0dp"
@@ -218,21 +221,21 @@
                 android:layout_marginRight="4dp"
                 android:minWidth="70dp"
                 android:layout_weight="1"
-                android:focusable="true">
-
+                android:focusable="true"
+                tools:ignore="UseCompoundDrawables">
                 <ImageView
                     android:background="@drawable/rounded_menu_background"
                     android:padding="8dp"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/salary"
-                    android:contentDescription="TODO" />
+                    android:src="@drawable/meeting_add"
+                    android:contentDescription="@string/todo" />
                 <TextView
                     android:textSize="12sp"
                     android:textColor="@color/grey_charcoal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Salary"/>
+                    android:text="@string/meetings"/>
             </LinearLayout>
 
 
@@ -242,7 +245,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:weightSum="3">
+            android:weightSum="3"
+            android:baselineAligned="false">
 
             <LinearLayout
                 android:gravity="center"
@@ -256,20 +260,21 @@
                 android:layout_marginRight="4dp"
                 android:minWidth="70dp"
                 android:layout_weight="1"
-                android:focusable="true">
+                android:focusable="true"
+                tools:ignore="UseCompoundDrawables">
                 <ImageView
                     android:background="@drawable/rounded_menu_background"
                     android:padding="8dp"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/team_list"
-                    android:contentDescription="TODO" />
+                    android:contentDescription="@string/todo" />
                 <TextView
                     android:textSize="12sp"
                     android:textColor="@color/grey_charcoal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="My Team"/>
+                    android:text="@string/my_team"/>
             </LinearLayout>
 
 
@@ -287,20 +292,21 @@
                 android:layout_marginRight="4dp"
                 android:minWidth="70dp"
                 android:layout_weight="1"
-                android:focusable="true">
+                android:focusable="true"
+                tools:ignore="UseCompoundDrawables">
                 <ImageView
                     android:background="@drawable/rounded_menu_background"
                     android:padding="8dp"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/report_mgmt"
-                    android:contentDescription="TODO" />
+                    android:contentDescription="@string/todo" />
                 <TextView
                     android:textSize="12sp"
                     android:textColor="@color/grey_charcoal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Reports"/>
+                    android:text="@string/reports"/>
             </LinearLayout>
 
 
@@ -316,38 +322,32 @@
                 android:layout_marginRight="4dp"
                 android:minWidth="70dp"
                 android:layout_weight="1"
-                android:focusable="true">
+                android:focusable="true"
+                tools:ignore="UseCompoundDrawables">
                 <ImageView
                     android:background="@drawable/rounded_menu_background"
                     android:padding="8dp"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/maintenance"
-                    android:contentDescription="TODO" />
+                    android:contentDescription="@string/todo" />
                 <TextView
                     android:textSize="12sp"
                     android:textColor="@color/grey_charcoal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Department"/>
+                    android:text="@string/department"/>
             </LinearLayout>
 
-
-
-
-
-
         </LinearLayout>
-
-
-
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:weightSum="3">
+            android:weightSum="3"
+            android:baselineAligned="false">
 
 
             <LinearLayout
@@ -362,21 +362,22 @@
                 android:layout_marginRight="4dp"
                 android:minWidth="70dp"
                 android:layout_weight="1"
-                android:focusable="true">
+                android:focusable="true"
+                tools:ignore="UseCompoundDrawables">
                 <ImageView
                     android:background="@drawable/rounded_menu_background"
                     android:padding="8dp"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/employee_menu"
-                    android:contentDescription="TODO" />
+                    android:contentDescription="@string/todo" />
                 <TextView
                     android:textSize="12sp"
                     android:textColor="@color/grey_charcoal"
                     android:id="@+id/textView6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Employees"/>
+                    android:text="@string/employees"/>
             </LinearLayout>
 
             <LinearLayout
@@ -391,23 +392,25 @@
                 android:layout_marginRight="4dp"
                 android:minWidth="70dp"
                 android:layout_weight="1"
-                android:focusable="true">
+                android:focusable="true"
+                tools:ignore="UseCompoundDrawables">
                 <ImageView
                     android:background="@drawable/rounded_menu_background"
                     android:padding="8dp"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/rating_client"
-                    android:contentDescription="TODO" />
+                    android:contentDescription="@string/todo" />
                 <TextView
                     android:textSize="12sp"
                     android:textColor="@color/grey_charcoal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Customer/Client"/>
+                    android:text="@string/customer_client"/>
             </LinearLayout>
 
             <LinearLayout
+                android:visibility="gone"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:id="@+id/orders"
@@ -419,20 +422,21 @@
                 android:layout_marginRight="4dp"
                 android:minWidth="70dp"
                 android:layout_weight="1"
-                android:focusable="true">
+                android:focusable="true"
+                tools:ignore="UseCompoundDrawables">
                 <ImageView
                     android:background="@drawable/rounded_menu_background"
                     android:padding="8dp"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/order"
-                    android:contentDescription="TODO" />
+                    android:contentDescription="@string/todo" />
                 <TextView
                     android:textSize="12sp"
                     android:textColor="@color/grey_charcoal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Orders"/>
+                    android:text="@string/orders"/>
             </LinearLayout>
 
 
@@ -443,7 +447,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:weightSum="3">
+            android:weightSum="3"
+            android:baselineAligned="false">
 
 
             <LinearLayout
@@ -451,7 +456,6 @@
                 android:orientation="vertical"
                 android:id="@+id/holiday"
                 android:padding="8dp"
-
                 android:clickable="true"
                 android:layout_width="0dp"
                 android:visibility="gone"
@@ -460,20 +464,21 @@
                 android:layout_marginRight="4dp"
                 android:minWidth="70dp"
                 android:layout_weight="1"
-                android:focusable="true">
+                android:focusable="true"
+                tools:ignore="UseCompoundDrawables">
                 <ImageView
                     android:background="@drawable/rounded_menu_background"
                     android:padding="8dp"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/event_day"
-                    android:contentDescription="TODO" />
+                    android:contentDescription="@string/todo" />
                 <TextView
                     android:textSize="12sp"
                     android:textColor="@color/grey_charcoal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Day Management"/>
+                    android:text="@string/day_management"/>
             </LinearLayout>
 
             <LinearLayout
@@ -488,56 +493,27 @@
                 android:layout_marginRight="4dp"
                 android:minWidth="70dp"
                 android:layout_weight="1"
-                android:focusable="true">
+                android:focusable="true"
+                tools:ignore="UseCompoundDrawables">
                 <ImageView
                     android:background="@drawable/rounded_menu_background"
                     android:padding="8dp"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/factory"
-                    android:contentDescription="TODO" />
+                    android:contentDescription="@string/todo" />
                 <TextView
                     android:textSize="12sp"
                     android:textColor="@color/grey_charcoal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Organization"/>
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:gravity="center"
-                android:orientation="vertical"
-                android:id="@+id/logout"
-                android:padding="8dp"
-                android:visibility="gone"
-                android:clickable="true"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:minWidth="70dp"
-                android:layout_weight="1"
-                android:focusable="true">
-                <ImageView
-                    android:background="@drawable/rounded_menu_background"
-                    android:padding="8dp"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/logout"
-                    android:contentDescription="TODO" />
-                <TextView
-                    android:textSize="12sp"
-                    android:textColor="@color/grey_charcoal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Logout"/>
+                    android:text="@string/organization"/>
             </LinearLayout>
 
             <LinearLayout
                 android:gravity="center"
                 android:orientation="vertical"
-                android:id="@+id/plan_detail"
+                android:id="@+id/salary"
                 android:padding="8dp"
                 android:clickable="true"
                 android:layout_width="0dp"
@@ -546,21 +522,27 @@
                 android:layout_marginRight="4dp"
                 android:minWidth="70dp"
                 android:layout_weight="1"
-                android:focusable="true">
+                android:focusable="true"
+                tools:ignore="UseCompoundDrawables">
+
                 <ImageView
                     android:background="@drawable/rounded_menu_background"
                     android:padding="8dp"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/ic_featured_play_list_black_24dp"
-                    android:contentDescription="TODO" />
+                    android:src="@drawable/salary"
+                    android:contentDescription="@string/todo" />
                 <TextView
                     android:textSize="12sp"
                     android:textColor="@color/grey_charcoal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Plan Features"/>
+                    android:text="@string/salary"/>
             </LinearLayout>
+
+
+
+
 
             <LinearLayout
                 android:gravity="center"
@@ -574,20 +556,21 @@
                 android:layout_marginRight="4dp"
                 android:minWidth="70dp"
                 android:layout_weight="1"
-                android:focusable="true">
+                android:focusable="true"
+                tools:ignore="UseCompoundDrawables">
                 <ImageView
                     android:background="@drawable/rounded_menu_background"
                     android:padding="8dp"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/leave_menu"
-                    android:contentDescription="TODO" />
+                    android:contentDescription="@string/todo" />
                 <TextView
                     android:textSize="12sp"
                     android:textColor="@color/grey_charcoal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Week Off"/>
+                    android:text="@string/week_off"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -597,7 +580,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:weightSum="3">
+            android:weightSum="3"
+            android:baselineAligned="false">
 
             <LinearLayout
                 android:gravity="center"
@@ -611,20 +595,21 @@
                 android:layout_marginRight="4dp"
                 android:minWidth="70dp"
                 android:layout_weight="1"
-                android:focusable="true">
+                android:focusable="true"
+                tools:ignore="UseCompoundDrawables">
                 <ImageView
                     android:background="@drawable/rounded_menu_background"
                     android:padding="8dp"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/change_password"
-                    android:contentDescription="TODO" />
+                    android:contentDescription="@string/todo" />
                 <TextView
                     android:textSize="12sp"
                     android:textColor="@color/grey_charcoal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Change Password"/>
+                    android:text="@string/change_password"/>
             </LinearLayout>
 
             <LinearLayout
@@ -639,20 +624,21 @@
                 android:layout_marginRight="4dp"
                 android:minWidth="70dp"
                 android:layout_weight="1"
-                android:focusable="true">
+                android:focusable="true"
+                tools:ignore="UseCompoundDrawables">
                 <ImageView
                     android:background="@drawable/rounded_menu_background"
                     android:padding="8dp"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/man_location"
-                    android:contentDescription="TODO" />
+                    android:contentDescription="@string/todo" />
                 <TextView
                     android:textSize="12sp"
                     android:textColor="@color/grey_charcoal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="FAQ"/>
+                    android:text="@string/faq"/>
             </LinearLayout>
 
 
@@ -668,20 +654,21 @@
                 android:layout_marginRight="4dp"
                 android:minWidth="70dp"
                 android:layout_weight="1"
-                android:focusable="true">
+                android:focusable="true"
+                tools:ignore="UseCompoundDrawables">
                 <ImageView
                     android:background="@drawable/rounded_menu_background"
                     android:padding="8dp"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/ic_calender"
-                    android:contentDescription="TODO" />
+                    android:contentDescription="@string/todo" />
                 <TextView
                     android:textSize="12sp"
                     android:textColor="@color/grey_charcoal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Calendar"/>
+                    android:text="@string/calendar"/>
             </LinearLayout>
 
 
@@ -695,7 +682,67 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:weightSum="3">
+            android:weightSum="3"
+            android:baselineAligned="false">
+
+            <LinearLayout
+                android:gravity="center"
+                android:orientation="vertical"
+                android:id="@+id/stocks"
+                android:padding="8dp"
+                android:clickable="true"
+                android:visibility="gone"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:minWidth="70dp"
+                android:layout_weight="1"
+                android:focusable="true"
+                tools:ignore="UseCompoundDrawables">
+                <ImageView
+                    android:background="@drawable/rounded_menu_background"
+                    android:padding="8dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/order"
+                    android:contentDescription="@string/todo" />
+                <TextView
+                    android:textSize="12sp"
+                    android:textColor="@color/grey_charcoal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Stocks"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:gravity="center"
+                android:orientation="vertical"
+                android:id="@+id/plan_detail"
+                android:padding="8dp"
+                android:clickable="true"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:minWidth="70dp"
+                android:layout_weight="1"
+                android:focusable="true"
+                tools:ignore="UseCompoundDrawables">
+                <ImageView
+                    android:background="@drawable/rounded_menu_background"
+                    android:padding="8dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_featured_play_list_black_24dp"
+                    android:contentDescription="@string/todo" />
+                <TextView
+                    android:textSize="12sp"
+                    android:textColor="@color/grey_charcoal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/plan_features"/>
+            </LinearLayout>
 
             <LinearLayout
                   android:gravity="center"
@@ -709,20 +756,21 @@
                   android:layout_marginRight="4dp"
                   android:minWidth="70dp"
                   android:layout_weight="1"
-                  android:focusable="true">
+                  android:focusable="true"
+                tools:ignore="UseCompoundDrawables">
                   <ImageView
                       android:background="@drawable/rounded_menu_background"
                       android:padding="8dp"
                       android:layout_width="40dp"
                       android:layout_height="40dp"
                       android:src="@drawable/settings_icon_noti"
-                      android:contentDescription="TODO" />
+                      android:contentDescription="@string/todo" />
                   <TextView
                       android:textSize="12sp"
                       android:textColor="@color/grey_charcoal"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
-                      android:text="Settings"/>
+                      android:text="@string/settings"/>
               </LinearLayout>
         </LinearLayout>
     </LinearLayout>

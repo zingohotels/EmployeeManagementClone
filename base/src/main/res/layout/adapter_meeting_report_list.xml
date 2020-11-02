@@ -5,67 +5,44 @@
     xmlns:aapt="http://schemas.android.com/aapt"
     android:orientation="vertical"
     android:id="@+id/attendanceItem"
+    android:layout_margin="5dp"
     android:background="@drawable/ripple"
     android:focusable="true"
     android:clickable="true"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
     <LinearLayout
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
+        android:weightSum="2"
         android:layout_marginRight="8dp">
-        <LinearLayout
-            android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp">
 
-            <LinearLayout
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:gravity="center_vertical"
+                android:id="@+id/title_task"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:gravity="center_vertical"
-                    android:id="@+id/title_task"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="8dp"
-                    android:text="Title"
-                    android:textColor="#000000"
-                    android:textSize="18dp"
-                    />
-
-                <LinearLayout
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    android:id="@+id/contact_employee"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:minWidth="70dp">
-                    <ImageView
-
-                        android:gravity="center"
-
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:src="@drawable/contact"
-                        style="@style/OvalBack"
-                        android:contentDescription="TODO" />
-                </LinearLayout>
-            </LinearLayout>
+                android:layout_weight="1"
+                android:layout_marginLeft="8dp"
+                android:text="Title"
+                android:textColor="#000000"
+                android:textSize="18dp"
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/task_update"
+                android:layout_marginTop="5dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -79,21 +56,6 @@
                     android:textSize="16dp"
                     />
 
-
-
-                <TextView
-                    android:id="@+id/time_task"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:drawableLeft="@drawable/build_year"
-                    android:drawablePadding="10dp"
-                    android:paddingLeft="20dp"
-                    android:gravity="center_vertical"
-                    android:text="Time"
-                    android:textColor="@color/text_grey"
-                    android:textSize="16dp" />
-
                 <TextView
                     android:id="@+id/dead_line_task"
                     android:layout_width="match_parent"
@@ -104,19 +66,9 @@
                     android:paddingLeft="20dp"
                     android:gravity="center_vertical"
                     android:text="DeadLine"
+                    android:visibility="gone"
                     android:textColor="#FF0000"
                     android:textSize="16dp" />
-
-                <TextView
-                    android:gravity="center_vertical"
-                    android:id="@+id/created_by"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:text="Created by"
-                    android:textColor="@color/text_grey"
-                    android:textSize="16dp"
-                    />
 
                 <TextView
                     android:id="@+id/task_location"
@@ -131,53 +83,151 @@
                     android:textColor="@color/text_grey"
                     android:textSize="16dp" />
 
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <ImageView
-
-                        android:gravity="center"
-                        android:layout_weight="1"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:id="@+id/update"
-                        android:src="@drawable/edit_list"
-                        android:contentDescription="TODO" />
-                    <ImageView
-
-                        android:gravity="center"
-                        android:id="@+id/map"
-                        android:layout_weight="1"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:src="@drawable/placeholder"
-                        android:contentDescription="TODO" />
-
-                    <TextView
-                        android:textSize="14dp"
-                        android:textColor="@color/white"
-                        android:gravity="center"
-                        android:layout_weight="1"
-                        android:id="@+id/status"
-                        android:background="#FF0000"
-                        android:padding="8dp"
-                        android:layout_margin="5dp"
-                        android:layout_gravity="right"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:text="Open"/>
-                </LinearLayout>
-
-
-
             </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:layout_gravity="right"
+                android:id="@+id/contact_employee"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:minWidth="70dp">
+                <ImageView
+
+                    android:gravity="center"
+
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/contact"
+                    style="@style/OvalBack"
+                    android:contentDescription="TODO" />
+            </LinearLayout>
+
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:paddingLeft="20dp"
+                android:gravity="center_vertical"
+                android:text="Started at"
+                android:textColor="@color/text_grey"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/time_task"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20dp"
+                android:layout_margin="3dp"
+                android:gravity="center_vertical"
+                android:text="Time"
+                android:textColor="@color/text_grey"
+                android:textSize="14dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20dp"
+                android:layout_margin="3dp"
+                android:gravity="center_vertical"
+                android:text="Ended at"
+                android:textColor="@color/text_grey"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/time_task_end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20dp"
+                android:layout_margin="3dp"
+                android:gravity="center_vertical"
+                android:text="Time"
+                android:textColor="@color/text_grey"
+                android:textSize="14dp" />
+
         </LinearLayout>
     </LinearLayout>
-    <View
-        android:background="@color/highLight"
+
+    <TextView
+        android:gravity="center_vertical"
+        android:id="@+id/created_by"
         android:layout_width="match_parent"
-        android:layout_height="1dp"/>
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:text="By"
+        android:textColor="@color/text_grey"
+        android:textSize="16dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+
+            android:gravity="center"
+            android:layout_weight="1"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:id="@+id/meeting_images"
+            android:src="@drawable/attach_image"
+            android:contentDescription="@string/todo" />
+
+        <ImageView
+
+            android:gravity="center"
+            android:layout_weight="1"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:id="@+id/update"
+            android:src="@drawable/edit_list"
+            android:contentDescription="@string/todo" />
+
+
+        <ImageView
+
+            android:gravity="center"
+            android:id="@+id/map"
+            android:layout_weight="1"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/placeholder"
+            android:contentDescription="@string/todo" />
+
+        <TextView
+            android:textSize="14dp"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:id="@+id/status"
+            android:background="#FF0000"
+            android:padding="8dp"
+            android:layout_margin="5dp"
+            android:layout_gravity="right"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Open"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorPrimary"
+        android:layout_marginBottom="10dp"
+        />
+
 </LinearLayout>

@@ -3,7 +3,7 @@ package app.zingo.employeemanagements.Custom;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.support.annotation.IntRange;
+import androidx.annotation.IntRange;
 import android.util.Log;
 
 import com.google.zxing.BarcodeFormat;

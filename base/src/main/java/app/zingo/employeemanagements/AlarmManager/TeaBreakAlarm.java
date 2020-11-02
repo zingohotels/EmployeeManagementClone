@@ -6,14 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
-import static android.support.v4.content.WakefulBroadcastReceiver.startWakefulService;
+import static androidx.legacy.content.WakefulBroadcastReceiver.startWakefulService;
 
 
 public class TeaBreakAlarm extends BroadcastReceiver {
-
     private static final String TAG = "LunchBreakAlarm";
     Intent activityIntent = null;
-
 
     @Override
     public void onReceive(Context context, Intent intent) {

@@ -7,7 +7,7 @@
     android:layout_height="fill_parent">
 
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:background="#FFFFFFFF"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -47,7 +47,7 @@
                 />
 
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/nameInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -57,19 +57,19 @@
                 android:hint="Organization Name"
 
                 >
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/name"
                     android:maxLength="50"
                     android:inputType="text"
                     style="@style/fp_editText" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/activity_large_margin"
@@ -99,7 +99,7 @@
 
             </LinearLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/check_time_lay"
                 android:layout_width="200dp"
                 android:layout_weight="2"
@@ -110,12 +110,12 @@
                 android:layout_marginRight="@dimen/activity_large_margin"
                 android:hint="Last Check-in Time"
                 >
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/check_time"
                     android:focusableInTouchMode="false"
                     android:inputType="time"
                     style="@style/fp_editText" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
 
             <LinearLayout
@@ -123,7 +123,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/buildInputLayout"
                     android:layout_width="match_parent"
                     android:layout_weight="2"
@@ -133,14 +133,14 @@
                     android:layout_marginRight="@dimen/activity_large_margin"
                     android:hint="Build Year"
                     >
-                    <android.support.design.widget.TextInputEditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/build"
                         android:maxLength="4"
                         android:inputType="number"
                         style="@style/fp_editText" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/websitesInputLayout"
                     android:layout_width="match_parent"
                     android:layout_weight="1"
@@ -150,16 +150,16 @@
                     android:hint="Website"
 
                     >
-                    <android.support.design.widget.TextInputEditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/website"
                         android:maxLength="50"
                         android:inputType="textUri"
                         style="@style/fp_editText" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/location_limit_lay"
                 android:layout_width="200dp"
                 android:layout_height="0dp"
@@ -170,11 +170,11 @@
                 android:layout_weight="2"
                 android:hint="Location Access Limit">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/location_limit"
                     style="@style/fp_editText"
                     android:inputType="number" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -238,7 +238,7 @@
 
             </RelativeLayout>
 
-            <android.support.v7.widget.AppCompatButton
+            <androidx.appcompat.widget.AppCompatButton
                 android:textSize="@dimen/regularFont"
                 android:textColor="@color/white"
                 android:id="@+id/updateCompany"
@@ -255,6 +255,6 @@
 
 
         </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </RelativeLayout>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,7 +7,7 @@
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
     xmlns:card-view="http://schemas.android.com/tools"
-    tools:context="app.zingo.employeemanagements.UI.SupportScreen">
+    tools:context="app.zingo.employeemanagements.ui.SupportScreen">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -57,7 +57,7 @@
 
 
 
-                <android.support.v4.view.ViewPager
+                <androidx.viewpager.widget.ViewPager
                     android:id="@+id/pager_image_support"
                     android:layout_alignParentTop="true"
                     android:layout_width="match_parent"
@@ -84,4 +84,4 @@
 
     </RelativeLayout>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

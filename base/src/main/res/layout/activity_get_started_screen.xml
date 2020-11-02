@@ -11,7 +11,7 @@
 
 
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -20,7 +20,7 @@
         android:background="#FFFFFF"
         >
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@id/toolbar"
             android:background="@drawable/shape_bottom_stroke_grey_light"
             android:fitsSystemWindows="true"
@@ -48,11 +48,11 @@
 
             </LinearLayout>
 
-        </android.support.v7.widget.Toolbar>
+        </androidx.appcompat.widget.Toolbar>
 
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:background="#FFFFFFFF"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -67,7 +67,7 @@
             android:orientation="vertical">
 
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/nameInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -77,12 +77,12 @@
                 android:hint="Organization Name"
 
                 >
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/name"
                     android:maxLength="50"
                     android:inputType="text"
                     style="@style/fp_editText" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -97,7 +97,7 @@
                     android:layout_marginRight="@dimen/activity_large_margin"
                     android:orientation="horizontal">
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="0dp"
                         android:layout_height="30dp"
                         android:layout_gravity="right"
@@ -143,7 +143,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/activity_large_margin"
@@ -185,7 +185,7 @@
                     android:orientation="horizontal"
                     >
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
@@ -235,7 +235,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/cityInputLayout"
                     android:layout_width="match_parent"
                     android:layout_weight="1"
@@ -245,15 +245,15 @@
                     android:layout_marginRight="@dimen/activity_large_margin"
                     android:hint="City"
                     >
-                    <android.support.design.widget.TextInputEditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/city"
                         android:maxLength="50"
                         android:focusableInTouchMode="false"
                         android:inputType="text"
                         style="@style/fp_editText" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/stateInputLayout"
                     android:layout_width="match_parent"
                     android:layout_weight="1"
@@ -264,12 +264,12 @@
                     android:hint="State"
 
                     >
-                    <android.support.design.widget.TextInputEditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/state"
                         android:maxLength="50"
                         android:inputType="text"
                         style="@style/fp_editText" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
@@ -278,7 +278,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/buildInputLayout"
                     android:layout_width="match_parent"
                     android:layout_weight="1"
@@ -288,14 +288,14 @@
                     android:layout_marginRight="@dimen/activity_large_margin"
                     android:hint="Build Year"
                     >
-                    <android.support.design.widget.TextInputEditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/build"
                         android:maxLength="4"
                         android:inputType="number"
                         style="@style/fp_editText" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/employeeInputLayout"
                     android:layout_width="match_parent"
                     android:layout_weight="1"
@@ -306,16 +306,16 @@
                     android:hint="No of Employees"
 
                     >
-                    <android.support.design.widget.TextInputEditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/employee_count"
                         android:maxLength="3"
                         android:inputType="number"
                         style="@style/fp_editText" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/websiteInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -325,12 +325,12 @@
                 android:hint="Website"
 
                 >
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/website"
                     android:maxLength="50"
                     android:inputType="textUri"
                     style="@style/fp_editText" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -494,7 +494,7 @@
             </LinearLayout>
 
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/plans"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -502,12 +502,12 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
 
-                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:focusable="true" />
 
             </LinearLayout>
 
-            <android.support.v7.widget.AppCompatButton
+            <androidx.appcompat.widget.AppCompatButton
                 android:textSize="@dimen/regularFont"
                 android:textColor="@color/white"
                 android:id="@+id/createCompany"
@@ -524,6 +524,6 @@
 
 
         </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </RelativeLayout>

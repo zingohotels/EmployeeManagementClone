@@ -10,7 +10,7 @@
     >
 
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:background="#FFFFFFFF"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -86,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/fromInputLayout"
                     android:layout_width="match_parent"
                     android:layout_weight="1"
@@ -96,15 +96,15 @@
                     android:layout_marginRight="@dimen/activity_large_margin"
                     android:hint="From"
                     >
-                    <android.support.design.widget.TextInputEditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/from_date"
                         android:maxLength="50"
                         android:focusableInTouchMode="false"
                         android:inputType="text"
                         style="@style/fp_editText" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/toInputLayout"
                     android:layout_width="match_parent"
                     android:layout_weight="1"
@@ -115,13 +115,13 @@
                     android:hint="To"
 
                     >
-                    <android.support.design.widget.TextInputEditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/to_date"
                         android:maxLength="50"
                         android:focusableInTouchMode="false"
                         android:inputType="text"
                         style="@style/fp_editText" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
@@ -131,7 +131,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/activity_large_margin"
@@ -161,7 +161,7 @@
             </LinearLayout>
 
 
-            <android.support.v7.widget.AppCompatButton
+            <androidx.appcompat.widget.AppCompatButton
                 android:textSize="@dimen/regularFont"
                 android:textColor="@color/white"
                 android:id="@+id/apply_leave"
@@ -179,6 +179,6 @@
 
 
         </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </RelativeLayout>

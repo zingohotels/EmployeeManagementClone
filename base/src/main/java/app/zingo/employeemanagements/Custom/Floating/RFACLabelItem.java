@@ -29,7 +29,7 @@ public class RFACLabelItem<T> implements Serializable {
         return resId;
     }
 
-    public RFACLabelItem<T> setResId(int resId) {
+    public RFACLabelItem <T> setResId( int resId) {
         this.resId = resId;
         return this;
     }
@@ -38,7 +38,7 @@ public class RFACLabelItem<T> implements Serializable {
         return label;
     }
 
-    public RFACLabelItem<T> setLabel(String label) {
+    public RFACLabelItem <T> setLabel( String label) {
         this.label = label;
         return this;
     }
@@ -47,7 +47,7 @@ public class RFACLabelItem<T> implements Serializable {
         return wrapper;
     }
 
-    public RFACLabelItem<T> setWrapper(T wrapper) {
+    public RFACLabelItem <T> setWrapper( T wrapper) {
         this.wrapper = wrapper;
         return this;
     }
@@ -56,7 +56,7 @@ public class RFACLabelItem<T> implements Serializable {
         return drawable;
     }
 
-    public RFACLabelItem<T> setDrawable(Drawable drawable) {
+    public RFACLabelItem <T> setDrawable( Drawable drawable) {
         this.drawable = drawable;
         return this;
     }
@@ -65,7 +65,7 @@ public class RFACLabelItem<T> implements Serializable {
         return iconNormalColor;
     }
 
-    public RFACLabelItem<T> setIconNormalColor(Integer iconNormalColor) {
+    public RFACLabelItem <T> setIconNormalColor( Integer iconNormalColor) {
         this.iconNormalColor = iconNormalColor;
         return this;
     }
@@ -74,7 +74,7 @@ public class RFACLabelItem<T> implements Serializable {
         return iconPressedColor;
     }
 
-    public RFACLabelItem<T> setIconPressedColor(Integer iconPressedColor) {
+    public RFACLabelItem <T> setIconPressedColor( Integer iconPressedColor) {
         this.iconPressedColor = iconPressedColor;
         return this;
     }
@@ -83,7 +83,7 @@ public class RFACLabelItem<T> implements Serializable {
         return labelTextBold;
     }
 
-    public RFACLabelItem<T> setLabelTextBold(boolean labelTextBold) {
+    public RFACLabelItem <T> setLabelTextBold( boolean labelTextBold) {
         this.labelTextBold = labelTextBold;
         return this;
     }
@@ -93,7 +93,7 @@ public class RFACLabelItem<T> implements Serializable {
         return labelBackgroundDrawable;
     }
 
-    public RFACLabelItem<T> setLabelBackgroundDrawable(Drawable labelBackgroundDrawable) {
+    public RFACLabelItem <T> setLabelBackgroundDrawable( Drawable labelBackgroundDrawable) {
         this.labelBackgroundDrawable = labelBackgroundDrawable;
         return this;
     }
@@ -102,7 +102,7 @@ public class RFACLabelItem<T> implements Serializable {
         return labelColor;
     }
 
-    public RFACLabelItem<T> setLabelColor(Integer labelColor) {
+    public RFACLabelItem <T> setLabelColor( Integer labelColor) {
         this.labelColor = labelColor;
         return this;
     }
@@ -111,7 +111,7 @@ public class RFACLabelItem<T> implements Serializable {
         return labelSizeSp;
     }
 
-    public RFACLabelItem<T> setLabelSizeSp(Integer labelSizeSp) {
+    public RFACLabelItem <T> setLabelSizeSp( Integer labelSizeSp) {
         this.labelSizeSp = labelSizeSp;
         return this;
     }

@@ -47,10 +47,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:weightSum="3">
+
             <LinearLayout
                 android:gravity="center"
                 android:orientation="vertical"
-                android:id="@+id/department"
+                android:id="@+id/customer_creation"
                 android:padding="8dp"
                 android:clickable="true"
                 android:layout_width="0dp"
@@ -65,15 +66,16 @@
                     android:padding="8dp"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/employee_menu"
+                    android:src="@drawable/rating_client"
                     android:contentDescription="TODO" />
                 <TextView
                     android:textSize="12sp"
                     android:textColor="@color/grey_charcoal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Organization"/>
+                    android:text="Customer/Client"/>
             </LinearLayout>
+
             <LinearLayout
                 android:gravity="center"
                 android:orientation="vertical"
@@ -87,13 +89,14 @@
                 android:minWidth="70dp"
                 android:layout_weight="1"
                 android:focusable="true">
+
                 <ImageView
+                    android:layout_width="34dp"
+                    android:layout_height="36dp"
                     android:background="@drawable/rounded_menu_background"
+                    android:contentDescription="TODO"
                     android:padding="8dp"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/attendance_menu"
-                    android:contentDescription="TODO" />
+                    android:src="@drawable/attendance_menu" />
                 <TextView
                     android:textSize="12sp"
                     android:textColor="@color/grey_charcoal"
@@ -289,6 +292,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:visibility="gone"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:id="@+id/orders"
@@ -411,11 +415,10 @@
                         android:text="Change Password"/>
                 </LinearLayout>
 
-
                 <LinearLayout
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:id="@+id/customer_creation"
+                    android:id="@+id/department"
                     android:padding="8dp"
                     android:clickable="true"
                     android:layout_width="0dp"
@@ -430,15 +433,17 @@
                         android:padding="8dp"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:src="@drawable/rating_client"
+                        android:src="@drawable/employee_menu"
                         android:contentDescription="TODO" />
                     <TextView
                         android:textSize="12sp"
                         android:textColor="@color/grey_charcoal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Customer/Client"/>
+                        android:text="Organization"/>
                 </LinearLayout>
+
+
 
 
 

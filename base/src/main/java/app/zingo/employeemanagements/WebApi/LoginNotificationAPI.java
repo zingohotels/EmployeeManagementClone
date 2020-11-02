@@ -2,7 +2,7 @@ package app.zingo.employeemanagements.WebApi;
 
 import java.util.ArrayList;
 
-import app.zingo.employeemanagements.Model.LoginDetailsNotificationManagers;
+import app.zingo.employeemanagements.model.LoginDetailsNotificationManagers;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -16,14 +16,14 @@ import retrofit2.http.Path;
 public interface LoginNotificationAPI {
 
     @POST("LoginDetailsNotificationManagers")
-    Call<LoginDetailsNotificationManagers> saveLoginNotification(@Body LoginDetailsNotificationManagers details);
+    Call<LoginDetailsNotificationManagers> saveLoginNotification ( @Body LoginDetailsNotificationManagers details );
 
     @GET("LoginDetailsNotificationManager/GetLoginDetailsNotificationByManagerId/{ManagerId}")
-    Call<ArrayList<LoginDetailsNotificationManagers>> getNotificationByManagerId(@Path("ManagerId") int ManagerId);
+    Call<ArrayList<LoginDetailsNotificationManagers>> getNotificationByManagerId ( @Path ("ManagerId") int ManagerId );
 
     @GET("LoginDetailsNotificationManager/GetLoginDetailsNotificationByEmployeeId/{EmployeeId}")
-    Call<ArrayList<LoginDetailsNotificationManagers>> getNotificationByEmployeeId(@Path("EmployeeId") int EmployeeId);
+    Call<ArrayList<LoginDetailsNotificationManagers>> getNotificationByEmployeeId ( @Path ("EmployeeId") int EmployeeId );
 
     @POST("LoginDetailsNotificationManagers/SendLoginDetailsNotification")
-    Call<ArrayList<String>> sendLoginNotification(@Body LoginDetailsNotificationManagers details);
+    Call<ArrayList<String>> sendLoginNotification ( @Body LoginDetailsNotificationManagers details );
 }

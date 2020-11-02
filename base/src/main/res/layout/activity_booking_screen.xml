@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card-view="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:focusable="false"
+    android:focusableInTouchMode="true"
+    xmlns:card_view="http://schemas.android.com/tools"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/pay"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/colorPrimaryDark"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:id="@+id/back"
+                android:src="@drawable/ic_back_screen"
+                />
+
+            <app.zingo.employeemanagements.Custom.MyTextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textSize="20dp"
+                android:textColor="@color/white"
+                android:gravity="center_vertical"
+                android:paddingRight="35dp"
+                android:text="Payment Screen"/>
+
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="#ffffff">
+
+                <LinearLayout
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+
+                        android:src="@drawable/ems"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_alignParentBottom="true">
+                        <TextView
+                            android:textSize="20sp"
+                            android:textColor="@color/colorPrimary"
+                            android:layout_gravity="top|bottom|center_vertical|fill_vertical|center|fill"
+                            android:id="@+id/txt_hotel_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Krony"
+                            android:visibility="gone"
+                            android:textStyle="bold"
+                            android:singleLine="true"
+                            android:includeFontPadding="false"
+                            android:fontFamily="sans-serif" />
+
+                        <RatingBar
+                            android:id="@+id/hotel_ratingbar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:isIndicator="true"
+                            android:visibility="gone"
+                            style="?android:attr/ratingBarStyleSmall"
+                            />
+                    </LinearLayout>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Descriptions"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                android:textColor="#000000"
+                                android:layout_marginBottom="10dp"
+                                android:fontFamily="sans-serif"/>
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_marginTop="10dp">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Total Item "
+                                    android:textSize="15sp"
+                                    android:textColor="#000000"
+                                    android:layout_weight="1"/>
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text=""
+                                    android:textSize="15sp"
+                                    android:gravity="end"
+                                    android:textColor="#000000"
+                                    android:id="@+id/pay_total_item_count"
+                                    android:layout_weight="1"/>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_marginTop="10dp">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Total Amount"
+                                    android:textSize="15sp"
+                                    android:textColor="#000000"
+                                    android:layout_weight="1"/>
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text=""
+                                        android:textSize="15sp"
+                                        android:gravity="end"
+                                        android:id="@+id/pay_amount"
+                                        android:layout_weight="1"/>
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:layout_marginTop="10dp"
+                                android:background="@color/colorPrimary"
+                                android:layout_marginBottom="10dp"
+                                />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_marginTop="10dp">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text=" "
+                                    android:textColor="#000000"
+                                    android:textSize="16sp"
+                                    android:layout_weight="1"/>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:background="#DCDFDE"
+                        android:orientation="vertical">
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="20dp"
+                            app:cardCornerRadius="5dp"
+                            card_view:cardElevation="9dp"
+                            android:background="@drawable/round_border">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:paddingBottom="40dp">
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="0dp">
+
+                                    <TextView
+                                        android:id="@+id/info"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:background="#00000000"
+                                        android:gravity="center"
+                                        android:textStyle="bold"
+                                        android:textColor="#000000"
+                                        android:text="Personal Information"
+                                        android:padding="15dp"
+                                        android:textSize="13dp"/>
+
+                                </LinearLayout>
+
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginRight="10dp"
+                                    android:background="@drawable/round_border">
+
+                                    <EditText
+                                        android:id="@+id/fullname"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:background="#00000000"
+                                        android:hint="Full Name"
+                                        android:padding="10dp"
+                                        android:textSize="16dp" />
+
+                                </LinearLayout>
+
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginRight="10dp"
+                                    android:background="@drawable/round_border">
+
+                                    <EditText
+                                        android:id="@+id/email"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:background="#00000000"
+                                        android:hint="Email"
+                                        android:inputType="textEmailAddress"
+                                        android:padding="15dp"
+                                        android:textSize="16dp" />
+
+                                </LinearLayout>
+
+
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginRight="10dp"
+                                    android:background="@drawable/round_border">
+
+                                    <EditText
+                                        android:id="@+id/phone"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:background="#00000000"
+                                        android:inputType="number"
+                                        android:hint="Phone Number"
+                                        android:padding="15dp"
+                                        android:textSize="13dp" />
+
+                                </LinearLayout>
+
+                                <EditText
+                                    android:id="@+id/address"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginRight="10dp"
+                                    android:inputType="textMultiLine"
+                                    android:hint="Address"
+                                    android:layout_gravity="start"
+                                    android:gravity="start"
+                                    android:lines="5"
+                                    android:maxLines="5"
+                                    android:padding="15dp"
+                                    android:background="@drawable/round_border"
+                                    android:textSize="16dp" />
+
+
+
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+                    </LinearLayout>
+
+
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+
+        </ScrollView>
+
+    </LinearLayout>
+
+
+
+    <TextView
+        android:id="@+id/pay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:text="Order Now  &amp; Pay Later"
+        android:textSize="20dp"
+        android:textColor="#fff"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:padding="12dp"
+        android:layout_alignParentBottom="true"
+        />
+
+</RelativeLayout>

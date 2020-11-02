@@ -21,7 +21,7 @@ public class EncryptionHelper {
 
     public static EncryptionHelper getInstance() {
         if (encryptionHelper == null) {
-            encryptionHelper = new EncryptionHelper();
+            encryptionHelper = new EncryptionHelper ();
         }
         return encryptionHelper;
     }
@@ -37,7 +37,7 @@ public class EncryptionHelper {
         return Base64.encodeToString(encryptionKey.getBytes(), Base64.DEFAULT);
     }
 
-    public EncryptionHelper encryptionString(String encryptionKey) {
+    public EncryptionHelper encryptionString( String encryptionKey) {
         this.encryptionKey = encryptionKey;
         return encryptionHelper;
     }

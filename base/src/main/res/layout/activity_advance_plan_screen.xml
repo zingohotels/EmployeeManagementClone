@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="app.zingo.employeemanagements.UI.AdvancePlanScreen">
+    tools:context="app.zingo.employeemanagements.ui.AdvancePlanScreen">
 
     <LinearLayout
         android:orientation="vertical"

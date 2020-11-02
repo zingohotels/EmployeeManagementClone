@@ -1,6 +1,6 @@
 package app.zingo.employeemanagements.WebApi;
 
-import app.zingo.employeemanagements.Model.Places;
+import app.zingo.employeemanagements.model.Places;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -12,5 +12,5 @@ import retrofit2.http.Query;
 public interface PlaceAPI {
 
     @GET("https://maps.googleapis.com/maps/api/geocode/json")//?lat={lati}&lon={longi}&units=metric"
-    Call<Places> getPlaces(@Query("latlng") String lati, @Query("key") String key);
+    Call<Places> getPlaces ( @Query ("latlng") String lati , @Query ("key") String key );
 }

@@ -2,10 +2,10 @@ package app.zingo.employeemanagements.Custom.CustomCalendar;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -44,44 +44,44 @@ public class CustomMonthPicker {
         }
     }
 
-    public CustomMonthPicker setPositiveButton(DateMonthDialogListener dateMonthDialogListener) {
+    public CustomMonthPicker setPositiveButton( DateMonthDialogListener dateMonthDialogListener) {
         this.dateMonthDialogListener = dateMonthDialogListener;
         mPositiveButton.setOnClickListener(builder.positiveButtonClick());
         return this;
     }
 
-    public CustomMonthPicker setNegativeButton(OnCancelMonthDialogListener onCancelMonthDialogListener) {
+    public CustomMonthPicker setNegativeButton( OnCancelMonthDialogListener onCancelMonthDialogListener) {
         this.onCancelMonthDialogListener = onCancelMonthDialogListener;
         mNegativeButton.setOnClickListener(builder.negativeButtonClick());
         return this;
     }
 
-    public CustomMonthPicker setPositiveText(String text) {
+    public CustomMonthPicker setPositiveText( String text) {
         mPositiveButton.setText(text);
         return this;
     }
 
-    public CustomMonthPicker setNegativeText(String text) {
+    public CustomMonthPicker setNegativeText( String text) {
         mNegativeButton.setText(text);
         return this;
     }
 
-    public CustomMonthPicker setLocale(Locale locale) {
+    public CustomMonthPicker setLocale( Locale locale) {
         builder.setLocale(locale);
         return this;
     }
 
-    public CustomMonthPicker setSelectedMonth(int index) {
+    public CustomMonthPicker setSelectedMonth( int index) {
         builder.setSelectedMonth(index);
         return this;
     }
 
-    public CustomMonthPicker setSelectedYear(int year) {
+    public CustomMonthPicker setSelectedYear( int year) {
         builder.setSelectedYear(year);
         return this;
     }
 
-    public CustomMonthPicker setColorTheme(int color) {
+    public CustomMonthPicker setColorTheme( int color) {
         builder.setColorTheme(color);
         return this;
     }
@@ -126,7 +126,7 @@ public class CustomMonthPicker {
             year = cal.get(Calendar.YEAR);
 
             listener = this;
-            monthAdapter = new MonthAdapter(context, this,year);
+            monthAdapter = new MonthAdapter (context, this,year);
             recyclerView = contentView.findViewById(R.id.recycler_view);
             recyclerView.setLayoutManager(new GridLayoutManager(context, 4));
             recyclerView.setHasFixedSize(true);
@@ -156,8 +156,8 @@ public class CustomMonthPicker {
             linearToolbar.setBackgroundResource(color);
 
             monthAdapter.setBackgroundMonth(color);
-            mPositiveButton.setTextColor(ContextCompat.getColor(context, color));
-            mNegativeButton.setTextColor(ContextCompat.getColor(context, color));
+            mPositiveButton.setTextColor( ContextCompat.getColor(context, color));
+            mNegativeButton.setTextColor( ContextCompat.getColor(context, color));
         }
 
         public void build() {
@@ -179,7 +179,7 @@ public class CustomMonthPicker {
                     mYear.setText(year + "");
                     mTitleView.setText(monthAdapter.getShortMonth() + " " + year);
 
-                    monthAdapter = new MonthAdapter(context, listener,year);
+                    monthAdapter = new MonthAdapter (context, listener,year);
                     recyclerView = contentView.findViewById(R.id.recycler_view);
                     recyclerView.setLayoutManager(new GridLayoutManager(context, 4));
                     recyclerView.setHasFixedSize(true);
@@ -196,7 +196,7 @@ public class CustomMonthPicker {
                     mYear.setText(year + "");
                     mTitleView.setText(monthAdapter.getShortMonth() + " " + year);
 
-                    monthAdapter = new MonthAdapter(context, listener,year);
+                    monthAdapter = new MonthAdapter (context, listener,year);
                     recyclerView = contentView.findViewById(R.id.recycler_view);
                     recyclerView.setLayoutManager(new GridLayoutManager(context, 4));
                     recyclerView.setHasFixedSize(true);

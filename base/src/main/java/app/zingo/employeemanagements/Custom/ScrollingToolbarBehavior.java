@@ -1,9 +1,9 @@
 package app.zingo.employeemanagements.Custom;
 
 import android.content.Context;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.appbar.AppBarLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.appcompat.widget.Toolbar;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -11,19 +11,19 @@ import android.view.View;
  * Created by ZingoHotels Tech on 08-01-2019.
  */
 
-public class ScrollingToolbarBehavior  extends CoordinatorLayout.Behavior<Toolbar> {
+public class ScrollingToolbarBehavior  extends CoordinatorLayout.Behavior< Toolbar > {
 
     public ScrollingToolbarBehavior(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
     @Override
-    public boolean layoutDependsOn(CoordinatorLayout parent, Toolbar child, View dependency) {
+    public boolean layoutDependsOn( CoordinatorLayout parent, Toolbar child, View dependency) {
         return dependency instanceof AppBarLayout;
     }
 
     @Override
-    public boolean onDependentViewChanged(CoordinatorLayout parent, Toolbar child, View dependency) {
+    public boolean onDependentViewChanged( CoordinatorLayout parent, Toolbar child, View dependency) {
         if (dependency instanceof AppBarLayout) {
 
             int distanceToScroll = child.getHeight();

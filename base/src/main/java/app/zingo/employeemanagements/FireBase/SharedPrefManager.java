@@ -18,9 +18,9 @@ public class SharedPrefManager {
         mCtx = context;
     }
 
-    public static synchronized SharedPrefManager getInstance(Context context) {
+    public static synchronized SharedPrefManager getInstance( Context context) {
         if (mInstance == null) {
-            mInstance = new SharedPrefManager(context);
+            mInstance = new SharedPrefManager (context);
         }
         return mInstance;
     }

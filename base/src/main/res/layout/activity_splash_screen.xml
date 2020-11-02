@@ -7,14 +7,13 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:background="@color/colorPrimary"
-    tools:context=".UI.Landing.SplashScreen">
+    tools:context="app.zingo.employeemanagements.ui.landing.SplashScreen">
 
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:text="Ver: 1.0"
             android:textColor="@color/white"
             android:layout_alignParentEnd="true"
             android:layout_margin="10dp"
@@ -29,12 +28,10 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:layout_marginBottom="12dp"
-            android:text="Krony"
-
+            android:text="@string/krony"
             android:textColor="@color/white"
-            android:textSize="50dp"
+            android:textSize="50sp"
             android:layout_centerInParent="true"
-
             android:textStyle="normal"
             app:fontName="Mistral">
 
@@ -43,14 +40,13 @@
 
         <app.zingo.employeemanagements.Custom.CustomFontTextView
             android:id="@+id/app_name"
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
             android:layout_margin="5dp"
             android:layout_below="@+id/employee_splash"
-            android:text="Employee Management App"
+            android:text="@string/employee_management_app"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="normal"

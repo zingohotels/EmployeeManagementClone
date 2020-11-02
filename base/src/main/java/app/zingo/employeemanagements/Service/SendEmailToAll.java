@@ -14,16 +14,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import app.zingo.employeemanagements.Model.EmailData;
-import app.zingo.employeemanagements.Model.Employee;
-import app.zingo.employeemanagements.Model.LiveTracking;
-import app.zingo.employeemanagements.Model.LoginDetails;
-import app.zingo.employeemanagements.Model.Meetings;
-import app.zingo.employeemanagements.Model.Organization;
-import app.zingo.employeemanagements.Model.ReportDataEmployee;
-import app.zingo.employeemanagements.Model.ReportDataModel;
-import app.zingo.employeemanagements.Utils.ThreadExecuter;
-import app.zingo.employeemanagements.Utils.Util;
+import app.zingo.employeemanagements.model.EmailData;
+import app.zingo.employeemanagements.model.Employee;
+import app.zingo.employeemanagements.model.LiveTracking;
+import app.zingo.employeemanagements.model.LoginDetails;
+import app.zingo.employeemanagements.model.Meetings;
+import app.zingo.employeemanagements.model.Organization;
+import app.zingo.employeemanagements.model.ReportDataEmployee;
+import app.zingo.employeemanagements.model.ReportDataModel;
+import app.zingo.employeemanagements.utils.ThreadExecuter;
+import app.zingo.employeemanagements.utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
 import app.zingo.employeemanagements.WebApi.OrganizationApi;
 import app.zingo.employeemanagements.WebApi.SendEmailAPI;
@@ -34,7 +34,7 @@ import retrofit2.Response;
 public class SendEmailToAll extends Service {
 
     ReportDataModel reportDataModel;
-    ArrayList<ReportDataEmployee> reportDataEmployees;
+    ArrayList< ReportDataEmployee > reportDataEmployees;
 
     @Override
     public IBinder onBind(Intent arg0) {
@@ -88,28 +88,28 @@ public class SendEmailToAll extends Service {
 
     public void getCompany() {
 
-        new ThreadExecuter().execute(new Runnable() {
+        new ThreadExecuter ().execute( new Runnable() {
             @Override
             public void run() {
 
-                final OrganizationApi subCategoryAPI = Util.getClient().create(OrganizationApi.class);
-                Call<ArrayList<Organization>> getProf = subCategoryAPI.getOrganization();
+                final OrganizationApi subCategoryAPI = Util.getClient().create( OrganizationApi.class);
+                Call<ArrayList< Organization >> getProf = subCategoryAPI.getOrganization();
                 //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
 
-                getProf.enqueue(new Callback<ArrayList<Organization>>() {
+                getProf.enqueue(new Callback<ArrayList< Organization >>() {
 
                     @Override
-                    public void onResponse(Call<ArrayList<Organization>> call, Response<ArrayList<Organization>> response) {
+                    public void onResponse( Call<ArrayList< Organization >> call, Response<ArrayList< Organization >> response) {
 
                         if (response.code() == 200||response.code() == 201||response.code() == 204)
                         {
 
-                            ArrayList<Organization> list = response.body();
+                            ArrayList< Organization > list = response.body();
 
                             if(list!=null&&list.size()!=0){
 
 
-                                for (Organization org:list) {
+                                for ( Organization org:list) {
 
                                     getEmployees(new SimpleDateFormat("yyyy-MM-dd").format(new Date()),org.getOrganizationId());
 
@@ -129,7 +129,7 @@ public class SendEmailToAll extends Service {
                     }
 
                     @Override
-                    public void onFailure(Call<ArrayList<Organization>> call, Throwable t) {
+                    public void onFailure( Call<ArrayList< Organization >> call, Throwable t) {
 
                        // Toast.makeText(BasicPlanScreen.this, "Something went wrong", Toast.LENGTH_SHORT).show();
 
@@ -145,10 +145,10 @@ public class SendEmailToAll extends Service {
 
 
 
-        new ThreadExecuter().execute(new Runnable() {
+        new ThreadExecuter ().execute( new Runnable() {
             @Override
             public void run() {
-                EmployeeApi apiService = Util.getClient().create(EmployeeApi.class);
+                EmployeeApi apiService = Util.getClient().create( EmployeeApi.class);
                 Call<ArrayList<Employee>> call = apiService.getEmployeesByOrgId(orgId);
 
                 call.enqueue(new Callback<ArrayList<Employee>>() {
@@ -160,7 +160,7 @@ public class SendEmailToAll extends Service {
 
 
                             ArrayList<Employee> list = response.body();
-                            reportDataModel = new ReportDataModel();
+                            reportDataModel = new ReportDataModel ();
 
 
 
@@ -194,19 +194,19 @@ public class SendEmailToAll extends Service {
                                         }
 
 
-                                        LoginDetails ld  = new LoginDetails();
+                                        LoginDetails ld  = new LoginDetails ();
                                         ld.setEmployeeId(list.get(j).getEmployeeId());
                                         ld.setLoginDate(new SimpleDateFormat("MM/dd/yyyy").format(date));
                                         String logDate = new SimpleDateFormat("MMM dd,yyyy").format(date);
                                         //getLoginDetails(ld,logDate);
 
 
-                                        LiveTracking lv = new LiveTracking();
+                                        LiveTracking lv = new LiveTracking ();
                                         lv.setEmployeeId(list.get(j).getEmployeeId());
                                         lv.setTrackingDate(new SimpleDateFormat("MM/dd/yyyy").format(date));
                                        // getLiveLocation(lv);
 
-                                        Meetings md  = new Meetings();
+                                        Meetings md  = new Meetings ();
                                         md.setEmployeeId(list.get(j).getEmployeeId());
                                         md.setMeetingDate(new SimpleDateFormat("MM/dd/yyyy").format(date));
                                        // getMeetingsDetails(md);
@@ -936,7 +936,7 @@ public class SendEmailToAll extends Service {
                 "\t<div class=\"bg-frm\">\n" +
                 "\t\t<div class=\"row\">\n" +
                 "\t\t\t<div class=\"col-lg-5 col-md-5 col-sm-5 col-xs-12\">\t\t\t\n" +
-                "\t\t\t\t  <h2 style=\"color: white\">Krony App</h2>\t \t\t\t\n" +
+                "\t\t\t\t  <h2 style=\"color: white\">Mysolite App</h2>\t \t\t\t\n" +
                 "\t\t\t</div>\t\n" +
                 "\t\t\t<div class=\"col-lg-7 col-md-7 col-sm-7 col-xs-12\">\n" +
                 "\t\t\t\t<h4 style=\"color: white; text-align:right\">Team Activity Report</h4>\n" +
@@ -1002,12 +1002,12 @@ public class SendEmailToAll extends Service {
 
 
 
-        new ThreadExecuter().execute(new Runnable() {
+        new ThreadExecuter ().execute( new Runnable() {
             @Override
             public void run() {
 
 
-                SendEmailAPI travellerApi = Util.getClient().create(SendEmailAPI.class);
+                SendEmailAPI travellerApi = Util.getClient().create( SendEmailAPI.class);
                 Call<String> response = travellerApi.sendEmail(emailData);
 
                 response.enqueue(new Callback<String>() {

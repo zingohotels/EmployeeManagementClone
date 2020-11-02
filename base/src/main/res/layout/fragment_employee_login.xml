@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:aapt="http://schemas.android.com/aapt"
+    android:id="@+id/snackbar_action"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -22,7 +23,6 @@
             class="com.google.android.gms.maps.SupportMapFragment"/>
         <LinearLayout
             android:orientation="horizontal"
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -347,7 +347,9 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="16dp"
                 android:layout_weight="1">
-                <LinearLayout android:gravity="center"
+
+                <LinearLayout
+                    android:gravity="center"
                     android:layout_gravity="center_horizontal"
                     android:orientation="vertical"
                     android:id="@+id/lunch_break"

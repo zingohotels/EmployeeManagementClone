@@ -16,5 +16,5 @@ public interface UploadApi {
     @Multipart
     //@POST("Upload/user/PostUserImage")
     @POST("Upload/user/PostProfileImage")
-    Call<String> uploadProfileImages(@Part MultipartBody.Part file, @Part("UploadedImage") RequestBody name);
+    Call<String> uploadProfileImages ( @Part MultipartBody.Part file , @Part ("UploadedImage") RequestBody name );
 }

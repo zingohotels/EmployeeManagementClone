@@ -25,7 +25,7 @@
             android:focusable="false"
             android:orientation="vertical">
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:focusableInTouchMode="false"
                 android:focusable="false"
                 android:id="@+id/typeInputLayout"
@@ -33,14 +33,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/task_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="12sp"
                     android:hint="Task Name" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
 
             <LinearLayout
@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_margin="5dp"
                     android:id="@+id/from_date_TextInputEditText"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -56,7 +56,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
-                    <android.support.design.widget.TextInputEditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/from_date"
                         android:layout_width="match_parent"
                         android:textSize="12sp"
@@ -65,9 +65,9 @@
                         android:focusableInTouchMode="false"
                         android:drawableRight="@drawable/ic_date"
                         android:inputType="date" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_margin="5dp"
                     android:id="@+id/to_date_TextInputEditText"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -75,7 +75,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
-                    <android.support.design.widget.TextInputEditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/to_date"
                         android:layout_width="match_parent"
                         android:textSize="12sp"
@@ -84,7 +84,7 @@
                         android:focusableInTouchMode="false"
                         android:drawableRight="@drawable/ic_date"
                         android:inputType="date" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
@@ -94,7 +94,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_margin="5dp"
                     android:id="@+id/from_time_TextInputEditText"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -102,7 +102,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
-                    <android.support.design.widget.TextInputEditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/from_time"
                         android:layout_width="match_parent"
                         android:textSize="12sp"
@@ -111,9 +111,9 @@
                         android:focusableInTouchMode="false"
                         android:drawableRight="@drawable/ic_time"
                         android:inputType="date" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_margin="5dp"
                     android:id="@+id/to_time_TextInputEditText"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -121,7 +121,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
-                    <android.support.design.widget.TextInputEditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/to_time"
                         android:layout_width="match_parent"
                         android:textSize="12sp"
@@ -130,7 +130,7 @@
                         android:focusableInTouchMode="false"
                         android:drawableRight="@drawable/ic_time"
                         android:inputType="date" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
@@ -169,14 +169,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_margin="5dp"
                 android:id="@+id/task_description_InputLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/task_description"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -188,10 +188,10 @@
                     android:singleLine="false"
                     android:textSize="12sp" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_margin="5dp"
                 android:id="@+id/task_comments_InputLayout"
                 android:layout_marginTop="20dp"
@@ -199,7 +199,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/task_comments"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -211,7 +211,7 @@
                     android:singleLine="false"
                     android:textSize="12sp" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
 
@@ -303,7 +303,7 @@
 
     </ScrollView>
 
-    <android.support.v7.widget.AppCompatButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/apply_leave"
         android:layout_width="match_parent"
         android:layout_height="50dp"

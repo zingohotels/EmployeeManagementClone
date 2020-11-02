@@ -67,7 +67,7 @@ public class RapidFloatingActionLayout extends RelativeLayout implements View.On
 
     private OnRapidFloatingActionListener onRapidFloatingActionListener;
 
-    public void setOnRapidFloatingActionListener(OnRapidFloatingActionListener onRapidFloatingActionListener) {
+    public void setOnRapidFloatingActionListener( OnRapidFloatingActionListener onRapidFloatingActionListener) {
         this.onRapidFloatingActionListener = onRapidFloatingActionListener;
     }
 
@@ -96,7 +96,7 @@ public class RapidFloatingActionLayout extends RelativeLayout implements View.On
         this.disableContentDefaultAnimation = disableContentDefaultAnimation;
     }
 
-    public RapidFloatingActionLayout setContentView(RapidFloatingActionContent contentView) {
+    public RapidFloatingActionLayout setContentView( RapidFloatingActionContent contentView) {
         if (null == contentView) {
             throw new RuntimeException("contentView can not be null");
         }

@@ -4,30 +4,30 @@ import android.animation.AnimatorSet;
 
 public interface OnRapidFloatingActionListener {
 
-    void onRFABClick();
+    void onRFABClick ( );
 
 
-    void toggleContent();
+    void toggleContent ( );
 
 
-    void expandContent();
+    void expandContent ( );
 
 
-    void collapseContent();
+    void collapseContent ( );
 
 
-    RapidFloatingActionLayout obtainRFALayout();
+    RapidFloatingActionLayout obtainRFALayout ( );
 
 
-    RapidFloatingActionButton obtainRFAButton();
+    RapidFloatingActionButton obtainRFAButton ( );
 
 
-    RapidFloatingActionContent obtainRFAContent();
+    RapidFloatingActionContent obtainRFAContent ( );
 
 
-    void onExpandAnimator(AnimatorSet animatorSet);
+    void onExpandAnimator ( AnimatorSet animatorSet );
 
 
-    void onCollapseAnimator(AnimatorSet animatorSet);
+    void onCollapseAnimator ( AnimatorSet animatorSet );
 
 }

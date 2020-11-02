@@ -2,7 +2,7 @@ package app.zingo.employeemanagements.WebApi;
 
 import java.util.ArrayList;
 
-import app.zingo.employeemanagements.Model.Plans;
+import app.zingo.employeemanagements.model.Plans;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -16,11 +16,11 @@ import retrofit2.http.Path;
 public interface PlansAndRatesAPI {
 
     @POST("Plans")
-    Call<Plans> addPlans(@Body Plans details);
+    Call<Plans> addPlans ( @Body Plans details );
 
     @GET("Plans/{id}")
-    Call<Plans> getPlansById(@Path("id") int id);
+    Call<Plans> getPlansById ( @Path ("id") int id );
 
     @GET("Plans")
-    Call<ArrayList<Plans>> getPlans();
+    Call<ArrayList<Plans>> getPlans ( );
 }

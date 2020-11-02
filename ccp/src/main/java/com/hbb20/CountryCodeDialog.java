@@ -9,8 +9,6 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -19,6 +17,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.futuremind.recyclerviewfastscroll.FastScroller;
 
@@ -131,7 +132,7 @@ class CountryCodeDialog {
         }
 
         final CountryCodeAdapter cca = new CountryCodeAdapter(context, masterCountries, codePicker, rlQueryHolder, editText_search, textView_noResult, dialog, imgClearQuery);
-        recyclerView_countryDialog.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView_countryDialog.setLayoutManager(new LinearLayoutManager (context));
         recyclerView_countryDialog.setAdapter(cca);
 
         //fast scroller

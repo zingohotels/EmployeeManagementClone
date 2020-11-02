@@ -5,8 +5,8 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.widget.Toast;
 
 import com.google.android.gms.location.ActivityRecognitionClient;
@@ -14,7 +14,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
-import app.zingo.employeemanagements.Utils.Constants;
+import app.zingo.employeemanagements.utils.Constants;
 
 public class BackgroundDetectedActivitiesService extends Service {
 

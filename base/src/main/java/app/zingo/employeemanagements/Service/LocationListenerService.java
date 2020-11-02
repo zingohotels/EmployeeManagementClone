@@ -4,18 +4,21 @@ import android.Manifest;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.SystemClock;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
@@ -24,9 +27,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimerTask;
 
-import app.zingo.employeemanagements.Model.LiveTracking;
-import app.zingo.employeemanagements.Utils.PreferenceHandler;
-import app.zingo.employeemanagements.Utils.Util;
+import app.zingo.employeemanagements.model.LiveTracking;
+import app.zingo.employeemanagements.utils.Const;
+import app.zingo.employeemanagements.utils.PreferenceHandler;
+import app.zingo.employeemanagements.utils.Util;
 import app.zingo.employeemanagements.WebApi.LiveTrackingAPI;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,7 +38,6 @@ import retrofit2.Response;
 
 
 public class LocationListenerService   extends Service implements LocationListener {
-
     private static final String TAG = "BookingTrackingService";
     private Context context;
     boolean isGPSEnable = false;
@@ -43,8 +46,6 @@ public class LocationListenerService   extends Service implements LocationListen
     LocationManager locationManager;
     Location location;
     private Handler mHandler = new Handler();
-
-
     public double track_lat = 0.0;
     public double track_lng = 0.0;
 
@@ -64,12 +65,18 @@ public class LocationListenerService   extends Service implements LocationListen
 
     }
 
+    private BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver(){
+        @Override
+        public void onReceive( Context ctxt, Intent intent) {
+            int level = intent.getIntExtra( BatteryManager.EXTRA_LEVEL, 0);
+            Const.BATTERY_LEVEL = level;
+        }
+    };
 
     @Override
     public void onCreate() {
         super.onCreate();
-
-
+        this.registerReceiver(this.mBatInfoReceiver, new IntentFilter (Intent.ACTION_BATTERY_CHANGED));
     }
 
     @Override
@@ -202,7 +209,7 @@ public class LocationListenerService   extends Service implements LocationListen
             stopSelf();
         } else {
 
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if ( ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
 
@@ -219,13 +226,15 @@ public class LocationListenerService   extends Service implements LocationListen
 
 
                         if(latitude!=0&&longitude!=0){
-                            LiveTracking liveTracking = new LiveTracking();
-                            liveTracking.setEmployeeId(PreferenceHandler.getInstance(LocationListenerService.this).getUserId());
+                            LiveTracking liveTracking = new LiveTracking ();
+                            liveTracking.setEmployeeId(PreferenceHandler.getInstance( LocationListenerService.this).getUserId());
                             liveTracking.setLatitude(""+latitude);
                             liveTracking.setLongitude(""+longitude);
                             liveTracking.setTrackingDate(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
                             liveTracking.setTrackingTime(new SimpleDateFormat("HH:mm:ss").format(new Date()));
-                            //liveTracking.setTrackingDate("01/02/2019");
+                            if(Const.BATTERY_LEVEL!=0){
+                                liveTracking.setBatteryPercentage (String.valueOf ( Const.BATTERY_LEVEL ));
+                            }
                             try {
                                 addLiveTracking(liveTracking);
                             } catch (Exception e) {
@@ -250,78 +259,51 @@ public class LocationListenerService   extends Service implements LocationListen
 
 
                         if(latitude!=0&&longitude!=0){
-                            LiveTracking liveTracking = new LiveTracking();
-                            liveTracking.setEmployeeId(PreferenceHandler.getInstance(LocationListenerService.this).getUserId());
+                            LiveTracking liveTracking = new LiveTracking ();
+                            liveTracking.setEmployeeId(PreferenceHandler.getInstance( LocationListenerService.this).getUserId());
                             liveTracking.setLatitude(""+latitude);
                             liveTracking.setLongitude(""+longitude);
                             liveTracking.setTrackingDate(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
                             liveTracking.setTrackingTime(new SimpleDateFormat("HH:mm:ss").format(new Date()));
-                            //liveTracking.setTrackingDate("01/02/2019");
+                            if(Const.BATTERY_LEVEL!=0){
+                                liveTracking.setBatteryPercentage (String.valueOf ( Const.BATTERY_LEVEL ));
+                            }
                             try {
                                 addLiveTracking(liveTracking);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
-//                        fn_update(location);
                     }
                 }
             }
-
-
             Log.e(TAG, "START SERVICE");
          //   trackLocation();
 
         }
     }
     public void addLiveTracking(final LiveTracking liveTracking) {
-
-
-
-
-
-        LiveTrackingAPI apiService = Util.getClient().create(LiveTrackingAPI.class);
-
-        Call<LiveTracking> call = apiService.addLiveTracking(liveTracking);
-
-        call.enqueue(new Callback<LiveTracking>() {
+        LiveTrackingAPI apiService = Util.getClient().create( LiveTrackingAPI.class);
+        Call< LiveTracking > call = apiService.addLiveTracking(liveTracking);
+        call.enqueue(new Callback< LiveTracking >() {
             @Override
-            public void onResponse(Call<LiveTracking> call, Response<LiveTracking> response) {
-//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
-                try
-                {
-
-
+            public void onResponse( Call< LiveTracking > call, Response< LiveTracking > response) {
+                try {
                     int statusCode = response.code();
                     if (statusCode == 200 || statusCode == 201) {
-
                         LiveTracking s = response.body();
-
                         if(s!=null){
-
                             Log.e("TAG", "Success");
                         }
-
-
-
-
-                    }else {
-
                     }
                 }
-                catch (Exception ex)
-                {
-
-
+                catch (Exception ex) {
                     ex.printStackTrace();
                 }
-//                callGetStartEnd();
             }
 
             @Override
-            public void onFailure(Call<LiveTracking> call, Throwable t) {
-
-
+            public void onFailure( Call< LiveTracking > call, Throwable t) {
                 Log.e("TAG", t.toString());
             }
         });

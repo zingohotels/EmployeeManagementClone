@@ -19,7 +19,7 @@ public class CircleButtonDrawable extends Drawable {
     private CircleButtonProperties circleButtonProperties;
     private int realSizePx;
 
-    public CircleButtonDrawable(Context context, CircleButtonProperties circleButtonProperties, int color) {
+    public CircleButtonDrawable( Context context, CircleButtonProperties circleButtonProperties, int color) {
         this.context = context;
         this.circleButtonProperties = circleButtonProperties;
         paint = new Paint();
@@ -63,7 +63,7 @@ public class CircleButtonDrawable extends Drawable {
         return paint;
     }
 
-    public CircleButtonDrawable setColor(int color) {
+    public CircleButtonDrawable setColor( int color) {
         paint.setColor(color);
         return this;
     }

@@ -38,7 +38,7 @@
                         android:layout_below="@+id/cardview_data_count"
                         android:orientation="horizontal">
 
-                        <android.support.v7.widget.CardView
+                        <androidx.cardview.widget.CardView
                             android:layout_width="match_parent"
                             android:layout_height="100dp"
                             android:layout_weight="1"
@@ -90,9 +90,9 @@
 
                             </LinearLayout>
 
-                        </android.support.v7.widget.CardView>
+                        </androidx.cardview.widget.CardView>
 
-                        <android.support.v7.widget.CardView
+                        <androidx.cardview.widget.CardView
                             android:layout_width="match_parent"
                             android:layout_height="100dp"
                             android:layout_weight="1"
@@ -145,7 +145,7 @@
 
                             </LinearLayout>
 
-                        </android.support.v7.widget.CardView>
+                        </androidx.cardview.widget.CardView>
 
                     </LinearLayout>
 
@@ -157,7 +157,7 @@
                         android:layout_below="@+id/revenue_layout"
                         android:orientation="horizontal">
 
-                        <android.support.v7.widget.CardView
+                        <androidx.cardview.widget.CardView
                             android:layout_width="match_parent"
                             android:layout_height="100dp"
                             android:layout_weight="1"
@@ -209,9 +209,9 @@
 
                             </LinearLayout>
 
-                        </android.support.v7.widget.CardView>
+                        </androidx.cardview.widget.CardView>
 
-                        <android.support.v7.widget.CardView
+                        <androidx.cardview.widget.CardView
                             android:layout_width="match_parent"
                             android:layout_height="100dp"
                             android:layout_weight="1"
@@ -263,7 +263,7 @@
 
                             </LinearLayout>
 
-                        </android.support.v7.widget.CardView>
+                        </androidx.cardview.widget.CardView>
 
                     </LinearLayout>
 
@@ -275,7 +275,7 @@
                         android:layout_below="@+id/revenue_layout2"
                         android:orientation="horizontal">
 
-                        <android.support.v7.widget.CardView
+                        <androidx.cardview.widget.CardView
                             android:layout_width="match_parent"
                             android:layout_height="100dp"
                             android:layout_weight="1"
@@ -327,9 +327,9 @@
 
                             </LinearLayout>
 
-                        </android.support.v7.widget.CardView>
+                        </androidx.cardview.widget.CardView>
 
-                        <android.support.v7.widget.CardView
+                        <androidx.cardview.widget.CardView
                             android:layout_width="match_parent"
                             android:layout_height="100dp"
                             android:layout_weight="1"
@@ -381,7 +381,7 @@
 
                             </LinearLayout>
 
-                        </android.support.v7.widget.CardView>
+                        </androidx.cardview.widget.CardView>
 
                     </LinearLayout>
 
@@ -405,13 +405,13 @@
                             android:textColor="#000"
                             />
 
-                        <android.support.v7.widget.RecyclerView
+                        <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/upcoming_transaction"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:clickable="true"
                             android:layout_margin="8dp"
-                            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                             android:focusable="true" />
                     </LinearLayout>
 

@@ -1,4 +1,4 @@
-<android.support.v4.widget.NestedScrollView
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,9 +9,7 @@
     android:focusableInTouchMode="true"
     android:id="@+id/scroll_view"
     android:focusable="false"
-    android:scrollbars="none"
-    tools:context="app.zingo.employeemanagements.UI.NewAdminDesigns.AdminDashBoardFragment">
-
+    android:scrollbars="none">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -51,7 +49,6 @@
                 android:layout_marginRight="10dp"
                 android:textSize="15dp"
                 android:id="@+id/hidden_login_id"/>
-
 
             <TextView
                 android:textSize="14dp"
@@ -194,7 +191,7 @@
         </LinearLayout>
 
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:id="@+id/cardview_data_count"
             android:visibility="gone"
@@ -364,40 +361,56 @@
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
 
 
         <LinearLayout
-
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="100dp"
             android:orientation="horizontal"
             android:layout_marginTop="10dp">
-
 
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:layout_marginLeft="50dp"
+                android:layout_marginLeft="5dp"
                 android:background="@drawable/login_time"
                 android:layout_gravity="center"
                 android:contentDescription="TODO" />
 
-
-            <app.zingo.employeemanagements.Custom.MyRegulerText
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18dp"
-                android:id="@+id/login_time"
-                android:textColor="@color/text_black"
-                android:letterSpacing="0.025"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="10dp"/>
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <app.zingo.employeemanagements.Custom.MyRegulerText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="@color/schedulecolor"
+                    android:letterSpacing="0.025"
+                    android:id="@+id/login_time_text"
+                    android:layout_marginLeft="30dp"
+                    android:textSize="18sp" />
+
+                <app.zingo.employeemanagements.Custom.MyRegulerText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:id="@+id/login_time"
+                    android:text=""
+                    android:gravity="center"
+                    android:textColor="@color/text_black"
+                    android:letterSpacing="0.025"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="10dp"/>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
                 <app.zingo.employeemanagements.Custom.MyRegulerText
                     android:layout_width="wrap_content"
@@ -407,10 +420,7 @@
                     android:textColor="@color/schedulecolor"
                     android:letterSpacing="0.025"
                     android:layout_marginLeft="30dp"
-                    android:textSize="18dp"
-
-                    />
-
+                    android:textSize="18sp" />
 
                 <app.zingo.employeemanagements.Custom.MyRegulerText
                     android:layout_width="wrap_content"
@@ -420,11 +430,8 @@
                     android:textColor="@color/statementcolor"
                     android:letterSpacing="0.025"
                     android:layout_marginLeft="30dp"
-                    android:textSize="12dp"
-                    android:layout_marginTop="5dp"/>
+                    android:textSize="12sp" />
             </LinearLayout>
-
-
 
         </LinearLayout>
 
@@ -436,35 +443,50 @@
             android:layout_marginTop="2dp"/>
 
         <LinearLayout
-
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="100dp"
             android:orientation="horizontal"
             android:layout_marginTop="10dp">
-
 
             <ImageView
                 android:layout_width="22dp"
                 android:layout_height="25dp"
                 android:layout_gravity="center"
-                android:layout_marginLeft="50dp"
+                android:layout_marginLeft="5dp"
                 android:background="@drawable/logout_time"
                 android:contentDescription="TODO" />
-
-
-            <app.zingo.employeemanagements.Custom.MyRegulerText
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18dp"
-                android:id="@+id/logout_time"
-                android:textColor="@color/text_black"
-                android:letterSpacing="0.025"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="10dp"/>
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <app.zingo.employeemanagements.Custom.MyRegulerText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="@color/schedulecolor"
+                    android:letterSpacing="0.025"
+                    android:id="@+id/logout_time_text"
+                    android:layout_marginLeft="30dp"
+                    android:textSize="18sp" />
+
+                <app.zingo.employeemanagements.Custom.MyRegulerText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:gravity="center"
+                    android:text=""
+                    android:id="@+id/logout_time"
+                    android:textColor="@color/text_black"
+                    android:letterSpacing="0.025"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="10dp"/>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
                 <app.zingo.employeemanagements.Custom.MyRegulerText
                     android:layout_width="wrap_content"
@@ -474,10 +496,7 @@
                     android:textColor="@color/schedulecolor"
                     android:letterSpacing="0.025"
                     android:layout_marginLeft="30dp"
-                    android:textSize="18dp"
-
-                    />
-
+                    android:textSize="18sp" />
 
                 <app.zingo.employeemanagements.Custom.MyRegulerText
                     android:layout_width="wrap_content"
@@ -487,14 +506,10 @@
                     android:textColor="@color/statementcolor"
                     android:letterSpacing="0.025"
                     android:layout_marginLeft="30dp"
-                    android:textSize="12dp"
-                    android:layout_marginTop="5dp"/>
+                    android:textSize="12sp" />
             </LinearLayout>
 
-
-
         </LinearLayout>
-
 
         <View
             android:layout_width="match_parent"
@@ -528,13 +543,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="16dp"
-                    android:text=""
+                    android:text="Total Meeting time"
                     android:layout_weight="1"
                     android:id="@+id/meeting_time"
                     android:textColor="@color/text_black"
                     android:letterSpacing="0.025"
-                    android:layout_marginLeft="15dp"
-                    />
+                    android:layout_marginLeft="15dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -550,162 +564,13 @@
                         android:id="@+id/meeting__text"
                         android:textColor="@color/schedulecolor"
                         android:letterSpacing="0.025"
-                        android:textSize="18dp"
-
-                        />
-
-
+                        android:textSize="18dp" />
 
                 </LinearLayout>
 
             </LinearLayout>
 
-
-
-
-
-
         </LinearLayout>
-
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.3dp"
-            android:background="#99A1AC"
-            android:layout_marginTop="2dp"/>
-
-        <LinearLayout
-
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp">
-
-
-            <ImageView
-                android:layout_width="22dp"
-                android:layout_height="25dp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="50dp"
-                android:background="@drawable/expense_admin"
-                android:contentDescription="TODO" />
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-
-                <app.zingo.employeemanagements.Custom.MyRegulerText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="16dp"
-                    android:text=""
-                    android:layout_weight="1"
-                    android:id="@+id/expenses_text"
-                    android:textColor="@color/text_black"
-                    android:letterSpacing="0.025"
-                    android:layout_marginLeft="15dp"
-                    />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-                    <app.zingo.employeemanagements.Custom.MyRegulerText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="right"
-                        android:layout_gravity="center"
-                        android:id="@+id/expense_amount"
-                        android:textColor="@color/schedulecolor"
-                        android:letterSpacing="0.025"
-
-                        android:textSize="18dp"
-
-                        />
-
-
-
-                </LinearLayout>
-
-
-
-            </LinearLayout>
-
-
-
-
-
-        </LinearLayout>
-
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.3dp"
-            android:background="#99A1AC"
-            android:layout_marginTop="2dp"/>
-
-        <LinearLayout
-
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp">
-
-
-            <ImageView
-                android:layout_width="22dp"
-                android:layout_height="25dp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="50dp"
-                android:background="@drawable/km_travelled"
-                android:contentDescription="TODO" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <app.zingo.employeemanagements.Custom.MyRegulerText
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textSize="16dp"
-
-                    android:layout_gravity="center"
-                    android:text="Travelled"
-                    android:layout_weight="1"
-                    android:textColor="@color/text_black"
-                    android:letterSpacing="0.025"
-                    android:layout_marginLeft="15dp"
-                    />
-
-                <app.zingo.employeemanagements.Custom.MyRegulerText
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textSize="18dp"
-                    android:id="@+id/km_text"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    android:layout_gravity="center"
-                    android:text="0 km/0 miles"
-                    android:textColor="@color/text_black"
-                    android:letterSpacing="0.025"
-
-                    />
-
-            </LinearLayout>
-
-
-
-
-
-
-
-        </LinearLayout>
-
 
         <View
             android:layout_width="match_parent"
@@ -742,8 +607,7 @@
                     android:text="Avg Meeting Time"
                     android:textColor="@color/text_black"
                     android:letterSpacing="0.025"
-                    android:layout_marginLeft="15dp"
-                    />
+                    android:layout_marginLeft="15dp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -759,21 +623,12 @@
                         android:id="@+id/avg_meeting_time"
                         android:textColor="@color/schedulecolor"
                         android:letterSpacing="0.025"
-                        android:textSize="18dp"
-
-                        />
-
-
-
+                        android:textSize="18dp" />
                 </LinearLayout>
-
 
             </LinearLayout>
 
-
-
         </LinearLayout>
-
 
         <View
             android:layout_width="match_parent"
@@ -826,23 +681,13 @@
                         android:id="@+id/avg_task_time"
                         android:textColor="@color/schedulecolor"
                         android:letterSpacing="0.025"
-
-                        android:textSize="18dp"
-
-                        />
-
-
+                        android:textSize="18dp" />
 
                 </LinearLayout>
+
             </LinearLayout>
 
-
-
-
-
-
         </LinearLayout>
-
 
         <View
             android:layout_width="match_parent"
@@ -851,12 +696,62 @@
             android:layout_marginTop="2dp"/>
 
         <LinearLayout
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="10dp">
 
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="50dp"
+                android:background="@drawable/km_travelled"
+                android:contentDescription="TODO" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <app.zingo.employeemanagements.Custom.MyRegulerText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="16dp"
+                    android:layout_gravity="center"
+                    android:text="Travelled"
+                    android:layout_weight="1"
+                    android:textColor="@color/text_black"
+                    android:letterSpacing="0.025"
+                    android:layout_marginLeft="15dp" />
+
+                <app.zingo.employeemanagements.Custom.MyRegulerText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="18dp"
+                    android:id="@+id/km_text"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:layout_gravity="center"
+                    android:text="0 km/0 miles"
+                    android:textColor="@color/text_black"
+                    android:letterSpacing="0.025" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.3dp"
+            android:background="#99A1AC"
+            android:layout_marginTop="2dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
 
             <ImageView
                 android:layout_width="22dp"
@@ -895,20 +790,67 @@
                         android:id="@+id/idle_time"
                         android:textColor="@color/schedulecolor"
                         android:letterSpacing="0.025"
-
-                        android:textSize="18dp"
-
-                        />
-
-
-
+                        android:textSize="18dp" />
                 </LinearLayout>
 
             </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.3dp"
+            android:background="#99A1AC"
+            android:layout_marginTop="2dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="50dp"
+                android:background="@drawable/expense_admin"
+                android:contentDescription="TODO" />
 
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
 
+                <app.zingo.employeemanagements.Custom.MyRegulerText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16dp"
+                    android:text="Total Expense"
+                    android:layout_weight="1"
+                    android:id="@+id/expenses_text"
+                    android:textColor="@color/text_black"
+                    android:letterSpacing="0.025"
+                    android:layout_marginLeft="15dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <app.zingo.employeemanagements.Custom.MyRegulerText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:layout_gravity="center"
+                        android:id="@+id/expense_amount"
+                        android:textColor="@color/schedulecolor"
+                        android:letterSpacing="0.025"
+                        android:textSize="18dp" />
+
+                </LinearLayout>
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -923,14 +865,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-
             android:layout_below="@+id/cardview_data_count"
             android:gravity="left"
             android:text="Tasks"
             android:paddingLeft="10dp"
             android:paddingTop="10dp"
-            android:textColor="#000"
-            />
+            android:textColor="#000" />
 
         <LinearLayout
             android:gravity="center"
@@ -958,7 +898,7 @@
                 android:layout_height="wrap_content"
                 android:text="No Task Found"/>
         </LinearLayout>
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/targetList"
             android:visibility="gone"
             android:focusable="false"
@@ -981,9 +921,7 @@
             android:padding="5dp"
             android:text="Read More"
             android:textSize="22dp"
-            android:textColor="@color/white"
-            />
-
+            android:textColor="@color/white" />
 
         <View
             android:layout_width="match_parent"
@@ -1030,7 +968,7 @@
                 android:layout_height="wrap_content"
                 android:text="No Meetings Found"/>
         </LinearLayout>
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/targetList_meeting"
             android:visibility="gone"
             android:focusable="false"
@@ -1073,7 +1011,7 @@
                   android:layout_gravity="center"
                   android:gravity="center"
                   android:orientation="horizontal">
-                  <app.zingo.employeemanagements.Custom.MyRegulerText
+                  <mysoliteegulerText
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:textSize="14sp"
@@ -1084,7 +1022,7 @@
                       android:paddingTop="10dp"
                       android:textColor="#000"
                       />
-                  <app.zingo.employeemanagements.Custom.MyRegulerText
+                  <mysoliteegulerText
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:textSize="15sp"
@@ -1110,7 +1048,7 @@
                   android:layout_gravity="center"
                   android:gravity="center"
                   android:orientation="horizontal">
-                  <app.zingo.employeemanagements.Custom.MyRegulerText
+                  <mysoliteegulerText
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:textSize="14sp"
@@ -1121,7 +1059,7 @@
                       android:paddingTop="10dp"
                       android:textColor="#000"
                       />
-                  <app.zingo.employeemanagements.Custom.MyRegulerText
+                  <mysoliteegulerText
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:textSize="15sp"
@@ -1147,7 +1085,7 @@
                   android:layout_gravity="center"
                   android:gravity="center"
                   android:orientation="horizontal">
-                  <app.zingo.employeemanagements.Custom.MyRegulerText
+                  <mysoliteegulerText
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:textSize="14sp"
@@ -1158,7 +1096,7 @@
                       android:paddingTop="10dp"
                       android:textColor="#000"
                       />
-                  <app.zingo.employeemanagements.Custom.MyRegulerText
+                  <mysoliteegulerText
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:textSize="15sp"
@@ -1178,4 +1116,4 @@
 
 
 
-</android.support.v4.widget.NestedScrollView>
+</androidx.core.widget.NestedScrollView>

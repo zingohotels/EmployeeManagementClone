@@ -9,7 +9,7 @@
 
 
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none"
@@ -74,7 +74,7 @@
                             android:layout_marginRight="10dp"
                             android:layout_marginTop="10dp"
                             android:gravity="center"
-                            android:text="Join Krony as a Company and a Founder with following steps"/>
+                            android:text="Join Mysolite as a Company and a Founder with following steps"/>
 
 
                         <LinearLayout
@@ -220,7 +220,7 @@
                                 />
                         </LinearLayout>
 
-                    <android.support.v4.view.ViewPager
+                    <androidx.viewpager.widget.ViewPager
                         android:layout_width="match_parent"
                         android:layout_height="300dp"
                         android:id="@+id/company_create_vp"
@@ -345,7 +345,7 @@
                                 />
                         </LinearLayout>
 
-                    <android.support.v4.view.ViewPager
+                    <androidx.viewpager.widget.ViewPager
                         android:layout_width="match_parent"
                         android:layout_height="300dp"
                         android:id="@+id/dep_create_vp"
@@ -443,7 +443,7 @@
                             />
                     </LinearLayout>
 
-                    <android.support.v4.view.ViewPager
+                    <androidx.viewpager.widget.ViewPager
                         android:layout_width="match_parent"
                         android:layout_height="300dp"
                         android:id="@+id/empl_create_vp"
@@ -528,7 +528,7 @@
                             />
                     </LinearLayout>
 
-                    <android.support.v4.view.ViewPager
+                    <androidx.viewpager.widget.ViewPager
                         android:layout_width="match_parent"
                         android:layout_height="300dp"
                         android:id="@+id/empl_atndz_vp"
@@ -612,7 +612,7 @@
                             />
                     </LinearLayout>
 
-                    <android.support.v4.view.ViewPager
+                    <androidx.viewpager.widget.ViewPager
                         android:layout_width="match_parent"
                         android:layout_height="300dp"
                         android:id="@+id/empl_loc_vp"
@@ -740,7 +740,7 @@
                             />
                     </LinearLayout>
 
-                    <android.support.v4.view.ViewPager
+                    <androidx.viewpager.widget.ViewPager
                         android:layout_width="match_parent"
                         android:layout_height="300dp"
                         android:id="@+id/empl_task_vp"
@@ -868,7 +868,7 @@
                             />
                     </LinearLayout>
 
-                    <android.support.v4.view.ViewPager
+                    <androidx.viewpager.widget.ViewPager
                         android:layout_width="match_parent"
                         android:layout_height="300dp"
                         android:id="@+id/empl_exp_vp"
@@ -953,7 +953,7 @@
                             />
                     </LinearLayout>
 
-                    <android.support.v4.view.ViewPager
+                    <androidx.viewpager.widget.ViewPager
                         android:layout_width="match_parent"
                         android:layout_height="300dp"
                         android:id="@+id/empl_lea_vp"
@@ -984,5 +984,5 @@
 
         </LinearLayout>
 
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 </RelativeLayout>

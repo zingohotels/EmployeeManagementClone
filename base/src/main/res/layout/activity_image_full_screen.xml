@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UI.Common.ImageFullScreenActivity">
+    tools:context="app.zingo.employeemanagements.ui.Common.ImageFullScreenActivity">
 
   <ImageView
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:id="@+id/image_src"
-      android:contentDescription="TODO" />
 
-</android.support.constraint.ConstraintLayout>
+      android:contentDescription="@string/todo" />
+
+  <androidx.viewpager.widget.ViewPager
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:visibility="gone"
+      android:id="@+id/imageList_vp"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

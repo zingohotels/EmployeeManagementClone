@@ -10,7 +10,7 @@
     >
 
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:background="#FFFFFFFF"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -24,7 +24,7 @@
             android:focusableInTouchMode="true"
             android:orientation="vertical">
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/activity_large_margin"
@@ -59,7 +59,7 @@
                 android:textOn="Yes"/>
 
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/nameInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -70,12 +70,12 @@
 
                 >
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/name"
                     style="@style/fp_editText"
                     android:inputType="text"
                     android:maxLength="50" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <RadioGroup
                 android:layout_width="match_parent"
@@ -204,7 +204,7 @@
 
             </LinearLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/emailInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -215,14 +215,14 @@
 
                 >
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/email"
                     style="@style/fp_editText"
                     android:inputType="textEmailAddress"
                     android:maxLength="80" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/semailInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -233,15 +233,15 @@
 
                 android:hint="Alternate Email Id(Optional)">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/semail"
                     style="@style/fp_editText"
                     android:inputType="textEmailAddress"
                     android:maxLength="80" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/mobileInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -252,12 +252,12 @@
 
                 >
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/mobile"
                     style="@style/fp_editText"
                     android:inputType="number"
                     android:maxLength="15" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -338,7 +338,7 @@
 
             </LinearLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/designationInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -349,15 +349,15 @@
 
                 >
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/designation"
                     style="@style/fp_editText"
                     android:inputType="text"
                     android:maxLength="50" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/salaryInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -368,14 +368,14 @@
 
                 >
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/salary"
                     style="@style/fp_editText"
                     android:inputType="numberDecimal"
                     android:maxLength="50" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/passwordInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -386,14 +386,14 @@
                 android:hint="Password *"
 
                 >
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/password"
                     android:maxLength="50"
                     android:inputType="textPassword"
                     style="@style/fp_editText" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/confirmpwdInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -404,12 +404,12 @@
                 android:hint="Confirm Password *"
 
                 >
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/confirmpwd"
                     android:maxLength="50"
                     android:inputType="textPassword"
                     style="@style/fp_editText" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
 
             <LinearLayout
@@ -417,7 +417,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/activity_large_margin"
@@ -480,7 +480,7 @@
                 android:id="@+id/week_lay"
                 android:visibility="gone"
                 android:orientation="vertical">
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/weekInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -491,12 +491,12 @@
 
                     >
 
-                    <android.support.design.widget.TextInputEditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/week_off"
                         style="@style/fp_editText"
                         android:inputType="number"
                         android:maxLength="2" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -519,7 +519,7 @@
             </LinearLayout>
 
 
-            <android.support.v7.widget.AppCompatButton
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/createFounder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -537,6 +537,6 @@
 
 
         </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </RelativeLayout>

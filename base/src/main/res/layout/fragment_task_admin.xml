@@ -207,14 +207,14 @@
                     android:text="No Record Found"/>
             </LinearLayout>
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/targetList"
                 android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"/>
         </LinearLayout>
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:layout_gravity="bottom|right|center_vertical|center_horizontal|center|end"
             android:id="@+id/addTargetOption"
             android:layout_width="wrap_content"
@@ -226,7 +226,7 @@
             app:elevation="6dp"
             app:fabSize="normal"/>
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:layout_gravity="bottom|left|center_vertical|center_horizontal|center|start"
             android:id="@+id/refresh"
             android:layout_width="wrap_content"

@@ -5,7 +5,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.support.v4.app.NotificationCompat;
+import androidx.core.app.NotificationCompat;
 import android.util.Log;
 
 import app.zingo.employeemanagements.base.R;
@@ -78,7 +78,7 @@ public class LocaitionPassWithConditionServices extends Service {
 
         // Make notification show big text.
         NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
-        bigTextStyle.setBigContentTitle("Krony app");
+        bigTextStyle.setBigContentTitle("Mysolite app");
         // Set big text style.
         builder.setStyle(bigTextStyle);
 

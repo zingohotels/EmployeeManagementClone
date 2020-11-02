@@ -9,7 +9,7 @@
     android:focusable="false"
     android:focusableInTouchMode="true"
     xmlns:card_view="http://schemas.android.com/tools"
-    tools:context="app.zingo.employeemanagements.UI.NewAdminDesigns.PlanSubscribtionScreen">
+    tools:context="app.zingo.employeemanagements.ui.NewAdminDesigns.PlanSubscribtionScreen">
 
 
 
@@ -196,7 +196,7 @@
                             android:textSize="18dp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Employees Nos"
+                            android:text="Total No of Users Allowed"
                             android:textColor="@color/text"
                             android:background="#0000"
                             android:padding="16dp"
@@ -256,7 +256,7 @@
                             </LinearLayout>
                         </LinearLayout>
 
-                      <!--  <app.zingo.employeemanagements.Custom.MyRegulerText
+                      <!--  <mysoliteegulerText
                             android:layout_weight="0.6"
                             android:id="@+id/employee_count_plan"
                             android:textSize="18dp"

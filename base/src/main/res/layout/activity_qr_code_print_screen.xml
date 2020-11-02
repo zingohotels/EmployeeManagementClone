@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="app.zingo.employeemanagements.UI.NewAdminDesigns.QrCodePrintScreen">
+    tools:context="app.zingo.employeemanagements.ui.NewAdminDesigns.QrCodePrintScreen">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -67,7 +67,7 @@
         </LinearLayout>
 
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:layout_width="150dp"
             android:layout_height="50dp"
 

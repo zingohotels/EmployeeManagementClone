@@ -4,18 +4,9 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.util.Log;
 import android.widget.Toast;
 
-import java.net.URISyntaxException;
-
-import app.zingo.employeemanagements.Service.LocationForegroundService;
-import app.zingo.employeemanagements.UI.NewEmployeeDesign.EmployeeNewMainScreen;
-
-import static android.support.v4.content.WakefulBroadcastReceiver.startWakefulService;
+import static androidx.legacy.content.WakefulBroadcastReceiver.startWakefulService;
 
 
 public class LunchBreakAlarm extends BroadcastReceiver {

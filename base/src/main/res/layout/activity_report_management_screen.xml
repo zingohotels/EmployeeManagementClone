@@ -5,8 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card-view="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/tools"
-    xmlns:custom="http://schemas.android.com/apk/res-auto"
-    tools:context=".UI.Common.ReportManagementScreen">
+    tools:context="app.zingo.employeemanagements.ui.Common.ReportManagementScreen">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,388 +15,355 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
-
-
-
-            <ScrollView
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/scroll_view"
+                android:layout_height="50dp"
+                android:id="@+id/linear_title"
+                android:background="@color/colorPrimary" />
 
-                android:scrollbars="none">
-                <RelativeLayout
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:id="@+id/cardview_data_count"
+                android:layout_height="100dp"
+                android:layout_marginTop="-30dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_below="@+id/linear_title"
+                card-view:cardElevation="5dp"
+                card_view:cardCornerRadius="20dp">
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-
-
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:id="@+id/linear_title"
-                        android:background="@color/colorPrimary"></View>
-
-
-
-                    <android.support.v7.widget.CardView
-                        android:layout_width="match_parent"
-                        android:id="@+id/cardview_data_count"
-                        android:layout_height="100dp"
-                        android:layout_marginTop="-30dp"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
-                        android:layout_below="@+id/linear_title"
-                        card-view:cardElevation="5dp"
-                        card_view:cardCornerRadius="20dp">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal">
-
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:id="@+id/employee_count_layout"
-                                android:orientation="vertical">
-
-                                <app.zingo.employeemanagements.Custom.MyRegulerText
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:textSize="14sp"
-                                    android:gravity="center_horizontal"
-                                    android:text="Employee"
-                                    android:paddingLeft="10dp"
-                                    android:paddingTop="10dp"
-                                    android:textColor="#000"
-                                    />
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:gravity="center_horizontal"
-                                    android:orientation="horizontal">
-                                    <app.zingo.employeemanagements.Custom.MyRegulerText
-                                        android:id="@+id/present_employee_count_text"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="match_parent"
-                                        android:textSize="20sp"
-                                        android:text="0"
-                                        android:paddingTop="5dp"
-                                        android:paddingLeft="10dp"
-                                        android:textColor="#FBC02D"
-                                        />
-
-                                        <app.zingo.employeemanagements.Custom.MyRegulerText
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:textSize="15sp"
-                                            android:id="@+id/total_employee_count"
-                                            android:text="/0"
-                                            android:paddingTop="5dp"
-                                            android:layout_marginLeft="5dp"
-                                            android:textColor="#000000"
-                                            />
-
-
-
-
-
-                                </LinearLayout>
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:id="@+id/on_task_count_layout"
-                                android:orientation="vertical">
-
-                                <app.zingo.employeemanagements.Custom.MyRegulerText
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:textSize="14sp"
-                                    android:gravity="center_horizontal"
-                                    android:text="Task"
-                                    android:paddingLeft="10dp"
-                                    android:paddingTop="10dp"
-                                    android:textColor="#000"
-                                    />
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:gravity="center_horizontal"
-                                    android:id="@+id/task_list_show"
-                                    android:orientation="horizontal">
-                                    <app.zingo.employeemanagements.Custom.MyRegulerText
-                                        android:id="@+id/completed_task_count_text"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="match_parent"
-                                        android:textSize="20sp"
-                                        android:text="0"
-                                        android:paddingTop="5dp"
-                                        android:paddingLeft="15dp"
-                                        android:textColor="#D81B60"
-                                        />
-                                    <app.zingo.employeemanagements.Custom.MyRegulerText
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:textSize="15sp"
-                                        android:id="@+id/total_tasks"
-                                        android:text="/0"
-                                        android:paddingTop="5dp"
-                                        android:layout_marginLeft="5dp"
-                                        android:textColor="#000000"
-                                        />
-
-
-                                </LinearLayout>
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:id="@+id/meeting_layout"
-                                android:orientation="vertical">
-
-                                <app.zingo.employeemanagements.Custom.MyRegulerText
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:textSize="14sp"
-                                    android:gravity="center_horizontal"
-                                    android:text="Visit"
-                                    android:paddingLeft="10dp"
-                                    android:paddingTop="10dp"
-                                    android:textColor="#000"
-                                    />
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:gravity="center_horizontal"
-                                    android:id="@+id/show_visits"
-                                    android:orientation="horizontal">
-                                    <app.zingo.employeemanagements.Custom.MyRegulerText
-                                        android:id="@+id/meeting_count"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="match_parent"
-                                        android:textSize="20sp"
-                                        android:text="0"
-                                        android:paddingTop="5dp"
-                                        android:paddingLeft="15dp"
-                                        android:textColor="#F44336"
-                                        />
-
-
-                                </LinearLayout>
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:id="@+id/expense_layout"
-                                android:orientation="vertical">
-
-                                <app.zingo.employeemanagements.Custom.MyRegulerText
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:textSize="14sp"
-                                    android:gravity="center_horizontal"
-                                    android:text="Expenses"
-                                    android:paddingLeft="10dp"
-                                    android:paddingTop="10dp"
-                                    android:textColor="#000"
-                                    />
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:gravity="center_horizontal"
-                                    android:id="@+id/report_expense_list"
-                                    android:orientation="horizontal">
-                                    <app.zingo.employeemanagements.Custom.MyRegulerText
-                                        android:id="@+id/expense_count_text"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="match_parent"
-                                        android:textSize="20sp"
-                                        android:text="0"
-                                        android:paddingTop="5dp"
-                                        android:paddingLeft="15dp"
-                                        android:textColor="#AFB42B"
-                                        />
-
-
-
-                                </LinearLayout>
-                            </LinearLayout>
-                        </LinearLayout>
-                    </android.support.v7.widget.CardView>
-
-
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:baselineAligned="false">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:id="@+id/revenue_layout"
-                        android:layout_marginTop="10dp"
-                        android:layout_below="@+id/cardview_data_count"
-                        android:orientation="horizontal">
+                        android:layout_weight="1"
+                        android:id="@+id/employee_count_layout"
+                        android:orientation="vertical">
 
-
-                        <HorizontalScrollView
+                        <app.zingo.employeemanagements.Custom.MyRegulerText
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:gravity="center_horizontal"
+                            android:text="Employee"
+                            android:paddingLeft="10dp"
+                            android:paddingTop="10dp"
+                            android:textColor="#000"/>
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_horizontal"
+                            android:orientation="horizontal">
+
+                            <app.zingo.employeemanagements.Custom.MyRegulerText
+                                android:id="@+id/present_employee_count_text"
+                                android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:orientation="vertical">
+                                android:textSize="20sp"
+                                android:text="0"
+                                android:paddingTop="5dp"
+                                android:paddingLeft="10dp"
+                                android:textColor="#FBC02D"/>
 
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="50dp"
-                                    android:layout_marginBottom="10dp"
-                                    android:background="#dadada"
-                                    android:orientation="horizontal">
+                            <app.zingo.employeemanagements.Custom.MyRegulerText
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="15sp"
+                                android:id="@+id/total_employee_count"
+                                android:text="/0"
+                                android:paddingTop="5dp"
+                                android:layout_marginLeft="5dp"
+                                android:textColor="#000000" />
 
-
-                                    <TextView
-                                        android:id="@+id/report_name"
-                                        android:layout_width="150dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_margin="3dp"
-                                        android:layout_weight="1"
-                                        android:gravity="center"
-                                        android:text="Name"
-                                        android:textColor="@color/colorPrimary" />
-
-                                    <TextView
-                                        android:id="@+id/report_login"
-                                        android:layout_width="100dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_margin="3dp"
-                                        android:layout_weight="1"
-                                        android:gravity="center"
-                                        android:text="Login"
-                                        android:textColor="@color/colorPrimaryDark" />
-
-                                    <TextView
-                                        android:id="@+id/report_logout"
-                                        android:layout_width="100dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_margin="3dp"
-                                        android:layout_weight="1"
-                                        android:gravity="center"
-                                        android:text="Logout"
-                                        android:textColor="@color/colorPrimaryDark" />
-
-
-                                    <TextView
-                                        android:id="@+id/report_hours"
-                                        android:layout_width="80dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_margin="3dp"
-                                        android:gravity="center"
-                                        android:text="Hours"
-                                        android:textColor="@color/colorPrimaryDark" />
-
-                                    <TextView
-                                        android:id="@+id/report_hours_break"
-                                        android:layout_width="80dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_margin="3dp"
-                                        android:gravity="center"
-                                        android:text="Break Hours"
-                                        android:textColor="@color/colorPrimaryDark" />
-
-                                    <TextView
-                                        android:id="@+id/report_visit"
-                                        android:layout_width="50dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_margin="3dp"
-                                        android:gravity="center"
-                                        android:text="Visits"
-                                        android:textColor="@color/colorPrimaryDark" />
-
-                                    <TextView
-                                        android:id="@+id/report_task"
-                                        android:layout_width="50dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_margin="3dp"
-                                        android:gravity="center"
-                                        android:text="Tasks"
-                                        android:textColor="@color/colorPrimaryDark" />
-
-                                    <TextView
-                                        android:id="@+id/report_expense"
-                                        android:layout_width="100dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_margin="3dp"
-                                        android:gravity="center"
-                                        android:text="Expense"
-                                        android:textColor="@color/colorPrimaryDark" />
-
-
-                                    <TextView
-                                        android:id="@+id/report_expense_amount"
-                                        android:layout_width="100dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_margin="3dp"
-                                        android:gravity="center"
-                                        android:text="Exp Amt"
-                                        android:textColor="@color/colorPrimaryDark" />
-
-                                    <TextView
-                                        android:id="@+id/travel_km_break"
-                                        android:layout_width="200dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_margin="3dp"
-                                        android:gravity="center"
-                                        android:text="KM in Break"
-                                        android:textColor="@color/colorPrimaryDark" />
-
-                                    <TextView
-                                        android:id="@+id/travel_km"
-                                        android:layout_width="200dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_margin="3dp"
-                                        android:gravity="center"
-                                        android:text="KM"
-                                        android:textColor="@color/colorPrimaryDark" />
-
-
-
-                                </LinearLayout>
-
-                                <android.support.v7.widget.RecyclerView
-                                    android:id="@+id/report_list"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
-
-                            </LinearLayout>
-
-                        </HorizontalScrollView>
+                        </LinearLayout>
 
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:id="@+id/on_task_count_layout"
+                        android:orientation="vertical">
+
+                        <app.zingo.employeemanagements.Custom.MyRegulerText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:gravity="center_horizontal"
+                            android:text="Task"
+                            android:paddingLeft="10dp"
+                            android:paddingTop="10dp"
+                            android:textColor="#000"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_horizontal"
+                            android:id="@+id/task_list_show"
+                            android:orientation="horizontal">
+
+                            <app.zingo.employeemanagements.Custom.MyRegulerText
+                                android:id="@+id/completed_task_count_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:textSize="20sp"
+                                android:text="0"
+                                android:paddingTop="5dp"
+                                android:paddingLeft="15dp"
+                                android:textColor="#D81B60" />
+
+                            <app.zingo.employeemanagements.Custom.MyRegulerText
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="15sp"
+                                android:id="@+id/total_tasks"
+                                android:text="/0"
+                                android:paddingTop="5dp"
+                                android:layout_marginLeft="5dp"
+                                android:textColor="#000000"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:id="@+id/meeting_layout"
+                        android:orientation="vertical">
+
+                        <app.zingo.employeemanagements.Custom.MyRegulerText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:gravity="center_horizontal"
+                            android:text="Visit"
+                            android:paddingLeft="10dp"
+                            android:paddingTop="10dp"
+                            android:textColor="#000"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_horizontal"
+                            android:id="@+id/show_visits"
+                            android:orientation="horizontal">
+                            <app.zingo.employeemanagements.Custom.MyRegulerText
+                                android:id="@+id/meeting_count"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:textSize="20sp"
+                                android:text="0"
+                                android:paddingTop="5dp"
+                                android:paddingLeft="15dp"
+                                android:textColor="#F44336"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:id="@+id/expense_layout"
+                        android:orientation="vertical">
+
+                        <app.zingo.employeemanagements.Custom.MyRegulerText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:gravity="center_horizontal"
+                            android:text="Expenses"
+                            android:paddingLeft="10dp"
+                            android:paddingTop="10dp"
+                            android:textColor="#000"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_horizontal"
+                            android:id="@+id/report_expense_list"
+                            android:orientation="horizontal">
+
+                            <app.zingo.employeemanagements.Custom.MyRegulerText
+                                android:id="@+id/expense_count_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:textSize="20sp"
+                                android:text="0"
+                                android:paddingTop="5dp"
+                                android:paddingLeft="15dp"
+                                android:textColor="#AFB42B"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/revenue_layout"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/cardview_data_count"
+                android:orientation="horizontal">
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_marginBottom="10dp"
+                            android:background="#dadada"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/report_name"
+                                android:layout_width="150dp"
+                                android:layout_height="match_parent"
+                                android:layout_margin="3dp"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="Name"
+                                android:textColor="@color/colorPrimary" />
+
+                            <TextView
+                                android:id="@+id/report_login"
+                                android:layout_width="100dp"
+                                android:layout_height="match_parent"
+                                android:layout_margin="3dp"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="Login"
+                                android:textColor="@color/colorPrimaryDark" />
+
+                            <TextView
+                                android:id="@+id/report_logout"
+                                android:layout_width="100dp"
+                                android:layout_height="match_parent"
+                                android:layout_margin="3dp"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="Logout"
+                                android:textColor="@color/colorPrimaryDark" />
 
 
+                            <TextView
+                                android:id="@+id/report_hours"
+                                android:layout_width="80dp"
+                                android:layout_height="match_parent"
+                                android:layout_margin="3dp"
+                                android:gravity="center"
+                                android:text="Hours"
+                                android:textColor="@color/colorPrimaryDark" />
+
+                            <TextView
+                                android:id="@+id/report_hours_break"
+                                android:layout_width="80dp"
+                                android:layout_height="match_parent"
+                                android:layout_margin="3dp"
+                                android:gravity="center"
+                                android:text="Break Hours"
+                                android:textColor="@color/colorPrimaryDark" />
+
+                            <TextView
+                                android:id="@+id/report_visit"
+                                android:layout_width="50dp"
+                                android:layout_height="match_parent"
+                                android:layout_margin="3dp"
+                                android:gravity="center"
+                                android:text="Visits"
+                                android:textColor="@color/colorPrimaryDark" />
+
+                            <TextView
+                                android:id="@+id/report_task"
+                                android:layout_width="50dp"
+                                android:layout_height="match_parent"
+                                android:layout_margin="3dp"
+                                android:gravity="center"
+                                android:text="Tasks"
+                                android:textColor="@color/colorPrimaryDark" />
+
+                            <TextView
+                                android:id="@+id/report_expense"
+                                android:layout_width="100dp"
+                                android:layout_height="match_parent"
+                                android:layout_margin="3dp"
+                                android:gravity="center"
+                                android:text="Expense"
+                                android:textColor="@color/colorPrimaryDark" />
 
 
+                            <TextView
+                                android:id="@+id/report_expense_amount"
+                                android:layout_width="100dp"
+                                android:layout_height="match_parent"
+                                android:layout_margin="3dp"
+                                android:gravity="center"
+                                android:text="Exp Amt"
+                                android:textColor="@color/colorPrimaryDark" />
 
+                            <TextView
+                                android:id="@+id/travel_km_break"
+                                android:layout_width="200dp"
+                                android:layout_height="match_parent"
+                                android:layout_margin="3dp"
+                                android:gravity="center"
+                                android:text="KM in Break"
+                                android:textColor="@color/colorPrimaryDark" />
 
+                            <TextView
+                                android:id="@+id/travel_km"
+                                android:layout_width="200dp"
+                                android:layout_height="match_parent"
+                                android:layout_margin="3dp"
+                                android:gravity="center"
+                                android:text="KM"
+                                android:textColor="@color/colorPrimaryDark" />
 
-                </RelativeLayout>
-            </ScrollView>
+                        </LinearLayout>
+
+                     <androidx.core.widget.NestedScrollView
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content">
+
+                         <androidx.recyclerview.widget.RecyclerView
+                             android:id="@+id/report_list"
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+                     </androidx.core.widget.NestedScrollView>
+
+                    </LinearLayout>
+
+                </HorizontalScrollView>
+
+            </LinearLayout>
+
         </RelativeLayout>
+
     </LinearLayout>
 
     <Button

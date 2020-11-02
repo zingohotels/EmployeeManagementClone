@@ -1,6 +1,6 @@
 package app.zingo.employeemanagements.WebApi;
 
-import app.zingo.employeemanagements.Model.EmployeeDeviceMapping;
+import app.zingo.employeemanagements.model.EmployeeDeviceMapping;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
@@ -11,6 +11,6 @@ import retrofit2.http.POST;
 
 public interface EmployeeDeviceApi {
 
-    @POST("EmployeeDeviceMappings")
-    Call<EmployeeDeviceMapping> addProfileDevice(@Body EmployeeDeviceMapping body);
+        @POST("EmployeeDeviceMappings")
+        Call<EmployeeDeviceMapping> addProfileDevice ( @Body EmployeeDeviceMapping body );
 }

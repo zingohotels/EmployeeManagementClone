@@ -24,8 +24,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import app.zingo.employeemanagements.UI.NewEmployeeDesign.EmployeeNewMainScreen;
-import app.zingo.employeemanagements.Utils.PreferenceHandler;
+import app.zingo.employeemanagements.ui.newemployeedesign.EmployeeNewMainScreen;
+import app.zingo.employeemanagements.utils.PreferenceHandler;
 import app.zingo.employeemanagements.base.R;
 
 public class CheckInAlarmReceiverService extends IntentService {

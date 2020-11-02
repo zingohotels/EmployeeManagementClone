@@ -2,120 +2,119 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:aapt="http://schemas.android.com/aapt"
-    android:orientation="vertical"
+    android:orientation="horizontal"
+    android:background="@color/colorPrimary"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="2dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profilePicture"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_margin="8dp"
+        android:scaleType="centerCrop"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_account_circle_black"
+        app:civ_border_color="@color/colorAppBackground"
+        app:civ_border_width="0dp" />
+
     <LinearLayout
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:background="@color/colorPrimary"
-        android:layout_width="match_parent"
-        android:padding="2dp"
-        android:layout_height="wrap_content">
+        android:orientation="vertical"
+        android:id="@+id/profile"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
 
-        <app.zingo.employeemanagements.Custom.RoundImageView
-
-            android:src="@drawable/profile_image"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_margin="8dp"
-            android:id="@+id/profilePicture"
-            android:scaleType="fitXY"
-            />
-
-        <LinearLayout
+        <TextView
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:ellipsize="end"
             android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:id="@+id/profile"
-            android:layout_width="0dp"
+            android:id="@+id/organizationName"
+            android:focusable="true"
+            android:clickable="true"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_marginBottom="4dp"
+            android:text="@string/organization_name"/>
 
-            <TextView
-                android:textSize="14sp"
-                android:textColor="@color/white"
-                android:ellipsize="end"
-                android:gravity="center_vertical"
-                android:id="@+id/organizationName"
-                android:focusable="true"
-                android:clickable="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:text="Organization Name"/>
-
-            <Spinner
-                android:id="@+id/branch_name"
-                android:layout_width="150dp"
-                android:layout_height="30dp"
-                android:visibility="gone"
-                android:layout_weight="1"
-                android:background="@drawable/spinner_background"/>
+        <Spinner
+            android:id="@+id/branch_name"
+            android:layout_width="150dp"
+            android:layout_height="30dp"
+            android:visibility="gone"
+            android:background="@drawable/spinner_background"/>
 
 
 
-            <TextView
-                android:textSize="12sp"
-                android:textColor="@color/white"
-                android:ellipsize="end"
-                android:gravity="center_vertical"
-                android:id="@+id/userName"
-                android:focusable="true"
-                android:clickable="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Name"/>
-        </LinearLayout>
-        <LinearLayout
-            android:gravity="center"
-            android:orientation="vertical"
-            android:id="@+id/demo_layout"
+        <TextView
+            android:textSize="12sp"
+            android:textColor="@color/white"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:id="@+id/userName"
             android:focusable="true"
             android:clickable="true"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_margin="8dp">
-            <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/demo_image"
-
-
-                android:contentDescription="TODO" />
-        </LinearLayout>
-        <LinearLayout
-            android:gravity="center"
-            android:orientation="vertical"
-            android:id="@+id/share_layout"
-            android:focusable="true"
-            android:clickable="true"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_margin="8dp">
-            <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/ic_share_24dp"
-
-                style="@style/OvalGreen"
-                android:contentDescription="TODO" />
-        </LinearLayout>
-        <LinearLayout
-            android:gravity="center"
-            android:orientation="vertical"
-            android:id="@+id/qr_layout"
-            android:focusable="true"
-            android:clickable="true"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_margin="8dp">
-            <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/qr_code_admin"
-                style="@style/OvalBack"
-                android:contentDescription="TODO" />
-        </LinearLayout>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/name"/>
     </LinearLayout>
+
+    <LinearLayout
+        android:gravity="center"
+        android:orientation="vertical"
+        android:id="@+id/demo_layout"
+        android:focusable="true"
+        android:clickable="true"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp">
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/demo_image"
+
+
+            android:contentDescription="@string/todo" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:gravity="center"
+        android:orientation="vertical"
+        android:id="@+id/share_layout"
+        android:focusable="true"
+        android:clickable="true"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp">
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_share_24dp"
+
+            style="@style/OvalGreen"
+            android:contentDescription="@string/todo" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:gravity="center"
+        android:orientation="vertical"
+        android:id="@+id/qr_layout"
+        android:focusable="true"
+        android:clickable="true"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp">
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/qr_code_admin"
+            style="@style/OvalBack"
+            android:contentDescription="@string/todo" />
+    </LinearLayout>
+
 </LinearLayout>

@@ -10,8 +10,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import app.zingo.employeemanagements.Model.NotificationSettingsData;
-import app.zingo.employeemanagements.Model.WorkingDay;
+import app.zingo.employeemanagements.model.NotificationSettingsData;
+import app.zingo.employeemanagements.model.WorkingDay;
 
 public class DBHelper extends SQLiteOpenHelper {
 
@@ -98,7 +98,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    public boolean addTimings (WorkingDay workingDay) {
+    public boolean addTimings ( WorkingDay workingDay) {
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -199,10 +199,10 @@ public class DBHelper extends SQLiteOpenHelper {
         return array_list;
     }
 
-    public WorkingDay getOfficeTimingByOrgId(final int id) {
+    public WorkingDay getOfficeTimingByOrgId( final int id) {
 
 
-        WorkingDay object = new WorkingDay();
+        WorkingDay object = new WorkingDay ();
         //hp = new HashMap();
         SQLiteDatabase db = this.getReadableDatabase();
 

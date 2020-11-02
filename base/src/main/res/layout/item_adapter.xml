@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="125dp"
+                android:layout_height="125dp"
+                android:id="@+id/category_image_list"
+                android:src="@drawable/no_image"
+                />
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:id="@+id/itemname3"
+                    android:layout_marginLeft="13.4dp"
+                    android:text=""
+                    android:textColor="#262628"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:id="@+id/sell_rate"
+                    android:layout_marginLeft="13.4dp"
+                    android:text=""
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/colorPrimaryDark"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp"
+                    android:id="@+id/displ_rate"
+                    android:layout_marginLeft="13.4dp"
+                    android:text=""
+                    android:layout_marginTop="2dp"
+                    android:background="@drawable/text_striker"
+                    android:textColor="#9b9b9b"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp"
+                    android:id="@+id/displ_rate_item"
+                    android:layout_marginLeft="13.4dp"
+                    android:text=""
+                    android:visibility="gone"
+                    android:layout_marginTop="2dp"
+                    android:background="@drawable/text_striker"
+                    android:textColor="#9b9b9b"/>
+
+            </LinearLayout>
+
+
+
+
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+
+
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:layout_gravity="right"
+                android:text="Add"
+                android:id="@+id/add_item"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"
+                android:textColor="#fff"
+                android:background="@drawable/button_background"/>
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:gravity="right"
+                android:visibility="gone"
+                android:id="@+id/item_add_layout"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/circle">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:padding="5dp"
+                        android:id="@+id/item_add"
+                        android:src="@drawable/ic_sign"
+                        />
+                </LinearLayout>
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="15dp"
+                    android:text="1"
+                    android:id="@+id/item_count"
+                    android:layout_marginRight="15dp"
+                    android:textColor="#000"
+                    android:textSize="16dp"
+
+
+                    />
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/circle"
+                    android:layout_marginRight="30dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:padding="5dp"
+                        android:id="@+id/item_remove"
+
+                        android:src="@drawable/ic_line_1"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#f5f5f5"/>
+
+</LinearLayout>

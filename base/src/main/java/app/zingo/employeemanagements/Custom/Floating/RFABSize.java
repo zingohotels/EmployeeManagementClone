@@ -11,8 +11,8 @@ public enum RFABSize {
         this.dpSize = dpSize;
     }
 
-    public static RFABSize getRFABSizeByCode(int code) {
-        for (RFABSize rfabSize : RFABSize.values()) {
+    public static RFABSize getRFABSizeByCode( int code) {
+        for ( RFABSize rfabSize : RFABSize.values()) {
             if (code == rfabSize.code) {
                 return rfabSize;
             }

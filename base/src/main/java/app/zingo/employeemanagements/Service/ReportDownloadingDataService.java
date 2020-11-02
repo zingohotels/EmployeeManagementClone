@@ -13,9 +13,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.FileProvider;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.FileProvider;
 import android.util.Log;
 
 import java.io.File;
@@ -31,18 +31,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import app.zingo.employeemanagements.Model.Employee;
-import app.zingo.employeemanagements.Model.Expenses;
-import app.zingo.employeemanagements.Model.LiveTracking;
-import app.zingo.employeemanagements.Model.LoginDetails;
-import app.zingo.employeemanagements.Model.Meetings;
-import app.zingo.employeemanagements.Model.ObservableReportData;
-import app.zingo.employeemanagements.Model.ReportDataEmployee;
-import app.zingo.employeemanagements.Model.Tasks;
-import app.zingo.employeemanagements.UI.Common.ReportBulkDataDisplayScreen;
-import app.zingo.employeemanagements.Utils.PreferenceHandler;
-import app.zingo.employeemanagements.Utils.ThreadExecuter;
-import app.zingo.employeemanagements.Utils.Util;
+import app.zingo.employeemanagements.model.Employee;
+import app.zingo.employeemanagements.model.Expenses;
+import app.zingo.employeemanagements.model.LiveTracking;
+import app.zingo.employeemanagements.model.LoginDetails;
+import app.zingo.employeemanagements.model.Meetings;
+import app.zingo.employeemanagements.model.ObservableReportData;
+import app.zingo.employeemanagements.model.ReportDataEmployee;
+import app.zingo.employeemanagements.model.Tasks;
+import app.zingo.employeemanagements.ui.Common.ReportBulkDataDisplayScreen;
+import app.zingo.employeemanagements.utils.PreferenceHandler;
+import app.zingo.employeemanagements.utils.ThreadExecuter;
+import app.zingo.employeemanagements.utils.Util;
 import app.zingo.employeemanagements.WebApi.EmployeeApi;
 import app.zingo.employeemanagements.WebApi.MultpleAPI;
 import app.zingo.employeemanagements.base.R;
@@ -269,11 +269,11 @@ public class ReportDownloadingDataService extends Service {
 
 
 
-        new ThreadExecuter().execute(new Runnable() {
+        new ThreadExecuter ().execute( new Runnable() {
             @Override
             public void run() {
-                EmployeeApi apiService = Util.getClient().create(EmployeeApi.class);
-                Call<ArrayList<Employee>> call = apiService.getEmployeesByOrgId(PreferenceHandler.getInstance(ReportDownloadingDataService.this).getCompanyId());
+                EmployeeApi apiService = Util.getClient().create( EmployeeApi.class);
+                Call<ArrayList<Employee>> call = apiService.getEmployeesByOrgId(PreferenceHandler.getInstance( ReportDownloadingDataService.this).getCompanyId());
 
                 call.enqueue(new Callback<ArrayList<Employee>>() {
                     @Override
@@ -397,19 +397,19 @@ public class ReportDownloadingDataService extends Service {
             e.printStackTrace();
         }
 
-        LoginDetails ld  = new LoginDetails();
+        LoginDetails ld  = new LoginDetails ();
         ld.setEmployeeId(dto.getEmployeeId());
         ld.setLoginDate(new SimpleDateFormat("MM/dd/yyyy").format(date));
         String logDate = new SimpleDateFormat("MMM dd,yyyy").format(date);
         //getLoginDetails(ld,holder.mLogin,holder.mLogout,holder.mHours,logDate);
 
 
-        LiveTracking lv = new LiveTracking();
+        LiveTracking lv = new LiveTracking ();
         lv.setEmployeeId(dto.getEmployeeId());
         lv.setTrackingDate(new SimpleDateFormat("MM/dd/yyyy").format(date));
         //getLiveLocation(lv,holder.mKm);
 
-        Meetings md  = new Meetings();
+        Meetings md  = new Meetings ();
         md.setEmployeeId(dto.getEmployeeId());
         md.setMeetingDate(new SimpleDateFormat("MM/dd/yyyy").format(date));
         //getMeetingsDetails(md,holder.mVisits);
@@ -424,7 +424,7 @@ public class ReportDownloadingDataService extends Service {
                 .build();
 
 
-        MultpleAPI backendApi = Util.getClient().create(MultpleAPI.class);
+        MultpleAPI backendApi = Util.getClient().create( MultpleAPI.class);
 
         List<Observable<?>> requests = new ArrayList<>();
 
@@ -438,7 +438,7 @@ public class ReportDownloadingDataService extends Service {
         requests.add(backendApi.getLiveTrackingByEmployeeIdAndDate(lv));
          requests.add(backendApi.getMeetingsByEmployeeIdAndDate(md));
         requests.add(backendApi.getTasksByEmployeeId(dto.getEmployeeId()));
-        requests.add(backendApi.getExpenseByEmployeeIdAndOrganizationId(PreferenceHandler.getInstance(ReportDownloadingDataService.this).getCompanyId(),dto.getEmployeeId()));
+        requests.add(backendApi.getExpenseByEmployeeIdAndOrganizationId(PreferenceHandler.getInstance( ReportDownloadingDataService.this).getCompanyId(),dto.getEmployeeId()));
 
 
 
@@ -450,9 +450,9 @@ public class ReportDownloadingDataService extends Service {
 
                 if(args!=null&&args.length==5){
 
-                    result.setLoginDetailsArrayList((ArrayList<LoginDetails>)args[0]);
-                    result.setLiveTrackingArrayList((ArrayList<LiveTracking>)args[1]);
-                    result.setMeetingsArrayList((ArrayList<Meetings>)args[2]);
+                    result.setLoginDetailsArrayList((ArrayList< LoginDetails >)args[0]);
+                    result.setLiveTrackingArrayList((ArrayList< LiveTracking >)args[1]);
+                    result.setMeetingsArrayList((ArrayList< Meetings >)args[2]);
                     result.setTasksArrayList((ArrayList<Tasks>)args[3]);
                     result.setExpensesArrayList((ArrayList<Expenses>)args[4]);
                     result.setEmpName(dto.getEmployeeName());
@@ -508,7 +508,7 @@ public class ReportDownloadingDataService extends Service {
 
                 ReportDataEmployee reportDataEmployee = new ReportDataEmployee();
 
-                ArrayList<LoginDetails> loginDetailsArrayList = data.getLoginDetailsArrayList();
+                ArrayList< LoginDetails > loginDetailsArrayList = data.getLoginDetailsArrayList();
 
                 if (loginDetailsArrayList !=null && loginDetailsArrayList.size()!=0) {
 
@@ -531,7 +531,7 @@ public class ReportDownloadingDataService extends Service {
 
                     long diffHrs = 0;
 
-                    for (LoginDetails lg:loginDetailsArrayList) {
+                    for ( LoginDetails lg:loginDetailsArrayList) {
 
                         Date date = null;
                         try {
@@ -620,7 +620,7 @@ public class ReportDownloadingDataService extends Service {
 
                 }
 
-                ArrayList<Meetings> meetingsArrayList = data.getMeetingsArrayList();
+                ArrayList< Meetings > meetingsArrayList = data.getMeetingsArrayList();
 
                 if (meetingsArrayList !=null && meetingsArrayList.size()!=0) {
 
@@ -861,7 +861,7 @@ public class ReportDownloadingDataService extends Service {
 
 
 
-                ArrayList<LiveTracking> liveTrackingArrayList = data.getLiveTrackingArrayList();
+                ArrayList< LiveTracking > liveTrackingArrayList = data.getLiveTrackingArrayList();
                 float distance = 0;
 
 
@@ -971,7 +971,7 @@ public class ReportDownloadingDataService extends Service {
                             File sd = Environment.getExternalStorageDirectory();
                             String csvFile = "TeamActivity_"+startDateValue+"_"+endDateValue+".xls";
 
-                            File directory = new File(sd.getAbsolutePath()+"/Krony App/Team Activity");
+                            File directory = new File(sd.getAbsolutePath()+"/Mysolite App/Team Activity");
                             //create directory if not exist
 
                             File file = new File(directory, csvFile);
@@ -1035,7 +1035,7 @@ public class ReportDownloadingDataService extends Service {
                                     .setSmallIcon(R.mipmap.ic_launcher)
                                     .setContentTitle(name)
                                     .setContentText("Download Completed")
-                                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                                    .setPriority( NotificationCompat.PRIORITY_HIGH)
                                     .setContentIntent(pendingIntent)
                                     .setAutoCancel(false)
                                     .setVibrate(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400})
@@ -1082,7 +1082,7 @@ public class ReportDownloadingDataService extends Service {
             File sd = Environment.getExternalStorageDirectory();
             csvFile = "TeamActivity_"+startDateValue+"_"+endDateValue+".xls";
 
-            File directory = new File(sd.getAbsolutePath()+"/Krony App/Team Activity");
+            File directory = new File(sd.getAbsolutePath()+"/Mysolite App/Team Activity");
             //create directory if not exist
             if (!directory.exists() && !directory.isDirectory()) {
                 directory.mkdirs();
@@ -1098,7 +1098,7 @@ public class ReportDownloadingDataService extends Service {
             WritableSheet sheet = workbook.createSheet(sheetName, 0);
 
 
-            sheet.addCell(new Label(5,0, PreferenceHandler.getInstance(ReportDownloadingDataService.this).getCompanyName()));
+            sheet.addCell(new Label(5,0, PreferenceHandler.getInstance( ReportDownloadingDataService.this).getCompanyName()));
 
             sheet.mergeCells(5,0,10,0);
 
@@ -1110,7 +1110,7 @@ public class ReportDownloadingDataService extends Service {
             sheet.addCell(new Label(3,3,"Generated On "+new SimpleDateFormat("dd/MM/yyyy, hh:mm aa").format(new Date())));
             sheet.mergeCells(3,3,6,3);
 
-            sheet.addCell(new Label(7,3,"User : "+ PreferenceHandler.getInstance(ReportDownloadingDataService.this).getUserFullName()));
+            sheet.addCell(new Label(7,3,"User : "+ PreferenceHandler.getInstance( ReportDownloadingDataService.this).getUserFullName()));
             sheet.mergeCells(7,3,10,3);
 
             sheet.setColumnView(0, 20);

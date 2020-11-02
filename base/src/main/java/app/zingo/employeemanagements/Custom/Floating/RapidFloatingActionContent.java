@@ -63,7 +63,7 @@ public abstract class RapidFloatingActionContent extends FrameLayout {
 
     private View rootView;
 
-    public RapidFloatingActionContent setRootView(View rootView) {
+    public RapidFloatingActionContent setRootView( View rootView) {
         if (null == rootView) {
             return this;
         }
@@ -79,7 +79,7 @@ public abstract class RapidFloatingActionContent extends FrameLayout {
         return this;
     }
 
-    public RapidFloatingActionContent setRootView(int rootViewResId) {
+    public RapidFloatingActionContent setRootView( int rootViewResId) {
         return setRootView(LayoutInflater.from(getContext()).inflate(rootViewResId, null));
     }
 

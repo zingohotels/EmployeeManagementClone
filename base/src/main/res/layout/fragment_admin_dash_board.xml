@@ -6,7 +6,7 @@
     xmlns:card-view="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/tools"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
-    tools:context="app.zingo.employeemanagements.UI.NewAdminDesigns.AdminDashBoardFragment">
+    tools:context="app.zingo.employeemanagements.ui.NewAdminDesigns.AdminDashBoardFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -35,7 +35,7 @@
 
 
 
-                    <android.support.v7.widget.CardView
+                    <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:id="@+id/cardview_data_count"
                         android:layout_height="100dp"
@@ -203,7 +203,7 @@
                                 </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
-                    </android.support.v7.widget.CardView>
+                    </androidx.cardview.widget.CardView>
 
                     <app.zingo.employeemanagements.Custom.MyRegulerText
                         android:layout_width="match_parent"
@@ -220,7 +220,7 @@
 
 
 
-                    <android.support.v7.widget.CardView
+                    <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:id="@+id/cardview_data_count_employee"
                         android:layout_below="@+id/atten_title"
@@ -352,7 +352,7 @@
 
 
                         </LinearLayout>
-                    </android.support.v7.widget.CardView>
+                    </androidx.cardview.widget.CardView>
 
 
                     <!--
@@ -386,7 +386,7 @@
                                                         android:layout_weight="2"
                                                         android:layout_marginTop="10dp"
                                                         android:orientation="horizontal">
-                                                        <app.zingo.employeemanagements.Custom.MyRegulerText
+                                                        <mysoliteegulerText
                                                             android:id="@+id/today_employee_present"
                                                             android:layout_width="wrap_content"
                                                             android:layout_height="wrap_content"
@@ -401,7 +401,7 @@
 
                                                     </LinearLayout>
 
-                                                    <app.zingo.employeemanagements.Custom.MyRegulerText
+                                                    <mysoliteegulerText
                                                         android:layout_width="match_parent"
                                                         android:layout_height="wrap_content"
                                                         android:textSize="14sp"
@@ -441,7 +441,7 @@
                                                         android:layout_marginTop="10dp"
                                                         android:orientation="horizontal">
 
-                                                        <app.zingo.employeemanagements.Custom.MyRegulerText
+                                                        <mysoliteegulerText
                                                             android:id="@+id/absent_employee"
                                                             android:layout_width="wrap_content"
                                                             android:layout_height="wrap_content"
@@ -456,7 +456,7 @@
 
                                                     </LinearLayout>
 
-                                                    <app.zingo.employeemanagements.Custom.MyRegulerText
+                                                    <mysoliteegulerText
                                                         android:layout_width="match_parent"
                                                         android:layout_height="wrap_content"
                                                         android:textSize="14sp"
@@ -505,7 +505,7 @@
                                                         android:layout_weight="2"
                                                         android:layout_marginTop="10dp"
                                                         android:orientation="horizontal">
-                                                        <app.zingo.employeemanagements.Custom.MyRegulerText
+                                                        <mysoliteegulerText
                                                             android:id="@+id/leave_employees"
                                                             android:layout_width="wrap_content"
                                                             android:layout_height="wrap_content"
@@ -520,7 +520,7 @@
 
                                                     </LinearLayout>
 
-                                                    <app.zingo.employeemanagements.Custom.MyRegulerText
+                                                    <mysoliteegulerText
                                                         android:layout_width="match_parent"
                                                         android:layout_height="wrap_content"
                                                         android:textSize="14sp"
@@ -559,7 +559,7 @@
                                                         android:layout_weight="2"
                                                         android:layout_marginTop="10dp"
                                                         android:orientation="horizontal">
-                                                        <app.zingo.employeemanagements.Custom.MyRegulerText
+                                                        <mysoliteegulerText
                                                             android:id="@+id/unmarked_employees"
                                                             android:layout_width="wrap_content"
                                                             android:layout_height="wrap_content"
@@ -574,7 +574,7 @@
 
                                                     </LinearLayout>
 
-                                                    <app.zingo.employeemanagements.Custom.MyRegulerText
+                                                    <mysoliteegulerText
                                                         android:layout_width="match_parent"
                                                         android:layout_height="wrap_content"
                                                         android:textSize="14sp"
@@ -638,7 +638,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="No Location Found"/>
                         </LinearLayout>
-                        <android.support.v7.widget.RecyclerView
+                        <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/location_list_track"
                             android:visibility="gone"
                             android:clickable="true"
@@ -726,7 +726,7 @@
                                 android:textSize="15sp" />
                         </LinearLayout>
 
-                        <android.support.v7.widget.RecyclerView
+                        <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/task_list_dash"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -795,11 +795,11 @@
                                 android:layout_height="wrap_content"
                                 android:text="No Meetings Found"/>
                         </LinearLayout>
-                        <android.support.v7.widget.RecyclerView
+                        <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/targetList_meeting"
                             android:visibility="gone"
                             android:focusable="false"
-                            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"/>

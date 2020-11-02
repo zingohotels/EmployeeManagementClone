@@ -10,14 +10,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.AudioAttributes;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
 import android.net.Uri;
-import android.util.Log;
 
-import app.zingo.employeemanagements.UI.NewEmployeeDesign.EmployeeLoginFragment;
-import app.zingo.employeemanagements.UI.NewEmployeeDesign.EmployeeNewMainScreen;
-import app.zingo.employeemanagements.Utils.PreferenceHandler;
+import app.zingo.employeemanagements.ui.newemployeedesign.EmployeeNewMainScreen;
+import app.zingo.employeemanagements.utils.PreferenceHandler;
 import app.zingo.employeemanagements.base.R;
 
 
@@ -37,13 +33,13 @@ public class AlarmNotificationService extends IntentService {
 
         if(intent.getStringExtra ("type")!=null&&intent.getStringExtra ("type").equalsIgnoreCase ("Lunch")){
             System.out.println ("Suree Notification "+intent.getStringExtra ("type"));
-            if(PreferenceHandler.getInstance(AlarmNotificationService.this).getLunchBreakStatus ().equalsIgnoreCase ("true")) {
+            if(PreferenceHandler.getInstance( AlarmNotificationService.this).getLunchBreakStatus ().equalsIgnoreCase ("true")) {
                 sendNotification ("You are Still in Lunch Break.  if you completed your Break, Please end break");
             }
         }
         else if(intent.getStringExtra ("type")!=null&&intent.getStringExtra ("type").equalsIgnoreCase ("Tea")){
             System.out.println ("Suree Notification "+intent.getStringExtra ("type"));
-            if(PreferenceHandler.getInstance(AlarmNotificationService.this).getTeaBreakStatus ().equalsIgnoreCase ("true")){
+            if(PreferenceHandler.getInstance( AlarmNotificationService.this).getTeaBreakStatus ().equalsIgnoreCase ("true")){
                 sendNotification("You are Still in Tea Break.  if you completed your Break, Please end break");
             }
         }

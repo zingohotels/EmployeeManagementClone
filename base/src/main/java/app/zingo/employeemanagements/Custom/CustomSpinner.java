@@ -1,7 +1,7 @@
 package app.zingo.employeemanagements.Custom;
 
 import android.content.Context;
-import android.support.v7.widget.AppCompatSpinner;
+import androidx.appcompat.widget.AppCompatSpinner;
 import android.util.AttributeSet;
 
 public class CustomSpinner extends AppCompatSpinner {
@@ -31,9 +31,9 @@ public class CustomSpinner extends AppCompatSpinner {
 
     public interface OnSpinnerEventsListener {
 
-        void onSpinnerOpened();
+        void onSpinnerOpened ( );
 
-        void onSpinnerClosed();
+        void onSpinnerClosed ( );
 
     }
 

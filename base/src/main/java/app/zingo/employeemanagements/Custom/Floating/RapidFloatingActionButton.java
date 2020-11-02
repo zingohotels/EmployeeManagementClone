@@ -8,7 +8,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -46,7 +46,7 @@ public class RapidFloatingActionButton extends FrameLayout implements View.OnCli
     }
 
 
-    private CircleButtonProperties rfabProperties = new CircleButtonProperties();
+    private CircleButtonProperties rfabProperties = new CircleButtonProperties ();
 
 
     private int normalColor;
@@ -59,14 +59,14 @@ public class RapidFloatingActionButton extends FrameLayout implements View.OnCli
 
     private OnRapidFloatingActionListener onRapidFloatingActionListener;
 
-    public void setOnRapidFloatingActionListener(OnRapidFloatingActionListener onRapidFloatingActionListener) {
+    public void setOnRapidFloatingActionListener( OnRapidFloatingActionListener onRapidFloatingActionListener) {
         this.onRapidFloatingActionListener = onRapidFloatingActionListener;
     }
 
 
     private OnRapidFloatingButtonSeparateListener onRapidFloatingButtonSeparateListener;
 
-    public void setOnRapidFloatingButtonSeparateListener(OnRapidFloatingButtonSeparateListener onRapidFloatingButtonSeparateListener) {
+    public void setOnRapidFloatingButtonSeparateListener( OnRapidFloatingButtonSeparateListener onRapidFloatingButtonSeparateListener) {
         this.onRapidFloatingButtonSeparateListener = onRapidFloatingButtonSeparateListener;
     }
 
@@ -107,7 +107,7 @@ public class RapidFloatingActionButton extends FrameLayout implements View.OnCli
             normalColor = a.getColor(R.styleable.RapidFloatingActionButton_rfab_color_normal, getContext().getResources().getColor(R.color.rfab__color_background_normal));
             pressedColor = a.getColor(R.styleable.RapidFloatingActionButton_rfab_color_pressed, getContext().getResources().getColor(R.color.rfab__color_background_pressed));
             int sizeCode = a.getInt(R.styleable.RapidFloatingActionButton_rfab_size, RFABSize.NORMAL.getCode());
-            rfabProperties.setStandardSize(RFABSize.getRFABSizeByCode(sizeCode));
+            rfabProperties.setStandardSize( RFABSize.getRFABSizeByCode(sizeCode));
             rfabProperties.setShadowColor(a.getInt(R.styleable.RapidFloatingActionButton_rfab_shadow_color, Color.TRANSPARENT));
             rfabProperties.setShadowDx(a.getDimensionPixelSize(R.styleable.RapidFloatingActionButton_rfab_shadow_dx, 0));
             rfabProperties.setShadowDy(a.getDimensionPixelSize(R.styleable.RapidFloatingActionButton_rfab_shadow_dy, 0));
@@ -133,12 +133,12 @@ public class RapidFloatingActionButton extends FrameLayout implements View.OnCli
         }
 
 
-        CircleButtonDrawable normalDrawable = new CircleButtonDrawable(getContext(), rfabProperties, normalColor);
+        CircleButtonDrawable normalDrawable = new CircleButtonDrawable (getContext(), rfabProperties, normalColor);
         RFABViewUtil.setBackgroundDrawable(
                 this,
                 RFABShape.selectorClickSimple(
                         normalDrawable,
-                        new CircleButtonDrawable(getContext(), rfabProperties, pressedColor)
+                        new CircleButtonDrawable (getContext(), rfabProperties, pressedColor)
                 )
         );
 

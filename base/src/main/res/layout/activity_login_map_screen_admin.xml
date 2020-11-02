@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="app.zingo.employeemanagements.UI.Common.EmployeeMeetingMap">
+    tools:context="app.zingo.employeemanagements.ui.Common.EmployeeMeetingMap">
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/employee_login"

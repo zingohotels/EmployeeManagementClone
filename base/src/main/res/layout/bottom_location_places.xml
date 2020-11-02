@@ -15,12 +15,12 @@
         android:textSize="18dp"
         android:textColor="#000000"
         android:text="Text"/>
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/location_lists"
         android:layout_marginTop="25dp"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
 
 

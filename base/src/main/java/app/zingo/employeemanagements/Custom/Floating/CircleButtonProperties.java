@@ -21,7 +21,7 @@ public class CircleButtonProperties implements Serializable {
         return standardSize;
     }
 
-    public CircleButtonProperties setStandardSize(RFABSize standardSize) {
+    public CircleButtonProperties setStandardSize( RFABSize standardSize) {
         this.standardSize = standardSize;
         return this;
     }
@@ -43,7 +43,7 @@ public class CircleButtonProperties implements Serializable {
         return shadowColor;
     }
 
-    public CircleButtonProperties setShadowColor(int shadowColor) {
+    public CircleButtonProperties setShadowColor( int shadowColor) {
         this.shadowColor = shadowColor;
         return this;
     }
@@ -52,7 +52,7 @@ public class CircleButtonProperties implements Serializable {
         return shadowRadius;
     }
 
-    public CircleButtonProperties setShadowRadius(int shadowRadius) {
+    public CircleButtonProperties setShadowRadius( int shadowRadius) {
         this.shadowRadius = shadowRadius;
         return this;
     }
@@ -61,7 +61,7 @@ public class CircleButtonProperties implements Serializable {
         return shadowDx;
     }
 
-    public CircleButtonProperties setShadowDx(int shadowDx) {
+    public CircleButtonProperties setShadowDx( int shadowDx) {
         this.shadowDx = shadowDx;
         return this;
     }
@@ -70,7 +70,7 @@ public class CircleButtonProperties implements Serializable {
         return shadowDy;
     }
 
-    public CircleButtonProperties setShadowDy(int shadowDy) {
+    public CircleButtonProperties setShadowDy( int shadowDy) {
         this.shadowDy = shadowDy;
         return this;
     }

@@ -6,14 +6,12 @@
     android:orientation="vertical"
     android:id="@+id/rootView"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
+    android:layout_height="fill_parent">
 
     <ScrollView
         android:background="#FFFFFFFF"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@id/appBar"
         android:layout_marginBottom="10dp"
         android:layout_alignParentBottom="true">
 
@@ -445,7 +443,7 @@
     </ScrollView>
 
 
-    <android.support.v7.widget.AppCompatButton
+    <androidx.appcompat.widget.AppCompatButton
         android:textSize="@dimen/regularFont"
         android:textColor="@color/white"
         android:id="@+id/save"

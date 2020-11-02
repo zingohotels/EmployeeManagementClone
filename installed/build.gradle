@@ -1,23 +1,22 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
 
-
-
-    defaultConfig {
-
-        applicationId "app.zingo.employeemanagements"
-        minSdkVersion 21
-        multiDexEnabled true
-        targetSdkVersion 28
-        versionCode 34
-        versionName "1.34"
-
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    defaultConfig {
+        applicationId "app.zingo.employeemanagements"
+        minSdkVersion 19
+        multiDexEnabled true
+        targetSdkVersion 29
+        versionCode 38
+        versionName "1.38"
 
-
+    }
 }
 
 dependencies {

@@ -21,9 +21,9 @@ import app.zingo.employeemanagements.base.R;
 
 public class RapidFloatingActionContentLabelList extends RapidFloatingActionContent implements View.OnClickListener {
     public interface OnRapidFloatingActionContentLabelListListener<T> {
-        void onRFACItemLabelClick(int position, RFACLabelItem<T> item);
+        void onRFACItemLabelClick( int position , RFACLabelItem < T > item );
 
-        void onRFACItemIconClick(int position, RFACLabelItem<T> item);
+        void onRFACItemIconClick( int position , RFACLabelItem < T > item );
     }
 
     private OnRapidFloatingActionContentLabelListListener onRapidFloatingActionContentLabelListListener;
@@ -51,7 +51,7 @@ public class RapidFloatingActionContentLabelList extends RapidFloatingActionCont
     private int rfacItemDrawableSizePx;
 
     private LinearLayout contentView;
-    private List<RFACLabelItem> items;
+    private List< RFACLabelItem > items;
     private int iconShadowRadius;
     private int iconShadowColor;
     private int iconShadowDx;
@@ -72,19 +72,19 @@ public class RapidFloatingActionContentLabelList extends RapidFloatingActionCont
         refreshItems();
     }
 
-    public List<RFACLabelItem> getItems() {
+    public List< RFACLabelItem > getItems() {
         return items;
     }
 
-    public RapidFloatingActionContentLabelList setItems(List<RFACLabelItem> items) {
-        if (!RFABTextUtil.isEmpty(items)) {
+    public RapidFloatingActionContentLabelList setItems( List< RFACLabelItem > items) {
+        if (! RFABTextUtil.isEmpty(items)) {
             this.items = items;
         }
         return this;
     }
 
     private void refreshItems() {
-        if (RFABTextUtil.isEmpty(items)) {
+        if ( RFABTextUtil.isEmpty(items)) {
             throw new RuntimeException(this.getClass().getSimpleName() + "[items] can not be empty!");
         }
         contentView.removeAllViews();
@@ -104,8 +104,8 @@ public class RapidFloatingActionContentLabelList extends RapidFloatingActionCont
             iconIv.setTag(R.id.rfab__id_content_label_list_item_position, i);
 
             // 设置item的图片属性
-            CircleButtonProperties circleButtonProperties = new CircleButtonProperties()
-                    .setStandardSize(RFABSize.MINI)
+            CircleButtonProperties circleButtonProperties = new CircleButtonProperties ()
+                    .setStandardSize( RFABSize.MINI)
                     .setShadowColor(iconShadowColor)
                     .setShadowRadius(iconShadowRadius)
                     .setShadowDx(iconShadowDx)
@@ -134,9 +134,9 @@ public class RapidFloatingActionContentLabelList extends RapidFloatingActionCont
             Integer normalColor = item.getIconNormalColor();
             Integer pressedColor = item.getIconPressedColor();
 
-            CircleButtonDrawable rfacNormalDrawable = new CircleButtonDrawable(getContext(), circleButtonProperties,
+            CircleButtonDrawable rfacNormalDrawable = new CircleButtonDrawable (getContext(), circleButtonProperties,
                     null == normalColor ? getResources().getColor(R.color.rfab__color_background_normal) : normalColor);
-            CircleButtonDrawable rfacPressedDrawable = new CircleButtonDrawable(getContext(), circleButtonProperties,
+            CircleButtonDrawable rfacPressedDrawable = new CircleButtonDrawable (getContext(), circleButtonProperties,
                     null == pressedColor ? getResources().getColor(R.color.rfab__color_background_pressed) : pressedColor);
 
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.HONEYCOMB) {
@@ -150,7 +150,7 @@ public class RapidFloatingActionContentLabelList extends RapidFloatingActionCont
 
 
             String label = item.getLabel();
-            if (RFABTextUtil.isEmpty(label)) {
+            if ( RFABTextUtil.isEmpty(label)) {
                 labelTv.setVisibility(GONE);
             } else {
                 if (item.isLabelTextBold()) {
@@ -181,7 +181,7 @@ public class RapidFloatingActionContentLabelList extends RapidFloatingActionCont
                 iconIv.setImageDrawable(drawable);
             } else if ((resId = item.getResId()) > 0) {
                 iconIv.setVisibility(VISIBLE);
-                iconIv.setImageDrawable(RFABImageUtil.getResourceDrawableBounded(getContext(), resId, rfacItemDrawableSizePx));
+                iconIv.setImageDrawable( RFABImageUtil.getResourceDrawableBounded(getContext(), resId, rfacItemDrawableSizePx));
             } else {
                 iconIv.setVisibility(GONE);
             }
@@ -214,22 +214,22 @@ public class RapidFloatingActionContentLabelList extends RapidFloatingActionCont
         }
     }
 
-    public RapidFloatingActionContentLabelList setIconShadowRadius(int iconShadowRadius) {
+    public RapidFloatingActionContentLabelList setIconShadowRadius( int iconShadowRadius) {
         this.iconShadowRadius = iconShadowRadius;
         return this;
     }
 
-    public RapidFloatingActionContentLabelList setIconShadowColor(int iconShadowColor) {
+    public RapidFloatingActionContentLabelList setIconShadowColor( int iconShadowColor) {
         this.iconShadowColor = iconShadowColor;
         return this;
     }
 
-    public RapidFloatingActionContentLabelList setIconShadowDx(int iconShadowDx) {
+    public RapidFloatingActionContentLabelList setIconShadowDx( int iconShadowDx) {
         this.iconShadowDx = iconShadowDx;
         return this;
     }
 
-    public RapidFloatingActionContentLabelList setIconShadowDy(int iconShadowDy) {
+    public RapidFloatingActionContentLabelList setIconShadowDy( int iconShadowDy) {
         this.iconShadowDy = iconShadowDy;
         return this;
     }

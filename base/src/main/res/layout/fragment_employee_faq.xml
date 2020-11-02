@@ -85,7 +85,7 @@
                         android:layout_marginRight="10dp"
                         android:layout_marginTop="10dp"
                         android:gravity="center"
-                        android:text="Join Krony as an Employee with following steps"/>
+                        android:text="Join Mysolite as an Employee with following steps"/>
 
 
                     <LinearLayout

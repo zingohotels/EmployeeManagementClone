@@ -2,7 +2,7 @@ package app.zingo.employeemanagements.WebApi;
 
 import java.util.ArrayList;
 
-import app.zingo.employeemanagements.Model.MeetingDetailsNotificationManagers;
+import app.zingo.employeemanagements.model.MeetingDetailsNotificationManagers;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -16,15 +16,15 @@ import retrofit2.http.Path;
 public interface MeetingNotificationAPI {
 
     @POST("MeetingDetailsNotificationManagers")
-    Call<MeetingDetailsNotificationManagers> saveMeetingNotification(@Body MeetingDetailsNotificationManagers details);
+    Call<MeetingDetailsNotificationManagers> saveMeetingNotification ( @Body MeetingDetailsNotificationManagers details );
 
     @POST("MeetingDetailsNotificationManagers/SendMeetingDetailsNotification")
-    Call<ArrayList<String>> sendMeetingNotification(@Body MeetingDetailsNotificationManagers details);
+    Call<ArrayList<String>> sendMeetingNotification ( @Body MeetingDetailsNotificationManagers details );
 
     @GET("MeetingDetailsNotificationManagers/GetMeetingDetailsNotificationByManagerId/{ManagerId}")
-    Call<ArrayList<MeetingDetailsNotificationManagers>> getMeetingNotificationByManagerId(@Path("ManagerId") int ManagerId);
+    Call<ArrayList<MeetingDetailsNotificationManagers>> getMeetingNotificationByManagerId ( @Path ("ManagerId") int ManagerId );
 
     @GET("MeetingDetailsNotificationManagers/GetMeetingDetailsNotificationByEmployeeId/{EmployeeId}")
-    Call<ArrayList<MeetingDetailsNotificationManagers>> getMeetingNotificationByEmployeeId(@Path("EmployeeId") int EmployeeId);
+    Call<ArrayList<MeetingDetailsNotificationManagers>> getMeetingNotificationByEmployeeId ( @Path ("EmployeeId") int EmployeeId );
 
 }

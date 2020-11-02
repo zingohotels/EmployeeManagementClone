@@ -2,7 +2,7 @@ package app.zingo.employeemanagements.WebApi;
 
 import java.util.ArrayList;
 
-import app.zingo.employeemanagements.Model.Leaves;
+import app.zingo.employeemanagements.model.Leaves;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -17,19 +17,19 @@ import retrofit2.http.Path;
 public interface LeaveAPI {
 
     @POST("Leaves")
-    Call<Leaves> addLeave(@Body Leaves details);
+    Call<Leaves> addLeave ( @Body Leaves details );
 
     @PUT("Leaves/{id}")
-    Call<Leaves> updateLeaves(@Path("id") int id, @Body Leaves details);
+    Call<Leaves> updateLeaves ( @Path ("id") int id , @Body Leaves details );
 
     @GET("Leaves/GetAllLeavesByEmployeeId/{EmployeeId}")
-    Call<ArrayList<Leaves>> getLeavesByEmployeeId(@Path("EmployeeId") int id);
+    Call<ArrayList<Leaves>> getLeavesByEmployeeId ( @Path ("EmployeeId") int id );
 
     @GET("Leaves/{id}")
-    Call<Leaves> getLeaveById(@Path("id") int id);
+    Call<Leaves> getLeaveById ( @Path ("id") int id );
 
     @GET("Leaves/GetAllLeavesByStatusandEmployeeId/{Status}/{EmployeeId}")
-    Call<ArrayList<Leaves>> getLeavesByStatusAndEmployeeId(@Path("Status") String status, @Path("EmployeeId") int id);
+    Call<ArrayList<Leaves>> getLeavesByStatusAndEmployeeId ( @Path ("Status") String status , @Path ("EmployeeId") int id );
 
 
 }

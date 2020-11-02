@@ -1,44 +1,47 @@
 package app.zingo.employeemanagements.Service;
 
 import android.Manifest;
-import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.IBinder;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationCompat;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+
+import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import app.zingo.employeemanagements.AlarmManager.AlarmNotificationService;
-import app.zingo.employeemanagements.AlarmManager.AlarmSoundService;
-import app.zingo.employeemanagements.AlarmManager.CheckOutAlarm;
-import app.zingo.employeemanagements.Model.LiveTracking;
-import app.zingo.employeemanagements.UI.NewEmployeeDesign.BreakPurpose;
-import app.zingo.employeemanagements.Utils.PreferenceHandler;
-import app.zingo.employeemanagements.Utils.TrackGPS;
-import app.zingo.employeemanagements.Utils.Util;
+
+import app.zingo.employeemanagements.model.LiveTracking;
+import app.zingo.employeemanagements.ui.newemployeedesign.BreakPurpose;
+import app.zingo.employeemanagements.utils.Const;
+import app.zingo.employeemanagements.utils.PreferenceHandler;
+import app.zingo.employeemanagements.utils.TrackGPS;
+import app.zingo.employeemanagements.utils.Util;
 import app.zingo.employeemanagements.WebApi.LiveTrackingAPI;
 import app.zingo.employeemanagements.base.BuildConfig;
 import app.zingo.employeemanagements.base.R;
@@ -47,16 +50,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LocationForegroundService extends Service {
-
     private static final String TAG_FOREGROUND_SERVICE = "FOREGROUND_SERVICE";
     public static final String ACTION_START_FOREGROUND_SERVICE = "ACTION_START_FOREGROUND_SERVICE";
     public static final String ACTION_STOP_FOREGROUND_SERVICE = "ACTION_STOP_FOREGROUND_SERVICE";
     boolean check = false;
     TrackGPS gps;
     TelephonyManager telephonyManager;
-    private AlarmManager alarmManager;
-    private PendingIntent pendingIntent;
-    private static final int ALARM_REQUEST_CODE = 133;
 
     public LocationForegroundService() {
     }
@@ -67,16 +66,23 @@ public class LocationForegroundService extends Service {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
+    private BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver(){
+        @Override
+        public void onReceive( Context context, Intent intent) {
+            int level = intent.getIntExtra( BatteryManager.EXTRA_LEVEL, 0);
+            Const.BATTERY_LEVEL = level;
+        }
+    };
+
     @Override
     public void onCreate() {
         super.onCreate();
         Log.d(TAG_FOREGROUND_SERVICE, "My foreground service onCreate().");
-
+        this.registerReceiver(this.mBatInfoReceiver, new IntentFilter (Intent.ACTION_BATTERY_CHANGED));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             startMyOwnForeground();
         else
             startForeground(1, new Notification());
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -104,9 +110,7 @@ public class LocationForegroundService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
             String action = intent.getAction();
-
-            gps = new TrackGPS(LocationForegroundService.this);
-
+            gps = new TrackGPS ( LocationForegroundService.this);
             switch (action) {
                 case ACTION_START_FOREGROUND_SERVICE:
                     startForegroundService();
@@ -120,7 +124,6 @@ public class LocationForegroundService extends Service {
             }
         }
         return START_STICKY;
-
     }
 
     /* Used to build and start foreground service. */
@@ -156,7 +159,7 @@ public class LocationForegroundService extends Service {
 
             //Alarm
             if(PreferenceHandler.getInstance(getApplicationContext()).getUserId()!=0&& PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()!=2&& PreferenceHandler.getInstance(getApplicationContext()).getLoginStatus().equalsIgnoreCase("Login")){
-                triggerAlarmManager();
+                //triggerAlarmManager();
             }
 
         } else {
@@ -194,9 +197,7 @@ public class LocationForegroundService extends Service {
                 assert notificationManager != null;
                 notificationManager.createNotificationChannel(mChannel);
             }
-
             // notificationManager.notify(m, builder.build());
-
             // Start foreground service.
             new Timer().schedule(new TimerTask() {
                 @Override
@@ -210,58 +211,14 @@ public class LocationForegroundService extends Service {
         }
         //Alarm
         if(PreferenceHandler.getInstance(getApplicationContext()).getUserId()!=0&& PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()!=2&& PreferenceHandler.getInstance(getApplicationContext()).getLoginStatus().equalsIgnoreCase("Login")){
-            triggerAlarmManager();
+            // triggerAlarmManager();
         }
     }
 
-    public void triggerAlarmManager () {
-
-        Intent myIntent = new Intent(LocationForegroundService.this, CheckOutAlarm.class);
-        myIntent.putExtra("type","checkout");
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(LocationForegroundService.this, 0, myIntent, 0);
-        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-
-       /* Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        calendar.add(Calendar.MINUTE, 15);*/
-
-        Calendar firingCal = Calendar.getInstance();
-        Calendar currentCal = Calendar.getInstance();
-
-        firingCal.set(Calendar.HOUR_OF_DAY, 22); // At the hour you wanna fire
-        firingCal.set(Calendar.MINUTE,00); // Particular minute
-        firingCal.set(Calendar.SECOND, 00); // particular second
-         // particular AM/PM (While using 24 Time Zone It`s Not Required)
-
-        long intendedTime = firingCal.getTimeInMillis();
-        long currentTime = currentCal.getTimeInMillis();
-
-        if(intendedTime >= currentTime){
-            alarmManager.setRepeating(AlarmManager.RTC, intendedTime, AlarmManager.INTERVAL_DAY, pendingIntent);
-        } else{
-            firingCal.add(Calendar.DAY_OF_MONTH, 1);
-            intendedTime = firingCal.getTimeInMillis();
-            alarmManager.setRepeating(AlarmManager.RTC, intendedTime, AlarmManager.INTERVAL_DAY, pendingIntent);
-        }
-    }
-
-    public void stopAlarmManager () {
-        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        manager.cancel(pendingIntent);
-        stopService(new Intent(LocationForegroundService.this, AlarmSoundService.class));
-        NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancel(AlarmNotificationService.NOTIFICATION_ID);
-       // Toast.makeText(this, "Alarm Cancelled/Stop by User.", Toast.LENGTH_SHORT).show();
-    }
-
-
-    private void stopForegroundService()
-    {
+    private void stopForegroundService() {
         Log.d(TAG_FOREGROUND_SERVICE, "Stop foreground service.");
-
         // Stop foreground service and remove the notification.
         stopForeground(true);
-
         // Stop the foreground service.
         stopSelf();
     }
@@ -269,49 +226,43 @@ public class LocationForegroundService extends Service {
     private void locationPassing(){
 
         try {
-
             telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-
             if(locationCheck()&& PreferenceHandler.getInstance(getApplicationContext()).getUserId()!=0&& PreferenceHandler.getInstance(getApplicationContext()).getUserRoleUniqueID()!=2&& PreferenceHandler.getInstance(getApplicationContext()).getLoginStatus().equalsIgnoreCase("Login")){
-
-                if(gps.canGetLocation())
-                {
+                if(gps.canGetLocation()) {
                     System.out.println("Long and lat Rev "+gps.getLatitude()+" = "+gps.getLongitude());
                     double latitude = gps.getLatitude();
                     double longitude = gps.getLongitude();
-
-
-
                     if(latitude!=0&&longitude!=0){
-
-                        if(PreferenceHandler.getInstance(LocationForegroundService.this).isFar()){
-
+                        if(PreferenceHandler.getInstance( LocationForegroundService.this).isFar()){
                             NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
                             notificationManager.cancel(12);
-
                         }else{
-
                             distance(latitude,longitude);
-
                         }
-                        LiveTracking liveTracking = new LiveTracking();
-                        liveTracking.setEmployeeId(PreferenceHandler.getInstance(LocationForegroundService.this).getUserId());
+                        LiveTracking liveTracking = new LiveTracking ();
+                        liveTracking.setEmployeeId(PreferenceHandler.getInstance( LocationForegroundService.this).getUserId());
                         liveTracking.setLatitude(""+latitude);
                         liveTracking.setLongitude(""+longitude);
                         liveTracking.setAppVersion(""+ BuildConfig.VERSION_NAME);
                         liveTracking.setTrackingDate(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
                         liveTracking.setTrackingTime(new SimpleDateFormat("HH:mm:ss").format(new Date()));
+                        if(Const.BATTERY_LEVEL!=0){
+                            liveTracking.setBatteryPercentage(""+Const.BATTERY_LEVEL);
+                        }
+                        if(getMobileOSVersion ()!=null){
+                            liveTracking.setMobileOSVersion ( getMobileOSVersion () );
+                        }if(isInternetOn (this)){
+                            liveTracking.setInternetOn ("Internet ON");
+                        }else{
+                            liveTracking.setInternetOn ("Internet ON");
+                        }
+
 
                         try {
-
-                            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                            if ( ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
                                 // TODO: Consider calling
                                 //    ActivityCompat#requestPermissions
-                                // here to request the missing permissions, and then overriding
-                                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                //                                          int[] grantResults)
-                                // to handle the case where the user grants the permission. See the documentation
-                                // for ActivityCompat#requestPermissions for more details.
+
                                 return;
                             }
 
@@ -321,33 +272,17 @@ public class LocationForegroundService extends Service {
 
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                 if(telephonyManager.getPhoneCount()>1) {
-
-
-
                                     for(int i =0 ;i<telephonyManager.getPhoneCount();i++){
-
-                                        imei = imei+","+telephonyManager.getDeviceId(i);
+                                        imei = imei+","+/*telephonyManager.getDeviceId(i)*/Settings.System.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
                                     }
-
                                     liveTracking.setDeviceName("" + imei+"");
-
                                 }else{
-
-                                    liveTracking.setDeviceName(imei+"," + telephonyManager.getDeviceId());
+                                    liveTracking.setDeviceName(imei+"," + /*telephonyManager.getDeviceId()*/Settings.System.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID));
                                 }
 
                             }else{
-
-                                liveTracking.setDeviceName(imei+","+ telephonyManager.getDeviceId());
+                                liveTracking.setDeviceName(imei+","+ /*telephonyManager.getDeviceId()*/Settings.System.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID));
                             }
-
-                            BatteryManager bm = (BatteryManager)getSystemService(BATTERY_SERVICE);
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
-                                liveTracking.setBatteryPercentage(""+batLevel);
-
-                            }
-                            //
 
                         }catch (Exception e){
                             e.printStackTrace();
@@ -356,21 +291,15 @@ public class LocationForegroundService extends Service {
                         addLiveTracking(liveTracking);
                     }
                 }
-                else
-                {
-
-                }
             }
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
     public boolean locationCheck(){
 
-        final boolean status = false;
         LocationManager lm = (LocationManager) LocationForegroundService.this.getSystemService(Context.LOCATION_SERVICE);
         boolean gps_enabled = false;
         boolean network_enabled = false;
@@ -387,47 +316,27 @@ public class LocationForegroundService extends Service {
     }
 
     public void addLiveTracking(final LiveTracking liveTracking) {
-
-
-        LiveTrackingAPI apiService = Util.getClient().create(LiveTrackingAPI.class);
-
-        Call<LiveTracking> call = apiService.addLiveTracking(liveTracking);
-
-        call.enqueue(new Callback<LiveTracking>() {
+        LiveTrackingAPI apiService = Util.getClient().create( LiveTrackingAPI.class);
+        Call< LiveTracking > call = apiService.addLiveTracking(liveTracking);
+        call.enqueue(new Callback< LiveTracking >() {
             @Override
-            public void onResponse(Call<LiveTracking> call, Response<LiveTracking> response) {
-//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
-                try
-                {
-
-
+            public void onResponse( Call< LiveTracking > call, Response< LiveTracking > response) {
+                try {
                     int statusCode = response.code();
                     if (statusCode == 200 || statusCode == 201) {
-
                         LiveTracking s = response.body();
-
                         if(s!=null){
-
                             Log.e("TAG", "Success");
                         }
-
-                    }else {
-
                     }
                 }
-                catch (Exception ex)
-                {
-
-
+                catch (Exception ex) {
                     ex.printStackTrace();
                 }
-//                callGetStartEnd();
             }
 
             @Override
-            public void onFailure(Call<LiveTracking> call, Throwable t) {
-
-
+            public void onFailure( Call< LiveTracking > call, Throwable t) {
                 Log.e("TAG", t.toString());
             }
         });
@@ -435,97 +344,106 @@ public class LocationForegroundService extends Service {
 
 
     private void distance(final double lati,final double longi){
-
         Location locationA = new Location("point A");
-        locationA.setLatitude(Double.parseDouble(PreferenceHandler.getInstance(LocationForegroundService.this).getOrganizationLati()));
-        locationA.setLongitude(Double.parseDouble(PreferenceHandler.getInstance(LocationForegroundService.this).getOrganizationLongi()));
+        locationA.setLatitude(Double.parseDouble(PreferenceHandler.getInstance( LocationForegroundService.this).getOrganizationLati()));
+        locationA.setLongitude(Double.parseDouble(PreferenceHandler.getInstance( LocationForegroundService.this).getOrganizationLongi()));
         Location locationB = new Location("point B");
         locationB.setLatitude(lati);
         locationB.setLongitude(longi);
 
         float distance = locationA.distanceTo(locationB);
-
         if ( PreferenceHandler.getInstance( LocationForegroundService.this ).isLocationOn( ) ) {
             distance = 0;
         }
 
         if(distance>200){
 
-            Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+            if(PreferenceHandler.getInstance( getApplicationContext() ).isMovingFar()){
 
-            URL url = null;
-
-            Intent intents = new Intent(LocationForegroundService.this, BreakPurpose.class);
-            intents.putExtra("Longi",""+longi);
-            intents.putExtra("Lati",""+lati);
-
-            //  Uri sound = Uri.parse("android.resource://" + this.getPackageName() + "/raw/good_morning");
-            int m =12;
-
-            intents.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP );
-
-            intents.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, m, intents, PendingIntent.FLAG_UPDATE_CURRENT);
-
-            int notifyID = 1;
-            String CHANNEL_ID = ""+ 1;// The id of the channel.
-            CharSequence name = "Zingo" ;// The user-visible name of the channel.
-            int importance = NotificationManager.IMPORTANCE_LOW;
-            NotificationChannel mChannel=null;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
-            }
-
-            Notification.Builder notificationBuilder = null;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                notificationBuilder = new Notification.Builder(this)
-                        .setTicker("You are moving far away from your organization").setWhen(0)
-                        .setContentTitle("You are moving far away from your organization")
-                        .setContentText("You are moving far away from your organization")
-                        .setAutoCancel(true)
-                        //.setFullScreenIntent(pendingIntent,false)
-                        //.setNumber()
-                        .setContentIntent(pendingIntent)
-                        .setOngoing(true)
-                        .setContentInfo("You are moving far away from your organization")
-                        .setLargeIcon(icon)
-                        .setChannelId("1")
-
-                        .setPriority(Notification.PRIORITY_MAX)
-
-                        // .setPriority(NotificationManager.IMPORTANCE_HIGH)
-                        .setSmallIcon(R.mipmap.ic_launcher);
             }else{
-                notificationBuilder = new Notification.Builder(this)
-                        .setTicker("You are moving far away from your organization").setWhen(0)
-                        .setContentTitle("You are moving far away from your organization")
-                        .setContentText("You are moving far away from your organization")
-                        .setAutoCancel(true)
-                        //.setFullScreenIntent(pendingIntent,false)
 
-                        .setContentIntent(pendingIntent)
-                        .setOngoing(true)
-                        .setContentInfo("You are moving far away from your organization")
-                        .setLargeIcon(icon)
+                Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+                URL url = null;
 
-                        .setPriority(Notification.PRIORITY_MAX)
+                Intent intents = new Intent( LocationForegroundService.this, BreakPurpose.class);
+                intents.putExtra("Longi",""+longi);
+                intents.putExtra("Lati",""+lati);
+                //  Uri sound = Uri.parse("android.resource://" + this.getPackageName() + "/raw/good_morning");
+                int m =12;
 
-                        .setNumber(1)
-                        // .setPriority(NotificationManager.IMPORTANCE_HIGH)
-                        .setSmallIcon(R.mipmap.ic_launcher);
+                intents.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP );
+                intents.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                PendingIntent pendingIntent = PendingIntent.getActivity(this, m, intents, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                int notifyID = 1;
+                String CHANNEL_ID = ""+ 1;// The id of the channel.
+                CharSequence name = "Zingo" ;// The user-visible name of the channel.
+                int importance = NotificationManager.IMPORTANCE_LOW;
+                NotificationChannel mChannel=null;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+                }
+
+                Notification.Builder notificationBuilder = null;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    notificationBuilder = new Notification.Builder(this)
+                            .setTicker("You are moving far away from your organization").setWhen(0)
+                            .setContentTitle("You are moving far away from your organization")
+                            .setContentText("You are moving far away from your organization")
+                            .setAutoCancel(true)
+                            //.setFullScreenIntent(pendingIntent,false)
+                            //.setNumber()
+                            .setContentIntent(pendingIntent)
+                            .setOngoing(true)
+                            .setContentInfo("You are moving far away from your organization")
+                            .setLargeIcon(icon)
+                            .setChannelId("1")
+                            .setPriority(Notification.PRIORITY_MAX)
+                            // .setPriority(NotificationManager.IMPORTANCE_HIGH)
+                            .setSmallIcon(R.mipmap.ic_launcher);
+                }else{
+                    notificationBuilder = new Notification.Builder(this)
+                            .setTicker("You are moving far away from your organization").setWhen(0)
+                            .setContentTitle("You are moving far away from your organization")
+                            .setContentText("You are moving far away from your organization")
+                            .setAutoCancel(true)
+                            //.setFullScreenIntent(pendingIntent,false)
+
+                            .setContentIntent(pendingIntent)
+                            .setOngoing(true)
+                            .setContentInfo("You are moving far away from your organization")
+                            .setLargeIcon(icon)
+                            .setPriority(Notification.PRIORITY_MAX)
+                            .setNumber(1)
+                            // .setPriority(NotificationManager.IMPORTANCE_HIGH)
+                            .setSmallIcon(R.mipmap.ic_launcher);
+                }
+
+                notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
+                notificationBuilder.setLights(Color.YELLOW, 1000, 300);
+
+                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    notificationManager.createNotificationChannel(mChannel);
+                }
+                notificationManager.notify(m, notificationBuilder.build());
+                check = true;
+                PreferenceHandler.getInstance( getApplicationContext() ).setMovingFar( true );
             }
-
-            notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
-            notificationBuilder.setLights(Color.YELLOW, 1000, 300);
-
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                notificationManager.createNotificationChannel(mChannel);
-            }
-
-            notificationManager.notify(m, notificationBuilder.build());
-
-            check = true;
         }
+    }
+    private String getMobileOSVersion(){
+        String OSVersiondetails;
+        String versionRelease = Build.VERSION.RELEASE;
+        String versonName = Build.VERSION_CODES.class.getFields()[Build.VERSION.SDK_INT].getName();
+        OSVersiondetails = "Version : " + versionRelease+" * "+versonName;
+        return OSVersiondetails;
+    }
+
+    public boolean isInternetOn(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        //should check null because in airplane mode it will be null
+        return (netInfo != null && netInfo.isConnected());
     }
 }

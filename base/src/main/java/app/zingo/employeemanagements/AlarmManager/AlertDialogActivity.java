@@ -6,7 +6,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 
-import app.zingo.employeemanagements.UI.NewEmployeeDesign.EmployeeNewMainScreen;
+import app.zingo.employeemanagements.ui.newemployeedesign.EmployeeNewMainScreen;
 
 public class AlertDialogActivity extends Activity
 {
@@ -25,7 +25,7 @@ public class AlertDialogActivity extends Activity
         builder.setPositiveButton ("Check Out", new DialogInterface.OnClickListener () {
             public void onClick (DialogInterface dialog, int id) {
                 dialog.cancel ();
-                Intent intent = new Intent (AlertDialogActivity.this, EmployeeNewMainScreen.class);
+                Intent intent = new Intent ( AlertDialogActivity.this, EmployeeNewMainScreen.class);
                 intent.putExtra ("viewpager_position", 2);
                 startActivity (intent);
             }
