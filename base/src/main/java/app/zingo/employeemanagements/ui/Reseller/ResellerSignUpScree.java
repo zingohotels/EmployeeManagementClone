@@ -1,5 +1,4 @@
 package app.zingo.employeemanagements.ui.Reseller;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.location.Address;
@@ -51,35 +50,24 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ResellerSignUpScree extends AppCompatActivity {
-
     MyEditText mName,mUserName,mEmail,mMobile,mPassword,mConfirm;
     MyTextView mCity,mCountry;
-
     RadioButton mMale,mFemale,mOthers;
     MyTextView mCreate;
-
     CheckBox mShowPwd;
-
     public static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         try{
-
             setContentView(R.layout.activity_reseller_sign_up_scree);
-
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             setTitle("Reseller Signup");
-
             try {
                 // Initialize Places.
                 Places.initialize(getApplicationContext(), Constants.mapKey);
-                // Create a new Places client instance.
-                // PlacesClient placesClient = Places.createClient(this);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

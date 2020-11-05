@@ -2744,7 +2744,6 @@ public class EmployeeLoginFragment extends Fragment implements GoogleApiClient.C
                             dialog.dismiss();
                         }
                         try {
-
                             if(type!=null&&type.equalsIgnoreCase("Selfie")){
                                 if( Util.IMAGE_URL==null){
                                     loginDetails.setEndPlaceID( Constants.IMAGE_URL+ response.body());

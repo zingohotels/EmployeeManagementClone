@@ -107,8 +107,6 @@ public class PhoneVerificationScreen extends AppCompatActivity {
                 screen = bundle.getString("Screen");
             }
 
-
-
             mCancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

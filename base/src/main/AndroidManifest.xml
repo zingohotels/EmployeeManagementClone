@@ -39,7 +39,7 @@
 
     <application
         android:name="androidx.multidex.MultiDexApplication"
-        android:allowBackup="false"
+        android:allowBackup="true"
         android:extractNativeLibs="false"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
@@ -50,7 +50,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute"
-        tools:replace="android:allowBackup,android:icon">
+        tools:replace="android:allowBackup,android:icon"
+        android:requestLegacyExternalStorage="true">
         <activity
             android:name="app.zingo.employeemanagements.ui.newemployeedesign.BookingScreen"
             android:screenOrientation="portrait"

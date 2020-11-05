@@ -682,6 +682,7 @@ public class GetStartedScreen extends AppCompatActivity implements PaymentResult
                         // convert calendar to date
                         Date additionalDate = c.getTime();
                         organization.setLicenseEndDate(sdfs.format(additionalDate));
+                        //String resellerCode = mResellerCode.getText().toString();
                         if(resellerCode!=null&&!resellerCode.isEmpty()){
                             String code = resellerCode.replaceAll("[^0-9]", "");
                             getProfiles(Integer.parseInt(code),organization,resellerCode);
