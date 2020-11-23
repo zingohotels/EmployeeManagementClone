@@ -1,3 +1,4 @@
+/*
 package app.zingo.employeemanagements.Service;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -11,10 +12,8 @@ import android.os.BatteryManager;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.util.Log;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import app.zingo.employeemanagements.model.LiveTracking;
 import app.zingo.employeemanagements.utils.Const;
 import app.zingo.employeemanagements.utils.PreferenceHandler;
@@ -157,3 +156,4 @@ public class LocationTrackEmplService extends Service {
         super.onDestroy();
     }
 }
+*/

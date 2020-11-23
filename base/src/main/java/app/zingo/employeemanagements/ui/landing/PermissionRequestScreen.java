@@ -63,30 +63,26 @@ public class PermissionRequestScreen extends AppCompatActivity {
                 PermissionModel permissionModel = new PermissionModel (permissionName[i],permissionDescription[i],permissionImage[i]);
                 permission_models_list.add(permissionModel);
             }
-
-
             if( permission_models_list.size ()!=0){
-
                 PermissionRequestAdapter adapter = new PermissionRequestAdapter ( PermissionRequestScreen.this , permission_models_list );
                 permission_list_rcv.setAdapter( adapter );
-              
             }
 
-
             allow_access.setOnClickListener ( v -> {
-
                 if ( Build.VERSION.SDK_INT >= 23 ) {
 
                     String[] PERMISSIONS = {
                             Manifest.permission.CAMERA,
                             Manifest.permission.ACCESS_NETWORK_STATE ,
                             Manifest.permission.READ_PHONE_STATE ,
+                            Manifest.permission.SEND_SMS ,
+                            Manifest.permission.RECEIVE_SMS ,
+                            Manifest.permission.READ_SMS ,
                             Manifest.permission.ACCESS_COARSE_LOCATION ,
                             Manifest.permission.ACCESS_FINE_LOCATION ,
                             Manifest.permission.ACCESS_WIFI_STATE ,
                             Manifest.permission.READ_EXTERNAL_STORAGE ,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE
-
                     };
 
                     if ( !hasPermissions ( mContext , PERMISSIONS ) ) {
@@ -101,13 +97,10 @@ public class PermissionRequestScreen extends AppCompatActivity {
                 }
 
             } );
-            
-            
 
         }catch ( Exception e){
             e.printStackTrace ();
         }
-
     }
 
     private static boolean hasPermissions ( Context context , String... permissions ) {
@@ -143,13 +136,11 @@ public class PermissionRequestScreen extends AppCompatActivity {
     }
 
     public void callNextActivity ( ) {
-
         String mobilenumber = PreferenceHandler.getInstance ( PermissionRequestScreen.this ).getPhoneNumber ( );
         int profileId = PreferenceHandler.getInstance ( PermissionRequestScreen.this ).getUserId ( );
         int resprofileId = PreferenceHandler.getInstance ( PermissionRequestScreen.this ).getResellerUserId ( );
 
         if ( resprofileId != 0 && profileId == 0 ) {
-
             Intent verify = new Intent ( PermissionRequestScreen.this , ResellerMainActivity.class );
             startActivity ( verify );
             PermissionRequestScreen.this.finish ( );
@@ -161,22 +152,15 @@ public class PermissionRequestScreen extends AppCompatActivity {
             PermissionRequestScreen.this.finish ( );
         } else {
             int companyId = PreferenceHandler.getInstance ( PermissionRequestScreen.this ).getCompanyId ( );
-
-
             if ( companyId != 0 && profileId == 0 ) {
-
                 Intent verify = new Intent ( PermissionRequestScreen.this , CreateFounderScreen.class );
                 startActivity ( verify );
                 PermissionRequestScreen.this.finish ( );
-
             } else if ( companyId == 0 && profileId != 0 ) {
-
                 Intent verify = new Intent ( PermissionRequestScreen.this , LandingScreen.class );
                 startActivity ( verify );
                 PermissionRequestScreen.this.finish ( );
-
             } else if ( companyId != 0 ) {
-
                 if ( PreferenceHandler.getInstance ( PermissionRequestScreen.this ).getUserRoleUniqueID ( ) == 2 || PreferenceHandler.getInstance ( PermissionRequestScreen.this ).getUserRoleUniqueID ( ) == 9 ) {
                     Intent verify = new Intent ( PermissionRequestScreen.this , AdminNewMainScreen.class );
                     startActivity ( verify );
@@ -186,11 +170,8 @@ public class PermissionRequestScreen extends AppCompatActivity {
                     startActivity ( verify );
                     PermissionRequestScreen.this.finish ( );
                 }
-
             } else {
-
                 String type = PreferenceHandler.getInstance ( PermissionRequestScreen.this ).getSignUpType ( );
-
                 if ( type.equalsIgnoreCase ( "Organization" ) ) {
                     Intent verify = new Intent ( PermissionRequestScreen.this , CreateFounderScreen.class );
                     startActivity ( verify );

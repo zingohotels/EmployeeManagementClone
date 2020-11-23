@@ -10,11 +10,11 @@ android {
 
     defaultConfig {
         applicationId "app.zingo.employeemanagements"
-        minSdkVersion 19
+        minSdkVersion 21
         multiDexEnabled true
         targetSdkVersion 29
-        versionCode 38
-        versionName "1.38"
+        versionCode 40
+        versionName "1.40"
 
     }
 }

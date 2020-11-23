@@ -44,8 +44,7 @@ public class LocationAndDataServiceWithTimer extends Service implements TextToSp
 
 
     @Override
-    public void onCreate()
-    {
+    public void onCreate() {
         super.onCreate();
         Log.e("Location1", "Inside onCreate");
 

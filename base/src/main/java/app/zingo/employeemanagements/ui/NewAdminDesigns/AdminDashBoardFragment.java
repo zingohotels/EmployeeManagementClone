@@ -105,7 +105,7 @@ public class AdminDashBoardFragment extends Fragment {
     Handler h;
     Runnable runnable;
     int delay = 2*1000;
-
+    public static int  ADAPTER_POSITION = -1;
     private  String SHOWCASE_ID_ADMIN ;
 
     public AdminDashBoardFragment() {

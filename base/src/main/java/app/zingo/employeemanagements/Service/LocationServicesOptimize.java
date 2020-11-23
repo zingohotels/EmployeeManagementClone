@@ -1,3 +1,4 @@
+/*
 package app.zingo.employeemanagements.Service;
 
 import android.Manifest;
@@ -52,8 +53,10 @@ public class LocationServicesOptimize extends Service implements LocationListene
         // TODO Auto-generated method stub
         super.onCreate();
 
-      /*  mTimer = new Timer();
-        mTimer.schedule(new TimerTaskToGetLocation(), 10000, notify_interval);*/
+      */
+/*  mTimer = new Timer();
+        mTimer.schedule(new TimerTaskToGetLocation(), 10000, notify_interval);*//*
+
 
     }
 
@@ -196,4 +199,4 @@ public class LocationServicesOptimize extends Service implements LocationListene
     }
 
 
-}
+}*/

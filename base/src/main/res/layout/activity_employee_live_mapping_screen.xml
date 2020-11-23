@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UI.Admin.EmployeeLiveMappingScreen">
-
-
+    tools:context="app.zingo.employeemanagements.ui.Admin.EmployeeLiveMappingScreen">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,20 +16,16 @@
             android:id="@+id/employee_live_list_map"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
-            />
-
+            android:layout_margin="10dp" />
 
     </LinearLayout>
-
 
     <TextView
         android:layout_width="150dp"
         android:layout_height="25dp"
-        android:textSize="18dp"
+        android:textSize="18sp"
         android:ellipsize="end"
         android:gravity="center"
-
         android:layout_margin="5dp"
         android:textColor="@color/colorPrimary"
         android:layout_gravity="center_horizontal"
@@ -46,9 +39,7 @@
         android:layout_height="wrap_content"
         android:background="#e9e7e7"
         android:fillViewport="true"
-        android:layout_gravity="bottom"
-
-        >
+        android:layout_gravity="bottom">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -73,8 +64,8 @@
                         android:singleLine="true"
                         android:ellipsize="end"
                         android:text=""
-                        android:layout_marginLeft="3dp"
-                        android:textSize="16dp"
+                        android:layout_marginStart="3sp"
+                        android:textSize="16sp"
                         android:layout_weight="1"
                         android:textStyle="bold"
                         android:textColor="#000000"
@@ -83,7 +74,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="13dp"
+                        android:textSize="13sp"
                         android:ellipsize="end"
                         android:text=""
                         android:id="@+id/updated_details"/>
@@ -91,10 +82,10 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="13dp"
+                        android:textSize="13sp"
                         android:ellipsize="end"
                         android:drawableLeft="@drawable/location_dynamic"
-                        android:text="Searching..."
+                        android:text="@string/searching"
                         android:id="@+id/address"/>
 
                 </LinearLayout>
@@ -107,13 +98,9 @@
                     android:layout_weight="1"
                     android:id="@+id/show_lay_hide"
                     android:src="@drawable/down_arrow_location"
-                    android:contentDescription="TODO" />
-
-
+                    android:contentDescription="@string/todo" />
 
             </LinearLayout>
-
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -121,20 +108,14 @@
                 android:layout_gravity="bottom"
                 android:layout_marginLeft="@dimen/activity_large_margin"
                 android:visibility="gone"
-
-
                 android:layout_marginRight="@dimen/activity_large_margin"
                 android:orientation="vertical"
                 android:id="@+id/location_list">
 
             </LinearLayout>
 
-
         </LinearLayout>
 
     </LinearLayout>
-
-
-
 
 </FrameLayout>

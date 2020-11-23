@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -87,20 +88,17 @@ public class DepartmentAdapter extends RecyclerView.Adapter< DepartmentAdapter.V
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-
         TextView mDepartmentName;
         CardView mLayout;
         RecyclerView mDepEmpList;
-        RelativeLayout mShowList;
+        LinearLayout mShowList;
 
         public ViewHolder(View itemView) {
             super(itemView);
-
             mDepartmentName = itemView.findViewById(R.id.department_name);
             mLayout = itemView.findViewById(R.id.department);
             mDepEmpList = itemView.findViewById(R.id.department_emp_list);
             mShowList = itemView.findViewById(R.id.shw_emp_list);
-
         }
     }
 

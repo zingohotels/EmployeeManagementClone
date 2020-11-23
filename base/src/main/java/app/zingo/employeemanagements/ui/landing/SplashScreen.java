@@ -50,7 +50,6 @@ public class SplashScreen extends AppCompatActivity {
         } catch ( Exception e ) {
             e.printStackTrace ( );
         }
-
     }
 
     @Override
@@ -58,62 +57,48 @@ public class SplashScreen extends AppCompatActivity {
         super.onResume ( );
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         boolean previouslyStarted = prefs.getBoolean(getString(R.string.pref_previously_started), false);
-
         new Handler ().postDelayed( ( ) -> {
-
             if(!previouslyStarted) {
-
                 init();
             }else{
                 callNextActivity ( );
             }
 
-
         } ,3000);
-
-
-
-
-
     }
 
     private void init ( ) {
         try {
-
             if ( Build.VERSION.SDK_INT >= 23 ) {
-
                 String[] PERMISSIONS = {
                         Manifest.permission.CAMERA,
                         Manifest.permission.ACCESS_NETWORK_STATE ,
                         Manifest.permission.READ_PHONE_STATE ,
+                        Manifest.permission.SEND_SMS ,
+                        Manifest.permission.RECEIVE_SMS ,
+                        Manifest.permission.READ_SMS ,
                         Manifest.permission.ACCESS_COARSE_LOCATION ,
                         Manifest.permission.ACCESS_FINE_LOCATION ,
                         Manifest.permission.ACCESS_WIFI_STATE ,
                         Manifest.permission.READ_EXTERNAL_STORAGE ,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE
-
                 };
 
                 if ( !hasPermissions ( mContext , PERMISSIONS ) ) {
-
                     //ActivityCompat.requestPermissions ( ( Activity ) mContext , PERMISSIONS , REQUEST );
                     Intent permissionRequest = new Intent ( SplashScreen.this,PermissionRequestScreen.class );
                     startActivity ( permissionRequest );
                     SplashScreen.this.finish ();
                 } else {
-
                     callNextActivity ( );
                 }
             } else {
-
                 callNextActivity ( );
             }
-
 
         } catch ( Exception e ) {
             e.printStackTrace ( );
         }
-
     }
 
     private static boolean hasPermissions ( Context context , String... permissions ) {
@@ -127,7 +112,6 @@ public class SplashScreen extends AppCompatActivity {
         return true;
     }
 
-
     public void callNextActivity ( ) {
 
         String mobilenumber = PreferenceHandler.getInstance ( SplashScreen.this ).getPhoneNumber ( );
@@ -135,34 +119,25 @@ public class SplashScreen extends AppCompatActivity {
         int resprofileId = PreferenceHandler.getInstance ( SplashScreen.this ).getResellerUserId ( );
 
         if ( resprofileId != 0 && profileId == 0 ) {
-
             Intent verify = new Intent ( SplashScreen.this , ResellerMainActivity.class );
             startActivity ( verify );
             SplashScreen.this.finish ( );
-
         } else if ( mobilenumber.equals ( "" ) && profileId == 0 ) {
-
             Intent verify = new Intent ( SplashScreen.this , LandingScreen.class );
             startActivity ( verify );
             SplashScreen.this.finish ( );
         } else {
             int companyId = PreferenceHandler.getInstance ( SplashScreen.this ).getCompanyId ( );
 
-
             if ( companyId != 0 && profileId == 0 ) {
-
                 Intent verify = new Intent ( SplashScreen.this , CreateFounderScreen.class );
                 startActivity ( verify );
                 SplashScreen.this.finish ( );
-
             } else if ( companyId == 0 && profileId != 0 ) {
-
                 Intent verify = new Intent ( SplashScreen.this , LandingScreen.class );
                 startActivity ( verify );
                 SplashScreen.this.finish ( );
-
             } else if ( companyId != 0 ) {
-
                 if ( PreferenceHandler.getInstance ( SplashScreen.this ).getUserRoleUniqueID ( ) == 2 || PreferenceHandler.getInstance ( SplashScreen.this ).getUserRoleUniqueID ( ) == 9 ) {
                     Intent verify = new Intent ( SplashScreen.this , AdminNewMainScreen.class );
                     startActivity ( verify );
@@ -172,11 +147,8 @@ public class SplashScreen extends AppCompatActivity {
                     startActivity ( verify );
                     SplashScreen.this.finish ( );
                 }
-
             } else {
-
                 String type = PreferenceHandler.getInstance ( SplashScreen.this ).getSignUpType ( );
-
                 if ( type.equalsIgnoreCase ( "Organization" ) ) {
                     Intent verify = new Intent ( SplashScreen.this , CreateFounderScreen.class );
                     startActivity ( verify );
@@ -186,10 +158,7 @@ public class SplashScreen extends AppCompatActivity {
                     startActivity ( verify );
                     SplashScreen.this.finish ( );
                 }
-
             }
-
-
         }
     }
 }

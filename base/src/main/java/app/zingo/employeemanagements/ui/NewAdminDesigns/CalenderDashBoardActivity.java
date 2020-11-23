@@ -118,7 +118,7 @@ public class CalenderDashBoardActivity extends AppCompatActivity {
     Runnable runnable;
     int delay = 2*1000;
     int totalEmp,preEmp=0,totaltask =0,compTask=0,visit=0,expense=0;
-
+    public static int  ADAPTER_POSITION = -1;
     private  String SHOWCASE_ID_ADMIN ;
 
 

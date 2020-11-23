@@ -1,5 +1,4 @@
 package app.zingo.employeemanagements.Service;
-
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
@@ -17,13 +16,10 @@ import com.google.android.gms.tasks.Task;
 import app.zingo.employeemanagements.utils.Constants;
 
 public class BackgroundDetectedActivitiesService extends Service {
-
     private static final String TAG = BackgroundDetectedActivitiesService.class.getSimpleName();
-
     private Intent mIntentService;
     private PendingIntent mPendingIntent;
     private ActivityRecognitionClient mActivityRecognitionClient;
-
     IBinder mBinder = new BackgroundDetectedActivitiesService.LocalBinder();
 
     public class LocalBinder extends Binder {
@@ -58,51 +54,15 @@ public class BackgroundDetectedActivitiesService extends Service {
     }
 
     public void requestActivityUpdatesButtonHandler() {
-        Task<Void> task = mActivityRecognitionClient.requestActivityUpdates(
-                Constants.DETECTION_INTERVAL_IN_MILLISECONDS,
-                mPendingIntent);
-
-        task.addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void result) {
-                Toast.makeText(getApplicationContext(),
-                        "Successfully requested activity updates",
-                        Toast.LENGTH_SHORT)
-                        .show();
-            }
-        });
-
-        task.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(),
-                        "Requesting activity updates failed to start",
-                        Toast.LENGTH_SHORT)
-                        .show();
-            }
-        });
+        Task<Void> task = mActivityRecognitionClient.requestActivityUpdates( Constants.DETECTION_INTERVAL_IN_MILLISECONDS, mPendingIntent);
+        task.addOnSuccessListener( result -> Toast.makeText(getApplicationContext(), "Successfully requested activity updates", Toast.LENGTH_SHORT).show() );
+        task.addOnFailureListener( e -> Toast.makeText(getApplicationContext(), "Requesting activity updates failed to start", Toast.LENGTH_SHORT).show() );
     }
 
     public void removeActivityUpdatesButtonHandler() {
-        Task<Void> task = mActivityRecognitionClient.removeActivityUpdates(
-                mPendingIntent);
-        task.addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void result) {
-                Toast.makeText(getApplicationContext(),
-                        "Removed activity updates successfully!",
-                        Toast.LENGTH_SHORT)
-                        .show();
-            }
-        });
-
-        task.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(), "Failed to remove activity updates!",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
+        Task<Void> task = mActivityRecognitionClient.removeActivityUpdates( mPendingIntent);
+        task.addOnSuccessListener( result -> Toast.makeText(getApplicationContext(), "Removed activity updates successfully!", Toast.LENGTH_SHORT).show() );
+        task.addOnFailureListener( e -> Toast.makeText(getApplicationContext(), "Failed to remove activity updates!", Toast.LENGTH_SHORT).show() );
     }
 
     @Override

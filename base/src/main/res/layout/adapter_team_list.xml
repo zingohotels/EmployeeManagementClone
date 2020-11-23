@@ -11,44 +11,53 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
+        android:layout_marginBottom="10dp"
         android:id="@+id/employee"
         card-view:cardElevation="5dp"
         app:cardElevation="5dp"
+        app:cardCornerRadius="10dp"
         android:elevation="10dp">
 
         <LinearLayout
+            android:background="@color/colorPrimaryDark"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
+                android:weightSum="2"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
                 android:elevation="10dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:fontFamily="sans-serif"
-                    android:textStyle="bold"
-                    android:text=""
-                    android:id="@+id/employee_name"
-                    android:textSize="18sp"
-                    android:gravity="center_vertical"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentLeft="true"/>
-                <ImageView
-                    android:layout_width="30dp"
-                    android:id="@+id/shw_emp_list"
-                    android:layout_height="20dp"
-                    android:src="@drawable/right_arrow"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentRight="true"
-                    android:contentDescription="TODO" />
 
-            </RelativeLayout>
+                <TextView
+                    android:layout_weight="0.4"
+                    android:id="@+id/employee_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/gray_btn_bg_color"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:padding="10dp"
+                    android:text="Hello"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+                <ImageView
+                    android:id="@id/shw_emp_list"
+                    android:layout_weight="1.7"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/drop_down_foreground"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/grey"
+                    android:padding="10dp"
+                    android:visibility="gone"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
+
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"

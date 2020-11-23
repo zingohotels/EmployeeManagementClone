@@ -80,20 +80,15 @@ public class ResellerSignUpScree extends AppCompatActivity {
             mConfirm = findViewById(R.id.reseller_confirmpwd);
             mCity = findViewById(R.id.reseller_city);
             mCountry = findViewById(R.id.reseller_country);
-
             mMale = findViewById(R.id.reseller_male);
             mFemale = findViewById(R.id.reseller_female);
             mOthers = findViewById(R.id.reseller_other);
-
             mCreate = findViewById(R.id.createReseller);
             mShowPwd = findViewById(R.id.show_hide_password);
 
             mShowPwd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
                 @Override
-                public void onCheckedChanged(CompoundButton button,
-                                             boolean isChecked) {
-
+                public void onCheckedChanged(CompoundButton button, boolean isChecked) {
                     // If it is checked then show password else hide password
                     if (isChecked) {
 

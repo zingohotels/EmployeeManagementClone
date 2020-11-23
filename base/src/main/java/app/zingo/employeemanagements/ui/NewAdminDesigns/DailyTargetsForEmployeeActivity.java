@@ -1,5 +1,4 @@
 package app.zingo.employeemanagements.ui.NewAdminDesigns;
-
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -40,17 +39,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class DailyTargetsForEmployeeActivity extends AppCompatActivity {
-
-
     FloatingActionButton floatingActionButton,refresh;
     TextView mDate;
     ImageView mPrevious,mNext;
-    //View layout;
     private TaskListAdapter mAdapter;
     RecyclerView mTaskList;
-
-    //CalendarDay mCalendarDay;
-    private Employee mEmployee;
     private int mEmployeeId;
     List<Tasks> mTargetList = new ArrayList();
     Toolbar mToolbar;
@@ -59,17 +52,11 @@ public class DailyTargetsForEmployeeActivity extends AppCompatActivity {
     TextView totalTargets;
     TextView openTargets;
     TextView presentDate;
-    ImageView prevDay;
-    ImageView nextDay;
-
-
     LinearLayout mTotalTask,mPendingTask,mCompletedTask,mClosedTask,mNoRecord;
-
     ArrayList<Tasks> employeeTasks;
     ArrayList<Tasks> pendingTasks ;
     ArrayList<Tasks> completedTasks ;
     ArrayList<Tasks> closedTasks ;
-
     ArrayList<Tasks> dayemployeeTasks;
     ArrayList<Tasks> daypendingTasks ;
     ArrayList<Tasks> daycompletedTasks ;
@@ -77,16 +64,13 @@ public class DailyTargetsForEmployeeActivity extends AppCompatActivity {
 
     int total=0,pending=0,complete=0,closed=0;
     int daytotal=0,daypending=0,daycomplete=0,dayclosed=0;
-
     SimpleDateFormat dateFormat;
     String passDate = "";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try{
-
             setContentView(R.layout.activity_daily_targets_for_employee);
             setupToolbar();
             Bundle bundle = getIntent().getExtras();
@@ -94,267 +78,164 @@ public class DailyTargetsForEmployeeActivity extends AppCompatActivity {
                 mEmployeeId = bundle.getInt("ProfileId");
             }
 
-//            this.mCalendarDay = CalendarDay.from(new Date());
             this.presentDate = findViewById(R.id.presentDate);
-           // this.presentDate.setText(DateUtil.getReadableDate(this.mCalendarDay));
             mTaskList = findViewById(R.id.targetList);
             mTaskList.setLayoutManager(new LinearLayoutManager(this));
-
-           // this.prevDay = (ImageView) findViewById(R.id.previousDay);
-           // this.nextDay = (ImageView) findViewById(R.id.nextDay);
             this.floatingActionButton = findViewById(R.id.addTargetOption);
             this.refresh = findViewById(R.id.refresh);
             totalTargets = findViewById(R.id.totalTargets);
             openTargets = findViewById(R.id.openTargets);
             closedTargets = findViewById(R.id.closedTargets);
             movedTargets = findViewById(R.id.movedTargets);
-
             mPendingTask = findViewById(R.id.openTargetsLayout);
             mCompletedTask = findViewById(R.id.closedTargetsLayout);
             mClosedTask = findViewById(R.id.movedTargetsLayout);
             mTotalTask = findViewById(R.id.totalTargetsLayout);
-
             mNoRecord = findViewById(R.id.noRecordFound);
-
             mDate = findViewById(R.id.presentDate);
-
-
             mPrevious = findViewById(R.id.previousDay);
             mNext = findViewById(R.id.nextDay);
-
-
-
             dateFormat = new SimpleDateFormat("dd-MM-yyyy");
             mDate.setText(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
             passDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 
-            /*this.prevDay.setOnClickListener(new C13241());
-            this.nextDay.setOnClickListener(new C13252());*/
-            floatingActionButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            floatingActionButton.setOnClickListener( view -> {
+                Intent createTask = new Intent( DailyTargetsForEmployeeActivity.this, CreateTaskScreen.class);
+                createTask.putExtra("EmployeeId", mEmployeeId);
+                startActivity(createTask);
+            } );
 
-                    Intent createTask = new Intent( DailyTargetsForEmployeeActivity.this, CreateTaskScreen.class);
-                    createTask.putExtra("EmployeeId", mEmployeeId);
-                    startActivity(createTask);
+            refresh.setOnClickListener( view -> {
+                Intent createTask = new Intent( DailyTargetsForEmployeeActivity.this, DailyTargetsForEmployeeActivity.class);
+                createTask.putExtra("ProfileId", mEmployeeId);
+                startActivity(createTask);
+                DailyTargetsForEmployeeActivity.this.finish();
+            } );
 
+            mPendingTask.setOnClickListener( view -> {
+                mTaskList.removeAllViews();
+                if(daypendingTasks!=null&&daypendingTasks.size()!=0){
+                    mAdapter = new TaskListAdapter( DailyTargetsForEmployeeActivity.this,daypendingTasks);
+                    mTaskList.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();
+                }else{
+                    mAdapter = new TaskListAdapter( DailyTargetsForEmployeeActivity.this,new ArrayList<Tasks>());
+                    mTaskList.setAdapter(mAdapter);
+                    Toast.makeText( DailyTargetsForEmployeeActivity.this, "No Pending Tasks given for this employee", Toast.LENGTH_SHORT).show();
                 }
-            });
+            } );
 
-            refresh.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    Intent createTask = new Intent( DailyTargetsForEmployeeActivity.this, DailyTargetsForEmployeeActivity.class);
-                    createTask.putExtra("ProfileId", mEmployeeId);
-                    startActivity(createTask);
-                    DailyTargetsForEmployeeActivity.this.finish();
-
+            mCompletedTask.setOnClickListener( view -> {
+                mTaskList.removeAllViews();
+                if(daycompletedTasks!=null&&daycompletedTasks.size()!=0){
+                    mAdapter = new TaskListAdapter( DailyTargetsForEmployeeActivity.this,daycompletedTasks);
+                    mTaskList.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();
+                }else{
+                    mAdapter = new TaskListAdapter( DailyTargetsForEmployeeActivity.this,new ArrayList<Tasks>());
+                    mTaskList.setAdapter(mAdapter);
+                    Toast.makeText( DailyTargetsForEmployeeActivity.this, "No Completed Tasks given for this employee", Toast.LENGTH_SHORT).show();
                 }
-            });
+            } );
 
-            mPendingTask.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    mTaskList.removeAllViews();
-
-                    if(daypendingTasks!=null&&daypendingTasks.size()!=0){
-                        mAdapter = new TaskListAdapter( DailyTargetsForEmployeeActivity.this,daypendingTasks);
-                        mTaskList.setAdapter(mAdapter);
-                        mAdapter.notifyDataSetChanged();
-                    }else{
-                        mAdapter = new TaskListAdapter( DailyTargetsForEmployeeActivity.this,new ArrayList<Tasks>());
-                        mTaskList.setAdapter(mAdapter);
-                        Toast.makeText( DailyTargetsForEmployeeActivity.this, "No Pending Tasks given for this employee", Toast.LENGTH_SHORT).show();
-                    }
-
-
+            mClosedTask.setOnClickListener( view -> {
+                mTaskList.removeAllViews();
+                if(dayclosedTasks!=null&&dayclosedTasks.size()!=0){
+                    mAdapter = new TaskListAdapter( DailyTargetsForEmployeeActivity.this,dayclosedTasks);
+                    mTaskList.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();
+                }else{
+                    mAdapter = new TaskListAdapter( DailyTargetsForEmployeeActivity.this,new ArrayList<Tasks>());
+                    mTaskList.setAdapter(mAdapter);
+                    Toast.makeText( DailyTargetsForEmployeeActivity.this, "No Closed Tasks given for this employee", Toast.LENGTH_SHORT).show();
                 }
-            });
+            } );
 
-            mCompletedTask.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    mTaskList.removeAllViews();
-
-                    if(daycompletedTasks!=null&&daycompletedTasks.size()!=0){
-                        mAdapter = new TaskListAdapter( DailyTargetsForEmployeeActivity.this,daycompletedTasks);
-                        mTaskList.setAdapter(mAdapter);
-                        mAdapter.notifyDataSetChanged();
-                    }else{
-                        mAdapter = new TaskListAdapter( DailyTargetsForEmployeeActivity.this,new ArrayList<Tasks>());
-                        mTaskList.setAdapter(mAdapter);
-                        Toast.makeText( DailyTargetsForEmployeeActivity.this, "No Completed Tasks given for this employee", Toast.LENGTH_SHORT).show();
-                    }
-
-
+            mTotalTask.setOnClickListener( view -> {
+                mTaskList.removeAllViews();
+                if(dayemployeeTasks!=null&&dayemployeeTasks.size()!=0){
+                    mAdapter = new TaskListAdapter( DailyTargetsForEmployeeActivity.this,dayemployeeTasks);
+                    mTaskList.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();
+                }else{
+                    mAdapter = new TaskListAdapter( DailyTargetsForEmployeeActivity.this,new ArrayList<Tasks>());
+                    mTaskList.setAdapter(mAdapter);
+                    Toast.makeText( DailyTargetsForEmployeeActivity.this, "No Tasks given for this employee", Toast.LENGTH_SHORT).show();
                 }
-            });
+            } );
 
-            mClosedTask.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    mTaskList.removeAllViews();
-
-                    if(dayclosedTasks!=null&&dayclosedTasks.size()!=0){
-                        mAdapter = new TaskListAdapter( DailyTargetsForEmployeeActivity.this,dayclosedTasks);
-                        mTaskList.setAdapter(mAdapter);
-                        mAdapter.notifyDataSetChanged();
-                    }else{
-                        mAdapter = new TaskListAdapter( DailyTargetsForEmployeeActivity.this,new ArrayList<Tasks>());
-                        mTaskList.setAdapter(mAdapter);
-                        Toast.makeText( DailyTargetsForEmployeeActivity.this, "No Closed Tasks given for this employee", Toast.LENGTH_SHORT).show();
-                    }
-
-
+            mPrevious.setOnClickListener( view -> {
+                try{
+                    final Date date = dateFormat.parse(mDate.getText().toString());
+                    final Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(date);
+                    calendar.add(Calendar.DAY_OF_YEAR, -1);
+                    Date date2 = calendar.getTime();
+                    mDate.setText(dateFormat.format(date2));
+                    passDate = new SimpleDateFormat("yyyy-MM-dd").format(date2);
+                    taskFilter(new SimpleDateFormat("yyyy-MM-dd").format(date2));
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
-            });
+            } );
 
-            mTotalTask.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    mTaskList.removeAllViews();
-
-                    if(dayemployeeTasks!=null&&dayemployeeTasks.size()!=0){
-                        mAdapter = new TaskListAdapter( DailyTargetsForEmployeeActivity.this,dayemployeeTasks);
-                        mTaskList.setAdapter(mAdapter);
-                        mAdapter.notifyDataSetChanged();
-                    }else{
-                        mAdapter = new TaskListAdapter( DailyTargetsForEmployeeActivity.this,new ArrayList<Tasks>());
-                        mTaskList.setAdapter(mAdapter);
-                        Toast.makeText( DailyTargetsForEmployeeActivity.this, "No Tasks given for this employee", Toast.LENGTH_SHORT).show();
-                    }
-
-
+            mNext.setOnClickListener( view -> {
+                try{
+                    final Date date = dateFormat.parse(mDate.getText().toString());
+                    final Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(date);
+                    calendar.add(Calendar.DAY_OF_YEAR, 1);
+                    Date date2 = calendar.getTime();
+                    mDate.setText(dateFormat.format(date2));
+                    passDate = new SimpleDateFormat("yyyy-MM-dd").format(date2);
+                    taskFilter(new SimpleDateFormat("yyyy-MM-dd").format(date2));
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
-            });
+            } );
 
-            mPrevious.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    try{
-                        final Date date = dateFormat.parse(mDate.getText().toString());
-                        final Calendar calendar = Calendar.getInstance();
-                        calendar.setTime(date);
-                        calendar.add(Calendar.DAY_OF_YEAR, -1);
-
-                        Date date2 = calendar.getTime();
-
-                        mDate.setText(dateFormat.format(date2));
-                        passDate = new SimpleDateFormat("yyyy-MM-dd").format(date2);
-
-                        taskFilter(new SimpleDateFormat("yyyy-MM-dd").format(date2));
-
-
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-                }
-            });
-
-            mNext.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                    try{
-                        final Date date = dateFormat.parse(mDate.getText().toString());
-                        final Calendar calendar = Calendar.getInstance();
-                        calendar.setTime(date);
-                        calendar.add(Calendar.DAY_OF_YEAR, 1);
-
-                        Date date2 = calendar.getTime();
-
-                        mDate.setText(dateFormat.format(date2));
-                        passDate = new SimpleDateFormat("yyyy-MM-dd").format(date2);
-                        taskFilter(new SimpleDateFormat("yyyy-MM-dd").format(date2));
-
-
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-
-                }
-            });
-
-            mDate.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    openDatePicker(mDate);
-                }
-            });
+            mDate.setOnClickListener( view -> openDatePicker(mDate) );
             final Calendar calendar = Calendar.getInstance();
             Date date2 = calendar.getTime();
-
             getTasks(mEmployeeId,new SimpleDateFormat("yyyy-MM-dd").format(date2));
-
 
         }catch (Exception e){
             e.printStackTrace();
         }
-
     }
 
     public void openDatePicker(final TextView tv) {
         // Get Current Date
-
         final Calendar c = Calendar.getInstance();
         int  mYear  = c.get(Calendar.YEAR);
         int mMonth = c.get(Calendar.MONTH);
         int mDay   = c.get(Calendar.DAY_OF_MONTH);
         //launch datepicker modal
         DatePickerDialog datePickerDialog = new DatePickerDialog( DailyTargetsForEmployeeActivity.this,
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        try {
-                            Log.d("Date", "DATE SELECTED "+dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-
-                            Calendar newDate = Calendar.getInstance();
-                            newDate.set(year,monthOfYear,dayOfMonth);
-
-
-                            String date1 = (dayOfMonth)  + "-" + (monthOfYear + 1)+ "-" + year;
-
-
-
-                            if (tv.equals(mDate)){
-
-
-                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-                                try {
-                                    Date fdate = simpleDateFormat.parse(date1);
-
-
-                                    taskFilter(new SimpleDateFormat("yyyy-MM-dd").format(fdate));
-
-                                    String startDate = simpleDateFormat.format(fdate);
-                                    tv.setText(startDate);
-
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                }
-                                //
-
-
+                ( view , year , monthOfYear , dayOfMonth ) -> {
+                    try {
+                        Log.d("Date", "DATE SELECTED "+dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                        Calendar newDate = Calendar.getInstance();
+                        newDate.set(year,monthOfYear,dayOfMonth);
+                        String date1 = (dayOfMonth)  + "-" + (monthOfYear + 1)+ "-" + year;
+                        if (tv.equals(mDate)){
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                            try {
+                                Date fdate = simpleDateFormat.parse(date1);
+                                taskFilter(new SimpleDateFormat("yyyy-MM-dd").format(fdate));
+                                String startDate = simpleDateFormat.format(fdate);
+                                tv.setText(startDate);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
                             }
-
                         }
-                        catch (Exception ex)
-                        {
-                            ex.printStackTrace();
-                        }
-
-
                     }
-                }, mYear, mMonth, mDay);
-
+                    catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                } , mYear, mMonth, mDay);
 
         datePickerDialog.show();
-
     }
 
     public void setupToolbar() {
@@ -371,12 +252,9 @@ public class DailyTargetsForEmployeeActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         int id = item.getItemId();
-
         if (id == android.R.id.home) {
             DailyTargetsForEmployeeActivity.this.finish();
-
         } else if (id == R.id.action_map) {
             Intent map = new Intent( DailyTargetsForEmployeeActivity.this, EmployeeTaskMapScreen.class);
             map.putExtra("EmployeeId", mEmployeeId);
@@ -387,218 +265,133 @@ public class DailyTargetsForEmployeeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-  /*  public boolean onOptionsItemSelected(MenuItem menuItem) {
-        if (menuItem.getItemId() != 16908332) {
-            return super.onOptionsItemSelected(menuItem);
-        }
-        finish();
-        return true;
-    }*/
-
     private void getTasks(final int employeeId,final String dateValue){
 
-
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Loading Details..");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-
-        new ThreadExecuter ().execute( new Runnable() {
+        TasksAPI apiService = Util.getClient().create( TasksAPI.class);
+        Call<ArrayList<Tasks>> call = apiService.getTasksByEmployeeId(employeeId);
+        call.enqueue(new Callback<ArrayList<Tasks>>() {
             @Override
-            public void run() {
-                TasksAPI apiService = Util.getClient().create( TasksAPI.class);
-                Call<ArrayList<Tasks>> call = apiService.getTasksByEmployeeId(employeeId);
-
-                call.enqueue(new Callback<ArrayList<Tasks>>() {
-                    @Override
-                    public void onResponse(Call<ArrayList<Tasks>> call, Response<ArrayList<Tasks>> response) {
-                        int statusCode = response.code();
-                        if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
-
-
-                            if (progressDialog != null&&progressDialog.isShowing())
-                                progressDialog.dismiss();
-                            ArrayList<Tasks> list = response.body();
-                            employeeTasks = new ArrayList<>();
-                            pendingTasks = new ArrayList<>();
-                            completedTasks = new ArrayList<>();
-                            closedTasks = new ArrayList<>();
-
-
-                            dayemployeeTasks = new ArrayList<>();
-                            daypendingTasks = new ArrayList<>();
-                            daycompletedTasks = new ArrayList<>();
-                            dayclosedTasks = new ArrayList<>();
-
-                            Date date = new Date();
-                            Date adate = new Date();
-                            Date edate = new Date();
-
-                            try {
-                                date = new SimpleDateFormat("yyyy-MM-dd").parse(dateValue);
-
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-
-
-                            if (list !=null && list.size()!=0) {
-
-
-
-                                for (Tasks task:list) {
-
-
-                                    if(task.getCategory()==null){
-
-
-
-
-
-
-                                        employeeTasks.add(task);
-                                        total = total+1;
-
-                                        if(task.getStatus().equalsIgnoreCase("Completed")){
-                                            completedTasks.add(task);
-                                            complete = complete+1;
-                                        }else if(task.getStatus().equalsIgnoreCase("Pending")){
-                                            pendingTasks.add(task);
-                                            pending = pending+1;
-                                        }else if(task.getStatus().equalsIgnoreCase("Closed")){
-                                            closedTasks.add(task);
-                                            closed = closed+1;
-                                        }
-
-
-
-
-                                        String froms = task.getStartDate();
-                                        String tos = task.getEndDate();
-
-                                        Date afromDate = null;
-                                        Date atoDate = null;
-
-                                        if(froms!=null&&!froms.isEmpty()){
-
-                                            if(froms.contains("T")){
-
-                                                String dojs[] = froms.split("T");
-
-                                                try {
-                                                    afromDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
-                                                } catch (ParseException e) {
-                                                    e.printStackTrace();
-                                                }
-
-
-                                            }
-
-                                        }
-
-                                        if(tos!=null&&!tos.isEmpty()){
-
-                                            if(tos.contains("T")){
-
-                                                String dojs[] = tos.split("T");
-
-                                                try {
-                                                    atoDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
-                                                } catch (ParseException e) {
-                                                    e.printStackTrace();
-                                                }
-
-                                            }
-
-                                        }
-
-                                        if(afromDate!=null&&atoDate!=null){
-
-                                            if(date.getTime() >= afromDate.getTime() && date.getTime() <= atoDate.getTime()){
-
-
-                                                dayemployeeTasks.add(task);
-                                                daytotal = daytotal+1;
-
-                                                if(task.getStatus().equalsIgnoreCase("Completed")){
-                                                    daycompletedTasks.add(task);
-                                                    daycomplete = daycomplete+1;
-                                                }else if(task.getStatus().equalsIgnoreCase("Pending")){
-                                                    daypendingTasks.add(task);
-                                                    daypending = daypending+1;
-                                                }else if(task.getStatus().equalsIgnoreCase("Closed")){
-                                                    dayclosedTasks.add(task);
-                                                    dayclosed = dayclosed+1;
-                                                }
-
-                                            }
-                                        }
-
-                                    }
-
-
-                                }
-
-                                if(dayemployeeTasks!=null&&dayemployeeTasks.size()!=0){
-
-                                    mNoRecord.setVisibility(View.GONE);
-                                    mTaskList.setVisibility(View.VISIBLE);
-                                    mAdapter = new TaskListAdapter( DailyTargetsForEmployeeActivity.this,dayemployeeTasks);
-                                    mTaskList.setAdapter(mAdapter);
-
-                                    totalTargets.setText(""+daytotal);
-                                    openTargets.setText(""+daypending);
-                                    closedTargets.setText(""+daycomplete);
-                                    movedTargets.setText(""+dayclosed);
-                                }else{
-
-                                    mNoRecord.setVisibility(View.VISIBLE);
-                                    mTaskList.setVisibility(View.GONE);
-                                }
-
-
-
-                            }else{
-
-                                mNoRecord.setVisibility(View.VISIBLE);
-                                mTaskList.setVisibility(View.GONE);
-
-                                Toast.makeText( DailyTargetsForEmployeeActivity.this, "No Tasks given for this employee ", Toast.LENGTH_SHORT).show();
-
-                            }
-
-                        }else {
-
-                            if (progressDialog != null&&progressDialog.isShowing())
-                                progressDialog.dismiss();
-
-                            Toast.makeText( DailyTargetsForEmployeeActivity.this, "Failed due to : "+response.message(), Toast.LENGTH_SHORT).show();
-                        }
+            public void onResponse(Call<ArrayList<Tasks>> call, Response<ArrayList<Tasks>> response) {
+                int statusCode = response.code();
+                if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
+                    ArrayList<Tasks> list = response.body();
+                    employeeTasks = new ArrayList<>();
+                    pendingTasks = new ArrayList<>();
+                    completedTasks = new ArrayList<>();
+                    closedTasks = new ArrayList<>();
+                    dayemployeeTasks = new ArrayList<>();
+                    daypendingTasks = new ArrayList<>();
+                    daycompletedTasks = new ArrayList<>();
+                    dayclosedTasks = new ArrayList<>();
+
+                    Date date = new Date();
+                    try {
+                        date = new SimpleDateFormat("yyyy-MM-dd").parse(dateValue);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
 
-                    @Override
-                    public void onFailure(Call<ArrayList<Tasks>> call, Throwable t) {
-                        // Log error here since request failed
-                        if (progressDialog != null&&progressDialog.isShowing())
-                            progressDialog.dismiss();
+                    if (list !=null && list.size()!=0) {
+                        for (Tasks task:list) {
+                            if(task.getCategory()==null){
+                                employeeTasks.add(task);
+                                total = total+1;
+                                if(task.getStatus().equalsIgnoreCase("Completed")){
+                                    completedTasks.add(task);
+                                    complete = complete+1;
+                                }else if(task.getStatus().equalsIgnoreCase("Pending")){
+                                    pendingTasks.add(task);
+                                    pending = pending+1;
+                                }else if(task.getStatus().equalsIgnoreCase("Closed")){
+                                    closedTasks.add(task);
+                                    closed = closed+1;
+                                }
+
+                                String froms = task.getStartDate();
+                                String tos = task.getEndDate();
+
+                                Date afromDate = null;
+                                Date atoDate = null;
+
+                                if(froms!=null&&!froms.isEmpty()){
+                                    if(froms.contains("T")){
+                                        String dojs[] = froms.split("T");
+                                        try {
+                                            afromDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
+                                        } catch (ParseException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+
+                                if(tos!=null&&!tos.isEmpty()){
+                                    if(tos.contains("T")){
+                                        String dojs[] = tos.split("T");
+                                        try {
+                                            atoDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
+                                        } catch (ParseException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+
+                                if(afromDate!=null&&atoDate!=null){
+                                    if(date.getTime() >= afromDate.getTime() && date.getTime() <= atoDate.getTime()){
+                                        dayemployeeTasks.add(task);
+                                        daytotal = daytotal+1;
+                                        if(task.getStatus().equalsIgnoreCase("Completed")){
+                                            daycompletedTasks.add(task);
+                                            daycomplete = daycomplete+1;
+                                        }else if(task.getStatus().equalsIgnoreCase("Pending")){
+                                            daypendingTasks.add(task);
+                                            daypending = daypending+1;
+                                        }else if(task.getStatus().equalsIgnoreCase("Closed")){
+                                            dayclosedTasks.add(task);
+                                            dayclosed = dayclosed+1;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if(dayemployeeTasks!=null&&dayemployeeTasks.size()!=0){
+                            mNoRecord.setVisibility(View.GONE);
+                            mTaskList.setVisibility(View.VISIBLE);
+                            mAdapter = new TaskListAdapter( DailyTargetsForEmployeeActivity.this,dayemployeeTasks);
+                            mTaskList.setAdapter(mAdapter);
+                            totalTargets.setText(""+daytotal);
+                            openTargets.setText(""+daypending);
+                            closedTargets.setText(""+daycomplete);
+                            movedTargets.setText(""+dayclosed);
+                        }else{
+                            mNoRecord.setVisibility(View.VISIBLE);
+                            mTaskList.setVisibility(View.GONE);
+                        }
+
+                    }else{
                         mNoRecord.setVisibility(View.VISIBLE);
                         mTaskList.setVisibility(View.GONE);
-                        Log.e("TAG", t.toString());
+                        Toast.makeText( DailyTargetsForEmployeeActivity.this, "No Tasks given for this employee ", Toast.LENGTH_SHORT).show();
                     }
-                });
+
+                }else {
+                    Toast.makeText( DailyTargetsForEmployeeActivity.this, "Failed due to : "+response.message(), Toast.LENGTH_SHORT).show();
+                }
             }
 
-
+            @Override
+            public void onFailure(Call<ArrayList<Tasks>> call, Throwable t) {
+                // Log error here since request failed
+                mNoRecord.setVisibility(View.VISIBLE);
+                mTaskList.setVisibility(View.GONE);
+                Log.e("TAG", t.toString());
+            }
         });
     }
 
 
     public void taskFilter(final String dateValue){
-
         if(employeeTasks!=null&&employeeTasks.size()!=0){
-
             mNoRecord.setVisibility(View.VISIBLE);
             mTaskList.setVisibility(View.GONE);
             mTaskList.removeAllViews();
@@ -625,67 +418,43 @@ public class DailyTargetsForEmployeeActivity extends AppCompatActivity {
             try {
                 date = new SimpleDateFormat("yyyy-MM-dd").parse(dateValue);
 
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-
-
             if (employeeTasks !=null && employeeTasks.size()!=0) {
-
-
-
                 for (Tasks task:employeeTasks) {
-
-
                     String froms = task.getStartDate();
                     String tos = task.getEndDate();
 
                     Date afromDate = null;
                     Date atoDate = null;
-
                     if(froms!=null&&!froms.isEmpty()){
-
                         if(froms.contains("T")){
-
                             String dojs[] = froms.split("T");
-
                             try {
                                 afromDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
-
-
                         }
-
                     }
 
                     if(tos!=null&&!tos.isEmpty()){
-
                         if(tos.contains("T")){
-
                             String dojs[] = tos.split("T");
-
                             try {
                                 atoDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
-
                         }
-
                     }
 
                     if(afromDate!=null&&atoDate!=null){
-
                         if(date.getTime() >= afromDate.getTime() && date.getTime() <= atoDate.getTime()){
-
-
                             dayemployeeTasks.add(task);
                             daytotal = daytotal+1;
-
                             if(task.getStatus().equalsIgnoreCase("Completed")){
                                 daycompletedTasks.add(task);
                                 daycomplete = daycomplete+1;
@@ -696,43 +465,26 @@ public class DailyTargetsForEmployeeActivity extends AppCompatActivity {
                                 dayclosedTasks.add(task);
                                 dayclosed = dayclosed+1;
                             }
-
                         }
                     }
-
-
-
                 }
 
                 if(dayemployeeTasks!=null&&dayemployeeTasks.size()!=0){
-
                     mNoRecord.setVisibility(View.GONE);
                     mTaskList.setVisibility(View.VISIBLE);
-
                     mAdapter = new TaskListAdapter( DailyTargetsForEmployeeActivity.this,dayemployeeTasks);
                     mTaskList.setAdapter(mAdapter);
-
                     totalTargets.setText(""+daytotal);
                     openTargets.setText(""+daypending);
                     closedTargets.setText(""+daycomplete);
                     movedTargets.setText(""+dayclosed);
-                }else{
-
-
                 }
 
-
-
             }else{
-
-                //Toast.makeText(DailyTargetsForEmployeeActivity.this, "No Tasks given for this employee ", Toast.LENGTH_SHORT).show();
                 mNoRecord.setVisibility(View.VISIBLE);
                 mTaskList.setVisibility(View.GONE);
                 mTaskList.removeAllViews();
-
             }
-
-
 
         }else{
             mNoRecord.setVisibility(View.VISIBLE);
@@ -741,4 +493,19 @@ public class DailyTargetsForEmployeeActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume ( ) {
+        super.onResume ( );
+        final Calendar calendar = Calendar.getInstance();
+        Date date2 = calendar.getTime();
+        getTasks(mEmployeeId,new SimpleDateFormat("yyyy-MM-dd").format(date2));
+    }
+
+    @Override
+    protected void onRestart ( ) {
+        super.onRestart ( );
+        final Calendar calendar = Calendar.getInstance();
+        Date date2 = calendar.getTime();
+        getTasks(mEmployeeId,new SimpleDateFormat("yyyy-MM-dd").format(date2));
+    }
 }

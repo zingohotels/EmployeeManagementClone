@@ -1,465 +1,435 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+<LinearLayout
     android:id="@+id/rootView"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="10">
 
-    <ScrollView
-        android:background="#FFFFFFFF"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_marginBottom="10dp"
-        android:layout_alignParentBottom="true">
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollbar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="9.5"
+        android:scrollbars="none"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="vertical">
 
-            <Switch
-                android:id="@+id/sunday"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:checked="false"
-                android:text="Sunday"
-                android:layout_marginLeft="@dimen/activity_large_margin"
-                android:layout_marginTop="20.0dip"
-                android:layout_marginRight="@dimen/activity_large_margin"
-                android:textOff="No"
-                android:textOn="Yes"/>
+           <LinearLayout
+               android:layout_width="fill_parent"
+               android:focusable="true"
+               android:focusableInTouchMode="true"
+               android:layout_height="wrap_content"
+               android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/timing_sunday"
-                android:visibility="gone"
-                android:orientation="horizontal">
+               <Switch
+                   android:id="@+id/sunday"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:checked="false"
+                   android:text="Sunday"
+                   android:layout_marginLeft="@dimen/activity_large_margin"
+                   android:layout_marginTop="20.0dip"
+                   android:layout_marginRight="@dimen/activity_large_margin"
+                   android:textOff="No"
+                   android:textOn="Yes"/>
 
-                <app.zingo.employeemanagements.Custom.MyTextView
-                    android:id="@+id/start_sun"
-                    android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:id="@+id/timing_sunday"
+                   android:visibility="gone"
+                   android:orientation="horizontal">
 
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    android:background="@drawable/test_background"
-                    android:hint="Started at"
-                    android:layout_weight="1"
-                    android:inputType="date"
-                    android:singleLine="true"
-                    android:textColor="#000000"
-                    android:textColorHint="#afaeae"
-                    />
+                   <app.zingo.employeemanagements.Custom.MyTextView
+                       android:id="@+id/start_sun"
+                       android:layout_width="match_parent"
+                       android:layout_height="35dp"
+                       android:layout_marginLeft="@dimen/activity_large_margin"
+                       android:layout_marginRight="@dimen/activity_large_margin"
+                       android:background="@drawable/test_background"
+                       android:hint="Started at"
+                       android:layout_weight="1"
+                       android:inputType="date"
+                       android:singleLine="true"
+                       android:textColor="#000000"
+                       android:textColorHint="#afaeae" />
 
-                <app.zingo.employeemanagements.Custom.MyTextView
-                    android:id="@+id/end_sun"
-                    android:layout_width="match_parent"
-                    android:inputType="date"
-                    android:layout_height="35dp"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    android:background="@drawable/test_background"
-                    android:hint="Ended at"
-                    android:layout_weight="1"
-                    android:singleLine="true"
-                    android:textColor="#000000"
-                    android:textColorHint="#afaeae"
-                    />
+                   <app.zingo.employeemanagements.Custom.MyTextView
+                       android:id="@+id/end_sun"
+                       android:layout_width="match_parent"
+                       android:inputType="date"
+                       android:layout_height="35dp"
+                       android:layout_marginLeft="@dimen/activity_large_margin"
+                       android:layout_marginRight="@dimen/activity_large_margin"
+                       android:background="@drawable/test_background"
+                       android:hint="Ended at"
+                       android:layout_weight="1"
+                       android:singleLine="true"
+                       android:textColor="#000000"
+                       android:textColorHint="#afaeae" />
 
+               </LinearLayout>
 
+               <Switch
+                   android:id="@+id/monday"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:checked="false"
+                   android:text="Monday"
+                   android:layout_marginLeft="@dimen/activity_large_margin"
+                   android:layout_marginTop="20.0dip"
+                   android:layout_marginRight="@dimen/activity_large_margin"
+                   android:textOff="No"
+                   android:textOn="Yes"/>
 
-            </LinearLayout>
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:id="@+id/timing_monday"
+                   android:visibility="gone"
+                   android:orientation="horizontal">
 
-            <Switch
-                android:id="@+id/monday"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:checked="false"
-                android:text="Monday"
-                android:layout_marginLeft="@dimen/activity_large_margin"
-                android:layout_marginTop="20.0dip"
-                android:layout_marginRight="@dimen/activity_large_margin"
-                android:textOff="No"
-                android:textOn="Yes"/>
+                   <app.zingo.employeemanagements.Custom.MyTextView
+                       android:id="@+id/start_mon"
+                       android:layout_width="match_parent"
+                       android:layout_height="35dp"
+                       android:layout_marginLeft="@dimen/activity_large_margin"
+                       android:layout_marginRight="@dimen/activity_large_margin"
+                       android:background="@drawable/test_background"
+                       android:hint="Started at"
+                       android:layout_weight="1"
+                       android:inputType="date"
+                       android:singleLine="true"
+                       android:textColor="#000000"
+                       android:textColorHint="#afaeae" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/timing_monday"
-                android:visibility="gone"
-                android:orientation="horizontal">
+                   <app.zingo.employeemanagements.Custom.MyTextView
+                       android:id="@+id/end_mon"
+                       android:layout_width="match_parent"
+                       android:inputType="date"
+                       android:layout_height="35dp"
+                       android:layout_marginLeft="@dimen/activity_large_margin"
+                       android:layout_marginRight="@dimen/activity_large_margin"
+                       android:background="@drawable/test_background"
+                       android:hint="Ended at"
+                       android:layout_weight="1"
+                       android:singleLine="true"
+                       android:textColor="#000000"
+                       android:textColorHint="#afaeae" />
 
-                <app.zingo.employeemanagements.Custom.MyTextView
-                    android:id="@+id/start_mon"
-                    android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
+               </LinearLayout>
 
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    android:background="@drawable/test_background"
-                    android:hint="Started at"
-                    android:layout_weight="1"
-                    android:inputType="date"
-                    android:singleLine="true"
-                    android:textColor="#000000"
-                    android:textColorHint="#afaeae"
-                    />
+               <Switch
+                   android:id="@+id/tuesday"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:checked="false"
+                   android:text="Tuesday"
+                   android:layout_marginLeft="@dimen/activity_large_margin"
+                   android:layout_marginTop="20.0dip"
+                   android:layout_marginRight="@dimen/activity_large_margin"
+                   android:textOff="No"
+                   android:textOn="Yes"/>
 
-                <app.zingo.employeemanagements.Custom.MyTextView
-                    android:id="@+id/end_mon"
-                    android:layout_width="match_parent"
-                    android:inputType="date"
-                    android:layout_height="35dp"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    android:background="@drawable/test_background"
-                    android:hint="Ended at"
-                    android:layout_weight="1"
-                    android:singleLine="true"
-                    android:textColor="#000000"
-                    android:textColorHint="#afaeae"
-                    />
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:id="@+id/timing_tuesday"
+                   android:visibility="gone"
+                   android:orientation="horizontal">
 
+                   <app.zingo.employeemanagements.Custom.MyTextView
+                       android:id="@+id/start_tues"
+                       android:layout_width="match_parent"
+                       android:layout_height="35dp"
+                       android:layout_marginLeft="@dimen/activity_large_margin"
+                       android:layout_marginRight="@dimen/activity_large_margin"
+                       android:background="@drawable/test_background"
+                       android:hint="Started at"
+                       android:layout_weight="1"
+                       android:inputType="date"
+                       android:singleLine="true"
+                       android:textColor="#000000"
+                       android:textColorHint="#afaeae" />
 
+                   <app.zingo.employeemanagements.Custom.MyTextView
+                       android:id="@+id/end_tues"
+                       android:layout_width="match_parent"
+                       android:inputType="date"
+                       android:layout_height="35dp"
+                       android:layout_marginLeft="@dimen/activity_large_margin"
+                       android:layout_marginRight="@dimen/activity_large_margin"
+                       android:background="@drawable/test_background"
+                       android:hint="Ended at"
+                       android:layout_weight="1"
+                       android:singleLine="true"
+                       android:textColor="#000000"
+                       android:textColorHint="#afaeae" />
 
-            </LinearLayout>
+               </LinearLayout>
 
-            <Switch
-                android:id="@+id/tuesday"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:checked="false"
-                android:text="Tuesday"
-                android:layout_marginLeft="@dimen/activity_large_margin"
-                android:layout_marginTop="20.0dip"
-                android:layout_marginRight="@dimen/activity_large_margin"
-                android:textOff="No"
-                android:textOn="Yes"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/timing_tuesday"
-                android:visibility="gone"
-                android:orientation="horizontal">
+               <Switch
+                   android:id="@+id/wednesday"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:checked="false"
+                   android:text="Wednesday"
+                   android:layout_marginLeft="@dimen/activity_large_margin"
+                   android:layout_marginTop="20.0dip"
+                   android:layout_marginRight="@dimen/activity_large_margin"
+                   android:textOff="No"
+                   android:textOn="Yes"/>
 
-                <app.zingo.employeemanagements.Custom.MyTextView
-                    android:id="@+id/start_tues"
-                    android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:id="@+id/timing_wed"
+                   android:visibility="gone"
+                   android:orientation="horizontal">
 
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    android:background="@drawable/test_background"
-                    android:hint="Started at"
-                    android:layout_weight="1"
-                    android:inputType="date"
-                    android:singleLine="true"
-                    android:textColor="#000000"
-                    android:textColorHint="#afaeae"
-                    />
+                   <app.zingo.employeemanagements.Custom.MyTextView
+                       android:id="@+id/start_wed"
+                       android:layout_width="match_parent"
+                       android:layout_height="35dp"
+                       android:layout_marginLeft="@dimen/activity_large_margin"
+                       android:layout_marginRight="@dimen/activity_large_margin"
+                       android:background="@drawable/test_background"
+                       android:hint="Started at"
+                       android:layout_weight="1"
+                       android:inputType="date"
+                       android:singleLine="true"
+                       android:textColor="#000000"
+                       android:textColorHint="#afaeae" />
 
-                <app.zingo.employeemanagements.Custom.MyTextView
-                    android:id="@+id/end_tues"
-                    android:layout_width="match_parent"
-                    android:inputType="date"
-                    android:layout_height="35dp"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    android:background="@drawable/test_background"
-                    android:hint="Ended at"
-                    android:layout_weight="1"
-                    android:singleLine="true"
-                    android:textColor="#000000"
-                    android:textColorHint="#afaeae"
-                    />
+                   <app.zingo.employeemanagements.Custom.MyTextView
+                       android:id="@+id/end_wed"
+                       android:layout_width="match_parent"
+                       android:inputType="date"
+                       android:layout_height="35dp"
+                       android:layout_marginLeft="@dimen/activity_large_margin"
+                       android:layout_marginRight="@dimen/activity_large_margin"
+                       android:background="@drawable/test_background"
+                       android:hint="Ended at"
+                       android:layout_weight="1"
+                       android:singleLine="true"
+                       android:textColor="#000000"
+                       android:textColorHint="#afaeae" />
 
+               </LinearLayout>
 
+               <Switch
+                   android:id="@+id/thursday"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:checked="false"
+                   android:text="Thursday"
+                   android:layout_marginLeft="@dimen/activity_large_margin"
+                   android:layout_marginTop="20.0dip"
+                   android:layout_marginRight="@dimen/activity_large_margin"
+                   android:textOff="No"
+                   android:textOn="Yes"/>
 
-            </LinearLayout>
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:id="@+id/timing_thur"
+                   android:visibility="gone"
+                   android:orientation="horizontal">
 
+                   <app.zingo.employeemanagements.Custom.MyTextView
+                       android:id="@+id/start_thu"
+                       android:layout_width="match_parent"
+                       android:layout_height="35dp"
+                       android:layout_marginLeft="@dimen/activity_large_margin"
+                       android:layout_marginRight="@dimen/activity_large_margin"
+                       android:background="@drawable/test_background"
+                       android:hint="Started at"
+                       android:layout_weight="1"
+                       android:inputType="date"
+                       android:singleLine="true"
+                       android:textColor="#000000"
+                       android:textColorHint="#afaeae" />
 
-            <Switch
-                android:id="@+id/wednesday"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:checked="false"
-                android:text="Wednesday"
-                android:layout_marginLeft="@dimen/activity_large_margin"
-                android:layout_marginTop="20.0dip"
-                android:layout_marginRight="@dimen/activity_large_margin"
-                android:textOff="No"
-                android:textOn="Yes"/>
+                   <app.zingo.employeemanagements.Custom.MyTextView
+                       android:id="@+id/end_thu"
+                       android:layout_width="match_parent"
+                       android:inputType="date"
+                       android:layout_height="35dp"
+                       android:layout_marginLeft="@dimen/activity_large_margin"
+                       android:layout_marginRight="@dimen/activity_large_margin"
+                       android:background="@drawable/test_background"
+                       android:hint="Ended at"
+                       android:layout_weight="1"
+                       android:singleLine="true"
+                       android:textColor="#000000"
+                       android:textColorHint="#afaeae" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/timing_wed"
-                android:visibility="gone"
-                android:orientation="horizontal">
+               </LinearLayout>
 
-                <app.zingo.employeemanagements.Custom.MyTextView
-                    android:id="@+id/start_wed"
-                    android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
+               <Switch
+                   android:id="@+id/friday"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:checked="false"
+                   android:text="Friday"
+                   android:layout_marginLeft="@dimen/activity_large_margin"
+                   android:layout_marginTop="20.0dip"
+                   android:layout_marginRight="@dimen/activity_large_margin"
+                   android:textOff="No"
+                   android:textOn="Yes"/>
 
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    android:background="@drawable/test_background"
-                    android:hint="Started at"
-                    android:layout_weight="1"
-                    android:inputType="date"
-                    android:singleLine="true"
-                    android:textColor="#000000"
-                    android:textColorHint="#afaeae"
-                    />
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:visibility="gone"
+                   android:id="@+id/timing_fri"
+                   android:orientation="horizontal">
 
-                <app.zingo.employeemanagements.Custom.MyTextView
-                    android:id="@+id/end_wed"
-                    android:layout_width="match_parent"
-                    android:inputType="date"
-                    android:layout_height="35dp"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    android:background="@drawable/test_background"
-                    android:hint="Ended at"
-                    android:layout_weight="1"
-                    android:singleLine="true"
-                    android:textColor="#000000"
-                    android:textColorHint="#afaeae"
-                    />
+                   <app.zingo.employeemanagements.Custom.MyTextView
+                       android:id="@+id/start_fri"
+                       android:layout_width="match_parent"
+                       android:layout_height="35dp"
+                       android:layout_marginLeft="@dimen/activity_large_margin"
+                       android:layout_marginRight="@dimen/activity_large_margin"
+                       android:background="@drawable/test_background"
+                       android:hint="Started at"
+                       android:layout_weight="1"
+                       android:inputType="date"
+                       android:singleLine="true"
+                       android:textColor="#000000"
+                       android:textColorHint="#afaeae" />
 
+                   <app.zingo.employeemanagements.Custom.MyTextView
+                       android:id="@+id/end_fri"
+                       android:layout_width="match_parent"
+                       android:inputType="date"
+                       android:layout_height="35dp"
+                       android:layout_marginLeft="@dimen/activity_large_margin"
+                       android:layout_marginRight="@dimen/activity_large_margin"
+                       android:background="@drawable/test_background"
+                       android:hint="Ended at"
+                       android:layout_weight="1"
+                       android:singleLine="true"
+                       android:textColor="#000000"
+                       android:textColorHint="#afaeae" />
 
-            </LinearLayout>
+                   <!--    <android.support.design.widget.TextInputLayout
+                           android:id="@+id/cityInputLayout"
+                           android:layout_width="match_parent"
+                           android:layout_weight="1"
+                           android:textColorHint="@color/colorPrimary"
 
-            <Switch
-                android:id="@+id/thursday"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:checked="false"
-                android:text="Thursday"
-                android:layout_marginLeft="@dimen/activity_large_margin"
-                android:layout_marginTop="20.0dip"
-                android:layout_marginRight="@dimen/activity_large_margin"
-                android:textOff="No"
-                android:textOn="Yes"/>
+                           android:layout_height="wrap_content"
+                           android:layout_marginLeft="@dimen/activity_large_margin"
+                           android:layout_marginTop="20.0dip"
+                           android:layout_marginRight="@dimen/activity_large_margin"
+                           android:hint="City"
+                           >
+                           <android.support.design.widget.TextInputEditText
+                               android:id="@+id/city"
+                               android:maxLength="50"
+                               android:textColor="@color/colorPrimary"
+                               android:focusableInTouchMode="false"
+                               android:inputType="text"
+                               style="@style/fp_editText" />
+                       </android.support.design.widget.TextInputLayout>-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/timing_thur"
-                android:visibility="gone"
-                android:orientation="horizontal">
+                   <!--        <android.support.design.widget.TextInputLayout
+                               android:id="@+id/stateInputLayout"
+                               android:layout_width="match_parent"
+                               android:layout_weight="1"
+                               android:textColorHint="@color/colorPrimary"
+                               android:layout_height="wrap_content"
+                               android:layout_marginLeft="@dimen/activity_large_margin"
+                               android:layout_marginTop="20.0dip"
+                               android:layout_marginRight="@dimen/activity_large_margin"
+                               android:hint="State"
 
-                <app.zingo.employeemanagements.Custom.MyTextView
-                    android:id="@+id/start_thu"
-                    android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
+                               >
+                               <android.support.design.widget.TextInputEditText
+                                   android:id="@+id/state"
+                                   android:maxLength="50"
+                                   android:inputType="text"
+                                   android:textColor="@color/colorPrimary"
+                                   style="@style/fp_editText" />
+                           </android.support.design.widget.TextInputLayout>-->
 
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    android:background="@drawable/test_background"
-                    android:hint="Started at"
-                    android:layout_weight="1"
-                    android:inputType="date"
-                    android:singleLine="true"
-                    android:textColor="#000000"
-                    android:textColorHint="#afaeae"
-                    />
+               </LinearLayout>
 
-                <app.zingo.employeemanagements.Custom.MyTextView
-                    android:id="@+id/end_thu"
-                    android:layout_width="match_parent"
-                    android:inputType="date"
-                    android:layout_height="35dp"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    android:background="@drawable/test_background"
-                    android:hint="Ended at"
-                    android:layout_weight="1"
-                    android:singleLine="true"
-                    android:textColor="#000000"
-                    android:textColorHint="#afaeae"
-                    />
+               <Switch
+                   android:id="@+id/saturday"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:checked="false"
+                   android:text="Saturday"
+                   android:layout_marginLeft="@dimen/activity_large_margin"
+                   android:layout_marginTop="20.0dip"
+                   android:layout_marginRight="@dimen/activity_large_margin"
+                   android:textOff="No"
+                   android:textOn="Yes"/>
 
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:id="@+id/timing_satday"
+                   android:visibility="gone"
+                   android:orientation="horizontal">
 
-            </LinearLayout>
+                   <app.zingo.employeemanagements.Custom.MyTextView
+                       android:id="@+id/start_sat"
+                       android:layout_width="match_parent"
+                       android:layout_height="35dp"
+                       android:layout_marginLeft="@dimen/activity_large_margin"
 
-            <Switch
-                android:id="@+id/friday"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:checked="false"
-                android:text="Friday"
-                android:layout_marginLeft="@dimen/activity_large_margin"
-                android:layout_marginTop="20.0dip"
-                android:layout_marginRight="@dimen/activity_large_margin"
-                android:textOff="No"
-                android:textOn="Yes"/>
+                       android:layout_marginRight="@dimen/activity_large_margin"
+                       android:background="@drawable/test_background"
+                       android:hint="Started at"
+                       android:layout_weight="1"
+                       android:inputType="date"
+                       android:singleLine="true"
+                       android:textColor="#000000"
+                       android:textColorHint="#afaeae" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:id="@+id/timing_fri"
-                android:orientation="horizontal">
+                   <app.zingo.employeemanagements.Custom.MyTextView
+                       android:id="@+id/end_sat"
+                       android:layout_width="match_parent"
+                       android:inputType="date"
+                       android:layout_height="35dp"
+                       android:layout_marginLeft="@dimen/activity_large_margin"
+                       android:layout_marginRight="@dimen/activity_large_margin"
+                       android:background="@drawable/test_background"
+                       android:hint="Ended at"
+                       android:layout_weight="1"
+                       android:singleLine="true"
+                       android:textColor="#000000"
+                       android:textColorHint="#afaeae" />
 
-                <app.zingo.employeemanagements.Custom.MyTextView
-                    android:id="@+id/start_fri"
-                    android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
+               </LinearLayout>
 
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    android:background="@drawable/test_background"
-                    android:hint="Started at"
-                    android:layout_weight="1"
-                    android:inputType="date"
-                    android:singleLine="true"
-                    android:textColor="#000000"
-                    android:textColorHint="#afaeae"
-                    />
-
-                <app.zingo.employeemanagements.Custom.MyTextView
-                    android:id="@+id/end_fri"
-                    android:layout_width="match_parent"
-                    android:inputType="date"
-                    android:layout_height="35dp"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    android:background="@drawable/test_background"
-                    android:hint="Ended at"
-                    android:layout_weight="1"
-                    android:singleLine="true"
-                    android:textColor="#000000"
-                    android:textColorHint="#afaeae"
-                    />
-
-                <!--    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/cityInputLayout"
-                        android:layout_width="match_parent"
-                        android:layout_weight="1"
-                        android:textColorHint="@color/colorPrimary"
-
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/activity_large_margin"
-                        android:layout_marginTop="20.0dip"
-                        android:layout_marginRight="@dimen/activity_large_margin"
-                        android:hint="City"
-                        >
-                        <android.support.design.widget.TextInputEditText
-                            android:id="@+id/city"
-                            android:maxLength="50"
-                            android:textColor="@color/colorPrimary"
-                            android:focusableInTouchMode="false"
-                            android:inputType="text"
-                            style="@style/fp_editText" />
-                    </android.support.design.widget.TextInputLayout>-->
-
-                <!--        <android.support.design.widget.TextInputLayout
-                            android:id="@+id/stateInputLayout"
-                            android:layout_width="match_parent"
-                            android:layout_weight="1"
-                            android:textColorHint="@color/colorPrimary"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/activity_large_margin"
-                            android:layout_marginTop="20.0dip"
-                            android:layout_marginRight="@dimen/activity_large_margin"
-                            android:hint="State"
-
-                            >
-                            <android.support.design.widget.TextInputEditText
-                                android:id="@+id/state"
-                                android:maxLength="50"
-                                android:inputType="text"
-                                android:textColor="@color/colorPrimary"
-                                style="@style/fp_editText" />
-                        </android.support.design.widget.TextInputLayout>-->
-
-            </LinearLayout>
-
-            <Switch
-                android:id="@+id/saturday"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:checked="false"
-                android:text="Saturday"
-                android:layout_marginLeft="@dimen/activity_large_margin"
-                android:layout_marginTop="20.0dip"
-                android:layout_marginRight="@dimen/activity_large_margin"
-                android:textOff="No"
-                android:textOn="Yes"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/timing_satday"
-                android:visibility="gone"
-                android:orientation="horizontal">
-
-                <app.zingo.employeemanagements.Custom.MyTextView
-                    android:id="@+id/start_sat"
-                    android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
-
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    android:background="@drawable/test_background"
-                    android:hint="Started at"
-                    android:layout_weight="1"
-                    android:inputType="date"
-                    android:singleLine="true"
-                    android:textColor="#000000"
-                    android:textColorHint="#afaeae"
-                    />
-
-                <app.zingo.employeemanagements.Custom.MyTextView
-                    android:id="@+id/end_sat"
-                    android:layout_width="match_parent"
-                    android:inputType="date"
-                    android:layout_height="35dp"
-                    android:layout_marginLeft="@dimen/activity_large_margin"
-                    android:layout_marginRight="@dimen/activity_large_margin"
-                    android:background="@drawable/test_background"
-                    android:hint="Ended at"
-                    android:layout_weight="1"
-                    android:singleLine="true"
-                    android:textColor="#000000"
-                    android:textColorHint="#afaeae"
-                    />
-
-
-
-            </LinearLayout>
+           </LinearLayout>
 
         </LinearLayout>
 
+    </androidx.core.widget.NestedScrollView>
 
-    </ScrollView>
+        <androidx.appcompat.widget.AppCompatButton
+            android:textSize="@dimen/regularFont"
+            android:textColor="@color/white"
+            android:id="@+id/save"
+            android:background="@drawable/selector_button_app"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_large_margin"
+            android:layout_marginRight="@dimen/activity_large_margin"
+            android:text="Save"
+            android:textAllCaps="false"/>
 
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:textSize="@dimen/regularFont"
-        android:textColor="@color/white"
-        android:id="@+id/save"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/selector_button_app"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_large_margin"
-        android:layout_marginTop="20.0dip"
-        android:layout_marginBottom="10.0dip"
-        android:layout_marginRight="@dimen/activity_large_margin"
-        android:text="Save"
-        android:textAllCaps="false"
-
-        />
-
-
-
-</RelativeLayout>
+</LinearLayout>

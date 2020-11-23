@@ -44,6 +44,9 @@ public interface LoginDetailsAPI {
     @POST("LoginDetails/GetLoginDetailsByEmployeeIdAndLoginDate")
     Observable <ArrayList<LoginDetails>> getLoginByEmployeeIdAndDateRx ( @Body LoginDetails details );
 
+    @GET("LoginDetails/GetLoginDetailsByEmployeeId/{EmployeeId}")
+    Observable<ArrayList<LoginDetails>> getLoginByEmployeeIdRx ( @Path ("EmployeeId") int id );
+
     @GET("LoginDetails/{id}")
     Observable<LoginDetails> getLoginByIdRx ( @Path ("id") int id );
 

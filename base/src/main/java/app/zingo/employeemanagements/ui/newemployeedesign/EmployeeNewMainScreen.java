@@ -109,6 +109,8 @@ import app.zingo.employeemanagements.ui.Admin.CreateTaskScreen;
 import app.zingo.employeemanagements.ui.Common.CustomerCreation;
 import app.zingo.employeemanagements.ui.Common.PlanExpireScreen;
 import app.zingo.employeemanagements.ui.landing.InternalServerErrorScreen;
+import app.zingo.employeemanagements.utils.BaseActivity;
+import app.zingo.employeemanagements.utils.Const;
 import app.zingo.employeemanagements.utils.Constants;
 import app.zingo.employeemanagements.utils.PreferenceHandler;
 import app.zingo.employeemanagements.utils.ThreadExecuter;
@@ -241,7 +243,9 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
                 con = extras.getBoolean("Condition");
 
             }
+
             gps = new TrackGPS ( EmployeeNewMainScreen.this);
+
             PreferenceHandler.getInstance( EmployeeNewMainScreen.this).setFirstCheck(con);
             RapidFloatingActionLayout rfaLayout = findViewById ( R.id.rfab_group_sample_fragment_a_rfal );
             RapidFloatingActionButton rfaButton = findViewById ( R.id.label_list_sample_rfab );
@@ -327,7 +331,6 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
                             .setIconPressedColor(0xff1a237e)
                             .setLabelColor(Color.BLUE)
                             .setLabelSizeSp(14)
-
                             .setWrapper(1)
             );
             items.add(new RFACLabelItem <Integer> ()
@@ -360,6 +363,11 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
                     rfaContent
             ).build();
 
+            if(gps.isGPSOn (this)){
+                System.out.println ( "Suree : GPS ON" );
+            }else{
+                System.out.println ( "Suree : GPS OFF" );
+            }
 
         }catch(Exception e){
             e.printStackTrace();
@@ -1073,14 +1081,14 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
                             if (dialog != null && dialog.isShowing()) {
                                 dialog.dismiss();
                             }
-
+                            String ImageUrl = Const.IMAGE_URL+response.body ().replaceAll("\"", "");
                             if (employeeImages == null) {
                                 EmployeeImages employeeImages = new EmployeeImages ();
 
                                 if ( Util.IMAGE_URL == null) {
-                                    employeeImages.setImage( Constants.IMAGE_URL + response.body());
+                                    employeeImages.setImage( ImageUrl);
                                 } else {
-                                    employeeImages.setImage( Util.IMAGE_URL + response.body());
+                                    employeeImages.setImage( ImageUrl);
                                 }
 
                                 employeeImages.setEmployeeId(employee.getEmployeeId());
@@ -1089,9 +1097,9 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
 
                                 EmployeeImages employeeImagess = employeeImages;
                                 if ( Util.IMAGE_URL == null) {
-                                    employeeImages.setImage( Constants.IMAGE_URL + response.body());
+                                    employeeImages.setImage( ImageUrl);
                                 } else {
-                                    employeeImages.setImage( Util.IMAGE_URL + response.body());
+                                    employeeImages.setImage( ImageUrl);
                                 }
                                 employeeImagess.setEmployeeImageId(employeeImages.getEmployeeImageId());
                                 employeeImages.setEmployeeId(employee.getEmployeeId());
@@ -2183,26 +2191,17 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
     }
 
     public void addMeeting( final Meetings loginDetails, final MeetingDetailsNotificationManagers md) {
-
-
-
         final ProgressDialog dialog = new ProgressDialog( EmployeeNewMainScreen.this);
         dialog.setMessage("Saving Details..");
         dialog.setCancelable(false);
         dialog.show();
-
         MeetingsAPI apiService = Util.getClient().create( MeetingsAPI.class);
-
         Call< Meetings > call = apiService.addMeeting(loginDetails);
-
         call.enqueue(new Callback< Meetings >() {
             @Override
             public void onResponse( Call< Meetings > call, Response< Meetings > response) {
-//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
-                try
-                {
-                    if(dialog != null && dialog.isShowing())
-                    {
+                try {
+                    if(dialog != null && dialog.isShowing()) {
                         dialog.dismiss();
                     }
                     int statusCode = response.code();
@@ -3170,22 +3169,17 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
 
 
 
-    private void uploadImage( final String filePath, final Meetings loginDetails, final MeetingDetailsNotificationManagers md, final String type)
-    {
+    private void uploadImage( final String filePath, final Meetings loginDetails, final MeetingDetailsNotificationManagers md, final String type) {
         //String filePath = getRealPathFromURIPath(uri, ImageUploadActivity.this);
-
         final File file = new File(filePath);
         int size = 1*1024*1024;
 
-        if(file != null)
-        {
-            if(file.length() > size)
-            {
+        if(file != null) {
+            if(file.length() > size) {
                 System.out.println(file.length());
                 compressImage(filePath,loginDetails,md,type);
             }
-            else
-            {
+            else {
                 final ProgressDialog dialog = new ProgressDialog( EmployeeNewMainScreen.this);
                 dialog.setCancelable(false);
                 dialog.setTitle("Uploading Image..");
@@ -3205,14 +3199,15 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
                             if (dialog != null && dialog.isShowing()) {
                                 dialog.dismiss();
                             }
+                            String ImageUrl = Const.IMAGE_URL+response.body ().replaceAll("\"", "");
                             Toast.makeText( EmployeeNewMainScreen.this,"Success "+response.message(),Toast.LENGTH_LONG).show();
                             try {
 
                                 if (type != null && type.equalsIgnoreCase("Selfie")) {
                                     if ( Util.IMAGE_URL == null) {
-                                        loginDetails.setEndPlaceID( Constants.IMAGE_URL + response.body());
+                                        loginDetails.setEndPlaceID(ImageUrl);
                                     } else {
-                                        loginDetails.setEndPlaceID( Util.IMAGE_URL + response.body());
+                                        loginDetails.setEndPlaceID(ImageUrl);
                                     }
 
                                     dispatchTakePictureIntent();
@@ -3220,9 +3215,9 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
                                 } else if (type != null && type.equalsIgnoreCase("Done")) {
 
                                     if ( Util.IMAGE_URL == null) {
-                                        loginDetails.setStartPlaceID( Constants.IMAGE_URL + response.body());
+                                        loginDetails.setStartPlaceID(ImageUrl);
                                     } else {
-                                        loginDetails.setStartPlaceID( Util.IMAGE_URL + response.body());
+                                        loginDetails.setStartPlaceID(ImageUrl);
                                     }
 
                                     if (methodAdd) {
@@ -3234,9 +3229,9 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
                                 } else {
 
                                     if ( Util.IMAGE_URL == null) {
-                                        loginDetails.setEndPlaceID( Constants.IMAGE_URL + response.body());
+                                        loginDetails.setEndPlaceID(ImageUrl);
                                     } else {
-                                        loginDetails.setEndPlaceID( Util.IMAGE_URL + response.body());
+                                        loginDetails.setEndPlaceID(ImageUrl);
                                     }
                                     if (methodAdd) {
                                         updateMeeting(loginDetails, md);
@@ -3259,7 +3254,6 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
                         // Log.d("UpdateCate", "Error " + "Bad Internet Connection");
                         //  Toast.makeText(EmployeeNewMainScreen.this,"Please Check your Internet permissions "+"Bad Internet Connection",Toast.LENGTH_LONG).show();
                     }
-
                 });
             }
         }
@@ -3455,7 +3449,6 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
     }
 
     protected void startLocationUpdates() {
-
         LocationRequest mLocationRequest = new LocationRequest ( );
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         /* 60 secs */
@@ -3473,12 +3466,9 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
 
     @Override
     public void onLocationChanged(Location location) {
-
         if(location!=null){
-
             latitude = location.getLatitude();
             longitude = location.getLongitude();
-
         }
     }
 
@@ -3486,6 +3476,4 @@ public class EmployeeNewMainScreen extends AppCompatActivity implements RapidFlo
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
-
-
 }

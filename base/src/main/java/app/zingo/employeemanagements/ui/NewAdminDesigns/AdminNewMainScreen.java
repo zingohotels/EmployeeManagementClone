@@ -91,6 +91,7 @@ import app.zingo.employeemanagements.ui.Employee.CreateEmployeeScreen;
 import app.zingo.employeemanagements.ui.Employee.EmployeeListScreen;
 import app.zingo.employeemanagements.ui.landing.InternalServerErrorScreen;
 import app.zingo.employeemanagements.ui.newemployeedesign.EmployeeLoginFragment;
+import app.zingo.employeemanagements.utils.Const;
 import app.zingo.employeemanagements.utils.Constants;
 import app.zingo.employeemanagements.utils.PreferenceHandler;
 import app.zingo.employeemanagements.utils.ThreadExecuter;
@@ -132,6 +133,7 @@ public class AdminNewMainScreen extends AppCompatActivity implements RapidFloati
     private Timer t;
 
     Employee profile;
+    ArrayList<Employee> profiles;
     EmployeeImages employeeImages;
     int userId=0,imageId=0;
 
@@ -688,15 +690,10 @@ public class AdminNewMainScreen extends AppCompatActivity implements RapidFloati
                     imageId = employeeImages.getEmployeeImageId();
                     String base=employeeImages.getImage();
                     if(base != null && !base.isEmpty()){
-                        Picasso.with( AdminNewMainScreen.this).load(base).placeholder(R.drawable.profile_image).
-                                error(R.drawable.profile_image).into(mProfileImage);
-
-
+                        Picasso.with( AdminNewMainScreen.this).load(base).placeholder(R.drawable.profile_image).error(R.drawable.profile_image).into(mProfileImage);
                     }
                 }
-
             }
-
         }
 
         profileView.setOnClickListener(new View.OnClickListener() {
@@ -771,7 +768,6 @@ public class AdminNewMainScreen extends AppCompatActivity implements RapidFloati
             public void run() {
                 final EmployeeApi subCategoryAPI = Util.getClient().create( EmployeeApi.class);
                 Call<ArrayList<Employee>> getProf = subCategoryAPI.getProfileById(id);
-                //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
                 getProf.enqueue(new Callback<ArrayList<Employee>>() {
                     @Override
                     public void onResponse(Call<ArrayList<Employee>> call, Response<ArrayList<Employee>> response) {
@@ -781,24 +777,36 @@ public class AdminNewMainScreen extends AppCompatActivity implements RapidFloati
                             ArrayList<EmployeeImages> images = profile.getEmployeeImages();
                             if(images!=null&&images.size()!=0){
                                 employeeImages = images.get(0);
-
                                 if(employeeImages!=null){
                                     imageId = employeeImages.getEmployeeImageId();
                                     String base=employeeImages.getImage();
                                     if(base != null && !base.isEmpty()){
-                                        Picasso.with( AdminNewMainScreen.this).load(base).placeholder(R.drawable.profile_image).
-                                                error(R.drawable.profile_image).into(mProfileImage);
-
+                                        Picasso.with( AdminNewMainScreen.this).load(base).placeholder(R.drawable.profile_image).error(R.drawable.profile_image).into(mProfileImage);
                                     }
                                 }
                             }
 
+                       /* if(profiles.size ()!=0&&!profiles.isEmpty ()){
+                        for(Employee employee:profiles){
+                            if(employee.getEmployeeImages ().size ()!=0&&!employee.getEmployeeImages ().isEmpty ()){
+                                image=employee.getEmployeeImages ();
+                            }
+                        }
+                        if(image.size ()!=0&&!image.isEmpty ()){
+                            for(EmployeeImages employeeImages:image){
+                                imageId = employeeImages.getEmployeeImageId();
+                                String base=employeeImages.getImage();
+                                if(base != null && !base.isEmpty()){
+                                    Picasso.with( AdminNewMainScreen.this).load(base).placeholder(R.drawable.profile_image).error(R.drawable.profile_image).into(mProfileImage);
+                                }
+                            }
+                        }
+                    }*/
                             profile.setAppOpen(true);
                             String app_version = PreferenceHandler.getInstance( AdminNewMainScreen.this).getAppVersion();
                             profile.setLastUpdated(""+ BuildConfig.VERSION_NAME);
                             profile.setLastseen(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
                             updateProfile(profile);
-
                         }
                     }
 
@@ -1066,16 +1074,16 @@ public class AdminNewMainScreen extends AppCompatActivity implements RapidFloati
                 fileUpload.enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
-                        if(dialog != null && dialog.isShowing())
-                        {
+                        if(dialog != null && dialog.isShowing()) {
                             dialog.dismiss();
                         }
+                        String ImageUrl = Const.IMAGE_URL+response.body ().replaceAll("\"", "");
                         if(employeeImages==null){
                             EmployeeImages employeeImages = new EmployeeImages();
                             if( Util.IMAGE_URL==null){
-                                employeeImages.setImage( Constants.IMAGE_URL+ response.body());
+                                employeeImages.setImage(ImageUrl);
                             }else{
-                                employeeImages.setImage( Util.IMAGE_URL+ response.body());
+                                employeeImages.setImage(ImageUrl);
                             }
                             employeeImages.setEmployeeId(employee.getEmployeeId());
                             addProfileImage(employeeImages);
@@ -1083,9 +1091,9 @@ public class AdminNewMainScreen extends AppCompatActivity implements RapidFloati
 
                             EmployeeImages employeeImagess = employeeImages;
                             if( Util.IMAGE_URL==null){
-                                employeeImages.setImage( Constants.IMAGE_URL+ response.body());
+                                employeeImages.setImage(ImageUrl);
                             }else{
-                                employeeImages.setImage( Util.IMAGE_URL+ response.body());
+                                employeeImages.setImage(ImageUrl);
                             }
                            // employeeImagess.setImage(Constants.IMAGE_URL+response.body().toString());
                             employeeImagess.setEmployeeImageId(employeeImages.getEmployeeImageId());

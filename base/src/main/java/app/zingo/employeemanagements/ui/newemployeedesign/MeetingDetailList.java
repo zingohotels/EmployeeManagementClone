@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Objects;
 
 import app.zingo.employeemanagements.adapter.MeetingDetailAdapter;
@@ -134,51 +135,31 @@ public class MeetingDetailList extends AppCompatActivity {
 
 
     private void getMeetings(final int employeeId){
-
-
         progressBarUtil.showProgress ( "Loading Meetings..." );
-
-
         MeetingsAPI apiService = Util.getClient().create(MeetingsAPI.class);
         Call<ArrayList< Meetings >> call = apiService.getMeetingsByEmployeeId(employeeId);
-
         call.enqueue(new Callback<ArrayList< Meetings >>() {
             @Override
             public void onResponse( @NonNull Call<ArrayList< Meetings >> call, @NonNull Response<ArrayList< Meetings >> response) {
                 int statusCode = response.code();
                 if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
-
-
                     if(progressBarUtil!=null){
                         progressBarUtil.hideProgress ();
                     }
-
                     ArrayList< Meetings > list = response.body();
+                    Collections.reverse ( list );
                     employeeMeetings = response.body();
-
-
-
-
                     if (list !=null && list.size()!=0) {
-
-
                         mAdapter = new MeetingDetailAdapter( MeetingDetailList.this,list);
                         mMeetingList.setAdapter(mAdapter);
-
-
-
                     }else{
-
                         Toast.makeText( MeetingDetailList.this, "No Meetings given for this employee ", Toast.LENGTH_SHORT).show();
-
                     }
 
                 }else {
-
                     if(progressBarUtil!=null){
                         progressBarUtil.hideProgress ();
                     }
-
                     Toast.makeText( MeetingDetailList.this, "Failed due to : "+response.message(), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -245,12 +226,9 @@ public class MeetingDetailList extends AppCompatActivity {
     }
 
     private void getMeetingsDetails(final Meetings loginDetails){
-
         progressBarUtil.showProgress ( "Loading Meetings..." );
-
         MeetingsAPI apiService = Util.getClient().create(MeetingsAPI.class);
         Call<ArrayList< Meetings >> call = apiService.getMeetingsByEmployeeIdAndDate(loginDetails);
-
         call.enqueue(new Callback<ArrayList< Meetings >>() {
             @Override
             public void onResponse( @NonNull Call<ArrayList< Meetings >> call, @NonNull Response<ArrayList< Meetings >> response) {
@@ -260,23 +238,18 @@ public class MeetingDetailList extends AppCompatActivity {
                     if(progressBarUtil!=null){
                         progressBarUtil.hideProgress ();
                     }
-
                     ArrayList< Meetings > list = response.body();
-
+                    Collections.reverse ( list );
                     if (list !=null && list.size()!=0) {
-
                         mMeetingList.removeAllViews();
                         mAdapter = new MeetingDetailAdapter( MeetingDetailList.this,list);
                         mMeetingList.setAdapter(mAdapter);
-
                     }
 
                 }else {
-
                     if(progressBarUtil!=null){
                         progressBarUtil.hideProgress ();
                     }
-
                     //Toast.makeText(DailyTargetsForEmployeeActivity.this, "Failed due to : "+response.message(), Toast.LENGTH_SHORT).show();
                 }
             }

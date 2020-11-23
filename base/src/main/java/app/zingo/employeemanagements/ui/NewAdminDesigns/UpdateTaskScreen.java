@@ -1,5 +1,4 @@
 package app.zingo.employeemanagements.ui.NewAdminDesigns;
-
 import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
@@ -10,7 +9,15 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.textfield.TextInputEditText;
+
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
@@ -31,7 +38,6 @@ import android.widget.Toast;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -47,6 +53,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -54,6 +61,8 @@ import java.util.Locale;
 
 import app.zingo.employeemanagements.Custom.MapViewScroll;
 import app.zingo.employeemanagements.model.Tasks;
+import app.zingo.employeemanagements.utils.Constants;
+import app.zingo.employeemanagements.utils.PreferenceHandler;
 import app.zingo.employeemanagements.utils.TrackGPS;
 import app.zingo.employeemanagements.utils.Util;
 import app.zingo.employeemanagements.WebApi.TasksAPI;
@@ -64,25 +73,18 @@ import retrofit2.Response;
 
 public class UpdateTaskScreen extends AppCompatActivity {
 
-    TextInputEditText mTaskName, mFrom, mTo, mFromTime, mToTime;//mDead
-    EditText mdesc,mComments;
-    Spinner mStatus;
-    AppCompatButton mCreate;
-    RelativeLayout mMapLay;
-    Switch mShow;
-
-    private EditText  lat, lng;
-    private TextView location;
-
+    private TextInputEditText mTaskName, mFrom, mTo, mFromTime, mToTime,task_description,comments_remarks, lat, lng;//mDead
+    private Spinner mStatus;
+    private TextView mCreate,location;
+    private RelativeLayout mMapLay;
+    private SwitchCompat mShow;
     private GoogleMap mMap;
-    MapViewScroll mapView;
-    Marker marker;
-    static int  ADAPTER_POSITION = -1;
-
-    double lati, lngi;
-    Tasks updateTask;
-
-    DecimalFormat df2 = new DecimalFormat(".##########");
+    private MapViewScroll mapView;
+    private Marker marker;
+    public static int  ADAPTER_POSITION = -1;
+    private double lati, lngi;
+    private Tasks updateTask;
+    private DecimalFormat df2 = new DecimalFormat(".##########");
     public static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     public String TAG = "MAPLOCATION",placeId;
 
@@ -102,9 +104,9 @@ public class UpdateTaskScreen extends AppCompatActivity {
             mFromTime = findViewById(R.id.from_time);
             mToTime = findViewById(R.id.to_time);
             // mDead = (TextInputEditText) findViewById(R.id.dead_line);
-            mdesc = findViewById(R.id.task_description);
-            mComments = findViewById(R.id.task_comments);
-            mCreate = findViewById(R.id.apply_leave);
+            task_description = findViewById(R.id.task_description);
+            comments_remarks = findViewById(R.id.comments_remarks);
+            mCreate = findViewById(R.id.update_task);
             mapView = findViewById(R.id.task_location_map);
             mShow = findViewById(R.id.show_map);
             mMapLay = findViewById(R.id.map_layout);
@@ -117,6 +119,12 @@ public class UpdateTaskScreen extends AppCompatActivity {
             if (bundle != null) {
                 updateTask = (Tasks)bundle.getSerializable("Task");
                 ADAPTER_POSITION = bundle.getInt("Position");
+            }
+
+            try{
+                Places.initialize ( getApplicationContext (), Constants.mapKey);
+            }catch ( Exception e ){
+                e.printStackTrace ();
             }
 
             if(updateTask!=null){
@@ -181,7 +189,6 @@ public class UpdateTaskScreen extends AppCompatActivity {
                             try {
                                /* atoDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]+" "+dojs[1]);
                                 tos = new SimpleDateFormat("MMM dd,yyyy").format(atoDate);*/
-
                                 atoDate = new SimpleDateFormat("yyyy-MM-dd").parse(dojs[0]);
                                 Date time = new SimpleDateFormat("HH:mm:ss").parse(dojs[1]);
                                 //tos = new SimpleDateFormat("MMM dd,yyyy HH:mm").format(afromDate);
@@ -192,42 +199,30 @@ public class UpdateTaskScreen extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                         }
-
-
-                                              /*  String parse = new SimpleDateFormat("MMM yyyy").format(atoDate);
-                                                toDate = new SimpleDateFormat("MMM yyyy").parse(parse);*/
-
                     }
-
                 }
 
                 mFrom.setText(""+froms);
                 mTo.setText(""+tos);
                 mFromTime.setText(""+fromTime);
                 mToTime.setText(""+toTime);
-                mComments.setText(""+updateTask.getComments());
-                mdesc.setText(""+updateTask.getTaskDescription());
+                comments_remarks.setText(""+updateTask.getComments());
+                task_description.setText(""+updateTask.getTaskDescription());
 
                 String status = updateTask.getStatus();
-
                 if(status.equalsIgnoreCase("Pending")){
-
                     mStatus.setSelection(0);
                 }else if(status.equalsIgnoreCase("On-Going")){
                     mStatus.setSelection(1);
-
                 }else if(status.equalsIgnoreCase("Completed")){
                     mStatus.setSelection(2);
-
                 }else if(status.equalsIgnoreCase("Closed")){
                     mStatus.setSelection(3);
-
                 }
 
             }else {
                 Toast.makeText( UpdateTaskScreen.this, "Something went wrong", Toast.LENGTH_SHORT).show();
             }
-
 
             mFrom.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -302,14 +297,7 @@ public class UpdateTaskScreen extends AppCompatActivity {
                     mTimePicker.show();
                 }
             });
-           /* mDead.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
 
-                    openDatePicker(mDead);
-                }
-            });
-*/
             mCreate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -343,16 +331,16 @@ public class UpdateTaskScreen extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        Intent intent =
-                                new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY/*MODE_FULLSCREEN*/)
-                                        .build( UpdateTaskScreen.this);
+                        /*Intent intent =
+                                new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY*//*MODE_FULLSCREEN*//*)
+                                        .build(CreateTaskScreen.this);
+                        startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);*/
+                        List< com.google.android.libraries.places.api.model.Place.Field> fields = Arrays.asList( com.google.android.libraries.places.api.model.Place.Field.ID, com.google.android.libraries.places.api.model.Place.Field.LAT_LNG, com.google.android.libraries.places.api.model.Place.Field.NAME, com.google.android.libraries.places.api.model.Place.Field.ADDRESS);
+                        Intent intent = new Autocomplete.IntentBuilder( AutocompleteActivityMode.FULLSCREEN, fields).build(getApplicationContext());
                         startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
-                    } catch (GooglePlayServicesRepairableException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                         // TODO: Handle the error.
-                    } catch (GooglePlayServicesNotAvailableException e) {
-                        // TODO: Handle the error.
-                        e.printStackTrace();
                     }
                 }
             });
@@ -450,38 +438,31 @@ public class UpdateTaskScreen extends AppCompatActivity {
         final Calendar newDate = Calendar.getInstance();
         //launch datepicker modal
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, final int year, final int monthOfYear, final int dayOfMonth) {
-                        try
-                        {
-                            newDate.set(year,monthOfYear,dayOfMonth);
-                            String date = ((monthOfYear+1)+"/"+dayOfMonth+"/"+year);
-                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
-                            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy");
-                            try {
-                                Date parse_date = simpleDateFormat.parse(date);
-                                String date_format = sdf.format(parse_date);
-
-                                if(tv.equals(mFrom))
-                                {
-                                    tv.setText(date_format);
-                                }
-                                else if(tv.equals(mTo))
-                                {
-                                    tv.setText(date_format);
-                                }
-
-                            } catch (ParseException e) {
-                                e.printStackTrace();
+                ( view , year , monthOfYear , dayOfMonth ) -> {
+                    try
+                    {
+                        newDate.set(year,monthOfYear,dayOfMonth);
+                        String date = ((monthOfYear+1)+"/"+dayOfMonth+"/"+year);
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+                        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy");
+                        try {
+                            Date parse_date = simpleDateFormat.parse(date);
+                            String date_format = sdf.format(parse_date);
+                            if(tv.equals(mFrom)) {
+                                tv.setText(date_format);
                             }
-                        }
-                        catch (Exception ex)
-                        {
-                            ex.printStackTrace();
+                            else if(tv.equals(mTo)) {
+                                tv.setText(date_format);
+                            }
+
+                        } catch (ParseException e) {
+                            e.printStackTrace();
                         }
                     }
-                }, mYear, mMonth, mDay);
+                    catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                } , mYear, mMonth, mDay);
 
         datePickerDialog.show();
     }
@@ -493,7 +474,7 @@ public class UpdateTaskScreen extends AppCompatActivity {
         String toTime = mToTime.getText().toString();
         //   String dead = mDead.getText().toString();
         String taskName = mTaskName.getText().toString();
-        String desc = mdesc.getText().toString();
+        String desc = task_description.getText().toString();
 
         if(taskName.isEmpty()){
             Toast.makeText(this, "Task Name is required", Toast.LENGTH_SHORT).show();
@@ -518,7 +499,7 @@ public class UpdateTaskScreen extends AppCompatActivity {
                 tasks.setReminderDate(new SimpleDateFormat("MM/dd/yyyy HH:mm").format(sdf.parse(from+" "+fromTime)));
                 tasks.setEndDate(new SimpleDateFormat("MM/dd/yyyy HH:mm").format(sdf.parse(to+" "+toTime)));
                 tasks.setStatus(""+mStatus.getSelectedItem().toString());
-                tasks.setComments(""+mComments.getText().toString());
+                tasks.setComments(""+comments_remarks.getText().toString());
                 tasks.setRemarks("");
 
                 if(mShow.isChecked()){
@@ -526,10 +507,30 @@ public class UpdateTaskScreen extends AppCompatActivity {
                     tasks.setLongitude(lngi+"");
                 }
                 tasks.setDepartmentId(0);
-                try {
+                if( PreferenceHandler.getInstance ( this ).getUserRoleUniqueID ()==2 ){
                     updateTasks(tasks);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                }else{
+                    try {
+                        SimpleDateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy");
+                        Date taskEndDate = new SimpleDateFormat("MM/dd/yyyy").parse(tasks.getEndDate ());
+                        Date currentDate = dateFormatter.parse ( dateFormatter.format ( new Date ( ) ) );
+                        if(taskEndDate.getTime ()>currentDate.getTime ()&&tasks.getStatus ().equalsIgnoreCase ( "Completed" )){
+                            Toast.makeText ( this , "Can`t Complete task before Task End date" , Toast.LENGTH_SHORT ).show ( );
+                            return;
+                        }if(taskEndDate.getTime ()>currentDate.getTime ()&&tasks.getStatus ().equalsIgnoreCase ( "Closed" )){
+                            Toast.makeText ( this , "Can`t Closed task before Task End date" , Toast.LENGTH_SHORT ).show ( );
+                            return;
+                        }if(taskEndDate.getTime ()<=currentDate.getTime ()&&tasks.getStatus ().equalsIgnoreCase ( "Completed" )){
+                            updateTasks(tasks);
+                        }if(taskEndDate.getTime ()<=currentDate.getTime ()&&tasks.getStatus ().equalsIgnoreCase ( "Closed" )) {
+                            updateTasks(tasks);
+                        }else{
+                            updateTasks(tasks);
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }catch (Exception e){
                 e.printStackTrace();
@@ -562,11 +563,11 @@ public class UpdateTaskScreen extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
         try{
             if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
                 if (resultCode == RESULT_OK) {
-                    Place place = PlaceAutocomplete.getPlace(this, data);
+                    Place place = Autocomplete.getPlaceFromIntent (data);
                     //System.out.println(place.getLatLng());
                     location.setText(place.getName()+","+place.getAddress());
                     //location.setText(""+place.getId());
@@ -589,8 +590,8 @@ public class UpdateTaskScreen extends AppCompatActivity {
                     }
                     //address.setText(place.getAddress());*/
                     Log.i(TAG, "Place: " + place.getName());
-                } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
-                    Status status = PlaceAutocomplete.getStatus(this, data);
+                }  else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                    Status status = Autocomplete.getStatusFromIntent (data);
                     // TODO: Handle the error.
                     Log.i(TAG, status.getStatusMessage());
 
@@ -604,131 +605,89 @@ public class UpdateTaskScreen extends AppCompatActivity {
     }
 
     public void updateTasks(final Tasks tasks) {
-
         final ProgressDialog dialog = new ProgressDialog( UpdateTaskScreen.this);
         dialog.setMessage("Saving Details..");
         dialog.setCancelable(false);
         dialog.show();
-
         TasksAPI apiService = Util.getClient().create( TasksAPI.class);
-
         Call<Tasks> call = apiService.updateTasks(tasks.getTaskId(),tasks);
-
         call.enqueue(new Callback<Tasks>() {
             @Override
             public void onResponse(Call<Tasks> call, Response<Tasks> response) {
-//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
-                try
-                {
-                    if(dialog != null && dialog.isShowing())
-                    {
+                try {
+                    if(dialog != null && dialog.isShowing()) {
                         dialog.dismiss();
                     }
 
                     int statusCode = response.code();
                     if (statusCode == 200 || statusCode == 201|| statusCode == 204) {
-
-
                         Toast.makeText( UpdateTaskScreen.this, "Update Task succesfully", Toast.LENGTH_SHORT).show();
-
+                        UpdateTaskScreen.this.finish ();
                       //  AdminDashBoardFragment.mTaskList.getAdapter().notifyDataSetChanged();
 
                     }else {
                         Toast.makeText( UpdateTaskScreen.this, "Failed Due to "+response.message(), Toast.LENGTH_SHORT).show();
                     }
                 }
-                catch (Exception ex)
-                {
-
-                    if(dialog != null && dialog.isShowing())
-                    {
+                catch (Exception ex) {
+                    if(dialog != null && dialog.isShowing()) {
                         dialog.dismiss();
                     }
                     ex.printStackTrace();
                 }
-//                callGetStartEnd();
             }
 
             @Override
             public void onFailure(Call<Tasks> call, Throwable t) {
-
-                if(dialog != null && dialog.isShowing())
-                {
+                if(dialog != null && dialog.isShowing()) {
                     dialog.dismiss();
                 }
                 Toast.makeText( UpdateTaskScreen.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });
-
-
-
     }
 
-
     public void deleteTasks(final Tasks tasks) {
-
-
-
         final ProgressDialog dialog = new ProgressDialog( UpdateTaskScreen.this);
         dialog.setMessage("Deleting Details..");
         dialog.setCancelable(false);
         dialog.show();
-
         TasksAPI apiService = Util.getClient().create( TasksAPI.class);
-
         Call<Tasks> call = apiService.deleteTasks(tasks.getTaskId());
-
         call.enqueue(new Callback<Tasks>() {
             @Override
             public void onResponse(Call<Tasks> call, Response<Tasks> response) {
-//                List<RouteDTO.Routes> list = new ArrayList<RouteDTO.Routes>();
-                try
-                {
-                    if(dialog != null && dialog.isShowing())
-                    {
+                try {
+                    if(dialog != null && dialog.isShowing()) {
                         dialog.dismiss();
                     }
 
                     int statusCode = response.code();
                     if (statusCode == 200 || statusCode == 201|| statusCode == 204) {
-
-
                         Toast.makeText( UpdateTaskScreen.this, "Deleted Task succesfully", Toast.LENGTH_SHORT).show();
                         UpdateTaskScreen.this.finish();
-
-
-
                     }else {
                         Toast.makeText( UpdateTaskScreen.this, "Failed Due to "+response.message(), Toast.LENGTH_SHORT).show();
                     }
                 }
-                catch (Exception ex)
-                {
-
-                    if(dialog != null && dialog.isShowing())
-                    {
+                catch (Exception ex) {
+                    if(dialog != null && dialog.isShowing()) {
                         dialog.dismiss();
                     }
                     ex.printStackTrace();
                 }
-//                callGetStartEnd();
             }
 
             @Override
             public void onFailure(Call<Tasks> call, Throwable t) {
-
-                if(dialog != null && dialog.isShowing())
-                {
+                if(dialog != null && dialog.isShowing()) {
                     dialog.dismiss();
                 }
                 Toast.makeText( UpdateTaskScreen.this , "Failed due to Bad Internet Connection" , Toast.LENGTH_SHORT ).show( );
                 Log.e("TAG", t.toString());
             }
         });
-
-
-
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -738,42 +697,30 @@ public class UpdateTaskScreen extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         int id = item.getItemId();
-
         if (id == android.R.id.home) {
             UpdateTaskScreen.this.finish();
-
         } else if (id == R.id.action_delete) {
             showalertbox();
-
-
         }
         return super.onOptionsItemSelected(item);
     }
 
     public void showalertbox(){
-
-
-
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder( UpdateTaskScreen.this);
         builder.setTitle("Do you want to Delete ?");
         builder.setCancelable(true);
         builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-
                 dialogInterface.dismiss();
-
                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder( UpdateTaskScreen.this);
                 builder.setTitle("Do you want to delete?");
                 builder.setCancelable(false);
                 builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
                         try {
-
                             if(updateTask!=null){
                                 deleteTasks(updateTask);
                                 dialogInterface.dismiss();
@@ -783,42 +730,29 @@ public class UpdateTaskScreen extends AppCompatActivity {
                             }
 
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            e.printStackTrace ( );
                         }
-
-
                     }
                 });
                 builder.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
-
-
                     }
                 });
 
                 android.app.AlertDialog dialog = builder.create();
                 dialog.show();
-
-
-
-
-
-
             }
         });
         builder.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-
                     dialogInterface.dismiss();
-
             }
         });
 
         android.app.AlertDialog dialog = builder.create();
         dialog.show();
-
     }
 }

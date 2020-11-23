@@ -3,6 +3,7 @@ package app.zingo.employeemanagements.WebApi;
 import java.util.ArrayList;
 
 import app.zingo.employeemanagements.model.Employee;
+import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -50,4 +51,8 @@ public interface EmployeeApi {
 
     @DELETE("Employees/{id}")
     Call<Employee> deletEmployee ( @Path ("id") int id );
+
+    //RxJava
+    @GET("Employees/{id}")
+    Observable <ArrayList<Employee>> getProfileByIdRx ( @Path ("id") int id );
 }

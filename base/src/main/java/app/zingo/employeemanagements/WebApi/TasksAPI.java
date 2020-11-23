@@ -42,5 +42,4 @@ public interface TasksAPI {
     @GET("Tasks/GetTasksByEmployeeId/{EmployeeId}")
     Observable <ArrayList<Tasks>> getTasksByEmployeeIdRx ( @Path ("EmployeeId") int EmployeeId );
 
-
 }

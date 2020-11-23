@@ -6,6 +6,8 @@ import android.os.Bundle;
 import com.google.android.material.textfield.TextInputEditText;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.SwitchCompat;
+
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -19,6 +21,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.ParseException;
@@ -56,14 +59,13 @@ import static java.util.Calendar.YEAR;
 public class CreateEmployeeScreen extends AppCompatActivity {
 
     TextInputEditText mName,mPrimaryEmail,mSecondaryEmail,
-            mMobile,mPassword,mConfirm,mDesignation,mSalary;
-    EditText mAddress;
+            mMobile,mPassword,mConfirm,mDesignation,mSalary,mAddress;
     MyEditText mDob,mDoj;
     Spinner mDepartment,mtoReport,mShift;
     RadioButton mMale,mFemale,mOthers;
     CheckBox mLocationCondition,mCheckTime;
-    AppCompatButton mCreate;
-    Switch mAdmin;
+    TextView mCreate;
+    SwitchCompat mAdmin;
 
     ArrayList<Departments> departmentData;
     ArrayList<Employee> employees;

@@ -1,148 +1,5 @@
 <resources>
-    <string name="app_name">Krony Employee Management</string>
-
-    <string name="permission_rationale">Location permission is needed for core functionality</string>
-    <string name="permission_denied_explanation">Permission was denied, but is needed for core functionality.</string>
-    <string name="ok">OK</string>
-
-    <string name="request_updates">Request updates</string>
-    <string name="remove_updates">Remove updates</string>
-    <string name="unknown_location">Unknown location</string>
-
-    <string name="batched_location_updates">Batched location updates</string>
-
-    <plurals name="num_locations_reported">
-        <item quantity="zero">No location reported</item>
-        <item quantity="one">One location reported</item>
-        <item quantity="other">%d locations reported</item>
-    </plurals>
-
-    <string name="ColonnaMT">ColonnaMT</string>
-    <string name="Leprosy">Leprosy</string>
-    <string name="BomBardment">bombardment_shadow</string>
-    <string name="mina">Mina_is_gone_3D</string>
-    <string name="Yeysk">Yeysk</string>
-    <string name="Maribel_Suit">Maribel_Suit</string>
-    <string name="arial">arial</string>
-    <string name="Mistral">Mistral</string>
-    <string name="CooperBlack">Cooper_Black_Regular</string>
-
-    <string name="file_provider_authority" translatable="false">app.zingo.employeemanagements.fileprovider</string>
-
-    <!--Splash screen-->
-    <string name="splash_app_name">Employee Management</string>
-    <string name="powered_by_zingo">Powered By Lucida Technologies</string>
-    <string name="copyright_lucida">&#9400; Lucida Hospitality Pvt Ltd</string>
-
-    <!--Guest Login-->
-    <string name="login_app_name">Employee Management</string>
-    <string name="login_app_desc">Manage your Organization</string>
-    <string name="verify_text">Verify your Mobile Number</string>
-    <string name="verify_msg">Enter the 6-digit code we sent to </string>
-
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Zingo Hotels</string>
-
-
-    <string name="textMeeting">Details</string>
-    <string name="mapView">Map View</string>
-
-    <string name="workingDays">Worked Days</string>
-    <string name="leaveDays">Leave Taken</string>
-
-    <string name="leaveNew">Apply Leave</string>
-    <string name="leaveRequest">Leaves</string>
-
-    <string name="share_app_text">Share App</string>
-
-    <string name="hint_contact_add_email">Email Id</string>
-    <string name="hint_contact_add_mobile">Mobile Number</string>
-    <string name="rupess">\u20A8</string>
-    <string name="uploadImages">Set your image</string>
-
-    <string-array name="leave_type">
-        <item>Paid</item>
-        <item>Un Paid</item>
-
-    </string-array>
-
-    <string-array name="leave_status">
-        <item>Pending</item>
-        <item>Approved</item>
-        <item>Rejected</item>
-        <item>Cancelled</item>
-
-    </string-array>
-
-    <string-array name="task_status">
-        <item>Pending</item>
-        <item>On-Going</item>
-        <item>Completed</item>
-        <item>Closed</item>
-
-    </string-array>
-
-    <string name="activity_in_vehicle">In Vehicle</string>
-    <string name="activity_on_bicycle">On Bicycle</string>
-    <string name="activity_on_foot">On Foot</string>
-    <string name="activity_running">Running</string>
-    <string name="activity_still">Still</string>
-    <string name="activity_tilting">Tilting</string>
-    <string name="activity_walking">walking</string>
-    <string name="activity_unknown">Unknown</string>
-
-    <string-array name="order_status">
-        <item>Pending</item>
-        <item>Order Taken</item>
-        <item>Dispatched</item>
-        <item>Delivered</item>
-        <item>Closed</item>
-
-    </string-array>
-
-    <string-array name="break_status">
-        <item>Tea Break</item>
-        <item>Lunch Break</item>
-        <item>Others</item>
-    </string-array>
-
-    <string-array name="week_off_day">
-        <item>Sun</item>
-        <item>Mon</item>
-        <item>Tue</item>
-        <item>Wed</item>
-        <item>Thu</item>
-        <item>Fri</item>
-        <item>Sat</item>
-
-    </string-array>
-
-    <string-array name="week_off_week">
-        <item>Week 1</item>
-        <item>Week 2</item>
-        <item>Week 3</item>
-        <item>Week 4</item>
-        <item>Week 5</item>
-    </string-array>
-
-    <string-array name="log_status">
-
-        <item>Absent</item>
-        <item>Present</item>
-
-    </string-array>
-
-    <string-array name="meeting_status">
-        <item>In-Meeting</item>
-        <item>Cancelled</item>
-        <item>Completed</item>
-
-
-    </string-array>
-
-
     <array name="navbar_items">
-        <!--<item>Home</item>-->
         <item>Profile</item>
         <item>Organization</item>
         <item>Employees</item>
@@ -150,6 +7,7 @@
         <item>Change Password</item>
         <item>Logout</item>
     </array>
+
     <array name="navnar_item_images">
         <item>@drawable/profile</item>
         <item>@drawable/organization_icon</item>
@@ -170,6 +28,7 @@
         <item>Change Password</item>
         <item>Logout</item>
     </array>
+
     <array name="navnar_item_images_advance">
         <item>@drawable/profile</item>
         <item>@drawable/organization_icon</item>
@@ -183,19 +42,17 @@
     </array>
 
     <array name="navbar_items_employee">
-        <!--<item>Home</item>-->
         <item>Profile</item>
         <item>Organization</item>
-
         <item>Attendance</item>
         <item>Leave Management</item>
         <item>Change Password</item>
         <item>Logout</item>
     </array>
+
     <array name="navnar_item_images_employee">
         <item>@drawable/profile</item>
         <item>@drawable/organization_icon</item>
-
         <item>@drawable/build_year</item>
         <item>@drawable/checklist</item>
         <item>@drawable/password</item>
@@ -203,7 +60,6 @@
     </array>
 
     <array name="navbar_items_employee_advance">
-        <!--<item>Home</item>-->
         <item>Profile</item>
         <item>Organization</item>
         <item>Meetings</item>
@@ -213,6 +69,7 @@
         <item>Change Password</item>
         <item>Logout</item>
     </array>
+
     <array name="navnar_item_images_employee_advance">
         <item>@drawable/profile</item>
         <item>@drawable/organization_icon</item>
@@ -225,7 +82,6 @@
     </array>
 
     <array name="month">
-        <!--<item>Home</item>-->
         <item>Jan</item>
         <item>Feb</item>
         <item>Mar</item>
@@ -238,25 +94,75 @@
         <item>Oct</item>
         <item>Nov</item>
         <item>Dec</item>
-
     </array>
 
-    <!-- TODO: Remove or change this placeholder text -->
+    <plurals name="num_locations_reported">
+        <item quantity="zero">No location reported</item>
+        <item quantity="one">One location reported</item>
+        <item quantity="other">%d locations reported</item>
+    </plurals>
+    <string name="app_name">Krony Employee Management</string>
+    <string name="permission_rationale">Location permission is needed for core functionality</string>
+    <string name="permission_denied_explanation">Permission was denied, but is needed for core functionality.</string>
+    <string name="ok">OK</string>
+    <string name="request_updates">Request updates</string>
+    <string name="remove_updates">Remove updates</string>
+    <string name="unknown_location">Unknown location</string>
+    <string name="batched_location_updates">Batched location updates</string>
+    <string name="ColonnaMT">ColonnaMT</string>
+    <!--Splash screen-->
+    <string name="Leprosy">Leprosy</string>
+    <string name="BomBardment">bombardment_shadow</string>
+    <string name="mina">Mina_is_gone_3D</string>
+    <!--Guest Login-->
+    <string name="Yeysk">Yeysk</string>
+    <string name="Maribel_Suit">Maribel_Suit</string>
+    <string name="arial">arial</string>
+    <string name="Mistral">Mistral</string>
+    <string name="CooperBlack">Cooper_Black_Regular</string>
+    <string name="file_provider_authority" translatable="false">app.zingo.employeemanagements.fileprovider</string>
+    <string name="splash_app_name">Employee Management</string>
+    <string name="powered_by_zingo">Powered By Lucida Technologies</string>
+    <string name="copyright_lucida">&#9400; Lucida Hospitality Pvt Ltd</string>
+    <string name="login_app_name">Employee Management</string>
+    <string name="login_app_desc">Manage your Organization</string>
+    <string name="verify_text">Verify your Mobile Number</string>
+    <string name="verify_msg">Enter the 6-digit code we sent to </string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Zingo Hotels</string>
+    <string name="textMeeting">Details</string>
+    <string name="mapView">Map View</string>
+    <string name="workingDays">Worked Days</string>
+    <string name="leaveDays">Leave Taken</string>
+    <string name="leaveNew">Apply Leave</string>
+    <string name="leaveRequest">Leaves</string>
+    <string name="share_app_text">Share App</string>
+    <string name="hint_contact_add_email">Email Id</string>
+    <string name="hint_contact_add_mobile">Mobile Number</string>
+    <string name="rupess">\u20A8</string>
+    <string name="uploadImages">Set your image</string>
+    <string name="activity_in_vehicle">In Vehicle</string>
+    <string name="activity_on_bicycle">On Bicycle</string>
+    <string name="activity_on_foot">On Foot</string>
+    <string name="activity_running">Running</string>
+    <string name="activity_still">Still</string>
+    <string name="activity_tilting">Tilting</string>
+    <string name="activity_walking">walking</string>
+    <string name="activity_unknown">Unknown</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="renew_alert_message">Dear Customer, Your EMS Subscription Expired.\nUpdate your plan and use our services. </string>
     <string name="error_code_expire">Error Code: EC_E05</string>
-
-
-    <!--calendar -->
     <string name="accounts">Accounts</string>
     <string name="description_add">Add Calendar</string>
     <string name="summary">Title</string>
     <string name="summary_hint">Enter the calendar title</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="icon_desc">Application icon</string>
     <string name="title_separator_desc">Title separator</string>
     <string name="refresh">Refresh</string>
+    <!--calendar -->
     <string name="batchadd">Copy Calendar x3 (Batch)</string>
     <string name="edit">Edit Calendar</string>
     <string name="delete">Delete Calendar</string>
@@ -265,7 +171,6 @@
     <string name="no">No</string>
     <string name="error">Error</string>
     <string name="error_format">[Error] %s</string>
-
     <string name="barcode_reader">QrCode Reader</string>
     <string name="company_step_one">Choose your User type as a Company &amp; Employer and click \"Join\" button.</string>
     <string name="employee_step_one">Choose your User type as an Employee and click \"Join\" button.</string>
@@ -292,15 +197,12 @@
     <string name="company_step_7sd">Click on \"Notifications\" and Click on \"Expenses\".You will get expenses list of all employees for current date.\nClick on Employee\'s Icon,You will get employees list with their attendance status(Present/Absent).\nClick on Employee\'s Name,you will able to see expense dashboard of that particular employee for current month.\n • By clicking on \"Date\" you can change month and see the expense dashboard on selected month.\n</string>
     <string name="employee_step_7sd">Click on \"Notifications\" and Click on \"Expenses\".You will get expenses list of yours for current date.• By clicking on \"Date\" you can change date and see the expense list on selected date.\n</string>
     <string name="company_step_5s">Click on \"Hamburger Icon(three horizontal lines which is in top right)\" and Click on \"Live Tracking\".You will get employee\'s updated last location.\n•Click on Employee\'s Icon(top on Title bar),you will get employees list.\n • By clicking on employee name you can check employees location based on data also •\n By clicking \"Calendar Icon\" you can change date and check location of employees</string>
-
     <string name="company_step_3s">Click on \"Hamburger Icon(three horizontal lines which is in top right)\" and Click on \"Employees\".You will get employees list and \"Floating\" button(bottom right corner).\nClick on \"Floating\" button,you will redirect to \"Create Employee\" screen. Mention Employees info based on given fields then click on \"Create Employee\".\n •Admin : If  Related Employee is Manager or Super Admin Or Team Leader or You want to make him/her as a Admin for other Employees then Admin Button Should be “Yes”.
 \n • Check in Location: If your employee has to check in from only office location the checked in this check box.\nIf your employee is sales employee and he/ she has to check in from any location then don’t checked in this check box.
 \n• Check in Time : If your Employee has to check in within office check-in hours Only then Checked in this check box.(Suppose Your Office timing is Morning 9 O’clock then Employee has to Check in Before 9 O’clock  ).
 </string>
-
     <string name="rfab_rfal__float_convert_color_alpha">0.7</string>
     <string name="share_using">Krony App</string>
-
     <string name="dialog_default_title">Here\'s a message!</string>
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Cancel</string>
@@ -312,7 +214,6 @@
     <string name="pref_previously_started">FirstTimeSplash</string>
     <string name="hide_password">Hide Password</string>
     <string name="show_password">Show Password</string>
-    <string name="todo">TODO</string>
     <string name="sign_in">Sign in</string>
     <string name="support">Support</string>
     <string name="e_mail_user_name">E-mail/User name</string>
@@ -361,6 +262,117 @@
     <string name="upload_pictures">Upload Pictures</string>
     <string name="brand_name_imp">Brand Name*</string>
     <string name="give_desc_brand">Give Description of the Brand*</string>
+    <string name="attention">Attention</string>
+    <string name="leave_type">Leave Type</string>
+    <string name="departments">Departments</string>
+    <string name="submit">Submit</string>
+    <string name="task_name">Task Name</string>
+    <string name="from_date">From Date</string>
+    <string name="to_date">To Date</string>
+    <string name="from_time">From Time</string>
+    <string name="to_time">To Time</string>
+    <string name="discription">Discription</string>
+    <string name="mark_on_map">Mark on Map</string>
+    <string name="location">Location</string>
+    <string name="latitude">Lattitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="describe_about_your_order">Describe About your order</string>
+    <string name="comments_remarks"><![CDATA[comments & Remarks]]></string>
+    <string name="discribe_about_your_task">Discribe About your Task</string>
+    <string name="status">Status</string>
+    <string name="admin">Admin</string>
+    <string name="employee_name">Employee Name *</string>
+    <string name="other">Others</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="primary_organization_email_id">Primary/Organization Email Id *</string>
+    <string name="alternate_email_id_optional">Alternate Email Id(Optional)</string>
+    <string name="mobile_number">Mobile Number *</string>
+    <string name="salary_astric">Salary *</string>
+    <string name="password_astric">Password *</string>
+    <string name="shift">Shift</string>
+    <string name="designation">Designation *</string>
+    <string name="to_report">To report</string>
+    <string name="con_password_astric">Confirm Password *</string>
+    <string name="create_employee">Create Employee</string>
+    <string name="address_optional">Address(Optional)</string>
+    <string name="fields_are_mandatory_astric">* Fields are Mandatory</string>
+    <string name="dob">DOB *</string>
+    <string name="doj">DOJ *</string>
+    <string name="department_name">Department Name</string>
+    <string name="description">Description</string>
+    <string name="create_department">Create Department</string>
+    <string name="address">Address</string>
+    <string name="check_in_location">Check-in Location</string>
+    <string name="check_in_time">Check-in Time</string>
+    <string name="check_in_with_location">Check-in Location (If Checked Employee has to Check-in
+        from Office Only)</string>
+    <string name="check_in_with_time" >Check-in Time (If Checked Employee has to Check-in within
+        Office Check-in Hours only)</string>
+    <string name="active_approve">Active/Approve</string>
+    <string name="custom_week_off">Custome Week-Off</string>
+    <string name="searching">Searching...</string>
+    <string name="todo">TODO</string>
+    <string-array name="leave_type">
+        <item>Paid</item>
+        <item>Un Paid</item>
+    </string-array>
 
+    <string-array name="leave_status">
+        <item>Pending</item>
+        <item>Approved</item>
+        <item>Rejected</item>
+        <item>Cancelled</item>
+    </string-array>
+
+    <string-array name="task_status">
+        <item>Pending</item>
+        <item>On-Going</item>
+        <item>Completed</item>
+        <item>Closed</item>
+    </string-array>
+
+    <string-array name="order_status">
+        <item>Pending</item>
+        <item>Order Taken</item>
+        <item>Dispatched</item>
+        <item>Delivered</item>
+        <item>Closed</item>
+    </string-array>
+
+    <string-array name="break_status">
+        <item>Tea Break</item>
+        <item>Lunch Break</item>
+        <item>Others</item>
+    </string-array>
+
+    <string-array name="week_off_day">
+        <item>Sun</item>
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wed</item>
+        <item>Thu</item>
+        <item>Fri</item>
+        <item>Sat</item>
+    </string-array>
+
+    <string-array name="week_off_week">
+        <item>Week 1</item>
+        <item>Week 2</item>
+        <item>Week 3</item>
+        <item>Week 4</item>
+        <item>Week 5</item>
+    </string-array>
+
+    <string-array name="log_status">
+        <item>Absent</item>
+        <item>Present</item>
+    </string-array>
+
+    <string-array name="meeting_status">
+        <item>In-Meeting</item>
+        <item>Cancelled</item>
+        <item>Completed</item>
+    </string-array>
 
 </resources>

@@ -1,5 +1,4 @@
 package app.zingo.employeemanagements.Service;
-
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -66,25 +65,15 @@ import rx.functions.FuncN;
 import rx.schedulers.Schedulers;
 
 public class ReportDownloadingDataService extends Service {
-
     private static final String AUTHORITY="app.zingo.employeemanagements";
-
     private static final String TAG_FOREGROUND_SERVICE = "FOREGROUND_SERVICE";
-
     public static final String ACTION_START_FOREGROUND_SERVICE = "ACTION_START_FOREGROUND_SERVICE";
-
     public static final String ACTION_STOP_FOREGROUND_SERVICE = "ACTION_STOP_FOREGROUND_SERVICE";
-
-
     ArrayList<ReportDataEmployee> reportDataEmployeeArrayList;
-
     ArrayList<ObservableReportData> data = new ArrayList<>();
-
     int totalDataCount = 0;
-
     String startDateValue = "";
     String endDateValue = "";
-
 
     public ReportDownloadingDataService() {
     }

@@ -38,4 +38,7 @@ public interface MeetingsAPI {
     /////RxJava
     @POST("Meetings/GetMeetingsDetailsByEmployeeIdAndLoginDate")
     Observable <ArrayList< Meetings >> getMeetingsByEmployeeIdAndDateRx( @Body Meetings details );
+    /////RxJava
+    @GET("Meetings/GetMeetingsByEmployeeId/{EmployeeId}")
+    Observable<ArrayList< Meetings >> getMeetingsByEmployeeIdRx ( @Path ("EmployeeId") int id );
 }

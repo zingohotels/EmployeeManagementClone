@@ -1,5 +1,4 @@
 package app.zingo.employeemanagements.Service;
-
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.IntentService;
@@ -29,7 +28,6 @@ import app.zingo.employeemanagements.utils.PreferenceHandler;
 import app.zingo.employeemanagements.base.R;
 
 public class CheckInAlarmReceiverService extends IntentService {
-
     protected static final String TAG = CheckInAlarmReceiverService.class.getSimpleName();
     private MediaPlayer mMediaPlayer;
 

@@ -1084,41 +1084,33 @@ public class ReportManagementScreen extends BaseActivity {
         int mDay   = c.get(Calendar.DAY_OF_MONTH);
         //launch datepicker modal
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                ( view , year , monthOfYear , dayOfMonth ) -> {
+                    try {
+                        Log.d("Date", "DATE SELECTED "+dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+
+                        Calendar newDate = Calendar.getInstance();
+                        newDate.set(year,monthOfYear,dayOfMonth);
+
+                        String date1 = (monthOfYear + 1)  + "/" + (dayOfMonth) + "/" + year;
+                        String date2 = year  + "-" +(monthOfYear + 1)+ "-" +  (dayOfMonth);
+
+                       SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
                         try {
-                            Log.d("Date", "DATE SELECTED "+dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                            Date fdate = simpleDateFormat.parse(date1);
+                            /*LiveTracking lv = new LiveTracking();
+                            new SimpleDateFormat("yyyy-MM-dd").format(new Date())
+                            lv.setTrackingDate(date1);
+                            getLiveLocation(lv);*/
+                            getEmployees(date2);
 
-                            Calendar newDate = Calendar.getInstance();
-                            newDate.set(year,monthOfYear,dayOfMonth);
-
-                            String date1 = (monthOfYear + 1)  + "/" + (dayOfMonth) + "/" + year;
-                            String date2 = year  + "-" +(monthOfYear + 1)+ "-" +  (dayOfMonth);
-
-                            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy");
-
-                            ArrayList<Date> dates = new ArrayList<Date>();
-                            SimpleDateFormat df1 = new SimpleDateFormat("yyyy-MM-dd");
-
-                           SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
-                            try {
-                                Date fdate = simpleDateFormat.parse(date1);
-                                /*LiveTracking lv = new LiveTracking();
-                                new SimpleDateFormat("yyyy-MM-dd").format(new Date())
-                                lv.setTrackingDate(date1);
-                                getLiveLocation(lv);*/
-                                getEmployees(date2);
-
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        catch (Exception ex) {
-                            ex.printStackTrace();
+                        } catch (ParseException e) {
+                            e.printStackTrace();
                         }
                     }
-                }, mYear, mMonth, mDay);
+                    catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                } , mYear, mMonth, mDay);
 
         datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         datePickerDialog.show();

@@ -1,5 +1,6 @@
 package app.zingo.employeemanagements.ui.Common;
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
@@ -37,12 +38,14 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.libraries.places.api.model.Place;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -106,6 +109,7 @@ public class AllEmployeeLiveLocation extends AppCompatActivity {
             mapView.onResume();
     }
 
+    @SuppressLint ("SetTextI18n")
     private void initViews ( ) {
         try{
             mapView = findViewById(R.id.employee_live_list_map);
@@ -133,39 +137,35 @@ public class AllEmployeeLiveLocation extends AppCompatActivity {
                 ex.printStackTrace();
             }
 
-            mapView.getMapAsync(new OnMapReadyCallback() {
-                @Override
-                public void onMapReady(GoogleMap googleMap) {
-                    mMap = googleMap;
-                    if ( ActivityCompat.checkSelfPermission( AllEmployeeLiveLocation.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission( AllEmployeeLiveLocation.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        return;
-                    }
+            mapView.getMapAsync( googleMap -> {
+                mMap = googleMap;
+                if ( ActivityCompat.checkSelfPermission( AllEmployeeLiveLocation.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission( AllEmployeeLiveLocation.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
 
-                    TrackGPS gp = new TrackGPS ( AllEmployeeLiveLocation.this);
+                TrackGPS gp = new TrackGPS ( AllEmployeeLiveLocation.this);
+                try{
+                    LatLng SomePos = new LatLng(Double.parseDouble(PreferenceHandler.getInstance( AllEmployeeLiveLocation.this).getOrganizationLati()),Double.parseDouble(PreferenceHandler.getInstance( AllEmployeeLiveLocation.this).getOrganizationLongi()));
+                    mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                    mMap.setMyLocationEnabled(true);
+                    mMap.setTrafficEnabled(false);
+                    mMap.setIndoorEnabled(false);
+                    mMap.setBuildingsEnabled(true);
+                    mMap.getUiSettings().setZoomControlsEnabled(true);
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(SomePos));
+                    mMap.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder().target(googleMap.getCameraPosition().target).zoom(17).bearing(30).tilt(45).build()));
                     try{
-                        LatLng SomePos = new LatLng(Double.parseDouble(PreferenceHandler.getInstance( AllEmployeeLiveLocation.this).getOrganizationLati()),Double.parseDouble(PreferenceHandler.getInstance( AllEmployeeLiveLocation.this).getOrganizationLongi()));
-                        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-                        mMap.setMyLocationEnabled(true);
-                        mMap.setTrafficEnabled(false);
-                        mMap.setIndoorEnabled(false);
-                        mMap.setBuildingsEnabled(true);
-                        mMap.getUiSettings().setZoomControlsEnabled(true);
-                        mMap.moveCamera(CameraUpdateFactory.newLatLng(SomePos));
-                        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(
-                                new CameraPosition.Builder().target(googleMap.getCameraPosition().target).zoom(17).bearing(30).tilt(45).build()));
-                        try{
-                            dateActivity = new SimpleDateFormat("MM/dd/yyyy",Locale.US).format(new Date());
-                            mLoadMap.setText(""+new SimpleDateFormat("dd-MM-yyyy",Locale.US).format(new Date()));
-                            getEmployees(new SimpleDateFormat("yyyy-MM-dd",Locale.US).format(new Date()));
+                        dateActivity = new SimpleDateFormat("MM/dd/yyyy",Locale.US).format(new Date());
+                        mLoadMap.setText(""+new SimpleDateFormat("dd-MM-yyyy",Locale.US).format(new Date()));
+                        getEmployees(new SimpleDateFormat("yyyy-MM-dd",Locale.US).format(new Date()));
 
-                        }catch (Exception e){
-                            e.printStackTrace();
-                        }
                     }catch (Exception e){
                         e.printStackTrace();
                     }
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
-            });
+            } );
 
             mShowHide.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -255,9 +255,6 @@ public class AllEmployeeLiveLocation extends AppCompatActivity {
                                 }else{
                                     Toast.makeText( AllEmployeeLiveLocation.this, "No Employes", Toast.LENGTH_SHORT).show();
                                 }
-
-                            }else{
-
                             }
 
                         }else {
@@ -726,6 +723,7 @@ public class AllEmployeeLiveLocation extends AppCompatActivity {
                         e.printStackTrace ( );
                     }
                 }
+
                 double lng = Double.parseDouble ( item.getLiveTracking ( ).getLongitude ( ) );
                 double lat = Double.parseDouble ( item.getLiveTracking ( ).getLatitude ( ) );
                 getAddress ( lng , lat , holder.mItemSubtitle );

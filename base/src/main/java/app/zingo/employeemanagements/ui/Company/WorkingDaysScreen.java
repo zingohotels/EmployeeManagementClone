@@ -29,38 +29,27 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class WorkingDaysScreen extends AppCompatActivity {
-
     private static final String TAG = WorkingDaysScreen.class.getSimpleName();
     Switch mSun,mMon,mTue,mWed,mThu,mFri,mSat;
     LinearLayout mSunLay,mMonLay,mTueLay,mWedLay,mThuLay,mFriLay,mSatLay;
     MyTextView mSunStart,mMonStart,mTueStart,mWedStart,mThuStart,mFriStart,mSatStart;
     MyTextView mSunEnd,mMonEnd,mTueEnd,mWedEnd,mThuEnd,mFriEnd,mSatEnd;
-
-
     AppCompatButton mSave;
-
     boolean isSun=false,isMon=false,isTue=false,isWed=false,isThu=false,isFri=false,isSat=false;
-
     WorkingDay updateWorkingDay;
     DBHelper mydb;
-
     int orgId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         try{
             setContentView(R.layout.activity_working_days_screen);
-
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             setTitle("Days");
-
             Bundle bun = getIntent().getExtras();
-
             if(bun!=null){
-
                 orgId = bun.getInt("OrganizationId",0);
                 updateWorkingDay = ( WorkingDay )bun.getSerializable("Timing");
             }
@@ -96,21 +85,12 @@ public class WorkingDaysScreen extends AppCompatActivity {
             mThuEnd = findViewById(R.id.end_thu);
             mFriEnd = findViewById(R.id.end_fri);
             mSatEnd = findViewById(R.id.end_sat);
-
             mSave = findViewById(R.id.save);
-
             mydb = new DBHelper( WorkingDaysScreen.this);
-
-
-
-
             mSun.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-
                     if(isChecked){
-
                         mSunLay.setVisibility(View.VISIBLE);
                         isSun =true;
                     }else{
@@ -123,10 +103,7 @@ public class WorkingDaysScreen extends AppCompatActivity {
             mMon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-
                     if(isChecked){
-
                         mMonLay.setVisibility(View.VISIBLE);
                         isMon =true;
                     }else{
@@ -139,10 +116,7 @@ public class WorkingDaysScreen extends AppCompatActivity {
             mTue.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-
                     if(isChecked){
-
                         mTueLay.setVisibility(View.VISIBLE);
                         isTue =true;
                     }else{
@@ -155,10 +129,7 @@ public class WorkingDaysScreen extends AppCompatActivity {
             mWed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-
                     if(isChecked){
-
                         mWedLay.setVisibility(View.VISIBLE);
                         isWed =true;
                     }else{
@@ -171,10 +142,7 @@ public class WorkingDaysScreen extends AppCompatActivity {
             mThu.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-
                     if(isChecked){
-
                         mThuLay.setVisibility(View.VISIBLE);
                         isThu =true;
                     }else{
@@ -187,10 +155,7 @@ public class WorkingDaysScreen extends AppCompatActivity {
             mFri.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-
                     if(isChecked){
-
                         mFriLay.setVisibility(View.VISIBLE);
                         isFri =true;
                     }else{
@@ -203,10 +168,7 @@ public class WorkingDaysScreen extends AppCompatActivity {
             mSat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-
                     if(isChecked){
-
                         mSatLay.setVisibility(View.VISIBLE);
                         isSat = true;
                     }else{
@@ -219,7 +181,6 @@ public class WorkingDaysScreen extends AppCompatActivity {
             mSunStart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     openTimePicker(mSunStart);
                 }
             });
@@ -227,7 +188,6 @@ public class WorkingDaysScreen extends AppCompatActivity {
             mSunEnd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     openTimePicker(mSunEnd);
                 }
             });
@@ -235,7 +195,6 @@ public class WorkingDaysScreen extends AppCompatActivity {
             mMonStart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     openTimePicker(mMonStart);
                 }
             });
@@ -243,7 +202,6 @@ public class WorkingDaysScreen extends AppCompatActivity {
             mMonEnd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     openTimePicker(mMonEnd);
                 }
             });
@@ -251,7 +209,6 @@ public class WorkingDaysScreen extends AppCompatActivity {
             mTueStart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     openTimePicker(mTueStart);
                 }
             });
@@ -259,7 +216,6 @@ public class WorkingDaysScreen extends AppCompatActivity {
             mTueEnd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     openTimePicker(mTueEnd);
                 }
             });
@@ -267,7 +223,6 @@ public class WorkingDaysScreen extends AppCompatActivity {
             mWedStart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     openTimePicker(mWedStart);
                 }
             });
@@ -275,7 +230,6 @@ public class WorkingDaysScreen extends AppCompatActivity {
             mWedEnd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     openTimePicker(mWedEnd);
                 }
             });
@@ -283,7 +237,6 @@ public class WorkingDaysScreen extends AppCompatActivity {
             mThuStart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     openTimePicker(mThuStart);
                 }
             });
@@ -291,7 +244,6 @@ public class WorkingDaysScreen extends AppCompatActivity {
             mThuEnd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     openTimePicker(mThuEnd);
                 }
             });
@@ -299,7 +251,6 @@ public class WorkingDaysScreen extends AppCompatActivity {
             mFriStart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     openTimePicker(mFriStart);
                 }
             });
@@ -307,7 +258,6 @@ public class WorkingDaysScreen extends AppCompatActivity {
             mFriEnd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     openTimePicker(mFriEnd);
                 }
             });
@@ -315,7 +265,6 @@ public class WorkingDaysScreen extends AppCompatActivity {
             mSatStart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     openTimePicker(mSatStart);
                 }
             });
@@ -323,7 +272,6 @@ public class WorkingDaysScreen extends AppCompatActivity {
             mSatEnd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     openTimePicker(mSatEnd);
                 }
             });
@@ -395,15 +343,11 @@ public class WorkingDaysScreen extends AppCompatActivity {
                     }else{
 
                         WorkingDay wd = new WorkingDay ();
-
                         if(updateWorkingDay!=null){
-
                             wd = updateWorkingDay;
                         }else{
-
                             wd = new WorkingDay ();
                         }
-
 
                         wd.setSuday(isSun);
                         wd.setMonday(isMon);
@@ -426,40 +370,24 @@ public class WorkingDaysScreen extends AppCompatActivity {
                         wd.setFridayCheckOutTime(friE);
                         wd.setSaturdayCheckInTime(satS);
                         wd.setSaturdayCheckOutTime(satE);
-
                         if(orgId!=0){
-
                             wd.setOrganizationId(orgId);
                         }else{
                             wd.setOrganizationId(PreferenceHandler.getInstance( WorkingDaysScreen.this).getCompanyId());
                         }
-
-
-
                         if(updateWorkingDay!=null){
-
                             updateOrganizationTimings(wd);
                         }else{
-
                             addOrganizationTimings(wd);
                         }
-
-
-
                     }
-
-
                 }
             });
-
 
         }catch (Exception e){
             e.printStackTrace();
         }
-
     }
-
-
 
     public void openTimePicker(final MyTextView tv){
         final Calendar mcurrentTime = Calendar.getInstance();
@@ -469,14 +397,12 @@ public class WorkingDaysScreen extends AppCompatActivity {
         mTimePicker = new TimePickerDialog( WorkingDaysScreen.this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
-                //tv.setText( selectedHour + ":" + selectedMinute);
                 try {
                     boolean isPM =(hourOfDay >= 12);
                     String cin = ""+String.format("%02d:%02d %s", (hourOfDay == 12 || hourOfDay == 0) ? 12 : hourOfDay % 12, minute, isPM ? "PM" : "AM");
                     tv.setText( cin);
                 }
-                catch (Exception ex)
-                {
+                catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
@@ -484,7 +410,6 @@ public class WorkingDaysScreen extends AppCompatActivity {
 
         mTimePicker.show();
     }
-
 
     public boolean validate(final Switch day,final String start,final String end){
 
@@ -497,204 +422,126 @@ public class WorkingDaysScreen extends AppCompatActivity {
         }
     }
 
-
     public void getOrganizationTimings(final int id) {
-
         final ProgressDialog dialog = new ProgressDialog(this);
         dialog.setMessage("Get Details..");
         dialog.setCancelable(false);
         dialog.show();
-
         new ThreadExecuter ().execute( new Runnable() {
             @Override
             public void run() {
-
                 final OrganizationTimingsAPI orgtimeapi = Util.getClient().create(OrganizationTimingsAPI.class);
                 Call<ArrayList< WorkingDay >> getProf = orgtimeapi.getOrganizationTimingByOrgId(id);
-                //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
-
                 getProf.enqueue(new Callback<ArrayList< WorkingDay >>() {
-
                     @Override
                     public void onResponse( Call<ArrayList< WorkingDay >> call, Response<ArrayList< WorkingDay >> response) {
-
                         if(dialog!=null&&dialog.isShowing()){
-
                             dialog.dismiss();
                         }
 
-                        if (response.code() == 200||response.code() == 201||response.code() == 204)
-                        {
-
+                        if (response.code() == 200||response.code() == 201||response.code() == 204) {
                             ArrayList< WorkingDay > workingDayArrayList = response.body();
-
                             if(workingDayArrayList!=null&&workingDayArrayList.size()!=0){
-
                                 WorkingDay displayData = workingDayArrayList.get(workingDayArrayList.size()-1);
-
                                 updateWorkingDay = displayData;
-
-
                                 if(displayData!=null){
-
                                     setData(displayData);
-
                                 }
                             }
-
-
                         }else{
-
                             Toast.makeText( WorkingDaysScreen.this, "Something went wrong", Toast.LENGTH_SHORT).show();
-
                         }
                     }
 
                     @Override
                     public void onFailure( Call<ArrayList< WorkingDay >> call, Throwable t) {
-
                         if(dialog!=null&&dialog.isShowing()){
-
                             dialog.dismiss();
                         }
-
-
                         Toast.makeText( WorkingDaysScreen.this, "Something went wrong", Toast.LENGTH_SHORT).show();
-
                     }
                 });
-
             }
-
         });
     }
 
-
     public void addOrganizationTimings(final WorkingDay workingDay) {
-
         final ProgressDialog dialog = new ProgressDialog(this);
         dialog.setMessage("Saving Details..");
         dialog.setCancelable(false);
         dialog.show();
-
         new ThreadExecuter ().execute( new Runnable() {
             @Override
             public void run() {
-
                 final OrganizationTimingsAPI orgtimeapi = Util.getClient().create(OrganizationTimingsAPI.class);
                 Call< WorkingDay > getProf = orgtimeapi.addOrganizationTimings(workingDay);
-                //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
-
                 getProf.enqueue(new Callback< WorkingDay >() {
-
                     @Override
                     public void onResponse( Call< WorkingDay > call, Response< WorkingDay > response) {
-
                         if(dialog!=null&&dialog.isShowing()){
-
                             dialog.dismiss();
                         }
-
-                        if (response.code() == 200||response.code() == 201||response.code() == 204)
-                        {
-
+                        if (response.code() == 200||response.code() == 201||response.code() == 204) {
                             WorkingDay workingDayArrayList = response.body();
-
                             if(workingDayArrayList!=null){
-
                                 WorkingDaysScreen.this.finish ();
                                 Toast.makeText( WorkingDaysScreen.this, "Timing saved success fully", Toast.LENGTH_SHORT).show();
-
                             }
-
-
                         }else{
-
                             Toast.makeText( WorkingDaysScreen.this, "Something went wrong", Toast.LENGTH_SHORT).show();
-
                         }
                     }
 
                     @Override
                     public void onFailure( Call< WorkingDay > call, Throwable t) {
-
                         if(dialog!=null&&dialog.isShowing()){
-
                             dialog.dismiss();
                         }
-
-
                         Toast.makeText( WorkingDaysScreen.this, "Something went wrong", Toast.LENGTH_SHORT).show();
-
                     }
                 });
-
             }
-
         });
     }
 
 
     public void updateOrganizationTimings(final WorkingDay workingDay) {
-
         final ProgressDialog dialog = new ProgressDialog(this);
         dialog.setMessage("Saving Details..");
         dialog.setCancelable(false);
         dialog.show();
-
         new ThreadExecuter ().execute( new Runnable() {
             @Override
             public void run() {
-
                 final OrganizationTimingsAPI orgtimeapi = Util.getClient().create(OrganizationTimingsAPI.class);
                 Call< WorkingDay > getProf = orgtimeapi.updateOrganizationTimings(workingDay.getOrganizationTimingId(),workingDay);
-                //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
-
                 getProf.enqueue(new Callback< WorkingDay >() {
-
                     @Override
                     public void onResponse( Call< WorkingDay > call, Response< WorkingDay > response) {
-
                         if(dialog!=null&&dialog.isShowing()){
-
                             dialog.dismiss();
                         }
 
-                        if (response.code() == 200||response.code() == 201||response.code() == 204)
-                        {
-
+                        if (response.code() == 200||response.code() == 201||response.code() == 204) {
                             Toast.makeText( WorkingDaysScreen.this, "Organization timing saved success fully", Toast.LENGTH_SHORT).show();
-
                         }else{
-
                             Toast.makeText( WorkingDaysScreen.this, "Something went wrong", Toast.LENGTH_SHORT).show();
-
                         }
                     }
 
                     @Override
                     public void onFailure( Call< WorkingDay > call, Throwable t) {
-
                         if(dialog!=null&&dialog.isShowing()){
-
                             dialog.dismiss();
                         }
-
-
                         Toast.makeText( WorkingDaysScreen.this, "Something went wrong", Toast.LENGTH_SHORT).show();
-
                     }
                 });
-
             }
-
         });
     }
 
-
     public void setData( WorkingDay workingDay){
-
-
         mSun.setChecked(workingDay.isSuday());
         mMon.setChecked(workingDay.isMonday());
         mTue.setChecked(workingDay.isiSTuesday());
@@ -718,20 +565,13 @@ public class WorkingDaysScreen extends AppCompatActivity {
         mThuEnd.setText(workingDay.getThursdayCheckOutTime());
         mFriEnd.setText(workingDay.getFridayCheckOutTime());
         mSatEnd.setText(workingDay.getSaturdayCheckOutTime());
-
-
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         int id = item.getItemId();
-
-        switch (id)
-        {
-            case android.R.id.home:
-
-                WorkingDaysScreen.this.finish();
+        if ( id == android.R.id.home ) {
+            WorkingDaysScreen.this.finish ( );
         }
         return super.onOptionsItemSelected(item);
     }

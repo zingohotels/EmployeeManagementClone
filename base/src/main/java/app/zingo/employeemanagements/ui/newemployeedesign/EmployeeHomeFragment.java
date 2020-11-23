@@ -329,12 +329,9 @@ public class EmployeeHomeFragment extends Fragment {
         }catch (Exception e){
             e.printStackTrace();
         }
-
-
     }
 
     public void openMenuViews(View view) {
-
         Intent intent;
         if (view.getId() == R.id.employees) {
             Intent employee = new Intent(getContext(), EmployeeUpdateListScreen.class);
@@ -410,10 +407,8 @@ public class EmployeeHomeFragment extends Fragment {
             bundle.putInt("ProfileId",employeed.getEmployeeId());
             orders.putExtras(bundle);
             startActivity(orders);*/
-
             Intent order = new Intent(getActivity(), StockOrderCategoryListScreen.class);
             startActivity(order);
-
            /* Intent task = new Intent(getActivity(), StockOrderCategoryListScreen.class);
             Bundle bundle = new Bundle();
             bundle.putInt("EmployeeId",employeed.getEmployeeId());
@@ -427,39 +422,28 @@ public class EmployeeHomeFragment extends Fragment {
         }else if (view.getId() == R.id.customer_creation) {
             Intent chnage = new Intent(getActivity(), CustomerMapViewScreen.class);
             startActivity(chnage);
-
           //  Toast.makeText(getActivity(), "Coming Soon", Toast.LENGTH_SHORT).show();
         }else if (view.getId() == R.id.logout) {
-
             Intent employees = new Intent(getContext(), NotificationShowActivity.class);
             Bundle bun = new Bundle();
             bun.putSerializable("Employee",employeed);
             bun.putString("Type","Employee");
             employees.putExtras(bun);
             getContext().startActivity(employees);
-
         }
     }
 
     private void getEmployees(){
-
-
-
-
         new ThreadExecuter().execute(new Runnable() {
             @Override
             public void run() {
                 EmployeeApi apiService = Util.getClient().create( EmployeeApi.class);
                 Call<ArrayList<Employee>> call = apiService.getProfileById(PreferenceHandler.getInstance(getActivity()).getUserId());
-
                 call.enqueue(new Callback<ArrayList<Employee>>() {
                     @Override
                     public void onResponse(Call<ArrayList<Employee>> call, Response<ArrayList<Employee>> response) {
                         int statusCode = response.code();
                         if (statusCode == 200 || statusCode == 201 || statusCode == 203 || statusCode == 204) {
-
-                           /* if (progressDialog != null&&progressDialog.isShowing())
-                                progressDialog.dismiss();*/
                             ArrayList<Employee> list = response.body();
                             if (list !=null && list.size()!=0) {
                                 employeed = list.get(0);
@@ -475,8 +459,6 @@ public class EmployeeHomeFragment extends Fragment {
                     @Override
                     public void onFailure(Call<ArrayList<Employee>> call, Throwable t) {
                         // Log error here since request failed
-                      /*  if (progressDialog != null&&progressDialog.isShowing())
-                            progressDialog.dismiss();*/
                         Log.e("TAG", t.toString());
                     }
                 });

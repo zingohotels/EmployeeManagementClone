@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:id="@+id/activity_item_details"
+<LinearLayout
+    android:id="@+id/activity_item_details"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="10"
-    xmlns:custom="custome"
-    tools:ignore="NamespaceTypo"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <ScrollView android:id="@+id/scrollbar"
+    tools:context="app.zingo.employeemanagements.ui.NewAdminDesigns.UpdateTaskScreen">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="9.5"
         android:scrollbars="none"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:layout_above="@+id/apply_leave"
+        android:padding="10dp"
         android:paddingTop="@dimen/activity_vertical_margin">
 
         <LinearLayout
@@ -26,110 +26,130 @@
             android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:focusableInTouchMode="false"
-                android:focusable="false"
-                android:id="@+id/typeInputLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_marginTop="5dp"
+                android:paddingStart="5dp"
+                android:id="@+id/task_name_InputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="@color/editTextColor"
+                android:hint="@string/task_name" >
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/task_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"
-                    android:hint="Task Name" />
+                    android:textSize="16sp"
+                    android:textColor="@color/grey"
+                    android:inputType="textPersonName"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
-
             <LinearLayout
+                android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:baselineAligned="false">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:layout_margin="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:paddingStart="5dp"
                     android:id="@+id/from_date_TextInputEditText"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/editTextColor"
+                    android:hint="@string/from_date"
                     android:layout_weight="1">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/from_date"
                         android:layout_width="match_parent"
-                        android:textSize="12sp"
                         android:layout_height="wrap_content"
-                        android:hint="Start Date"
+                        android:textSize="16sp"
                         android:focusableInTouchMode="false"
-                        android:drawableRight="@drawable/ic_date"
-                        android:inputType="date" />
+                        android:textColor="@color/grey"
+                        android:drawableEnd="@drawable/ic_date"
+                        android:inputType="date"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:layout_margin="5dp"
                     android:id="@+id/to_date_TextInputEditText"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_marginStart="5dp"
+                    android:paddingStart="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/editTextColor"
+                    android:hint="@string/to_date"
                     android:layout_weight="1">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/to_date"
                         android:layout_width="match_parent"
-                        android:textSize="12sp"
                         android:layout_height="wrap_content"
-                        android:hint="End Time"
+                        android:textSize="16sp"
                         android:focusableInTouchMode="false"
-                        android:drawableRight="@drawable/ic_date"
-                        android:inputType="date" />
+                        android:textColor="@color/grey"
+                        android:drawableEnd="@drawable/ic_date"
+                        android:inputType="date"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
-
             <LinearLayout
+                android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:layout_margin="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:paddingStart="5dp"
                     android:id="@+id/from_time_TextInputEditText"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/editTextColor"
+                    android:hint="@string/from_time"
                     android:layout_weight="1">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/from_time"
                         android:layout_width="match_parent"
-                        android:textSize="12sp"
                         android:layout_height="wrap_content"
-                        android:hint="Start Time"
+                        android:textSize="16sp"
                         android:focusableInTouchMode="false"
-                        android:drawableRight="@drawable/ic_time"
-                        android:inputType="date" />
+                        android:textColor="@color/grey"
+                        android:drawableEnd="@drawable/ic_time"
+                        android:inputType="time"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:layout_margin="5dp"
+                    android:layout_marginStart="5dp"
+                    android:paddingStart="5dp"
                     android:id="@+id/to_time_TextInputEditText"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/editTextColor"
+                    android:hint="@string/to_time"
                     android:layout_weight="1">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/to_time"
                         android:layout_width="match_parent"
-                        android:textSize="12sp"
                         android:layout_height="wrap_content"
-                        android:hint="End Time"
+                        android:textSize="16sp"
                         android:focusableInTouchMode="false"
-                        android:drawableRight="@drawable/ic_time"
-                        android:inputType="date" />
+                        android:textColor="@color/grey"
+                        android:drawableEnd="@drawable/ic_time"
+                        android:inputType="time"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
@@ -137,29 +157,40 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_large_margin"
-                android:layout_marginTop="20.0dip"
-                android:layout_marginRight="@dimen/activity_large_margin">
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:weightSum="2">
 
-                <app.zingo.employeemanagements.Custom.MyEditText
-                    android:id="@+id/email"
+                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:background="@drawable/test_background"
+                    android:layout_height="wrap_content"
+                    android:text="@string/status"
                     android:layout_weight="1"
-                    android:hint="Status"
-                    android:singleLine="true"
-                    android:textColor="#ffffff"
-                    android:textStyle="bold"
-                    android:textColorHint="#afaeae" />
+                    android:paddingStart="10dp"
+                    android:textAllCaps="true"
+                    android:textSize="16sp"
+                    android:textColor="@color/grey"
+                    android:gravity="start"
+                    android:layout_gravity="center_vertical"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
-                <Spinner
-                    android:id="@+id/task_status_update"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="25dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:entries="@array/task_status"
-                    android:background="@drawable/spinner_background"/>
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <Spinner
+                        android:id="@+id/task_status_update"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:padding="5dp"
+                        android:layout_weight="1"
+                        android:entries="@array/task_status"
+                        android:background="@drawable/spinner_background"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -170,46 +201,46 @@
             android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:layout_margin="5dp"
-                android:id="@+id/task_description_InputLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_marginTop="5dp"
+                android:paddingStart="5dp"
+                android:id="@+id/task_discription_InputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="100dp"
+                android:background="@color/editTextColor"
+                android:hint="@string/discribe_about_your_task">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/task_description"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="0dip"
-                    android:layout_marginRight="0dip"
-                    android:hint="Describe About your Task"
+                    android:textColor="@color/grey"
                     android:gravity="top|left"
                     android:lines="5"
                     android:singleLine="false"
-                    android:textSize="12sp" />
+                    android:textSize="16sp"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
-
             <com.google.android.material.textfield.TextInputLayout
-                android:layout_margin="5dp"
-                android:id="@+id/task_comments_InputLayout"
-                android:layout_marginTop="20dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_marginTop="5dp"
+                android:paddingStart="5dp"
+                android:id="@+id/comments_remarks_InputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="100dp"
+                android:background="@color/editTextColor"
+                android:hint="@string/comments_remarks">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/task_comments"
+                    android:id="@+id/comments_remarks"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="0dip"
-                    android:layout_marginRight="0dip"
-                    android:hint="Comments/Remarks"
+                    android:textColor="@color/grey"
                     android:gravity="top|left"
                     android:lines="5"
                     android:singleLine="false"
-                    android:textSize="12sp" />
+                    android:textSize="16sp"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -220,18 +251,17 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <Switch
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/show_map"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:checked="false"
-
-                    android:text="Mark on map"
+                    android:text="@string/mark_on_map"
                     android:layout_marginLeft="@dimen/activity_large_margin"
                     android:layout_marginTop="20.0dip"
                     android:layout_marginRight="@dimen/activity_large_margin"
-                    android:textOff="No"
-                    android:textOn="Yes"/>
+                    android:textOff="@string/no"
+                    android:textOn="@string/yes"/>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -242,50 +272,63 @@
                     <TextView
                         android:id="@+id/location_et"
                         android:layout_width="match_parent"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:hint="Location"
-                        android:textSize="16sp"
-                        android:padding="5dp"
-                        android:textColor="#000"
                         android:layout_height="wrap_content"
-                        android:background="#ffffff"/>
+                        android:layout_marginTop="15dp"
+                        android:hint="@string/location"
+                        android:textColor="@color/grey"
+                        android:background="@color/editTextColor"
+                        android:textSize="16sp"
+                        android:padding="10dp"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
                     <LinearLayout
                         android:id="@+id/lan_lat"
                         android:layout_below="@+id/location_et"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:weightSum="2"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp">
-                        <EditText
-                            android:id="@+id/lat_et"
-                            android:layout_width="0dp"
-                            android:layout_height="50dp"
+                        android:weightSum="2">
+
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_weight="1"
-                            android:hint="Latitude"
-                            android:textSize="16sp"
-                            android:textColor="#000"
-                            android:paddingLeft="10dp"
-                            android:layout_marginRight="5dp"
-                            android:background="#ffffff"/>
-                        <EditText
-                            android:id="@+id/lng_et"
-                            android:layout_width="0dp"
-                            android:layout_height="50dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/editTextColor"
+                            android:hint="@string/latitude">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/lat_et"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:focusableInTouchMode="false"
+                                android:textColor="@color/grey"
+                                android:inputType="textPersonName"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_weight="1"
-                            android:hint="Longitude"
-                            android:textSize="16sp"
-                            android:textColor="#000"
-                            android:paddingLeft="10dp"
-                            android:layout_marginLeft="5dp"
-                            android:background="#ffffff"/>
+                            android:layout_marginTop="10dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/editTextColor"
+                            android:hint="@string/longitude">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/lng_et"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:focusableInTouchMode="false"
+                                android:textColor="@color/grey"
+                                android:inputType="textPersonName"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                     </LinearLayout>
-
 
                     <app.zingo.employeemanagements.Custom.MapViewScroll
                         android:id="@+id/task_location_map"
@@ -301,9 +344,9 @@
 
         </LinearLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
-    <androidx.appcompat.widget.AppCompatButton
+   <!-- <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/apply_leave"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -314,5 +357,27 @@
         android:textSize="14dp"
         android:textColor="@color/white"
         android:textStyle="bold"
-        android:gravity="center"/>
-</RelativeLayout>
+        android:gravity="center"/>-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:background="@color/colorPrimary">
+
+        <TextView android:id="@+id/update_task"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary"
+            android:text="@string/submit"
+            android:textSize="14sp"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+    </LinearLayout>
+
+</LinearLayout>

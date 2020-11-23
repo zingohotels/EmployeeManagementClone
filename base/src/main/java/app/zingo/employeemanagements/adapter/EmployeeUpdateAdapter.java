@@ -58,10 +58,8 @@ public class EmployeeUpdateAdapter  extends RecyclerView.Adapter< EmployeeUpdate
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final Employee dto = list.get(position);
-
         holder.mProfileName.setText(dto.getEmployeeName());
         holder.mProfileEmail.setText(dto.getPrimaryEmailAddress());
-
 
         holder.mProfileMain.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,11 +79,6 @@ public class EmployeeUpdateAdapter  extends RecyclerView.Adapter< EmployeeUpdate
                         bundle.putSerializable("Employee",list.get(position));
                         intent.putExtras(bundle);
                         context.startActivity(intent);
-
-
-
-
-
                     }
                 });
                 builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {

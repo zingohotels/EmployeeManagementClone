@@ -4,39 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="app.zingo.employeemanagements.base">
 
-    <dist:module dist:instant="true" />
-
-    <uses-permission android:name="android.permission.INTERNET" /> <!-- Network call and base permission -->
-    <!-- Camera Permission -->
-    <uses-permission android:name="android.permission.CAMERA" />
-
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="true" /> <!-- Storage Permission -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- save images taken from in-app camera -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- Location Permission -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.REQUEST_COMPANION_RUN_IN_BACKGROUND" />
-    <uses-permission android:name="android.permission.REQUEST_COMPANION_USE_DATA_IN_BACKGROUND" />
-    <uses-permission android:name="android.permission.ACCES_BACKGROUND_LOCATION" />
-    <uses-feature android:name="android.hardware.location.gps" /> <!-- Required API 21 or higher -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.hardware.camera.autofocus" />
-    <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
-
-    <supports-screens
-        android:anyDensity="true"
-        android:largeScreens="true"
-        android:normalScreens="true"
-        android:resizeable="true"
-        android:smallScreens="true"
-        android:xlargeScreens="true" />
-
     <application
         android:name="androidx.multidex.MultiDexApplication"
         android:allowBackup="true"
@@ -46,23 +13,25 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:networkSecurityConfig="@xml/network_security_config"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute"
-        tools:replace="android:allowBackup,android:icon"
-        android:requestLegacyExternalStorage="true">
+        tools:replace="android:allowBackup,android:icon">
+        <activity android:name="app.zingo.employeemanagements.utils.loginclass.LoginCallbackClass"/>
         <activity
             android:name="app.zingo.employeemanagements.ui.newemployeedesign.BookingScreen"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name="app.zingo.employeemanagements.ui.newemployeedesign.CartScreen"
-            />
-        <activity android:name="app.zingo.employeemanagements.ui.newemployeedesign.SubCategoryDetailScreen"
+        <activity android:name="app.zingo.employeemanagements.ui.newemployeedesign.CartScreen" />
+        <activity
+            android:name="app.zingo.employeemanagements.ui.newemployeedesign.SubCategoryDetailScreen"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name="app.zingo.employeemanagements.ui.newemployeedesign.CategoryDetailScreen"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="app.zingo.employeemanagements.ui.newemployeedesign.CategoryDetailScreen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name="app.zingo.employeemanagements.ui.newemployeedesign.StockOrderCategoryListScreen" />
         <activity android:name="app.zingo.employeemanagements.ui.NewAdminDesigns.ShowAllMeetings" />
         <activity android:name="app.zingo.employeemanagements.ui.NewAdminDesigns.StockOrderDetailsScreen" />
@@ -75,7 +44,6 @@
         <activity android:name="app.zingo.employeemanagements.ui.NewAdminDesigns.StockOptionsListScreen" />
         <activity android:name="app.zingo.employeemanagements.ui.NewAdminDesigns.StockOptionsScreen" />
         <activity android:name="app.zingo.employeemanagements.utils.BaseActivity" />
-        <activity android:name="app.zingo.employeemanagements.utils.loginclass.LoginCallbackClass" />
         <activity
             android:name="app.zingo.employeemanagements.ui.landing.SplashScreen"
             android:screenOrientation="portrait"
@@ -103,38 +71,21 @@
         <activity android:name="app.zingo.employeemanagements.ui.Admin.EmployeeOrderMapScreen" />
         <activity
             android:name="app.zingo.employeemanagements.ui.Admin.CreateOrderScreen"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/AppTheme" />
         <activity
             android:name="app.zingo.employeemanagements.ui.NewAdminDesigns.DailyOrdersForEmployeeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name="app.zingo.employeemanagements.ui.Employee.OrdersListScreen" />
-
-        <uses-library
-            android:name="org.apache.http.legacy"
-            android:required="false" />
 
         <activity
             android:name="app.zingo.employeemanagements.ui.landing.PhoneVerificationScreen"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCCOdiugQwNAGmBpMdloo6Iu4Rb1i5RwEs" />
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-        <meta-data
-            android:name="com.razorpay.ApiKey"
-            android:value="rzp_live_tTRIgCc7PPKNq0" />
-        <!--
-            <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyD7wKDeCjNaLc8OjxHhYFVieOsL9lXhFZQ" />
-        -->
         <activity
             android:name="app.zingo.employeemanagements.ui.Company.CreateCompany"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name="app.zingo.employeemanagements.ui.Company.CreateFounderScreen"
             android:configChanges="keyboardHidden|orientation|keyboard"
@@ -146,79 +97,14 @@
             android:name="app.zingo.employeemanagements.ui.Admin.DashBoardAdmin"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
+        <!--
+            <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyD7wKDeCjNaLc8OjxHhYFVieOsL9lXhFZQ" />
+        -->
         <activity android:name="app.zingo.employeemanagements.ui.Company.OrganizationDetailScree" />
         <activity android:name="app.zingo.employeemanagements.ui.Employee.EmployeeListScreen" />
         <activity android:name="app.zingo.employeemanagements.ui.Employee.CreateEmployeeScreen" />
-
-        <receiver android:name="app.zingo.employeemanagements.Service.OnNotificationClickBroadcastReceiver" />
-        <receiver android:name="app.zingo.employeemanagements.Service.OnGPSNotificationClick" />
-        <receiver android:name="app.zingo.employeemanagements.AlarmManager.LunchBreakAlarm" />
-        <receiver android:name="app.zingo.employeemanagements.AlarmManager.TeaBreakAlarm" />
-        <service android:name="app.zingo.employeemanagements.AlarmManager.AlarmNotificationService" />
-        <service android:name="app.zingo.employeemanagements.AlarmManager.AlarmSoundService" />
-        <receiver android:name="app.zingo.employeemanagements.Service.GPSReciever">
-            <intent-filter>
-                <action android:name="android.location.PROVIDERS_CHANGED" />
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.net.conn.CONNECTIVITY_CAHNEG" />
-                <action android:name="android.location.GPS_ENABLED_CHANGE" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </receiver>
-
-        <service android:name="app.zingo.employeemanagements.FireBase.MyFirebaseInstanceIDService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
-        <service
-            android:name="app.zingo.employeemanagements.Service.LocationForegroundService"
-            android:enabled="true"
-            android:exported="true" />
-        <service
-            android:name="app.zingo.employeemanagements.Service.ReportDownloadingDataService"
-            android:enabled="true"
-            android:exported="true" />
-        <service
-            android:name="app.zingo.employeemanagements.Service.DetectedActivitiesIntentService"
-            android:exported="false" />
-        <service
-            android:name="app.zingo.employeemanagements.Service.CheckInAlarmReceiverService"
-            android:enabled="true"
-            android:exported="false" />
-        <service android:name="app.zingo.employeemanagements.Service.BackgroundDetectedActivitiesService"
-            android:enabled="true" />
-        <service
-            android:name="app.zingo.employeemanagements.utils.TrackGPS"
-            android:enabled="true" />
-        <service
-            android:name="app.zingo.employeemanagements.Service.LocationAndDataServiceWithTimer"
-            android:enabled="true" />
-        <service
-            android:name="app.zingo.employeemanagements.Service.SendEmailToAll"
-            android:enabled="true" />
-        <service
-            android:name="app.zingo.employeemanagements.Service.PriceUpdatingService"
-            android:enabled="true" />
-        <service
-            android:name="app.zingo.employeemanagements.Service.LocationTrackEmplService"
-            android:enabled="true"
-            android:exported="true" />
-        <service
-            android:name="app.zingo.employeemanagements.FireBase.MyFirebaseMessagingService"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-        <service
-            android:name="app.zingo.employeemanagements.Service.LocationListenerService"
-            android:enabled="true" />
-        <service
-            android:name="app.zingo.employeemanagements.Service.LocaitionPassWithConditionServices"
-            android:enabled="true" />
-
         <activity android:name="app.zingo.employeemanagements.AlarmManager.AlertDialogActivity" />
         <activity
             android:name="app.zingo.employeemanagements.ui.Employee.DashBoardEmployee"
@@ -228,6 +114,7 @@
         <activity
             android:name="app.zingo.employeemanagements.ui.Admin.EmployeesDashBoard"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
         <activity
             android:name="app.zingo.employeemanagements.ui.Common.EmployeeMeetingMap"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
@@ -236,12 +123,24 @@
         <activity
             android:name="app.zingo.employeemanagements.ui.Employee.EmployeeMeetingHost"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
         <activity
             android:name="app.zingo.employeemanagements.ui.Common.EmployeeMeetingList"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name="app.zingo.employeemanagements.ui.Employee.AttendanceScreen"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <!--
+<receiver android:name="app.zingo.employeemanagements.Service.GPSReciever">
+            <intent-filter>
+                <action android:name="android.location.PROVIDERS_CHANGED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.net.conn.CONNECTIVITY_CAHNEG" />
+                <action android:name="android.location.GPS_ENABLED_CHANGE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+        -->
         <activity
             android:name="app.zingo.employeemanagements.ui.Employee.WorkedDaysListScreen"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
@@ -258,19 +157,14 @@
         <activity android:name="app.zingo.employeemanagements.ui.Admin.LoginDetailsHost" />
         <activity android:name="app.zingo.employeemanagements.ui.Admin.EmployeeLoginList" />
         <activity android:name="app.zingo.employeemanagements.ui.Admin.EmployeeLoginMapView" />
-
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="@string/file_provider_authority"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_provider_path" />
-        </provider>
-
         <activity android:name="app.zingo.employeemanagements.ui.Admin.LeaveApprovalScreen" />
         <activity android:name="app.zingo.employeemanagements.ui.Admin.EmployeeLiveMappingScreen" />
+        <!--
+    <service
+            android:name="app.zingo.employeemanagements.Service.LocationTrackEmplService"
+            android:enabled="true"
+            android:exported="true" />
+        -->
         <activity
             android:name="app.zingo.employeemanagements.ui.LandingScreen"
             android:screenOrientation="portrait"
@@ -310,6 +204,7 @@
             android:name="app.zingo.employeemanagements.ui.SupportScreen"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
         <activity
             android:name="app.zingo.employeemanagements.ui.GetStartedScreen"
             android:configChanges="keyboardHidden|orientation|keyboard"
@@ -319,7 +214,7 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name="app.zingo.employeemanagements.ui.Admin.CreateTaskScreen"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/AppTheme" />
         <activity
             android:name="app.zingo.employeemanagements.ui.Admin.TaskListScreen"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
@@ -358,7 +253,9 @@
             android:name="app.zingo.employeemanagements.ui.AdvancePlanScreen"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name="app.zingo.employeemanagements.FireBase.EmailVerificationTesting" />
+
         <activity android:name="app.zingo.employeemanagements.ui.newemployeedesign.ExpenseManageHost" />
+
         <activity
             android:name="app.zingo.employeemanagements.ui.newemployeedesign.CreateExpensesScreen"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -493,6 +390,125 @@
         <activity android:name="app.zingo.employeemanagements.ui.Common.VisitingCard" />
         <activity android:name="app.zingo.employeemanagements.ui.Common.CustomerMapViewScreen" />
         <activity android:name="app.zingo.employeemanagements.ui.NewAdminDesigns.CalenderDashBoardActivity" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCCOdiugQwNAGmBpMdloo6Iu4Rb1i5RwEs" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.razorpay.ApiKey"
+            android:value="rzp_live_tTRIgCc7PPKNq0" />
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="@string/file_provider_authority"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_provider_path" />
+        </provider>
+        <receiver android:name="app.zingo.employeemanagements.Service.OnNotificationClickBroadcastReceiver" />
+        <receiver android:name="app.zingo.employeemanagements.Service.OnGPSNotificationClick" />
+        <receiver android:name="app.zingo.employeemanagements.AlarmManager.LunchBreakAlarm" />
+        <receiver android:name="app.zingo.employeemanagements.AlarmManager.TeaBreakAlarm" />
+        <service android:name="app.zingo.employeemanagements.AlarmManager.AlarmNotificationService" />
+        <service android:name="app.zingo.employeemanagements.AlarmManager.AlarmSoundService" />
+        <service android:name="app.zingo.employeemanagements.FireBase.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="app.zingo.employeemanagements.Service.LocationForegroundService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name="app.zingo.employeemanagements.Service.ReportDownloadingDataService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name="app.zingo.employeemanagements.Service.DetectedActivitiesIntentService"
+            android:exported="false" />
+        <service
+            android:name="app.zingo.employeemanagements.Service.CheckInAlarmReceiverService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name="app.zingo.employeemanagements.Service.BackgroundDetectedActivitiesService"
+            android:enabled="true" />
+        <service
+            android:name="app.zingo.employeemanagements.utils.TrackGPS"
+            android:enabled="true" />
+        <service
+            android:name="app.zingo.employeemanagements.Service.LocationAndDataServiceWithTimer"
+            android:enabled="true" />
+        <service
+            android:name="app.zingo.employeemanagements.Service.SendEmailToAll"
+            android:enabled="true" />
+        <service
+            android:name="app.zingo.employeemanagements.Service.PriceUpdatingService"
+            android:enabled="true" />
+        <service
+            android:name="app.zingo.employeemanagements.FireBase.MyFirebaseMessagingService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="app.zingo.employeemanagements.Service.LocationListenerService"
+            android:enabled="true" />
+        <service
+            android:name="app.zingo.employeemanagements.Service.LocaitionPassWithConditionServices"
+            android:enabled="true" />
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
     </application>
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true" /> <!-- Network call and base permission -->
+    <!-- Camera Permission -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
+    <uses-feature android:name="android.hardware.location.gps" /> <!-- Storage Permission -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- save images taken from in-app camera -->
+    <uses-permission android:name="android.permission.CAMERA" /> <!-- Location Permission -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.REQUEST_COMPANION_RUN_IN_BACKGROUND" />
+    <uses-permission android:name="android.permission.ACCES_BACKGROUND_LOCATION" />
+
+    <!--<uses-permission android:name="android.permission.REQUEST_COMPANION_RUN_IN_BACKGROUND" />
+    <uses-permission android:name="android.permission.REQUEST_COMPANION_USE_DATA_IN_BACKGROUND" />
+    <uses-permission android:name="android.permission.ACCES_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />-->
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/> <!-- Required API 21 or higher -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.hardware.camera.autofocus"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" android:maxSdkVersion="29" />
+    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
+    <uses-permission android:name="android.permission.READ_SMS"/>
+    <uses-permission android:name="android.permission.SEND_SMS"/>
+    <uses-permission android:name="android.permission.WRITE_SMS"/>
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
+    <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE" />
+    <dist:module dist:instant="true"/>
 
 </manifest>

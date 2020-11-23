@@ -1,6 +1,7 @@
 package app.zingo.employeemanagements.utils;
 
 public class Const {
+    public static final String IMAGE_URL = "https://zingolocal.azurewebsites.net/" ;
     public static String DEVICE_NAME = null;
     public static int BATTERY_LEVEL = 0;
     public static boolean CHECK_INTERNET_CONNECTION = false;

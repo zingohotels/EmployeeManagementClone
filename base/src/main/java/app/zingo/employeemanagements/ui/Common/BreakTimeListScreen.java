@@ -109,24 +109,14 @@ public class BreakTimeListScreen extends AppCompatActivity {
     }
 
     public void getBreaks(final int id) {
-
-
-
         new ThreadExecuter ().execute( new Runnable() {
             @Override
             public void run() {
-
                 final OrganizationBreakTimesAPI orgApi = Util.getClient().create( OrganizationBreakTimesAPI.class);
                 Call<ArrayList<OrganizationBreakTimes>> getProf = orgApi.getBreaksByOrgId(id);
-                //Call<ArrayList<Blogs>> getBlog = blogApi.getBlogs();
-
                 getProf.enqueue(new Callback<ArrayList<OrganizationBreakTimes>>() {
-
                     @Override
                     public void onResponse(Call<ArrayList<OrganizationBreakTimes>> call, Response<ArrayList<OrganizationBreakTimes>> response) {
-
-
-
                         if (response.code() == 200||response.code() == 201||response.code() == 204)
                         {
                             mLoader.setVisibility(View.GONE);

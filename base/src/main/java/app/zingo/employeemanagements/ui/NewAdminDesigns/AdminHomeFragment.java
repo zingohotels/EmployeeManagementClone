@@ -69,8 +69,7 @@ public class AdminHomeFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         super.onCreateView(layoutInflater, viewGroup, savedInstanceState);
 

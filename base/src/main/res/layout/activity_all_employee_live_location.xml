@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="app.zingo.employeemanagements.ui.Common.AllEmployeeLiveLocation">
-
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,12 +16,9 @@
             android:id="@+id/employee_live_list_map"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
-            />
-
+            android:layout_margin="10dp" />
 
     </LinearLayout>
-
 
     <TextView
         android:layout_width="150dp"
@@ -32,7 +26,6 @@
         android:textSize="18dp"
         android:ellipsize="end"
         android:gravity="center"
-
         android:layout_margin="5dp"
         android:textColor="@color/colorPrimary"
         android:layout_gravity="center_horizontal"
@@ -46,9 +39,7 @@
         android:layout_height="wrap_content"
         android:background="#e9e7e7"
         android:fillViewport="true"
-        android:layout_gravity="bottom"
-
-        >
+        android:layout_gravity="bottom">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -111,11 +102,7 @@
                     android:src="@drawable/down_arrow_location"
                     android:contentDescription="TODO" />
 
-
-
             </LinearLayout>
-
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -123,20 +110,14 @@
                 android:layout_gravity="bottom"
                 android:layout_marginLeft="@dimen/activity_large_margin"
                 android:visibility="gone"
-
-
                 android:layout_marginRight="@dimen/activity_large_margin"
                 android:orientation="vertical"
                 android:id="@+id/location_list">
 
             </LinearLayout>
 
-
         </LinearLayout>
 
     </LinearLayout>
-
-
-
 
 </FrameLayout>

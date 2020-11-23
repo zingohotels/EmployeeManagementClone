@@ -231,8 +231,8 @@ public class EmployeeDashBoardAdminView extends BaseActivity {
                                 LatLng master = new LatLng(Double.parseDouble(PreferenceHandler.getInstance(getApplicationContext()).getOrganizationLati()), Double.parseDouble(PreferenceHandler.getInstance(getApplicationContext()).getOrganizationLongi()));
                                 String address = getAddress( master);
                                 loginDetails.setLocation(String.valueOf (address));
-                                loginDetails.setStatus (status);
-                                loginDetails.setTotalMeeting (status);
+                                //loginDetails.setStatus (status);
+                                //loginDetails.setTotalMeeting (status);
                                 loginDetails.setLoginTime(""+sdt.format(new Date()) );
                                 loginDetails.setLoginDate(""+ sdf.format(new Date()));
                                 loginDetails.setLogOutTime("");
@@ -1186,8 +1186,8 @@ public class EmployeeDashBoardAdminView extends BaseActivity {
                 String address = getAddress(master);
                 result.setLogoutLocation (String.valueOf (address));
                 //result.setStatus (status);
+                // result.setTotalMeeting ( status );
                 result.setLogOutTime(""+sdt.format(new Date()) );
-                result.setTotalMeeting ( status );
                 updateLogin ( result , statusText );
             }
 

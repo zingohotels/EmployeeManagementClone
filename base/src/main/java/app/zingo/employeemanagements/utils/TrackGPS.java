@@ -182,6 +182,17 @@ public class TrackGPS extends Service implements LocationListener {
 
     }
 
+    public boolean isGPSOn(Context context) {
+        boolean GPS_STATUS;
+        LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            GPS_STATUS = false;
+        }else{
+            GPS_STATUS = true;
+        }
+        return GPS_STATUS;
+    }
+
     public static boolean isMockLocationOn(Location location, Context context) {
         if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             return location.isFromMockProvider();
@@ -305,7 +316,7 @@ public class TrackGPS extends Service implements LocationListener {
                     }
                 }
             } catch (PackageManager.NameNotFoundException e) {
-
+                        e.printStackTrace ();
             }
         }
         return appInfoList;

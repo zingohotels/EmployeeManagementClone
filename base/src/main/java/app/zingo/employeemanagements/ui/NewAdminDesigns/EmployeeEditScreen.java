@@ -7,6 +7,8 @@ import android.os.Bundle;
 import com.google.android.material.textfield.TextInputEditText;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.SwitchCompat;
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -21,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -52,28 +55,22 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class EmployeeEditScreen extends AppCompatActivity {
-
     TextInputEditText mName,mPrimaryEmail,mSecondaryEmail,
-            mMobile,mDesignation,mSalary,mPassword,mConfirm,mNoWeekOff;
+            mMobile,mDesignation,mSalary,mPassword,mConfirm,mNoWeekOff,mAddress;
     LinearLayout mWeekLay,mWeekContainer;
-    EditText mAddress;
     MyEditText mDob,mDoj;
     CheckBox mLocationCondition,mCheckTime,mWeekOffCheck;
     Spinner mDepartment,mtoReport,mShift;
-    Switch mAdmin,mActive;
+    SwitchCompat mAdmin,mActive;
     RadioButton mMale,mFemale,mOthers;
-    AppCompatButton mCreate;
-
+    TextView mCreate;
     ArrayList<Departments> departmentData;
     ArrayList< Employee > employeeList;
     ArrayList< WorkingDay > workingDays;
-
     Employee employees;
-
     private String current = "";
     private String ddmmyyyy = "DDMMYYYY";
     private Calendar cal = Calendar.getInstance();
-
     int orgId;
     boolean weekCondi = false;
 
@@ -1157,7 +1154,7 @@ public class EmployeeEditScreen extends AppCompatActivity {
                                 }
 
                                 if(employeeList!=null&&employeeList.size()!=0){
-                                   //
+                                    //
                                     // Collections.sort(employeeList,Employee.compareEmployee);
                                     ManagerSpinnerAdapter arrayAdapter = new ManagerSpinnerAdapter( EmployeeEditScreen.this, employeeList);
                                     mtoReport.setAdapter(arrayAdapter);
@@ -1165,7 +1162,7 @@ public class EmployeeEditScreen extends AppCompatActivity {
 
 
                                 }else{
-                                 //   Toast.makeText(EmployeeEditScreen.this,"No Employees added",Toast.LENGTH_LONG).show();
+                                    //   Toast.makeText(EmployeeEditScreen.this,"No Employees added",Toast.LENGTH_LONG).show();
 
                                 }
 
@@ -1173,7 +1170,7 @@ public class EmployeeEditScreen extends AppCompatActivity {
                                 //}
 
                             }else{
-                               // Toast.makeText(EmployeeEditScreen.this,"No Employees added",Toast.LENGTH_LONG).show();
+                                // Toast.makeText(EmployeeEditScreen.this,"No Employees added",Toast.LENGTH_LONG).show();
 
                             }
 
